@@ -32,7 +32,7 @@ public sealed class PrefabProcessor : IAssetProcessor
 					}
 					break;
 				case IPrefabInstance prefab:
-					if (prefab.RootGameObject_C1001P is { } root)
+					if (prefab.RootGameObjectP is { } root)
 					{
 						gameObjectsAlreadyProcessed.Add(root);
 					}
@@ -83,9 +83,9 @@ public sealed class PrefabProcessor : IAssetProcessor
 	{
 		IPrefabInstance prefab = virtualFile.CreateAsset((int)ClassIDType.PrefabInstance, PrefabInstance.Create);
 
-		prefab.ObjectHideFlags = HideFlags.HideInHierarchy;
-		prefab.RootGameObject_C1001P = root;
-		prefab.IsPrefabAsset_C1001 = true;
+		prefab.HideFlagsE = HideFlags.HideInHierarchy;
+		prefab.RootGameObjectP = root;
+		prefab.IsPrefabAsset = true;
 		prefab.AssetBundleName = root.AssetBundleName;
 		prefab.OriginalDirectory = root.OriginalDirectory;
 		prefab.OriginalName = root.OriginalName;

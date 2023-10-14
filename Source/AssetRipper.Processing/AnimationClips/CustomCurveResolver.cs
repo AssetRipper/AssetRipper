@@ -53,7 +53,7 @@ namespace AssetRipper.Processing.AnimationClips
 							{
 								continue;
 							}
-							IMesh? mesh = skin.Mesh_C137P;
+							IMesh? mesh = skin.MeshP;
 							if (mesh == null)
 							{
 								continue;

@@ -1,15 +1,13 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Assets.Interfaces;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_687078895;
-using AssetRipper.SourceGenerated.Interfaces;
 using System.Diagnostics;
 
 namespace AssetRipper.Processing.Textures;
 
-public sealed class SpriteInformationObject : UnityObjectBase, IHasName
+public sealed class SpriteInformationObject : UnityObjectBase, INamed
 {
 	public SpriteInformationObject(AssetInfo assetInfo, ITexture2D texture) : base(assetInfo)
 	{
@@ -19,12 +17,8 @@ public sealed class SpriteInformationObject : UnityObjectBase, IHasName
 	public ITexture2D Texture { get; }
 	public IReadOnlyDictionary<ISprite, ISpriteAtlas?> Sprites => dictionary;
 	private readonly Dictionary<ISprite, ISpriteAtlas?> dictionary = new();
-	string IHasNameString.NameString
-	{
-		get => Texture.Name;
-		set { }
-	}
-	Utf8String IHasName.Name
+
+	Utf8String INamed.Name
 	{
 		get => Texture.Name;
 		set { }

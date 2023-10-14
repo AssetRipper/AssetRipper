@@ -28,7 +28,7 @@ namespace AssetRipper.Export.UnityProjects.RawAssets
 			get { yield return Asset; }
 		}
 
-		public override string Name => Asset.NameString;
+		public override string Name => Asset.Name;
 
 		public override MetaPtr CreateExportPointer(IUnityObjectBase asset, bool isLocal)
 		{
@@ -37,7 +37,7 @@ namespace AssetRipper.Export.UnityProjects.RawAssets
 
 		public override bool Export(IExportContainer container, string projectDirectory)
 		{
-			string name = DirectoryUtils.FixInvalidPathCharacters(Asset.NameString);
+			string name = DirectoryUtils.FixInvalidPathCharacters(Asset.Name);
 			string resourcePath = Path.Combine(projectDirectory, "AssetRipper", "UnreadableAssets", Asset.ClassName, $"{name}.unreadable");
 			string subPath = Path.GetDirectoryName(resourcePath)!;
 			Directory.CreateDirectory(subPath);

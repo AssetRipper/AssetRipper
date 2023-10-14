@@ -103,9 +103,9 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 			if (instance.Data.Length == 0)
 			{
-				if (mesh?.StreamData_C43 is not null)
+				if (mesh?.StreamData is not null)
 				{
-					data = mesh.StreamData_C43.GetContent(mesh.Collection);
+					data = mesh.StreamData.GetContent(mesh.Collection);
 					if (data.Length == 0)
 					{
 						return;

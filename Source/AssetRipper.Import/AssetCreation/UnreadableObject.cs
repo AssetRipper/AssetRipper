@@ -1,22 +1,23 @@
-﻿using AssetRipper.Assets.Interfaces;
+﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Metadata;
 
 namespace AssetRipper.Import.AssetCreation
 {
-	public sealed class UnreadableObject : RawDataObject, IHasNameString
+	public sealed class UnreadableObject : RawDataObject, INamed
 	{
-		private string nameString = "";
+		private Utf8String? name;
 
-		public string NameString
+		[AllowNull]
+		public Utf8String Name
 		{
 			get
 			{
-				return string.IsNullOrEmpty(nameString)
+				return Utf8String.IsNullOrEmpty(name)
 					? $"Unreadable{ClassName}_{RawDataHash:X}"
-					: nameString;
+					: name;
 			}
 
-			set => nameString = value;
+			set => name = value;
 		}
 
 		public UnreadableObject(AssetInfo assetInfo, byte[] data) : base(assetInfo, data) { }

@@ -34,20 +34,20 @@ internal static class InformationTabContentExtensions
 					if (component.GameObject_C2P is { } gameObject)
 					{
 						list.Add((Localization.GameObject, gameObject));
-						if (component is IRenderer && gameObject.TryGetComponent<IMeshFilter>()?.Mesh_C33P is { } rendererMesh)
+						if (component is IRenderer && gameObject.TryGetComponent<IMeshFilter>()?.MeshP is { } rendererMesh)
 						{
 							list.Add((Localization.Mesh, rendererMesh));
 						}
 					}
-					if (component is IMonoBehaviour monoBehaviour && monoBehaviour.Script_C114P is { } monoScript)
+					if (component is IMonoBehaviour monoBehaviour && monoBehaviour.ScriptP is { } monoScript)
 					{
 						list.Add((Localization.Script, monoScript));
 					}
-					else if (component is IMeshFilter meshFilter && meshFilter.Mesh_C33P is { } mesh)
+					else if (component is IMeshFilter meshFilter && meshFilter.MeshP is { } mesh)
 					{
 						list.Add((Localization.Mesh, mesh));
 					}
-					else if (component is IAudioSource audioSource && audioSource.AudioClip_C82P is { } audioSourceClip)
+					else if (component is IAudioSource audioSource && audioSource.AudioClipP is { } audioSourceClip)
 					{
 						list.Add((Localization.AudioClip, audioSourceClip));
 					}
@@ -90,7 +90,7 @@ internal static class InformationTabContentExtensions
 				}
 			case IMonoBehaviour monoBehaviour:
 				{
-					if (monoBehaviour.Script_C114P is { } monoScript)
+					if (monoBehaviour.ScriptP is { } monoScript)
 					{
 						return ToPropertyArray(monoScript);
 					}
@@ -112,25 +112,25 @@ internal static class InformationTabContentExtensions
 				{
 					return new (string, string)[]
 					{
-						(Localization.VertexCount, mesh.VertexData_C43.VertexCount.ToString()),
-						(Localization.SubmeshCount, mesh.SubMeshes_C43.Count.ToString()),
+						(Localization.VertexCount, mesh.VertexData.VertexCount.ToString()),
+						(Localization.SubmeshCount, mesh.SubMeshes.Count.ToString()),
 					};
 				}
 			case IAudioClip audioClip:
 				{
 					return new (string, string)[]
 					{
-						(Localization.Channels, audioClip.Channels_C83.ToString()),
-						(Localization.Frequency, audioClip.Frequency_C83.ToString()),
-						(Localization.Length, audioClip.Length_C83.ToString()),
+						(Localization.Channels, audioClip.Channels.ToString()),
+						(Localization.Frequency, audioClip.Frequency.ToString()),
+						(Localization.Length, audioClip.Length.ToString()),
 					};
 				}
 			case ITerrainData terrainData:
 				{
 					return new (string, string)[]
 					{
-						(Localization.Width, terrainData.Heightmap_C156.GetWidth().ToString()),
-						(Localization.Height, terrainData.Heightmap_C156.GetHeight().ToString()),
+						(Localization.Width, terrainData.Heightmap.GetWidth().ToString()),
+						(Localization.Height, terrainData.Heightmap.GetHeight().ToString()),
 					};
 				}
 			default:
@@ -141,9 +141,9 @@ internal static class InformationTabContentExtensions
 		{
 			return new (string, string)[]
 			{
-				(Localization.AssemblyName, monoScript.AssemblyName_C115),
-				(Localization.Namespace, monoScript.Namespace_C115),
-				(Localization.ClassName, monoScript.ClassName_C115),
+				(Localization.AssemblyName, monoScript.AssemblyName),
+				(Localization.Namespace, monoScript.Namespace),
+				(Localization.ClassName, monoScript.ClassName_R),
 			};
 		}
 	}

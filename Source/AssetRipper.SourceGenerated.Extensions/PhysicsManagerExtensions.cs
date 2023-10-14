@@ -34,34 +34,34 @@ namespace AssetRipper.SourceGenerated.Extensions
 		}
 		public static ContactsGeneration GetContactsGeneration(this IPhysicsManager manager)
 		{
-			if (manager.Has_ContactsGeneration_C55())
+			if (manager.Has_ContactsGeneration())
 			{
-				return (ContactsGeneration)manager.ContactsGeneration_C55;
+				return (ContactsGeneration)manager.ContactsGeneration;
 			}
 			else
 			{
-				return manager.EnablePCM_C55 ? ContactsGeneration.PersistentContactManifold : ContactsGeneration.LegacyContactsGeneration;
+				return manager.EnablePCM ? ContactsGeneration.PersistentContactManifold : ContactsGeneration.LegacyContactsGeneration;
 			}
 		}
 
 		public static ContactPairsMode GetContactPairsMode(this IPhysicsManager manager)
 		{
-			return (ContactPairsMode)manager.ContactPairsMode_C55;
+			return (ContactPairsMode)manager.ContactPairsMode;
 		}
 
 		public static BroadphaseType GetBroadphaseType(this IPhysicsManager manager)
 		{
-			return (BroadphaseType)manager.BroadphaseType_C55;
+			return (BroadphaseType)manager.BroadphaseType;
 		}
 
 		public static FrictionType GetFrictionType(this IPhysicsManager manager)
 		{
-			return (FrictionType)manager.FrictionType_C55;
+			return (FrictionType)manager.FrictionType;
 		}
 
 		public static SolverType GetSolverType(this IPhysicsManager manager)
 		{
-			return (SolverType)manager.SolverType_C55;
+			return (SolverType)manager.SolverType;
 		}
 	}
 }

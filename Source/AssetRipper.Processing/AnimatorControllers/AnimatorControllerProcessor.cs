@@ -32,7 +32,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 
 		private static void Process(IAnimatorController controller, ProcessedAssetCollection processedCollection)
 		{
-			IControllerConstant controllerConstant = controller.Controller_C91;
+			IControllerConstant controllerConstant = controller.Controller;
 			IAnimatorStateMachine[] StateMachines = new IAnimatorStateMachine[controllerConstant.StateMachineArray.Count];
 			for (int i = 0; i < controllerConstant.StateMachineArray.Count; i++)
 			{
@@ -40,21 +40,21 @@ namespace AssetRipper.Processing.AnimatorControllers
 				StateMachines[i] = stateMachine;
 			}
 
-			controller.AnimatorParameters_C91.Clear();
-			controller.AnimatorParameters_C91.Capacity = controllerConstant.Values.Data.ValueArray.Count;
+			controller.AnimatorParameters.Clear();
+			controller.AnimatorParameters.Capacity = controllerConstant.Values.Data.ValueArray.Count;
 			for (int i = 0; i < controllerConstant.Values.Data.ValueArray.Count; i++)
 			{
-				IAnimatorControllerParameter newParameter = controller.AnimatorParameters_C91.AddNew();
+				IAnimatorControllerParameter newParameter = controller.AnimatorParameters.AddNew();
 				InitializeParameter(newParameter, controller, i);
 			}
 
-			controller.AnimatorLayers_C91.Clear();
-			controller.AnimatorLayers_C91.Capacity = controllerConstant.LayerArray.Count;
+			controller.AnimatorLayers.Clear();
+			controller.AnimatorLayers.Capacity = controllerConstant.LayerArray.Count;
 			for (int i = 0; i < controllerConstant.LayerArray.Count; i++)
 			{
 				uint stateMachineIndex = controllerConstant.LayerArray[i].Data.StateMachineIndex;
 				IAnimatorStateMachine stateMachine = StateMachines[stateMachineIndex];
-				IAnimatorControllerLayer newLayer = controller.AnimatorLayers_C91.AddNew();
+				IAnimatorControllerLayer newLayer = controller.AnimatorLayers.AddNew();
 				InitializeLayer(newLayer, stateMachine, controller, i);
 			}
 
@@ -66,11 +66,11 @@ namespace AssetRipper.Processing.AnimatorControllers
 
 		private static void InitializeLayer(IAnimatorControllerLayer animatorControllerLayer, IAnimatorStateMachine stateMachine, IAnimatorController controller, int layerIndex)
 		{
-			ILayerConstant layer = controller.Controller_C91.LayerArray[layerIndex].Data;
+			ILayerConstant layer = controller.Controller.LayerArray[layerIndex].Data;
 
-			stateMachine.ParentStateMachinePosition_C1107.SetValues(800.0f, 20.0f, 0.0f);//not sure why this happens here
+			stateMachine.ParentStateMachinePosition.SetValues(800.0f, 20.0f, 0.0f);//not sure why this happens here
 
-			animatorControllerLayer.Name = controller.TOS_C91[layer.Binding];
+			animatorControllerLayer.Name = controller.TOS[layer.Binding];
 
 			animatorControllerLayer.StateMachine.SetAsset(controller.Collection, stateMachine);
 
@@ -90,25 +90,25 @@ namespace AssetRipper.Processing.AnimatorControllers
 
 		private static void InitializeParameter(IAnimatorControllerParameter parameter, IAnimatorController controller, int paramIndex)
 		{
-			IValueConstant value = controller.Controller_C91.Values.Data.ValueArray[paramIndex];
-			parameter.Name = controller.TOS_C91[value.ID];
+			IValueConstant value = controller.Controller.Values.Data.ValueArray[paramIndex];
+			parameter.Name = controller.TOS[value.ID];
 			AnimatorControllerParameterType type = value.GetTypeValue();
 			switch (type)
 			{
 				case AnimatorControllerParameterType.Trigger:
-					parameter.DefaultBool = controller.Controller_C91.DefaultValues.Data.BoolValues[(int)value.Index];
+					parameter.DefaultBool = controller.Controller.DefaultValues.Data.BoolValues[(int)value.Index];
 					break;
 
 				case AnimatorControllerParameterType.Bool:
-					parameter.DefaultBool = controller.Controller_C91.DefaultValues.Data.BoolValues[(int)value.Index];
+					parameter.DefaultBool = controller.Controller.DefaultValues.Data.BoolValues[(int)value.Index];
 					break;
 
 				case AnimatorControllerParameterType.Int:
-					parameter.DefaultInt = controller.Controller_C91.DefaultValues.Data.IntValues[(int)value.Index];
+					parameter.DefaultInt = controller.Controller.DefaultValues.Data.IntValues[(int)value.Index];
 					break;
 
 				case AnimatorControllerParameterType.Float:
-					parameter.DefaultFloat = controller.Controller_C91.DefaultValues.Data.FloatValues[(int)value.Index];
+					parameter.DefaultFloat = controller.Controller.DefaultValues.Data.FloatValues[(int)value.Index];
 					break;
 
 				default:

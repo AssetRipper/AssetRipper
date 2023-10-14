@@ -6,13 +6,13 @@ public static class CubemapArrayExtensions
 {
 	public static byte[] GetImageData(this ICubemapArray texture)
 	{
-		if (texture.ImageData_C188.Length > 0)
+		if (texture.ImageData.Length > 0)
 		{
-			return texture.ImageData_C188;
+			return texture.ImageData;
 		}
-		else if (texture.Has_StreamData_C188() && texture.StreamData_C188.IsSet())
+		else if (texture.Has_StreamData() && texture.StreamData.IsSet())
 		{
-			return texture.StreamData_C188.GetContent(texture.Collection);
+			return texture.StreamData.GetContent(texture.Collection);
 		}
 		else
 		{
@@ -22,13 +22,13 @@ public static class CubemapArrayExtensions
 
 	public static bool CheckAssetIntegrity(this ICubemapArray texture)
 	{
-		if (texture.ImageData_C188.Length > 0)
+		if (texture.ImageData.Length > 0)
 		{
 			return true;
 		}
-		else if (texture.Has_StreamData_C188())
+		else if (texture.Has_StreamData())
 		{
-			return texture.StreamData_C188.CheckIntegrity(texture.Collection);
+			return texture.StreamData.CheckIntegrity(texture.Collection);
 		}
 		else
 		{

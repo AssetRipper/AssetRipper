@@ -8,7 +8,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 	{
 		public static void ConvertToEditorFormat(this IUnityConnectSettings settings)
 		{
-			settings.CrashReportingSettings_C310?.ConvertToEditorFormat();
+			settings.CrashReportingSettings?.ConvertToEditorFormat();
 		}
 
 		/// <summary>

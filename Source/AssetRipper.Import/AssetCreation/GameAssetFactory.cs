@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Generics;
-using AssetRipper.Assets.Interfaces;
 using AssetRipper.Assets.IO;
 using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.Metadata;
@@ -147,7 +146,7 @@ namespace AssetRipper.Import.AssetCreation
 			if (replaceWithUnreadableObject)
 			{
 				UnreadableObject unreadable = new UnreadableObject(asset.AssetInfo, assetData.ToArray());
-				unreadable.NameString = (asset as IHasNameString)?.NameString ?? "";
+				unreadable.Name = (asset as INamed)?.Name;
 				return unreadable;
 			}
 			else

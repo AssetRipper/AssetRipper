@@ -9,6 +9,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="AssetRipper.HashAlgorithms" Version="1.0.0" />
+		<PackageReference Include="AssetRipper.SourceGenerated" Version="0.3.4.2" />
 		<PackageReference Include="AssetRipper.TextureDecoder" Version="2.0.0" />
 		<PackageReference Include="Fmod5Sharp" Version="3.0.1" />
 		<PackageReference Include="ICSharpCode.Decompiler" Version="8.1.1.7464" />
@@ -22,13 +23,6 @@
 		<PackageReference Include="SharpGLTF.Toolkit" Version="1.0.0-alpha0030" />
 		<PackageReference Include="StbImageWriteSharp" Version="1.16.7" />
 		<PackageReference Include="System.Drawing.Common" Version="7.0.0" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Reference Include="AssetRipper.SourceGenerated">
-			<SpecificVersion>False</SpecificVersion>
-			<HintPath>../Libraries/AssetRipper.SourceGenerated.dll</HintPath>
-		</Reference>
 	</ItemGroup>
 
 	<ItemGroup>

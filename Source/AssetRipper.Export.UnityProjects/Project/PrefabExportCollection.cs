@@ -106,7 +106,7 @@ namespace AssetRipper.Export.UnityProjects.Project
 			UnityVersion version = UnityVersion.Max(virtualFile.Version, new UnityVersion(2018, 3, 0));
 			IPrefabInstance prefab = virtualFile.CreateAsset((int)ClassIDType.PrefabInstance, version, PrefabInstance.Create);
 			Debug.Assert(prefab is IPrefabInstanceMarker);
-			prefab.RootGameObject_C1001P = root;
+			prefab.RootGameObjectP = root;
 			prefab.AssetBundleName = root.AssetBundleName;
 			prefab.OriginalDirectory = root.OriginalDirectory;
 			prefab.OriginalName = root.OriginalName;
@@ -121,7 +121,7 @@ namespace AssetRipper.Export.UnityProjects.Project
 				IPrefabImporter importer = PrefabImporter.Create(container.File, container.ExportVersion);
 				if (RootGameObject.AssetBundleName is not null)
 				{
-					importer.AssetBundleName_C468431735 = RootGameObject.AssetBundleName;
+					importer.AssetBundleName_R = RootGameObject.AssetBundleName;
 				}
 				return importer;
 			}
@@ -148,7 +148,7 @@ namespace AssetRipper.Export.UnityProjects.Project
 		}
 
 		/// <summary>
-		/// Used for <see cref="IPrefabInstance.SourcePrefab_C1001"/>
+		/// Used for <see cref="IPrefabInstance.SourcePrefab"/>
 		/// </summary>
 		/// <returns></returns>
 		public MetaPtr GenerateMetaPtrForPrefab()

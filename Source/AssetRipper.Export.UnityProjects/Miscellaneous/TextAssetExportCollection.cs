@@ -66,9 +66,9 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 		protected override ITextScriptImporter CreateImporter(IExportContainer container)
 		{
 			ITextScriptImporter importer = TextScriptImporter.Create(container.File, container.ExportVersion);
-			if (importer.Has_AssetBundleName_C1031() && Asset.AssetBundleName is not null)
+			if (importer.Has_AssetBundleName_R() && Asset.AssetBundleName is not null)
 			{
-				importer.AssetBundleName_C1031 = Asset.AssetBundleName;
+				importer.AssetBundleName_R = Asset.AssetBundleName;
 			}
 			return importer;
 		}

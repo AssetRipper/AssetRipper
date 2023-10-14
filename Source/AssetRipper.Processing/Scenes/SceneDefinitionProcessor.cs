@@ -33,16 +33,16 @@ namespace AssetRipper.Processing.Scenes
 					if (asset is ILevelGameManager)
 					{
 						sceneCollections.Add(collection);
-						if (asset is IOcclusionCullingSettings sceneSettings && sceneSettings.Has_SceneGUID_C29())
+						if (asset is IOcclusionCullingSettings sceneSettings && sceneSettings.Has_SceneGUID())
 						{
-							sceneGuids[collection] = sceneSettings.SceneGUID_C29;
+							sceneGuids[collection] = sceneSettings.SceneGUID;
 						}
 					}
 					else if (asset is IBuildSettings buildSettings1)
 					{
 						buildSettings = buildSettings1;
 					}
-					else if (asset is IAssetBundle assetBundle && assetBundle.IsStreamedSceneAssetBundle_C142)
+					else if (asset is IAssetBundle assetBundle && assetBundle.IsStreamedSceneAssetBundle)
 					{
 						sceneAssetBundles.Add(assetBundle);
 					}
@@ -69,7 +69,7 @@ namespace AssetRipper.Processing.Scenes
 				else
 				{
 					int startingIndex = 0;
-					foreach (AccessPairBase<Utf8String, IAssetInfo> pair in assetBundleAsset.Container_C142)
+					foreach (AccessPairBase<Utf8String, IAssetInfo> pair in assetBundleAsset.Container)
 					{
 						Debug.Assert(pair.Value.Asset.IsNull(), "Scene pointer is not null");
 

@@ -70,7 +70,7 @@ namespace AssetRipper.GUI.Electron.Pages.Assets
 			}
 		}
 
-		public byte[] Font => Asset is IFont font ? font.FontData_C128 : Array.Empty<byte>();
+		public byte[] Font => Asset is IFont font ? font.FontData : Array.Empty<byte>();
 
 		public string FontFileName
 		{
@@ -112,7 +112,7 @@ namespace AssetRipper.GUI.Electron.Pages.Assets
 				return Asset switch
 				{
 					IShader shader => $"{shader.GetBestName()}.shader",
-					IMonoScript monoScript => $"{monoScript.ClassName_C115}.cs",
+					IMonoScript monoScript => $"{monoScript.ClassName_R}.cs",
 					ITextAsset textAsset => $"{textAsset.GetBestName()}.txt",
 					_ => $"{Asset.GetBestName()}.txt",
 				};

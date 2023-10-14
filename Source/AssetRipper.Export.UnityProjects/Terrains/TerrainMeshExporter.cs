@@ -53,10 +53,10 @@ namespace AssetRipper.Export.UnityProjects.Terrains
 			MeshBuilder<VertexPosition, VertexTexture1, VertexEmpty> meshBuilder = new();
 			PrimitiveBuilder<MaterialBuilder, VertexPosition, VertexTexture1, VertexEmpty> primitiveBuilder = meshBuilder.UsePrimitive(material);
 
-			int tw = Math.Max(terrain.Heightmap_C156.Width, terrain.Heightmap_C156.Resolution);
-			int th = Math.Max(terrain.Heightmap_C156.Height, terrain.Heightmap_C156.Resolution);
+			int tw = Math.Max(terrain.Heightmap.Width, terrain.Heightmap.Resolution);
+			int th = Math.Max(terrain.Heightmap.Height, terrain.Heightmap.Resolution);
 			
-			Vector3 meshScale = terrain.Heightmap_C156.Scale.CastToStruct() * new Vector3(-1, 1, 1);
+			Vector3 meshScale = terrain.Heightmap.Scale.CastToStruct() * new Vector3(-1, 1, 1);
 			Vector2 uvScale = new Vector2(1 / (tw - 1), 1 / (th - 1));
 
 			int w = th;
@@ -99,9 +99,9 @@ namespace AssetRipper.Export.UnityProjects.Terrains
 
 		private static float[,] GetHeights(ITerrainData terrain)
 		{
-			int width = Math.Max(terrain.Heightmap_C156.Width, terrain.Heightmap_C156.Resolution);
-			int height = Math.Max(terrain.Heightmap_C156.Height, terrain.Heightmap_C156.Resolution);
-			AssetList<short> heights = terrain.Heightmap_C156.Heights;
+			int width = Math.Max(terrain.Heightmap.Width, terrain.Heightmap.Resolution);
+			int height = Math.Max(terrain.Heightmap.Height, terrain.Heightmap.Resolution);
+			AssetList<short> heights = terrain.Heightmap.Heights;
 			float[,] result = new float[width, height];
 			for (int y = 0; y < height; y++)
 			{

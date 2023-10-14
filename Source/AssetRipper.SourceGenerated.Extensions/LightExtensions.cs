@@ -7,7 +7,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 	{
 		public static LightmappingMode GetLightmapping(this ILight light)
 		{
-			return (LightmappingMode)light.Lightmapping_C108;
+			return (LightmappingMode)light.Lightmapping;
 		}
 	}
 }

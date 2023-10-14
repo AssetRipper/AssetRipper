@@ -35,30 +35,30 @@ namespace AssetRipper.SourceGenerated.Extensions
 			{
 				GenerateOutline(sprite, atlas, rect, pivot, instance.Outline);
 			}
-			if (instance.Has_PhysicsShape() && sprite.Has_PhysicsShape_C213())
+			if (instance.Has_PhysicsShape() && sprite.Has_PhysicsShape())
 			{
 				GeneratePhysicsShape(sprite, atlas, rect, pivot, instance.PhysicsShape);
 			}
 			instance.TessellationDetail = 0;
-			if (instance.Has_Bones() && sprite.Has_Bones_C213() && instance.Has_SpriteID())
+			if (instance.Has_Bones() && sprite.Has_Bones() && instance.Has_SpriteID())
 			{
 				// Scale bones based off of the sprite's PPU
-				foreach (ISpriteBone bone in sprite.Bones_C213)
+				foreach (ISpriteBone bone in sprite.Bones)
 				{
-					bone.Position.Scale(sprite.PixelsToUnits_C213);
-					bone.Length *= sprite.PixelsToUnits_C213;
+					bone.Position.Scale(sprite.PixelsToUnits);
+					bone.Length *= sprite.PixelsToUnits;
 
 					// Set root bone position
 					if (bone.ParentId == -1)
 					{
-						bone.Position.X += sprite.Rect_C213.Width / 2;
-						bone.Position.Y += sprite.Rect_C213.Height / 2;
+						bone.Position.X += sprite.Rect.Width / 2;
+						bone.Position.Y += sprite.Rect.Height / 2;
 					}
 				}
 
 				instance.Bones.Clear();
-				instance.Bones.Capacity = sprite.Bones_C213.Count;
-				foreach (ISpriteBone bone in sprite.Bones_C213)
+				instance.Bones.Capacity = sprite.Bones.Count;
+				foreach (ISpriteBone bone in sprite.Bones)
 				{
 					instance.Bones.AddNew().CopyValues(bone);
 				}
@@ -75,7 +75,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			Vector3[]? vertices = null;
 			BoneWeight4[]? skin = null;
 
-			origin.RD_C213.VertexData?.ReadData(origin.Collection.Version, origin.Collection.EndianType, null,
+			origin.RD.VertexData?.ReadData(origin.Collection.Version, origin.Collection.EndianType, null,
 				out vertices,
 				out Vector3[]? _,//normals,
 				out Vector4[]? _,//tangents,
@@ -107,8 +107,8 @@ namespace AssetRipper.SourceGenerated.Extensions
 						Vector2f vertex = instance.Vertices.AddNew();
 
 						// Scale and translate vertices properly
-						vertex.X = vertices[i].X * origin.PixelsToUnits_C213 + origin.Rect_C213.Width / 2;
-						vertex.Y = vertices[i].Y * origin.PixelsToUnits_C213 + origin.Rect_C213.Height / 2;
+						vertex.X = vertices[i].X * origin.PixelsToUnits + origin.Rect.Width / 2;
+						vertex.Y = vertices[i].Y * origin.PixelsToUnits + origin.Rect.Height / 2;
 					}
 				}
 			}
@@ -116,13 +116,13 @@ namespace AssetRipper.SourceGenerated.Extensions
 			if (instance.Has_Indices())
 			{
 				instance.Indices.Clear();
-				if (origin.RD_C213.Has_IndexBuffer() && origin.RD_C213.IndexBuffer.Length != 0)
+				if (origin.RD.Has_IndexBuffer() && origin.RD.IndexBuffer.Length != 0)
 				{
-					instance.Indices.Capacity = origin.RD_C213.IndexBuffer.Length / 2;
-					for (int i = 0, j = 0; i < origin.RD_C213.IndexBuffer.Length / 2; i++, j += 2)
+					instance.Indices.Capacity = origin.RD.IndexBuffer.Length / 2;
+					for (int i = 0, j = 0; i < origin.RD.IndexBuffer.Length / 2; i++, j += 2)
 					{
 						//Endianness might matter here
-						instance.Indices.Add(BinaryPrimitives.ReadInt16LittleEndian(origin.RD_C213.IndexBuffer.AsSpan(j, 2)));
+						instance.Indices.Add(BinaryPrimitives.ReadInt16LittleEndian(origin.RD.IndexBuffer.AsSpan(j, 2)));
 					}
 				}
 			}
@@ -150,21 +150,21 @@ namespace AssetRipper.SourceGenerated.Extensions
 			Vector2 pivot,
 			AssetList<AssetList<Vector2f>> shape)
 		{
-			if (sprite.Has_PhysicsShape_C213() && sprite.PhysicsShape_C213.Count > 0)
+			if (sprite.Has_PhysicsShape() && sprite.PhysicsShape.Count > 0)
 			{
 				shape.Clear();
-				shape.Capacity = sprite.PhysicsShape_C213.Count;
+				shape.Capacity = sprite.PhysicsShape.Count;
 				float pivotShiftX = rect.Width * pivot.X - rect.Width * 0.5f;
 				float pivotShiftY = rect.Height * pivot.Y - rect.Height * 0.5f;
 				Vector2 pivotShift = new Vector2(pivotShiftX, pivotShiftY);
-				for (int i = 0; i < sprite.PhysicsShape_C213.Count; i++)
+				for (int i = 0; i < sprite.PhysicsShape.Count; i++)
 				{
-					AssetList<Vector2f> sourceList = sprite.PhysicsShape_C213[i];
+					AssetList<Vector2f> sourceList = sprite.PhysicsShape[i];
 					AssetList<Vector2f> targetList = shape.AddNew();
 					targetList.Capacity = sourceList.Count;
-					for (int j = 0; j < sprite.PhysicsShape_C213[i].Count; j++)
+					for (int j = 0; j < sprite.PhysicsShape[i].Count; j++)
 					{
-						Vector2 point = (Vector2)sourceList[j] * sprite.PixelsToUnits_C213;
+						Vector2 point = (Vector2)sourceList[j] * sprite.PixelsToUnits;
 						targetList.AddNew().CopyValues(point + pivotShift);
 					}
 				}
@@ -244,16 +244,16 @@ namespace AssetRipper.SourceGenerated.Extensions
 		/// <param name="rotation"></param>
 		private static void GetPacking(ISprite sprite, ISpriteAtlas? atlas, out bool isPacked, out SpritePackingRotation rotation)
 		{
-			if (atlas is not null && sprite.Has_RenderDataKey_C213())
+			if (atlas is not null && sprite.Has_RenderDataKey())
 			{
-				ISpriteAtlasData atlasData = atlas.RenderDataMap_C687078895[sprite.RenderDataKey_C213];
+				ISpriteAtlasData atlasData = atlas.RenderDataMap[sprite.RenderDataKey];
 				isPacked = atlasData.IsPacked();
 				rotation = atlasData.GetPackingRotation();
 			}
 			else
 			{
-				isPacked = sprite.RD_C213.IsPacked();
-				rotation = sprite.RD_C213.GetPackingRotation();
+				isPacked = sprite.RD.IsPacked();
+				rotation = sprite.RD.GetPackingRotation();
 			}
 		}
 
@@ -264,7 +264,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			Vector2 pivot,
 			AssetList<AssetList<Vector2f>> outlines)
 		{
-			GenerateOutline(sprite.RD_C213, sprite.Collection.Version, outlines);
+			GenerateOutline(sprite.RD, sprite.Collection.Version, outlines);
 			float pivotShiftX = rect.Width * pivot.X - rect.Width * 0.5f;
 			float pivotShiftY = rect.Height * pivot.Y - rect.Height * 0.5f;
 			Vector2 pivotShift = new Vector2(pivotShiftX, pivotShiftY);
@@ -272,7 +272,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			{
 				for (int i = 0; i < outline.Count; i++)
 				{
-					Vector2 point = (Vector2)outline[i] * sprite.PixelsToUnits_C213;
+					Vector2 point = (Vector2)outline[i] * sprite.PixelsToUnits;
 					outline[i].CopyValues(point + pivotShift);
 				}
 			}

@@ -34,15 +34,15 @@ namespace AssetRipper.Processing.Textures
 					if (spriteTexture is not null)
 					{
 						SpriteInformationObject spriteInformationObject = factory.GetOrCreate(spriteTexture);
-						ISpriteAtlas? atlas = sprite.SpriteAtlas_C213P;
+						ISpriteAtlas? atlas = sprite.SpriteAtlasP;
 						spriteInformationObject.AddToDictionary(sprite, atlas);
 					}
 
 					ProcessSprite(sprite);
 				}
-				else if (asset is ISpriteAtlas atlas && atlas.RenderDataMap_C687078895.Count > 0)
+				else if (asset is ISpriteAtlas atlas && atlas.RenderDataMap.Count > 0)
 				{
-					foreach (ISprite packedSprite in atlas.PackedSprites_C687078895P.WhereNotNull())
+					foreach (ISprite packedSprite in atlas.PackedSpritesP.WhereNotNull())
 					{
 						if (TryGetPackedSpriteTexture(atlas, packedSprite, out ITexture2D? spriteTexture))
 						{
@@ -60,7 +60,7 @@ namespace AssetRipper.Processing.Textures
 
 		private static bool TryGetPackedSpriteTexture(ISpriteAtlas atlas, ISprite packedSprite, [NotNullWhen(true)] out ITexture2D? spriteTexture)
 		{
-			if (packedSprite.Has_RenderDataKey_C213() && atlas.RenderDataMap_C687078895.TryGetValue(packedSprite.RenderDataKey_C213, out ISpriteAtlasData? atlasData))
+			if (packedSprite.Has_RenderDataKey() && atlas.RenderDataMap.TryGetValue(packedSprite.RenderDataKey, out ISpriteAtlasData? atlasData))
 			{
 				spriteTexture = atlasData.Texture.TryGetAsset(atlas.Collection);
 			}
@@ -78,14 +78,14 @@ namespace AssetRipper.Processing.Textures
 			// and the correct metadata of Sprite is stored in the m_RD field.
 			// Otherwise, if a SpriteAtlas reference is serialized into this sprite,
 			// we must recover the m_RD field of the sprite from the SpriteAtlas.
-			ISpriteAtlas? atlas = sprite.SpriteAtlas_C213P;
-			if (atlas is not null && sprite.Has_SpriteAtlas_C213())
+			ISpriteAtlas? atlas = sprite.SpriteAtlasP;
+			if (atlas is not null && sprite.Has_SpriteAtlas())
 			{
-				if (sprite.Has_RenderDataKey_C213() &&
-					atlas.RenderDataMap_C687078895.TryGetValue(sprite.RenderDataKey_C213, out ISpriteAtlasData? spriteData))
+				if (sprite.Has_RenderDataKey() &&
+					atlas.RenderDataMap.TryGetValue(sprite.RenderDataKey, out ISpriteAtlasData? spriteData))
 				{
 					PPtrConverter converter = new PPtrConverter(atlas, sprite);
-					ISpriteRenderData m_RD = sprite.RD_C213;
+					ISpriteRenderData m_RD = sprite.RD;
 					m_RD.Texture.CopyValues(spriteData.Texture, converter);
 					if (m_RD.Has_AlphaTexture())
 					{
@@ -113,23 +113,23 @@ namespace AssetRipper.Processing.Textures
 				}
 
 				// Must clear the reference to SpriteAtlas, since Unity Editor will crash trying to pack an already-packed sprite otherwise.
-				sprite.SpriteAtlas_C213P = null;
-				sprite.AtlasTags_C213?.Clear();
+				sprite.SpriteAtlasP = null;
+				sprite.AtlasTags?.Clear();
 			}
 
 			// Some sprite properties must be recalculated with regard to SpriteAtlas. See the comments inside the following method.
 			sprite.GetSpriteCoordinatesInAtlas(atlas, out RectangleF rect, out Vector2 pivot, out Vector4 border);
-			sprite.Rect_C213.CopyValues(rect);
-			sprite.Pivot_C213?.CopyValues(pivot);
-			sprite.Border_C213?.CopyValues(border);
+			sprite.Rect.CopyValues(rect);
+			sprite.Pivot?.CopyValues(pivot);
+			sprite.Border?.CopyValues(border);
 
 			// Calculate and overwrite Offset. It is the offset in pixels of the pivot to the center of Rect.
-			sprite.Offset_C213.X = (pivot.X - 0.5f) * rect.Width;
-			sprite.Offset_C213.Y = (pivot.Y - 0.5f) * rect.Height;
+			sprite.Offset.X = (pivot.X - 0.5f) * rect.Width;
+			sprite.Offset.Y = (pivot.Y - 0.5f) * rect.Height;
 
 			// Calculate and overwrite TextureRectOffset. It is the offset in pixels of m_RD.TextureRect to Rect.
-			sprite.RD_C213.TextureRectOffset.X = sprite.RD_C213.TextureRect.X - rect.X;
-			sprite.RD_C213.TextureRectOffset.Y = sprite.RD_C213.TextureRect.Y - rect.Y;
+			sprite.RD.TextureRectOffset.X = sprite.RD.TextureRect.X - rect.X;
+			sprite.RD.TextureRectOffset.Y = sprite.RD.TextureRect.Y - rect.Y;
 		}
 	}
 }

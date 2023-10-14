@@ -7,28 +7,28 @@ namespace AssetRipper.SourceGenerated.Extensions
 	{
 		public static ParticleSystemStopAction GetStopAction(this IParticleSystem system)
 		{
-			return (ParticleSystemStopAction)system.StopAction_C198;
+			return (ParticleSystemStopAction)system.StopAction;
 		}
 
 		public static ParticleSystemCullingMode GetCullingMode(this IParticleSystem system)
 		{
-			return (ParticleSystemCullingMode)system.CullingMode_C198;
+			return (ParticleSystemCullingMode)system.CullingMode;
 		}
 
 		public static ParticleSystemRingBufferMode GetRingBufferMode(this IParticleSystem system)
 		{
-			return (ParticleSystemRingBufferMode)system.RingBufferMode_C198;
+			return (ParticleSystemRingBufferMode)system.RingBufferMode;
 		}
 
 		public static ParticleSystemSimulationSpace GetMoveWithTransform(this IParticleSystem system)
 		{
-			if (system.Has_MoveWithTransform_C198_Boolean())
+			if (system.Has_MoveWithTransform_Boolean())
 			{
-				return system.MoveWithTransform_C198_Boolean ? ParticleSystemSimulationSpace.Local : ParticleSystemSimulationSpace.World;
+				return system.MoveWithTransform_Boolean ? ParticleSystemSimulationSpace.Local : ParticleSystemSimulationSpace.World;
 			}
 			else
 			{
-				return (ParticleSystemSimulationSpace)system.MoveWithTransform_C198_Int32;
+				return (ParticleSystemSimulationSpace)system.MoveWithTransform_Int32;
 			}
 		}
 	}

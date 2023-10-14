@@ -1,7 +1,6 @@
 using AssetRipper.Assets;
 using AssetRipper.Assets.Cloning;
 using AssetRipper.Assets.Export;
-using AssetRipper.Assets.Export.Dependencies;
 using AssetRipper.Assets.Export.Yaml;
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
@@ -65,16 +64,16 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 		public override YamlMappingNode ExportYamlEditor(IExportContainer container) => ExportYaml(container);
 		public override YamlMappingNode ExportYamlRelease(IExportContainer container) => ExportYaml(container);
 
-		public override IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<(string, PPtr)> FetchDependencies()
 		{
 			for (int i = 0; i < Fields.Length; i++)
 			{
 				SerializableType.Field etalon = Type.GetField(i);
 				if (IsAvailable(etalon))
 				{
-					foreach (PPtr<IUnityObjectBase> asset in Fields[i].FetchDependencies(context, etalon))
+					foreach ((string, PPtr) pair in Fields[i].FetchDependencies(etalon))
 					{
-						yield return asset;
+						yield return pair;
 					}
 				}
 			}

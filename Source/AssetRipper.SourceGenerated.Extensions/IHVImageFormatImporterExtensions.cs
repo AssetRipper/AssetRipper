@@ -7,9 +7,9 @@ namespace AssetRipper.SourceGenerated.Extensions
 	{
 		public static void SetToDefault(this IIHVImageFormatImporter importer)
 		{
-			importer.TextureSettings_C1055.FilterMode = (int)FilterMode.Bilinear;
-			importer.TextureSettings_C1055.Aniso = 1;
-			importer.SRGBTexture_C1055 = true;
+			importer.TextureSettings.FilterMode = (int)FilterMode.Bilinear;
+			importer.TextureSettings.Aniso = 1;
+			importer.SRGBTexture = true;
 		}
 	}
 }

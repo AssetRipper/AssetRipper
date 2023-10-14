@@ -314,7 +314,7 @@ namespace AssetRipper.Processing.StaticMeshes
 
 		private static void ApplyMeshToRendererAndFilter(IMesh mesh, IRenderer renderer, IMeshFilter meshFilter)
 		{
-			meshFilter.Mesh_C33P = mesh;
+			meshFilter.MeshP = mesh;
 			renderer.ClearStaticBatchInfo();
 			renderer.MarkGameObjectAsStatic();
 		}
@@ -326,7 +326,7 @@ namespace AssetRipper.Processing.StaticMeshes
 
 			newMesh.SetIndexFormat(instanceMeshData.GetIndexFormat());
 
-			ICompressedMesh compressedMesh = newMesh.CompressedMesh_C43;
+			ICompressedMesh compressedMesh = newMesh.CompressedMesh;
 			compressedMesh.SetVertices(instanceMeshData.Vertices);
 			compressedMesh.SetNormals(instanceMeshData.Normals);
 			compressedMesh.SetTangents(instanceMeshData.Tangents);
@@ -344,23 +344,23 @@ namespace AssetRipper.Processing.StaticMeshes
 			compressedMesh.SetBindPoses(instanceMeshData.BindPose);
 			compressedMesh.SetTriangles(instanceMeshData.ProcessedIndexBuffer);
 
-			newMesh.KeepIndices_C43 = true;//Not sure about this. Seems to be for animated meshes
-			newMesh.KeepVertices_C43 = true;//Not sure about this. Seems to be for animated meshes
-			newMesh.MeshMetrics_0__C43 = CalculateMeshMetric(instanceMeshData.Vertices, instanceMeshData.UV0, instanceMeshData.ProcessedIndexBuffer, instanceMeshData.SubMeshes, 0);
-			newMesh.MeshMetrics_1__C43 = CalculateMeshMetric(instanceMeshData.Vertices, instanceMeshData.UV1, instanceMeshData.ProcessedIndexBuffer, instanceMeshData.SubMeshes, 1);
-			newMesh.MeshUsageFlags_C43 = (int)SourceGenerated.NativeEnums.Global.MeshUsageFlags.MeshUsageFlagNone;
-			newMesh.CookingOptions_C43 = (int)SourceGenerated.NativeEnums.Global.MeshColliderCookingOptions.DefaultCookingFlags;
+			newMesh.KeepIndices = true;//Not sure about this. Seems to be for animated meshes
+			newMesh.KeepVertices = true;//Not sure about this. Seems to be for animated meshes
+			newMesh.MeshMetrics_0_ = CalculateMeshMetric(instanceMeshData.Vertices, instanceMeshData.UV0, instanceMeshData.ProcessedIndexBuffer, instanceMeshData.SubMeshes, 0);
+			newMesh.MeshMetrics_1_ = CalculateMeshMetric(instanceMeshData.Vertices, instanceMeshData.UV1, instanceMeshData.ProcessedIndexBuffer, instanceMeshData.SubMeshes, 1);
+			newMesh.MeshUsageFlags = (int)SourceGenerated.NativeEnums.Global.MeshUsageFlags.MeshUsageFlagNone;
+			newMesh.CookingOptions = (int)SourceGenerated.NativeEnums.Global.MeshColliderCookingOptions.DefaultCookingFlags;
 			//I copied 30 from a vanilla compressed mesh (with MeshCompression.Low), and it aligned with this enum.
 			newMesh.SetMeshOptimizationFlags(MeshOptimizationFlags.Everything);
 			newMesh.SetMeshCompression(ModelImporterMeshCompression.Low);
 
-			AccessListBase<ISubMesh> subMeshList = newMesh.SubMeshes_C43;
+			AccessListBase<ISubMesh> subMeshList = newMesh.SubMeshes;
 			foreach (SubMeshData subMesh in instanceMeshData.SubMeshes)
 			{
 				subMesh.CopyTo(subMeshList.AddNew(), newMesh.GetIndexFormat());
 			}
 
-			newMesh.LocalAABB_C43.CalculateFromVertexArray(instanceMeshData.Vertices);
+			newMesh.LocalAABB.CalculateFromVertexArray(instanceMeshData.Vertices);
 
 			return newMesh;
 		}
@@ -602,7 +602,7 @@ namespace AssetRipper.Processing.StaticMeshes
 				return false;
 			}
 
-			IMesh? mesh = meshFilter.Mesh_C33P;
+			IMesh? mesh = meshFilter.MeshP;
 			if (mesh is null)
 			{
 				cleanName = null;

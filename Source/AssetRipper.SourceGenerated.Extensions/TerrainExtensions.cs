@@ -7,25 +7,25 @@ namespace AssetRipper.SourceGenerated.Extensions
 	{
 		public static ShadowCastingMode GetShadowCastingMode(this ITerrain terrain)
 		{
-			if (terrain.Has_ShadowCastingMode_C218())
+			if (terrain.Has_ShadowCastingMode())
 			{
-				return terrain.ShadowCastingMode_C218E;
+				return terrain.ShadowCastingModeE;
 			}
 			else
 			{
-				return terrain.CastShadows_C218 ? ShadowCastingMode.TwoSided : ShadowCastingMode.Off;
+				return terrain.CastShadows ? ShadowCastingMode.TwoSided : ShadowCastingMode.Off;
 			}
 		}
 
 		public static bool GetCastShadows(this ITerrain terrain)
 		{
-			if (terrain.Has_CastShadows_C218())
+			if (terrain.Has_CastShadows())
 			{
-				return terrain.CastShadows_C218;
+				return terrain.CastShadows;
 			}
 			else
 			{
-				return terrain.ShadowCastingMode_C218E != ShadowCastingMode.Off;
+				return terrain.ShadowCastingModeE != ShadowCastingMode.Off;
 			}
 		}
 	}

@@ -42,7 +42,7 @@ public sealed class TextureArrayAssetExporter : BinaryAssetExporter
 				{
 					if (!cubemapArray.CheckAssetIntegrity())
 					{
-						WarnResourceFileNotFound(cubemapArray.Name, cubemapArray.StreamData_C188);
+						WarnResourceFileNotFound(cubemapArray.Name, cubemapArray.StreamData);
 						return false;
 					}
 					success = TextureConverter.TryConvertToBitmap(cubemapArray, out bitmap);
@@ -52,7 +52,7 @@ public sealed class TextureArrayAssetExporter : BinaryAssetExporter
 				{
 					if (!texture2DArray.CheckAssetIntegrity())
 					{
-						WarnResourceFileNotFound(texture2DArray.Name, texture2DArray.StreamData_C187);
+						WarnResourceFileNotFound(texture2DArray.Name, texture2DArray.StreamData);
 						return false;
 					}
 					success = TextureConverter.TryConvertToBitmap(texture2DArray, out bitmap);
@@ -62,7 +62,7 @@ public sealed class TextureArrayAssetExporter : BinaryAssetExporter
 				{
 					if (!texture3D.CheckAssetIntegrity())
 					{
-						WarnResourceFileNotFound(texture3D.Name, texture3D.StreamData_C117);
+						WarnResourceFileNotFound(texture3D.Name, texture3D.StreamData);
 						return false;
 					}
 					success = TextureConverter.TryConvertToBitmap(texture3D, out bitmap);

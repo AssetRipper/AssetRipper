@@ -23,7 +23,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 				return true;
 			}
 
-			AccessListBase<ISerializedProperty>? properties = shader.ParsedForm_C48?.PropInfo.Props;
+			AccessListBase<ISerializedProperty>? properties = shader.ParsedForm?.PropInfo.Props;
 			if (properties is null || properties.Count == 0)
 			{
 				return false;

@@ -7,20 +7,20 @@ namespace AssetRipper.SourceGenerated.Extensions
 	{
 		public static void ConvertToEditorFormat(this INavMeshSettings settings)
 		{
-			INavMeshData? data = settings.NavMeshData_C196P;
+			INavMeshData? data = settings.NavMeshDataP;
 			if (data == null)
 			{
-				settings.BuildSettings_C196.SetToDefault();
+				settings.BuildSettings.SetToDefault();
 			}
 			else
 			{
-				if (data.Has_NavMeshParams_C238())
+				if (data.Has_NavMeshParams())
 				{
-					settings.BuildSettings_C196.SetValues(data.NavMeshParams_C238);
+					settings.BuildSettings.SetValues(data.NavMeshParams);
 				}
 				else
 				{
-					settings.BuildSettings_C196.CopyValues(data.NavMeshBuildSettings_C238);
+					settings.BuildSettings.CopyValues(data.NavMeshBuildSettings);
 				}
 			}
 		}

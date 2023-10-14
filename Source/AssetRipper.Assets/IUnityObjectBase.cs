@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
-using AssetRipper.Assets.Export.Dependencies;
 using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.IO.Endian;
@@ -69,7 +68,6 @@ public interface IUnityObjectBase : IUnityAssetBase
 	IUnityObjectBase? MainAsset { get; set; }
 
 	YamlDocument ExportYamlDocument(IExportContainer container);
-	new IEnumerable<(FieldName, PPtr<IUnityObjectBase>)> FetchDependencies();
 	string GetBestName();
 }
 public static class UnityObjectBaseExtensions

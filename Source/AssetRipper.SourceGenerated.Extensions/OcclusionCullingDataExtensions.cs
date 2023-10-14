@@ -1,8 +1,6 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Generics;
-using AssetRipper.Assets.Interfaces;
-using AssetRipper.Assets.Metadata;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.SourceGenerated.Classes.ClassID_25;
 using AssetRipper.SourceGenerated.Classes.ClassID_29;
@@ -20,15 +18,15 @@ namespace AssetRipper.SourceGenerated.Extensions
 	{
 		public static void Initialize(this IOcclusionCullingData occlusionCullingData, IExportContainer container, IOcclusionCullingSettings cullingSetting)
 		{
-			occlusionCullingData.PVSData_C363 = cullingSetting.PVSData_C29 ?? Array.Empty<byte>();
-			int renderCount = cullingSetting.StaticRenderers_C29?.Count ?? 0;
-			int portalCount = cullingSetting.Portals_C29?.Count ?? 0;
-			occlusionCullingData.Scenes_C363.InitializeList(1);
-			OcclusionScene scene = occlusionCullingData.Scenes_C363[0];
-			scene.Initialize(cullingSetting.SceneGUID_C29, renderCount, portalCount);
+			occlusionCullingData.PVSData = cullingSetting.PVSData ?? Array.Empty<byte>();
+			int renderCount = cullingSetting.StaticRenderers?.Count ?? 0;
+			int portalCount = cullingSetting.Portals?.Count ?? 0;
+			occlusionCullingData.Scenes.InitializeList(1);
+			OcclusionScene scene = occlusionCullingData.Scenes[0];
+			scene.Initialize(cullingSetting.SceneGUID, renderCount, portalCount);
 
-			occlusionCullingData.StaticRenderers_C363.InitializeList(scene.SizeRenderers);
-			occlusionCullingData.Portals_C363.InitializeList(scene.SizePortals);
+			occlusionCullingData.StaticRenderers.InitializeList(scene.SizeRenderers);
+			occlusionCullingData.Portals.InitializeList(scene.SizePortals);
 			occlusionCullingData.SetIDs(container, cullingSetting, scene);
 		}
 
@@ -71,44 +69,44 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 
 			// if >= 5.5.0 and Release this asset doesn't containt renderers data so we need to create it
-			List<IOcclusionCullingSettings> cullingSettings = new List<IOcclusionCullingSettings>();
+			List<IOcclusionCullingSettings> cullingSettings = new();
 			foreach (IUnityObjectBase asset in occlusionCullingData.Collection.Bundle.FetchAssetsInHierarchy())
 			{
 				if (asset is IOcclusionCullingSettings cullingSetting
-					&& cullingSetting.Has_OcclusionCullingData_C29()
-					&& cullingSetting.OcclusionCullingData_C29.IsAsset(cullingSetting.Collection, occlusionCullingData))
+					&& cullingSetting.Has_OcclusionCullingData()
+					&& cullingSetting.OcclusionCullingData.IsAsset(cullingSetting.Collection, occlusionCullingData))
 				{
 					cullingSettings.Add(cullingSetting);
 				}
 			}
 
-			int maxRenderer = occlusionCullingData.Scenes_C363.Max(j => j.IndexRenderers + j.SizeRenderers);
-			occlusionCullingData.StaticRenderers_C363.InitializeList(maxRenderer);
-			int maxPortal = occlusionCullingData.Scenes_C363.Max(j => j.IndexPortals + j.SizePortals);
-			occlusionCullingData.Portals_C363.InitializeList(maxPortal);
+			int maxRenderer = occlusionCullingData.Scenes.Max(j => j.IndexRenderers + j.SizeRenderers);
+			occlusionCullingData.StaticRenderers.InitializeList(maxRenderer);
+			int maxPortal = occlusionCullingData.Scenes.Max(j => j.IndexPortals + j.SizePortals);
+			occlusionCullingData.Portals.InitializeList(maxPortal);
 
 			foreach (IOcclusionCullingSettings cullingSetting in cullingSettings)
 			{
-				if (!cullingSetting.Has_SceneGUID_C29())
+				if (!cullingSetting.Has_SceneGUID())
 				{
 					continue;
 				}
 
-				int sceneIndex = occlusionCullingData.Scenes_C363.IndexOf(t => t.Scene == cullingSetting.SceneGUID_C29);
+				int sceneIndex = occlusionCullingData.Scenes.IndexOf(t => t.Scene == cullingSetting.SceneGUID);
 				if (sceneIndex == -1)
 				{
 					//Previously a logged error
-					throw new Exception($"Unable to find scene data with GUID {cullingSetting.SceneGUID_C29} in {occlusionCullingData.GetBestName()}");
+					throw new Exception($"Unable to find scene data with GUID {cullingSetting.SceneGUID} in {occlusionCullingData.GetBestName()}");
 				}
 
-				IOcclusionScene scene = occlusionCullingData.Scenes_C363[sceneIndex];
-				if (scene.SizeRenderers != cullingSetting.StaticRenderers_C29.Count)
+				IOcclusionScene scene = occlusionCullingData.Scenes[sceneIndex];
+				if (scene.SizeRenderers != cullingSetting.StaticRenderers.Count)
 				{
-					throw new Exception($"Scene renderer count {scene.SizeRenderers} doesn't match with given {cullingSetting.StaticRenderers_C29.Count}");
+					throw new Exception($"Scene renderer count {scene.SizeRenderers} doesn't match with given {cullingSetting.StaticRenderers.Count}");
 				}
-				if (scene.SizePortals != cullingSetting.Portals_C29.Count)
+				if (scene.SizePortals != cullingSetting.Portals.Count)
 				{
-					throw new Exception($"Scene portal count {scene.SizePortals} doesn't match with given {cullingSetting.Portals_C29.Count}");
+					throw new Exception($"Scene portal count {scene.SizePortals} doesn't match with given {cullingSetting.Portals.Count}");
 				}
 				occlusionCullingData.SetIDs(container, cullingSetting, scene);
 			}
@@ -116,18 +114,18 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		private static void SetIDs(this IOcclusionCullingData occlusionCullingData, IExportContainer container, IOcclusionCullingSettings cullingSetting, IOcclusionScene scene)
 		{
-			PPtrAccessList<PPtr_Renderer_5_0_0, IRenderer> renderers = cullingSetting.StaticRenderers_C29P;
+			PPtrAccessList<PPtr_Renderer_5_0_0, IRenderer> renderers = cullingSetting.StaticRenderersP;
 			for (int i = 0; i < renderers.Count; i++)
 			{
 				IRenderer? renderer = renderers[i];
-				occlusionCullingData.StaticRenderers_C363[scene.IndexRenderers + i].SetObjectID(container, renderer);
+				occlusionCullingData.StaticRenderers[scene.IndexRenderers + i].SetObjectID(container, renderer);
 			}
 
-			PPtrAccessList<PPtr_OcclusionPortal_5_5_0, IOcclusionPortal> portals = cullingSetting.Portals_C29P;
+			PPtrAccessList<PPtr_OcclusionPortal_5_5_0, IOcclusionPortal> portals = cullingSetting.PortalsP;
 			for (int i = 0; i < portals.Count; i++)
 			{
 				IOcclusionPortal? portal = portals[i];
-				occlusionCullingData.Portals_C363[scene.IndexPortals + i].SetObjectID(container, portal);
+				occlusionCullingData.Portals[scene.IndexPortals + i].SetObjectID(container, portal);
 			}
 		}
 

@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Assets.Interfaces;
 
 namespace AssetRipper.SourceGenerated.Extensions
 {
@@ -7,9 +6,9 @@ namespace AssetRipper.SourceGenerated.Extensions
 	{
 		public static string GetOriginalName(this IUnityObjectBase _this)
 		{
-			if (_this is IHasNameString named)
+			if (_this is INamed named)
 			{
-				return named.NameString;
+				return named.Name;
 			}
 			else
 			{
@@ -19,14 +18,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static string? TryGetName(this IUnityObjectBase _this)
 		{
-			if (_this is IHasNameString named)
-			{
-				return named.NameString;
-			}
-			else
-			{
-				return null;
-			}
+			return (_this as INamed)?.Name;
 		}
 	}
 }

@@ -9,7 +9,7 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 	{
 		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			if (asset.MainAsset is IFont font && IsValidData(font.FontData_C128))
+			if (asset.MainAsset is IFont font && IsValidData(font.FontData))
 			{
 				exportCollection = new FontAssetExportCollection(this, font);
 				return true;
@@ -24,7 +24,7 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 		public override bool Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path)
 		{
 			IFont font = assets.OfType<IFont>().Single();
-			File.WriteAllBytes(path, font.FontData_C128);
+			File.WriteAllBytes(path, font.FontData);
 			return true;
 		}
 	}

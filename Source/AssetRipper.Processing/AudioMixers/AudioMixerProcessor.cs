@@ -85,19 +85,19 @@ namespace AssetRipper.Processing.AudioMixers
 				IAudioMixerGroupController group = groups[i];
 				IGroupConstant groupConstant = constants.Groups[i];
 
-				group.Volume_C243.CopyValues(indexToGuid.IndexNewGuid(groupConstant.VolumeIndex));
-				group.Pitch_C243.CopyValues(indexToGuid.IndexNewGuid(groupConstant.PitchIndex));
+				group.Volume.CopyValues(indexToGuid.IndexNewGuid(groupConstant.VolumeIndex));
+				group.Pitch.CopyValues(indexToGuid.IndexNewGuid(groupConstant.PitchIndex));
 
 				// Different Unity versions vary in whether a "send" field is used in groups as well as in snapshots.
 				// GroupConstant.Has_SendIndex() can be used to determine its existence.
 				// If "send" does not exist in GroupConstant, it may still exist in AudioMixerGroupController, but is just ignored.
-				if (groupConstant.Has_SendIndex() && group.Has_Send_C243())
+				if (groupConstant.Has_SendIndex() && group.Has_Send())
 				{
-					group.Send_C243.CopyValues(indexToGuid.IndexNewGuid(groupConstant.SendIndex));
+					group.Send.CopyValues(indexToGuid.IndexNewGuid(groupConstant.SendIndex));
 				}
-				group.Mute_C243 = groupConstant.Mute;
-				group.Solo_C243 = groupConstant.Solo;
-				group.BypassEffects_C243 = groupConstant.BypassEffects;
+				group.Mute = groupConstant.Mute;
+				group.Solo = groupConstant.Solo;
+				group.BypassEffects = groupConstant.BypassEffects;
 			}
 		}
 
@@ -116,7 +116,7 @@ namespace AssetRipper.Processing.AudioMixers
 			for (int i = 0; i < effects.Length; i++)
 			{
 				IAudioMixerEffectController effect = virtualFile.CreateAsset((int)ClassIDType.AudioMixerEffectController, AudioMixerEffectController.Create);
-				effect.ObjectHideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
+				effect.HideFlagsE = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
 				effects[i] = effect;
 				effect.MainAsset = mixer;
 			}
@@ -129,18 +129,18 @@ namespace AssetRipper.Processing.AudioMixers
 				IAudioMixerEffectController effect = effects[i];
 
 				IAudioMixerGroupController group = groups[(int)effectConstant.GroupConstantIndex];
-				group.Effects_C243P.Add(effect);
+				group.EffectsP.Add(effect);
 
-				effect.EffectID_C244.CopyValues(constants.EffectGUIDs[i]);
+				effect.EffectID.CopyValues(constants.EffectGUIDs[i]);
 
 				if (AudioEffectDefinitions.IsPluginEffect(effectConstant.Type))
 				{
-					effect.EffectName_C244 = pluginEffectNames[pluginEffectIndex++];
+					effect.EffectName = pluginEffectNames[pluginEffectIndex++];
 				}
 				else
 				{
 					string name = AudioEffectDefinitions.EffectTypeToName(effectConstant.Type) ?? "Unknown";
-					effect.EffectName_C244 = name;
+					effect.EffectName = name;
 					if (name == "Attenuation")
 					{
 						groupsWithAttenuation.Add(group);
@@ -148,14 +148,14 @@ namespace AssetRipper.Processing.AudioMixers
 				}
 
 				bool enableWetMix = effectConstant.WetMixLevelIndex != uint.MaxValue;
-				if (enableWetMix || effect.EffectName_C244 == "Send")
+				if (enableWetMix || effect.EffectName == "Send")
 				{
-					effect.MixLevel_C244.CopyValues(indexToGuid.IndexNewGuid(effectConstant.WetMixLevelIndex));
+					effect.MixLevel.CopyValues(indexToGuid.IndexNewGuid(effectConstant.WetMixLevelIndex));
 				}
 
 				for (int j = 0; j < effectConstant.ParameterIndices.Count; j++)
 				{
-					Parameter param = effect.Parameters_C244.AddNew();
+					Parameter param = effect.Parameters.AddNew();
 					// Use a dummy name here. The actual name will be recovered by AssetRipperAudioMixerPostprocessor.
 					param.ParameterName = $"Param_{j}";
 					param.GUID.CopyValues(indexToGuid.IndexNewGuid(effectConstant.ParameterIndices[j]));
@@ -163,10 +163,10 @@ namespace AssetRipper.Processing.AudioMixers
 
 				if (effectConstant.SendTargetEffectIndex != uint.MaxValue)
 				{
-					effect.SendTarget_C244P = effects[effectConstant.SendTargetEffectIndex];
+					effect.SendTargetP = effects[effectConstant.SendTargetEffectIndex];
 				}
-				effect.EnableWetMix_C244 = enableWetMix;
-				effect.Bypass_C244 = effectConstant.Bypass;
+				effect.EnableWetMix = enableWetMix;
+				effect.Bypass = effectConstant.Bypass;
 			}
 
 			// Append an Attenuation effect to a group if it has not yet got one,
@@ -176,12 +176,12 @@ namespace AssetRipper.Processing.AudioMixers
 				if (!groupsWithAttenuation.Contains(group))
 				{
 					IAudioMixerEffectController effect = virtualFile.CreateAsset((int)ClassIDType.AudioMixerEffectController, AudioMixerEffectController.Create);
-					effect.ObjectHideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
-					effect.EffectID_C244.CopyValues(UnityGuid.NewGuid());
-					effect.EffectName_C244 = "Attenuation";
+					effect.HideFlagsE = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
+					effect.EffectID.CopyValues(UnityGuid.NewGuid());
+					effect.EffectName = "Attenuation";
 					effect.MainAsset = mixer;
 
-					group.Effects_C243P.Add(effect);
+					group.EffectsP.Add(effect);
 				}
 			}
 		}
@@ -209,7 +209,7 @@ namespace AssetRipper.Processing.AudioMixers
 					{
 						if (indexToGuid.TryGetValue((uint)j, out UnityGuid valueGuid))
 						{
-							SetValue(snapshotController.FloatValues_C245, (GUID)valueGuid, snapshotConstant.Values[j]);
+							SetValue(snapshotController.FloatValues, (GUID)valueGuid, snapshotConstant.Values[j]);
 						}
 						else
 						{
@@ -223,7 +223,7 @@ namespace AssetRipper.Processing.AudioMixers
 						int transitionType = (int)snapshotConstant.TransitionTypes[j];
 						if (indexToGuid.TryGetValue(paramIndex, out UnityGuid paramGuid))
 						{
-							SetValue(snapshotController.TransitionOverrides_C245, (GUID)paramGuid, transitionType);
+							SetValue(snapshotController.TransitionOverrides, (GUID)paramGuid, transitionType);
 						}
 						else
 						{
@@ -241,16 +241,16 @@ namespace AssetRipper.Processing.AudioMixers
 		{
 			IAudioMixerConstant constants = mixer.MixerConstant_C240;
 			// generate exposed parameters
-			mixer.ExposedParameters_C241.Clear();
+			mixer.ExposedParameters.Clear();
 			for (int i = 0; i < constants.ExposedParameterIndices.Count; i++)
 			{
 				uint paramIndex = constants.ExposedParameterIndices[i];
 				uint paramNameCrc = constants.ExposedParameterNames[i];
 				if (indexToGuid.TryGetValue(paramIndex, out UnityGuid paramGuid))
 				{
-					ExposedAudioParameter exposedParam = mixer.ExposedParameters_C241.AddNew();
+					ExposedAudioParameter exposedParam = mixer.ExposedParameters.AddNew();
 					exposedParam.Guid.CopyValues(paramGuid);
-					exposedParam.NameString = Crc32Algorithm.ReverseAscii(paramNameCrc);
+					exposedParam.Name = Crc32Algorithm.ReverseAscii(paramNameCrc);
 				}
 				else
 				{
@@ -259,15 +259,15 @@ namespace AssetRipper.Processing.AudioMixers
 			}
 
 			// complete mixer controller
-			mixer.AudioMixerGroupViews_C241.Clear();
-			IAudioMixerGroupView groupView = mixer.AudioMixerGroupViews_C241.AddNew();
+			mixer.AudioMixerGroupViews.Clear();
+			IAudioMixerGroupView groupView = mixer.AudioMixerGroupViews.AddNew();
 			groupView.Name = ViewName;
 			foreach (IAudioMixerGroupController group in groups)
 			{
-				groupView.Guids.AddNew().CopyValues(group.GroupID_C243);
+				groupView.Guids.AddNew().CopyValues(group.GroupID);
 			}
-			mixer.CurrentViewIndex_C241 = 0;
-			mixer.TargetSnapshot_C241P = mixer.StartSnapshot_C241P;
+			mixer.CurrentViewIndex = 0;
+			mixer.TargetSnapshotP = mixer.StartSnapshotP;
 		}
 
 		private static Utf8String[] ParseNameBuffer(ReadOnlySpan<byte> buffer)

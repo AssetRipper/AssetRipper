@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Assets.Interfaces;
 using AssetRipper.SourceGenerated.Classes.ClassID_2;
 
 namespace AssetRipper.Tools.DependenceGrapher
@@ -13,9 +12,9 @@ namespace AssetRipper.Tools.DependenceGrapher
 			{
 				return gameObjectName;
 			}
-			else if (_this is IHasNameString named)
+			else if (_this is INamed named)
 			{
-				return named.NameString;
+				return named.Name;
 			}
 			else
 			{

@@ -17,28 +17,28 @@ namespace AssetRipper.Import.Structure.Assembly
 		/// </summary>
 		public static bool HasAssemblyName(this IMonoScript monoScript)
 		{
-			return monoScript.Collection.Flags.IsRelease() || !monoScript.IsReleaseOnly_AssemblyName_C115();
+			return monoScript.Collection.Flags.IsRelease() || !monoScript.IsReleaseOnly_AssemblyName();
 		}
 
 		public static string GetValidAssemblyName(this IMonoScript monoScript)
 		{
-			string name = FilenameUtils.FixAssemblyName(monoScript.AssemblyName_C115);
+			string name = FilenameUtils.FixAssemblyName(monoScript.AssemblyName);
 			return string.IsNullOrEmpty(name) ? "Assembly-CSharp" : name;
 		}
 
 		/// <summary>
-		/// Apply <see cref="FilenameUtils.FixAssemblyName(string)"/> to <see cref="IMonoScript.AssemblyName_C115"/>.
+		/// Apply <see cref="FilenameUtils.FixAssemblyName(string)"/> to <see cref="IMonoScript.AssemblyName"/>.
 		/// </summary>
 		/// <param name="monoScript">The relevant MonoScript.</param>
 		/// <returns></returns>
 		public static string GetAssemblyNameFixed(this IMonoScript monoScript)
 		{
-			return FilenameUtils.FixAssemblyName(monoScript.AssemblyName_C115);
+			return FilenameUtils.FixAssemblyName(monoScript.AssemblyName);
 		}
 
 		public static SerializableType? GetBehaviourType(this IMonoScript monoScript, IAssemblyManager assemblyManager)
 		{
-			ScriptIdentifier scriptID = assemblyManager.GetScriptID(monoScript.GetAssemblyNameFixed(), monoScript.Namespace_C115, monoScript.ClassName_C115);
+			ScriptIdentifier scriptID = assemblyManager.GetScriptID(monoScript.GetAssemblyNameFixed(), monoScript.Namespace, monoScript.ClassName_R);
 			if (assemblyManager.IsValid(scriptID))
 			{
 				return assemblyManager.GetSerializableType(scriptID, monoScript.Collection.Version);
@@ -48,19 +48,19 @@ namespace AssetRipper.Import.Structure.Assembly
 
 		public static string GetFullName(this IMonoScript monoScript)
 		{
-			if (string.IsNullOrEmpty(monoScript.Namespace_C115))
+			if (string.IsNullOrEmpty(monoScript.Namespace))
 			{
-				return monoScript.ClassName_C115;
+				return monoScript.ClassName_R;
 			}
 			else
 			{
-				return $"{monoScript.Namespace_C115}.{monoScript.ClassName_C115}";
+				return $"{monoScript.Namespace}.{monoScript.ClassName_R}";
 			}
 		}
 
 		public static ScriptIdentifier GetScriptID(this IMonoScript monoScript, IAssemblyManager assemblyManager)
 		{
-			return assemblyManager.GetScriptID(monoScript.GetAssemblyNameFixed(), monoScript.Namespace_C115, monoScript.ClassName_C115);
+			return assemblyManager.GetScriptID(monoScript.GetAssemblyNameFixed(), monoScript.Namespace, monoScript.ClassName_R);
 		}
 
 		public static TypeDefinition GetTypeDefinition(this IMonoScript monoScript, IAssemblyManager assemblyManager)
@@ -77,9 +77,9 @@ namespace AssetRipper.Import.Structure.Assembly
 
 		public static Hash128 GetPropertiesHash(this IMonoScript monoScript)
 		{
-			if (monoScript.Has_PropertiesHash_C115_Hash128())
+			if (monoScript.Has_PropertiesHash_Hash128())
 			{
-				return monoScript.PropertiesHash_C115_Hash128;
+				return monoScript.PropertiesHash_Hash128;
 			}
 			else
 			{
@@ -88,11 +88,11 @@ namespace AssetRipper.Import.Structure.Assembly
 				//but most platforms are little endian, so I don't really know for sure.
 				if (monoScript.Collection.EndianType == EndianType.BigEndian)
 				{
-					BinaryPrimitives.WriteUInt32BigEndian(hash, monoScript.PropertiesHash_C115_UInt32);
+					BinaryPrimitives.WriteUInt32BigEndian(hash, monoScript.PropertiesHash_UInt32);
 				}
 				else
 				{
-					BinaryPrimitives.WriteUInt32LittleEndian(hash, monoScript.PropertiesHash_C115_UInt32);
+					BinaryPrimitives.WriteUInt32LittleEndian(hash, monoScript.PropertiesHash_UInt32);
 				}
 				return new()
 				{

@@ -5,6 +5,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="AssetRipper.SourceGenerated" Version="0.3.4.2" />
 		<PackageReference Include="ElectronNET.API" Version="23.6.1" />
 		<PackageReference Include="System.Text.Json" Version="8.0.0-rc.2.23479.6" />
 	</ItemGroup>
@@ -14,12 +15,6 @@
 		<ProjectReference Include="..\AssetRipper.Export\AssetRipper.Export.csproj" />
 		<ProjectReference Include="..\AssetRipper.GUI.Licensing\AssetRipper.GUI.Licensing.csproj" />
 		<ProjectReference Include="..\AssetRipper.GUI.Localizations\AssetRipper.GUI.Localizations.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Reference Include="AssetRipper.SourceGenerated">
-			<HintPath>..\Libraries\AssetRipper.SourceGenerated.dll</HintPath>
-		</Reference>
 	</ItemGroup>
 
 	<ItemGroup>

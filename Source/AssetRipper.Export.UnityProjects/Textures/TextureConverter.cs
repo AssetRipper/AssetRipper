@@ -32,9 +32,9 @@ namespace AssetRipper.Export.UnityProjects.Textures
 
 			if (!TryConvertToBitmap(
 				texture.GetTextureFormat(),
-				texture.Width_C117,
-				texture.Height_C117,
-				texture.ImageCount_C117,
+				texture.Width,
+				texture.Height,
+				texture.ImageCount,
 				texture.GetCompleteImageSize(),
 				texture.Collection.Version,
 				buffer,
@@ -46,7 +46,7 @@ namespace AssetRipper.Export.UnityProjects.Textures
 			bitmap.FlipY();
 
 			// despite the name, this packing works for different formats
-			if (texture.LightmapFormat_C117E == TextureUsageMode.NormalmapDXT5nm)
+			if (texture.LightmapFormatE == TextureUsageMode.NormalmapDXT5nm)
 			{
 				UnpackNormal(bitmap.Bits);
 			}
@@ -64,11 +64,11 @@ namespace AssetRipper.Export.UnityProjects.Textures
 			}
 
 			if (!TryConvertToBitmap(
-				texture.Format_C187E,
-				texture.Width_C187,
-				texture.Height_C187,
-				texture.Depth_C187,
-				(int)texture.DataSize_C187,
+				texture.FormatE,
+				texture.Width,
+				texture.Height,
+				texture.Depth,
+				(int)texture.DataSize,
 				texture.Collection.Version,
 				buffer,
 				out bitmap))
@@ -91,11 +91,11 @@ namespace AssetRipper.Export.UnityProjects.Textures
 			}
 
 			if (!TryConvertToBitmap(
-				texture.Format_C188E,
-				texture.Width_C188,
-				texture.Width_C188,//Not sure if this is correct
-				texture.CubemapCount_C188 * 6,//Not sure if this is correct
-				(int)texture.DataSize_C188,
+				texture.FormatE,
+				texture.Width,
+				texture.Width,//Not sure if this is correct
+				texture.CubemapCount * 6,//Not sure if this is correct
+				(int)texture.DataSize,
 				texture.Collection.Version,
 				buffer,
 				out bitmap))

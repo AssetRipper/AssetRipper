@@ -7,13 +7,13 @@ namespace AssetRipper.SourceGenerated.Extensions
 	{
 		public static byte[] GetImageData(this ITexture3D texture)
 		{
-			if (texture.ImageData_C117.Length > 0)
+			if (texture.ImageData.Length > 0)
 			{
-				return texture.ImageData_C117;
+				return texture.ImageData;
 			}
-			else if (texture.Has_StreamData_C117() && texture.StreamData_C117.IsSet())
+			else if (texture.Has_StreamData() && texture.StreamData.IsSet())
 			{
-				return texture.StreamData_C117.GetContent(texture.Collection);
+				return texture.StreamData.GetContent(texture.Collection);
 			}
 			else
 			{
@@ -23,13 +23,13 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static bool CheckAssetIntegrity(this ITexture3D texture)
 		{
-			if (texture.ImageData_C117.Length > 0)
+			if (texture.ImageData.Length > 0)
 			{
 				return true;
 			}
-			else if (texture.Has_StreamData_C117())
+			else if (texture.Has_StreamData())
 			{
-				return texture.StreamData_C117.CheckIntegrity(texture.Collection);
+				return texture.StreamData.CheckIntegrity(texture.Collection);
 			}
 			else
 			{
@@ -39,51 +39,51 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static TextureFormat GetTextureFormat(this ITexture3D texture)
 		{
-			if (texture.Has_Format_C117_Int32())
+			if (texture.Has_Format_Int32())
 			{
-				return texture.Format_C117_Int32E;
+				return texture.Format_Int32E;
 			}
 			else
 			{
-				return texture.Format_C117_UInt32E;
+				return texture.Format_UInt32E;
 			}
 		}
 
 		public static TextureUsageMode GetLightmapFormat(this ITexture3D texture)
 		{
-			if (texture.Has_LightmapFormat_C117())
+			if (texture.Has_LightmapFormat())
 			{
-				return texture.LightmapFormat_C117E;
+				return texture.LightmapFormatE;
 			}
 			else
 			{
-				return texture.UsageMode_C117E;
+				return texture.UsageModeE;
 			}
 		}
 
 		public static int GetCompleteImageSize(this ITexture3D texture)
 		{
-			if (texture.Has_DataSize_C117())
+			if (texture.Has_DataSize())
 			{
-				return (int)texture.DataSize_C117;
+				return (int)texture.DataSize;
 			}
 			else
 			{
-				return texture.CompleteImageSize_C117;
+				return texture.CompleteImageSize;
 			}
 		}
 
 		public static int GetMipCount(this ITexture3D texture)
 		{
-			if (texture.Has_MipCount_C117())
+			if (texture.Has_MipCount())
 			{
-				return texture.MipCount_C117;
+				return texture.MipCount;
 			}
 			else
 			{
-				if (texture.MipMap_C117)
+				if (texture.MipMap)
 				{
-					int maxSide = Math.Max(texture.Width_C117, texture.Height_C117);
+					int maxSide = Math.Max(texture.Width, texture.Height);
 					return Convert.ToInt32(Math.Log2(maxSide));
 				}
 				else

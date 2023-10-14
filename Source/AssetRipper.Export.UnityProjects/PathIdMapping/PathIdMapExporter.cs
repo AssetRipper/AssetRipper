@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
-using AssetRipper.Assets.Interfaces;
 using AssetRipper.SourceGenerated.Classes.ClassID_27;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Classes.ClassID_49;
@@ -29,7 +28,7 @@ public sealed class PathIdMapExporter : IPostExporter
 				{
 					fileInfo.Assets.Add(new()
 					{
-						Name = (asset as IHasNameString)?.NameString,
+						Name = (asset as INamed)?.Name,
 						Type = asset.ClassName,
 						PathID = asset.PathID,
 					});

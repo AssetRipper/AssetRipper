@@ -76,7 +76,7 @@ namespace AssetRipper.Processing.Scenes
 			if (buildSettings is not null && IsSceneName(collection.Name))
 			{
 				int index = FileNameToSceneIndex(collection.Name, collection.Version);
-				if (index >= buildSettings.Scenes_C141.Count)
+				if (index >= buildSettings.Scenes.Count)
 				{
 					//This can happen in the following situation:
 					//1. A game is built with N scenes and published to a distribution platform.
@@ -87,7 +87,7 @@ namespace AssetRipper.Processing.Scenes
 					result = null;
 					return false;
 				}
-				string scenePath = buildSettings.Scenes_C141[index].String;
+				string scenePath = buildSettings.Scenes[index].String;
 				if (scenePath.StartsWith(AssetsName, StringComparison.Ordinal))
 				{
 					string extension = Path.GetExtension(scenePath);
@@ -126,10 +126,10 @@ namespace AssetRipper.Processing.Scenes
 				return false;
 			}
 
-			string sceneName = buildSettings.Scenes_C141[sceneIndex].String;
-			for (int i = 0; i < buildSettings.Scenes_C141.Count; i++)
+			string sceneName = buildSettings.Scenes[sceneIndex].String;
+			for (int i = 0; i < buildSettings.Scenes.Count; i++)
 			{
-				if (buildSettings.Scenes_C141[i] == sceneName)
+				if (buildSettings.Scenes[i] == sceneName)
 				{
 					if (i != sceneIndex)
 					{

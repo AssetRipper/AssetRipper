@@ -59,9 +59,9 @@ namespace AssetRipper.Export.UnityProjects.Meshes
 
 				(ISubMesh, MaterialBuilder)[] subMeshes = new (ISubMesh, MaterialBuilder)[1];
 
-				for (int submeshIndex = 0; submeshIndex < meshData.Mesh.SubMeshes_C43.Count; submeshIndex++)
+				for (int submeshIndex = 0; submeshIndex < meshData.Mesh.SubMeshes.Count; submeshIndex++)
 				{
-					ISubMesh subMesh = meshData.Mesh.SubMeshes_C43[submeshIndex];
+					ISubMesh subMesh = meshData.Mesh.SubMeshes[submeshIndex];
 					subMeshes[0] = (subMesh, material);
 					
 					IMeshBuilder<MaterialBuilder> subMeshBuilder = GlbSubMeshBuilder.BuildSubMeshes(subMeshes, meshData, Transformation.Identity, Transformation.Identity);

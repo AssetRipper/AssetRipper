@@ -1,5 +1,4 @@
-﻿using AssetRipper.Primitives;
-using AssetRipper.SourceGenerated.Classes.ClassID_90;
+﻿using AssetRipper.SourceGenerated.Classes.ClassID_90;
 
 namespace AssetRipper.SourceGenerated.Extensions
 {
@@ -7,7 +6,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 	{
 		public static Utf8String? FindBonePath(this IAvatar avatar, uint hash)
 		{
-			avatar.TOS_C90.TryGetValue(hash, out Utf8String? result);
+			avatar.TOS.TryGetValue(hash, out Utf8String? result);
 			return result;
 		}
 	}

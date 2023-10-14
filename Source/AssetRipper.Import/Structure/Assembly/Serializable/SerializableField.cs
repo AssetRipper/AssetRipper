@@ -1,9 +1,7 @@
 using AssetRipper.Assets;
 using AssetRipper.Assets.Cloning;
 using AssetRipper.Assets.Export;
-using AssetRipper.Assets.Export.Dependencies;
 using AssetRipper.Assets.Export.Yaml;
-using AssetRipper.Assets.IO;
 using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
@@ -628,30 +626,27 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 			}
 		}
 
-		public IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context, SerializableType.Field etalon)
+		public readonly IEnumerable<(string, PPtr)> FetchDependencies(SerializableType.Field etalon)
 		{
 			if (etalon.Type.Type == PrimitiveType.Complex)
 			{
 				if (etalon.IsArray)
 				{
 					IUnityAssetBase[] structures = (IUnityAssetBase[])CValue;
-					if (structures.Length > 0 && structures[0] is IDependent)
+					for (int i = 0; i < structures.Length; i++)
 					{
-						foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromArray(structures.Cast<IDependent>(), etalon.Name))
+						foreach ((string path, PPtr pptr) in structures[i].FetchDependencies())
 						{
-							yield return asset;
+							yield return ($"{etalon.Name}[{i}].{path}", pptr);
 						}
 					}
 				}
 				else
 				{
 					IUnityAssetBase structure = (IUnityAssetBase)CValue;
-					if (structure is IDependent dependent)
+					foreach ((string path, PPtr pptr) in structure.FetchDependencies())
 					{
-						foreach (PPtr<IUnityObjectBase> asset in context.FetchDependenciesFromDependent(dependent, etalon.Name))
-						{
-							yield return asset;
-						}
+						yield return ($"{etalon.Name}.{path}", pptr);
 					}
 				}
 			}

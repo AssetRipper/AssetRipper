@@ -7,7 +7,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 	{
 		public static ObstacleAvoidanceType GetObstacleAvoidanceType(this INavMeshAgent agent)
 		{
-			return (ObstacleAvoidanceType)agent.ObstacleAvoidanceType_C195;
+			return (ObstacleAvoidanceType)agent.ObstacleAvoidanceType;
 		}
 	}
 }

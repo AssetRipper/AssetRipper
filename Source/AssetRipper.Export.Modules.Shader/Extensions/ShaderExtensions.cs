@@ -9,32 +9,32 @@ namespace AssetRipper.Export.Modules.Shaders.Extensions
 	{
 		public static ShaderSubProgramBlob[] ReadBlobs(this IShader shader)
 		{
-			if (shader.Has_CompressedLengths_C48_AssetList_AssetList_UInt32())
+			if (shader.Has_CompressedLengths_AssetList_AssetList_UInt32())
 			{
 				return UnpackSubProgramBlobs(
 					shader.Collection,
-					shader.Offsets_C48_AssetList_AssetList_UInt32,
-					shader.CompressedLengths_C48_AssetList_AssetList_UInt32,
-					shader.DecompressedLengths_C48_AssetList_AssetList_UInt32,
-					shader.CompressedBlob_C48);
+					shader.Offsets_AssetList_AssetList_UInt32,
+					shader.CompressedLengths_AssetList_AssetList_UInt32,
+					shader.DecompressedLengths_AssetList_AssetList_UInt32,
+					shader.CompressedBlob);
 			}
-			else if (shader.Has_CompressedLengths_C48_AssetList_UInt32())
+			else if (shader.Has_CompressedLengths_AssetList_UInt32())
 			{
 				return UnpackSubProgramBlobs(
 					shader.Collection,
-					shader.Offsets_C48_AssetList_UInt32,
-					shader.CompressedLengths_C48_AssetList_UInt32,
-					shader.DecompressedLengths_C48_AssetList_UInt32,
-					shader.CompressedBlob_C48);
+					shader.Offsets_AssetList_UInt32,
+					shader.CompressedLengths_AssetList_UInt32,
+					shader.DecompressedLengths_AssetList_UInt32,
+					shader.CompressedBlob);
 			}
-			else if (shader.Has_CompressedBlob_C48())
+			else if (shader.Has_CompressedBlob())
 			{
 				return UnpackSubProgramBlobs(
 					shader.Collection,
 					0,
-					(uint)shader.CompressedBlob_C48.Length,
-					shader.DecompressedSize_C48,
-					shader.CompressedBlob_C48);
+					(uint)shader.CompressedBlob.Length,
+					shader.DecompressedSize,
+					shader.CompressedBlob);
 			}
 			else
 			{

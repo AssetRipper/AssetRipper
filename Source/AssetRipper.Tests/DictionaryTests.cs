@@ -85,12 +85,12 @@ namespace AssetRipper.Tests
 				Assert.That(dictionary[MakeFastPropertyName("Three")], Is.EqualTo(3));
 			});
 
-			static FastPropertyName MakeFastPropertyName(string str) => new() { NameString = str };
+			static FastPropertyName MakeFastPropertyName(string str) => new() { Name = str };
 
 			static void AddFastPropertyName(AssetDictionary<FastPropertyName, int> dictionary, string str, int value)
 			{
 				AssetPair<FastPropertyName, int> pair = dictionary.AddNew();
-				pair.Key.NameString = str;
+				pair.Key.Name = str;
 				pair.Value = value;
 			}
 		}

@@ -7,7 +7,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 	{
 		public static IEnumerable<GPUPlatform>? GetPlatforms(this IShader shader)
 		{
-			return shader.Platforms_C48?.Select(p => unchecked((GPUPlatform)p));
+			return shader.Platforms?.Select(p => unchecked((GPUPlatform)p));
 		}
 	}
 }

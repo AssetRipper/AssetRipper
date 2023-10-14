@@ -13,7 +13,7 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 
 		protected override string GetExportExtension(IUnityObjectBase asset)
 		{
-			return GetExtensionFromPath(Asset.OriginalPath_C329.String);
+			return GetExtensionFromPath(Asset.OriginalPath_R);
 		}
 
 		private static string GetExtensionFromPath(string path)
@@ -27,19 +27,19 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 			//There may be more fields to set here. I did not throughly check.
 
 			IVideoClipImporter importer = VideoClipImporter.Create(container.File, container.ExportVersion);
-			importer.EndFrame_C1127 = (int)Asset.FrameCount_C329;
-			if (importer.Has_SourceFileSize_C1127())
+			importer.EndFrame = (int)Asset.FrameCount;
+			if (importer.Has_SourceFileSize())
 			{
-				importer.OriginalHeight_C1127 = (int)Asset.Height_C329;
-				importer.OriginalWidth_C1127 = (int)Asset.Width_C329;
-				importer.SourceFileSize_C1127 = Asset.ExternalResources_C329.Size;
+				importer.OriginalHeight = (int)Asset.Height;
+				importer.OriginalWidth = (int)Asset.Width;
+				importer.SourceFileSize = Asset.ExternalResources.Size;
 			}
-			importer.FrameRate_C1127 = Asset.FrameRate_C329;
-			importer.FrameCount_C1127 = importer.EndFrame_C1127;
-			importer.ImportAudio_C1127 = true;
-			if (importer.Has_AssetBundleName_C1127() && Asset.AssetBundleName is not null)
+			importer.FrameRate = Asset.FrameRate;
+			importer.FrameCount = importer.EndFrame;
+			importer.ImportAudio = true;
+			if (importer.Has_AssetBundleName_R() && Asset.AssetBundleName is not null)
 			{
-				importer.AssetBundleName_C1127 = Asset.AssetBundleName;
+				importer.AssetBundleName_R = Asset.AssetBundleName;
 			}
 			return importer;
 		}

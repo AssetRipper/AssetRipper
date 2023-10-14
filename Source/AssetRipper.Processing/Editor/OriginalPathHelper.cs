@@ -1,9 +1,6 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Generics;
-using AssetRipper.Assets.Interfaces;
-using AssetRipper.Assets.Metadata;
 using AssetRipper.Import.Configuration;
-using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Classes.ClassID_142;
 using AssetRipper.SourceGenerated.Classes.ClassID_147;
 using AssetRipper.SourceGenerated.Extensions;
@@ -23,7 +20,7 @@ internal static class OriginalPathHelper
 
 	internal static void SetOriginalPaths(IResourceManager manager)
 	{
-		foreach (AccessPairBase<Utf8String, IPPtr_Object> kvp in manager.Container_C147)
+		foreach (AccessPairBase<Utf8String, IPPtr_Object> kvp in manager.Container)
 		{
 			IUnityObjectBase? asset = kvp.Value.TryGetAsset(manager.Collection);
 			if (asset is null)
@@ -51,7 +48,7 @@ internal static class OriginalPathHelper
 	/// 
 	/// </summary>
 	/// <remarks>
-	/// TODO: Asset bundles usually contain more assets than listed in <see cref="IAssetBundle.Container_C142"/>. 
+	/// TODO: Asset bundles usually contain more assets than listed in <see cref="IAssetBundle.Container"/>. 
 	/// Need to export them in AssetBundleFullPath directory if <see cref="m_BundledAssetsExportMode"/> is <see cref="BundledAssetsExportMode.GroupByBundleName"/>.
 	/// Or maybe remove that mode entirely. It has dubious utility.
 	/// </remarks>
@@ -62,7 +59,7 @@ internal static class OriginalPathHelper
 		string bundleName = bundle.GetAssetBundleName();
 		string bundleDirectory = bundleName + DirectorySeparator;
 		string directory = Path.Combine(AssetBundleFullPath, bundleName);
-		foreach (AccessPairBase<Utf8String, IAssetInfo> kvp in bundle.Container_C142)
+		foreach (AccessPairBase<Utf8String, IAssetInfo> kvp in bundle.Container)
 		{
 			// skip shared bundle assets, because we need to export them in their bundle directory
 			if (kvp.Value.Asset.FileID != 0)
@@ -152,7 +149,7 @@ internal static class OriginalPathHelper
 	/// <param name="asset"></param>
 	private static void UndoPathLowercasing(IUnityObjectBase asset)
 	{
-		string? assetName = (asset as IHasNameString)?.NameString;
+		string? assetName = (asset as INamed)?.Name;
 		string? originalName = asset.OriginalName;
 		if (assetName is not null
 			&& originalName is not null

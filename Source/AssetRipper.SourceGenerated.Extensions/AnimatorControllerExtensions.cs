@@ -33,7 +33,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 	{
 		public static bool ContainsAnimationClip(this IAnimatorController controller, IAnimationClip clip)
 		{
-			foreach (IPPtr_AnimationClip clipPtr in controller.AnimationClips_C91)
+			foreach (IPPtr_AnimationClip clipPtr in controller.AnimationClips)
 			{
 				if (clipPtr.IsAsset(controller.Collection, clip))
 				{
@@ -45,14 +45,14 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static IMonoBehaviour?[] GetStateBehaviours(this IAnimatorController controller, int layerIndex)
 		{
-			if (controller.Has_StateMachineBehaviourVectorDescription_C91())
+			if (controller.Has_StateMachineBehaviourVectorDescription())
 			{
-				uint layerID = controller.Controller_C91.LayerArray[layerIndex].Data.Binding;
+				uint layerID = controller.Controller.LayerArray[layerIndex].Data.Binding;
 				StateKey key = new();
 				key.SetValues(layerIndex, layerID);
-				if (controller.StateMachineBehaviourVectorDescription_C91.StateMachineBehaviourRanges.TryGetValue(key, out StateRange? range))
+				if (controller.StateMachineBehaviourVectorDescription.StateMachineBehaviourRanges.TryGetValue(key, out StateRange? range))
 				{
-					return GetStateBehaviours(controller.StateMachineBehaviourVectorDescription_C91, controller.StateMachineBehaviours_C91P, range);
+					return GetStateBehaviours(controller.StateMachineBehaviourVectorDescription, controller.StateMachineBehavioursP, range);
 				}
 			}
 			return Array.Empty<IMonoBehaviour>();
@@ -60,17 +60,17 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static IMonoBehaviour?[] GetStateBehaviours(this IAnimatorController controller, int stateMachineIndex, int stateIndex)
 		{
-			if (controller.Has_StateMachineBehaviourVectorDescription_C91())
+			if (controller.Has_StateMachineBehaviourVectorDescription())
 			{
-				int layerIndex = controller.Controller_C91.GetLayerIndexByStateMachineIndex(stateMachineIndex);
-				IStateMachineConstant stateMachine = controller.Controller_C91.StateMachineArray[stateMachineIndex].Data;
+				int layerIndex = controller.Controller.GetLayerIndexByStateMachineIndex(stateMachineIndex);
+				IStateMachineConstant stateMachine = controller.Controller.StateMachineArray[stateMachineIndex].Data;
 				IStateConstant state = stateMachine.StateConstantArray[stateIndex].Data;
 				uint stateID = GetIdForStateConstant(state);
 				StateKey key = new();
 				key.SetValues(layerIndex, stateID);
-				if (controller.StateMachineBehaviourVectorDescription_C91.StateMachineBehaviourRanges.TryGetValue(key, out StateRange? range))
+				if (controller.StateMachineBehaviourVectorDescription.StateMachineBehaviourRanges.TryGetValue(key, out StateRange? range))
 				{
-					return GetStateBehaviours(controller.StateMachineBehaviourVectorDescription_C91, controller.StateMachineBehaviours_C91P, range);
+					return GetStateBehaviours(controller.StateMachineBehaviourVectorDescription, controller.StateMachineBehavioursP, range);
 				}
 			}
 			return Array.Empty<IMonoBehaviour>();
@@ -110,7 +110,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 		{
 			yield return animatorController;
 
-			foreach (IAnimatorControllerLayer layer in animatorController.AnimatorLayers_C91)
+			foreach (IAnimatorControllerLayer layer in animatorController.AnimatorLayers)
 			{
 				//Ignoring layer.Controller, layer.Mask, and layer.SkeletonMask
 				if (layer.Has_Behaviours())
@@ -168,13 +168,13 @@ namespace AssetRipper.SourceGenerated.Extensions
 		private static IEnumerable<IUnityObjectBase?> FetchEditorHierarchy(this IAnimatorStateMachine stateMachine)
 		{
 			yield return stateMachine;
-			if (stateMachine.Has_ChildStateMachines_C1107())
+			if (stateMachine.Has_ChildStateMachines())
 			{
-				foreach (IAnimatorStateTransition? anyStateTransition in stateMachine.AnyStateTransitions_C1107P)
+				foreach (IAnimatorStateTransition? anyStateTransition in stateMachine.AnyStateTransitionsP)
 				{
 					yield return anyStateTransition;
 				}
-				foreach (ChildAnimatorStateMachine childAnimatorStateMachine in stateMachine.ChildStateMachines_C1107)
+				foreach (ChildAnimatorStateMachine childAnimatorStateMachine in stateMachine.ChildStateMachines)
 				{
 					IAnimatorStateMachine? childStateMachine = childAnimatorStateMachine.StateMachine.TryGetAsset(stateMachine.Collection);
 					if (childStateMachine is not null)
@@ -185,7 +185,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 						}
 					}
 				}
-				foreach (ChildAnimatorState childState in stateMachine.ChildStates_C1107)
+				foreach (ChildAnimatorState childState in stateMachine.ChildStates)
 				{
 					IAnimatorState? state = childState.State.TryGetAsset(stateMachine.Collection);
 					if (state is not null)
@@ -196,15 +196,15 @@ namespace AssetRipper.SourceGenerated.Extensions
 						}
 					}
 				}
-				foreach (IAnimatorTransition? entryTransition in stateMachine.EntryTransitions_C1107P)
+				foreach (IAnimatorTransition? entryTransition in stateMachine.EntryTransitionsP)
 				{
 					yield return entryTransition;
 				}
-				foreach (IMonoBehaviour? behaviour in stateMachine.StateMachineBehaviours_C1107P)
+				foreach (IMonoBehaviour? behaviour in stateMachine.StateMachineBehavioursP)
 				{
 					yield return behaviour;
 				}
-				foreach (AssetList<PPtr_AnimatorTransition> list in stateMachine.StateMachineTransitions_C1107.Values)
+				foreach (AssetList<PPtr_AnimatorTransition> list in stateMachine.StateMachineTransitions.Values)
 				{
 					//Skipping keys because they're IAnimatorStateMachine
 					foreach (PPtr_AnimatorTransition transition in list)
@@ -215,7 +215,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 			else
 			{
-				foreach (IAnimatorStateMachine? childStateMachine in stateMachine.ChildStateMachine_C1107P)
+				foreach (IAnimatorStateMachine? childStateMachine in stateMachine.ChildStateMachineP)
 				{
 					if (childStateMachine is not null)
 					{
@@ -225,9 +225,9 @@ namespace AssetRipper.SourceGenerated.Extensions
 						}
 					}
 				}
-				if (stateMachine.Has_LocalTransitions_C1107())
+				if (stateMachine.Has_LocalTransitions())
 				{
-					foreach ((PPtr_AnimatorState_4_0_0 statePPtr, AssetList<PPtr_AnimatorStateTransition_4_0_0> list) in stateMachine.LocalTransitions_C1107)
+					foreach ((PPtr_AnimatorState_4_0_0 statePPtr, AssetList<PPtr_AnimatorStateTransition_4_0_0> list) in stateMachine.LocalTransitions)
 					{
 						IAnimatorState? state = statePPtr.TryGetAsset(stateMachine.Collection);
 						if (state is not null)
@@ -243,7 +243,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 						}
 					}
 				}
-				foreach ((PPtr_AnimatorState_4_0_0 statePPtr, AssetList<PPtr_AnimatorStateTransition_4_0_0> list) in stateMachine.OrderedTransitions_C1107)
+				foreach ((PPtr_AnimatorState_4_0_0 statePPtr, AssetList<PPtr_AnimatorStateTransition_4_0_0> list) in stateMachine.OrderedTransitions)
 				{
 					IAnimatorState? state = statePPtr.TryGetAsset(stateMachine.Collection);
 					if (state is not null)
@@ -258,7 +258,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 						yield return transition.TryGetAsset(stateMachine.Collection);
 					}
 				}
-				foreach (IAnimatorState? state in stateMachine.States_C1107P)
+				foreach (IAnimatorState? state in stateMachine.StatesP)
 				{
 					if (state is not null)
 					{
@@ -275,7 +275,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 		private static IEnumerable<IUnityObjectBase?> FetchHierarchy(this IBlendTree blendTree)
 		{
 			yield return blendTree;
-			foreach (IChildMotion childMotion in blendTree.Childs_C206)
+			foreach (IChildMotion childMotion in blendTree.Childs)
 			{
 				//AnimationClips are excluded from the hierarchy
 				IBlendTree? child = childMotion.Motion.TryGetAsset(blendTree.Collection) as IBlendTree;
@@ -293,9 +293,9 @@ namespace AssetRipper.SourceGenerated.Extensions
 		{
 			yield return state;
 
-			if (state.Has_Motions_C1102())
+			if (state.Has_Motions())
 			{
-				foreach (IMotion? motion in state.Motions_C1102P)
+				foreach (IMotion? motion in state.MotionsP)
 				{
 					if (motion is IBlendTree blendTree)
 					{
@@ -308,7 +308,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 			else
 			{
-				if (state.Motion_C1102P is IBlendTree blendTree)
+				if (state.MotionP is IBlendTree blendTree)
 				{
 					foreach (IUnityObjectBase? reference in blendTree.FetchHierarchy())
 					{
@@ -317,16 +317,16 @@ namespace AssetRipper.SourceGenerated.Extensions
 				}
 			}
 			//Ignoring ParentStateMachine
-			if (state.Has_StateMachineBehaviours_C1102())
+			if (state.Has_StateMachineBehaviours())
 			{
-				foreach (IMonoBehaviour? behaviour in state.StateMachineBehaviours_C1102P)
+				foreach (IMonoBehaviour? behaviour in state.StateMachineBehavioursP)
 				{
 					yield return behaviour;
 				}
 			}
-			if (state.Has_Transitions_C1102())
+			if (state.Has_Transitions())
 			{
-				foreach (IAnimatorStateTransition? transition in state.Transitions_C1102P)
+				foreach (IAnimatorStateTransition? transition in state.TransitionsP)
 				{
 					yield return transition;
 				}

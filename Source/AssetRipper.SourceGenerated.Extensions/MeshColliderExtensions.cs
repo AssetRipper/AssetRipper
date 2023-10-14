@@ -7,9 +7,9 @@ namespace AssetRipper.SourceGenerated.Extensions
 	{
 		public static MeshColliderCookingOptions GetCookingOptions(this IMeshCollider collider)
 		{
-			if (collider.Has_CookingOptions_C64())
+			if (collider.Has_CookingOptions())
 			{
-				return (MeshColliderCookingOptions)collider.CookingOptions_C64;
+				return (MeshColliderCookingOptions)collider.CookingOptions;
 			}
 			else
 			{
@@ -18,7 +18,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 					MeshColliderCookingOptions.EnableMeshCleaning |
 					MeshColliderCookingOptions.WeldColocatedVertices;
 
-				if (collider.InflateMesh_C64)
+				if (collider.InflateMesh)
 				{
 					options |= MeshColliderCookingOptions.InflateConvexMesh;
 				}

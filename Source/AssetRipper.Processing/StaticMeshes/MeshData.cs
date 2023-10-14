@@ -122,7 +122,7 @@ namespace AssetRipper.Processing.StaticMeshes
 
 		private static SubMeshData[] GetSubMeshArray(IMesh mesh)
 		{
-			AccessListBase<ISubMesh> list = mesh.SubMeshes_C43;
+			AccessListBase<ISubMesh> list = mesh.SubMeshes;
 			if (list.Count == 0)
 			{
 				return Array.Empty<SubMeshData>();
@@ -132,7 +132,7 @@ namespace AssetRipper.Processing.StaticMeshes
 				SubMeshData[] array = new SubMeshData[list.Count];
 				for (int i = 0; i < list.Count; i++)
 				{
-					array[i] = SubMeshData.Create(list[i], mesh.IndexFormat_C43E);
+					array[i] = SubMeshData.Create(list[i], mesh.IndexFormatE);
 				}
 				return array;
 			}
