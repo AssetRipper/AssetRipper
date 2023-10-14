@@ -130,7 +130,7 @@ namespace AssetRipper.Processing.AnimationClips
 							return "m_Sprite";
 						}
 					}
-					throw GetUnknownAttributeException(type, attribute);
+					return ThrowUnknownAttributeException(type, attribute);
 
 				case BindingCustomType.MonoBehaviour:
 					{
@@ -139,7 +139,7 @@ namespace AssetRipper.Processing.AnimationClips
 							return foundPath;
 						}
 					}
-					throw GetUnknownAttributeException(type, attribute);
+					return ThrowUnknownAttributeException(type, attribute);
 
 				case BindingCustomType.Light:
 					{
@@ -148,7 +148,7 @@ namespace AssetRipper.Processing.AnimationClips
 							return foundPath;
 						}
 					}
-					throw GetUnknownAttributeException(type, attribute);
+					return ThrowUnknownAttributeException(type, attribute);
 
 				case BindingCustomType.RendererShadows:
 					{
@@ -157,7 +157,7 @@ namespace AssetRipper.Processing.AnimationClips
 							return foundPath;
 						}
 					}
-					throw GetUnknownAttributeException(type, attribute);
+					return ThrowUnknownAttributeException(type, attribute);
 
 				case BindingCustomType.ParticleSystem:
 					{
@@ -186,7 +186,7 @@ namespace AssetRipper.Processing.AnimationClips
 							return foundPath;
 						}
 					}
-					throw GetUnknownAttributeException(type, attribute);
+					return ThrowUnknownAttributeException(type, attribute);
 
 				case BindingCustomType.LineRenderer:
 					{
@@ -195,7 +195,7 @@ namespace AssetRipper.Processing.AnimationClips
 							return foundPath;
 						}
 					}
-					throw GetUnknownAttributeException(type, attribute);
+					return ThrowUnknownAttributeException(type, attribute);
 
 				case BindingCustomType.TrailRenderer:
 					{
@@ -204,7 +204,7 @@ namespace AssetRipper.Processing.AnimationClips
 							return foundPath;
 						}
 					}
-					throw GetUnknownAttributeException(type, attribute);
+					return ThrowUnknownAttributeException(type, attribute);
 
 				case BindingCustomType.PositionConstraint:
 					{
@@ -224,7 +224,7 @@ namespace AssetRipper.Processing.AnimationClips
 							10 => "m_Active",
 							11 => $"m_Sources.Array.data[{attribute >> 8}].sourceTransform",
 							12 => $"m_Sources.Array.data[{attribute >> 8}].weight",
-							_ => throw GetUnknownAttributeException(type, attribute)
+							_ => ThrowUnknownAttributeException(type, attribute)
 						};
 					}
 
@@ -246,7 +246,7 @@ namespace AssetRipper.Processing.AnimationClips
 							10 => "m_Active",
 							11 => $"m_Sources.Array.data[{attribute >> 8}].sourceTransform",
 							12 => $"m_Sources.Array.data[{attribute >> 8}].weight",
-							_ => throw GetUnknownAttributeException(type, attribute)
+							_ => ThrowUnknownAttributeException(type, attribute)
 						};
 					}
 
@@ -268,7 +268,7 @@ namespace AssetRipper.Processing.AnimationClips
 							10 => "m_Active",
 							11 => $"m_Sources.Array.data[{attribute >> 8}].sourceTransform",
 							12 => $"m_Sources.Array.data[{attribute >> 8}].weight",
-							_ => throw GetUnknownAttributeException(type, attribute)
+							_ => ThrowUnknownAttributeException(type, attribute)
 						};
 					}
 
@@ -285,7 +285,7 @@ namespace AssetRipper.Processing.AnimationClips
 							5 => "m_WorldUpObject",
 							6 => $"m_Sources.Array.data[{attribute >> 8}].sourceTransform",
 							7 => $"m_Sources.Array.data[{attribute >> 8}].weight",
-							_ => throw GetUnknownAttributeException(type, attribute)
+							_ => ThrowUnknownAttributeException(type, attribute)
 						};
 					}
 
@@ -310,7 +310,7 @@ namespace AssetRipper.Processing.AnimationClips
 							13 => $"m_RotationOffsets.Array.data[{attribute >> 8}].z",
 							14 => $"m_Sources.Array.data[{attribute >> 8}].sourceTransform",
 							15 => $"m_Sources.Array.data[{attribute >> 8}].weight",
-							_ => throw GetUnknownAttributeException(type, attribute)
+							_ => ThrowUnknownAttributeException(type, attribute)
 						};
 					}
 
@@ -325,7 +325,7 @@ namespace AssetRipper.Processing.AnimationClips
 							3 => $"m_Sources.Array.data[{attribute >> 8}].sourceTransform",
 							4 => $"m_Sources.Array.data[{attribute >> 8}].weight",
 							5 => "m_Roll",
-							_ => throw GetUnknownAttributeException(type, attribute)
+							_ => ThrowUnknownAttributeException(type, attribute)
 						};
 					}
 
@@ -336,7 +336,7 @@ namespace AssetRipper.Processing.AnimationClips
 							return foundPath;
 						}
 					}
-					throw GetUnknownAttributeException(type, attribute);
+					return ThrowUnknownAttributeException(type, attribute);
 
 				case BindingCustomType.VisualEffect:
 					{
@@ -364,7 +364,7 @@ namespace AssetRipper.Processing.AnimationClips
 							return foundPath;
 						}
 					}
-					throw GetUnknownAttributeException(type, attribute);
+					return ThrowUnknownAttributeException(type, attribute);
 
 				case BindingCustomType.UserDefined:
 					return Crc32Algorithm.ReverseAscii(attribute, $"UserDefined_0x{attribute:X}_");
@@ -377,15 +377,16 @@ namespace AssetRipper.Processing.AnimationClips
 							return foundPath;
 						}
 					}
-					throw GetUnknownAttributeException(type, attribute);
+					return ThrowUnknownAttributeException(type, attribute);
 
 				default:
 					throw new ArgumentException($"Binding type {type} not implemented", nameof(type));
 			}
 
-			static Exception GetUnknownAttributeException(BindingCustomType type, uint attribute)
+			[DoesNotReturn]
+			static string ThrowUnknownAttributeException(BindingCustomType type, uint attribute)
 			{
-				return new ArgumentException($"Unknown attribute 0x{attribute:X} ({attribute}) for {type}");
+				throw new ArgumentException($"Unknown attribute 0x{attribute:X} ({attribute}) for {type}");
 			}
 		}
 
