@@ -2,7 +2,6 @@
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
-using AssetRipper.SourceGenerated.Classes.ClassID_49;
 
 namespace AssetRipper.Export.UnityProjects.Shaders
 {
@@ -13,7 +12,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 	{
 		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			if (asset is IShader shader and ITextAsset textAsset && HasDecompiledShaderText(textAsset.Script_C49.String))
+			if (asset is IShader shader && shader.Has_Script() && HasDecompiledShaderText(shader.Script.String))
 			{
 				exportCollection = new ShaderExportCollection(this, shader);
 				return true;
@@ -28,7 +27,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
 			using FileStream stream = File.OpenWrite(path);
-			stream.Write(((ITextAsset)asset).Script_C49.Data);
+			stream.Write(((IShader)asset).Script!.Data);
 			stream.Flush();
 			return true;
 		}
