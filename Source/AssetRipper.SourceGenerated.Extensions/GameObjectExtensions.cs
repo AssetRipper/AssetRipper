@@ -82,6 +82,26 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 		}
 
+		public static int GetComponentCount(this IGameObject gameObject)
+		{
+			if (gameObject.Has_Component_AssetList_ComponentPair())
+			{
+				return gameObject.Component_AssetList_ComponentPair.Count;
+			}
+			else if (gameObject.Has_Component_AssetList_AssetPair_Int32_PPtr_Component_3_5_0())
+			{
+				return gameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_3_5_0.Count;
+			}
+			else if (gameObject.Has_Component_AssetList_AssetPair_Int32_PPtr_Component_5_0_0())
+			{
+				return gameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_5_0_0.Count;
+			}
+			else
+			{
+				throw new Exception("All three component properties returned null");
+			}
+		}
+
 		public static void AddComponent(this IGameObject gameObject, ClassIDType classID, IComponent component)
 		{
 			if (gameObject.Has_Component_AssetList_ComponentPair())
