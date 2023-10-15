@@ -13,7 +13,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AssetRipper.SourceGenerated" Version="0.3.4.2" />
+		<PackageReference Include="AssetRipper.SourceGenerated" Version="0.3.4.4" />
 	</ItemGroup>
 
 </Project>
