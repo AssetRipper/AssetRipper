@@ -5,68 +5,14 @@ using System.CodeDom.Compiler;
 
 namespace AssetRipper.Decompilation.CSharp;
 
-public static class CSharpDecompiler
+public class CSharpDecompiler : IDefinitionVisitor<IndentedTextWriter, IndentedTextWriter>
 {
 	public static string Decompile(TypeDefinition type)
 	{
-		NameGenerator nameGenerator = TypeScopedNameGenerator.Create(type);
-
 		StringWriter stringWriter = new();
 		IndentedTextWriter textWriter = new(stringWriter);
-
 		textWriter.WriteComment("This decompilation assumes that the latest C# version is being used.");
-		if (!Utf8String.IsNullOrEmpty(type.Namespace))
-		{
-			textWriter.WriteFileScopedNamespace(type.Namespace);
-		}
-
-		textWriter.Write(GetAccessModifier(type));
-		textWriter.Write(' ');
-
-		if (TryGetInheritanceModifier(type, out string? inheritanceModifier))
-		{
-			textWriter.Write(inheritanceModifier);
-			textWriter.Write(' ');
-		}
-		
-		textWriter.Write(GetTypeCategory(type));
-		textWriter.Write(' ');
-
-		textWriter.Write(type.Name);
-
-		if (type.BaseType is not null && !IsSpecialType(type.BaseType))
-		{
-			textWriter.Write(nameGenerator.GetFullName(type.BaseType.ToTypeSignature()));
-		}
-		textWriter.WriteLine();
-		using (new CurlyBrackets(textWriter))
-		{
-			if (type.NestedTypes.Count > 0)
-			{
-				textWriter.WriteComment("Nested type decompilation not implemented yet");
-				textWriter.WriteLineNoTabs();
-			}
-			if (type.Fields.Count > 0)
-			{
-				textWriter.WriteComment("Field decompilation not implemented yet");
-				textWriter.WriteLineNoTabs();
-			}
-			if (type.Methods.Count > 0)
-			{
-				textWriter.WriteComment("Method decompilation not implemented yet");
-				textWriter.WriteLineNoTabs();
-			}
-			if (type.Properties.Count > 0)
-			{
-				textWriter.WriteComment("Property decompilation not implemented yet");
-				textWriter.WriteLineNoTabs();
-			}
-			if (type.Events.Count > 0)
-			{
-				textWriter.WriteComment("Event decompilation not implemented yet");
-				textWriter.WriteLineNoTabs();
-			}
-		}
+		type.AcceptVisitor(new CSharpDecompiler(), textWriter);
 		return stringWriter.ToString();
 	}
 
@@ -164,5 +110,83 @@ public static class CSharpDecompiler
 		}
 		modifier = null;
 		return false;
+	}
+
+	IndentedTextWriter IDefinitionVisitor<IndentedTextWriter, IndentedTextWriter>.VisitType(TypeDefinition type, IndentedTextWriter state)
+	{
+		NameGenerator nameGenerator = TypeScopedNameGenerator.Create(type);
+		if (!Utf8String.IsNullOrEmpty(type.Namespace))
+		{
+			state.WriteFileScopedNamespace(type.Namespace);
+		}
+
+		state.Write(GetAccessModifier(type));
+		state.Write(' ');
+
+		if (TryGetInheritanceModifier(type, out string? inheritanceModifier))
+		{
+			state.Write(inheritanceModifier);
+			state.Write(' ');
+		}
+
+		state.Write(GetTypeCategory(type));
+		state.Write(' ');
+
+		state.Write(type.Name);
+
+		if (type.BaseType is not null && !IsSpecialType(type.BaseType))
+		{
+			state.Write(nameGenerator.GetFullName(type.BaseType.ToTypeSignature()));
+		}
+		state.WriteLine();
+		using (new CurlyBrackets(state))
+		{
+			foreach (TypeDefinition nestedType in type.NestedTypes)
+			{
+				nestedType.AcceptVisitor(this, state)
+					.WriteLineNoTabs();
+			}
+			if (type.Fields.Count > 0)
+			{
+				state.WriteComment("Field decompilation not implemented yet");
+				state.WriteLineNoTabs();
+			}
+			if (type.Methods.Count > 0)
+			{
+				state.WriteComment("Method decompilation not implemented yet");
+				state.WriteLineNoTabs();
+			}
+			if (type.Properties.Count > 0)
+			{
+				state.WriteComment("Property decompilation not implemented yet");
+				state.WriteLineNoTabs();
+			}
+			if (type.Events.Count > 0)
+			{
+				state.WriteComment("Event decompilation not implemented yet");
+				state.WriteLineNoTabs();
+			}
+		}
+		return state;
+	}
+
+	IndentedTextWriter IDefinitionVisitor<IndentedTextWriter, IndentedTextWriter>.VisitField(FieldDefinition field, IndentedTextWriter state)
+	{
+		throw new NotImplementedException();
+	}
+
+	IndentedTextWriter IDefinitionVisitor<IndentedTextWriter, IndentedTextWriter>.VisitMethod(MethodDefinition method, IndentedTextWriter state)
+	{
+		throw new NotImplementedException();
+	}
+
+	IndentedTextWriter IDefinitionVisitor<IndentedTextWriter, IndentedTextWriter>.VisitEvent(EventDefinition @event, IndentedTextWriter state)
+	{
+		throw new NotImplementedException();
+	}
+
+	IndentedTextWriter IDefinitionVisitor<IndentedTextWriter, IndentedTextWriter>.VisitProperty(PropertyDefinition property, IndentedTextWriter state)
+	{
+		throw new NotImplementedException();
 	}
 }
