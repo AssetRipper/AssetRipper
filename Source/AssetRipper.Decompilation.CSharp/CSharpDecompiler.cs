@@ -1,4 +1,5 @@
-﻿using AsmResolver.DotNet;
+﻿using AsmResolver;
+using AsmResolver.DotNet;
 using AssetRipper.Text.SourceGeneration;
 using System.CodeDom.Compiler;
 
@@ -8,11 +9,13 @@ public static class CSharpDecompiler
 {
 	public static string Decompile(TypeDefinition type)
 	{
+		NameGenerator nameGenerator = TypeScopedNameGenerator.Create(type);
+
 		StringWriter stringWriter = new();
 		IndentedTextWriter textWriter = new(stringWriter);
 
 		textWriter.WriteComment("This decompilation assumes that the latest C# version is being used.");
-		if (type.Namespace is not null)
+		if (!Utf8String.IsNullOrEmpty(type.Namespace))
 		{
 			textWriter.WriteFileScopedNamespace(type.Namespace);
 		}
@@ -33,13 +36,36 @@ public static class CSharpDecompiler
 
 		if (type.BaseType is not null && !IsSpecialType(type.BaseType))
 		{
-			textWriter.Write(" : global::");
-			textWriter.Write(type.BaseType.FullName);
+			textWriter.Write(nameGenerator.GetFullName(type.BaseType.ToTypeSignature()));
 		}
 		textWriter.WriteLine();
 		using (new CurlyBrackets(textWriter))
 		{
-			textWriter.WriteComment("Member decompilation not implemented yet");
+			if (type.NestedTypes.Count > 0)
+			{
+				textWriter.WriteComment("Nested type decompilation not implemented yet");
+				textWriter.WriteLineNoTabs();
+			}
+			if (type.Fields.Count > 0)
+			{
+				textWriter.WriteComment("Field decompilation not implemented yet");
+				textWriter.WriteLineNoTabs();
+			}
+			if (type.Methods.Count > 0)
+			{
+				textWriter.WriteComment("Method decompilation not implemented yet");
+				textWriter.WriteLineNoTabs();
+			}
+			if (type.Properties.Count > 0)
+			{
+				textWriter.WriteComment("Property decompilation not implemented yet");
+				textWriter.WriteLineNoTabs();
+			}
+			if (type.Events.Count > 0)
+			{
+				textWriter.WriteComment("Event decompilation not implemented yet");
+				textWriter.WriteLineNoTabs();
+			}
 		}
 		return stringWriter.ToString();
 	}
