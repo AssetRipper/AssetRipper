@@ -25,7 +25,7 @@ namespace AssetRipper.Export.UnityProjects.Project
 		{
 			exportCollection = asset switch
 			{
-				IMonoBehaviour monoBehaviour => CreateCollection(monoBehaviour),
+				IMonoBehaviour monoBehaviour => monoBehaviour.IsSceneObject() ? null : CreateCollection(monoBehaviour),
 				_ => null,
 			};
 			return exportCollection is not null;

@@ -10,14 +10,17 @@ using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.Yaml;
 using AssetRipper.Yaml.Extensions;
 using System.Diagnostics;
+using static AssetRipper.Import.Structure.Assembly.Serializable.SerializableStructure;
 
 namespace AssetRipper.Import.Structure.Assembly.Serializable
 {
 	[DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
 	public record struct SerializableField(ulong PValue, object CValue)
 	{
-		public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, int depth, in SerializableType.Field etalon)
+		public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, int depth, in SerializableType.Field etalon, out HashSet<long>? pathIDS)
 		{
+			pathIDS = new HashSet<long>();
+
 			switch (etalon.Type.Type)
 			{
 				case PrimitiveType.Bool:
@@ -183,13 +186,16 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 						IUnityAssetBase[] structures = new IUnityAssetBase[count];
 						for (int i = 0; i < count; i++)
 						{
-							structures[i] = CreateAndReadComplexStructure(ref reader, version, flags, depth, etalon);
+							HashSet<long>? elementPathIDS;
+							structures[i] = CreateAndReadComplexStructure(ref reader, version, flags, depth, etalon, out elementPathIDS);
+							if(elementPathIDS != null)
+								pathIDS.UnionWith(elementPathIDS);
 						}
 						CValue = structures;
 					}
 					else
 					{
-						CValue = CreateAndReadComplexStructure(ref reader, version, flags, depth, etalon);
+						CValue = CreateAndReadComplexStructure(ref reader, version, flags, depth, etalon, out pathIDS);
 					}
 					break;
 
@@ -197,16 +203,24 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 					throw new NotSupportedException(etalon.Type.Type.ToString());
 			}
 
-			static IUnityAssetBase CreateAndReadComplexStructure(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, int depth, SerializableType.Field etalon)
+			static IUnityAssetBase CreateAndReadComplexStructure(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, int depth, SerializableType.Field etalon, out HashSet<long>? pathIDS)
 			{
+				pathIDS = new HashSet<long>();
 				IUnityAssetBase asset = etalon.Type.CreateInstance(depth + 1, version);
 				if (asset is SerializableStructure structure)
 				{
-					structure.Read(ref reader, version, flags);
+					OptionalOut<HashSet<long>> internalStructurePathIDs = new OptionalOut<HashSet<long>>();
+					structure.Read(ref reader, version, flags, internalStructurePathIDs);
+					pathIDS = internalStructurePathIDs.Result;
 				}
 				else
 				{
 					asset.Read(ref reader, flags);
+					var ipptr = asset as IPPtr;
+					if (ipptr != null)
+					{
+						pathIDS.Add(ipptr.PathID);
+					}
 				}
 
 				return asset;

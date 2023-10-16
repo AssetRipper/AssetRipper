@@ -7,7 +7,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 		/// <summary>
 		/// Does this MonoBehaviour belongs to scene/prefab hierarchy? In other words, is <see cref="IMonoBehaviour.GameObject"/> a non-null pptr?
 		/// </summary>
-		public static bool IsSceneObject(this IMonoBehaviour monoBehaviour) => !monoBehaviour.GameObject.IsNull();
+		public static bool IsSceneObject(this IMonoBehaviour monoBehaviour) => monoBehaviour.Collection.IsScene || !monoBehaviour.GameObject.IsNull();
 		/// <summary>
 		/// Does this MonoBehaviour have a name?
 		/// </summary>
