@@ -1,5 +1,7 @@
 ﻿using AsmResolver;
 using AsmResolver.DotNet;
+using AsmResolver.DotNet.Collections;
+using AsmResolver.DotNet.Signatures.Types;
 using AssetRipper.Text.SourceGeneration;
 using System.CodeDom.Compiler;
 
@@ -18,14 +20,10 @@ public class CSharpDecompiler : IDefinitionVisitor<(IndentedTextWriter, NameGene
 
 	private static bool IsSpecialType(ITypeDefOrRef type)
 	{
-		if (type.Namespace == "System")
-		{
-			if (type.Name?.Value is "Object" or "ValueType" or "Enum" or "Delegate")
-			{
-				return type.Scope?.GetAssembly()?.IsCorLib ?? false;
-			}
-		}
-		return false;
+		return type.DeclaringType is null
+			&& type.Namespace == "System"
+			&& type.Name?.Value is "Object" or "ValueType" or "Enum" or "Delegate"
+			&& (type.Scope?.GetAssembly()?.IsCorLib ?? false);
 	}
 
 	private static string GetAccessModifier(TypeDefinition type)
@@ -153,10 +151,10 @@ public class CSharpDecompiler : IDefinitionVisitor<(IndentedTextWriter, NameGene
 				writer.WriteComment("Field decompilation not implemented yet");
 				writer.WriteLineNoTabs();
 			}
-			if (type.Methods.Count > 0)
+			foreach (MethodDefinition method in type.Methods.Where(m => m.Semantics is null))
 			{
-				writer.WriteComment("Method decompilation not implemented yet");
-				writer.WriteLineNoTabs();
+				method.AcceptVisitor(this, state)
+					.WriteLineNoTabs();
 			}
 			foreach (PropertyDefinition property in type.Properties)
 			{
@@ -179,7 +177,81 @@ public class CSharpDecompiler : IDefinitionVisitor<(IndentedTextWriter, NameGene
 
 	IndentedTextWriter IDefinitionVisitor<(IndentedTextWriter, NameGenerator), IndentedTextWriter>.VisitMethod(MethodDefinition method, (IndentedTextWriter, NameGenerator) state)
 	{
-		throw new NotImplementedException();
+		IndentedTextWriter writer = state.Item1;
+		NameGenerator nameGenerator = state.Item2;
+
+		if (!method.IsStatic || !method.IsConstructor)
+		{
+			writer.WriteComment("Accessibly modifier not implemented yet");
+			writer.Write("public ");
+		}
+
+		if (method.IsStatic)
+		{
+			writer.Write("static ");
+		}
+
+		if (method.IsConstructor)
+		{
+			if (method.DeclaringType is not null)
+			{
+				writer.Write(method.DeclaringType.Name);
+			}
+			else
+			{
+				writer.Write("/* Could not determine type name */");
+			}
+		}
+		else if (method.Signature is null)
+		{
+			writer.Write("/* Could not determine return type */ ");
+			writer.Write(method.Name);
+		}
+		else
+		{
+			writer.Write(nameGenerator.GetFullName(method.Signature.ReturnType));
+			writer.Write(' ');
+			writer.Write(method.Name);
+		}
+
+		if (method.GenericParameters.Count > 0)
+		{
+			writer.Write('<');
+			for (int i = 0; i < method.GenericParameters.Count; i++)
+			{
+				if (i > 0)
+				{
+					writer.Write(", ");
+				}
+				writer.Write(nameGenerator.GetFullName(new GenericParameterSignature(GenericParameterType.Method, method.GenericParameters[i].Number)));
+			}
+			writer.Write('>');
+		}
+
+		writer.Write('(');
+
+		for (int i = 0; i < method.Parameters.Count; i++)
+		{
+			if (i > 0)
+			{
+				writer.Write(", ");
+			}
+			Parameter parameter = method.Parameters[i];
+			writer.Write(nameGenerator.GetFullName(parameter.ParameterType));
+			writer.Write(' ');
+			writer.Write(parameter.Definition?.Name ?? $"parameter_{i + 1}");
+			//Parameter name stripping is rare. We will worry about name conflicts later.
+		}
+
+		writer.WriteLine(')');
+
+		using (new CurlyBrackets(writer))
+		{
+			writer.WriteComment("Method body decompilation not implemented yet");
+			writer.WriteLine("throw null;");
+		}
+
+		return writer;
 	}
 
 	IndentedTextWriter IDefinitionVisitor<(IndentedTextWriter, NameGenerator), IndentedTextWriter>.VisitEvent(EventDefinition @event, (IndentedTextWriter, NameGenerator) state)
