@@ -7,14 +7,19 @@ using System.CodeDom.Compiler;
 
 namespace AssetRipper.Decompilation.CSharp;
 
-public class CSharpDecompiler : IDefinitionVisitor<(IndentedTextWriter, NameGenerator), IndentedTextWriter>
+public class CSharpDecompiler : 
+	IVisitor<TypeDefinition, (IndentedTextWriter, NameGenerator), IndentedTextWriter>,
+	IVisitor<FieldDefinition, (IndentedTextWriter, NameGenerator), IndentedTextWriter>,
+	IVisitor<MethodDefinition, (IndentedTextWriter, NameGenerator), IndentedTextWriter>,
+	IVisitor<EventDefinition, (IndentedTextWriter, NameGenerator), IndentedTextWriter>,
+	IVisitor<PropertyDefinition, (IndentedTextWriter, NameGenerator), IndentedTextWriter>
 {
 	public static string Decompile(TypeDefinition type)
 	{
 		StringWriter stringWriter = new();
 		IndentedTextWriter textWriter = new(stringWriter);
 		textWriter.WriteComment("This decompilation assumes that the latest C# version is being used.");
-		type.AcceptVisitor(new CSharpDecompiler(), (textWriter, TypeScopedNameGenerator.Create(type)));
+		new CSharpDecompiler().Visit(type, (textWriter, TypeScopedNameGenerator.Create(type)));
 		return stringWriter.ToString();
 	}
 
@@ -110,7 +115,7 @@ public class CSharpDecompiler : IDefinitionVisitor<(IndentedTextWriter, NameGene
 		return false;
 	}
 
-	IndentedTextWriter IDefinitionVisitor<(IndentedTextWriter, NameGenerator), IndentedTextWriter>.VisitType(TypeDefinition type, (IndentedTextWriter, NameGenerator) state)
+	public IndentedTextWriter Visit(TypeDefinition type, (IndentedTextWriter, NameGenerator) state)
 	{
 		IndentedTextWriter writer = state.Item1;
 		NameGenerator nameGenerator = state.Item2;
@@ -143,7 +148,7 @@ public class CSharpDecompiler : IDefinitionVisitor<(IndentedTextWriter, NameGene
 		{
 			foreach (TypeDefinition nestedType in type.NestedTypes)
 			{
-				nestedType.AcceptVisitor(this, (writer, TypeScopedNameGenerator.Create(nestedType)))
+				Visit(nestedType, (writer, TypeScopedNameGenerator.Create(nestedType)))
 					.WriteLineNoTabs();
 			}
 			if (type.Fields.Count > 0)
@@ -153,12 +158,12 @@ public class CSharpDecompiler : IDefinitionVisitor<(IndentedTextWriter, NameGene
 			}
 			foreach (MethodDefinition method in type.Methods.Where(m => m.Semantics is null))
 			{
-				method.AcceptVisitor(this, state)
+				Visit(method, (writer, MethodScopedNameGenerator.Create(method)))
 					.WriteLineNoTabs();
 			}
 			foreach (PropertyDefinition property in type.Properties)
 			{
-				property.AcceptVisitor(this, state)
+				Visit(property, state)
 					.WriteLineNoTabs();
 			}
 			if (type.Events.Count > 0)
@@ -170,12 +175,12 @@ public class CSharpDecompiler : IDefinitionVisitor<(IndentedTextWriter, NameGene
 		return writer;
 	}
 
-	IndentedTextWriter IDefinitionVisitor<(IndentedTextWriter, NameGenerator), IndentedTextWriter>.VisitField(FieldDefinition field, (IndentedTextWriter, NameGenerator) state)
+	public IndentedTextWriter Visit(FieldDefinition field, (IndentedTextWriter, NameGenerator) state)
 	{
 		throw new NotImplementedException();
 	}
 
-	IndentedTextWriter IDefinitionVisitor<(IndentedTextWriter, NameGenerator), IndentedTextWriter>.VisitMethod(MethodDefinition method, (IndentedTextWriter, NameGenerator) state)
+	public IndentedTextWriter Visit(MethodDefinition method, (IndentedTextWriter, NameGenerator) state)
 	{
 		IndentedTextWriter writer = state.Item1;
 		NameGenerator nameGenerator = state.Item2;
@@ -254,12 +259,12 @@ public class CSharpDecompiler : IDefinitionVisitor<(IndentedTextWriter, NameGene
 		return writer;
 	}
 
-	IndentedTextWriter IDefinitionVisitor<(IndentedTextWriter, NameGenerator), IndentedTextWriter>.VisitEvent(EventDefinition @event, (IndentedTextWriter, NameGenerator) state)
+	public IndentedTextWriter Visit(EventDefinition @event, (IndentedTextWriter, NameGenerator) state)
 	{
 		throw new NotImplementedException();
 	}
 
-	IndentedTextWriter IDefinitionVisitor<(IndentedTextWriter, NameGenerator), IndentedTextWriter>.VisitProperty(PropertyDefinition property, (IndentedTextWriter, NameGenerator) state)
+	public IndentedTextWriter Visit(PropertyDefinition property, (IndentedTextWriter, NameGenerator) state)
 	{
 		IndentedTextWriter writer = state.Item1;
 		NameGenerator nameGenerator = state.Item2;
