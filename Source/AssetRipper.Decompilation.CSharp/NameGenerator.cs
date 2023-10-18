@@ -1,12 +1,13 @@
 ﻿using AsmResolver.DotNet.Signatures.Types;
 using AsmResolver.PE.DotNet.Metadata.Tables.Rows;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace AssetRipper.Decompilation.CSharp;
 
-public abstract class NameGenerator : ITypeSignatureVisitor<StringBuilder, StringBuilder>
+public abstract partial class NameGenerator : ITypeSignatureVisitor<StringBuilder, StringBuilder>
 {
-	private const string GlobalPrefix = "global::";
+	private protected const string GlobalPrefix = "global::";
 
 	public string GetFullName(TypeSignature signature)
 	{
@@ -70,7 +71,9 @@ public abstract class NameGenerator : ITypeSignatureVisitor<StringBuilder, Strin
 
 	public virtual StringBuilder VisitGenericInstanceType(GenericInstanceTypeSignature signature, StringBuilder state)
 	{
-		return AppendTypeParameters(state.Append(signature.GenericType.FullName), signature.TypeArguments);
+		return AppendTypeParameters(
+			Visit(signature.GenericType.ToTypeSignature(), state),
+			signature.TypeArguments);
 	}
 
 	public virtual StringBuilder VisitGenericParameter(GenericParameterSignature signature, StringBuilder state)
@@ -100,7 +103,10 @@ public abstract class NameGenerator : ITypeSignatureVisitor<StringBuilder, Strin
 
 	public virtual StringBuilder VisitTypeDefOrRef(TypeDefOrRefSignature signature, StringBuilder state)
 	{
-		return state.Append(GlobalPrefix).Append(signature.Type.FullName);
+		return state.Append(GlobalPrefix)
+			.Append(RemoveGenericEnding(signature.Type.FullName));
+		//This is probably wrong for nested types of generic types.
+		//It will be necessary to do our own name generation instead of relying on FullName from AsmResolver.
 	}
 
 	private StringBuilder AppendTypeParameters(StringBuilder state, IList<TypeSignature> typeArguments)
@@ -128,4 +134,20 @@ public abstract class NameGenerator : ITypeSignatureVisitor<StringBuilder, Strin
 
 		return state;
 	}
+
+	private static string RemoveGenericEnding(string name)
+	{
+		Match match = GenericName().Match(name);
+		if (match.Success)
+		{
+			return name[..match.Index];
+		}
+		else
+		{
+			return name;
+		}
+	}
+
+	[GeneratedRegex(@"(`[0-9]+)$")]
+	private static partial Regex GenericName();
 }
