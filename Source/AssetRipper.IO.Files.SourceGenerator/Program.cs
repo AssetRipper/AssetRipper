@@ -55,11 +55,11 @@ namespace AssetRipper.IO.Files.SourceGenerator
 				string text = File.ReadAllText(fileInfo.FullName);
 				if (fileInfo.Name == declarationFileName)
 				{
-					declaration = JsonSerializer.Deserialize<TypeDeclaration>(text);
+					declaration = JsonSerializer.Deserialize(text, InternalSerializerContext.Default.TypeDeclaration);
 				}
 				else
 				{
-					TypeDefinition definition = JsonSerializer.Deserialize<TypeDefinition>(text) ?? throw new NullReferenceException();
+					TypeDefinition definition = JsonSerializer.Deserialize(text, InternalSerializerContext.Default.TypeDefinition) ?? throw new NullReferenceException();
 					if (definition.Version == -1)
 					{
 						if (versionIndependent is null)

@@ -86,7 +86,7 @@ namespace AssetRipper.Tools.DependenceGrapher
 				if (File.Exists(cabMapPath))
 				{
 					using FileStream cabMapStream = File.OpenRead(cabMapPath);
-					cabMap = JsonSerializer.Deserialize<Dictionary<string, string>>(cabMapPath) ?? new();
+					cabMap = JsonSerializer.Deserialize(cabMapPath, DictionarySerializerContext.Default.DictionaryStringString) ?? new();
 				}
 				else
 				{
