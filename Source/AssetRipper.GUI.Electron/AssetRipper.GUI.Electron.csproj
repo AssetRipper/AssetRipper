@@ -6,7 +6,7 @@
 		<InvariantGlobalization>true</InvariantGlobalization>
 	</PropertyGroup>
 	
-	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
+	<PropertyGroup Condition="'$(Configuration)' == 'Release' and false">
 		<PublishAot>true</PublishAot>
 	</PropertyGroup>
 

@@ -113,21 +113,7 @@ namespace SpirV
 	public abstract class EnumOperandValue<T> : IEnumOperandValue
 		where T : unmanaged, Enum
 	{
-		public string? GetEnumName(uint value)
-		{
-			if (Unsafe.SizeOf<T>() == sizeof(uint))
-			{
-				return Enum.GetName<T>(Unsafe.As<uint, T>(ref value));
-			}
-			else
-			{
-#if DEBUG
-				throw new InvalidCastException();
-#else
-				return default;//Exceptions prevent inlining.
-#endif
-			}
-		}
+		public string? GetEnumName(uint value) => Enum.GetName<T>(value.AsEnum<T>());
 	}
 
 	public class ValueEnumOperandValue<T> : EnumOperandValue<T>, IValueEnumOperandValue

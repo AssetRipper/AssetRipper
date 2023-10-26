@@ -151,9 +151,9 @@ namespace SpirV
 			if (typeof(T).GetTypeInfo().GetCustomAttributes<FlagsAttribute>().Any())
 			{
 				Dictionary<uint, IReadOnlyList<object>> result = new Dictionary<uint, IReadOnlyList<object>>();
-				foreach (object enumValue in EnumerationType.GetEnumValues())
+				foreach (T enumValue in Enum.GetValues<T>())
 				{
-					uint bit = (uint)enumValue;
+					uint bit = enumValue.AsUInt32();
 					// bit == 0 and words[0] == 0 handles the 0x0 = None cases
 					if ((words[index] & bit) != 0 || (bit == 0 && words[index] == 0))
 					{
@@ -202,9 +202,7 @@ namespace SpirV
 			return true;
 		}
 
-		public System.Type EnumerationType => typeof(T);
-
-		private U parameterFactory_ = new U();
+		private readonly U parameterFactory_ = new U();
 	}
 
 	public class IdScope : OperandType
