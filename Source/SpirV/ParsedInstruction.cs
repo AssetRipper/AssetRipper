@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace SpirV
@@ -38,7 +39,7 @@ namespace SpirV
 			return ((ObjectReference)Value).Id;
 		}
 
-		public T GetBitEnumValue<T>() where T : Enum
+		public uint GetBitEnumValue()
 		{
 			IBitEnumOperandValue v = (IBitEnumOperandValue)Value;
 
@@ -48,7 +49,7 @@ namespace SpirV
 				result |= k;
 			}
 
-			return (T)(object)result;
+			return result;
 		}
 
 		public IReadOnlyList<uint> Words { get; }
@@ -95,7 +96,7 @@ namespace SpirV
 
 	public interface IEnumOperandValue
 	{
-		System.Type EnumerationType { get; }
+		string? GetEnumName(uint value);
 	}
 
 	public interface IBitEnumOperandValue : IEnumOperandValue
@@ -109,8 +110,28 @@ namespace SpirV
 		IReadOnlyList<object> Value { get; }
 	}
 
-	public class ValueEnumOperandValue<T> : IValueEnumOperandValue
-		where T : Enum
+	public abstract class EnumOperandValue<T> : IEnumOperandValue
+		where T : unmanaged, Enum
+	{
+		public string? GetEnumName(uint value)
+		{
+			if (Unsafe.SizeOf<T>() == sizeof(uint))
+			{
+				return Enum.GetName<T>(Unsafe.As<uint, T>(ref value));
+			}
+			else
+			{
+#if DEBUG
+				throw new InvalidCastException();
+#else
+				return default;//Exceptions prevent inlining.
+#endif
+			}
+		}
+	}
+
+	public class ValueEnumOperandValue<T> : EnumOperandValue<T>, IValueEnumOperandValue
+		where T : unmanaged, Enum
 	{
 		public ValueEnumOperandValue(T key, IReadOnlyList<object> value)
 		{
@@ -118,13 +139,12 @@ namespace SpirV
 			Value = value;
 		}
 
-		public System.Type EnumerationType => typeof(T);
 		public object Key { get; }
 		public IReadOnlyList<object> Value { get; }
 	}
 
-	public class BitEnumOperandValue<T> : IBitEnumOperandValue
-		where T : Enum
+	public class BitEnumOperandValue<T> : EnumOperandValue<T>, IBitEnumOperandValue
+		where T : unmanaged, Enum
 	{
 		public BitEnumOperandValue(Dictionary<uint, IReadOnlyList<object>> values)
 		{
@@ -132,7 +152,6 @@ namespace SpirV
 		}
 
 		public IReadOnlyDictionary<uint, IReadOnlyList<object>> Values { get; }
-		public System.Type EnumerationType => typeof(T);
 	}
 
 	public class ObjectReference

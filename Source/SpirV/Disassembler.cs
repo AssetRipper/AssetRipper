@@ -189,7 +189,7 @@ namespace SpirV
 		{
 			foreach (uint key in enumOperandValue.Values.Keys)
 			{
-				sb.Append(enumOperandValue.EnumerationType.GetEnumName(key));
+				sb.Append(enumOperandValue.GetEnumName(key));
 				IReadOnlyList<object> value = enumOperandValue.Values[key];
 				if (value.Count != 0)
 				{

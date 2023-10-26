@@ -137,12 +137,12 @@ namespace SpirV
 	}
 
 	public class EnumType<T> : EnumType<T, ParameterFactory>
-		where T : Enum
+		where T : unmanaged, Enum
 	{
 	};
 
 	public class EnumType<T, U> : OperandType
-		where T : Enum
+		where T : unmanaged, Enum
 		where U : ParameterFactory, new()
 	{
 		public override bool ReadValue(IReadOnlyList<uint> words, int index, out object value, out int wordsUsed)
