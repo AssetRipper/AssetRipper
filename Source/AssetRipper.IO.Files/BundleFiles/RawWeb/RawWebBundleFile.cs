@@ -10,7 +10,7 @@ namespace AssetRipper.IO.Files.BundleFiles.RawWeb
 	public abstract class RawWebBundleFile<THeader> : FileContainer where THeader : RawWebBundleHeader, new()
 	{
 		public THeader Header { get; } = new();
-		public DirectoryInfo<RawWebNode>? DirectoryInfo { get; set; } = new();
+		public DirectoryInfo<RawWebNode> DirectoryInfo { get; set; } = new();
 
 		public override void Read(SmartStream stream)
 		{
