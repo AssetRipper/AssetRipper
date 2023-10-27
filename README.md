@@ -19,11 +19,7 @@ Thank you for considering to support me. I have normal expenses like food, elect
 
 # Supported Versions
 
-Unity `3.5.0` to `2022.3.X`
-
-# Release Schedule
-
-[Releases](https://github.com/AssetRipper/AssetRipper/releases) are usually put out once a week on either Sunday or Monday.
+Unity `3.5.0` to `2023.2.X`
 
 # Links
 
