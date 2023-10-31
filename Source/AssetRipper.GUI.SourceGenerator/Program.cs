@@ -13,36 +13,11 @@ public static class Program
 
 	private static void CleanJsonLocalizationFiles()
 	{
-		string englishJson = File.ReadAllText(Paths.LocalizationsPath + "en_US.json");
-		Dictionary<string, string> englishDictionary = DeserializeJson(englishJson).OrderBy(pair => pair.Key).ToDictionary(pair => pair.Key, pair => pair.Value);
-		foreach (string path in Directory.EnumerateFiles(Paths.LocalizationsPath, "*.json"))
-		{
-			string fileName = Path.GetFileName(path);
-			switch (fileName)
-			{
-				case "en_US.json":
-					File.WriteAllText(path, SerializeJson(englishDictionary));
-					break;
-				default:
-					{
-						Dictionary<string, string> oldForeignDictionary = DeserializeJson(File.ReadAllText(path));
-						Dictionary<string, string> newForeignDictionary = new(englishDictionary.Count);
-						foreach (string key in englishDictionary.Keys.Order())
-						{
-							if (oldForeignDictionary.TryGetValue(key, out string? value))
-							{
-								newForeignDictionary.Add(key, value);
-							}
-							else
-							{
-								newForeignDictionary.Add(key, "");
-							}
-						}
-						File.WriteAllText(path, SerializeJson(newForeignDictionary));
-					}
-					break;
-			}
-		}
+		const string englishPath = Paths.LocalizationsPath + "en_US.json";
+		Dictionary<string, string> englishDictionary = DeserializeJson(File.ReadAllText(englishPath))
+			.OrderBy(pair => pair.Key)
+			.ToDictionary(pair => pair.Key, pair => pair.Value);
+		File.WriteAllText(englishPath, SerializeJson(englishDictionary));
 
 		static Dictionary<string, string> DeserializeJson(string jsonText) => DictionarySerializerContext.Deserialize(jsonText);
 		static string SerializeJson(Dictionary<string, string> dictionary)
