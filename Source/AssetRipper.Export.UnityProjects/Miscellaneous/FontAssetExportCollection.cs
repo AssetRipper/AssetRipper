@@ -35,42 +35,42 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 		{
 			IFont origin = Asset;
 			ITrueTypeFontImporter instance = TrueTypeFontImporter.Create(container.File, container.ExportVersion);
-			instance.FontSize_C1042 = (int)origin.FontSize_C128;
-			instance.IncludeFontData_C1042 = true;
-			instance.Style_C1042 = (int)origin.GetDefaultStyle();
-			if (origin.FontNames_C128.Count > 0)
+			instance.FontSize = (int)origin.FontSize;
+			instance.IncludeFontData = true;
+			instance.Style = (int)origin.GetDefaultStyle();
+			if (origin.FontNames.Count > 0)
 			{
-				instance.FontName_C1042 = origin.FontNames_C128[0];
-				foreach (Utf8String name in origin.FontNames_C128)
+				instance.FontName = origin.FontNames[0];
+				foreach (Utf8String name in origin.FontNames)
 				{
-					instance.FontNames_C1042.Add(name);
+					instance.FontNames.Add(name);
 				}
 			}
-			if (origin.Has_FallbackFonts_C128() && instance.Has_FallbackFontReferences_C1042())
+			if (origin.Has_FallbackFonts() && instance.Has_FallbackFontReferences())
 			{
 				PPtrConverter ptrConverter = new(origin, instance);
-				foreach (IPPtr_Font ptrFont in origin.FallbackFonts_C128)
+				foreach (IPPtr_Font ptrFont in origin.FallbackFonts)
 				{
-					instance.FallbackFontReferences_C1042.AddNew().CopyValues(ptrFont, ptrConverter);
+					instance.FallbackFontReferences.AddNew().CopyValues(ptrFont, ptrConverter);
 				}
 			}
-			instance.CharacterSpacing_C1042 = origin.CharacterSpacing_C128;
-			instance.CharacterPadding_C1042 = origin.CharacterPadding_C128;
-			instance.FontRenderingMode_C1042 = origin.FontRenderingMode_C128;
-			instance.AscentCalculationMode_C1042E = AscentCalculationMode.FaceAscender;
-			instance.ForceTextureCase_C1042E = FontTextureCase.Dynamic;
-			instance.UseLegacyBoundsCalculation_C1042 = origin.UseLegacyBoundsCalculation_C128;
-			instance.ShouldRoundAdvanceValue_C1042 = origin.ShouldRoundAdvanceValue_C128;
-			if (instance.Has_AssetBundleName_C1042() && origin.AssetBundleName is not null)
+			instance.CharacterSpacing = origin.CharacterSpacing;
+			instance.CharacterPadding = origin.CharacterPadding;
+			instance.FontRenderingMode = origin.FontRenderingMode;
+			instance.AscentCalculationModeE = AscentCalculationMode.FaceAscender;
+			instance.ForceTextureCaseE = FontTextureCase.Dynamic;
+			instance.UseLegacyBoundsCalculation = origin.UseLegacyBoundsCalculation;
+			instance.ShouldRoundAdvanceValue = origin.ShouldRoundAdvanceValue;
+			if (instance.Has_AssetBundleName_R() && origin.AssetBundleName is not null)
 			{
-				instance.AssetBundleName_C1042 = origin.AssetBundleName;
+				instance.AssetBundleName_R = origin.AssetBundleName;
 			}
 			return instance;
 		}
 
 		protected override string GetExportExtension(IUnityObjectBase asset)
 		{
-			byte[] fontData = ((IFont)asset).FontData_C128;
+			byte[] fontData = ((IFont)asset).FontData;
 			uint type = BitConverter.ToUInt32(fontData, 0);
 			return type == OttoAsciiFourCC ? "otf" : "ttf";
 		}

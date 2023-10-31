@@ -250,6 +250,7 @@ public static class Program
 			Type = MenuType.normal,
 			Click = () =>
 			{
+				Logger.Info(LogCategory.System, $"Loading locale {x.Key}.json");
 				Localization.LoadLanguage(x.Key);
 				MainWindow.Reload();
 			}
@@ -257,6 +258,14 @@ public static class Program
 
 		MenuItem[] windowMenu = new MenuItem[]
 		{
+#if DEBUG
+			new MenuItem
+			{
+				Label = "Launch Debugger",
+				Type = MenuType.normal,
+				Click = () => System.Diagnostics.Debugger.Launch(),
+			},
+#endif
 			new MenuItem { Role = MenuRole.minimize, Accelerator = "CmdOrCtrl+M" },
 			new MenuItem { Role = MenuRole.close, Accelerator = "CmdOrCtrl+W" }
 		};

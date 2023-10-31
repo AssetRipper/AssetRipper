@@ -9,7 +9,7 @@ public partial class ScriptExportCollection
 	{
 		public static MonoScriptInfo From(IMonoScript monoScript)
 		{
-			return new MonoScriptInfo(monoScript.ClassName_C115.String, monoScript.Namespace_C115.String, monoScript.GetAssemblyNameFixed());
+			return new MonoScriptInfo(monoScript.ClassName_R.String, monoScript.Namespace.String, monoScript.GetAssemblyNameFixed());
 		}
 	}
 }

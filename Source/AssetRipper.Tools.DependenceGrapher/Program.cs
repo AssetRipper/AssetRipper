@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
-using AssetRipper.Assets.Export.Dependencies;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Import.AssetCreation;
 using AssetRipper.Import.Structure.Assembly.Managers;
@@ -87,7 +86,7 @@ namespace AssetRipper.Tools.DependenceGrapher
 				if (File.Exists(cabMapPath))
 				{
 					using FileStream cabMapStream = File.OpenRead(cabMapPath);
-					cabMap = JsonSerializer.Deserialize<Dictionary<string, string>>(cabMapPath) ?? new();
+					cabMap = JsonSerializer.Deserialize(cabMapPath, DictionarySerializerContext.Default.DictionaryStringString) ?? new();
 				}
 				else
 				{
@@ -217,12 +216,12 @@ namespace AssetRipper.Tools.DependenceGrapher
 			{
 				if (filters.All(filter => filter.IsAcceptable(asset)))
 				{
-					foreach ((FieldName fieldName, PPtr<IUnityObjectBase> pptr) in asset.FetchDependencies())
+					foreach ((string fieldName, PPtr<IUnityObjectBase> pptr) in asset.FetchDependencies())
 					{
 						if (pptr.FileID > 0)
 						{
 							FileIdentifier identifier = file.Dependencies[pptr.FileID - 1];
-							results.GetOrAdd(identifier.GetFilePath()).AddLast((fieldName.ToString(), asset));
+							results.GetOrAdd(identifier.GetFilePath()).AddLast((fieldName, asset));
 						}
 					}
 				}

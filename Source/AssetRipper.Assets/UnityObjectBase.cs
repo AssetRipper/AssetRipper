@@ -1,8 +1,6 @@
 ﻿using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
-using AssetRipper.Assets.Export.Dependencies;
 using AssetRipper.Assets.Export.Yaml;
-using AssetRipper.Assets.Interfaces;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Yaml;
 using System.Diagnostics;
@@ -39,11 +37,6 @@ public abstract class UnityObjectBase : UnityAssetBase, IUnityObjectBase
 		return document;
 	}
 
-	public IEnumerable<(FieldName, PPtr<IUnityObjectBase>)> FetchDependencies()
-	{
-		return FetchDependencies((FieldName?)null);
-	}
-
 	/// <summary>
 	/// Get the best name for this object.
 	/// </summary>
@@ -57,7 +50,7 @@ public abstract class UnityObjectBase : UnityAssetBase, IUnityObjectBase
 	/// <returns>A nonempty string.</returns>
 	public string GetBestName()
 	{
-		string? name = (this as IHasNameString)?.NameString;
+		string? name = (this as INamed)?.Name;
 		if (!string.IsNullOrEmpty(name))
 		{
 			return name;

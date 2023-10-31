@@ -1,7 +1,7 @@
 using AssetRipper.Assets;
 using AssetRipper.Assets.Cloning;
 using AssetRipper.Assets.Export;
-using AssetRipper.Assets.Export.Dependencies;
+using AssetRipper.Assets.Export.Yaml;
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Import.Logging;
@@ -50,6 +50,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 		public YamlMappingNode ExportYaml(IExportContainer container)
 		{
 			YamlMappingNode node = new();
+			node.AddSerializedVersion(Type.Version);
 			for (int i = 0; i < Fields.Length; i++)
 			{
 				SerializableType.Field etalon = Type.GetField(i);
@@ -63,32 +64,22 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 		public override YamlMappingNode ExportYamlEditor(IExportContainer container) => ExportYaml(container);
 		public override YamlMappingNode ExportYamlRelease(IExportContainer container) => ExportYaml(container);
 
-		public override IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
+		public override IEnumerable<(string, PPtr)> FetchDependencies()
 		{
 			for (int i = 0; i < Fields.Length; i++)
 			{
 				SerializableType.Field etalon = Type.GetField(i);
 				if (IsAvailable(etalon))
 				{
-					foreach (PPtr<IUnityObjectBase> asset in Fields[i].FetchDependencies(context, etalon))
+					foreach ((string, PPtr) pair in Fields[i].FetchDependencies(etalon))
 					{
-						yield return asset;
+						yield return pair;
 					}
 				}
 			}
 		}
 
-		public override string ToString()
-		{
-			if (Type.Namespace.Length == 0)
-			{
-				return $"{Type.Name}";
-			}
-			else
-			{
-				return $"{Type.Namespace}.{Type.Name}";
-			}
-		}
+		public override string ToString() => Type.FullName;
 
 		private bool IsAvailable(in SerializableType.Field field)
 		{

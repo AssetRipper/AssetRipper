@@ -22,43 +22,43 @@ namespace AssetRipper.Export.UnityProjects.Textures
 		{
 			TextureImporterData data = new TextureImporterData(origin);
 			ITextureImporter instance = TextureImporter.Create(container.File, container.ExportVersion);
-			instance.MipMaps_C1006.EnableMipMap = data.EnableMipMap ? 1 : 0;
-			instance.MipMaps_C1006.SRGBTexture = data.SRGBTexture ? 1 : 0;
-			instance.MipMaps_C1006.AlphaTestReferenceValue = 0.5f;
-			instance.MipMaps_C1006.MipMapFadeDistanceStart = 1;
-			instance.MipMaps_C1006.MipMapFadeDistanceEnd = 3;
-			instance.BumpMap_C1006.HeightScale = .25f;
-			instance.GenerateCubemap_C1006E = TextureImporterGenerateCubemap.AutoCubemap;
-			instance.StreamingMipmaps_C1006 = data.StreamingMipmaps ? 1 : 0;
-			instance.StreamingMipmapsPriority_C1006 = data.StreamingMipmapsPriority;
-			instance.IsReadable_C1006 = data.IsReadable ? 1 : 0;
-			instance.Format_C1006 = (int)data.Format;
-			instance.MaxTextureSize_C1006 = data.MaxTextureSize;
-			instance.TextureSettings_C1006.CopyValues(data.TextureSettings);
+			instance.MipMaps.EnableMipMap = data.EnableMipMap ? 1 : 0;
+			instance.MipMaps.SRGBTexture = data.SRGBTexture ? 1 : 0;
+			instance.MipMaps.AlphaTestReferenceValue = 0.5f;
+			instance.MipMaps.MipMapFadeDistanceStart = 1;
+			instance.MipMaps.MipMapFadeDistanceEnd = 3;
+			instance.BumpMap.HeightScale = .25f;
+			instance.GenerateCubemapE = TextureImporterGenerateCubemap.AutoCubemap;
+			instance.StreamingMipmaps = data.StreamingMipmaps ? 1 : 0;
+			instance.StreamingMipmapsPriority = data.StreamingMipmapsPriority;
+			instance.IsReadable = data.IsReadable ? 1 : 0;
+			instance.Format = (int)data.Format;
+			instance.MaxTextureSize = data.MaxTextureSize;
+			instance.TextureSettings.CopyValues(data.TextureSettings);
 			// cubemaps break when they aren't scaled, while sprites break if they ARE scaled
 			// everything else works with no scaling, so we just only scale for cubemaps
-			instance.NPOTScale_C1006E = origin is ICubemap
+			instance.NPOTScaleE = origin is ICubemap
 				? TextureImporterNPOTScale.ToNearest
 				: TextureImporterNPOTScale.None;
-			instance.CompressionQuality_C1006 = 50;
+			instance.CompressionQuality = 50;
 
 			instance.SetSwizzle(TextureImporterSwizzle.R, TextureImporterSwizzle.G, TextureImporterSwizzle.B, TextureImporterSwizzle.A);
 
-			instance.SpriteMode_C1006E = SpriteImportMode.Single;
-			instance.SpriteExtrude_C1006 = 1;
-			instance.SpriteMeshType_C1006E = SpriteMeshType.Tight;
-			instance.SpritePivot_C1006?.SetValues(0.5f, 0.5f);
-			instance.SpritePixelsToUnits_C1006 = 100.0f;
-			instance.SpriteGenerateFallbackPhysicsShape_C1006 = 1;
-			instance.AlphaUsage_C1006E = TextureImporterAlphaSource.FromInput;
-			instance.AlphaIsTransparency_C1006 = 1;
-			instance.SpriteTessellationDetail_C1006 = -1;
-			instance.TextureType_C1006E = data.TextureType;
-			instance.TextureShape_C1006E = data.TextureShape;
+			instance.SpriteModeE = SpriteImportMode.Single;
+			instance.SpriteExtrude = 1;
+			instance.SpriteMeshTypeE = SpriteMeshType.Tight;
+			instance.SpritePivot?.SetValues(0.5f, 0.5f);
+			instance.SpritePixelsToUnits = 100.0f;
+			instance.SpriteGenerateFallbackPhysicsShape = 1;
+			instance.AlphaUsageE = TextureImporterAlphaSource.FromInput;
+			instance.AlphaIsTransparency = 1;
+			instance.SpriteTessellationDetail = -1;
+			instance.TextureTypeE = data.TextureType;
+			instance.TextureShapeE = data.TextureShape;
 
-			ITextureImporterPlatformSettings platformSettings = instance.PlatformSettings_C1006.AddNew();
+			ITextureImporterPlatformSettings platformSettings = instance.PlatformSettings.AddNew();
 			platformSettings.BuildTarget = "DefaultTexturePlatform";
-			platformSettings.MaxTextureSize = instance.MaxTextureSize_C1006;
+			platformSettings.MaxTextureSize = instance.MaxTextureSize;
 			platformSettings.ResizeAlgorithm = (int)TextureResizeAlgorithm.Mitchell;
 			platformSettings.Format = (int)TextureImporterFormat.Automatic;
 			platformSettings.TextureCompression = (int)TextureImporterCompression.CompressedHQ;//Uncompressed results in a significantly larger Library folder
@@ -69,9 +69,9 @@ namespace AssetRipper.Export.UnityProjects.Textures
 			platformSettings.AndroidETC2FallbackOverride = (int)AndroidETC2FallbackOverride.UseBuildSettings;
 			platformSettings.ForceMaximumCompressionQuality_BC6H_BC7 = false;
 
-			if (instance.Has_AssetBundleName_C1006() && origin.AssetBundleName is not null)
+			if (instance.Has_AssetBundleName_R() && origin.AssetBundleName is not null)
 			{
-				instance.AssetBundleName_C1006 = origin.AssetBundleName;
+				instance.AssetBundleName_R = origin.AssetBundleName;
 			}
 
 			return instance;
@@ -120,15 +120,15 @@ namespace AssetRipper.Export.UnityProjects.Textures
 						break;
 					case ITexture2DArray texture2DArray:
 						{
-							EnableMipMap = texture2DArray.MipCount_C187 > 1;
-							SRGBTexture = texture2DArray.ColorSpace_C187E == ColorSpace.Linear;
+							EnableMipMap = texture2DArray.MipCount > 1;
+							SRGBTexture = texture2DArray.ColorSpaceE == ColorSpace.Linear;
 							StreamingMipmaps = false;
 							StreamingMipmapsPriority = default;
-							IsReadable = texture2DArray.IsReadable_C187;
-							Format = texture2DArray.Format_C187E;
-							MaxTextureSize = CalculateMaxTextureSize(texture2DArray.Width_C187, texture2DArray.Height_C187);
-							TextureSettings = texture2DArray.TextureSettings_C187;
-							TextureType = texture2DArray.Has_UsageMode_C187() && texture2DArray.UsageMode_C187E.IsNormalmap()
+							IsReadable = texture2DArray.IsReadable;
+							Format = texture2DArray.FormatE;
+							MaxTextureSize = CalculateMaxTextureSize(texture2DArray.Width, texture2DArray.Height);
+							TextureSettings = texture2DArray.TextureSettings;
+							TextureType = texture2DArray.Has_UsageMode() && texture2DArray.UsageModeE.IsNormalmap()
 								? TextureImporterType.NormalMap
 								: TextureImporterType.Default;
 							TextureShape = TextureImporterShape.Texture2DArray;
@@ -136,15 +136,15 @@ namespace AssetRipper.Export.UnityProjects.Textures
 						break;
 					case ICubemapArray cubemapArray:
 						{
-							EnableMipMap = cubemapArray.MipCount_C188 > 1;
-							SRGBTexture = cubemapArray.ColorSpace_C188E == ColorSpace.Linear;
+							EnableMipMap = cubemapArray.MipCount > 1;
+							SRGBTexture = cubemapArray.ColorSpaceE == ColorSpace.Linear;
 							StreamingMipmaps = false;
 							StreamingMipmapsPriority = default;
-							IsReadable = cubemapArray.IsReadable_C188;
-							Format = cubemapArray.Format_C188E;
-							MaxTextureSize = CalculateMaxTextureSize(cubemapArray.Width_C188, cubemapArray.Width_C188);
-							TextureSettings = cubemapArray.TextureSettings_C188;
-							TextureType = cubemapArray.Has_UsageMode_C188() && cubemapArray.UsageMode_C188E.IsNormalmap()
+							IsReadable = cubemapArray.IsReadable;
+							Format = cubemapArray.FormatE;
+							MaxTextureSize = CalculateMaxTextureSize(cubemapArray.Width, cubemapArray.Width);
+							TextureSettings = cubemapArray.TextureSettings;
+							TextureType = cubemapArray.Has_UsageMode() && cubemapArray.UsageModeE.IsNormalmap()
 								? TextureImporterType.NormalMap
 								: TextureImporterType.Default;
 							TextureShape = TextureImporterShape.Texture2DArray;//Maybe this should be TextureCube
@@ -152,14 +152,14 @@ namespace AssetRipper.Export.UnityProjects.Textures
 						break;
 					case ITexture3D texture3D:
 						{
-							EnableMipMap = texture3D.Has_MipCount_C117() && texture3D.MipCount_C117 > 1 || texture3D.Has_MipMap_C117() && texture3D.MipMap_C117;
-							SRGBTexture = texture3D.ColorSpace_C117E == ColorSpace.Linear;
+							EnableMipMap = texture3D.Has_MipCount() && texture3D.MipCount > 1 || texture3D.Has_MipMap() && texture3D.MipMap;
+							SRGBTexture = texture3D.ColorSpaceE == ColorSpace.Linear;
 							StreamingMipmaps = false;
 							StreamingMipmapsPriority = default;
-							IsReadable = texture3D.IsReadable_C117;
+							IsReadable = texture3D.IsReadable;
 							Format = texture3D.GetTextureFormat();
-							MaxTextureSize = CalculateMaxTextureSize(texture3D.Width_C117, texture3D.Height_C117);
-							TextureSettings = texture3D.TextureSettings_C117;
+							MaxTextureSize = CalculateMaxTextureSize(texture3D.Width, texture3D.Height);
+							TextureSettings = texture3D.TextureSettings;
 							TextureType = texture3D.GetLightmapFormat().IsNormalmap()
 								? TextureImporterType.NormalMap
 								: TextureImporterType.Default;
@@ -180,13 +180,13 @@ namespace AssetRipper.Export.UnityProjects.Textures
 			}
 			IIHVImageFormatImporter instance = IHVImageFormatImporter.Create(container.File, container.ExportVersion);
 			instance.SetToDefault();
-			instance.IsReadable_C1055 = origin.IsReadable_C28;
-			instance.SRGBTexture_C1055 = origin.ColorSpace_C28E == ColorSpace.Linear;
-			instance.StreamingMipmaps_C1055 = origin.StreamingMipmaps_C28;
-			instance.StreamingMipmapsPriority_C1055 = origin.StreamingMipmapsPriority_C28;
+			instance.IsReadable = origin.IsReadable_C28;
+			instance.SRGBTexture = origin.ColorSpace_C28E == ColorSpace.Linear;
+			instance.StreamingMipmaps = origin.StreamingMipmaps_C28;
+			instance.StreamingMipmapsPriority = origin.StreamingMipmapsPriority_C28;
 			if (origin.AssetBundleName is not null)
 			{
-				instance.AssetBundleName_C1055 = origin.AssetBundleName;
+				instance.AssetBundleName_R = origin.AssetBundleName;
 			}
 			return instance;
 		}

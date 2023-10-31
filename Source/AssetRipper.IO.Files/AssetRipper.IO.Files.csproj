@@ -7,9 +7,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AssetRipper.Primitives" Version="2.0.0" />
+		<PackageReference Include="AssetRipper.Primitives" Version="2.0.1" />
 		<PackageReference Include="K4os.Compression.LZ4" Version="1.3.6" />
-		<PackageReference Include="SharpCompress" Version="0.33.0" />
+		<PackageReference Include="SharpCompress" Version="0.34.1" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -2,18 +2,24 @@
 @using AssetRipper.Assets.Bundles;
 @model IndexModel
 @{
-	ViewData["Title"] = "Home";
+	ViewData["Title"] = @Localization.Home;
 }
 
 <div class="text-center">
-	<h1 class="display-4">Welcome</h1>
+	<h1 class="display-4">@Localization.Welcome</h1>
 	@if (Program.Ripper.IsLoaded)
 	{
 		GameBundle gameBundle = Program.Ripper.GameStructure.FileCollection;
-		<a class="btn btn-primary" asp-page="/Bundles/View" asp-route-path="@gameBundle.GetPath().ToJson()">View Loaded Files</a>
+		<a class="btn btn-success" asp-page="/Bundles/View" asp-route-path="@gameBundle.GetPath().ToJson()">@Localization.ViewLoadedFiles</a>
 	}
 	else
 	{
-		<p>No files loaded.</p>
+		<button type="button" class="btn btn-secondary" disabled>@Localization.NoFilesLoaded</button>
 	}
+	<p>@Localization.DonationMessage</p>
+	<div>
+		<p><a class="btn btn-primary" onclick="require('electron').shell.openExternal('https://patreon.com/ds5678')">Patreon</a></p>
+		<p><a class="btn btn-primary" onclick="require('electron').shell.openExternal('https://paypal.me/ds5678')">Paypal</a></p>
+		<p><a class="btn btn-primary" onclick="require('electron').shell.openExternal('https://github.com/sponsors/ds5678')">GitHub Sponsors</a></p>
+	</div>
 </div>

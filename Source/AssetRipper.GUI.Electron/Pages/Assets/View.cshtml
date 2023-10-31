@@ -9,36 +9,42 @@
 @{
 	string audioSource = Model.AudioSource;
 	DirectBitmap imageBitmap = Model.ImageBitmap;
+	byte[] font = Model.Font;
 	string text = Model.Text;
+	string? yaml = Model.Asset.GetYamlString();
 
 	bool audioTabDisabled = string.IsNullOrEmpty(audioSource);
 	bool imageTabDisabled = imageBitmap == default;
+	bool fontTabDisabled = font.Length == 0;
 	bool textTabDisabled = string.IsNullOrEmpty(text);
-
-	const string DefaultTabClassSet = "nav-link";
-	string audioTabClassSet = DefaultTabClassSet + (audioTabDisabled ? " disabled" : "");
-	string imageTabClassSet = DefaultTabClassSet + (imageTabDisabled ? " disabled" : "");
-	string textTabClassSet = DefaultTabClassSet + (textTabDisabled ? " disabled" : "");
+	bool yamlTabDisabled = string.IsNullOrEmpty(yaml);
 
 	<nav>
 		<div class="nav nav-tabs" id="nav-tab" role="tablist">
 			<button class="nav-link active" id="nav-information-tab" data-bs-toggle="tab" data-bs-target="#nav-information" type="button" role="tab" aria-controls="nav-information" aria-selected="true">
-				Information
+				@Localization.AssetTabInformation
 			</button>
-			<button class="@audioTabClassSet" id="nav-audio-tab" data-bs-toggle="tab" data-bs-target="#nav-audio" type="button" role="tab" aria-controls="nav-audio" aria-selected="false" aria-disabled="@audioTabDisabled.ToString().ToLower()">
-				Audio
+			<button class="@TabHelpers.GetTabClassSet(audioTabDisabled)" id="nav-audio-tab" data-bs-toggle="tab" data-bs-target="#nav-audio" type="button" role="tab" aria-controls="nav-audio" aria-selected="false" aria-disabled="@audioTabDisabled.ToString().ToLower()">
+				@Localization.AssetTabAudio
 			</button>
-			<button class="@imageTabClassSet" id="nav-image-tab" data-bs-toggle="tab" data-bs-target="#nav-image" type="button" role="tab" aria-controls="nav-image" aria-selected="false" aria-disabled="@imageTabDisabled.ToString().ToLower()">
-				Image
+			<button class="@TabHelpers.GetTabClassSet(imageTabDisabled)" id="nav-image-tab" data-bs-toggle="tab" data-bs-target="#nav-image" type="button" role="tab" aria-controls="nav-image" aria-selected="false" aria-disabled="@imageTabDisabled.ToString().ToLower()">
+				@Localization.AssetTabImage
 			</button>
-			<button class="@textTabClassSet" id="nav-text-tab" data-bs-toggle="tab" data-bs-target="#nav-text" type="button" role="tab" aria-controls="nav-text" aria-selected="false" aria-disabled="@textTabDisabled.ToString().ToLower()">
-				Text
+			<button class="@TabHelpers.GetTabClassSet(fontTabDisabled)" id="nav-font-tab" data-bs-toggle="tab" data-bs-target="#nav-font" type="button" role="tab" aria-controls="nav-font" aria-selected="false" aria-disabled="@fontTabDisabled.ToString().ToLower()">
+				Font
+				@* TODO: @Localization.AssetTabFont *@
+			</button>
+			<button class="@TabHelpers.GetTabClassSet(textTabDisabled)" id="nav-text-tab" data-bs-toggle="tab" data-bs-target="#nav-text" type="button" role="tab" aria-controls="nav-text" aria-selected="false" aria-disabled="@textTabDisabled.ToString().ToLower()">
+				@Localization.AssetTabText
+			</button>
+			<button class="@TabHelpers.GetTabClassSet(yamlTabDisabled)" id="nav-yaml-tab" data-bs-toggle="tab" data-bs-target="#nav-yaml" type="button" role="tab" aria-controls="nav-yaml" aria-selected="false" aria-disabled="@yamlTabDisabled.ToString().ToLower()">
+				@Localization.Yaml
 			</button>
 			<button class="nav-link" id="nav-hex-tab" data-bs-toggle="tab" data-bs-target="#nav-hex" type="button" role="tab" aria-controls="nav-hex" aria-selected="false">
-				Hex
+				@Localization.AssetTabHex
 			</button>
 			<button class="nav-link" id="nav-dev-tab" data-bs-toggle="tab" data-bs-target="#nav-dev" type="button" role="tab" aria-controls="nav-dev" aria-selected="false">
-				Development
+				@Localization.AssetTabDevelopment
 			</button>
 		</div>
 	</nav>
@@ -53,24 +59,43 @@
 		<div class="tab-pane fade" id="nav-image" role="tabpanel" aria-labelledby="nav-image-tab">
 			<partial name="ImageTabContent" model="imageBitmap" />
 		</div>
+		<div class="tab-pane fade" id="nav-font" role="tabpanel" aria-labelledby="nav-font-tab">
+			@{
+				<partial name="FontTabContent" model="Model.Font"/>
+				<div class="text-center">
+					<partial name="DataSaveButton" model="(Model.FontFileName, font)" />
+				</div>
+			}
+		</div>
 		<div class="tab-pane fade" id="nav-text" role="tabpanel" aria-labelledby="nav-text-tab">
 			@if (!textTabDisabled)
 			{
 				<pre class="bg-dark-subtle rounded-3 p-2">@text</pre>
+				<div class="text-center">
+					<partial name="TextSaveButton" model="(Model.TextFileName, text)" />
+				</div>
+			}
+		</div>
+		<div class="tab-pane fade" id="nav-yaml" role="tabpanel" aria-labelledby="nav-yaml-tab">
+			@if (!yamlTabDisabled)
+			{
+				<pre class="bg-dark-subtle rounded-3 p-2">@yaml</pre>
+				<div class="text-center">
+					<partial name="TextSaveButton" model="(Model.YamlFileName, yaml)" />
+				</div>
 			}
 		</div>
 		<div class="tab-pane fade" id="nav-hex" role="tabpanel" aria-labelledby="nav-hex-tab">
-			<partial name="HexTable" model="Model.Data" />
+			@{
+				byte[] data = Model.Data;
+				<partial name="HexTable" model="data" />
+				<div class="text-center">
+					<partial name="DataSaveButton" model="(Model.DataFileName, data)" />
+				</div>
+			}
 		</div>
 		<div class="tab-pane fade" id="nav-dev" role="tabpanel" aria-labelledby="nav-dev-tab">
-			<table class="table">
-				<tbody>
-					<tr>
-						<td>C# Type</td>
-						<td>@Model.Asset.GetType().Name</td>
-					</tr>
-				</tbody>
-			</table>
+			<partial name="DevelopmentTabContent" model="Model.Asset" />
 		</div>
 	</div>
 }

@@ -77,7 +77,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 					}
 					else
 					{
-						return controller.AnimationClips_C91P[clipIndex] as IMotion;//AnimationClip has inherited from Motion since Unity 4.
+						return controller.AnimationClipsP[clipIndex] as IMotion;//AnimationClip has inherited from Motion since Unity 4.
 					}
 				}
 			}
@@ -86,13 +86,13 @@ namespace AssetRipper.Processing.AnimatorControllers
 		private static IBlendTree CreateBlendTree(ProcessedAssetCollection virtualFile, IAnimatorController controller, IStateConstant state, int nodeIndex)
 		{
 			IBlendTree blendTree = virtualFile.CreateAsset((int)ClassIDType.BlendTree, BlendTree.Create);
-			blendTree.ObjectHideFlags = HideFlags.HideInHierarchy;
+			blendTree.HideFlagsE = HideFlags.HideInHierarchy;
 
 			IBlendTreeNodeConstant node = state.GetBlendTree().NodeArray[nodeIndex].Data;
 
 			blendTree.Name = BlendTreeName;
 
-			blendTree.Childs_C206.Capacity = node.ChildIndices.Count;
+			blendTree.Childs.Capacity = node.ChildIndices.Count;
 			for (int i = 0; i < node.ChildIndices.Count; i++)
 			{
 				blendTree.AddAndInitializeNewChild(virtualFile, controller, state, nodeIndex, i);
@@ -100,30 +100,30 @@ namespace AssetRipper.Processing.AnimatorControllers
 
 			if (node.BlendEventID != uint.MaxValue)
 			{
-				blendTree.BlendParameter_C206 = controller.TOS_C91[node.BlendEventID];
+				blendTree.BlendParameter = controller.TOS[node.BlendEventID];
 			}
 			if (node.BlendEventYID != uint.MaxValue)
 			{
-				blendTree.BlendParameterY_C206 = controller.TOS_C91[node.BlendEventYID];
+				blendTree.BlendParameterY = controller.TOS[node.BlendEventYID];
 			}
-			blendTree.MinThreshold_C206 = node.GetMinThreshold();
-			blendTree.MaxThreshold_C206 = node.GetMaxThreshold();
-			blendTree.UseAutomaticThresholds_C206 = false;
-			blendTree.NormalizedBlendValues_C206 = node.BlendDirectData?.Data.NormalizedBlendValues ?? false;
-			if (blendTree.Has_BlendType_C206_Int32())
+			blendTree.MinThreshold = node.GetMinThreshold();
+			blendTree.MaxThreshold = node.GetMaxThreshold();
+			blendTree.UseAutomaticThresholds = false;
+			blendTree.NormalizedBlendValues = node.BlendDirectData?.Data.NormalizedBlendValues ?? false;
+			if (blendTree.Has_BlendType_Int32())
 			{
-				blendTree.BlendType_C206_Int32 = (int)node.BlendType;
+				blendTree.BlendType_Int32 = (int)node.BlendType;
 			}
 			else
 			{
-				blendTree.BlendType_C206_UInt32 = node.BlendType;
+				blendTree.BlendType_UInt32 = node.BlendType;
 			}
 			return blendTree;
 		}
 
 		private static IChildMotion AddAndInitializeNewChild(this IBlendTree tree, ProcessedAssetCollection file, IAnimatorController controller, IStateConstant state, int nodeIndex, int childIndex)
 		{
-			IChildMotion childMotion = tree.Childs_C206.AddNew();
+			IChildMotion childMotion = tree.Childs.AddNew();
 			IBlendTreeConstant treeConstant = state.GetBlendTree();
 			IBlendTreeNodeConstant node = treeConstant.NodeArray[nodeIndex].Data;
 			int childNodeIndex = (int)node.ChildIndices[childIndex];
@@ -137,7 +137,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 
 			if (node.TryGetDirectBlendParameter(childIndex, out uint directID))
 			{
-				childMotion.DirectBlendParameter = controller.TOS_C91[directID];
+				childMotion.DirectBlendParameter = controller.TOS[directID];
 			}
 
 			childMotion.Mirror = node.Mirror;
@@ -153,7 +153,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 			IReadOnlyList<IAnimatorState> States,
 			AssetDictionary<uint, Utf8String> TOS)
 		{
-			if (generatedStateMachine.Has_EntryTransitions_C1107() && stateMachineConstant.Has_SelectorStateConstantArray())
+			if (generatedStateMachine.Has_EntryTransitions() && stateMachineConstant.Has_SelectorStateConstantArray())
 			{
 				foreach (OffsetPtr_SelectorStateConstant selectorPtr in stateMachineConstant.SelectorStateConstantArray)
 				{
@@ -164,7 +164,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 						{
 							SelectorTransitionConstant selectorTrans = selector.TransitionConstantArray[i].Data;
 							IAnimatorTransition transition = CreateAnimatorTransition(file, stateMachineConstant, States, TOS, selectorTrans);
-							generatedStateMachine.EntryTransitions_C1107P.Add(transition);
+							generatedStateMachine.EntryTransitionsP.Add(transition);
 						}
 					}
 				}
@@ -176,29 +176,29 @@ namespace AssetRipper.Processing.AnimatorControllers
 			const float StateOffset = 250.0f;
 
 			IAnimatorStateMachine generatedStateMachine = virtualFile.CreateAsset((int)ClassIDType.AnimatorStateMachine, AnimatorStateMachine.Create);
-			generatedStateMachine.ObjectHideFlags = HideFlags.HideInHierarchy;
+			generatedStateMachine.HideFlagsE = HideFlags.HideInHierarchy;
 
-			int layerIndex = controller.Controller_C91.GetLayerIndexByStateMachineIndex(stateMachineIndex);
-			ILayerConstant layer = controller.Controller_C91.LayerArray[layerIndex].Data;
-			generatedStateMachine.Name = controller.TOS_C91[layer.Binding];
+			int layerIndex = controller.Controller.GetLayerIndexByStateMachineIndex(stateMachineIndex);
+			ILayerConstant layer = controller.Controller.LayerArray[layerIndex].Data;
+			generatedStateMachine.Name = controller.TOS[layer.Binding];
 
-			IStateMachineConstant stateMachine = controller.Controller_C91.StateMachineArray[stateMachineIndex].Data;
+			IStateMachineConstant stateMachine = controller.Controller.StateMachineArray[stateMachineIndex].Data;
 
 			int stateCount = stateMachine.StateConstantArray.Count;
 			int stateMachineCount = 0;
-			int count = stateCount + stateMachineCount;
-			int side = (int)Math.Ceiling(Math.Sqrt(count));
+			int stateAndStateMachineCount = stateCount + stateMachineCount;
+			int side = (int)Math.Ceiling(Math.Sqrt(stateAndStateMachineCount));
 
 			List<IAnimatorState> states = new();
-			if (generatedStateMachine.Has_ChildStates_C1107())
+			if (generatedStateMachine.Has_ChildStates())
 			{
-				generatedStateMachine.ChildStates_C1107.Clear();
-				generatedStateMachine.ChildStates_C1107.Capacity = stateCount;
+				generatedStateMachine.ChildStates.Clear();
+				generatedStateMachine.ChildStates.Capacity = stateCount;
 			}
-			else if (generatedStateMachine.Has_States_C1107())
+			else if (generatedStateMachine.Has_States())
 			{
-				generatedStateMachine.States_C1107.Clear();
-				generatedStateMachine.States_C1107.Capacity = stateCount;
+				generatedStateMachine.States.Clear();
+				generatedStateMachine.States.Capacity = stateCount;
 			}
 			for (int y = 0, stateIndex = 0; y < side && stateIndex < stateCount; y++)
 			{
@@ -207,15 +207,15 @@ namespace AssetRipper.Processing.AnimatorControllers
 					Vector3f position = new() { X = x * StateOffset, Y = y * StateOffset };
 					IAnimatorState state = CreateAnimatorState(virtualFile, controller, stateMachineIndex, stateIndex, position);
 
-					if (generatedStateMachine.Has_ChildStates_C1107())
+					if (generatedStateMachine.Has_ChildStates())
 					{
-						ChildAnimatorState childState = generatedStateMachine.ChildStates_C1107.AddNew();
+						ChildAnimatorState childState = generatedStateMachine.ChildStates.AddNew();
 						childState.Position.CopyValues(position);
 						childState.State.SetAsset(generatedStateMachine.Collection, state);
 					}
-					else if (generatedStateMachine.Has_States_C1107())
+					else if (generatedStateMachine.Has_States())
 					{
-						generatedStateMachine.States_C1107P.Add(state);
+						generatedStateMachine.StatesP.Add(state);
 					}
 
 					states.Add(state);
@@ -223,7 +223,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 			}
 
 #warning TODO: child StateMachines
-			//generatedStateMachine.ChildStateMachines_C1107 = new ChildAnimatorStateMachine[stateMachineCount];
+			//generatedStateMachine.ChildStateMachines = new ChildAnimatorStateMachine[stateMachineCount];
 
 			// set destination state for transitions here because all states have only become valid now
 			for (int i = 0; i < stateMachine.StateConstantArray.Count; i++)
@@ -232,17 +232,17 @@ namespace AssetRipper.Processing.AnimatorControllers
 				IStateConstant stateConstant = stateMachine.StateConstantArray[i].Data;
 
 				AssetList<PPtr_AnimatorStateTransition_4_0_0>? transitionList;
-				if (state.Has_Transitions_C1102())
+				if (state.Has_Transitions())
 				{
-					state.Transitions_C1102.EnsureCapacity(state.Transitions_C1102.Count + stateConstant.TransitionConstantArray.Count);
+					state.Transitions.EnsureCapacity(state.Transitions.Count + stateConstant.TransitionConstantArray.Count);
 					transitionList = null;
 				}
-				else if (generatedStateMachine.Has_OrderedTransitions_C1107())
+				else if (generatedStateMachine.Has_OrderedTransitions())
 				{
 					//I'm not sure if this is correct, but it seems to be the only logical way to store the transitions before Unity 5.
 					//IAnimatorStateMachine.LocalTransitions only exists until Unity 4.2.0, so by process of elimination, this is the only option.
 
-					AssetPair<PPtr_AnimatorState_4_0_0, AssetList<PPtr_AnimatorStateTransition_4_0_0>> pair = generatedStateMachine.OrderedTransitions_C1107.AddNew();
+					AssetPair<PPtr_AnimatorState_4_0_0, AssetList<PPtr_AnimatorStateTransition_4_0_0>> pair = generatedStateMachine.OrderedTransitions.AddNew();
 					pair.Key.SetAsset(generatedStateMachine.Collection, state);
 					transitionList = pair.Value;
 				}
@@ -256,52 +256,71 @@ namespace AssetRipper.Processing.AnimatorControllers
 				for (int j = 0; j < stateConstant.TransitionConstantArray.Count; j++)
 				{
 					ITransitionConstant transitionConstant = stateConstant.TransitionConstantArray[j].Data;
-					IAnimatorStateTransition transition = CreateAnimatorStateTransition(virtualFile, stateMachine, states, controller.TOS_C91, transitionConstant);
-					if (state.Has_Transitions_C1102())
+					IAnimatorStateTransition transition = CreateAnimatorStateTransition(virtualFile, stateMachine, states, controller.TOS, transitionConstant);
+					if (state.Has_Transitions())
 					{
-						state.Transitions_C1102P.Add(transition);
+						state.TransitionsP.Add(transition);
 					}
-					else if (transitionList is not null)
+					else
 					{
-						transitionList.AddNew().SetAsset(generatedStateMachine.Collection, transition);
+						transitionList?.AddNew().SetAsset(generatedStateMachine.Collection, transition);
 					}
 				}
 			}
 
-			//This code only works for Unity 5 and newer.
-			//However, IStateMachineConstant.AnyStateTransitionConstantArray is available on all versions.
-			//So, transitions in that array are not currently recovered on Unity 4 and earlier.
-			if (generatedStateMachine.Has_AnyStateTransitions_C1107())
+			//AnyStateTransitions
 			{
-				generatedStateMachine.AnyStateTransitions_C1107.Clear();
-				generatedStateMachine.AnyStateTransitions_C1107.Capacity = stateMachine.AnyStateTransitionConstantArray.Count;
-				for (int i = 0; i < stateMachine.AnyStateTransitionConstantArray.Count; i++)
+				int count = stateMachine.AnyStateTransitionConstantArray.Count;
+				if (generatedStateMachine.Has_AnyStateTransitions())
 				{
-					ITransitionConstant transitionConstant = stateMachine.AnyStateTransitionConstantArray[i].Data;
-					IAnimatorStateTransition transition = CreateAnimatorStateTransition(virtualFile, stateMachine, states, controller.TOS_C91, transitionConstant);
-					generatedStateMachine.AnyStateTransitions_C1107P.Add(transition);
+					generatedStateMachine.AnyStateTransitions.Capacity = count;
+					for (int i = 0; i < count; i++)
+					{
+						ITransitionConstant transitionConstant = stateMachine.AnyStateTransitionConstantArray[i].Data;
+						IAnimatorStateTransition transition = CreateAnimatorStateTransition(virtualFile, stateMachine, states, controller.TOS, transitionConstant);
+						generatedStateMachine.AnyStateTransitionsP.Add(transition);
+					}
+				}
+				else
+				{
+					//https://github.com/AssetRipper/AssetRipper/issues/1028
+					AssetList<PPtr_AnimatorStateTransition_4_0_0> newList = generatedStateMachine.OrderedTransitions.AddNew().Value;
+					newList.Capacity = count;
+					PPtrAccessList<PPtr_AnimatorStateTransition_4_0_0, IAnimatorStateTransition> anyStateTransitions = new(newList, generatedStateMachine.Collection);
+					for (int i = 0; i < count; i++)
+					{
+						ITransitionConstant transitionConstant = stateMachine.AnyStateTransitionConstantArray[i].Data;
+						IAnimatorStateTransition transition = CreateAnimatorStateTransition(virtualFile, stateMachine, states, controller.TOS, transitionConstant);
+						anyStateTransitions.Add(transition);
+					}
 				}
 			}
 
-			CreateEntryTransitions(generatedStateMachine, stateMachine, virtualFile, layer.Binding, states, controller.TOS_C91);
+			CreateEntryTransitions(generatedStateMachine, stateMachine, virtualFile, layer.Binding, states, controller.TOS);
 
-			generatedStateMachine.StateMachineBehaviours_C1107?.Clear();
+			generatedStateMachine.StateMachineBehaviours?.Clear();
 #warning TEMP: enable when AnimatorStateMachine's child StateMachines has been implemented
 			if (false)
 			{
-				generatedStateMachine.StateMachineBehaviours_C1107P.AddRange(controller.GetStateBehaviours(layerIndex));
+				generatedStateMachine.StateMachineBehavioursP.AddRange(controller.GetStateBehaviours(layerIndex));
 			}
 
-			generatedStateMachine.AnyStatePosition_C1107.SetValues(0.0f, -StateOffset, 0.0f);
-			generatedStateMachine.EntryPosition_C1107?.SetValues(StateOffset, -StateOffset, 0.0f);
-			generatedStateMachine.ExitPosition_C1107?.SetValues(2.0f * StateOffset, -StateOffset, 0.0f);
-			generatedStateMachine.ParentStateMachinePosition_C1107.SetValues(0.0f, -2.0f * StateOffset, 0.0f);
+			generatedStateMachine.AnyStatePosition.SetValues(0.0f, -StateOffset, 0.0f);
+			generatedStateMachine.EntryPosition?.SetValues(StateOffset, -StateOffset, 0.0f);
+			generatedStateMachine.ExitPosition?.SetValues(2.0f * StateOffset, -StateOffset, 0.0f);
+			generatedStateMachine.ParentStateMachinePosition.SetValues(0.0f, -2.0f * StateOffset, 0.0f);
 
-			if (generatedStateMachine.Has_ChildStates_C1107() && generatedStateMachine.ChildStates_C1107.Count > 0)
+			if (generatedStateMachine.Has_ChildStates() && generatedStateMachine.ChildStates.Count > 0)
 			{
-				PPtr_AnimatorState_5_0_0 defaultStatePPtr = generatedStateMachine.ChildStates_C1107[(int)stateMachine.DefaultState].State;
+				PPtr_AnimatorState_5_0_0 defaultStatePPtr = generatedStateMachine.ChildStates[(int)stateMachine.DefaultState].State;
 
-				generatedStateMachine.DefaultState_C1107.CopyValues(defaultStatePPtr, new PPtrConverter(generatedStateMachine));
+				generatedStateMachine.DefaultState.CopyValues(defaultStatePPtr, new PPtrConverter(generatedStateMachine));
+			}
+			else if (generatedStateMachine.Has_States() && generatedStateMachine.States.Count > 0)
+			{
+				PPtr_AnimatorState_4_0_0 defaultStatePPtr = generatedStateMachine.States[(int)stateMachine.DefaultState];
+
+				generatedStateMachine.DefaultState.CopyValues(defaultStatePPtr, new PPtrConverter(generatedStateMachine));
 			}
 
 			return generatedStateMachine;
@@ -310,35 +329,35 @@ namespace AssetRipper.Processing.AnimatorControllers
 		private static IAnimatorState CreateAnimatorState(ProcessedAssetCollection virtualFile, IAnimatorController controller, int stateMachineIndex, int stateIndex, Vector3f position)
 		{
 			IAnimatorState generatedState = virtualFile.CreateAsset((int)ClassIDType.AnimatorState, AnimatorState.Create);
-			generatedState.ObjectHideFlags = HideFlags.HideInHierarchy;
+			generatedState.HideFlagsE = HideFlags.HideInHierarchy;
 
 			AssetDictionary<uint, Utf8String> tos;
-			if (controller.TOS_C91.ContainsKey(0))
+			if (controller.TOS.ContainsKey(0))
 			{
-				tos = controller.TOS_C91;
+				tos = controller.TOS;
 			}
 			else
 			{
 				tos = new AssetDictionary<uint, Utf8String>() { { 0, Utf8String.Empty } };
-				foreach ((uint hash, Utf8String str) in controller.TOS_C91)
+				foreach ((uint hash, Utf8String str) in controller.TOS)
 				{
 					tos.Add(hash, str);
 				}
 			}
-			IStateMachineConstant stateMachine = controller.Controller_C91.StateMachineArray[stateMachineIndex].Data;
+			IStateMachineConstant stateMachine = controller.Controller.StateMachineArray[stateMachineIndex].Data;
 			IStateConstant state = stateMachine.StateConstantArray[stateIndex].Data;
 
 			generatedState.Name = tos[state.NameID];
 
-			generatedState.Speed_C1102 = state.Speed;
-			generatedState.CycleOffset_C1102 = state.CycleOffset;
+			generatedState.Speed = state.Speed;
+			generatedState.CycleOffset = state.CycleOffset;
 
 			// skip Transitions because not all state exists at this moment
 
-			if (generatedState.Has_StateMachineBehaviours_C1102())
+			if (generatedState.Has_StateMachineBehaviours())
 			{
 				// exclude StateMachine's behaviours
-				int layerIndex = controller.Controller_C91.GetLayerIndexByStateMachineIndex(stateMachineIndex);
+				int layerIndex = controller.Controller.GetLayerIndexByStateMachineIndex(stateMachineIndex);
 				IMonoBehaviour?[] machineBehaviours = controller.GetStateBehaviours(layerIndex);
 				IMonoBehaviour?[] stateBehaviours = controller.GetStateBehaviours(stateMachineIndex, stateIndex);
 				IMonoBehaviour?[] behaviours = stateBehaviours;
@@ -352,33 +371,33 @@ namespace AssetRipper.Processing.AnimatorControllers
 				//	}
 				//}
 
-				generatedState.StateMachineBehaviours_C1102P.AddRange(behaviours);
+				generatedState.StateMachineBehavioursP.AddRange(behaviours);
 			}
 
-			generatedState.Position_C1102.CopyValues(position);
-			generatedState.IKOnFeet_C1102 = state.IKOnFeet;
-			generatedState.WriteDefaultValues_C1102 = state.GetWriteDefaultValues();
-			generatedState.Mirror_C1102 = state.Mirror;
-			generatedState.SpeedParameterActive_C1102 = state.SpeedParamID > 0;
-			generatedState.MirrorParameterActive_C1102 = state.MirrorParamID > 0;
-			generatedState.CycleOffsetParameterActive_C1102 = state.CycleOffsetParamID > 0;
-			generatedState.TimeParameterActive_C1102 = state.TimeParamID > 0;
+			generatedState.Position.CopyValues(position);
+			generatedState.IKOnFeet = state.IKOnFeet;
+			generatedState.WriteDefaultValues = state.GetWriteDefaultValues();
+			generatedState.Mirror = state.Mirror;
+			generatedState.SpeedParameterActive = state.SpeedParamID > 0;
+			generatedState.MirrorParameterActive = state.MirrorParamID > 0;
+			generatedState.CycleOffsetParameterActive = state.CycleOffsetParamID > 0;
+			generatedState.TimeParameterActive = state.TimeParamID > 0;
 
 			IMotion? motion = state.CreateMotion(virtualFile, controller, 0);
-			if (generatedState.Has_Motion_C1102())
+			if (generatedState.Has_Motion())
 			{
-				generatedState.Motion_C1102P = motion;
+				generatedState.MotionP = motion;
 			}
 			else
 			{
-				generatedState.Motions_C1102P.Add(motion);
+				generatedState.MotionsP.Add(motion);
 			}
 
-			generatedState.Tag_C1102 = tos[state.TagID];
-			generatedState.SpeedParameter_C1102 = tos[state.SpeedParamID];
-			generatedState.MirrorParameter_C1102 = tos[state.MirrorParamID];
-			generatedState.CycleOffsetParameter_C1102 = tos[state.CycleOffsetParamID];
-			generatedState.TimeParameter_C1102 = tos[state.TimeParamID];
+			generatedState.Tag = tos[state.TagID];
+			generatedState.SpeedParameter = tos[state.SpeedParamID];
+			generatedState.MirrorParameter = tos[state.MirrorParamID];
+			generatedState.CycleOffsetParameter = tos[state.CycleOffsetParamID];
+			generatedState.TimeParameter = tos[state.TimeParamID];
 
 			return generatedState;
 		}
@@ -391,34 +410,36 @@ namespace AssetRipper.Processing.AnimatorControllers
 			ITransitionConstant Transition)
 		{
 			IAnimatorStateTransition animatorStateTransition = virtualFile.CreateAsset((int)ClassIDType.AnimatorStateTransition, AnimatorStateTransition.Create);
-			animatorStateTransition.HideFlags_C1101 = (uint)HideFlags.HideInHierarchy;
+			animatorStateTransition.HideFlags = (uint)HideFlags.HideInHierarchy;
 
-			animatorStateTransition.Conditions_C1101.Capacity = Transition.ConditionConstantArray.Count;
+			animatorStateTransition.Conditions.Capacity = Transition.ConditionConstantArray.Count;
 			for (int i = 0; i < Transition.ConditionConstantArray.Count; i++)
 			{
 				ConditionConstant conditionConstant = Transition.ConditionConstantArray[i].Data;
-				if (conditionConstant.ConditionMode != (int)AnimatorConditionMode.ExitTime)
+				if (!animatorStateTransition.Has_ExitTime() || conditionConstant.ConditionMode != (int)AnimatorConditionMode.ExitTime)
 				{
-					IAnimatorCondition condition = animatorStateTransition.Conditions_C1101.AddNew();
+					IAnimatorCondition condition = animatorStateTransition.Conditions.AddNew();
 					condition.ConditionMode = (int)conditionConstant.ConditionModeE;
 					condition.ConditionEvent = TOS[conditionConstant.EventID];
 					condition.EventTreshold = conditionConstant.EventThreshold;
+					condition.ExitTime = conditionConstant.ExitTime;
 				}
 			}
 
-			animatorStateTransition.DstState_C1101P = GetDestinationState(Transition.DestinationState, StateMachine, States);
+			animatorStateTransition.DstStateP = GetDestinationState(Transition.DestinationState, StateMachine, States);
 
 			animatorStateTransition.Name = TOS[Transition.UserID];
-			animatorStateTransition.IsExit_C1101 = Transition.IsExit();
+			animatorStateTransition.IsExit = Transition.IsExit();
 
-			animatorStateTransition.TransitionDuration_C1101 = Transition.TransitionDuration;
-			animatorStateTransition.TransitionOffset_C1101 = Transition.TransitionOffset;
-			animatorStateTransition.ExitTime_C1101 = Transition.GetExitTime();
-			animatorStateTransition.HasExitTime_C1101 = Transition.GetHasExitTime();
-			animatorStateTransition.HasFixedDuration_C1101 = Transition.GetHasFixedDuration();
-			animatorStateTransition.InterruptionSource_C1101E = Transition.GetInterruptionSource();
-			animatorStateTransition.OrderedInterruption_C1101 = Transition.OrderedInterruption;
-			animatorStateTransition.CanTransitionToSelf_C1101 = Transition.CanTransitionToSelf;
+			animatorStateTransition.Atomic = Transition.Atomic;
+			animatorStateTransition.TransitionDuration = Transition.TransitionDuration;
+			animatorStateTransition.TransitionOffset = Transition.TransitionOffset;
+			animatorStateTransition.ExitTime = Transition.GetExitTime();
+			animatorStateTransition.HasExitTime = Transition.GetHasExitTime();
+			animatorStateTransition.HasFixedDuration = Transition.GetHasFixedDuration();
+			animatorStateTransition.InterruptionSourceE = Transition.GetInterruptionSource();
+			animatorStateTransition.OrderedInterruption = Transition.OrderedInterruption;
+			animatorStateTransition.CanTransitionToSelf = Transition.CanTransitionToSelf;
 
 			return animatorStateTransition;
 		}
@@ -431,22 +452,22 @@ namespace AssetRipper.Processing.AnimatorControllers
 			SelectorTransitionConstant Transition)
 		{
 			IAnimatorTransition animatorTransition = virtualFile.CreateAsset((int)ClassIDType.AnimatorTransition, AnimatorTransition.Create);
-			animatorTransition.HideFlags_C1109 = (uint)HideFlags.HideInHierarchy;
+			animatorTransition.HideFlagsE = HideFlags.HideInHierarchy;
 
-			animatorTransition.Conditions_C1109.Capacity = Transition.ConditionConstantArray.Count;
+			animatorTransition.Conditions.Capacity = Transition.ConditionConstantArray.Count;
 			for (int i = 0; i < Transition.ConditionConstantArray.Count; i++)
 			{
 				ConditionConstant conditionConstant = Transition.ConditionConstantArray[i].Data;
 				if (conditionConstant.ConditionMode != (int)AnimatorConditionMode.ExitTime)
 				{
-					IAnimatorCondition condition = animatorTransition.Conditions_C1109.AddNew();
+					IAnimatorCondition condition = animatorTransition.Conditions.AddNew();
 					condition.ConditionMode = (int)conditionConstant.ConditionModeE;
 					condition.ConditionEvent = TOS[conditionConstant.EventID];
 					condition.EventTreshold = conditionConstant.EventThreshold;
 				}
 			}
 
-			animatorTransition.DstState_C1109P = GetDestinationState(Transition.Destination, StateMachine, States);
+			animatorTransition.DstStateP = GetDestinationState(Transition.Destination, StateMachine, States);
 
 			return animatorTransition;
 		}

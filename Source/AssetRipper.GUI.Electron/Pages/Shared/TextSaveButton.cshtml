@@ -1,0 +1,9 @@
+﻿@using System.Text;
+@model ValueTuple<string, string>
+@{
+	//Item1 is the filename, Item2 is the file contents
+
+	string sourcePath = $"data:text/plain;base64,{Convert.ToBase64String(Encoding.UTF8.GetBytes(Model.Item2), Base64FormattingOptions.None)}";
+
+	<a href="@sourcePath" download="@Model.Item1" class="btn btn-primary">@Localization.Save</a>
+}

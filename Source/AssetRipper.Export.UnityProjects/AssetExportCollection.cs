@@ -72,10 +72,10 @@ namespace AssetRipper.Export.UnityProjects
 		protected virtual IUnityObjectBase CreateImporter(IExportContainer container)
 		{
 			INativeFormatImporter importer = NativeFormatImporter.Create(container.File, container.ExportVersion);
-			importer.MainObjectFileID_C1034 = GetExportID(Asset);
-			if (importer.Has_AssetBundleName_C1034() && Asset.AssetBundleName is not null)
+			importer.MainObjectFileID = GetExportID(Asset);
+			if (importer.Has_AssetBundleName_R() && Asset.AssetBundleName is not null)
 			{
-				importer.AssetBundleName_C1034 = Asset.AssetBundleName;
+				importer.AssetBundleName_R = Asset.AssetBundleName;
 			}
 			return importer;
 		}

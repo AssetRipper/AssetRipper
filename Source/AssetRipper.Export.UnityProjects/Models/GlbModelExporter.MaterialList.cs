@@ -21,9 +21,9 @@ namespace AssetRipper.Export.UnityProjects.Models
 				this.file = file;
 			}
 
-			public MaterialList(IMeshRenderer renderer) : this(renderer.Materials_C23, renderer.Collection) { }
+			public MaterialList(IMeshRenderer renderer) : this(renderer.Materials, renderer.Collection) { }
 
-			public MaterialList(ISkinnedMeshRenderer renderer) : this(renderer.Materials_C137, renderer.Collection) { }
+			public MaterialList(ISkinnedMeshRenderer renderer) : this(renderer.Materials, renderer.Collection) { }
 
 			public int Count => materials.Count;
 

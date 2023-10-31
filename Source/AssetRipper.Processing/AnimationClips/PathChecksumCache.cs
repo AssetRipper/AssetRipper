@@ -36,19 +36,19 @@ public readonly struct PathChecksumCache
 	
 	private void AddAnimatorPathsToCache(IAnimator animator)
 	{
-		IAvatar? avatar = animator.Avatar_C95P;
+		IAvatar? avatar = animator.AvatarP;
 		if (avatar != null)
 		{
 			 AddAvatarTOS(avatar);
 			 return;
 		}
 		
-		if (animator.Has_HasTransformHierarchy_C95() && !animator.HasTransformHierarchy_C95)
+		if (animator.Has_HasTransformHierarchy() && !animator.HasTransformHierarchy)
 		{
 			return;
 		}
 
-		IGameObject gameObject = animator.GameObject_C95.GetAsset(animator.Collection);
+		IGameObject gameObject = animator.GameObject.GetAsset(animator.Collection);
 		AddGameObjectPathsToCacheRecursive(gameObject, string.Empty);
 	}
 
@@ -61,8 +61,8 @@ public readonly struct PathChecksumCache
 			IGameObject child = childTransform?.GameObject_C4P ?? throw new NullReferenceException();
 
 			string path = string.IsNullOrEmpty(parentPath)
-				? child.NameString
-				: $"{parentPath}/{child.NameString}";
+				? child.Name
+				: $"{parentPath}/{child.Name}";
 
 			uint pathHash = Crc32Algorithm.HashUTF8(path);
 			AddKeys(pathHash, path);
@@ -79,7 +79,7 @@ public readonly struct PathChecksumCache
 	
 	private void AddAvatarTOS(IAvatar avatar)
 	{
-		foreach ((uint key, Utf8String value) in avatar.TOS_C90)
+		foreach ((uint key, Utf8String value) in avatar.TOS)
 		{
 			AddKeys(key, value);
 		}

@@ -329,17 +329,7 @@ namespace AssetRipper.Export.UnityProjects
 
 		private void OverrideEngineExporters(ProjectExporter projectExporter)
 		{
-			EngineAssetExporter engineExporter = new(Settings);
-			projectExporter.OverrideExporter<IMaterial>(engineExporter);
-			projectExporter.OverrideExporter<ITexture2D>(engineExporter);
-			projectExporter.OverrideExporter<IMesh>(engineExporter);
-			projectExporter.OverrideExporter<IShader>(engineExporter);
-			projectExporter.OverrideExporter<IComputeShader>(engineExporter);
-			projectExporter.OverrideExporter<IMonoBehaviour>(engineExporter);
-			projectExporter.OverrideExporter<IMonoScript>(engineExporter);
-			projectExporter.OverrideExporter<IFont>(engineExporter);
-			projectExporter.OverrideExporter<ISprite>(engineExporter);
-			projectExporter.OverrideExporter<ILightmapParameters>(engineExporter);
+			projectExporter.OverrideExporter<IUnityObjectBase>(EngineAssetsExporter.CreateFromEmbeddedData(Settings.Version));
 		}
 	}
 }

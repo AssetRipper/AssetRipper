@@ -13,7 +13,13 @@ namespace AssetRipper.Assets.Export
 		/// <param name="projectDirectory">The directory containing the whole project including Assets and ProjectSettings.</param>
 		/// <returns>True if export was successful.</returns>
 		bool Export(IExportContainer container, string projectDirectory);
+		/// <summary>
+		/// To be removed
+		/// </summary>
 		bool IsContains(IUnityObjectBase asset);
+		/// <summary>
+		/// To be removed
+		/// </summary>
 		long GetExportID(IUnityObjectBase asset);
 		MetaPtr CreateExportPointer(IUnityObjectBase asset, bool isLocal);
 

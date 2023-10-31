@@ -43,7 +43,7 @@ internal static class Program
 		try
 #endif
 		{
-			var file = SchemeReader.LoadFile(fullName);
+			FileBase file = SchemeReader.LoadFile(fullName);
 			if (file is SerializedFile serializedFile)
 			{
 				ExtractJson(serializedFile);
@@ -88,7 +88,7 @@ internal static class Program
 		foreach ((_, IUnityObjectBase asset) in collection.Assets)
 		{
 			JsonObject assetObject = new();
-			array.Add(assetObject);
+			array.Add((JsonNode)assetObject);
 			assetObject.Add("PathID", asset.PathID);
 			assetObject.Add("ClassID", asset.ClassID);
 			assetObject.Add("Fields", ((JsonAsset)asset).Contents);
@@ -96,6 +96,6 @@ internal static class Program
 			//Normally, this would be a cause for concern, but the asset won't be used after this.
 		}
 		using FileStream stream = File.Create(Path.Combine(outputDirectory, $"{file.NameFixed}.json"));
-		System.Text.Json.JsonSerializer.Serialize(stream, root, new JsonSerializerOptions() { WriteIndented = true });
+		System.Text.Json.JsonSerializer.Serialize(stream, root, JsonObjectSerializerContext.Default.JsonObject);
 	}
 }

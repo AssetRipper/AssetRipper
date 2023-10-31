@@ -20,14 +20,14 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static bool IsSet(this IMesh mesh)
 		{
-			return mesh.CompressedMesh_C43.IsSet() || mesh.VertexData_C43.IsSet(mesh.StreamData_C43);
+			return mesh.CompressedMesh.IsSet() || mesh.VertexData.IsSet(mesh.StreamData);
 		}
 
 		public static bool CheckAssetIntegrity(this IMesh mesh)
 		{
-			if (mesh.Has_StreamData_C43() && mesh.VertexData_C43.IsSet(mesh.StreamData_C43))
+			if (mesh.Has_StreamData() && mesh.VertexData.IsSet(mesh.StreamData))
 			{
-				return mesh.StreamData_C43.CheckIntegrity(mesh.Collection);
+				return mesh.StreamData.CheckIntegrity(mesh.Collection);
 			}
 			return true;
 		}
@@ -64,7 +64,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			uv6 = default;
 			uv7 = default;
 
-			mesh.VertexData_C43?.ReadData(mesh.Collection.Version, mesh.Collection.EndianType, mesh,
+			mesh.VertexData?.ReadData(mesh.Collection.Version, mesh.Collection.EndianType, mesh,
 				out vertices,
 				out normals,
 				out tangents,
@@ -79,7 +79,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 				out uv6,
 				out uv7);
 
-			mesh.CompressedMesh_C43.DecompressCompressedMesh(mesh.Collection.Version,
+			mesh.CompressedMesh.DecompressCompressedMesh(mesh.Collection.Version,
 				out Vector3[]? compressed_vertices,
 				out Vector3[]? compressed_normals,
 				out Vector4[]? compressed_tangents,
@@ -100,7 +100,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			normals ??= compressed_normals;
 			tangents ??= compressed_tangents;
 			colors ??= compressed_colors;
-			skin ??= compressed_skin ?? mesh.Skin_C43?.Select(b => b.ToCommonClass()).ToArray();
+			skin ??= compressed_skin ?? mesh.Skin?.Select(b => b.ToCommonClass()).ToArray();
 			uv0 ??= compressed_uv0;
 			uv1 ??= compressed_uv1;
 			uv2 ??= compressed_uv2;
@@ -120,25 +120,25 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static byte[] GetChannelsData(this IMesh mesh)
 		{
-			if (mesh.Has_StreamData_C43() && mesh.StreamData_C43.IsSet())
+			if (mesh.Has_StreamData() && mesh.StreamData.IsSet())
 			{
-				return mesh.StreamData_C43.GetContent(mesh.Collection);
+				return mesh.StreamData.GetContent(mesh.Collection);
 			}
 			else
 			{
-				return mesh.VertexData_C43?.Data ?? Array.Empty<byte>();
+				return mesh.VertexData?.Data ?? Array.Empty<byte>();
 			}
 		}
 
 		public static string? FindBlendShapeNameByCRC(this IMesh mesh, uint crc)
 		{
-			if (mesh.Has_Shapes_C43())
+			if (mesh.Has_Shapes())
 			{
-				return mesh.Shapes_C43.FindShapeNameByCRC(crc);
+				return mesh.Shapes.FindShapeNameByCRC(crc);
 			}
-			else if (mesh.Has_ShapesList_C43())
+			else if (mesh.Has_ShapesList())
 			{
-				foreach (MeshBlendShape_4_1_0 blendShape in mesh.ShapesList_C43)
+				foreach (MeshBlendShape_4_1_0 blendShape in mesh.ShapesList)
 				{
 					if (blendShape.IsCRCMatch(crc))
 					{
@@ -156,9 +156,9 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static IndexFormat GetIndexFormat(this IMesh mesh)
 		{
-			if (mesh.Has_IndexFormat_C43())
+			if (mesh.Has_IndexFormat())
 			{
-				return mesh.IndexFormat_C43E;
+				return mesh.IndexFormatE;
 			}
 			else
 			{
@@ -168,9 +168,9 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static void SetIndexFormat(this IMesh mesh, IndexFormat indexFormat)
 		{
-			if (mesh.Has_IndexFormat_C43())
+			if (mesh.Has_IndexFormat())
 			{
-				mesh.IndexFormat_C43E = indexFormat;
+				mesh.IndexFormatE = indexFormat;
 			}
 			else if (indexFormat != IndexFormat.UInt16)
 			{
@@ -181,13 +181,13 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static MeshOptimizationFlags GetMeshOptimizationFlags(this IMesh mesh)
 		{
-			if (mesh.Has_MeshOptimizationFlags_C43())
+			if (mesh.Has_MeshOptimizationFlags())
 			{
-				return (MeshOptimizationFlags)mesh.MeshOptimizationFlags_C43;
+				return (MeshOptimizationFlags)mesh.MeshOptimizationFlags;
 			}
-			else if (mesh.Has_MeshOptimized_C43())
+			else if (mesh.Has_MeshOptimized())
 			{
-				return mesh.MeshOptimized_C43 ? MeshOptimizationFlags.Everything : MeshOptimizationFlags.PolygonOrder;
+				return mesh.MeshOptimized ? MeshOptimizationFlags.Everything : MeshOptimizationFlags.PolygonOrder;
 			}
 			else
 			{
@@ -197,24 +197,24 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static void SetMeshOptimizationFlags(this IMesh mesh, MeshOptimizationFlags value)
 		{
-			if (mesh.Has_MeshOptimizationFlags_C43())
+			if (mesh.Has_MeshOptimizationFlags())
 			{
-				mesh.MeshOptimizationFlags_C43 = (int)value;
+				mesh.MeshOptimizationFlags = (int)value;
 			}
-			else if (mesh.Has_MeshOptimized_C43())
+			else if (mesh.Has_MeshOptimized())
 			{
-				mesh.MeshOptimized_C43 = value == MeshOptimizationFlags.Everything;
+				mesh.MeshOptimized = value == MeshOptimizationFlags.Everything;
 			}
 		}
 
 		public static ModelImporterMeshCompression GetMeshCompression(this IMesh mesh)
 		{
-			return (ModelImporterMeshCompression)mesh.MeshCompression_C43;
+			return (ModelImporterMeshCompression)mesh.MeshCompression;
 		}
 
 		public static void SetMeshCompression(this IMesh mesh, ModelImporterMeshCompression meshCompression)
 		{
-			mesh.MeshCompression_C43 = (byte)meshCompression;
+			mesh.MeshCompression = (byte)meshCompression;
 		}
 
 		public static uint[] GetProcessedIndexBuffer(this IMesh mesh)
@@ -222,11 +222,11 @@ namespace AssetRipper.SourceGenerated.Extensions
 			uint[] result;
 			if (mesh.Is16BitIndices())
 			{
-				int indexCount = mesh.IndexBuffer_C43.Length / sizeof(ushort);
+				int indexCount = mesh.IndexBuffer.Length / sizeof(ushort);
 				ushort[] rentedBuffer = ArrayPool<ushort>.Shared.Rent(indexCount);
 				if (!BitConverter.IsLittleEndian && mesh.Collection.EndianType == EndianType.LittleEndian)
 				{
-					ReadOnlySpan<byte> indexBuffer = mesh.IndexBuffer_C43;
+					ReadOnlySpan<byte> indexBuffer = mesh.IndexBuffer;
 					for (int i = 0; i < indexCount; i++)
 					{
 						rentedBuffer[i] = BinaryPrimitives.ReadUInt16LittleEndian(indexBuffer.Slice(i * sizeof(ushort)));
@@ -234,7 +234,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 				}
 				else if (BitConverter.IsLittleEndian && mesh.Collection.EndianType == EndianType.BigEndian)
 				{
-					ReadOnlySpan<byte> indexBuffer = mesh.IndexBuffer_C43;
+					ReadOnlySpan<byte> indexBuffer = mesh.IndexBuffer;
 					for (int i = 0; i < indexCount; i++)
 					{
 						rentedBuffer[i] = BinaryPrimitives.ReadUInt16BigEndian(indexBuffer.Slice(i * sizeof(ushort)));
@@ -242,7 +242,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 				}
 				else
 				{
-					Buffer.BlockCopy(mesh.IndexBuffer_C43, 0, rentedBuffer, 0, mesh.IndexBuffer_C43.Length);
+					Buffer.BlockCopy(mesh.IndexBuffer, 0, rentedBuffer, 0, mesh.IndexBuffer.Length);
 				}
 				result = new uint[indexCount];
 				UShortToUInt(rentedBuffer, result, indexCount);
@@ -250,11 +250,11 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 			else
 			{
-				int indexCount = mesh.IndexBuffer_C43.Length / sizeof(uint);
+				int indexCount = mesh.IndexBuffer.Length / sizeof(uint);
 				result = new uint[indexCount];
 				if (!BitConverter.IsLittleEndian && mesh.Collection.EndianType == EndianType.LittleEndian)
 				{
-					ReadOnlySpan<byte> indexBuffer = mesh.IndexBuffer_C43;
+					ReadOnlySpan<byte> indexBuffer = mesh.IndexBuffer;
 					for (int i = 0; i < indexCount; i++)
 					{
 						result[i] = BinaryPrimitives.ReadUInt32LittleEndian(indexBuffer.Slice(i * sizeof(uint)));
@@ -262,7 +262,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 				}
 				else if (BitConverter.IsLittleEndian && mesh.Collection.EndianType == EndianType.BigEndian)
 				{
-					ReadOnlySpan<byte> indexBuffer = mesh.IndexBuffer_C43;
+					ReadOnlySpan<byte> indexBuffer = mesh.IndexBuffer;
 					for (int i = 0; i < indexCount; i++)
 					{
 						result[i] = BinaryPrimitives.ReadUInt32BigEndian(indexBuffer.Slice(i * sizeof(uint)));
@@ -270,7 +270,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 				}
 				else
 				{
-					Buffer.BlockCopy(mesh.IndexBuffer_C43, 0, result, 0, mesh.IndexBuffer_C43.Length);
+					Buffer.BlockCopy(mesh.IndexBuffer, 0, result, 0, mesh.IndexBuffer.Length);
 				}
 			}
 			return result;
@@ -280,13 +280,13 @@ namespace AssetRipper.SourceGenerated.Extensions
 		{
 			if (mesh.Is16BitIndices())
 			{
-				mesh.IndexBuffer_C43 = new byte[indices.Length * sizeof(ushort)];
+				mesh.IndexBuffer = new byte[indices.Length * sizeof(ushort)];
 				ushort[] rentedBuffer = ArrayPool<ushort>.Shared.Rent(indices.Length);
 				UIntToUShort(indices, rentedBuffer, indices.Length);
 
 				if (!BitConverter.IsLittleEndian && mesh.Collection.EndianType == EndianType.LittleEndian)
 				{
-					Span<byte> indexBuffer = mesh.IndexBuffer_C43;
+					Span<byte> indexBuffer = mesh.IndexBuffer;
 					for (int i = 0; i < indices.Length; i++)
 					{
 						BinaryPrimitives.WriteUInt16LittleEndian(indexBuffer.Slice(i * sizeof(ushort)), (ushort)indices[i]);
@@ -294,7 +294,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 				}
 				else if (BitConverter.IsLittleEndian && mesh.Collection.EndianType == EndianType.BigEndian)
 				{
-					Span<byte> indexBuffer = mesh.IndexBuffer_C43;
+					Span<byte> indexBuffer = mesh.IndexBuffer;
 					for (int i = 0; i < indices.Length; i++)
 					{
 						BinaryPrimitives.WriteUInt16BigEndian(indexBuffer.Slice(i * sizeof(ushort)), (ushort)indices[i]);
@@ -302,18 +302,18 @@ namespace AssetRipper.SourceGenerated.Extensions
 				}
 				else
 				{
-					Buffer.BlockCopy(rentedBuffer, 0, mesh.IndexBuffer_C43, 0, mesh.IndexBuffer_C43.Length);
+					Buffer.BlockCopy(rentedBuffer, 0, mesh.IndexBuffer, 0, mesh.IndexBuffer.Length);
 				}
 
 				ArrayPool<ushort>.Shared.Return(rentedBuffer);
 			}
 			else
 			{
-				mesh.IndexBuffer_C43 = new byte[indices.Length * sizeof(uint)];
+				mesh.IndexBuffer = new byte[indices.Length * sizeof(uint)];
 
 				if (!BitConverter.IsLittleEndian && mesh.Collection.EndianType == EndianType.LittleEndian)
 				{
-					Span<byte> indexBuffer = mesh.IndexBuffer_C43;
+					Span<byte> indexBuffer = mesh.IndexBuffer;
 					for (int i = 0; i < indices.Length; i++)
 					{
 						BinaryPrimitives.WriteUInt32LittleEndian(indexBuffer.Slice(i * sizeof(uint)), indices[i]);
@@ -321,7 +321,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 				}
 				else if (BitConverter.IsLittleEndian && mesh.Collection.EndianType == EndianType.BigEndian)
 				{
-					Span<byte> indexBuffer = mesh.IndexBuffer_C43;
+					Span<byte> indexBuffer = mesh.IndexBuffer;
 					for (int i = 0; i < indices.Length; i++)
 					{
 						BinaryPrimitives.WriteUInt32BigEndian(indexBuffer.Slice(i * sizeof(uint)), indices[i]);
@@ -329,7 +329,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 				}
 				else
 				{
-					Buffer.BlockCopy(indices, 0, mesh.IndexBuffer_C43, 0, mesh.IndexBuffer_C43.Length);
+					Buffer.BlockCopy(indices, 0, mesh.IndexBuffer, 0, mesh.IndexBuffer.Length);
 				}
 			}
 		}

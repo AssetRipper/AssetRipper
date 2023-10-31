@@ -1,20 +1,19 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
-using AssetRipper.Assets.Interfaces;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.IO.Files.ResourceFiles;
 using AssetRipper.IO.Files.Streams.Smart;
 
 namespace AssetRipper.GUI
 {
-	public sealed class DummyAssetForLooseResourceFile : UnityObjectBase, IDisposable, IHasNameString
+	public sealed class DummyAssetForLooseResourceFile : UnityObjectBase, IDisposable, INamed
 	{
 		private bool disposedValue;
 
 		public ResourceFile AssociatedFile { get; }
 
-		public string NameString
+		public Utf8String Name
 		{
 			get => AssociatedFile.Name;
 			set => throw new NotSupportedException();

@@ -1,0 +1,12 @@
+﻿@using AssetRipper.GUI.Electron.Pages.Settings.DropDown;
+@model DropDownParameters
+
+@{
+	string? selectedItem = Model.Expression.Compile().Invoke(Model.ParentModel);
+	<div class="form-group">
+		@Model.ParentHtml.LabelFor(Model.Expression, Model.Setting.Title)
+		@Model.ParentHtml.DropDownListFor(Model.Expression, Model.Setting.GetValues().Select(i => {
+			return new SelectListItem(i.DisplayName, i.Value, i.Value == selectedItem);
+		}), new {@class="form-control"})
+	</div>
+}

@@ -1,7 +1,5 @@
 ﻿using AssetRipper.Assets.Cloning;
 using AssetRipper.Assets.Export;
-using AssetRipper.Assets.Export.Dependencies;
-using AssetRipper.Assets.Interfaces;
 using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.IO.Serialization;
 using AssetRipper.Assets.IO.Writing;
@@ -34,19 +32,14 @@ public abstract class UnityAssetBase : IUnityAssetBase, IAssetReadable
 
 	public virtual YamlNode ExportYamlRelease(IExportContainer container) => throw MethodNotSupported();
 
-	public virtual IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
+	public virtual IEnumerable<(string, PPtr)> FetchDependencies()
 	{
-		return Enumerable.Empty<PPtr<IUnityObjectBase>>();
-	}
-
-	public virtual IEnumerable<(FieldName, PPtr<IUnityObjectBase>)> FetchDependencies(FieldName? parent)
-	{
-		return Enumerable.Empty<(FieldName, PPtr<IUnityObjectBase>)>();
+		return Enumerable.Empty<(string, PPtr)>();
 	}
 
 	public override string ToString()
 	{
-		string? name = (this as IHasNameString)?.NameString;
+		string? name = (this as INamed)?.Name;
 		return string.IsNullOrEmpty(name) ? GetType().Name : name;
 	}
 

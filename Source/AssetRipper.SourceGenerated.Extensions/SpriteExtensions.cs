@@ -27,43 +27,43 @@ namespace AssetRipper.SourceGenerated.Extensions
 			// if sprite doesn't belong to an atlas, consider its image as single sprite atlas
 
 			Vector2 cropBotLeft;
-			if (atlas is null || !sprite.Has_RenderDataKey_C213())
+			if (atlas is null || !sprite.Has_RenderDataKey())
 			{
-				sAtlasRect = sprite.RD_C213.TextureRect.CastToStruct();
-				cropBotLeft = (Vector2)sprite.RD_C213.TextureRectOffset;
+				sAtlasRect = sprite.RD.TextureRect.CastToStruct();
+				cropBotLeft = (Vector2)sprite.RD.TextureRectOffset;
 			}
 			else
 			{
-				ISpriteAtlasData atlasData = atlas.RenderDataMap_C687078895[sprite.RenderDataKey_C213];
+				ISpriteAtlasData atlasData = atlas.RenderDataMap[sprite.RenderDataKey];
 				sAtlasRect = atlasData.TextureRect.CastToStruct();
 				cropBotLeft = (Vector2)atlasData.TextureRectOffset;
 			}
 
-			Vector2 sizeDelta = sprite.Rect_C213.Size() - sAtlasRect.Size();
+			Vector2 sizeDelta = sprite.Rect.Size() - sAtlasRect.Size();
 			Vector2 cropTopRight = new Vector2(sizeDelta.X - cropBotLeft.X, sizeDelta.Y - cropBotLeft.Y);
 
 			Vector2 pivot;
-			if (sprite.Has_Pivot_C213())
+			if (sprite.Has_Pivot())
 			{
-				pivot = (Vector2)sprite.Pivot_C213;
+				pivot = (Vector2)sprite.Pivot;
 			}
 			else
 			{
-				Vector2 center = new Vector2(sprite.Rect_C213.Size().X / 2.0f, sprite.Rect_C213.Size().Y / 2.0f);
-				Vector2 pivotOffset = center + (Vector2)sprite.Offset_C213;
-				pivot = new Vector2(pivotOffset.X / sprite.Rect_C213.Size().X, pivotOffset.Y / sprite.Rect_C213.Size().Y);
+				Vector2 center = new Vector2(sprite.Rect.Size().X / 2.0f, sprite.Rect.Size().Y / 2.0f);
+				Vector2 pivotOffset = center + (Vector2)sprite.Offset;
+				pivot = new Vector2(pivotOffset.X / sprite.Rect.Size().X, pivotOffset.Y / sprite.Rect.Size().Y);
 			}
 
-			Vector2 pivotPosition = new Vector2(pivot.X * sprite.Rect_C213.Size().X, pivot.Y * sprite.Rect_C213.Size().Y);
+			Vector2 pivotPosition = new Vector2(pivot.X * sprite.Rect.Size().X, pivot.Y * sprite.Rect.Size().Y);
 			Vector2 aAtlasPivotPosition = pivotPosition - cropBotLeft;
 			sAtlasPivot = new Vector2(aAtlasPivotPosition.X / sAtlasRect.Size().X, aAtlasPivotPosition.Y / sAtlasRect.Size().Y);
 
-			if (sprite.Has_Border_C213())
+			if (sprite.Has_Border())
 			{
-				float borderL = sprite.Border_C213.X == 0.0f ? 0.0f : sprite.Border_C213.X - cropBotLeft.X;
-				float borderB = sprite.Border_C213.Y == 0.0f ? 0.0f : sprite.Border_C213.Y - cropBotLeft.Y;
-				float borderR = sprite.Border_C213.Z == 0.0f ? 0.0f : sprite.Border_C213.Z - cropTopRight.X;
-				float borderT = sprite.Border_C213.W == 0.0f ? 0.0f : sprite.Border_C213.W - cropTopRight.Y;
+				float borderL = sprite.Border.X == 0.0f ? 0.0f : sprite.Border.X - cropBotLeft.X;
+				float borderB = sprite.Border.Y == 0.0f ? 0.0f : sprite.Border.Y - cropBotLeft.Y;
+				float borderR = sprite.Border.Z == 0.0f ? 0.0f : sprite.Border.Z - cropTopRight.X;
+				float borderT = sprite.Border.W == 0.0f ? 0.0f : sprite.Border.W - cropTopRight.Y;
 				sAtlasBorder = new Vector4(borderL, borderB, borderR, borderT);
 			}
 			else
@@ -74,7 +74,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static ITexture2D? TryGetTexture(this ISprite sprite)
 		{
-			return sprite.RD_C213.Texture.TryGetAsset(sprite.Collection);
+			return sprite.RD.Texture.TryGetAsset(sprite.Collection);
 		}
 	}
 }

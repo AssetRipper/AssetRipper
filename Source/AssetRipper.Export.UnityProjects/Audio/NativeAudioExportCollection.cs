@@ -13,13 +13,13 @@ namespace AssetRipper.Export.UnityProjects.Audio
 		protected override string GetExportExtension(IUnityObjectBase asset)
 		{
 			IAudioClip audioClip = (IAudioClip)asset;
-			if (audioClip.Has_Type_C83())
+			if (audioClip.Has_Type())
 			{
 				return audioClip.GetSoundType().ToRawExtension();
 			}
 			else
 			{
-				return audioClip.CompressionFormat_C83E.ToRawExtension();
+				return audioClip.CompressionFormatE.ToRawExtension();
 			}
 		}
 	}

@@ -10,7 +10,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 	{
 		public static bool ContainsAnimationClip(this IAnimation animation, IAnimationClip clip)
 		{
-			foreach (IPPtr_AnimationClip clipPtr in animation.Animations_C111)
+			foreach (IPPtr_AnimationClip clipPtr in animation.Animations)
 			{
 				if (clipPtr.IsAsset(animation.Collection, clip))
 				{
@@ -29,7 +29,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 			//else if (animation.Has_CullingType_C111())
 			{
-				return animation.CullingType_C111E != AnimationCullingType.AlwaysAnimate;
+				return animation.CullingTypeE != AnimationCullingType.AlwaysAnimate;
 			}
 			//else
 			//{
@@ -46,7 +46,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 			//else if (animation.Has_CullingType_C111())
 			{
-				return animation.CullingType_C111E;
+				return animation.CullingTypeE;
 			}
 			//else
 			//{

@@ -10,20 +10,20 @@ namespace AssetRipper.Tools.SystemTester
 
 		static void Main(string[] args)
 		{
-			if (args.Length != 0)
-			{
-				Console.WriteLine("This program does not accept command line arguments.");
-				Console.ReadLine();
-				return;
-			}
-
 			Logger.Add(new ConsoleLogger(true));
 			Logger.Add(new FileLogger("AssetRipper.Tools.SystemTester.log"));
 			Logger.LogSystemInformation("System Tester");
 			Logger.BlankLine();
 
-			RunTests();
-			Console.ReadLine();
+			if (args.Length == 0)
+			{
+				RunTests();
+				Console.ReadLine();
+			}
+			else
+			{
+				Rip(args, Path.Combine(AppContext.BaseDirectory, "Ripped"));
+			}
 		}
 
 		static void RunTests()
@@ -65,11 +65,7 @@ namespace AssetRipper.Tools.SystemTester
 							string[] inputDirectories = Directory.GetDirectories(inputPath);
 							string[] inputPaths = Combine(inputFiles, inputDirectories);
 							string outputPath = Path.Combine(testPath, "Output");
-
-							Ripper ripper = new Ripper();
-							GameStructure gameStructure = ripper.Load(inputPaths);
-							PrepareExportDirectory(outputPath);
-							ripper.ExportProject(outputPath);
+							Rip(inputPaths, outputPath);
 							Logger.Info(LogCategory.General, $"Completed test: '{testName}' for Unity version: '{versionName}'");
 							Logger.BlankLine(2);
 							numSuccessful++;
@@ -102,6 +98,15 @@ namespace AssetRipper.Tools.SystemTester
 					Logger.Info(LogCategory.General, $"\t{version,-12} {test}");
 				}
 			}
+		}
+
+		private static void Rip(string[] inputPaths, string outputPath)
+		{
+			Ripper ripper = new();
+			ripper.Settings.LogConfigurationValues();
+			GameStructure gameStructure = ripper.Load(inputPaths);
+			PrepareExportDirectory(outputPath);
+			ripper.ExportProject(outputPath);
 		}
 
 		private static void PrepareExportDirectory(string path)

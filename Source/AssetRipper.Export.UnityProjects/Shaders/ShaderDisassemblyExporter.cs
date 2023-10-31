@@ -12,16 +12,8 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 	{
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
-			IShader shader = (IShader)asset;
-
-			//Importing Hidden/Internal shaders causes the unity editor screen to turn black
-			if (shader.ParsedForm_C48?.Name.String.StartsWith("Hidden/Internal", StringComparison.Ordinal) ?? false)
-			{
-				return false;
-			}
-
 			using Stream fileStream = File.Create(path);
-			ExportBinary(shader, fileStream, ShaderExporterInstantiator);
+			ExportBinary((IShader)asset, fileStream, ShaderExporterInstantiator);
 			return true;
 		}
 
@@ -56,15 +48,15 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 
 		private static void ExportBinary(IShader shader, Stream stream, Func<GPUPlatform, ShaderTextExporter> exporterInstantiator)
 		{
-			if (shader.Has_ParsedForm_C48())
+			if (shader.Has_ParsedForm())
 			{
 				using ShaderWriter writer = new ShaderWriter(stream, shader, exporterInstantiator);
-				shader.ParsedForm_C48.Export(writer);
+				shader.ParsedForm.Export(writer);
 			}
-			else if (shader.Has_CompressedBlob_C48())
+			else if (shader.Has_CompressedBlob())
 			{
 				using ShaderWriter writer = new ShaderWriter(stream, shader, exporterInstantiator);
-				string header = shader.Script_C48.String;
+				string header = shader.Script.String;
 				if (writer.Blobs.Length == 0)
 				{
 					writer.Write(header);
@@ -77,7 +69,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 			else
 			{
 				using BinaryWriter writer = new BinaryWriter(stream);
-				writer.Write(shader.Script_C48.Data);
+				writer.Write(shader.Script.Data);
 			}
 		}
 	}

@@ -10,7 +10,7 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 	{
 		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			if (asset is IVideoClip clip && clip.ExternalResources_C329.CheckIntegrity(clip.Collection))
+			if (asset is IVideoClip clip && clip.ExternalResources.CheckIntegrity(clip.Collection))
 			{
 				exportCollection = new VideoClipExportCollection(this, clip);
 				return true;
@@ -37,7 +37,7 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 
 		private static bool TryGetData(IUnityObjectBase clip, [NotNullWhen(true)] out byte[]? data)
 		{
-			if (clip is IVideoClip videoClip329 && videoClip329.ExternalResources_C329.TryGetContent(videoClip329.Collection, out data))
+			if (clip is IVideoClip videoClip329 && videoClip329.ExternalResources.TryGetContent(videoClip329.Collection, out data))
 			{
 				return true;
 			}

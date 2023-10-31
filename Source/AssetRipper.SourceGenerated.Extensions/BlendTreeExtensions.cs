@@ -7,7 +7,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 	{
 		public static BlendTreeType GetBlendType(this IBlendTree tree)
 		{
-			return tree.Has_BlendType_C206_Int32() ? tree.BlendType_C206_Int32E : tree.BlendType_C206_UInt32E;
+			return tree.Has_BlendType_Int32() ? tree.BlendType_Int32E : tree.BlendType_UInt32E;
 		}
 	}
 }

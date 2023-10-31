@@ -38,11 +38,11 @@ namespace AssetRipper.SourceGenerated.Extensions
 			{
 				// Unity doesn't verify tagID on export?
 				int tagIndex = tagID - 20000;
-				if (tagIndex < tagManager.Tags_C78.Count)
+				if (tagIndex < tagManager.Tags.Count)
 				{
 					if (tagIndex >= 0)
 					{
-						return tagManager.Tags_C78[tagIndex].String;
+						return tagManager.Tags[tagIndex].String;
 					}
 					else if (!tagManager.IsBrokenCustomTags())
 					{
@@ -74,9 +74,9 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 			if (tagManager != null)
 			{
-				for (int i = 0; i < tagManager.Tags_C78.Count; i++)
+				for (int i = 0; i < tagManager.Tags.Count; i++)
 				{
-					if (tagManager.Tags_C78[i] == tagName)
+					if (tagManager.Tags[i] == tagName)
 					{
 						return (ushort)(20000 + i);
 					}

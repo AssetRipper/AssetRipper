@@ -21,12 +21,12 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 			else if (savedProperties.Has_TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_5_0_0())
 			{
-				savedProperties.TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_5_0_0.TryGetValue(new() { NameString = propertyName }, out UnityTexEnv_5_0_0? texEnv);
+				savedProperties.TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_5_0_0.TryGetValue(new() { Name = propertyName }, out UnityTexEnv_5_0_0? texEnv);
 				property = texEnv;
 			}
 			else if (savedProperties.Has_TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_3_5_0())
 			{
-				savedProperties.TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_3_5_0.TryGetValue(new() { NameString = propertyName }, out UnityTexEnv_3_5_0? texEnv);
+				savedProperties.TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_3_5_0.TryGetValue(new() { Name = propertyName }, out UnityTexEnv_3_5_0? texEnv);
 				property = texEnv;
 			}
 			else

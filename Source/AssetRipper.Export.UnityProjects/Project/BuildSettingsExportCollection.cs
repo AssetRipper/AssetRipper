@@ -52,12 +52,12 @@ namespace AssetRipper.Export.UnityProjects.Project
 
 		public static void InitializeEditorBuildSettings(IEditorBuildSettings editorBuildSettings, IBuildSettings buildSettings, IExportContainer container)
 		{
-			int numScenes = buildSettings.Scenes_C141.Count;
-			editorBuildSettings.Scenes_C1045.Capacity = numScenes;
+			int numScenes = buildSettings.Scenes.Count;
+			editorBuildSettings.Scenes.Capacity = numScenes;
 			for (int i = 0; i < numScenes; i++)
 			{
-				string scenePath = buildSettings.Scenes_C141[i].String;
-				IScene scene = editorBuildSettings.Scenes_C1045.AddNew();
+				string scenePath = buildSettings.Scenes[i].String;
+				IScene scene = editorBuildSettings.Scenes.AddNew();
 				scene.Enabled = true;
 				scene.Path = scenePath;
 				if (scene.Has_Guid())

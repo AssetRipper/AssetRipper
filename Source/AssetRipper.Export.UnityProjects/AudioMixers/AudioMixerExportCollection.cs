@@ -20,7 +20,7 @@ namespace AssetRipper.Export.UnityProjects.AudioMixers
 				AddAsset(group);
 				if (group is IAudioMixerGroupController controller)
 				{
-					foreach (IAudioMixerEffectController? effect in controller.Effects_C243P.WhereNotNull())
+					foreach (IAudioMixerEffectController? effect in controller.EffectsP.WhereNotNull())
 					{
 						AddAsset(effect);
 					}

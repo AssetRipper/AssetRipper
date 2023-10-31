@@ -54,7 +54,7 @@ namespace AssetRipper.Export.UnityProjects.NavMeshes
 			MeshBuilder<VertexPosition, VertexEmpty, VertexEmpty> meshBuilder = new();
 			PrimitiveBuilder<MaterialBuilder, VertexPosition, VertexEmpty, VertexEmpty> primitiveBuilder = meshBuilder.UsePrimitive(material);
 			
-			foreach (IHeightMeshData heightMeshData in asset.HeightMeshes_C238)
+			foreach (IHeightMeshData heightMeshData in asset.HeightMeshes)
 			{
 				AssetList<int> indices = heightMeshData.Indices;
 				if (indices.Count % 3 != 0)

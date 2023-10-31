@@ -92,7 +92,7 @@ namespace AssetRipper.Export.UnityProjects
 				return default;
 			}
 
-			int index = m_buildSettings.Scenes_C141.IndexOf(s => s.String == name);
+			int index = m_buildSettings.Scenes.IndexOf(s => s.String == name);
 			if (index == -1)
 			{
 				throw new Exception($"Scene '{name}' hasn't been found in build settings");

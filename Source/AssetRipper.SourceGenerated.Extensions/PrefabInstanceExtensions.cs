@@ -7,13 +7,13 @@ namespace AssetRipper.SourceGenerated.Extensions
 	{
 		public static string GetName(this IPrefabInstance prefab)
 		{
-			string? name = prefab.RootGameObject_C1001P?.Name;
+			string? name = prefab.RootGameObjectP?.Name;
 			return string.IsNullOrEmpty(name) ? prefab.ClassName : name;
 		}
 
 		public static IGameObject GetRootGameObject(this IPrefabInstance prefab)
 		{
-			return prefab.RootGameObject_C1001P ?? throw new ArgumentException("Prefab has no root GameObject.", nameof(prefab));
+			return prefab.RootGameObjectP ?? throw new ArgumentException("Prefab has no root GameObject.", nameof(prefab));
 		}
 	}
 }

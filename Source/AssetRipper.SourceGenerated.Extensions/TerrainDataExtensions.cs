@@ -9,6 +9,6 @@ public static class TerrainDataExtensions
 {
 	public static IEnumerable<ITexture2D> GetSplatAlphaTextures(this ITerrainData terrainData)
 	{
-		return terrainData.SplatDatabase_C156.AlphaTextures.ToPPtrAccessList<IPPtr_Texture2D, ITexture2D>(terrainData.Collection).WhereNotNull();
+		return terrainData.SplatDatabase.AlphaTextures.ToPPtrAccessList<IPPtr_Texture2D, ITexture2D>(terrainData.Collection).WhereNotNull();
 	}
 }

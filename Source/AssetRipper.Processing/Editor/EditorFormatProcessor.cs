@@ -121,16 +121,16 @@ namespace AssetRipper.Processing.Editor
 					OriginalPathHelper.SetOriginalPaths(resourceManager);
 					break;
 				case IPlayerSettings playerSettings:
-					playerSettings.AllowUnsafeCode_C129 = true;
+					playerSettings.AllowUnsafeCode = true;
 					if (HasMscorlib2())
 					{
-						playerSettings.ApiCompatibilityLevel_C129E = ApiCompatibilityLevel.NET_2_0;
-						playerSettings.ScriptingRuntimeVersion_C129E = ScriptingRuntimeVersion.Legacy;
+						playerSettings.ApiCompatibilityLevelE = ApiCompatibilityLevel.NET_2_0;
+						playerSettings.ScriptingRuntimeVersionE = ScriptingRuntimeVersion.Legacy;
 					}
 					else
 					{
-						playerSettings.ApiCompatibilityLevel_C129E = ApiCompatibilityLevel.NET_Unity_4_8;
-						playerSettings.ScriptingRuntimeVersion_C129E = ScriptingRuntimeVersion.Latest;
+						playerSettings.ApiCompatibilityLevelE = ApiCompatibilityLevel.NET_Unity_4_8;
+						playerSettings.ScriptingRuntimeVersionE = ScriptingRuntimeVersion.Latest;
 					}
 					break;
 			}
@@ -153,7 +153,7 @@ namespace AssetRipper.Processing.Editor
 					mesh.SetMeshOptimizationFlags(MeshOptimizationFlags.Everything);
 					break;
 				case ITerrain terrain:
-					terrain.ScaleInLightmap_C218 = 0.0512f;
+					terrain.ScaleInLightmap = 0.0512f;
 					break;
 				case IPlayableDirector playableDirector:
 					EditorFormatConverterAsync.Convert(playableDirector);

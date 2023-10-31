@@ -1,11 +1,11 @@
-﻿using AssetRipper.Assets.Interfaces;
+﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Metadata;
 
 namespace AssetRipper.Import.AssetCreation
 {
-	public sealed class UnknownObject : RawDataObject, IHasNameString
+	public sealed class UnknownObject : RawDataObject, INamed
 	{
-		public string NameString
+		public Utf8String Name
 		{
 			get => $"Unknown{ClassName}_{RawDataHash:X}";
 			set { }

@@ -19,6 +19,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Material;
 using AssetRipper.SourceGenerated.Subclasses.SubMesh;
+using Microsoft.Win32.SafeHandles;
 using SharpGLTF.Geometry;
 using SharpGLTF.Materials;
 using SharpGLTF.Scenes;
@@ -70,16 +71,25 @@ namespace AssetRipper.Export.UnityProjects.Models
 
 		public bool ExportModel(IEnumerable<IUnityObjectBase> assets, string path, bool isScene)
 		{
-			byte[] data = ExportBinary(assets, isScene);
+			ReadOnlySpan<byte> data = ExportBinary(assets, isScene);
 			if (data.Length == 0)
 			{
 				return false;
 			}
-				File.WriteAllBytes(path, data);
-				return true;
-			}
 
-		private static byte[] ExportBinary(IEnumerable<IUnityObjectBase> assets, bool isScene)
+			WriteAllBytes(path, data);
+			return true;
+		}
+
+		private static void WriteAllBytes(string path, ReadOnlySpan<byte> data)
+		{
+			ArgumentException.ThrowIfNullOrEmpty(path);
+
+			using SafeFileHandle sfh = File.OpenHandle(path, FileMode.Create, FileAccess.Write, FileShare.Read);
+			RandomAccess.Write(sfh, data, 0);
+		}
+
+		private static ArraySegment<byte> ExportBinary(IEnumerable<IUnityObjectBase> assets, bool isScene)
 		{
 			SceneBuilder sceneBuilder = new();
 			BuildParameters parameters = new BuildParameters(isScene);
@@ -103,7 +113,15 @@ namespace AssetRipper.Export.UnityProjects.Models
 
 			SharpGLTF.Schema2.WriteSettings writeSettings = new();
 
-			return sceneBuilder.ToGltf2().WriteGLB(writeSettings).ToArray();
+			try
+			{
+				return sceneBuilder.ToGltf2().WriteGLB(writeSettings);
+			}
+			catch (InvalidOperationException ex) when (ex.Message == "Can't merge a buffer larger than 2Gb")
+			{
+				Logger.Error(LogCategory.Export, $"Model was too large to export as GLB.");
+				return default;
+			}
 		}
 
 		private static void AddGameObjectToScene(SceneBuilder sceneBuilder, BuildParameters parameters, NodeBuilder? parentNode, Transformation parentGlobalTransform, Transformation parentGlobalInverseTransform, ITransform transform)
@@ -168,7 +186,7 @@ namespace AssetRipper.Export.UnityProjects.Models
 
 		private static void AddDynamicMeshToScene(SceneBuilder sceneBuilder, BuildParameters parameters, NodeBuilder node, MeshData meshData, MaterialList materialList)
 		{
-			AccessListBase<ISubMesh> subMeshes = meshData.Mesh.SubMeshes_C43;
+			AccessListBase<ISubMesh> subMeshes = meshData.Mesh.SubMeshes;
 			(ISubMesh, MaterialBuilder)[] subMeshArray = ArrayPool<(ISubMesh, MaterialBuilder)>.Shared.Rent(subMeshes.Count);
 			for (int i = 0; i < subMeshes.Count; i++)
 			{
@@ -184,7 +202,7 @@ namespace AssetRipper.Export.UnityProjects.Models
 		private static void AddStaticMeshToScene(SceneBuilder sceneBuilder, BuildParameters parameters, NodeBuilder node, MeshData meshData, int[] subsetIndices, MaterialList materialList, Transformation globalTransform, Transformation globalInverseTransform)
 		{
 			(ISubMesh, MaterialBuilder)[] subMeshArray = ArrayPool<(ISubMesh, MaterialBuilder)>.Shared.Rent(subsetIndices.Length);
-			AccessListBase<ISubMesh> subMeshes = meshData.Mesh.SubMeshes_C43;
+			AccessListBase<ISubMesh> subMeshes = meshData.Mesh.SubMeshes;
 			for (int i = 0; i < subsetIndices.Length; i++)
 			{
 				ISubMesh subMesh = subMeshes[subsetIndices[i]];
@@ -199,26 +217,26 @@ namespace AssetRipper.Export.UnityProjects.Models
 
 		private static bool ReferencesDynamicMesh(IMeshRenderer renderer)
 		{
-			return (renderer.Has_StaticBatchInfo_C23() && renderer.StaticBatchInfo_C23.SubMeshCount == 0)
-				|| (renderer.Has_SubsetIndices_C23() && renderer.SubsetIndices_C23.Count == 0);
+			return (renderer.Has_StaticBatchInfo() && renderer.StaticBatchInfo.SubMeshCount == 0)
+				|| (renderer.Has_SubsetIndices() && renderer.SubsetIndices.Count == 0);
 		}
 
 		private static bool ReferencesDynamicMesh(ISkinnedMeshRenderer renderer)
 		{
-			return (renderer.Has_StaticBatchInfo_C137() && renderer.StaticBatchInfo_C137.SubMeshCount == 0)
-				|| (renderer.Has_SubsetIndices_C137() && renderer.SubsetIndices_C137.Count == 0);
+			return (renderer.Has_StaticBatchInfo() && renderer.StaticBatchInfo.SubMeshCount == 0)
+				|| (renderer.Has_SubsetIndices() && renderer.SubsetIndices.Count == 0);
 		}
 
 		private static int[] GetSubsetIndices(IMeshRenderer renderer)
 		{
-			AccessListBase<IPPtr_Material> materials = renderer.Materials_C23;
-			if (renderer.Has_SubsetIndices_C23())
+			AccessListBase<IPPtr_Material> materials = renderer.Materials;
+			if (renderer.Has_SubsetIndices())
 			{
-				return renderer.SubsetIndices_C23.Select(i => (int)i).ToArray();
+				return renderer.SubsetIndices.Select(i => (int)i).ToArray();
 			}
-			else if (renderer.Has_StaticBatchInfo_C23())
+			else if (renderer.Has_StaticBatchInfo())
 			{
-				return Enumerable.Range(renderer.StaticBatchInfo_C23.FirstSubMesh, renderer.StaticBatchInfo_C23.SubMeshCount).ToArray();
+				return Enumerable.Range(renderer.StaticBatchInfo.FirstSubMesh, renderer.StaticBatchInfo.SubMeshCount).ToArray();
 			}
 			else
 			{
@@ -228,13 +246,13 @@ namespace AssetRipper.Export.UnityProjects.Models
 
 		private static int[] GetSubsetIndices(ISkinnedMeshRenderer renderer)
 		{
-			if (renderer.Has_SubsetIndices_C137())
+			if (renderer.Has_SubsetIndices())
 			{
-				return renderer.SubsetIndices_C137.Select(i => (int)i).ToArray();
+				return renderer.SubsetIndices.Select(i => (int)i).ToArray();
 			}
-			else if (renderer.Has_StaticBatchInfo_C137())
+			else if (renderer.Has_StaticBatchInfo())
 			{
-				return Enumerable.Range(renderer.StaticBatchInfo_C137.FirstSubMesh, renderer.StaticBatchInfo_C137.SubMeshCount).ToArray();
+				return Enumerable.Range(renderer.StaticBatchInfo.FirstSubMesh, renderer.StaticBatchInfo.SubMeshCount).ToArray();
 			}
 			else
 			{

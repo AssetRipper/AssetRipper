@@ -1,5 +1,4 @@
-﻿using AssetRipper.Assets.Bundles;
-using AssetRipper.Assets.Collections;
+﻿using AssetRipper.Assets.Collections;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 
 namespace AssetRipper.Processing.Textures;

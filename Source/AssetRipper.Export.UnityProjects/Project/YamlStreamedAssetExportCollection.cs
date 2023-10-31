@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Export;
-using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Classes.ClassID_117;
 using AssetRipper.SourceGenerated.Classes.ClassID_187;
 using AssetRipper.SourceGenerated.Classes.ClassID_188;
@@ -38,26 +37,26 @@ namespace AssetRipper.Export.UnityProjects.Project
 		private bool ExportMesh(IExportContainer container, string filePath, string dirPath, IMesh mesh)
 		{
 			bool result;
-			if (mesh.Has_StreamData_C43())
+			if (mesh.Has_StreamData())
 			{
-				ulong offset = mesh.StreamData_C43.GetOffset();
-				Utf8String path = mesh.StreamData_C43.Path;
-				uint size = mesh.StreamData_C43.Size;
-				if (mesh.VertexData_C43 is not null && mesh.VertexData_C43.Data.Length == 0 && mesh.StreamData_C43.IsSet())
+				ulong offset = mesh.StreamData.GetOffset();
+				Utf8String path = mesh.StreamData.Path;
+				uint size = mesh.StreamData.Size;
+				if (mesh.VertexData is not null && mesh.VertexData.Data.Length == 0 && mesh.StreamData.IsSet())
 				{
-					mesh.VertexData_C43.Data = mesh.StreamData_C43.GetContent(mesh.Collection);
-					mesh.StreamData_C43.ClearValues();
+					mesh.VertexData.Data = mesh.StreamData.GetContent(mesh.Collection);
+					mesh.StreamData.ClearValues();
 					result = base.ExportInner(container, filePath, dirPath);
-					mesh.VertexData_C43.Data = Array.Empty<byte>();
+					mesh.VertexData.Data = Array.Empty<byte>();
 				}
 				else
 				{
-					mesh.StreamData_C43.ClearValues();
+					mesh.StreamData.ClearValues();
 					result = base.ExportInner(container, filePath, dirPath);
 				}
-				mesh.StreamData_C43.SetOffset(offset);
-				mesh.StreamData_C43.Path = path;
-				mesh.StreamData_C43.Size = size;
+				mesh.StreamData.SetOffset(offset);
+				mesh.StreamData.Path = path;
+				mesh.StreamData.Size = size;
 			}
 			else
 			{
@@ -105,26 +104,26 @@ namespace AssetRipper.Export.UnityProjects.Project
 		private bool ExportTexture3D(IExportContainer container, string filePath, string dirPath, ITexture3D texture)
 		{
 			bool result;
-			if (texture.Has_StreamData_C117())
+			if (texture.Has_StreamData())
 			{
-				ulong offset = texture.StreamData_C117.GetOffset();
-				Utf8String path = texture.StreamData_C117.Path;
-				uint size = texture.StreamData_C117.Size;
-				if (texture.ImageData_C117.Length == 0 && texture.StreamData_C117.IsSet())
+				ulong offset = texture.StreamData.GetOffset();
+				Utf8String path = texture.StreamData.Path;
+				uint size = texture.StreamData.Size;
+				if (texture.ImageData.Length == 0 && texture.StreamData.IsSet())
 				{
-					texture.ImageData_C117 = texture.StreamData_C117.GetContent(texture.Collection);
-					texture.StreamData_C117.ClearValues();
+					texture.ImageData = texture.StreamData.GetContent(texture.Collection);
+					texture.StreamData.ClearValues();
 					result = base.ExportInner(container, filePath, dirPath);
-					texture.ImageData_C117 = Array.Empty<byte>();
+					texture.ImageData = Array.Empty<byte>();
 				}
 				else
 				{
-					texture.StreamData_C117.ClearValues();
+					texture.StreamData.ClearValues();
 					result = base.ExportInner(container, filePath, dirPath);
 				}
-				texture.StreamData_C117.SetOffset(offset);
-				texture.StreamData_C117.Path = path;
-				texture.StreamData_C117.Size = size;
+				texture.StreamData.SetOffset(offset);
+				texture.StreamData.Path = path;
+				texture.StreamData.Size = size;
 			}
 			else
 			{
@@ -137,26 +136,26 @@ namespace AssetRipper.Export.UnityProjects.Project
 		private bool ExportTexture2DArray(IExportContainer container, string filePath, string dirPath, ITexture2DArray texture)
 		{
 			bool result;
-			if (texture.Has_StreamData_C187())
+			if (texture.Has_StreamData())
 			{
-				ulong offset = texture.StreamData_C187.GetOffset();
-				Utf8String path = texture.StreamData_C187.Path;
-				uint size = texture.StreamData_C187.Size;
-				if (texture.ImageData_C187.Length == 0 && texture.StreamData_C187.IsSet())
+				ulong offset = texture.StreamData.GetOffset();
+				Utf8String path = texture.StreamData.Path;
+				uint size = texture.StreamData.Size;
+				if (texture.ImageData.Length == 0 && texture.StreamData.IsSet())
 				{
-					texture.ImageData_C187 = texture.StreamData_C187.GetContent(texture.Collection);
-					texture.StreamData_C187.ClearValues();
+					texture.ImageData = texture.StreamData.GetContent(texture.Collection);
+					texture.StreamData.ClearValues();
 					result = base.ExportInner(container, filePath, dirPath);
-					texture.ImageData_C187 = Array.Empty<byte>();
+					texture.ImageData = Array.Empty<byte>();
 				}
 				else
 				{
-					texture.StreamData_C187.ClearValues();
+					texture.StreamData.ClearValues();
 					result = base.ExportInner(container, filePath, dirPath);
 				}
-				texture.StreamData_C187.SetOffset(offset);
-				texture.StreamData_C187.Path = path;
-				texture.StreamData_C187.Size = size;
+				texture.StreamData.SetOffset(offset);
+				texture.StreamData.Path = path;
+				texture.StreamData.Size = size;
 			}
 			else
 			{
@@ -169,26 +168,26 @@ namespace AssetRipper.Export.UnityProjects.Project
 		private bool ExportCubemapArray(IExportContainer container, string filePath, string dirPath, ICubemapArray texture)
 		{
 			bool result;
-			if (texture.Has_StreamData_C188())
+			if (texture.Has_StreamData())
 			{
-				ulong offset = texture.StreamData_C188.GetOffset();
-				Utf8String path = texture.StreamData_C188.Path;
-				uint size = texture.StreamData_C188.Size;
-				if (texture.ImageData_C188.Length == 0 && texture.StreamData_C188.IsSet())
+				ulong offset = texture.StreamData.GetOffset();
+				Utf8String path = texture.StreamData.Path;
+				uint size = texture.StreamData.Size;
+				if (texture.ImageData.Length == 0 && texture.StreamData.IsSet())
 				{
-					texture.ImageData_C188 = texture.StreamData_C188.GetContent(texture.Collection);
-					texture.StreamData_C188.ClearValues();
+					texture.ImageData = texture.StreamData.GetContent(texture.Collection);
+					texture.StreamData.ClearValues();
 					result = base.ExportInner(container, filePath, dirPath);
-					texture.ImageData_C188 = Array.Empty<byte>();
+					texture.ImageData = Array.Empty<byte>();
 				}
 				else
 				{
-					texture.StreamData_C188.ClearValues();
+					texture.StreamData.ClearValues();
 					result = base.ExportInner(container, filePath, dirPath);
 				}
-				texture.StreamData_C188.SetOffset(offset);
-				texture.StreamData_C188.Path = path;
-				texture.StreamData_C188.Size = size;
+				texture.StreamData.SetOffset(offset);
+				texture.StreamData.Path = path;
+				texture.StreamData.Size = size;
 			}
 			else
 			{

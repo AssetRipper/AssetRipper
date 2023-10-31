@@ -2,6 +2,12 @@
 
 namespace AssetRipper.IO.Files.SerializedFiles.Parser
 {
+	/// <summary>
+	/// A reference type for a serializeable C# type.
+	/// </summary>
+	/// <remarks>
+	/// These are used for fields with the [SerializeReference] attribute.
+	/// </remarks>
 	public sealed class SerializedTypeReference : SerializedTypeBase
 	{
 		public string ClassName { get; set; } = "";

@@ -24,6 +24,18 @@ namespace AssetRipper.SourceGenerated.Extensions
 			return subMesh.Has_Topology() ? subMesh.TopologyE : subMesh.IsTriStripE;
 		}
 
+		public static void SetTopology(this ISubMesh subMesh, MeshTopology topology)
+		{
+			if (subMesh.Has_Topology())
+			{
+				subMesh.TopologyE = topology;
+			}
+			else
+			{
+				subMesh.IsTriStripE = topology;
+			}
+		}
+
 		private static void UpdateSubMeshVertexRange(UnityVersion version, IMesh mesh, ISubMesh submesh)
 		{
 			if (submesh.IndexCount == 0)
@@ -40,9 +52,9 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		private static void FindMinMaxIndices(UnityVersion version, IMesh mesh, ISubMesh submesh, out int min, out int max)
 		{
-			if (mesh.CompressedMesh_C43.Triangles.IsSet())
+			if (mesh.CompressedMesh.Triangles.IsSet())
 			{
-				int[] triangles = mesh.CompressedMesh_C43.Triangles.UnpackInts();
+				int[] triangles = mesh.CompressedMesh.Triangles.UnpackInts();
 				uint offset = mesh.Is16BitIndices()
 					? submesh.FirstByte / sizeof(ushort)
 					: submesh.FirstByte / sizeof(uint);
@@ -51,11 +63,11 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 			else if (mesh.Is16BitIndices())
 			{
-				FindMinMax16Indices(mesh.IndexBuffer_C43, (int)submesh.FirstByte, (int)submesh.IndexCount, out min, out max);
+				FindMinMax16Indices(mesh.IndexBuffer, (int)submesh.FirstByte, (int)submesh.IndexCount, out min, out max);
 			}
 			else
 			{
-				FindMinMax32Indices(mesh.IndexBuffer_C43, (int)submesh.FirstByte, (int)submesh.IndexCount, out min, out max);
+				FindMinMax32Indices(mesh.IndexBuffer, (int)submesh.FirstByte, (int)submesh.IndexCount, out min, out max);
 			}
 		}
 
@@ -132,17 +144,17 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		private static void FindMinMaxBounds(IMesh mesh, ISubMesh submesh, out Vector3 min, out Vector3 max)
 		{
-			//if (mesh.Has_CompressedMesh_C43())
+			//if (mesh.Has_CompressedMesh())
 			{
-				if (mesh.CompressedMesh_C43.Vertices.IsSet())
+				if (mesh.CompressedMesh.Vertices.IsSet())
 				{
-					float[] vertices = mesh.CompressedMesh_C43.Vertices.Unpack();
+					float[] vertices = mesh.CompressedMesh.Vertices.Unpack();
 					FindMinMaxBounds(vertices, (int)submesh.FirstVertex, (int)submesh.VertexCount, out min, out max);
 					return;
 				}
 			}
 
-			FindMinMaxBounds(mesh.Collection, mesh.VertexData_C43, (int)submesh.FirstVertex, (int)submesh.VertexCount, out min, out max);
+			FindMinMaxBounds(mesh.Collection, mesh.VertexData, (int)submesh.FirstVertex, (int)submesh.VertexCount, out min, out max);
 		}
 
 		private static void FindMinMaxBounds(float[] vertexBuffer, int firstVertex, int vertexCount, out Vector3 min, out Vector3 max)

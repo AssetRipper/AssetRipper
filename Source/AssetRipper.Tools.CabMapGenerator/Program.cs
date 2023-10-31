@@ -35,7 +35,7 @@ namespace AssetRipper.Tools.CabMapGenerator
 				using FileStream stream = File.Create(outputFile);
 				Dictionary<string, string> map = new();
 				LoadFiles(GetAllFilePaths(filesToExport), map);
-				JsonSerializer.Serialize(stream, map, new JsonSerializerOptions() { WriteIndented = true });
+				JsonSerializer.Serialize(stream, map, DictionarySerializerContext.Default.DictionaryStringString);
 				Console.WriteLine("Done!");
 			},
 			filesToExportOption, outputOption);

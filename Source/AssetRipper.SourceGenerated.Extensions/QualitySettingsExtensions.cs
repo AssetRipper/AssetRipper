@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Assets.Generics;
-using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Classes.ClassID_47;
 using AssetRipper.SourceGenerated.Enums;
 
@@ -9,7 +8,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 	{
 		public static void ConvertToEditorFormat(this IQualitySettings settings)
 		{
-			settings.PerPlatformDefaultQuality_C47?.SetDefaultPlatformQuality();
+			settings.PerPlatformDefaultQuality?.SetDefaultPlatformQuality();
 		}
 
 		private static void SetDefaultPlatformQuality(this AssetDictionary<Utf8String, int> dictionary)

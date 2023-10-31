@@ -2,7 +2,6 @@
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
-using AssetRipper.Assets.Export.Dependencies;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Export.UnityProjects.Project;
 using AssetRipper.Export.UnityProjects.RawAssets;
@@ -227,8 +226,7 @@ namespace AssetRipper.Export.UnityProjects
 
 				if (options.ExportDependencies)
 				{
-					DependencyContext context = new DependencyContext(true);
-					foreach (PPtr<IUnityObjectBase> pointer in asset.FetchDependencies(context))
+					foreach ((string path, PPtr pointer) in asset.FetchDependencies())
 					{
 						if (pointer.IsNull)
 						{
@@ -238,8 +236,8 @@ namespace AssetRipper.Export.UnityProjects
 						IUnityObjectBase? dependency = asset.Collection.TryGetAsset(pointer);
 						if (dependency == null)
 						{
-							string hierarchy = $"[{asset.Collection.Name}]" + asset.Collection.GetAssetLogString(asset.PathID) + "." + context.GetPointerPath();
-							Logger.Log(LogType.Warning, LogCategory.Export, $"{hierarchy}'s dependency {context.PointerName} = {ToLogString(pointer, asset.Collection)} wasn't found");
+							string hierarchy = $"[{asset.Collection.Name}]" + asset.Collection.GetAssetLogString(asset.PathID) + "." + path;
+							Logger.Log(LogType.Warning, LogCategory.Export, $"{hierarchy}'s dependency = {ToLogString(pointer, asset.Collection)} wasn't found");
 							continue;
 						}
 
@@ -276,10 +274,10 @@ namespace AssetRipper.Export.UnityProjects
 			EventExportFinished?.Invoke();
 		}
 
-		private static string ToLogString<T>(PPtr<T> pptr, IAssetContainer container) where T : IUnityObjectBase
+		private static string ToLogString(PPtr pptr, IAssetContainer container)
 		{
 			string depName = pptr.FileID == 0 ? container.Name : container.Dependencies[pptr.FileID - 1]?.Name ?? "Not Found";
-			return $"[{depName}]{typeof(T).Name}_{pptr.PathID}";
+			return $"[{depName}]_{pptr.PathID}";
 		}
 	}
 }

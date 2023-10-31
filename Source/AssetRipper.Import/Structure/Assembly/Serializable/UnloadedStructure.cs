@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Cloning;
 using AssetRipper.Assets.Export;
-using AssetRipper.Assets.Export.Dependencies;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
@@ -48,7 +47,7 @@ public sealed class UnloadedStructure : UnityAssetBase
 	public SerializableStructure? LoadStructure()
 	{
 		ThrowIfNotStructure();
-		SerializableStructure? structure = monoBehaviour.Script_C114P?.GetBehaviourType(assemblyManager)?.CreateSerializableStructure();
+		SerializableStructure? structure = monoBehaviour.ScriptP?.GetBehaviourType(assemblyManager)?.CreateSerializableStructure();
 		if (structure is not null)
 		{
 			EndianSpanReader reader = new EndianSpanReader(structureData, monoBehaviour.Collection.EndianType);
@@ -76,16 +75,10 @@ public sealed class UnloadedStructure : UnityAssetBase
 		return structure?.ExportYamlRelease(container) ?? new();
 	}
 
-	public override IEnumerable<PPtr<IUnityObjectBase>> FetchDependencies(DependencyContext context)
+	public override IEnumerable<(string, PPtr)> FetchDependencies()
 	{
 		IUnityAssetBase? structure = LoadStructure();
-		return structure?.FetchDependencies(context) ?? Enumerable.Empty<PPtr<IUnityObjectBase>>();
-	}
-
-	public override IEnumerable<(FieldName, PPtr<IUnityObjectBase>)> FetchDependencies(FieldName? parent)
-	{
-		IUnityAssetBase? structure = LoadStructure();
-		return structure?.FetchDependencies(parent) ?? Enumerable.Empty<(FieldName, PPtr<IUnityObjectBase>)>();
+		return structure?.FetchDependencies() ?? Enumerable.Empty<(string, PPtr)>();
 	}
 
 	public override void WriteEditor(AssetWriter writer)

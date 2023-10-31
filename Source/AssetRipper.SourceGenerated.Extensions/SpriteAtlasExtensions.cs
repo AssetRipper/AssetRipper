@@ -11,7 +11,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 	{
 		public static void ConvertToEditorFormat(this ISpriteAtlas atlas)
 		{
-			ISpriteAtlasEditorData data = atlas.EditorData_C687078895;
+			ISpriteAtlasEditorData data = atlas.EditorData;
 
 			data.TextureSettings.Initialize();
 			data.PackingParameters?.Initialize();
@@ -20,9 +20,9 @@ namespace AssetRipper.SourceGenerated.Extensions
 			data.BindAsDefault = true;
 
 			data.Packables.Clear();
-			data.Packables.Capacity = atlas.PackedSprites_C687078895.Count;
+			data.Packables.Capacity = atlas.PackedSprites.Count;
 			PPtrAccessList<PPtr_Object_5_0_0, IObject> packables = data.Packables.ToPPtrAccessList<PPtr_Object_5_0_0, IObject>(atlas.Collection);
-			foreach (ISprite? sprite in atlas.PackedSprites_C687078895P)
+			foreach (ISprite? sprite in atlas.PackedSpritesP)
 			{
 				packables.Add(sprite);
 			}

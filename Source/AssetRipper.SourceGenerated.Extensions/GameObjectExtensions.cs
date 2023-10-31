@@ -1,11 +1,9 @@
 ﻿using AssetRipper.Assets.Generics;
-using AssetRipper.Assets.Metadata;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_18;
 using AssetRipper.SourceGenerated.Classes.ClassID_2;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
 using AssetRipper.SourceGenerated.Classes.ClassID_78;
-using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.ComponentPair;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Component;
 
@@ -20,13 +18,13 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static bool GetIsActive(this IGameObject gameObject)
 		{
-			return gameObject.IsActive_C1_Boolean || gameObject.IsActive_C1_Byte > 0;
+			return gameObject.IsActive_Boolean || gameObject.IsActive_Byte > 0;
 		}
 
 		public static void SetIsActive(this IGameObject gameObject, bool active)
 		{
-			gameObject.IsActive_C1_Byte = active ? (byte)1 : (byte)0;
-			gameObject.IsActive_C1_Boolean = active;
+			gameObject.IsActive_Byte = active ? (byte)1 : (byte)0;
+			gameObject.IsActive_Boolean = active;
 		}
 
 		private static bool ShouldBeActive(this IGameObject gameObject)
@@ -41,22 +39,22 @@ namespace AssetRipper.SourceGenerated.Extensions
 		public static void ConvertToEditorFormat(this IGameObject gameObject, ITagManager? tagManager)
 		{
 			gameObject.SetIsActive(gameObject.ShouldBeActive());
-			gameObject.TagString_C1 = tagManager.TagIDToName(gameObject.Tag_C1);
+			gameObject.TagString = tagManager.TagIDToName(gameObject.Tag);
 		}
 
 		public static IEnumerable<IPPtr_Component> FetchComponents(this IGameObject gameObject)
 		{
-			if (gameObject.Has_Component_C1_AssetList_ComponentPair())
+			if (gameObject.Has_Component_AssetList_ComponentPair())
 			{
-				return gameObject.Component_C1_AssetList_ComponentPair.Select(pair => pair.Component);
+				return gameObject.Component_AssetList_ComponentPair.Select(pair => pair.Component);
 			}
-			else if (gameObject.Has_Component_C1_AssetList_AssetPair_Int32_PPtr_Component_3_5_0())
+			else if (gameObject.Has_Component_AssetList_AssetPair_Int32_PPtr_Component_3_5_0())
 			{
-				return gameObject.Component_C1_AssetList_AssetPair_Int32_PPtr_Component_3_5_0.Select(pair => pair.Value);
+				return gameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_3_5_0.Select(pair => pair.Value);
 			}
-			else if (gameObject.Has_Component_C1_AssetList_AssetPair_Int32_PPtr_Component_5_0_0())
+			else if (gameObject.Has_Component_AssetList_AssetPair_Int32_PPtr_Component_5_0_0())
 			{
-				return gameObject.Component_C1_AssetList_AssetPair_Int32_PPtr_Component_5_0_0.Select(pair => pair.Value);
+				return gameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_5_0_0.Select(pair => pair.Value);
 			}
 			else
 			{
@@ -66,17 +64,37 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static AccessListBase<IPPtr_Component> GetComponentPPtrList(this IGameObject gameObject)
 		{
-			if (gameObject.Has_Component_C1_AssetList_ComponentPair())
+			if (gameObject.Has_Component_AssetList_ComponentPair())
 			{
-				return new ComponentPairAccessList(gameObject.Component_C1_AssetList_ComponentPair);
+				return new ComponentPairAccessList(gameObject.Component_AssetList_ComponentPair);
 			}
-			else if (gameObject.Has_Component_C1_AssetList_AssetPair_Int32_PPtr_Component_3_5_0())
+			else if (gameObject.Has_Component_AssetList_AssetPair_Int32_PPtr_Component_3_5_0())
 			{
-				return new AssetPairAccessList<PPtr_Component_3_5_0>(gameObject.Component_C1_AssetList_AssetPair_Int32_PPtr_Component_3_5_0);
+				return new AssetPairAccessList<PPtr_Component_3_5_0>(gameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_3_5_0);
 			}
-			else if (gameObject.Has_Component_C1_AssetList_AssetPair_Int32_PPtr_Component_5_0_0())
+			else if (gameObject.Has_Component_AssetList_AssetPair_Int32_PPtr_Component_5_0_0())
 			{
-				return new AssetPairAccessList<PPtr_Component_5_0_0>(gameObject.Component_C1_AssetList_AssetPair_Int32_PPtr_Component_5_0_0);
+				return new AssetPairAccessList<PPtr_Component_5_0_0>(gameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_5_0_0);
+			}
+			else
+			{
+				throw new Exception("All three component properties returned null");
+			}
+		}
+
+		public static int GetComponentCount(this IGameObject gameObject)
+		{
+			if (gameObject.Has_Component_AssetList_ComponentPair())
+			{
+				return gameObject.Component_AssetList_ComponentPair.Count;
+			}
+			else if (gameObject.Has_Component_AssetList_AssetPair_Int32_PPtr_Component_3_5_0())
+			{
+				return gameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_3_5_0.Count;
+			}
+			else if (gameObject.Has_Component_AssetList_AssetPair_Int32_PPtr_Component_5_0_0())
+			{
+				return gameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_5_0_0.Count;
 			}
 			else
 			{
@@ -86,19 +104,19 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static void AddComponent(this IGameObject gameObject, ClassIDType classID, IComponent component)
 		{
-			if (gameObject.Has_Component_C1_AssetList_ComponentPair())
+			if (gameObject.Has_Component_AssetList_ComponentPair())
 			{
-				gameObject.Component_C1_AssetList_ComponentPair.AddNew().Component.SetAsset(gameObject.Collection, component);
+				gameObject.Component_AssetList_ComponentPair.AddNew().Component.SetAsset(gameObject.Collection, component);
 			}
-			else if (gameObject.Has_Component_C1_AssetList_AssetPair_Int32_PPtr_Component_3_5_0())
+			else if (gameObject.Has_Component_AssetList_AssetPair_Int32_PPtr_Component_3_5_0())
 			{
-				AssetPair<int, PPtr_Component_3_5_0> pair = gameObject.Component_C1_AssetList_AssetPair_Int32_PPtr_Component_3_5_0.AddNew();
+				AssetPair<int, PPtr_Component_3_5_0> pair = gameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_3_5_0.AddNew();
 				pair.Key = (int)classID;
 				pair.Value.SetAsset(gameObject.Collection, component);
 			}
-			else if (gameObject.Has_Component_C1_AssetList_AssetPair_Int32_PPtr_Component_5_0_0())
+			else if (gameObject.Has_Component_AssetList_AssetPair_Int32_PPtr_Component_5_0_0())
 			{
-				AssetPair<int, PPtr_Component_5_0_0> pair = gameObject.Component_C1_AssetList_AssetPair_Int32_PPtr_Component_5_0_0.AddNew();
+				AssetPair<int, PPtr_Component_5_0_0> pair = gameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_5_0_0.AddNew();
 				pair.Key = (int)classID;
 				pair.Value.SetAsset(gameObject.Collection, component);
 			}

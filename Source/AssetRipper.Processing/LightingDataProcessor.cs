@@ -2,7 +2,6 @@
 using AssetRipper.Assets.Cloning;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Generics;
-using AssetRipper.Assets.Metadata;
 using AssetRipper.Import.Logging;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1032;
@@ -45,26 +44,26 @@ namespace AssetRipper.Processing
 				}
 
 				lightmapSettingsDictionary.Add(lightmapSettings, scene);
-				if (lightmapSettings.LightProbes_C157P is { } lightProbes && !lightProbeDictionary.TryAdd(lightProbes, scene))
+				if (lightmapSettings.LightProbesP is { } lightProbes && !lightProbeDictionary.TryAdd(lightProbes, scene))
 				{
 					lightProbeDictionary[lightProbes] = null;//This set of light probes is shared between scenes.
 				}
 
-				if (!lightmapSettings.Has_LightingDataAsset_C157() || !HasLightingData(lightmapSettings))
+				if (!lightmapSettings.Has_LightingDataAsset() || !HasLightingData(lightmapSettings))
 				{
 					continue;
 				}
 
 				ILightingDataAsset lightingDataAsset = CreateLightingDataAsset(processedCollection);
 
-				lightmapSettings.LightingDataAsset_C157P = lightingDataAsset;
+				lightmapSettings.LightingDataAssetP = lightingDataAsset;
 
 				PPtrConverter converter = new PPtrConverter(lightmapSettings, lightingDataAsset);
 
-				lightingDataAsset.LightmapsMode_C1120 = lightmapSettings.LightmapsMode_C157;
-				lightingDataAsset.EnlightenSceneMapping_C1120.CopyValues(lightmapSettings.EnlightenSceneMapping_C157, converter);
+				lightingDataAsset.LightmapsMode = lightmapSettings.LightmapsMode;
+				lightingDataAsset.EnlightenSceneMapping.CopyValues(lightmapSettings.EnlightenSceneMapping, converter);
 
-				SetLightmaps(lightingDataAsset, lightmapSettings.Lightmaps_C157, converter);
+				SetLightmaps(lightingDataAsset, lightmapSettings.Lightmaps, converter);
 				SetScene(lightingDataAsset, scene, processedCollection);
 				SetLightProbes(lightingDataAsset, lightmapSettings);
 				SetEnlightenDataVersion(lightingDataAsset);
@@ -88,7 +87,7 @@ namespace AssetRipper.Processing
 
 			foreach ((ILightmapSettings lightmapSettings, SceneDefinition scene) in lightmapSettingsDictionary)
 			{
-				ILightProbes? lightProbes = lightmapSettings.LightProbes_C157P;
+				ILightProbes? lightProbes = lightmapSettings.LightProbesP;
 				if (lightProbes is not null && lightProbeDictionary[lightProbes] is null)
 				{
 					lightProbes = null;//Shared light probes should not have their path set.
@@ -101,7 +100,7 @@ namespace AssetRipper.Processing
 		{
 			//Supposedly, a LightingDataAsset without any lightmaps causes Unity to crash.
 			//See: https://github.com/AssetRipper/AssetRipper/issues/811
-			return lightmapSettings.Lightmaps_C157.Count > 0;
+			return lightmapSettings.Lightmaps.Count > 0;
 		}
 
 		private static void AddRenderer(ILightingDataAsset lightingDataAsset, IRenderer renderer)
@@ -110,11 +109,11 @@ namespace AssetRipper.Processing
 			if (lightmapIndex != ushort.MaxValue || renderer.LightmapIndexDynamic_C25 != ushort.MaxValue)
 			{
 				//Scene object identifiers for the renderer associated with each value in the lightmapped renderer data array
-				SceneObjectIdentifier identifier = lightingDataAsset.LightmappedRendererDataIDs_C1120.AddNew();
+				SceneObjectIdentifier identifier = lightingDataAsset.LightmappedRendererDataIDs.AddNew();
 				identifier.TargetObjectReference = renderer;
 
 				//The lightmap index, lightmap uv scale/offset value, etc
-				IRendererData rendererData = lightingDataAsset.LightmappedRendererData_C1120.AddNew();
+				IRendererData rendererData = lightingDataAsset.LightmappedRendererData.AddNew();
 				rendererData.LightmapIndex = lightmapIndex;
 				rendererData.LightmapIndexDynamic = renderer.LightmapIndexDynamic_C25;
 				rendererData.LightmapST.CopyValues(renderer.LightmapTilingOffset_C25);
@@ -128,22 +127,22 @@ namespace AssetRipper.Processing
 
 		private static void AddTerrain(ILightingDataAsset lightingDataAsset, ITerrain terrain)
 		{
-			if (terrain.LightmapIndex_C218 != ushort.MaxValue || terrain.LightmapIndexDynamic_C218 != ushort.MaxValue)
+			if (terrain.LightmapIndex != ushort.MaxValue || terrain.LightmapIndexDynamic != ushort.MaxValue)
 			{
 				//Scene object identifiers for the terrain associated with each value in the lightmapped renderer data array
-				SceneObjectIdentifier identifier = lightingDataAsset.LightmappedRendererDataIDs_C1120.AddNew();
+				SceneObjectIdentifier identifier = lightingDataAsset.LightmappedRendererDataIDs.AddNew();
 				identifier.TargetObjectReference = terrain;
 
 				//The lightmap index, lightmap uv scale/offset value, etc
-				IRendererData rendererData = lightingDataAsset.LightmappedRendererData_C1120.AddNew();
-				rendererData.LightmapIndex = terrain.LightmapIndex_C218;
-				rendererData.LightmapIndexDynamic = terrain.LightmapIndexDynamic_C218;
-				rendererData.LightmapST.CopyValues(terrain.LightmapTilingOffset_C218);
-				rendererData.LightmapSTDynamic.CopyValues(terrain.LightmapTilingOffsetDynamic_C218);
+				IRendererData rendererData = lightingDataAsset.LightmappedRendererData.AddNew();
+				rendererData.LightmapIndex = terrain.LightmapIndex;
+				rendererData.LightmapIndexDynamic = terrain.LightmapIndexDynamic;
+				rendererData.LightmapST.CopyValues(terrain.LightmapTilingOffset);
+				rendererData.LightmapSTDynamic.CopyValues(terrain.LightmapTilingOffsetDynamic);
 
-				rendererData.TerrainDynamicUVST.CopyValues(terrain.DynamicUVST_C218);
-				rendererData.TerrainChunkDynamicUVST.CopyValues(terrain.ChunkDynamicUVST_C218);
-				rendererData.ExplicitProbeSetHash?.CopyValues(terrain.ExplicitProbeSetHash_C218);
+				rendererData.TerrainDynamicUVST.CopyValues(terrain.DynamicUVST);
+				rendererData.TerrainChunkDynamicUVST.CopyValues(terrain.ChunkDynamicUVST);
+				rendererData.ExplicitProbeSetHash?.CopyValues(terrain.ExplicitProbeSetHash);
 			}
 			else
 			{
@@ -156,14 +155,14 @@ namespace AssetRipper.Processing
 			// We're not sure what the most appropriate way to check if a light belongs
 			// in these arrays or not is, but just including all of them is harmless.
 
-			SceneObjectIdentifier identifier = lightingDataAsset.Lights_C1120.AddNew();
+			SceneObjectIdentifier identifier = lightingDataAsset.Lights.AddNew();
 			identifier.TargetObjectReference = light;
 
-			lightingDataAsset.LightBakingOutputs_C1120?.AddNew().CopyValues(light.BakingOutput_C108);
+			lightingDataAsset.LightBakingOutputs?.AddNew().CopyValues(light.BakingOutput);
 		}
 
 		/// <summary>
-		/// Add several <see cref="ILightmapData"/> to <see cref="ILightingDataAsset.Lightmaps_C1120"/>.
+		/// Add several <see cref="ILightmapData"/> to <see cref="ILightingDataAsset.Lightmaps"/>.
 		/// </summary>
 		/// <param name="lightingDataAsset"></param>
 		/// <param name="lightmaps"></param>
@@ -172,7 +171,7 @@ namespace AssetRipper.Processing
 		{
 			foreach (ILightmapData lightmapData in lightmaps)
 			{
-				lightingDataAsset.Lightmaps_C1120.AddNew().CopyValues(lightmapData, converter);
+				lightingDataAsset.Lightmaps.AddNew().CopyValues(lightmapData, converter);
 			}
 		}
 
@@ -187,7 +186,7 @@ namespace AssetRipper.Processing
 			//    LightProbes.asset //optional; this can be anywhere
 			//    <a bunch of lightmap textures> //optional; the textures can be anywhere
 
-			ILightingDataAsset? lightingDataAsset = lightmapSettings.LightingDataAsset_C157P;
+			ILightingDataAsset? lightingDataAsset = lightmapSettings.LightingDataAssetP;
 			if (lightingDataAsset is not null)
 			{
 				lightingDataAsset.MainAsset = lightingDataAsset;
@@ -209,7 +208,7 @@ namespace AssetRipper.Processing
 			}
 
 			//Move the lightmap textures to the scene subfolder.
-			foreach (ILightmapData lightmapData in lightmapSettings.Lightmaps_C157)
+			foreach (ILightmapData lightmapData in lightmapSettings.Lightmaps)
 			{
 				if (lightmapData.DirLightmap?.TryGetAsset(lightmapSettings.Collection, out ITexture2D? dirLightmap) ?? false)
 				{
@@ -235,7 +234,7 @@ namespace AssetRipper.Processing
 		}
 
 		/// <summary>
-		/// Sets <see cref="ILightingDataAsset.LightProbes_C1120P"/> from <see cref="ILightmapSettings.LightProbes_C157P"/>.
+		/// Sets <see cref="ILightingDataAsset.LightProbesP"/> from <see cref="ILightmapSettings.LightProbesP"/>.
 		/// </summary>
 		/// <remarks>
 		/// Note: it is possible for a LightProbes asset to be shared between multiple LightingDataAsset.<br/>
@@ -247,30 +246,30 @@ namespace AssetRipper.Processing
 		/// <param name="lightmapSettings"></param>
 		private static void SetLightProbes(ILightingDataAsset lightingDataAsset, ILightmapSettings lightmapSettings)
 		{
-			lightingDataAsset.LightProbes_C1120P = lightmapSettings.LightProbes_C157P as ILightProbes;
+			lightingDataAsset.LightProbesP = lightmapSettings.LightProbesP as ILightProbes;
 		}
 
 		/// <summary>
-		/// Sets <see cref="ILightingDataAsset.Scene_C1120P"/> or <see cref="ILightingDataAsset.SceneGUID_C1120"/>.
+		/// Sets <see cref="ILightingDataAsset.SceneP"/> or <see cref="ILightingDataAsset.SceneGUID"/>.
 		/// </summary>
 		/// <param name="lightingDataAsset"></param>
 		/// <param name="scene"></param>
 		/// <param name="processedCollection"></param>
 		private static void SetScene(ILightingDataAsset lightingDataAsset, SceneDefinition scene, ProcessedAssetCollection processedCollection)
 		{
-			if (lightingDataAsset.Has_Scene_C1120())
+			if (lightingDataAsset.Has_Scene())
 			{
 				ISceneAsset sceneAsset = CreateSceneAsset(processedCollection, scene);
-				lightingDataAsset.Scene_C1120P = sceneAsset;
+				lightingDataAsset.SceneP = sceneAsset;
 			}
-			else if (lightingDataAsset.Has_SceneGUID_C1120())
+			else if (lightingDataAsset.Has_SceneGUID())
 			{
-				lightingDataAsset.SceneGUID_C1120.CopyValues(scene.GUID);
+				lightingDataAsset.SceneGUID.CopyValues(scene.GUID);
 			}
 		}
 
 		/// <summary>
-		/// Sets <see cref="ILightingDataAsset.EnlightenDataVersion_C1120"/>
+		/// Sets <see cref="ILightingDataAsset.EnlightenDataVersion"/>
 		/// </summary>
 		/// <remarks>
 		/// This value must be assigned correctly. The version varies widely based on Unity version.<br/>
@@ -284,7 +283,7 @@ namespace AssetRipper.Processing
 		/// <param name="lightingDataAsset"></param>
 		private static void SetEnlightenDataVersion(ILightingDataAsset lightingDataAsset)
 		{
-			lightingDataAsset.EnlightenDataVersion_C1120 = 112;
+			lightingDataAsset.EnlightenDataVersion = 112;
 		}
 
 		/// <summary>

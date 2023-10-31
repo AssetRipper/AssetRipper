@@ -1,0 +1,72 @@
+﻿@model byte[]
+
+@if (Model.Length > 0)
+{
+    var fontSizes = Enumerable.Range(0, 5).Select(i => 12 + i * 6).ToList();
+
+    <script>
+        customElements.define("font-view", class FontPreviewer extends HTMLElement {
+            #shadowRoot;
+            #uniqName;
+            #data;
+            constructor() {
+                super();
+                this.#shadowRoot = this.attachShadow({ mode: "open" });
+                this.#uniqName = this.randName(10);
+            }
+            connectedCallback() {
+                this.#data = Uint8Array.from(atob(this.getAttribute("data")), c => c.charCodeAt(0));
+                this.attachFont().then(() => this.attachStyle());
+                this.#shadowRoot.innerHTML = "<slot></slot>";
+            }
+            async attachFont() {
+                const font = new FontFace(this.#uniqName, this.#data);
+                await font.load();
+                document.fonts.add(font);
+            }
+            async attachStyle() {
+                const sheet = new CSSStyleSheet();
+                await sheet.replace(`:host { font-family: "${this.#uniqName}"; }`);
+                this.#shadowRoot.adoptedStyleSheets = [sheet];
+            }
+            randName(length, out = '') {
+                for (let i = 0; i < length; i++)
+                    out += String.fromCharCode((Math.random() * 26 + 97) | 0);
+                return out;
+            }
+        });
+    </script>
+
+    <div class="container my-4">
+        <div class="mb-3">
+            <label for="font-preview-input" class="form-label">Preview Text</label>
+            <input type="text" class="form-control" id="font-preview-input" placeholder="Type something..." value="Preview - 1234567890" />
+        </div>
+        <div class="mb-3">
+            <label for="font-preview-scale" class="form-label">Scale</label>
+            <input type="range" class="form-range" id="font-preview-scale" min="1.0" max="2.0" step="0.1" value="1.0" />
+        </div>
+    </div>
+
+    @* <input type="text" id="font-preview-input" placeholder="Type something..." value="Preview - 1234567890" /> *@
+    @* <input type="range" id="font-preview-scale" min="1.0" max="2.0" step="0.1" value="1.0" style="width: 100%;" /> *@
+
+    <font-view data="@Html.Raw(Convert.ToBase64String(Model, Base64FormattingOptions.None))">
+        @foreach (var fontSize in fontSizes)
+        {
+            <p style="font-size: @(fontSize)px" data-font-size="@fontSize">
+                <span>@fontSize: </span>
+                <span class="font-preview">Preview - 1234567890</span>
+            </p>
+        }
+    </font-view>
+
+    <script>
+        document.getElementById("font-preview-input").addEventListener("input", event => {
+            document.querySelectorAll(".font-preview").forEach(span => span.textContent = event.target.value);
+        });
+        document.getElementById("font-preview-scale").addEventListener("input", event => {
+            document.querySelectorAll("p").forEach(p => p.style.fontSize = `${parseFloat(p.dataset.fontSize) * event.target.value}px`);
+        });
+    </script>
+}

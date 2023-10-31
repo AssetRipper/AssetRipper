@@ -1,7 +1,6 @@
 ﻿using AssetRipper.HashAlgorithms;
 using AssetRipper.Import.Structure.Assembly;
 using AssetRipper.IO.Files.Utils;
-using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using System.Buffers.Binary;
 using System.Text;
@@ -71,7 +70,7 @@ public static class ScriptHashing
 	/// </remarks>
 	public static int CalculateScriptFileID(IMonoScript script)
 	{
-		return CalculateScriptFileID(script.Namespace_C115.Data, script.ClassName_C115.Data);
+		return CalculateScriptFileID(script.Namespace.Data, script.ClassName_R.Data);
 	}
 
 	/// <summary>
@@ -103,7 +102,7 @@ public static class ScriptHashing
 	{
 		//The assembly file name without any extension.
 		ReadOnlySpan<byte> assemblyName = Encoding.UTF8.GetBytes(script.GetAssemblyNameFixed());
-		return ComputeScriptGuid(assemblyName, script.Namespace_C115.Data, script.ClassName_C115.Data);
+		return ComputeScriptGuid(assemblyName, script.Namespace.Data, script.ClassName_R.Data);
 	}
 
 	/// <summary>

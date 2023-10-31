@@ -9,12 +9,12 @@ namespace AssetRipper.SourceGenerated.Extensions
 	{
 		public static FontStyle GetDefaultStyle(this IFont font)
 		{
-			return (FontStyle)font.DefaultStyle_C128;
+			return (FontStyle)font.DefaultStyle;
 		}
 
 		public static FontRenderingMode GetFontRenderingMode(this IFont font)
 		{
-			return (FontRenderingMode)font.FontRenderingMode_C128;
+			return (FontRenderingMode)font.FontRenderingMode;
 		}
 
 		/// <summary>
@@ -25,7 +25,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 		/// <returns></returns>
 		public static bool TryGetFontMaterial(this IFont font, [NotNullWhen(true)] out IMaterial? fontMaterial)
 		{
-			if (font.DefaultMaterial_C128P is { NameString: "Font Material" } material)
+			if (font.DefaultMaterialP is { Name.String: "Font Material" } material)
 			{
 				fontMaterial = material;
 				return true;
@@ -45,7 +45,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 		/// <returns></returns>
 		public static bool TryGetFontTexture(this IFont font, [NotNullWhen(true)] out ITexture? fontTexture)
 		{
-			if (font.Texture_C128P is { NameString: "Font Texture" } texture)
+			if (font.TextureP is { Name.String: "Font Texture" } texture)
 			{
 				fontTexture = texture;
 				return true;

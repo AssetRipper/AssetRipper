@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Export.Yaml;
-using AssetRipper.Assets.Interfaces;
 using AssetRipper.Export.UnityProjects.Audio;
 using AssetRipper.Export.UnityProjects.Shaders;
 using AssetRipper.Export.UnityProjects.Terrains;
@@ -187,13 +186,13 @@ namespace AssetRipper.GUI.AssetInformation
 
 		private bool HasName => Asset switch
 		{
-			IHasNameString hasName => !string.IsNullOrEmpty(hasName.NameString),
+			INamed hasName => !Utf8String.IsNullOrEmpty(hasName.Name),
 			_ => false
 		};
 
 		private string? Name => Asset switch
 		{
-			IHasNameString hasName => hasName.NameString,
+			INamed hasName => hasName.Name,
 			_ => null
 		};
 
@@ -207,21 +206,21 @@ namespace AssetRipper.GUI.AssetInformation
 		private int ImageWidth => Asset switch
 		{
 			ITexture2D img => img.Width_C28,
-			ITerrainData terrain => terrain.Heightmap_C156.Width,
+			ITerrainData terrain => terrain.Heightmap.Width,
 			_ => -1,
 		};
 
 		private int ImageHeight => Asset switch
 		{
 			ITexture2D img => img.Height_C28,
-			ITerrainData terrain => terrain.Heightmap_C156.Height,
+			ITerrainData terrain => terrain.Heightmap.Height,
 			_ => -1,
 		};
 
 		private int ImageSize => Asset switch
 		{
 			ITexture2D img => img.GetImageData().Length,
-			ITerrainData terrain => terrain.Heightmap_C156.Width * terrain.Heightmap_C156.Height * 2,
+			ITerrainData terrain => terrain.Heightmap.Width * terrain.Heightmap.Height * 2,
 			_ => -1,
 		};
 
@@ -296,10 +295,10 @@ namespace AssetRipper.GUI.AssetInformation
 					builder.AppendLine($"Image Size: {ImageSize} bytes");
 				}
 
-				IMonoScript? monoScript = (Asset as IMonoScript) ?? (Asset as IMonoBehaviour)?.Script_C114P;
+				IMonoScript? monoScript = (Asset as IMonoScript) ?? (Asset as IMonoBehaviour)?.ScriptP;
 				if (monoScript is not null)
 				{
-					builder.AppendLine($"Script: {monoScript.AssemblyName_C115}, {monoScript.GetFullName()}");
+					builder.AppendLine($"Script: {monoScript.AssemblyName}, {monoScript.GetFullName()}");
 				}
 
 				if (Asset.MainAsset is { } mainAsset)

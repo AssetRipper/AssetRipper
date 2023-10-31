@@ -43,8 +43,8 @@ namespace AssetRipper.Export.UnityProjects.Terrains
 		public static DirectBitmap GetBitmap(ITerrainData terrain)
 		{
 			DirectBitmap bitmap = new DirectBitmap(
-				Math.Max(terrain.Heightmap_C156.Width, terrain.Heightmap_C156.Resolution),
-				Math.Max(terrain.Heightmap_C156.Height, terrain.Heightmap_C156.Resolution),
+				Math.Max(terrain.Heightmap.Width, terrain.Heightmap.Resolution),
+				Math.Max(terrain.Heightmap.Height, terrain.Heightmap.Resolution),
 				1,
 				GetBGRA32Data(terrain));
 			bitmap.FlipY();
@@ -53,7 +53,7 @@ namespace AssetRipper.Export.UnityProjects.Terrains
 
 		public static byte[] GetBGRA32Data(ITerrainData terrain)
 		{
-			AssetList<short> heights = terrain.Heightmap_C156.Heights;
+			AssetList<short> heights = terrain.Heightmap.Heights;
 			byte[] result = new byte[heights.Count * 4];
 			for (int y = 0; y < heights.Count; y++)
 			{

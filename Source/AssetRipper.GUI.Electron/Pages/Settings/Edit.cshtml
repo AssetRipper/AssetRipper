@@ -1,0 +1,49 @@
+﻿@page
+@using AssetRipper.GUI.Electron.Pages.Settings.DropDown;
+@model AssetRipper.GUI.Electron.Pages.Settings.EditModel
+@{
+	ViewData["Title"] = "Settings";
+}
+
+@if (!Program.Ripper.IsLoaded)
+{
+	<form asp-page-handler="UpdateSettings" method="post">
+		<div class="form-group">
+			@Html.CheckBoxFor(m => m.EnableStaticMeshSeparation)
+			@Html.LabelFor(m => m.EnableStaticMeshSeparation, Localization.EnableStaticMeshSeparation)
+		</div>
+		<div class="form-group">
+			@Html.CheckBoxFor(m => m.EnablePrefabOutlining)
+			@Html.LabelFor(m => m.EnablePrefabOutlining, Localization.EnablePrefabOutlining)
+		</div>
+		<div class="form-group">
+			@Html.CheckBoxFor(m => m.IgnoreStreamingAssets)
+			@Html.LabelFor(m => m.IgnoreStreamingAssets, Localization.SkipStreamingAssets)
+		</div>
+		<div class="form-group">
+			@Html.CheckBoxFor(m => m.IgnoreEngineAssets)
+			@Html.LabelFor(m => m.IgnoreEngineAssets, Localization.IgnoreEngineAssets)
+		</div>
+
+		<div class="form-group">
+			@Html.LabelFor(m => m.DefaultVersion, Localization.DefaultVersion)
+			@Html.TextBoxFor(m => m.DefaultVersion, new {@class="form-control"})
+		</div>
+
+		<partial name="DropDownSetting" model="new DropDownParameters(Model, Html, BundledAssetsExportModeDropDownSetting.Instance, m => m.BundledAssetsExportMode)" />
+		<partial name="DropDownSetting" model="new DropDownParameters(Model, Html, AudioExportFormatDropDownSetting.Instance, m => m.AudioExportFormat)" />
+		<partial name="DropDownSetting" model="new DropDownParameters(Model, Html, ImageExportFormatDropDownSetting.Instance, m => m.ImageExportFormat)" />
+		<partial name="DropDownSetting" model="new DropDownParameters(Model, Html, MeshExportFormatDropDownSetting.Instance, m => m.MeshExportFormat)" />
+		<partial name="DropDownSetting" model="new DropDownParameters(Model, Html, SpriteExportModeDropDownSetting.Instance, m => m.SpriteExportMode)" />
+		<partial name="DropDownSetting" model="new DropDownParameters(Model, Html, TerrainExportModeDropDownSetting.Instance, m => m.TerrainExportMode)" />
+		<partial name="DropDownSetting" model="new DropDownParameters(Model, Html, TextExportModeDropDownSetting.Instance, m => m.TextExportMode)" />
+		<partial name="DropDownSetting" model="new DropDownParameters(Model, Html, ShaderExportModeDropDownSetting.Instance, m => m.ShaderExportMode)" />
+		<partial name="DropDownSetting" model="new DropDownParameters(Model, Html, ScriptExportModeDropDownSetting.Instance, m => m.ScriptExportMode)" />
+		<partial name="DropDownSetting" model="new DropDownParameters(Model, Html, ScriptContentLevelDropDownSetting.Instance, m => m.ScriptContentLevel)" />
+		<partial name="DropDownSetting" model="new DropDownParameters(Model, Html, ScriptLanguageVersionDropDownSetting.Instance, m => m.ScriptLanguageVersion)" />
+
+		<div class="form-group">
+			<input class="btn btn-primary" type="submit" value="Save" />
+		</div>
+	</form>
+}

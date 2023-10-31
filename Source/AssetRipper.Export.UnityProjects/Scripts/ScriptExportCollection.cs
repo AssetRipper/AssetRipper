@@ -177,13 +177,13 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 				}
 				else
 				{
-					string? scriptKey = $"{script.AssemblyName_C115}{script.Namespace_C115}{script.ClassName_C115}";
+					string? scriptKey = $"{script.AssemblyName}{script.Namespace}{script.ClassName_R}";
 					if (!ScriptId.TryGetValue(scriptKey, out fileID))
 					{
 						fileID = ScriptHashing.CalculateScriptFileID(script);
 						ScriptId.Add(scriptKey, fileID);
 					}
-					guid = GetAssemblyGuid(script.AssemblyName_C115);
+					guid = GetAssemblyGuid(script.AssemblyName);
 				}
 
 				return new MetaPtr(fileID, guid, AssetExporter.ToExportType(asset));
@@ -194,7 +194,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 		{
 			IMonoScript script = (IMonoScript)asset;
 			IMonoImporter importer = MonoImporter.Create(asset.Collection, container.ExportVersion);
-			importer.ExecutionOrder_C1035 = (short)script.ExecutionOrder_C115;
+			importer.ExecutionOrder = (short)script.ExecutionOrder;
 			Meta meta = new Meta(ScriptHashing.ComputeScriptGuid(script), importer);
 			ExportMeta(container, meta, path);
 		}
@@ -219,24 +219,24 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 
 			static bool HasPlatformData(IPluginImporter importer)
 			{
-				return importer.Has_PlatformData_C1050_AssetDictionary_AssetPair_Utf8String_Utf8String_PlatformSettingsData_Plugin()
-					|| importer.Has_PlatformData_C1050_AssetDictionary_Utf8String_PlatformSettingsData_Plugin();
+				return importer.Has_PlatformData_AssetDictionary_AssetPair_Utf8String_Utf8String_PlatformSettingsData_Plugin()
+					|| importer.Has_PlatformData_AssetDictionary_Utf8String_PlatformSettingsData_Plugin();
 			}
 
 			static PlatformSettingsData_Plugin AddPlatformSettings(IPluginImporter importer, Utf8String platformKey, Utf8String platformValue)
 			{
-				if (importer.Has_PlatformData_C1050_AssetDictionary_AssetPair_Utf8String_Utf8String_PlatformSettingsData_Plugin())
+				if (importer.Has_PlatformData_AssetDictionary_AssetPair_Utf8String_Utf8String_PlatformSettingsData_Plugin())
 				{
 					(AssetPair<Utf8String, Utf8String> pair, PlatformSettingsData_Plugin data)
-						= importer.PlatformData_C1050_AssetDictionary_AssetPair_Utf8String_Utf8String_PlatformSettingsData_Plugin.AddNew();
+						= importer.PlatformData_AssetDictionary_AssetPair_Utf8String_Utf8String_PlatformSettingsData_Plugin.AddNew();
 					pair.Key = platformKey;
 					pair.Value = platformValue;
 					return data;
 				}
-				else if (importer.Has_PlatformData_C1050_AssetDictionary_Utf8String_PlatformSettingsData_Plugin())
+				else if (importer.Has_PlatformData_AssetDictionary_Utf8String_PlatformSettingsData_Plugin())
 				{
 					AssetPair<Utf8String, PlatformSettingsData_Plugin> pair
-						= importer.PlatformData_C1050_AssetDictionary_Utf8String_PlatformSettingsData_Plugin.AddNew();
+						= importer.PlatformData_AssetDictionary_Utf8String_PlatformSettingsData_Plugin.AddNew();
 
 					pair.Key = platformKey;
 					return pair.Value;
@@ -264,7 +264,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 
 		private static void GetExportSubPath(IMonoScript script, out string folderPath, out string fileName)
 		{
-			GetExportSubPath(script.GetAssemblyNameFixed(), script.Namespace_C115.String, script.ClassName_C115.String, out folderPath, out fileName);
+			GetExportSubPath(script.GetAssemblyNameFixed(), script.Namespace.String, script.ClassName_R.String, out folderPath, out fileName);
 		}
 
 		private UnityGuid GetAssemblyGuid(string assemblyName)

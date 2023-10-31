@@ -1,5 +1,4 @@
-﻿using AssetRipper.Assets.Metadata;
-using AssetRipper.SourceGenerated.Classes.ClassID_221;
+﻿using AssetRipper.SourceGenerated.Classes.ClassID_221;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
 using AssetRipper.SourceGenerated.Classes.ClassID_93;
 using AssetRipper.SourceGenerated.Subclasses.AnimationClipOverride;
@@ -10,7 +9,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 	{
 		public static bool ContainsAnimationClip(this IAnimatorOverrideController controller, IAnimationClip clip)
 		{
-			foreach (IAnimationClipOverride overClip in controller.Clips_C221)
+			foreach (IAnimationClipOverride overClip in controller.Clips)
 			{
 				if (overClip.OriginalClip.IsAsset(controller.Collection, clip))
 				{
@@ -21,7 +20,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 					return true;
 				}
 			}
-			IRuntimeAnimatorController? baseController = controller.Controller_C221P;
+			IRuntimeAnimatorController? baseController = controller.ControllerP;
 			if (baseController != null)
 			{
 				return baseController.ContainsAnimationClip(clip);

@@ -1,0 +1,36 @@
+﻿@page
+@using AssetRipper.GUI.Licensing;
+@{
+	ViewData["Title"] = Localization.Licenses;
+}
+<h1>@Localization.Licenses</h1>
+<div class="container text-center">
+	<div class="row">
+		<div class="col-4">
+			<nav>
+				<div class="nav nav-pills flex-column" id="nav-tab" role="tablist">
+					@foreach (string name in Licenses.Names)
+					{
+						string id = $"nav-{name}-tab";
+						string target = $"#nav-{name}";
+						<button class="nav-link" id="@id" data-bs-toggle="tab" data-bs-target="@target" type="button" role="tab" aria-controls="nav-hex" aria-selected="false">
+							@name
+						</button>
+					}
+				</div>
+			</nav>
+		</div>
+		<div class="col-8">
+			<div class="tab-content" id="nav-tabContent">
+				@foreach (string name in Licenses.Names)
+				{
+					string id = $"nav-{name}";
+					string tab = $"#nav-{name}-tab";
+					<div class="tab-pane fade" id="@id" role="tabpanel" aria-labelledby="@tab">
+						<pre class="bg-dark-subtle rounded-3 p-2">@Licenses.Load(name)</pre>
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+</div>

@@ -53,6 +53,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{
 		.github\workflows\docfx_build.yml = .github\workflows\docfx_build.yml
 		.github\workflows\greetings.yml = .github\workflows\greetings.yml
 		.github\workflows\publish.yml = .github\workflows\publish.yml
+		.github\workflows\publish_electron.yml = .github\workflows\publish_electron.yml
 		.github\workflows\test.yml = .github\workflows\test.yml
 	EndProjectSection
 EndProject
@@ -161,6 +162,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Checksum.Tests", "Source\AssetRipper.Checksum.Tests\AssetRipper.Checksum.Tests.csproj", "{964E75F2-2875-41CD-9FEA-3D002025D6DC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.GUI.Electron", "Source\AssetRipper.GUI.Electron\AssetRipper.GUI.Electron.csproj", "{ECBFE50F-909A-41B9-A3FF-19ACB33574EB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.GUI.Licensing", "Source\AssetRipper.GUI.Licensing\AssetRipper.GUI.Licensing.csproj", "{ED4D8B01-2C3B-412B-981B-986FBA6FB2FD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Decompilation.CSharp", "Source\AssetRipper.Decompilation.CSharp\AssetRipper.Decompilation.CSharp.csproj", "{82566A68-BF9B-4B2F-8B57-2137B31CF197}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -340,6 +345,14 @@ Global
 		{ECBFE50F-909A-41B9-A3FF-19ACB33574EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ECBFE50F-909A-41B9-A3FF-19ACB33574EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ECBFE50F-909A-41B9-A3FF-19ACB33574EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED4D8B01-2C3B-412B-981B-986FBA6FB2FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED4D8B01-2C3B-412B-981B-986FBA6FB2FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED4D8B01-2C3B-412B-981B-986FBA6FB2FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED4D8B01-2C3B-412B-981B-986FBA6FB2FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82566A68-BF9B-4B2F-8B57-2137B31CF197}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82566A68-BF9B-4B2F-8B57-2137B31CF197}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82566A68-BF9B-4B2F-8B57-2137B31CF197}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82566A68-BF9B-4B2F-8B57-2137B31CF197}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

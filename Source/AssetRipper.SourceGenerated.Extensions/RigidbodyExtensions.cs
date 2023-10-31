@@ -7,24 +7,24 @@ namespace AssetRipper.SourceGenerated.Extensions
 	{
 		public static RigidbodyInterpolation GetInterpolate(this IRigidbody body)
 		{
-			return (RigidbodyInterpolation)body.Interpolate_C54;
+			return (RigidbodyInterpolation)body.Interpolate;
 		}
 
 		public static RigidbodyConstraints GetConstraints(this IRigidbody body)
 		{
-			//if (body.Has_FreezeRotation_C54())
+			//if (body.Has_FreezeRotation())
 			{
-				//return body.FreezeRotation_C54 ? RigidbodyConstraints.FreezeRotation : RigidbodyConstraints.None;
+				//return body.FreezeRotation ? RigidbodyConstraints.FreezeRotation : RigidbodyConstraints.None;
 			}
 			//else
 			{
-				return (RigidbodyConstraints)body.Constraints_C54;
+				return (RigidbodyConstraints)body.Constraints;
 			}
 		}
 
 		public static CollisionDetectionMode GetCollisionDetection(this IRigidbody body)
 		{
-			return (CollisionDetectionMode)body.CollisionDetection_C54;
+			return (CollisionDetectionMode)body.CollisionDetection;
 		}
 	}
 }

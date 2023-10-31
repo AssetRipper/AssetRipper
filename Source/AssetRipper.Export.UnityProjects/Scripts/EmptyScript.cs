@@ -6,7 +6,7 @@ public static class EmptyScript
 {
 	public static string GetContent(IMonoScript script)
 	{
-		return GetContent(script.Namespace_C115.String, script.ClassName_C115.String);
+		return GetContent(script.Namespace.String, script.ClassName_R.String);
 	}
 
 	public static string GetContent(string? @namespace, string name)

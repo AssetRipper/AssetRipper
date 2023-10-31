@@ -19,7 +19,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 		}
 		public static TextureLayout GetTextureLayout(this IFlare flare)
 		{
-			return (TextureLayout)flare.TextureLayout_C121;
+			return (TextureLayout)flare.TextureLayout;
 		}
 	}
 }

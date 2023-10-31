@@ -39,28 +39,18 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
-			IShader shader = (IShader)asset;
-
-			//Importing Hidden/Internal shaders causes the unity editor screen to turn black
-			if (shader.ParsedForm_C48?.Name.String.StartsWith("Hidden/Internal", StringComparison.Ordinal) ?? false)
-			{
-				return false;
-			}
-
-			using (FileStream fileStream = File.Create(path))
-			{
-				ExportShader(shader, fileStream);
-			}
+			using FileStream fileStream = File.Create(path);
+			ExportShader((IShader)asset, fileStream);
 			return true;
 		}
 
 		public static void ExportShader(IShader shader, Stream stream)
 		{
-			if (shader.Has_ParsedForm_C48())
+			if (shader.Has_ParsedForm())
 			{
 				using InvariantStreamWriter writer = new InvariantStreamWriter(stream);
-				writer.Write($"Shader \"{shader.ParsedForm_C48.Name}\" {{\n");
-				Export(shader.ParsedForm_C48.PropInfo, writer);
+				writer.Write($"Shader \"{shader.ParsedForm.Name}\" {{\n");
+				Export(shader.ParsedForm.PropInfo, writer);
 
 				TemplateShader templateShader = TemplateList.GetBestTemplate(shader);
 				writer.Write("\t//DummyShaderTextExporter\n");
@@ -75,15 +65,15 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 				}
 				writer.Write('\n');
 
-				if (shader.ParsedForm_C48.FallbackName != string.Empty)
+				if (shader.ParsedForm.FallbackName != string.Empty)
 				{
 					writer.WriteIndent(1);
-					writer.Write($"Fallback \"{shader.ParsedForm_C48.FallbackName}\"\n");
+					writer.Write($"Fallback \"{shader.ParsedForm.FallbackName}\"\n");
 				}
-				if (shader.ParsedForm_C48.CustomEditorName != string.Empty)
+				if (shader.ParsedForm.CustomEditorName != string.Empty)
 				{
 					writer.WriteIndent(1);
-					writer.Write($"//CustomEditor \"{shader.ParsedForm_C48.CustomEditorName}\"\n");
+					writer.Write($"//CustomEditor \"{shader.ParsedForm.CustomEditorName}\"\n");
 				}
 				writer.Write('}');
 			}

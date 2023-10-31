@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<IsTrimmable>true</IsTrimmable>
+		<OutputPath>..\0Bins\Other\AssetRipper.Decompilation.CSharp\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.Decompilation.CSharp\$(Configuration)\</IntermediateOutputPath>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AsmResolver.DotNet" Version="5.4.0" />
+		<PackageReference Include="AssetRipper.Text.SourceGeneration" Version="1.1.0" />
+	</ItemGroup>
+
+</Project>

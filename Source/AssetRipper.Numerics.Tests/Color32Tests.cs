@@ -1,3 +1,4 @@
+using System.Drawing;
 using System.Runtime.CompilerServices;
 
 namespace AssetRipper.Numerics.Tests;
@@ -64,5 +65,18 @@ public class Color32Tests
 		Color32 color = new Color32(33, 57, 199, 255);
 		uint value = Unsafe.As<Color32, uint>(ref color);
 		Assert.That(color.Rgba, Is.EqualTo(value));
+	}
+
+	[Test]
+	public void ConversionToSystemDrawingColorIsCorrect()
+	{
+		Assert.Multiple(() =>
+		{
+			Color color = (Color)_color;
+			Assert.That(color.R, Is.EqualTo(_color.R));
+			Assert.That(color.G, Is.EqualTo(_color.G));
+			Assert.That(color.B, Is.EqualTo(_color.B));
+			Assert.That(color.A, Is.EqualTo(_color.A));
+		});
 	}
 }

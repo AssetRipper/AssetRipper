@@ -148,7 +148,7 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 				writer.Write("[Gamma] ");
 			}
 
-			writer.Write($"{_this.NameString} (\"{_this.Description}\", ");
+			writer.Write($"{_this.Name} (\"{_this.Description}\", ");
 
 			switch (_this.GetType_())
 			{
@@ -468,7 +468,7 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 			writer.Write("\" {\n");
 			writer.WriteIndent(5);
 
-			int platformIndex = writer.Shader.Platforms_C48!.IndexOf((uint)graphicApi);//ISerializedSubProgram and Platforms_C48 both only exist on 5.5+
+			int platformIndex = writer.Shader.Platforms!.IndexOf((uint)graphicApi);//ISerializedSubProgram and Platforms both only exist on 5.5+
 			writer.Blobs[platformIndex].SubPrograms[_this.BlobIndex].Export(writer, type);
 
 			writer.Write('\n');

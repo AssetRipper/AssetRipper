@@ -10,10 +10,11 @@ using System.Runtime.Versioning;
 
 namespace AssetRipper.Export.UnityProjects.Utils;
 
-public readonly record struct DirectBitmap<TColor, TColorArg>
-	where TColorArg : unmanaged
-	where TColor : unmanaged, IColor<TColorArg>
+public readonly record struct DirectBitmap<TColor, TChannel>
+	where TChannel : unmanaged
+	where TColor : unmanaged, IColor<TChannel>
 {
+	private static readonly ImageWriter imageWriter = new();
 	public DirectBitmap(int width, int height, int depth = 1)
 	{
 		Width = width;
@@ -24,15 +25,31 @@ public readonly record struct DirectBitmap<TColor, TColorArg>
 
 	public DirectBitmap(int width, int height, int depth, byte[] data)
 	{
-		if (data.Length < CalculateByteSize(width, height, depth))
-		{
-			throw new ArgumentException("Data does not have enough space.", nameof(data));
-		}
+		ValidateLength(width, height, depth, data);
 
 		Width = width;
 		Height = height;
 		Depth = depth;
 		Data = data;
+
+		static void ValidateLength(int width, int height, int depth, byte[] data)
+		{
+			if (data.Length < CalculateByteSize(width, height, depth))
+			{
+				throw new ArgumentException("Data does not have enough space.", nameof(data));
+			}
+		}
+	}
+
+	public void FlipX()
+	{
+		int totalRows = Height * Depth;
+		Span<TColor> pixels = Pixels;
+		for (int row = 0; row < totalRows; row += Height)
+		{
+			Span<TColor> pixelsRow = pixels.Slice(row * Width, Width);
+			pixelsRow.Reverse();
+		}
 	}
 
 	public void FlipY()
@@ -52,6 +69,49 @@ public readonly record struct DirectBitmap<TColor, TColorArg>
 				}
 			}
 		}
+	}
+
+	public void Rotate90()
+	{
+		Transpose();
+		FlipX();
+	}
+
+	public void Rotate180()
+	{
+		FlipX();
+		FlipY();
+	}
+
+	public void Rotate270()
+	{
+		FlipX();
+		Transpose();
+	}
+
+	private void Transpose()
+	{
+		int layerSize = Width * Height;
+		Span<TColor> pixels = Pixels;
+		for (int depthIndex = 0; depthIndex < Depth; depthIndex++)
+		{
+			int offset = depthIndex * layerSize;
+			for (int i = 0; i < layerSize; i++)
+			{
+				int first = offset + i;
+				int ci = i % Width;
+				int ri = i / Width;
+				int second = offset + (ci * Width) + ri;
+				(pixels[first], pixels[second]) = (pixels[second], pixels[first]);
+			}
+		}
+	}
+
+	public DirectBitmap<TColor, TChannel> DeepClone()
+	{
+		byte[] data = new byte[Data.Length];
+		Buffer.BlockCopy(Data, 0, data, 0, Data.Length);
+		return new DirectBitmap<TColor, TChannel>(Width, Height, Depth, data);
 	}
 
 	public void Save(Stream stream, ImageExportFormat format)
@@ -86,38 +146,20 @@ public readonly record struct DirectBitmap<TColor, TColorArg>
 		}
 		else
 		{
-			ImageWriter writer = new();
-			if (typeof(TColor) == typeof(ColorRGBA32))
+			GetDataAndComponentsForSaving(out byte[] data, out ColorComponents components);
+			lock (imageWriter)
 			{
-				writer.WriteBmp(Data, Width, Height, ColorComponents.RedGreenBlueAlpha, stream);
-			}
-			else if (typeof(TColor) == typeof(ColorRGB24))
-			{
-				writer.WriteBmp(Data, Width, Height, ColorComponents.RedGreenBlue, stream);
-			}
-			else
-			{
-				RgbConverter.Convert<TColor, TColorArg, ColorRGBA32, byte>(Bits, Width, Height, out byte[] output);
-				writer.WriteBmp(output, Width, Height, ColorComponents.RedGreenBlueAlpha, stream);
+				imageWriter.WriteBmp(data, Width, Height, components, stream);
 			}
 		}
 	}
 
 	public void SaveAsHdr(Stream stream)
 	{
-		ImageWriter writer = new();
-		if (typeof(TColor) == typeof(ColorRGBA32))
+		GetDataAndComponentsForSaving(out byte[] data, out ColorComponents components);
+		lock (imageWriter)
 		{
-			writer.WriteHdr(Data, Width, Height, ColorComponents.RedGreenBlueAlpha, stream);
-		}
-		else if (typeof(TColor) == typeof(ColorRGB24))
-		{
-			writer.WriteHdr(Data, Width, Height, ColorComponents.RedGreenBlue, stream);
-		}
-		else
-		{
-			RgbConverter.Convert<TColor, TColorArg, ColorRGBA32, byte>(Bits, Width, Height, out byte[] output);
-			writer.WriteHdr(output, Width, Height, ColorComponents.RedGreenBlueAlpha, stream);
+			imageWriter.WriteHdr(data, Width, Height, components, stream);
 		}
 	}
 
@@ -129,19 +171,10 @@ public readonly record struct DirectBitmap<TColor, TColorArg>
 		}
 		else
 		{
-			ImageWriter writer = new();
-			if (typeof(TColor) == typeof(ColorRGBA32))
+			GetDataAndComponentsForSaving(out byte[] data, out ColorComponents components);
+			lock (imageWriter)
 			{
-				writer.WriteJpg(Data, Width, Height, ColorComponents.RedGreenBlueAlpha, stream, default);
-			}
-			else if (typeof(TColor) == typeof(ColorRGB24))
-			{
-				writer.WriteJpg(Data, Width, Height, ColorComponents.RedGreenBlue, stream, default);
-			}
-			else
-			{
-				RgbConverter.Convert<TColor, TColorArg, ColorRGBA32, byte>(Bits, Width, Height, out byte[] output);
-				writer.WriteJpg(output, Width, Height, ColorComponents.RedGreenBlueAlpha, stream, default);
+				imageWriter.WriteJpg(data, Width, Height, components, stream, default);
 			}
 		}
 	}
@@ -154,38 +187,44 @@ public readonly record struct DirectBitmap<TColor, TColorArg>
 		}
 		else
 		{
-			ImageWriter writer = new();
-			if (typeof(TColor) == typeof(ColorRGBA32))
+			GetDataAndComponentsForSaving(out byte[] data, out ColorComponents components);
+			lock (imageWriter)
 			{
-				writer.WritePng(Data, Width, Height, ColorComponents.RedGreenBlueAlpha, stream);
-			}
-			else if (typeof(TColor) == typeof(ColorRGB24))
-			{
-				writer.WritePng(Data, Width, Height, ColorComponents.RedGreenBlue, stream);
-			}
-			else
-			{
-				RgbConverter.Convert<TColor, TColorArg, ColorRGBA32, byte>(Bits, Width, Height, out byte[] output);
-				writer.WritePng(output, Width, Height, ColorComponents.RedGreenBlueAlpha, stream);
+				imageWriter.WritePng(data, Width, Height, components, stream);
 			}
 		}
 	}
 
 	public void SaveAsTga(Stream stream)
 	{
-		ImageWriter writer = new();
-		if (typeof(TColor) == typeof(ColorRGBA32))
+		GetDataAndComponentsForSaving(out byte[] data, out ColorComponents components);
+		lock (imageWriter)
 		{
-			writer.WriteTga(Data, Width, Height, ColorComponents.RedGreenBlueAlpha, stream);
+			imageWriter.WriteTga(data, Width, Height, components, stream);
 		}
-		else if (typeof(TColor) == typeof(ColorRGB24))
+	}
+
+	private void GetDataAndComponentsForSaving(out byte[] data, out ColorComponents components)
+	{
+		if (typeof(TColor) == typeof(ColorRGBA<byte>))
 		{
-			writer.WriteTga(Data, Width, Height, ColorComponents.RedGreenBlue, stream);
+			data = Data;
+			components = ColorComponents.RedGreenBlueAlpha;
+		}
+		else if (typeof(TColor) == typeof(ColorRGB<byte>))
+		{
+			data = Data;
+			components = ColorComponents.RedGreenBlue;
+		}
+		else if (TColor.HasAlphaChannel)
+		{
+			RgbConverter.Convert<TColor, TChannel, ColorRGBA<byte>, byte>(Bits, Width, Height, out data);
+			components = ColorComponents.RedGreenBlueAlpha;
 		}
 		else
 		{
-			RgbConverter.Convert<TColor, TColorArg, ColorRGBA32, byte>(Bits, Width, Height, out byte[] output);
-			writer.WriteTga(output, Width, Height, ColorComponents.RedGreenBlueAlpha, stream);
+			RgbConverter.Convert<TColor, TChannel, ColorRGB<byte>, byte>(Bits, Width, Height, out data);
+			components = ColorComponents.RedGreenBlue;
 		}
 	}
 
@@ -204,7 +243,7 @@ public readonly record struct DirectBitmap<TColor, TColorArg>
 			bitsHandle.Free();
 		}
 
-		static void GetData(DirectBitmap<TColor, TColorArg> @this, out byte[] data, out int pixelSize, out PixelFormat pixelFormat)
+		static void GetData(DirectBitmap<TColor, TChannel> @this, out byte[] data, out int pixelSize, out PixelFormat pixelFormat)
 		{
 			if (typeof(TColor) == typeof(ColorBGRA32))
 			{
@@ -214,7 +253,7 @@ public readonly record struct DirectBitmap<TColor, TColorArg>
 			}
 			else
 			{
-				RgbConverter.Convert<TColor, TColorArg, ColorBGRA32, byte>(@this.Bits, @this.Width, @this.Height, out data);
+				RgbConverter.Convert<TColor, TChannel, ColorBGRA32, byte>(@this.Bits, @this.Width, @this.Height, out data);
 				pixelSize = 4;
 				pixelFormat = PixelFormat.Format32bppArgb;
 			}

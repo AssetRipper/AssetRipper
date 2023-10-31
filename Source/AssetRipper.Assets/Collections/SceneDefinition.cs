@@ -1,7 +1,4 @@
-﻿using AssetRipper.IO.Files;
-using AssetRipper.Primitives;
-
-namespace AssetRipper.Assets.Collections;
+﻿namespace AssetRipper.Assets.Collections;
 
 public sealed class SceneDefinition
 {

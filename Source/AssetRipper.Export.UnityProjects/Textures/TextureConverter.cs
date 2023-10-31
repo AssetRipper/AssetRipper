@@ -32,9 +32,9 @@ namespace AssetRipper.Export.UnityProjects.Textures
 
 			if (!TryConvertToBitmap(
 				texture.GetTextureFormat(),
-				texture.Width_C117,
-				texture.Height_C117,
-				texture.ImageCount_C117,
+				texture.Width,
+				texture.Height,
+				texture.ImageCount,
 				texture.GetCompleteImageSize(),
 				texture.Collection.Version,
 				buffer,
@@ -46,7 +46,7 @@ namespace AssetRipper.Export.UnityProjects.Textures
 			bitmap.FlipY();
 
 			// despite the name, this packing works for different formats
-			if (texture.LightmapFormat_C117E == TextureUsageMode.NormalmapDXT5nm)
+			if (texture.LightmapFormatE == TextureUsageMode.NormalmapDXT5nm)
 			{
 				UnpackNormal(bitmap.Bits);
 			}
@@ -64,11 +64,11 @@ namespace AssetRipper.Export.UnityProjects.Textures
 			}
 
 			if (!TryConvertToBitmap(
-				texture.Format_C187E,
-				texture.Width_C187,
-				texture.Height_C187,
-				texture.Depth_C187,
-				(int)texture.DataSize_C187,
+				texture.FormatE,
+				texture.Width,
+				texture.Height,
+				texture.Depth,
+				(int)texture.DataSize,
 				texture.Collection.Version,
 				buffer,
 				out bitmap))
@@ -91,11 +91,11 @@ namespace AssetRipper.Export.UnityProjects.Textures
 			}
 
 			if (!TryConvertToBitmap(
-				texture.Format_C188E,
-				texture.Width_C188,
-				texture.Width_C188,//Not sure if this is correct
-				texture.CubemapCount_C188 * 6,//Not sure if this is correct
-				(int)texture.DataSize_C188,
+				texture.FormatE,
+				texture.Width,
+				texture.Width,//Not sure if this is correct
+				texture.CubemapCount * 6,//Not sure if this is correct
+				(int)texture.DataSize,
 				texture.Collection.Version,
 				buffer,
 				out bitmap))
@@ -315,7 +315,7 @@ namespace AssetRipper.Export.UnityProjects.Textures
 
 				//RGB
 				case TextureFormat.Alpha8:
-					RgbConverter.Convert<ColorA8, byte, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
+					RgbConverter.Convert<ColorA<byte>, byte, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
 					return true;
 
 				case TextureFormat.ARGB4444:
@@ -331,19 +331,19 @@ namespace AssetRipper.Export.UnityProjects.Textures
 					return true;
 
 				case TextureFormat.R8:
-					RgbConverter.Convert<ColorR8, byte, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
+					RgbConverter.Convert<ColorR<byte>, byte, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
 					return true;
 
 				case TextureFormat.RG16:
-					RgbConverter.Convert<ColorRG16, byte, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
+					RgbConverter.Convert<ColorRG<byte>, byte, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
 					return true;
 
 				case TextureFormat.RGB24:
-					RgbConverter.Convert<ColorRGB24, byte, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
+					RgbConverter.Convert<ColorRGB<byte>, byte, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
 					return true;
 
 				case TextureFormat.RGBA32:
-					RgbConverter.Convert<ColorRGBA32, byte, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
+					RgbConverter.Convert<ColorRGBA<byte>, byte, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
 					return true;
 
 				case TextureFormat.ARGB32:
@@ -356,43 +356,43 @@ namespace AssetRipper.Export.UnityProjects.Textures
 					return true;
 
 				case TextureFormat.R16:
-					RgbConverter.Convert<ColorR16, ushort, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
+					RgbConverter.Convert<ColorR<ushort>, ushort, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
 					return true;
 
 				case TextureFormat.RG32:
-					RgbConverter.Convert<ColorRG32, ushort, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
+					RgbConverter.Convert<ColorRG<ushort>, ushort, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
 					return true;
 
 				case TextureFormat.RGB48:
-					RgbConverter.Convert<ColorRGB48, ushort, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
+					RgbConverter.Convert<ColorRGB<ushort>, ushort, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
 					return true;
 
 				case TextureFormat.RGBA64:
-					RgbConverter.Convert<ColorRGBA64, ushort, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
+					RgbConverter.Convert<ColorRGBA<ushort>, ushort, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
 					return true;
 
 				case TextureFormat.RHalf:
-					RgbConverter.Convert<ColorR16Half, Half, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
+					RgbConverter.Convert<ColorR<Half>, Half, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
 					return true;
 
 				case TextureFormat.RGHalf:
-					RgbConverter.Convert<ColorRG32Half, Half, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
+					RgbConverter.Convert<ColorRG<Half>, Half, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
 					return true;
 
 				case TextureFormat.RGBAHalf:
-					RgbConverter.Convert<ColorRGBA64Half, Half, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
+					RgbConverter.Convert<ColorRGBA<Half>, Half, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
 					return true;
 
 				case TextureFormat.RFloat:
-					RgbConverter.Convert<ColorR32Single, float, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
+					RgbConverter.Convert<ColorR<float>, float, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
 					return true;
 
 				case TextureFormat.RGFloat:
-					RgbConverter.Convert<ColorRG64Single, float, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
+					RgbConverter.Convert<ColorRG<float>, float, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
 					return true;
 
 				case TextureFormat.RGBAFloat:
-					RgbConverter.Convert<ColorRGBA128Single, float, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
+					RgbConverter.Convert<ColorRGBA<float>, float, ColorBGRA32, byte>(inputSpan, width, height, outputSpan);
 					return true;
 
 				case TextureFormat.RGB9e5Float:

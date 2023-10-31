@@ -6,14 +6,8 @@ namespace AssetRipper.IO.Files.SerializedFiles
 	{
 		public SerializedFileException(string message, UnityVersion version, BuildTarget platform, int classIdType, string fileName, string filePath) : base(message)
 		{
-			if (string.IsNullOrEmpty(fileName))
-			{
-				throw new ArgumentNullException(nameof(fileName));
-			}
-			if (string.IsNullOrEmpty(filePath))
-			{
-				throw new ArgumentNullException(nameof(filePath));
-			}
+			ArgumentException.ThrowIfNullOrEmpty(fileName);
+			ArgumentException.ThrowIfNullOrEmpty(filePath);
 
 			Version = version;
 			Platform = platform;
@@ -24,14 +18,8 @@ namespace AssetRipper.IO.Files.SerializedFiles
 
 		public SerializedFileException(string message, Exception innerException, UnityVersion version, BuildTarget platform, int classIdType, string fileName, string filePath) : base(message, innerException)
 		{
-			if (string.IsNullOrEmpty(fileName))
-			{
-				throw new ArgumentNullException(nameof(fileName));
-			}
-			if (string.IsNullOrEmpty(filePath))
-			{
-				throw new ArgumentNullException(nameof(filePath));
-			}
+			ArgumentException.ThrowIfNullOrEmpty(fileName);
+			ArgumentException.ThrowIfNullOrEmpty(filePath);
 
 			Version = version;
 			Platform = platform;
@@ -42,7 +30,7 @@ namespace AssetRipper.IO.Files.SerializedFiles
 
 		public override string ToString()
 		{
-			StringBuilder sb = new StringBuilder();
+			StringBuilder sb = new();
 			sb.Append("SerializedFileException:");
 			sb.Append(" v:").Append(Version.ToString());
 			sb.Append(" p:").Append(Platform.ToString());

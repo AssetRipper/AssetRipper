@@ -14,23 +14,23 @@ public class AudioExportCollection : AssetExportCollection<IAudioClip>
 	protected override IAudioImporter CreateImporter(IExportContainer container)
 	{
 		IAudioImporter importer = AudioImporter.Create(container.File, container.ExportVersion);
-		importer.P_3D_C1020 = Asset.P_3D_C83;
-		importer.Ambisonic_C1020 = Asset.Ambisonic_C83;
-		if (importer.Has_DefaultSettings_C1020())
+		importer.P_3D = Asset.P_3D;
+		importer.Ambisonic = Asset.Ambisonic;
+		if (importer.Has_DefaultSettings())
 		{
-			ISampleSettings settings = importer.DefaultSettings_C1020;
-			settings.CompressionFormat = Asset.CompressionFormat_C83;
-			settings.LoadType = Asset.LoadType_C83;
-			settings.PreloadAudioData = Asset.PreloadAudioData_C83;
+			ISampleSettings settings = importer.DefaultSettings;
+			settings.CompressionFormat = Asset.CompressionFormat;
+			settings.LoadType = Asset.LoadType;
+			settings.PreloadAudioData = Asset.PreloadAudioData;
 		}
-		importer.Format_C1020 = Asset.Format_C83;
-		importer.LoadInBackground_C1020 = Asset.LoadInBackground_C83;
-		importer.PreloadAudioData_C1020 = Asset.PreloadAudioData_C83;
-		importer.Stream_C1020 = Asset.Stream_C83;
-		importer.UseHardware_C1020 = Asset.UseHardware_C83;
-		if (importer.Has_AssetBundleName_C1020() && Asset.AssetBundleName is not null)
+		importer.Format = Asset.Format;
+		importer.LoadInBackground = Asset.LoadInBackground;
+		importer.PreloadAudioData = Asset.PreloadAudioData;
+		importer.Stream = Asset.Stream;
+		importer.UseHardware = Asset.UseHardware;
+		if (importer.Has_AssetBundleName_R() && Asset.AssetBundleName is not null)
 		{
-			importer.AssetBundleName_C1020 = Asset.AssetBundleName;
+			importer.AssetBundleName_R = Asset.AssetBundleName;
 		}
 		return importer;
 	}

@@ -1,0 +1,32 @@
+﻿@page
+@using AssetRipper.Assets.Collections;
+@model AssetRipper.GUI.Electron.Pages.Scenes.ViewModel
+@{
+	ViewData["Title"] = Model.Scene.Name;
+}
+<h1>@Model.Scene.Name</h1>
+
+<table class="table">
+	<tbody>
+		<tr>
+			<th>@Localization.Name</th>
+			<td>@Model.Scene.Name</td>
+		</tr>
+		<tr>
+			<th>@Localization.Path</th>
+			<td>@Model.Scene.Path</td>
+		</tr>
+		<tr>
+			<th>@Localization.Guid</th>
+			<td>@Model.Scene.GUID.ToString()</td>
+		</tr>
+	</tbody>
+</table>
+
+<h2>@Localization.Collections</h2>
+<ul>
+	@foreach (AssetCollection collection in Model.Scene.Collections)
+	{
+		<li><a asp-page="/Collections/View" asp-route-path="@collection.GetPath().ToJson()">@collection.Name</a></li>
+	}
+</ul>

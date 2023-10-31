@@ -5,24 +5,9 @@ namespace AssetRipper.SourceGenerated.Extensions
 {
 	public sealed class MeshOutlineGenerator
 	{
-		private sealed class Outline
+		private readonly struct Outline
 		{
-			private readonly struct Outside
-			{
-				public Outside(int triIndex, int vertex)
-				{
-					Triangle = triIndex;
-					Member = vertex;
-				}
-
-				public override string ToString()
-				{
-					return $"{Triangle}:{Member}";
-				}
-
-				public int Triangle { get; }
-				public int Member { get; }
-			}
+			private readonly record struct Outside(int Triangle, int Member);
 
 			public Outline(IReadOnlyList<Vector3i> triangles, int startTriangle)
 			{
@@ -34,14 +19,14 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 			public void GenerateOutline()
 			{
-				List<int> outline = new();
+				m_outline.Clear();
 				Outside outsider = m_outsiders[0];
 				Vector3i tri = m_triangles[outsider.Triangle];
 				int first = tri.GetValueByMember(outsider.Member);
 				int second = tri.GetValueByMember(outsider.Member + 1);
 				int startTriIndex = outsider.Triangle;
-				outline.Add(first);
-				outline.Add(second);
+				m_outline.Add(first);
+				m_outline.Add(second);
 
 				Vector3i lastTri = tri;
 				int lastMember = outsider.Member + 1;
@@ -74,16 +59,11 @@ namespace AssetRipper.SourceGenerated.Extensions
 						break;
 					}
 
-					outline.Add(nextVertex);
+					m_outline.Add(nextVertex);
 				}
-
-				GeneratedOutline = outline;
 			}
 
-			public bool IsContain(int triIndex)
-			{
-				return m_indexes.Contains(triIndex);
-			}
+			public bool Contains(int triIndex) => m_indexes.Contains(triIndex);
 
 			private int GetEdgeMask(Vector3i triangle, IReadOnlyList<int> indexes)
 			{
@@ -291,23 +271,18 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 
 			public int TriangleCount => m_indexes.Count;
-			public IReadOnlyList<int> GeneratedOutline { get; private set; } = Array.Empty<int>();
+			public IReadOnlyList<int> GeneratedOutline => m_outline;
 
 			private readonly IReadOnlyList<Vector3i> m_triangles;
 			private readonly HashSet<int> m_indexes = new();
+			private readonly List<int> m_outline = new();
 			private readonly List<Outside> m_outsiders = new();
 		}
 
 		public MeshOutlineGenerator(IReadOnlyList<Vector3> vertices, IReadOnlyList<Vector3i> triangles)
 		{
-			if (vertices == null)
-			{
-				throw new ArgumentNullException(nameof(vertices));
-			}
-			if (triangles == null)
-			{
-				throw new ArgumentNullException(nameof(triangles));
-			}
+			ArgumentNullException.ThrowIfNull(vertices);
+			ArgumentNullException.ThrowIfNull(triangles);
 			m_vertices = vertices;
 			foreach (Vector3i triangle in triangles)
 			{
@@ -320,13 +295,13 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public List<Vector2[]> GenerateOutlines()
 		{
-			List<Outline> outlines = new List<Outline>();
+			List<Outline> outlines = new();
 			for (int i = 0; i < m_triangles.Count; i++)
 			{
 				bool isKnown = false;
 				for (int j = 0; j < outlines.Count; j++)
 				{
-					if (outlines[j].IsContain(i))
+					if (outlines[j].Contains(i))
 					{
 						isKnown = true;
 						break;
@@ -362,17 +337,17 @@ namespace AssetRipper.SourceGenerated.Extensions
 							for (int l = index; l < nextOutline.GeneratedOutline.Count; l++)
 							{
 								int nextVertex = nextOutline.GeneratedOutline[l];
-								resultLine.Add((Vector2f)m_vertices[nextVertex]);
+								resultLine.Add(m_vertices[nextVertex].AsVector2());
 							}
 							for (int m = 0; m < index; m++)
 							{
 								int nextVertex = nextOutline.GeneratedOutline[m];
-								resultLine.Add((Vector2f)m_vertices[nextVertex]);
+								resultLine.Add(m_vertices[nextVertex].AsVector2());
 							}
 							outlines.RemoveAt(k--);
 						}
 					}*/
-					resultLine.Add(ConvertToVector2f(m_vertices[vertex]));
+					resultLine.Add(m_vertices[vertex].AsVector2());
 				}
 				result.Add(resultLine.ToArray());
 			}
@@ -380,14 +355,12 @@ namespace AssetRipper.SourceGenerated.Extensions
 			return result;
 		}
 
-		private static Vector2 ConvertToVector2f(Vector3 v3) => new Vector2(v3.X, v3.Y);
-
 		private static bool IsValidTriangle(Vector3i triangle)
 		{
 			return triangle.X != triangle.Y && triangle.X != triangle.Z && triangle.Y != triangle.Z;
 		}
 
 		private readonly IReadOnlyList<Vector3> m_vertices;
-		private readonly List<Vector3i> m_triangles = new List<Vector3i>();
+		private readonly List<Vector3i> m_triangles = new();
 	}
 }

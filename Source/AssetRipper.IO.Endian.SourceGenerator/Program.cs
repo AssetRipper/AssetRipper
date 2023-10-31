@@ -180,7 +180,7 @@ internal class Program
 		using (new CurlyBrackets(writer))
 		{
 			writer.WriteLine($"{returnType} {ResultVariable} = {BigEndianField}");
-			using (new IndentedBlock(writer))
+			using (new Indented(writer))
 			{
 				writer.WriteLine($"? {GetBinaryPrimitivesMethodName(typeName, true, true)}({DataField}.{SliceMethod}({OffsetField}))");
 				writer.WriteLine($": {GetBinaryPrimitivesMethodName(typeName, false, true)}({DataField}.{SliceMethod}({OffsetField}));");

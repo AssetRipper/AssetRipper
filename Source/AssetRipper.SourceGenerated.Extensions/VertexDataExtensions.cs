@@ -1,6 +1,4 @@
-﻿using AssetRipper.Assets.Export;
-using AssetRipper.Assets.Generics;
-using AssetRipper.IO.Endian;
+﻿using AssetRipper.IO.Endian;
 using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Extensions;
@@ -18,7 +16,6 @@ namespace AssetRipper.SourceGenerated.Extensions
 {
 	public static class VertexDataExtensions
 	{
-		private const int StaticStreamCount = 4;
 		private const int VertexStreamAlign = 16;
 
 		public static bool IsSet(this IVertexData instance, IStreamingInfo? streamingInfo)
@@ -39,8 +36,8 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 			else
 			{
-				List<IStreamInfo> streams = instance.GetStreamsInvariant();
-				ChannelInfo channelInfo = new ChannelInfo();
+				IReadOnlyList<IStreamInfo> streams = instance.GetStreamsInvariant();
+				ChannelInfo channelInfo = new();
 				ShaderChannel4 channelv4 = channelType.ToShaderChannel4();
 				int streamIndex = streams.IndexOf(t => t.IsMatch(channelv4));
 				if (streamIndex >= 0)
@@ -103,9 +100,9 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 			if (instance.Data.Length == 0)
 			{
-				if (mesh?.StreamData_C43 is not null)
+				if (mesh?.StreamData is not null)
 				{
-					data = mesh.StreamData_C43.GetContent(mesh.Collection);
+					data = mesh.StreamData.GetContent(mesh.Collection);
 					if (data.Length == 0)
 					{
 						return;
@@ -122,7 +119,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 
 			IReadOnlyList<ChannelInfo> channels = instance.GetChannels(version);
-			List<IStreamInfo> streams = instance.GetStreams(version);
+			IReadOnlyList<IStreamInfo> streams = instance.GetStreams(version);
 
 			for (int chn = 0; chn < channels.Count; chn++)
 			{
@@ -162,14 +159,16 @@ namespace AssetRipper.SourceGenerated.Extensions
 							}
 						}
 
-						int[] componentsIntArray = Array.Empty<int>();
-						float[] componentsFloatArray = Array.Empty<float>();
+						int[] componentsIntArray;
+						float[] componentsFloatArray;
 						if (MeshHelper.IsIntFormat(vertexFormat))
 						{
 							componentsIntArray = MeshHelper.BytesToIntArray(componentBytes, vertexFormat);
+							componentsFloatArray = Array.Empty<float>();
 						}
 						else
 						{
+							componentsIntArray = Array.Empty<int>();
 							componentsFloatArray = MeshHelper.BytesToFloatArray(componentBytes, vertexFormat);
 						}
 
@@ -282,8 +281,12 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 		}
 
-		public static BoneWeight4[] GenerateSkin(this IVertexData instance, IExportContainer container)
+		public static BoneWeight4[] GenerateSkin(this IVertexData instance, UnityVersion version)
 		{
+			if (instance.Channels is null)
+			{
+				throw new NotImplementedException("GenerateSkin is not implemented for this version.");
+			}
 			ChannelInfo weightChannel = instance.Channels[(int)ShaderChannel2018.SkinWeight];
 			ChannelInfo indexChannel = instance.Channels[(int)ShaderChannel2018.SkinBoneIndex];
 			if (!weightChannel.IsSet())
@@ -292,10 +295,10 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 
 			BoneWeight4[] skin = new BoneWeight4[instance.VertexCount];
-			int weightStride = instance.Channels.Where(t => t.Stream == weightChannel.Stream).Sum(t => t.GetStride(container.Version));
-			int weightStreamOffset = instance.GetStreamOffset(container.Version, weightChannel.Stream);
-			int indexStride = instance.Channels.Where(t => t.Stream == indexChannel.Stream).Sum(t => t.GetStride(container.Version));
-			int indexStreamOffset = instance.GetStreamOffset(container.Version, indexChannel.Stream);
+			int weightStride = instance.Channels.Where(t => t.Stream == weightChannel.Stream).Sum(t => t.GetStride(version));
+			int weightStreamOffset = instance.GetStreamOffset(version, weightChannel.Stream);
+			int indexStride = instance.Channels.Where(t => t.Stream == indexChannel.Stream).Sum(t => t.GetStride(version));
+			int indexStreamOffset = instance.GetStreamOffset(version, indexChannel.Stream);
 
 			using MemoryStream memStream = new MemoryStream(instance.Data);
 			using BinaryReader reader = new BinaryReader(memStream);
@@ -339,7 +342,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 
 			Vector3[] verts = new Vector3[submesh.VertexCount];
-			int streamStride = instance.Channels.Where(t => t.Stream == channel.Stream).Sum(t => t.GetStride(version));
+			int streamStride = instance.GetStreamStride(version, channel.Stream);
 			int streamOffset = instance.GetStreamOffset(version, channel.Stream);
 			using (MemoryStream memStream = new MemoryStream(instance.Data))
 			{
@@ -359,8 +362,8 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static int GetStreamStride(this IVertexData instance, UnityVersion version, int stream)
 		{
-			return instance.Has_Streams() ?
-				(int)instance.Streams[stream].GetStride() : instance.Channels.Where(t => t.IsSet() && t.Stream == stream).Sum(t => t.GetStride(version));
+			return instance.HasStreamsInvariant() ?
+				(int)instance.GetStreamsInvariant()[stream].GetStride() : instance.Channels!.Where(t => t.IsSet() && t.Stream == stream).Sum(t => t.GetStride(version));
 		}
 
 		public static int GetStreamSize(this IVertexData instance, UnityVersion version, int stream)
@@ -379,20 +382,20 @@ namespace AssetRipper.SourceGenerated.Extensions
 			return offset;
 		}
 
-		private static List<IStreamInfo> GetStreams(this IVertexData instance, UnityVersion version)
+		private static IReadOnlyList<IStreamInfo> GetStreams(this IVertexData instance, UnityVersion version)
 		{
 			if (instance.HasStreamsInvariant())
 			{
 				return instance.GetStreamsInvariant();
 			}
-			int streamCount = instance.Channels.Max(x => x.Stream) + 1;
+			int streamCount = instance.Channels!.Max(x => x.Stream) + 1;
 			List<IStreamInfo> streams = new List<IStreamInfo>(streamCount);
 			long offset = 0;
 			for (int s = 0; s < streamCount; s++)
 			{
 				uint chnMask = 0;
 				uint stride = 0;
-				for (int chn = 0; chn < instance.Channels.Count; chn++)
+				for (int chn = 0; chn < instance.Channels!.Count; chn++)
 				{
 					ChannelInfo m_Channel = instance.Channels[chn];
 					if (m_Channel.Stream == s)
@@ -424,25 +427,25 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		private static bool HasStreamsInvariant(this IVertexData instance) => instance.Has_Streams() || instance.Has_Streams_0_();
 
-		private static List<IStreamInfo> GetStreamsInvariant(this IVertexData instance)
+		private static IReadOnlyList<IStreamInfo> GetStreamsInvariant(this IVertexData instance)
 		{
 			if (instance.Has_Streams())
 			{
-				return instance.Streams.Select(s => (IStreamInfo)s).ToList();
+				return instance.Streams;
 			}
 			else if (instance.Has_Streams_0_())
 			{
-				return new List<IStreamInfo>()
+				return new IStreamInfo[]
 				{
 					instance.Streams_0_,
-					instance.Streams_1_!,
-					instance.Streams_2_!,
-					instance.Streams_3_!
+					instance.Streams_1_,
+					instance.Streams_2_,
+					instance.Streams_3_
 				};
 			}
 			else
 			{
-				return new();
+				return Array.Empty<IStreamInfo>();
 			}
 		}
 
@@ -452,8 +455,8 @@ namespace AssetRipper.SourceGenerated.Extensions
 			{
 				return instance.Channels;
 			}
-			AssetList<ChannelInfo> channels = new AssetList<ChannelInfo>(6);
-			List<IStreamInfo> streams = instance.GetStreamsInvariant();
+			List<ChannelInfo> channels = new List<ChannelInfo>(6);
+			IReadOnlyList<IStreamInfo> streams = instance.GetStreamsInvariant();
 			for (int s = 0; s < streams.Count; s++)
 			{
 				IStreamInfo m_Stream = streams[s];
@@ -463,7 +466,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 				{
 					if (channelMask.Get(i))
 					{
-						ChannelInfo m_Channel = channels.AddNew();
+						ChannelInfo m_Channel = new();
 						m_Channel.Stream = (byte)s;
 						m_Channel.Offset = offset;
 						switch (i)
@@ -488,6 +491,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 								break;
 						}
 						offset += (byte)(m_Channel.GetDataDimension() * MeshHelper.GetFormatSize(MeshHelper.ToVertexFormat(m_Channel.Format, version)));
+						channels.Add(m_Channel);
 					}
 				}
 			}
