@@ -1,6 +1,7 @@
 using AssetRipper.Assets.Cloning;
-using AssetRipper.Assets.IO.Reading;
+using AssetRipper.Assets.Collections;
 using AssetRipper.Checksum;
+using AssetRipper.IO.Endian;
 using AssetRipper.Processing.AnimationClips.Editor;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
@@ -27,6 +28,7 @@ using AssetRipper.SourceGenerated.Subclasses.QuaternionCurve;
 using AssetRipper.SourceGenerated.Subclasses.StreamedClip;
 using AssetRipper.SourceGenerated.Subclasses.Vector3Curve;
 using System.Buffers;
+using System.Buffers.Binary;
 using System.Runtime.InteropServices;
 
 namespace AssetRipper.Processing.AnimationClips
@@ -570,21 +572,47 @@ namespace AssetRipper.Processing.AnimationClips
 		public IReadOnlyList<StreamedFrame> GenerateFramesFromStreamedClip(StreamedClip clip)
 		{
 			List<StreamedFrame> frames = new();
-			byte[] memStreamBuffer = new byte[clip.Data.Count * sizeof(uint)];
-			{
-				Span<uint> span = MemoryMarshal.Cast<byte, uint>(memStreamBuffer);
-				clip.Data.CopyTo(span);
-			}
+			Span<byte> buffer = new byte[clip.Data.Count * sizeof(uint)];
+			AssetCollection collection = m_clip.Collection;
+			CopyDataToBuffer(clip, collection, buffer);
 
-			using MemoryStream stream = new MemoryStream(memStreamBuffer);
-			using AssetReader reader = new AssetReader(stream, m_clip.Collection);
-			while (reader.BaseStream.Position < reader.BaseStream.Length)
+			EndianSpanReader reader = new EndianSpanReader(buffer, collection.EndianType);
+			while (reader.Position < reader.Length)
 			{
 				StreamedFrame frame = new();
-				frame.Read(reader);
+				frame.Read(ref reader, collection.Version);
 				frames.Add(frame);
 			}
 			return frames;
+
+			static bool CpuEndiannessMatchesCollection(AssetCollection collection)
+			{
+				return (BitConverter.IsLittleEndian && collection.EndianType is EndianType.LittleEndian)
+					|| (!BitConverter.IsLittleEndian && collection.EndianType is EndianType.BigEndian);
+			}
+
+			static void CopyDataToBuffer(StreamedClip clip, AssetCollection collection, Span<byte> buffer)
+			{
+				if (CpuEndiannessMatchesCollection(collection))
+				{
+					Span<uint> span = MemoryMarshal.Cast<byte, uint>(buffer);
+					clip.Data.CopyTo(span);
+				}
+				else
+				{
+					for (int i = 0; i < clip.Data.Count; i++)
+					{
+						if (BitConverter.IsLittleEndian)
+						{
+							BinaryPrimitives.WriteUInt32LittleEndian(buffer.Slice(i * sizeof(uint)), clip.Data[i]);
+						}
+						else
+						{
+							BinaryPrimitives.WriteUInt32BigEndian(buffer.Slice(i * sizeof(uint)), clip.Data[i]);
+						}
+					}
+				}
+			}
 		}
 
 		private UnityVersion Version => m_clip.Collection.Version;

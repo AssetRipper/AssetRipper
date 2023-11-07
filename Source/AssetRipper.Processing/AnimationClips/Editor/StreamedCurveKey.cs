@@ -1,4 +1,4 @@
-﻿using AssetRipper.Assets.IO.Reading;
+﻿using AssetRipper.IO.Endian;
 using AssetRipper.SourceGenerated.Subclasses.AnimationCurve_Single;
 using AssetRipper.SourceGenerated.Subclasses.Keyframe_Single;
 using System.Numerics;
@@ -48,7 +48,7 @@ namespace AssetRipper.Processing.AnimationClips.Editor
 			return curveKey;
 		}
 
-		public void Read(AssetReader reader)
+		public void Read(ref EndianSpanReader reader)
 		{
 			Index = reader.ReadInt32();
 			Coefficient = new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());

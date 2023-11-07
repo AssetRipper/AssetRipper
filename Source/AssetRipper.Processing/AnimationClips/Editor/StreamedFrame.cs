@@ -1,38 +1,43 @@
-using AssetRipper.Assets.IO.Reading;
+using AssetRipper.IO.Endian;
 
 namespace AssetRipper.Processing.AnimationClips.Editor
 {
 	public sealed class StreamedFrame
 	{
-		public void Read(AssetReader reader)
+		public void Read(ref EndianSpanReader reader, UnityVersion version)
 		{
 			Time = reader.ReadSingle();
-			Curves = ReadAssetArray(reader);
+			Curves = ReadAssetArray(ref reader, version);
 		}
 
 		public float Time { get; set; }
 		public StreamedCurveKey[] Curves { get; set; } = Array.Empty<StreamedCurveKey>();
 
-		private static StreamedCurveKey[] ReadAssetArray(AssetReader reader)
+		private static StreamedCurveKey[] ReadAssetArray(ref EndianSpanReader reader, UnityVersion version)
 		{
 			int count = reader.ReadInt32();
-			if (count < 0)
-			{
-				throw new ArgumentOutOfRangeException(nameof(count), $"Cannot be negative: {count}");
-			}
+			ThrowIfNegative(count);
 
 			StreamedCurveKey[] array = count == 0 ? Array.Empty<StreamedCurveKey>() : new StreamedCurveKey[count];
 			for (int i = 0; i < count; i++)
 			{
 				StreamedCurveKey instance = new();
-				instance.Read(reader);
+				instance.Read(ref reader);
 				array[i] = instance;
 			}
-			if (reader.IsAlignArray)
+			if (version.IsGreaterEqual(2017, 1))
 			{
-				reader.AlignStream();
+				reader.Align();
 			}
 			return array;
+
+			static void ThrowIfNegative(int count)
+			{
+				if (count < 0)
+				{
+					throw new ArgumentOutOfRangeException(nameof(count), $"Cannot be negative: {count}");
+				}
+			}
 		}
 	}
 }

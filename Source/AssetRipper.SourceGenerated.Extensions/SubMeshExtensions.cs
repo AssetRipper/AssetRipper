@@ -1,5 +1,5 @@
 ﻿using AssetRipper.Assets.Collections;
-using AssetRipper.Assets.IO.Reading;
+using AssetRipper.IO.Endian;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Extensions;
@@ -204,14 +204,14 @@ namespace AssetRipper.SourceGenerated.Extensions
 			int extraStride = streamStride - ShaderChannel.Vertex.GetStride(meshCollection.Version);
 			int vertexOffset = firstVertex * streamStride;
 			int begin = streamOffset + vertexOffset + channel.Offset;
-			using MemoryStream stream = new MemoryStream(vertexData.Data);
-			using AssetReader reader = new AssetReader(stream, meshCollection);
-			stream.Position = begin;
+
+			EndianSpanReader reader = new EndianSpanReader(vertexData.Data, meshCollection.EndianType);
+			reader.Position = begin;
 			Vector3 dummyVertex = reader.ReadVector3();
 			min = dummyVertex;
 			max = dummyVertex;
 
-			stream.Position = begin;
+			reader.Position = begin;
 			for (int i = 0; i < vertexCount; i++)
 			{
 				Vector3 vertex = reader.ReadVector3();
@@ -239,11 +239,11 @@ namespace AssetRipper.SourceGenerated.Extensions
 				{
 					min.Z = vertex.Z;
 				}
-				stream.Position += extraStride;
+				reader.Position += extraStride;
 			}
 		}
 
-		private static Vector3 ReadVector3(this AssetReader reader)
+		private static Vector3 ReadVector3(this ref EndianSpanReader reader)
 		{
 			return new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
 		}
