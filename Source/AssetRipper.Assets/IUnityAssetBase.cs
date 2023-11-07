@@ -4,6 +4,7 @@ using AssetRipper.Assets.IO.Serialization;
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.IO.Endian;
+using AssetRipper.IO.Files.SerializedFiles;
 using System.Text.Json.Nodes;
 
 namespace AssetRipper.Assets;
@@ -32,4 +33,18 @@ public interface IUnityAssetBase : IEndianSpanReadable, IAssetWritable, IYamlExp
 	/// <returns>A new <see cref="JsonNode"/> containing this asset's serialized data.</returns>
 	JsonNode SerializeReleaseFields(IUnityAssetSerializer serializer, SerializationOptions options);
 	IEnumerable<(string, PPtr)> FetchDependencies();
+}
+public static class UnityAssetBaseExtensions
+{
+	public static void Read(this IUnityAssetBase asset, ref EndianSpanReader reader, TransferInstructionFlags flags)
+	{
+		if (flags.IsRelease())
+		{
+			asset.ReadRelease(ref reader);
+		}
+		else
+		{
+			asset.ReadEditor(ref reader);
+		}
+	}
 }

@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Generics;
-using AssetRipper.Assets.IO.Reading;
 using AssetRipper.Assets.IO.Writing;
 using K4os.Compression.LZ4;
 

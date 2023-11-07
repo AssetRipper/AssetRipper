@@ -1,5 +1,4 @@
-﻿using AssetRipper.Assets.IO.Reading;
-using AssetRipper.Assets.IO.Writing;
+﻿using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Primitives;
 
 namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
