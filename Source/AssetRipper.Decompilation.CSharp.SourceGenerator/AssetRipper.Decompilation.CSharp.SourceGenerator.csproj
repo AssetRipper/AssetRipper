@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>exe</OutputType>
+		<OutputPath>..\0Bins\Other\AssetRipper.Decompilation.CSharp.SourceGenerator\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.Decompilation.CSharp.SourceGenerator\$(Configuration)\</IntermediateOutputPath>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AssetRipper.Text.SourceGeneration" Version="1.1.0" />
+	</ItemGroup>
+
+</Project>
