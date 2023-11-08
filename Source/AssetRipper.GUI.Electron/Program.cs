@@ -137,6 +137,25 @@ public static class Program
 				}
 			},
 			new MenuItem { Type = MenuType.separator },
+			new MenuItem
+			{
+				Label = "Save Log",
+				Type = MenuType.normal,
+				Click = async () =>
+				{
+					SaveDialogOptions options = new()
+					{
+						DefaultPath = "AssetRipper.log",
+						Filters = new FileFilter[]
+						{
+							new FileFilter { Name = "Log File", Extensions = new string[] { "log" } }
+						}
+					};
+					string result = await ElectronAPI.Dialog.ShowSaveDialogAsync(MainWindow, options);
+					await File.WriteAllTextAsync(result, LoggingManager.Log);
+				}
+			},
+			new MenuItem { Type = MenuType.separator },
 			new MenuItem { Role = OperatingSystem.IsMacOS() ? MenuRole.close : MenuRole.quit }
 		};
 
