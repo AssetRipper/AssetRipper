@@ -5,7 +5,13 @@
 	ViewData["Title"] = "Settings";
 }
 
-@if (!Program.Ripper.IsLoaded)
+@if (Program.Ripper.IsLoaded)
+{
+	<div class="text-center">
+		<p>@Localization.SettingsCanOnlyBeChangedBeforeLoadingFiles</p>
+	</div>
+}
+else
 {
 	<form asp-page-handler="UpdateSettings" method="post">
 		<div class="form-group">

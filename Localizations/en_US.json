@@ -157,6 +157,7 @@
     "script_export_title": "Script Export Format",
     "script_language_version_title": "C# Language Version",
     "select_asset_to_view_info": "Select an Asset on the left to view information about it",
+    "settings_can_only_be_changed_before_loading_files": "Settings can only be changed before loading files.",
     "shader": "Shader",
     "shader_asset_export_title": "Shader Export Format",
     "shader_asset_format_decompile": "Decompile",

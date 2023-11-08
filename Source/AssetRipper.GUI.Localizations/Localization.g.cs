@@ -801,6 +801,11 @@ partial class Localization
 	public static string SelectAssetToViewInfo => Get("select_asset_to_view_info");
 	
 	/// <summary>
+	/// Settings can only be changed before loading files.
+	/// </summary>
+	public static string SettingsCanOnlyBeChangedBeforeLoadingFiles => Get("settings_can_only_be_changed_before_loading_files");
+	
+	/// <summary>
 	/// Shader
 	/// </summary>
 	public static string Shader => Get("shader");
