@@ -1,6 +1,20 @@
 ﻿@page
-@model AssetRipper.GUI.Electron.Pages.ConsoleModel
 @{
-	ViewData["Title"] = "Console";
+	Layout = null;
 }
-<pre class="bg-dark-subtle">@Model.Log</pre>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Console</title>
+	<link rel="stylesheet" href="@BootstrapInformation.StyleSheet.Url" integrity="@BootstrapInformation.StyleSheet.Integrity" crossorigin="anonymous">
+</head>
+<body
+	data-bs-theme="dark"
+	onload="window.scrollTo(0, document.body.scrollHeight);">
+	<pre class="bg-dark-subtle">@LoggingManager.Log</pre>
+
+	<script src="@BootstrapInformation.Script.Url" integrity="@BootstrapInformation.Script.Integrity" crossorigin="anonymous"></script>
+</body>
+</html>

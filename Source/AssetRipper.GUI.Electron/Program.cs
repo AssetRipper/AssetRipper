@@ -22,8 +22,7 @@ public static class Program
 
 	public static async Task Main(string[] args)
 	{
-		Logger.Add(new ConsoleLogger());
-		Pages.ConsoleModel.RegisterLogger();
+		LoggingManager.RegisterLogger();
 		Logger.LogSystemInformation("AssetRipper");
 
 		WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -53,6 +52,8 @@ public static class Program
 		LocalHost.Initialize();
 
 		_mainWindow = await ElectronAPI.WindowManager.CreateWindowAsync();
+
+		await LoggingManager.LaunchWindow();
 
 		app.WaitForShutdown();
 	}
