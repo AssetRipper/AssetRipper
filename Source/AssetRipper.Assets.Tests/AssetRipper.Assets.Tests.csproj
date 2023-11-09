@@ -8,7 +8,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="AssetRipper.SourceGenerated" Version="0.3.4.5" />
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
 		<PackageReference Include="Moq" Version="4.18.4" />
 		<PackageReference Include="NUnit" Version="3.14.0" />
 		<PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
