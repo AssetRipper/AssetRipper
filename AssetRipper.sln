@@ -17,15 +17,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Licenses", "Licenses", "{56
 	ProjectSection(SolutionItems) = preProject
 		Source\Licenses\AsmResolver.md = Source\Licenses\AsmResolver.md
 		Source\Licenses\AssetStudio.md = Source\Licenses\AssetStudio.md
-		Source\Licenses\Avalonia.md = Source\Licenses\Avalonia.md
 		Source\Licenses\Cpp2IL.md = Source\Licenses\Cpp2IL.md
 		Source\Licenses\Crunch.md = Source\Licenses\Crunch.md
 		Source\Licenses\darkfx.md = Source\Licenses\darkfx.md
 		Source\Licenses\Fmod5Sharp.md = Source\Licenses\Fmod5Sharp.md
 		Source\Licenses\ILSpy.md = Source\Licenses\ILSpy.md
-		Source\Licenses\LibVLCSharp.md = Source\Licenses\LibVLCSharp.md
 		Source\Licenses\Lz4.md = Source\Licenses\Lz4.md
-		Source\Licenses\MessageBoxAvalonia.md = Source\Licenses\MessageBoxAvalonia.md
 		Source\Licenses\NAudio.md = Source\Licenses\NAudio.md
 		Source\Licenses\NAudioVorbis.md = Source\Licenses\NAudioVorbis.md
 		Source\Licenses\NVorbis.md = Source\Licenses\NVorbis.md
@@ -52,7 +49,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{
 		.github\workflows\cla.yml = .github\workflows\cla.yml
 		.github\workflows\docfx_build.yml = .github\workflows\docfx_build.yml
 		.github\workflows\greetings.yml = .github\workflows\greetings.yml
-		.github\workflows\publish.yml = .github\workflows\publish.yml
 		.github\workflows\publish_electron.yml = .github\workflows\publish_electron.yml
 		.github\workflows\test.yml = .github\workflows\test.yml
 	EndProjectSection
@@ -85,8 +81,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.IO.Endian", "Source\AssetRipper.IO.Endian\AssetRipper.IO.Endian.csproj", "{82436B39-9077-407B-9FE6-51E1BEADB855}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.IO.Files", "Source\AssetRipper.IO.Files\AssetRipper.IO.Files.csproj", "{95684DEF-EFC1-4649-AD9E-4660DA7A584A}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.GUI", "Source\AssetRipper.GUI\AssetRipper.GUI.csproj", "{6158D3B9-B15D-43BD-84B7-128EE8410527}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.GUI.SourceGenerator", "Source\AssetRipper.GUI.SourceGenerator\AssetRipper.GUI.SourceGenerator.csproj", "{A5FDF7D3-E4CC-4ED1-8BE8-966BE488EE82}"
 EndProject
@@ -167,7 +161,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.GUI.Licensing",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Decompilation.CSharp", "Source\AssetRipper.Decompilation.CSharp\AssetRipper.Decompilation.CSharp.csproj", "{82566A68-BF9B-4B2F-8B57-2137B31CF197}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.Decompilation.CSharp.SourceGenerator", "Source\AssetRipper.Decompilation.CSharp.SourceGenerator\AssetRipper.Decompilation.CSharp.SourceGenerator.csproj", "{F71711D6-40D2-463A-AAA3-1ABC0C359BC9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Decompilation.CSharp.SourceGenerator", "Source\AssetRipper.Decompilation.CSharp.SourceGenerator\AssetRipper.Decompilation.CSharp.SourceGenerator.csproj", "{F71711D6-40D2-463A-AAA3-1ABC0C359BC9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -207,10 +201,6 @@ Global
 		{95684DEF-EFC1-4649-AD9E-4660DA7A584A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95684DEF-EFC1-4649-AD9E-4660DA7A584A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95684DEF-EFC1-4649-AD9E-4660DA7A584A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6158D3B9-B15D-43BD-84B7-128EE8410527}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6158D3B9-B15D-43BD-84B7-128EE8410527}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6158D3B9-B15D-43BD-84B7-128EE8410527}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6158D3B9-B15D-43BD-84B7-128EE8410527}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A5FDF7D3-E4CC-4ED1-8BE8-966BE488EE82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A5FDF7D3-E4CC-4ED1-8BE8-966BE488EE82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5FDF7D3-E4CC-4ED1-8BE8-966BE488EE82}.Release|Any CPU.ActiveCfg = Release|Any CPU
