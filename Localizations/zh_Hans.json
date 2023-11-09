@@ -68,13 +68,13 @@
     "loading_step_locate_key_functions": "正在扫描库函数的 IL2CPP 二进制文件",
     "loading_step_parse_archive": "正在解析 Archive 文件 {0}",
     "loading_step_parse_bundle": "正在解析 Bundle 资源 {0}",
-    "loading_step_parse_il2cpp_metadata": "正在解析 IL2CPP Metadata",
+    "loading_step_parse_il2cpp_metadata": "正在解析 IL2CPP 元数据",
     "loading_step_parse_resource": "正在解析资源文件 {0}",
     "loading_step_parse_serialized": "正在解析已序列化的文件 {0}",
     "loading_step_parse_web": "正在解析 Web 文件 {0}",
     "loading_step_pre_processing": "正在预处理文件",
-    "loading_step_restore_attributes": "恢复生成的程序集的属性",
-    "loose_file_saved_at": "已将松散文件 (Loose File) 保存至 {0}",
+    "loading_step_restore_attributes": "正在恢复已生成程序集的属性",
+    "loose_file_saved_at": "已将松散文件（Loose File）保存至 {0}",
     "menu_export": "导出",
     "menu_export_all": "导出所有文件",
     "menu_export_selected": "导出选中文件",
@@ -198,5 +198,6 @@
     "frequency": "频率",
     "channels": "频道",
     "class_id_type_name": "类 ID 类型名（Class ID Type Name）",
-    "class_id_type_number": "类 ID 类型号（Class ID Type Number）"
+    "class_id_type_number": "类 ID 类型号（Class ID Type Number）",
+    "settings_can_only_be_changed_before_loading_files": "仅可在加载文件前修改设置。"
 }
