@@ -6,7 +6,7 @@ using AssetRipper.IO.Files.Utils;
 
 namespace AssetRipper.Assets.Tests;
 
-public class ResolutionTests
+public class FileResolutionTests
 {
 	[Test]
 	public void CollectionResolutionWorksAnywhereInTheHierarchy()

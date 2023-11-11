@@ -1,11 +1,9 @@
 ﻿using AssetRipper.Assets.Bundles;
-using AssetRipper.Assets.Exceptions;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
 using System.Collections;
-using System.Diagnostics;
 
 namespace AssetRipper.Assets.Collections;
 
@@ -100,7 +98,7 @@ public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>, I
 		int fileIndex = dependencies.IndexOf(asset.Collection);
 		if (fileIndex < 0)
 		{
-			throw new Exception($"Asset doesn't belong to this {nameof(AssetCollection)} or any of its dependencies");
+			throw new ArgumentException($"Asset doesn't belong to this {nameof(AssetCollection)} or any of its dependencies", nameof(asset));
 		}
 		return new PPtr<T>(fileIndex, asset.PathID);
 	}
@@ -118,10 +116,21 @@ public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>, I
 
 	private protected void AddAsset(IUnityObjectBase asset)
 	{
-		Debug.Assert(asset.Collection == this, "Asset info must marked this as its collection.");
-		Debug.Assert(asset.PathID is not 0, "The zero path ID is reserved for null PPtr's.");
+		ValidateAsset(asset);
 
 		assets.Add(asset.PathID, asset);
+
+		void ValidateAsset(IUnityObjectBase asset)
+		{
+			if (asset.Collection != this)
+			{
+				throw new ArgumentException("Asset info must marked this as its collection.", nameof(asset));
+			}
+			if (asset.PathID is 0)
+			{
+				throw new ArgumentException("The zero path ID is reserved for null PPtr's.", nameof(asset));
+			}
+		}
 	}
 
 	public override string ToString()
@@ -139,10 +148,9 @@ public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>, I
 
 	public T GetAsset<T>(long pathID) where T : IUnityObjectBase
 	{
-		IUnityObjectBase asset = GetAsset(pathID);
-		return asset is T castedAsset
-			? castedAsset
-			: throw new ArgumentException($"Object with type {asset.GetType()} could not be assigned to type {typeof(T)}.", nameof(T));
+		return TryGetAsset(pathID, out T? asset)
+			? asset
+			: throw new ArgumentException($"Object with path ID {pathID} wasn't found.", nameof(pathID));
 	}
 
 	public IUnityObjectBase? TryGetAsset(long pathID)
@@ -159,31 +167,49 @@ public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>, I
 
 	public bool TryGetAsset(long pathID, [NotNullWhen(true)] out IUnityObjectBase? asset)
 	{
-		if (pathID is 0)
+		return TryGetAsset<IUnityObjectBase>(pathID, out asset);
+	}
+
+	public bool TryGetAsset<T>(long pathID, [NotNullWhen(true)] out T? asset) where T : IUnityObjectBase
+	{
+		if (assets.TryGetValue(pathID, out IUnityObjectBase? @object))
+		{
+			if (typeof(T).IsAssignableTo(typeof(NullObject)))
+			{
+				switch (@object)
+				{
+					case T t:
+						asset = t;
+						return true;
+					default:
+						return ThrowForInvalidType(@object.GetType(), out asset);
+				}
+			}
+			else
+			{
+				switch (@object)
+				{
+					case NullObject:
+						asset = default;
+						return false;
+					case T t:
+						asset = t;
+						return true;
+					default:
+						return ThrowForInvalidType(@object.GetType(), out asset);
+				}
+			}
+		}
+		else
 		{
 			asset = default;
 			return false;
 		}
 
-		return assets.TryGetValue(pathID, out asset);
-	}
-
-	public bool TryGetAsset<T>(long pathID, [NotNullWhen(true)] out T? asset) where T : IUnityObjectBase
-	{
-		IUnityObjectBase? @object = TryGetAsset(pathID);
-		switch (@object)
+		[DoesNotReturn]
+		static bool ThrowForInvalidType(Type type, [NotNullWhen(true)] out T? asset)
 		{
-			case null:
-				asset = default;
-				return false;
-			case T t:
-				asset = t;
-				return true;
-			case NullObject:
-				asset = default;
-				return false;
-			default:
-				throw new ArgumentException($"Object with type {@object.GetType()} could not be assigned to type {typeof(T)}.", nameof(T));
+			throw new ArgumentException($"Object with type {type} could not be assigned to type {typeof(T)}.", nameof(T));
 		}
 	}
 

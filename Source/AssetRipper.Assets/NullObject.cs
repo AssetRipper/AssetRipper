@@ -3,7 +3,7 @@
 namespace AssetRipper.Assets;
 
 /// <summary>
-/// An object that, if referenced by a <see cref="PPtr"/> and a type check fails, returns null.
+/// An object that, if referenced by a <see cref="PPtr"/>, returns null unless explicity searched for.
 /// </summary>
 public abstract class NullObject : UnityObjectBase
 {
