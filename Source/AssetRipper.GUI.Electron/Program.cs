@@ -35,11 +35,7 @@ public static class Program
 		WebApplication app = builder.Build();
 
 		// Configure the HTTP request pipeline.
-		if (!app.Environment.IsDevelopment())
-		{
-			app.UseExceptionHandler("/Error");
-		}
-
+		app.UseMiddleware<ErrorHandlingMiddleware>();
 		app.UseStaticFiles();
 		app.UseRouting();
 		app.UseAuthorization();
