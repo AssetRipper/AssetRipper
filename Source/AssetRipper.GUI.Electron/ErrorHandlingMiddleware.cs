@@ -2,16 +2,9 @@
 
 namespace AssetRipper.GUI.Electron;
 
-internal sealed class ErrorHandlingMiddleware
+internal sealed class ErrorHandlingMiddleware : IMiddleware
 {
-	private readonly RequestDelegate next;
-
-	public ErrorHandlingMiddleware(RequestDelegate next)
-	{
-		this.next = next;
-	}
-
-	public async Task Invoke(HttpContext context)
+	public async Task InvokeAsync(HttpContext context, RequestDelegate next)
 	{
 		try
 		{

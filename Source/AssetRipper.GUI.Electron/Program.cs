@@ -30,6 +30,7 @@ public static class Program
 		builder.WebHost.UseElectron(args);
 
 		// Add services to the container.
+		builder.Services.AddTransient<ErrorHandlingMiddleware>(static (_) => new());
 		builder.Services.AddRazorPages();
 
 		WebApplication app = builder.Build();
