@@ -1,5 +1,4 @@
 using AssetRipper.Assets;
-using AssetRipper.GUI.Localizations;
 using AssetRipper.Processing.Textures;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;

@@ -1,5 +1,4 @@
 using AssetRipper.Export.UnityProjects;
-using AssetRipper.GUI.Localizations;
 using AssetRipper.Import.Logging;
 using ElectronNET.API;
 using ElectronNET.API.Entities;

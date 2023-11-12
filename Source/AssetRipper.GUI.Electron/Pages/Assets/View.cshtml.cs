@@ -201,8 +201,15 @@ namespace AssetRipper.GUI.Electron.Pages.Assets
 			}
 			else
 			{
-				TypeDefinition type = monoScript.GetTypeDefinition(assemblyManager);
-				return CSharpDecompiler.Decompile(type);
+				try
+				{
+					TypeDefinition type = monoScript.GetTypeDefinition(assemblyManager);
+					return CSharpDecompiler.Decompile(type);
+				}
+				catch (Exception ex)
+				{
+					return $"{Localization.AnErrorOccuredDuringDecompilation}\n\n{ex}";
+				}
 			}
 		}
 	}

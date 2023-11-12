@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Export.UnityProjects.Configuration;
-using AssetRipper.GUI.Localizations;
 
 namespace AssetRipper.GUI.Electron.Pages.Settings.DropDown;
 

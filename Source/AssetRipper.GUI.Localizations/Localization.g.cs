@@ -4,6 +4,11 @@ namespace AssetRipper.GUI.Localizations;
 partial class Localization
 {
 	/// <summary>
+	/// An error occurred during decompilation.
+	/// </summary>
+	public static string AnErrorOccuredDuringDecompilation => Get("an_error_occured_during_decompilation");
+	
+	/// <summary>
 	/// Assembly Name
 	/// </summary>
 	public static string AssemblyName => Get("assembly_name");

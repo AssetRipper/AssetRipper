@@ -1,5 +1,4 @@
-﻿using AssetRipper.GUI.Localizations;
-using AssetRipper.Import.Configuration;
+﻿using AssetRipper.Import.Configuration;
 
 namespace AssetRipper.GUI.Electron.Pages.Settings.DropDown;
 
