@@ -13,12 +13,6 @@ public class EditModel : PageModel
 
 	private static LibraryConfiguration Configuration => Program.Ripper.Settings;
 
-	public bool EnableStaticMeshSeparation
-	{
-		get => Configuration.EnableStaticMeshSeparation;
-		set => Configuration.EnableStaticMeshSeparation = value;
-	}
-
 	public bool EnablePrefabOutlining
 	{
 		get => Configuration.EnablePrefabOutlining;

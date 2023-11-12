@@ -27,11 +27,8 @@ using AssetRipper.Processing.AudioMixers;
 using AssetRipper.Processing.Editor;
 using AssetRipper.Processing.PrefabOutlining;
 using AssetRipper.Processing.Scenes;
-using AssetRipper.Processing.StaticMeshes;
 using AssetRipper.Processing.Textures;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
-using AssetRipper.SourceGenerated.Classes.ClassID_1113;
-using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using AssetRipper.SourceGenerated.Classes.ClassID_117;
 using AssetRipper.SourceGenerated.Classes.ClassID_128;
@@ -55,7 +52,6 @@ using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Classes.ClassID_49;
 using AssetRipper.SourceGenerated.Classes.ClassID_687078895;
-using AssetRipper.SourceGenerated.Classes.ClassID_72;
 using AssetRipper.SourceGenerated.Classes.ClassID_83;
 using System.Text;
 
@@ -134,10 +130,7 @@ namespace AssetRipper.Export.UnityProjects
 				yield return new AnimatorControllerProcessor();
 				yield return new AudioMixerProcessor();
 				yield return new EditorFormatProcessor(Settings.BundledAssetsExportMode);
-				if (Settings.EnableStaticMeshSeparation)
-				{
-					yield return new StaticMeshProcessor();
-				}
+				//Static mesh separation goes here
 				if (Settings.EnablePrefabOutlining)
 				{
 					yield return new PrefabOutliningProcessor();

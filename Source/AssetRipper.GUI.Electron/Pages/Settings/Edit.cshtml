@@ -15,10 +15,6 @@ else
 {
 	<form asp-page-handler="UpdateSettings" method="post">
 		<div class="form-group">
-			@Html.CheckBoxFor(m => m.EnableStaticMeshSeparation)
-			@Html.LabelFor(m => m.EnableStaticMeshSeparation, Localization.EnableStaticMeshSeparation)
-		</div>
-		<div class="form-group">
 			@Html.CheckBoxFor(m => m.EnablePrefabOutlining)
 			@Html.LabelFor(m => m.EnablePrefabOutlining, Localization.EnablePrefabOutlining)
 		</div>
