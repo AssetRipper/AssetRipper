@@ -3,6 +3,7 @@ using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Import.Logging;
+using AssetRipper.IO.Files.Utils;
 using AssetRipper.Processing.Editor;
 using AssetRipper.SourceGenerated.Classes.ClassID_141;
 using AssetRipper.SourceGenerated.Classes.ClassID_142;
@@ -65,6 +66,21 @@ namespace AssetRipper.Processing.Scenes
 				if (bundle is not SerializedBundle)
 				{
 					Logger.Log(LogType.Warning, LogCategory.Processing, $"Scene name recovery is not supported for bundles of type {bundle.GetType().Name}");
+				}
+				else if (assetBundleAsset.Has_SceneHashes() && assetBundleAsset.SceneHashes.Count > 0)
+				{
+					foreach ((Utf8String scenePath, Utf8String collectionName) in assetBundleAsset.SceneHashes)
+					{
+						string path = Path.ChangeExtension(scenePath, null);
+						path = OriginalPathHelper.EnsurePathNotRooted(path);
+						path = OriginalPathHelper.EnsureStartsWithAssets(path);
+
+						string name = FilenameUtils.FixFileIdentifier(collectionName);
+
+						AssetCollection sceneCollection = bundle.Collections.First(collection => collection.Name == name);
+						sceneCollections.Add(sceneCollection);//Just to be safe
+						scenePaths[sceneCollection] = path;
+					}
 				}
 				else
 				{
