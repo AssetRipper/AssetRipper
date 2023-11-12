@@ -98,7 +98,8 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 								break;
 
 							default:
-								throw new NotSupportedException($"Bundle compression '{compressType}' isn't supported");
+								UnsupportedBundleDecompression.Throw(entry.PathFixed, compressType);
+								break;
 						}
 						blockStream = m_cachedBlockStream;
 					}
