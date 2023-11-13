@@ -22,12 +22,15 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static string GetRootPath(this ITransform transform)
 		{
-			string pre = string.Empty;
-			if (!transform.Father_C4.IsNull())
+			string name = transform.GameObject_C4P?.Name ?? "Unnamed";
+			if (transform.Father_C4P is { } father)
 			{
-				pre = transform.Father_C4.GetAsset(transform.Collection).GetRootPath() + PathSeparator;
+				return $"{father.GetRootPath()}{PathSeparator}{name}";
 			}
-			return pre + transform.GetGameObject().Name;
+			else
+			{
+				return name;
+			}
 		}
 
 		/// <summary>
@@ -59,23 +62,19 @@ namespace AssetRipper.SourceGenerated.Extensions
 		{
 			int separatorIndex = path.IndexOf(PathSeparator, startIndex);
 			string childName = separatorIndex == -1 ? path[startIndex..] : path[startIndex..separatorIndex];
-			foreach (ITransform child in transform.GetChildren())
+			foreach (ITransform child in transform.Children_C4P.WhereNotNull())
 			{
-				IGameObject childGO = child.GetGameObject();
+				IGameObject? childGO = child.GameObject_C4P;
+				if (childGO is null)
+				{
+					continue;
+				}
 				if (childGO.Name == childName)
 				{
 					return separatorIndex == -1 ? child : child.FindChild(path, separatorIndex + 1);
 				}
 			}
 			return default;
-		}
-
-		public static IEnumerable<ITransform> GetChildren(this ITransform transform)
-		{
-			foreach (IPPtr_Transform childPtr in transform.Children_C4)
-			{
-				yield return childPtr.GetAsset(transform.Collection);
-			}
 		}
 
 		/// <summary>

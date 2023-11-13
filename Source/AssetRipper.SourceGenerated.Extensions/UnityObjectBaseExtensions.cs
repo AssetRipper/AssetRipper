@@ -20,5 +20,18 @@ namespace AssetRipper.SourceGenerated.Extensions
 		{
 			return (_this as INamed)?.Name;
 		}
+
+		public static string GetLogString(this IUnityObjectBase asset)
+		{
+			string? name = asset.TryGetName();
+			if (name == null)
+			{
+				return $"{asset.ClassID}_{asset.PathID}";
+			}
+			else
+			{
+				return $"{asset.ClassID}_{asset.PathID}({name})";
+			}
+		}
 	}
 }

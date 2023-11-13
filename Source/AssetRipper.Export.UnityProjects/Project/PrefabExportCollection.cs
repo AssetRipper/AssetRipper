@@ -73,7 +73,7 @@ namespace AssetRipper.Export.UnityProjects.Project
 
 				case IComponent component:
 					{
-						IGameObject root = component.GetGameObject().GetRoot();
+						IGameObject root = component.GameObject_C2P!.GetRoot();
 						return (root, (IPrefabInstance?)root.MainAsset);
 					}
 

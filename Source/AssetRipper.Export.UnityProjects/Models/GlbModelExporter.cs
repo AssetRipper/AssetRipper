@@ -59,7 +59,7 @@ namespace AssetRipper.Export.UnityProjects.Models
 			return asset switch
 			{
 				IGameObject gameObject => gameObject.GetRoot(),
-				IComponent component => component.GetRoot(),
+				IComponent component => component.GameObject_C2P!.GetRoot(),
 				_ => throw new InvalidOperationException()
 			};
 		}
@@ -126,7 +126,12 @@ namespace AssetRipper.Export.UnityProjects.Models
 
 		private static void AddGameObjectToScene(SceneBuilder sceneBuilder, BuildParameters parameters, NodeBuilder? parentNode, Transformation parentGlobalTransform, Transformation parentGlobalInverseTransform, ITransform transform)
 		{
-			IGameObject gameObject = transform.GetGameObject();
+			IGameObject? gameObject = transform.GameObject_C4P;
+			if (gameObject is null)
+			{
+				return;
+			}
+
 			Transformation localTransform = transform.ToTransformation();
 			Transformation localInverseTransform = transform.ToInverseTransformation();
 			Transformation globalTransform = localTransform * parentGlobalTransform;
@@ -178,7 +183,7 @@ namespace AssetRipper.Export.UnityProjects.Models
 				}
 			}
 
-			foreach (ITransform childTransform in transform.GetChildren())
+			foreach (ITransform childTransform in transform.Children_C4P.WhereNotNull())
 			{
 				AddGameObjectToScene(sceneBuilder, parameters, node, localTransform * parentGlobalTransform, parentGlobalInverseTransform * localInverseTransform, childTransform);
 			}

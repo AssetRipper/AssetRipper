@@ -27,14 +27,22 @@ namespace AssetRipper.SourceGenerated.Extensions
 				{
 					if (animator.ContainsAnimationClip(clip))
 					{
-						yield return animator.GameObject_C8.GetAsset(animator.Collection);
+						IGameObject? gameObject = animator.GameObjectP;
+						if (gameObject is not null)
+						{
+							yield return gameObject;
+						}
 					}
 				}
 				else if (asset is IAnimation animation)
 				{
 					if (animation.ContainsAnimationClip(clip))
 					{
-						yield return animation.GameObject_C8.GetAsset(animation.Collection);
+						IGameObject? gameObject = animation.GameObjectP;
+						if (gameObject is not null)
+						{
+							yield return gameObject;
+						}
 					}
 				}
 			}

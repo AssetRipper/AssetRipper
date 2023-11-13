@@ -45,19 +45,9 @@ namespace AssetRipper.Export.UnityProjects
 			return File.TryGetAsset(pathID);
 		}
 
-		public IUnityObjectBase GetAsset(long pathID)
-		{
-			return File.GetAsset(pathID);
-		}
-
 		public virtual IUnityObjectBase? TryGetAsset(int fileIndex, long pathID)
 		{
 			return File.TryGetAsset(fileIndex, pathID);
-		}
-
-		public virtual IUnityObjectBase GetAsset(int fileIndex, long pathID)
-		{
-			return File.GetAsset(fileIndex, pathID);
 		}
 
 		public long GetExportID(IUnityObjectBase asset)

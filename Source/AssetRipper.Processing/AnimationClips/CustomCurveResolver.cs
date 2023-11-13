@@ -48,7 +48,7 @@ namespace AssetRipper.Processing.AnimationClips
 							{
 								continue;
 							}
-							ISkinnedMeshRenderer? skin = child.GetGameObject().TryGetComponent<ISkinnedMeshRenderer>();
+							ISkinnedMeshRenderer? skin = child.GameObject_C4P?.TryGetComponent<ISkinnedMeshRenderer>();
 							if (skin == null)
 							{
 								continue;
@@ -93,7 +93,7 @@ namespace AssetRipper.Processing.AnimationClips
 							}
 
 							uint crc28 = attribute & 0xFFFFFFF;
-							IRenderer? renderer = child.GetGameObject().TryGetComponent<IRenderer>();
+							IRenderer? renderer = child.GameObject_C4P?.TryGetComponent<IRenderer>();
 							if (renderer == null)
 							{
 								continue;

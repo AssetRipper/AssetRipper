@@ -236,7 +236,7 @@ namespace AssetRipper.Export.UnityProjects
 						IUnityObjectBase? dependency = asset.Collection.TryGetAsset(pointer);
 						if (dependency == null)
 						{
-							string hierarchy = $"[{asset.Collection.Name}]" + asset.Collection.GetAssetLogString(asset.PathID) + "." + path;
+							string hierarchy = $"[{asset.Collection.Name}]{asset.GetLogString()}.{path}";
 							Logger.Log(LogType.Warning, LogCategory.Export, $"{hierarchy}'s dependency = {ToLogString(pointer, asset.Collection)} wasn't found");
 							continue;
 						}

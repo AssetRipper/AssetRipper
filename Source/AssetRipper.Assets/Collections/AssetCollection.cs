@@ -139,20 +139,6 @@ public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>, I
 	}
 
 	#region GetAsset Methods
-	public IUnityObjectBase GetAsset(long pathID)
-	{
-		return TryGetAsset(pathID, out IUnityObjectBase? asset)
-			? asset
-			: throw new ArgumentException($"Object with path ID {pathID} wasn't found.", nameof(pathID));
-	}
-
-	public T GetAsset<T>(long pathID) where T : IUnityObjectBase
-	{
-		return TryGetAsset(pathID, out T? asset)
-			? asset
-			: throw new ArgumentException($"Object with path ID {pathID} wasn't found.", nameof(pathID));
-	}
-
 	public IUnityObjectBase? TryGetAsset(long pathID)
 	{
 		TryGetAsset(pathID, out IUnityObjectBase? asset);
@@ -182,7 +168,8 @@ public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>, I
 						asset = t;
 						return true;
 					default:
-						return ThrowForInvalidType(@object.GetType(), out asset);
+						asset = default;
+						return false;
 				}
 			}
 			else
@@ -196,7 +183,8 @@ public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>, I
 						asset = t;
 						return true;
 					default:
-						return ThrowForInvalidType(@object.GetType(), out asset);
+						asset = default;
+						return false;
 				}
 			}
 		}
@@ -205,26 +193,6 @@ public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>, I
 			asset = default;
 			return false;
 		}
-
-		[DoesNotReturn]
-		static bool ThrowForInvalidType(Type type, [NotNullWhen(true)] out T? asset)
-		{
-			throw new ArgumentException($"Object with type {type} could not be assigned to type {typeof(T)}.", nameof(T));
-		}
-	}
-
-	public IUnityObjectBase GetAsset(int fileIndex, long pathID)
-	{
-		ThrowIfFileIndexOutOfRange(fileIndex);
-		AssetCollection file = Dependencies[fileIndex] ?? throw new ArgumentException($"Dependency collection with index {fileIndex} was not found.", nameof(fileIndex));
-		return file.GetAsset(pathID);
-	}
-
-	public T GetAsset<T>(int fileIndex, long pathID) where T : IUnityObjectBase
-	{
-		ThrowIfFileIndexOutOfRange(fileIndex);
-		AssetCollection file = Dependencies[fileIndex] ?? throw new ArgumentException($"Dependency collection with index {fileIndex} was not found.", nameof(fileIndex));
-		return file.GetAsset<T>(pathID);
 	}
 
 	public IUnityObjectBase? TryGetAsset(int fileIndex, long pathID)
@@ -241,8 +209,7 @@ public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>, I
 
 	public bool TryGetAsset(int fileIndex, long pathID, [NotNullWhen(true)] out IUnityObjectBase? asset)
 	{
-		ThrowIfFileIndexOutOfRange(fileIndex);
-		AssetCollection? file = Dependencies[fileIndex];
+		AssetCollection? file = TryGetDependency(fileIndex);
 		if (file is not null)
 		{
 			return file.TryGetAsset(pathID, out asset);
@@ -256,8 +223,7 @@ public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>, I
 
 	public bool TryGetAsset<T>(int fileIndex, long pathID, [NotNullWhen(true)] out T? asset) where T : IUnityObjectBase
 	{
-		ThrowIfFileIndexOutOfRange(fileIndex);
-		AssetCollection? file = Dependencies[fileIndex];
+		AssetCollection? file = TryGetDependency(fileIndex);
 		if (file is not null)
 		{
 			return file.TryGetAsset(pathID, out asset);
@@ -267,13 +233,6 @@ public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>, I
 			asset = default;
 			return false;
 		}
-	}
-
-	public IUnityObjectBase GetAsset(PPtr pptr) => GetAsset(pptr.FileID, pptr.PathID);
-
-	public T GetAsset<T>(PPtr<T> pptr) where T : IUnityObjectBase
-	{
-		return GetAsset<T>(pptr.FileID, pptr.PathID);
 	}
 
 	public IUnityObjectBase? TryGetAsset(PPtr pptr) => TryGetAsset(pptr.FileID, pptr.PathID);
@@ -290,15 +249,15 @@ public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>, I
 		return TryGetAsset(pptr.FileID, pptr.PathID, out asset);
 	}
 
-	private void ThrowIfFileIndexOutOfRange(int fileIndex)
+	private AssetCollection? TryGetDependency(int fileIndex)
 	{
-		if (fileIndex < 0)
+		if (fileIndex < 0 || fileIndex >= Dependencies.Count)
 		{
-			throw new ArgumentOutOfRangeException(nameof(fileIndex), $"File index cannot be negative: {fileIndex}");
+			return null;
 		}
-		else if (fileIndex >= Dependencies.Count)
+		else
 		{
-			throw new ArgumentException($"{nameof(AssetCollection)} with index {fileIndex} was not found in dependencies", nameof(fileIndex));
+			return Dependencies[fileIndex];
 		}
 	}
 	#endregion

@@ -48,7 +48,11 @@ public readonly struct PathChecksumCache
 			return;
 		}
 
-		IGameObject gameObject = animator.GameObject.GetAsset(animator.Collection);
+		IGameObject? gameObject = animator.GameObjectP;
+		if (gameObject is null)
+		{
+			return;
+		}
 		AddGameObjectPathsToCacheRecursive(gameObject, string.Empty);
 	}
 
@@ -58,7 +62,11 @@ public readonly struct PathChecksumCache
 
 		foreach (ITransform? childTransform in transform.Children_C4P)
 		{
-			IGameObject child = childTransform?.GameObject_C4P ?? throw new NullReferenceException();
+			IGameObject? child = childTransform?.GameObject_C4P;
+			if (child is null)
+			{
+				continue;
+			}
 
 			string path = string.IsNullOrEmpty(parentPath)
 				? child.Name
@@ -73,7 +81,11 @@ public readonly struct PathChecksumCache
 	
 	private void AddAnimationPathsToCache(IAnimation animation)
 	{
-		IGameObject go = animation.GameObject_C8.GetAsset(animation.Collection);
+		IGameObject? go = animation.GameObjectP;
+		if (go is null)
+		{
+			return;
+		}
 		AddGameObjectPathsToCacheRecursive(go, string.Empty);
 	}
 	
