@@ -19,7 +19,7 @@ namespace AssetRipper.IO.Files.BundleFiles
 			byte[] properties = new byte[PropertiesSize];
 			long basePosition = compressedStream.Position;
 
-			compressedStream.ReadBuffer(properties, 0, PropertiesSize);
+			compressedStream.ReadExactly(properties, 0, PropertiesSize);
 
 			long headSize = compressedStream.Position - basePosition;
 			long headlessSize = compressedSize - headSize;
@@ -45,8 +45,8 @@ namespace AssetRipper.IO.Files.BundleFiles
 			byte[] sizeBytes = new byte[UncompressedSize]; //GetBuffer();
 			long basePosition = compressedStream.Position;
 
-			compressedStream.ReadBuffer(properties, 0, PropertiesSize);
-			compressedStream.ReadBuffer(sizeBytes, 0, UncompressedSize);
+			compressedStream.ReadExactly(properties, 0, PropertiesSize);
+			compressedStream.ReadExactly(sizeBytes, 0, UncompressedSize);
 			long decompressedSize = BitConverter.ToInt64(sizeBytes, 0);
 
 			long headSize = compressedStream.Position - basePosition;

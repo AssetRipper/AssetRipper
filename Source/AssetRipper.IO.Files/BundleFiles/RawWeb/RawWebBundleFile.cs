@@ -84,7 +84,7 @@ namespace AssetRipper.IO.Files.BundleFiles.RawWeb
 			{
 				byte[] buffer = new byte[entry.Size];
 				stream.Position = metadataOffset + entry.Offset;
-				stream.ReadBuffer(buffer, 0, buffer.Length);
+				stream.ReadExactly(buffer);
 				ResourceFile file = new ResourceFile(buffer, FilePath, entry.Path);
 				AddResourceFile(file);
 			}

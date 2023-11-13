@@ -15,7 +15,10 @@ namespace AssetRipper.IO.Files.Streams
 			m_leaveOpen = leaveOpen;
 
 			m_initialPosition = baseStream.Position;
-			Position = 0;
+			if (Position != 0)
+			{
+				Position = 0;
+			}
 		}
 
 		~PartialStream()

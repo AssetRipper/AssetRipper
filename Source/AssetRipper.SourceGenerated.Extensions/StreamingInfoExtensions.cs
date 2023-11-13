@@ -28,7 +28,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 			byte[] data = new byte[streamingInfo.Size];
 			res.Stream.Position = (long)streamingInfo.GetOffset();
-			res.Stream.ReadBuffer(data, 0, data.Length);
+			res.Stream.ReadExactly(data);
 			return data;
 		}
 

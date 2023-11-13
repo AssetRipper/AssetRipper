@@ -1,7 +1,8 @@
 ﻿using AssetRipper.IO.Files.Exceptions;
-using AssetRipper.IO.Files.Extensions;
+using AssetRipper.IO.Files.Streams;
 using AssetRipper.IO.Files.Streams.Smart;
 using K4os.Compression.LZ4;
+using System.Buffers;
 
 namespace AssetRipper.IO.Files.BundleFiles.FileStream
 {
@@ -50,6 +51,8 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 			// copy data of all blocks used by current entry to new stream
 			while (left > 0)
 			{
+				byte[]? rentedArray;
+
 				long blockStreamOffset;
 				Stream blockStream;
 				StorageBlock block = m_blocksInfo.StorageBlocks[blockIndex];
@@ -59,6 +62,7 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 					// so we don't need to unpack it once again. Instead we can use cached stream
 					blockStreamOffset = 0;
 					blockStream = m_cachedBlockStream;
+					rentedArray = null;
 					m_stream.Position += block.CompressedSize;
 				}
 				else
@@ -68,12 +72,13 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 					{
 						blockStreamOffset = m_dataOffset + blockCompressedOffset;
 						blockStream = m_stream;
+						rentedArray = null;
 					}
 					else
 					{
 						blockStreamOffset = 0;
 						m_cachedBlockIndex = blockIndex;
-						m_cachedBlockStream.Move(CreateStream(block.UncompressedSize));
+						m_cachedBlockStream.Move(CreateTemporaryStream(block.UncompressedSize, out rentedArray));
 						switch (compressType)
 						{
 							case CompressionType.Lzma:
@@ -114,11 +119,17 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 				entryOffsetInsideBlock = 0;
 
 				long size = Math.Min(blockSize, left);
-				blockStream.CopyStream(entryStream, size);
+				using PartialStream partialStream = new(blockStream, blockStream.Position, size);
+				partialStream.CopyTo(entryStream);
 				blockIndex++;
 
 				blockCompressedOffset += block.CompressedSize;
 				left -= size;
+
+				if (rentedArray != null)
+				{
+					ArrayPool<byte>.Shared.Return(rentedArray);
+				}
 			}
 			if (left < 0)
 			{
@@ -137,6 +148,20 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 		private static SmartStream CreateStream(long decompressedSize)
 		{
 			return decompressedSize > MaxMemoryStreamLength ? SmartStream.CreateTemp() : SmartStream.CreateMemory(new byte[decompressedSize]);
+		}
+
+		private static SmartStream CreateTemporaryStream(long decompressedSize, out byte[]? rentedArray)
+		{
+			if (decompressedSize > MaxMemoryStreamLength)
+			{
+				rentedArray = null;
+				return SmartStream.CreateTemp();
+			}
+			else
+			{
+				rentedArray = ArrayPool<byte>.Shared.Rent((int)decompressedSize);
+				return SmartStream.CreateMemory(rentedArray, 0, (int)decompressedSize);
+			}
 		}
 
 		/// <summary>
