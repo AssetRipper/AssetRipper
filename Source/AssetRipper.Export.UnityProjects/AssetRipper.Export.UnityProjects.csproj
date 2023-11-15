@@ -24,7 +24,7 @@
 		<PackageReference Include="SharpGLTF.Core" Version="1.0.0-alpha0030" />
 		<PackageReference Include="SharpGLTF.Toolkit" Version="1.0.0-alpha0030" />
 		<PackageReference Include="StbImageWriteSharp" Version="1.16.7" />
-		<PackageReference Include="System.Drawing.Common" Version="7.0.0" />
+		<PackageReference Include="System.Drawing.Common" Version="8.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
