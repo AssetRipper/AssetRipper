@@ -1,6 +1,6 @@
 <Project>
 	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<LangVersion>Latest</LangVersion>
 		<IsTrimmable>true</IsTrimmable>
