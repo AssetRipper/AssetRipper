@@ -1,4 +1,5 @@
-﻿using ICSharpCode.SharpZipLib.Checksum;
+﻿using System.Buffers.Binary;
+using System.IO.Hashing;
 using System.Text;
 
 namespace AssetRipper.Checksum;
@@ -10,10 +11,9 @@ public static partial class Crc32Algorithm
 
 	public static uint HashData(byte[] data)
 	{
-		crc ??= new();
-		crc.Reset();
-		crc.Update(data);
-		return (uint)crc.Value;
+		Span<byte> buffer = stackalloc byte[sizeof(uint)];
+		Crc32.Hash(data, buffer);
+		return BinaryPrimitives.ReadUInt32LittleEndian(buffer);
 	}
 
 	public static uint HashAscii(ReadOnlySpan<char> data)
@@ -22,7 +22,7 @@ public static partial class Crc32Algorithm
 		crc.Reset();
 		crc.UpdateAscii(data);
 
-		return (uint)crc.Value;
+		return crc.FinishHash();
 	}
 
 	private static uint HashAscii(ReadOnlySpan<char> str1, ReadOnlySpan<char> str2)
@@ -32,7 +32,7 @@ public static partial class Crc32Algorithm
 		crc.UpdateAscii(str1);
 		crc.UpdateAscii(str2);
 
-		return (uint)crc.Value;
+		return crc.FinishHash();
 	}
 
 	public static uint HashUTF8(string data)
@@ -55,7 +55,14 @@ public static partial class Crc32Algorithm
 		for (int i = 0; i < data.Length; i++)
 		{
 			byte b = (byte)data[i];
-			@this.Update(b);
+			@this.Append(new ReadOnlySpan<byte>(in b));
 		}
+	}
+
+	private static uint FinishHash(this Crc32 @this)
+	{
+		Span<byte> buffer = stackalloc byte[sizeof(uint)];
+		@this.GetHashAndReset(buffer);
+		return BinaryPrimitives.ReadUInt32LittleEndian(buffer);
 	}
 }

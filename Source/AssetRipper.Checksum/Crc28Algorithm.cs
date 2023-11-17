@@ -1,4 +1,4 @@
-﻿using ICSharpCode.SharpZipLib.Checksum;
+﻿using System.IO.Hashing;
 using System.Text;
 
 namespace AssetRipper.Checksum;
@@ -7,28 +7,14 @@ public static class Crc28Algorithm
 {
 	private const int Mask = 0xFFFFFFF;
 
-	[ThreadStatic]
-	private static Crc32? crc;
-
 	public static uint HashData(byte[] data)
 	{
-		crc ??= new();
-		crc.Reset();
-		crc.Update(data);
-		return (uint)crc.Value & Mask;
+		return Crc32Algorithm.HashData(data) & Mask;
 	}
 
 	public static uint HashAscii(ReadOnlySpan<char> data)
 	{
-		crc ??= new();
-		crc.Reset();
-		for (int i = 0; i < data.Length; i++)
-		{
-			byte b = (byte)data[i];
-			crc.Update(b);
-		}
-
-		return (uint)crc.Value & Mask;
+		return Crc32Algorithm.HashAscii(data) & Mask;
 	}
 
 	public static uint HashUTF8(string data)
