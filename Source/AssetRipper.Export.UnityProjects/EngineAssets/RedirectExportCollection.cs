@@ -42,7 +42,7 @@ public class RedirectExportCollection : IExportCollection
 		{
 			if (exportID == 0)
 			{
-				throw new ArgumentOutOfRangeException(nameof(exportID), "The export id must be non-negative.");
+				throw new ArgumentOutOfRangeException(nameof(exportID), "The export id must be nonzero.");
 			}
 			if (guid.IsZero || guid == UnityGuid.MissingReference)
 			{
