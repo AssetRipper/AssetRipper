@@ -2,31 +2,14 @@
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
-using AssetRipper.Export.UnityProjects.Project;
-using AssetRipper.Export.UnityProjects.RawAssets;
-using AssetRipper.Import.AssetCreation;
 using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Logging;
 using AssetRipper.IO.Files;
 using AssetRipper.SourceGenerated;
-using AssetRipper.SourceGenerated.Classes.ClassID_1;
-using AssetRipper.SourceGenerated.Classes.ClassID_1001;
-using AssetRipper.SourceGenerated.Classes.ClassID_1032;
-using AssetRipper.SourceGenerated.Classes.ClassID_114;
-using AssetRipper.SourceGenerated.Classes.ClassID_116;
-using AssetRipper.SourceGenerated.Classes.ClassID_141;
-using AssetRipper.SourceGenerated.Classes.ClassID_142;
-using AssetRipper.SourceGenerated.Classes.ClassID_147;
-using AssetRipper.SourceGenerated.Classes.ClassID_150;
-using AssetRipper.SourceGenerated.Classes.ClassID_2;
-using AssetRipper.SourceGenerated.Classes.ClassID_290;
-using AssetRipper.SourceGenerated.Classes.ClassID_3;
-using AssetRipper.SourceGenerated.Classes.ClassID_6;
-using AssetRipper.SourceGenerated.Classes.ClassID_94;
 
 namespace AssetRipper.Export.UnityProjects
 {
-	public sealed class ProjectExporter
+	public sealed partial class ProjectExporter
 	{
 		public event Action? EventExportPreparationStarted;
 		public event Action? EventExportPreparationFinished;
@@ -48,34 +31,6 @@ namespace AssetRipper.Export.UnityProjects
 
 		//Exporters
 		private DummyAssetExporter DummyExporter { get; } = new DummyAssetExporter();
-
-		public ProjectExporter()
-		{
-			OverrideExporter<IUnityObjectBase>(new DefaultYamlExporter(), true);
-
-			OverrideExporter<IGlobalGameManager>(new ManagerAssetExporter(), true);
-
-			OverrideExporter<IBuildSettings>(new BuildSettingsExporter(), true);
-
-			OverrideExporter<IMonoBehaviour>(new ScriptableObjectExporter(), true);
-
-			SceneYamlExporter sceneExporter = new();
-			OverrideExporter<IPrefabInstance>(sceneExporter, true);
-			OverrideExporter<IGameObject>(sceneExporter, true);
-			OverrideExporter<IComponent>(sceneExporter, true);
-			OverrideExporter<ILevelGameManager>(sceneExporter, true);
-
-			OverrideDummyExporter<IPreloadData>(ClassIDType.PreloadData, true, false);
-			OverrideDummyExporter<IAssetBundle>(ClassIDType.AssetBundle, true, false);
-			OverrideDummyExporter<IAssetBundleManifest>(ClassIDType.AssetBundleManifest, true, false);
-			OverrideDummyExporter<IMonoManager>(ClassIDType.MonoManager, true, false);
-			OverrideDummyExporter<IResourceManager>(ClassIDType.ResourceManager, true, false);
-			OverrideDummyExporter<IShaderNameRegistry>(ClassIDType.ShaderNameRegistry, true, false);
-
-			OverrideExporter<ISceneAsset>(new SceneAssetExporter(), true);
-			OverrideExporter<UnknownObject>(new UnknownObjectExporter(), false);
-			OverrideExporter<UnreadableObject>(new UnreadableObjectExporter(), false);
-		}
 
 		/// <summary>Adds an exporter to the stack of exporters for this asset type.</summary>
 		/// <typeparam name="T">The c sharp type of this asset type. Any inherited types also get this exporter.</typeparam>
@@ -99,6 +54,22 @@ namespace AssetRipper.Export.UnityProjects
 			{
 				RecalculateTypeMap();
 			}
+		}
+
+		/// <summary>
+		/// Use the <see cref="DummyExporter"/> for the specified class type.
+		/// </summary>
+		/// <typeparam name="T">The base type for assets of that <paramref name="classType"/>.</typeparam>
+		/// <param name="classType">The class id of assets we are using the <see cref="DummyExporter"/> for.</param>
+		/// <param name="isEmptyCollection">
+		/// True: an exception will be thrown if the asset is referenced by another asset.<br/>
+		/// False: any references to this asset will be replaced with a missing reference.
+		/// </param>
+		/// <param name="isMetaType"><see cref="AssetType.Meta"/> or <see cref="AssetType.Serialized"/>?</param>
+		private void OverrideDummyExporter<T>(ClassIDType classType, bool isEmptyCollection, bool isMetaType)
+		{
+			DummyExporter.SetUpClassType(classType, isEmptyCollection, isMetaType);
+			OverrideExporter<T>(DummyExporter, true);
 		}
 
 		public AssetType ToExportType(Type type)
@@ -156,22 +127,6 @@ namespace AssetRipper.Export.UnityProjects
 				}
 			}
 			return result;
-		}
-
-		/// <summary>
-		/// Use the <see cref="DummyExporter"/> for the specified class type.
-		/// </summary>
-		/// <typeparam name="T">The base type for assets of that <paramref name="classType"/>.</typeparam>
-		/// <param name="classType">The class id of assets we are using the <see cref="DummyExporter"/> for.</param>
-		/// <param name="isEmptyCollection">
-		/// True: an exception will be thrown if the asset is referenced by another asset.<br/>
-		/// False: any references to this asset will be replaced with a missing reference.
-		/// </param>
-		/// <param name="isMetaType"><see cref="AssetType.Meta"/> or <see cref="AssetType.Serialized"/>?</param>
-		private void OverrideDummyExporter<T>(ClassIDType classType, bool isEmptyCollection, bool isMetaType)
-		{
-			DummyExporter.SetUpClassType(classType, isEmptyCollection, isMetaType);
-			OverrideExporter<T>(DummyExporter, true);
 		}
 
 		public void Export(GameBundle fileCollection, CoreConfiguration options)

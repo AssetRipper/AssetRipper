@@ -3,6 +3,7 @@ using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Export.UnityProjects;
+using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.Yaml;
 
@@ -46,7 +47,7 @@ internal static class YamlTabExtensions
 	private sealed class UIAssetContainer : ProjectAssetContainer
 	{
 		public UIAssetContainer(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile) : base(
-			new ProjectExporter(),
+			new ProjectExporter(new(), new BaseManager((a) => { })),
 			temporaryFile,
 			Enumerable.Empty<IUnityObjectBase>(),
 			Array.Empty<IExportCollection>())
