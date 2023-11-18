@@ -5,7 +5,7 @@
 	ViewData["Title"] = "Settings";
 }
 
-@if (Program.Ripper.IsLoaded)
+@if (Program.IsLoaded)
 {
 	<div class="text-center">
 		<p>@Localization.SettingsCanOnlyBeChangedBeforeLoadingFiles</p>

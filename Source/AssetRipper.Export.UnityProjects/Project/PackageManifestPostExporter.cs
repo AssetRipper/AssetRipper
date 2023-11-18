@@ -1,12 +1,15 @@
-﻿namespace AssetRipper.Export.UnityProjects.Project;
+﻿using AssetRipper.Export.UnityProjects.Configuration;
+using AssetRipper.Processing;
+
+namespace AssetRipper.Export.UnityProjects.Project;
 
 public class PackageManifestPostExporter : IPostExporter
 {
-	public void DoPostExport(Ripper ripper)
+	public void DoPostExport(GameData gameData, LibraryConfiguration settings)
 	{
-		string packagesDirectory = Path.Combine(ripper.Settings.ProjectRootPath, "Packages");
+		string packagesDirectory = Path.Combine(settings.ProjectRootPath, "Packages");
 		Directory.CreateDirectory(packagesDirectory);
-		CreateManifest(ripper.Settings.Version).Save(Path.Combine(packagesDirectory, "manifest.json"));
+		CreateManifest(settings.Version).Save(Path.Combine(packagesDirectory, "manifest.json"));
 	}
 
 	protected virtual PackageManifest CreateManifest(UnityVersion version)

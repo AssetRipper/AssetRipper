@@ -26,7 +26,7 @@ namespace AssetRipper.GUI.Electron.Pages.Collections
 			}
 
 			CollectionPath = CollectionPath.FromJson(path);
-			if (Program.Ripper.IsLoaded && Program.Ripper.GameStructure.FileCollection.TryGetCollection(CollectionPath, out AssetCollection? collection))
+			if (Program.IsLoaded && Program.GameBundle.TryGetCollection(CollectionPath, out AssetCollection? collection))
 			{
 				Collection = collection;
 				return Page();

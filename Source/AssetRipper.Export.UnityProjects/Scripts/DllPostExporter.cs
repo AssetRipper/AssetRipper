@@ -1,18 +1,20 @@
 ﻿using AsmResolver.DotNet;
+using AssetRipper.Export.UnityProjects.Configuration;
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.IO.Files.Utils;
+using AssetRipper.Processing;
 
 namespace AssetRipper.Export.UnityProjects.Scripts
 {
 	public class DllPostExporter : IPostExporter
 	{
-		public void DoPostExport(Ripper ripper)
+		public void DoPostExport(GameData gameData, LibraryConfiguration settings)
 		{
-			string outputDirectory = Path.Combine(ripper.Settings.AuxiliaryFilesPath, "GameAssemblies");
+			string outputDirectory = Path.Combine(settings.AuxiliaryFilesPath, "GameAssemblies");
 
 			Logger.Info(LogCategory.Export, "Saving game assemblies...");
-			IAssemblyManager assemblyManager = ripper.GameStructure.AssemblyManager;
+			IAssemblyManager assemblyManager = gameData.AssemblyManager;
 			AssemblyDefinition[] assemblies = assemblyManager.GetAssemblies().ToArray();
 			if (assemblies.Length != 0)
 			{

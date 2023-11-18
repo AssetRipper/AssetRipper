@@ -11,7 +11,7 @@ public class EditModel : PageModel
 {
 	private readonly ILogger<EditModel> _logger;
 
-	private static LibraryConfiguration Configuration => Program.Ripper.Settings;
+	private static LibraryConfiguration Configuration => Program.Settings;
 
 	public bool EnablePrefabOutlining
 	{

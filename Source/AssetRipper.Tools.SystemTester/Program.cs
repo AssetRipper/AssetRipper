@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Export.UnityProjects;
+using AssetRipper.Export.UnityProjects.Configuration;
 using AssetRipper.Import.Logging;
-using AssetRipper.Import.Structure;
+using AssetRipper.Processing;
 
 namespace AssetRipper.Tools.SystemTester
 {
@@ -102,11 +103,12 @@ namespace AssetRipper.Tools.SystemTester
 
 		private static void Rip(string[] inputPaths, string outputPath)
 		{
-			Ripper ripper = new();
-			ripper.Settings.LogConfigurationValues();
-			GameStructure gameStructure = ripper.Load(inputPaths);
+			LibraryConfiguration settings = new();
+			settings.LogConfigurationValues();
+			GameData gameData = Ripper.Load(inputPaths, settings);
+			Ripper.Process(gameData, Ripper.GetDefaultProcessors(settings));
 			PrepareExportDirectory(outputPath);
-			ripper.ExportProject(outputPath);
+			Ripper.ExportProject(gameData, settings, outputPath);
 		}
 
 		private static void PrepareExportDirectory(string path)
@@ -120,15 +122,8 @@ namespace AssetRipper.Tools.SystemTester
 
 		private static T[] Combine<T>(T[] array1, T[] array2)
 		{
-			if (array1 == null)
-			{
-				throw new ArgumentNullException(nameof(array1));
-			}
-
-			if (array2 == null)
-			{
-				throw new ArgumentNullException(nameof(array2));
-			}
+			ArgumentNullException.ThrowIfNull(array1);
+			ArgumentNullException.ThrowIfNull(array2);
 
 			T[] result = new T[array1.Length + array2.Length];
 			for (int i = 0; i < array1.Length; i++)

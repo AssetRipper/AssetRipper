@@ -1,18 +1,20 @@
-﻿using AssetRipper.Import.Logging;
+﻿using AssetRipper.Export.UnityProjects.Configuration;
+using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Platforms;
+using AssetRipper.Processing;
 
 namespace AssetRipper.Export.UnityProjects.Project
 {
 	public class StreamingAssetsPostExporter : IPostExporter
 	{
-		public void DoPostExport(Ripper ripper)
+		public void DoPostExport(GameData gameData, LibraryConfiguration settings)
 		{
-			PlatformGameStructure? platform = ripper.GameStructure?.PlatformStructure;
+			PlatformGameStructure? platform = gameData.PlatformStructure;
 			if (platform is not null && !string.IsNullOrEmpty(platform.StreamingAssetsPath) && Directory.Exists(platform.StreamingAssetsPath))
 			{
 				Logger.Info(LogCategory.Export, "Copying streaming assets...");
 				string inputDirectory = platform.StreamingAssetsPath;
-				string outputDirectory = Path.Combine(ripper.Settings.AssetsPath, "StreamingAssets");
+				string outputDirectory = Path.Combine(settings.AssetsPath, "StreamingAssets");
 
 				Directory.CreateDirectory(outputDirectory);
 

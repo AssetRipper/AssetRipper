@@ -161,7 +161,7 @@ namespace AssetRipper.GUI.Electron.Pages.Assets
 				_logger.LogError("Path is null");
 				return Redirect("/");
 			}
-			else if (Program.Ripper.IsLoaded && Program.Ripper.GameStructure.FileCollection.TryGetAsset(AssetPath.FromJson(path), out IUnityObjectBase? asset))
+			else if (Program.IsLoaded && Program.GameBundle.TryGetAsset(AssetPath.FromJson(path), out IUnityObjectBase? asset))
 			{
 				Asset = asset;
 				return Page();
@@ -194,7 +194,7 @@ namespace AssetRipper.GUI.Electron.Pages.Assets
 
 		private static string DecompileMonoScript(IMonoScript monoScript)
 		{
-			IAssemblyManager assemblyManager = Program.Ripper.GameStructure.AssemblyManager;
+			IAssemblyManager assemblyManager = Program.AssemblyManager;
 			if (!monoScript.IsScriptPresents(assemblyManager))
 			{
 				return EmptyScript.GetContent(monoScript);

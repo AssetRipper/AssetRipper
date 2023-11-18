@@ -1,5 +1,4 @@
-﻿using AssetRipper.Assets;
-using AssetRipper.Assets.Bundles;
+﻿using AssetRipper.Assets.Bundles;
 using AssetRipper.Export.UnityProjects.Configuration;
 using AssetRipper.Export.UnityProjects.PathIdMapping;
 using AssetRipper.Export.UnityProjects.Project;
@@ -20,127 +19,74 @@ using AssetRipper.Processing.Textures;
 
 namespace AssetRipper.Export.UnityProjects
 {
-	public class Ripper
+	public static class Ripper
 	{
-		private GameStructure? gameStructure;
-
-		public Ripper() : this(new()) { }
-
-		public Ripper(LibraryConfiguration configuration)
+		public static GameData Load(IReadOnlyList<string> paths, CoreConfiguration settings)
 		{
-			Settings = configuration;
-		}
-
-		[MemberNotNullWhen(true, nameof(gameStructure))]
-		public bool IsLoaded => gameStructure != null;
-
-		public GameStructure GameStructure
-		{
-			[MemberNotNull(nameof(gameStructure))]
-			get
-			{
-				ThrowIfGameStructureIsNull();
-				return gameStructure;
-			}
-		}
-
-		/// <summary>
-		/// Needs to be set before loading assets to ensure predictable behavior
-		/// </summary>
-		public LibraryConfiguration Settings { get; }
-
-		public void ResetData()
-		{
-			gameStructure?.Dispose();
-			gameStructure = null;
-		}
-
-		[MemberNotNull(nameof(gameStructure))]
-		public GameStructure Load(IReadOnlyList<string> paths)
-		{
-			ResetData();
 			if (paths.Count == 1)
 			{
-				Logger.Info(LogCategory.General, $"Attempting to read files from {paths[0]}");
+				Logger.Info(LogCategory.Import, $"Attempting to read files from {paths[0]}");
 			}
 			else
 			{
-				Logger.Info(LogCategory.General, $"Attempting to read files from {paths.Count} paths...");
+				Logger.Info(LogCategory.Import, $"Attempting to read files from {paths.Count} paths...");
 			}
 
-			gameStructure = GameStructure.Load(paths, Settings);
-			Logger.Info(LogCategory.General, "Finished reading files");
-
-			Logger.Info(LogCategory.General, "Processing loaded assets...");
+			GameStructure gameStructure = GameStructure.Load(paths, settings);
 			GameData gameData = GameData.FromGameStructure(gameStructure);
-			foreach (IAssetProcessor processor in GetProcessors())
+			Logger.Info(LogCategory.Import, "Finished reading files");
+			return gameData;
+		}
+
+		public static void Process(GameData gameData, IEnumerable<IAssetProcessor> processors)
+		{
+			Logger.Info(LogCategory.Processing, "Processing loaded assets...");
+			foreach (IAssetProcessor processor in processors)
 			{
 				processor.Process(gameData);
 			}
-			Logger.Info(LogCategory.General, "Finished processing assets");
+			Logger.Info(LogCategory.Processing, "Finished processing assets");
+		}
 
-			return GameStructure;
-
-			IEnumerable<IAssetProcessor> GetProcessors()
+		public static IEnumerable<IAssetProcessor> GetDefaultProcessors(LibraryConfiguration settings)
+		{
+			if (settings.ScriptContentLevel == ScriptContentLevel.Level1)
 			{
-				if (Settings.ScriptContentLevel == ScriptContentLevel.Level1)
-				{
-					yield return new MethodStubbingProcessor();
-				}
-				yield return new SceneDefinitionProcessor();
-				yield return new MainAssetProcessor();
-				yield return new LightingDataProcessor();
-				yield return new AnimatorControllerProcessor();
-				yield return new AudioMixerProcessor();
-				yield return new EditorFormatProcessor(Settings.BundledAssetsExportMode);
-				//Static mesh separation goes here
-				if (Settings.EnablePrefabOutlining)
-				{
-					yield return new PrefabOutliningProcessor();
-				}
-				yield return new PrefabProcessor();
-				yield return new SpriteProcessor();
+				yield return new MethodStubbingProcessor();
 			}
-		}
-
-		public IEnumerable<IUnityObjectBase> FetchLoadedAssets()
-		{
-			return GameStructure.FileCollection.FetchAssets();
-		}
-
-		[MemberNotNull(nameof(gameStructure))]
-		private void ThrowIfGameStructureIsNull()
-		{
-			if (gameStructure == null)
+			yield return new SceneDefinitionProcessor();
+			yield return new MainAssetProcessor();
+			yield return new LightingDataProcessor();
+			yield return new AnimatorControllerProcessor();
+			yield return new AudioMixerProcessor();
+			yield return new EditorFormatProcessor(settings.BundledAssetsExportMode);
+			//Static mesh separation goes here
+			if (settings.EnablePrefabOutlining)
 			{
-				throw new NullReferenceException("GameStructure cannot be null");
+				yield return new PrefabOutliningProcessor();
 			}
+			yield return new PrefabProcessor();
+			yield return new SpriteProcessor();
 		}
 
-		[MemberNotNull(nameof(gameStructure))]
-		public void ExportProject(string exportPath, Action<ProjectExporter>? onBeforeExport = null)
+		public static void ExportProject(GameData gameData, LibraryConfiguration settings, string exportPath, IEnumerable<IPostExporter>? postExporters = null)
 		{
-			Logger.Info(LogCategory.Export, $"Attempting to export assets to {exportPath}...");
-			ThrowIfGameStructureIsNull();
-
 			Logger.Info(LogCategory.Export, "Starting export");
-			Logger.Info(LogCategory.Export, $"Game files have these Unity versions:{GetListOfVersions(gameStructure.FileCollection)}");
-			UnityVersion version = gameStructure.FileCollection.GetMaxUnityVersion();
-			Logger.Info(LogCategory.Export, $"Exporting to Unity version {version}");
+			Logger.Info(LogCategory.Export, $"Attempting to export assets to {exportPath}...");
+			Logger.Info(LogCategory.Export, $"Game files have these Unity versions:{GetListOfVersions(gameData.GameBundle)}");
+			Logger.Info(LogCategory.Export, $"Exporting to Unity version {gameData.ProjectVersion}");
 
-			Settings.ExportRootPath = exportPath;
-			Settings.SetProjectSettings(version, BuildTarget.NoTarget, TransferInstructionFlags.NoTransferInstructionFlags);
+			settings.ExportRootPath = exportPath;
+			settings.SetProjectSettings(gameData.ProjectVersion, BuildTarget.NoTarget, TransferInstructionFlags.NoTransferInstructionFlags);
 
-			{
-				ProjectExporter projectExporter = new(Settings, gameStructure.AssemblyManager);
-				onBeforeExport?.Invoke(projectExporter);
-				projectExporter.Export(gameStructure.FileCollection, Settings);
-			}
+			ProjectExporter projectExporter = new(settings, gameData.AssemblyManager);
+			projectExporter.Export(gameData.GameBundle, settings);
+
 			Logger.Info(LogCategory.Export, "Finished exporting assets");
 
-			foreach (IPostExporter postExporter in GetPostExporters())
+			foreach (IPostExporter postExporter in postExporters ?? GetDefaultPostExporters())
 			{
-				postExporter.DoPostExport(this);
+				postExporter.DoPostExport(gameData, settings);
 			}
 			Logger.Info(LogCategory.Export, "Finished post-export");
 
@@ -152,15 +98,15 @@ namespace AssetRipper.Export.UnityProjects
 					.Distinct()
 					.Select(v => v.ToString()));
 			}
+		}
 
-			static IEnumerable<IPostExporter> GetPostExporters()
-			{
-				yield return new ProjectVersionPostExporter();
-				yield return new PackageManifestPostExporter();
-				yield return new StreamingAssetsPostExporter();
-				yield return new DllPostExporter();
-				yield return new PathIdMapExporter();
-			}
+		public static IEnumerable<IPostExporter> GetDefaultPostExporters()
+		{
+			yield return new ProjectVersionPostExporter();
+			yield return new PackageManifestPostExporter();
+			yield return new StreamingAssetsPostExporter();
+			yield return new DllPostExporter();
+			yield return new PathIdMapExporter();
 		}
 	}
 }

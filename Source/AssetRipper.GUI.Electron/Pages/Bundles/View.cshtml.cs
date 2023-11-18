@@ -26,7 +26,7 @@ namespace AssetRipper.GUI.Electron.Pages.Bundles
 			}
 
 			BundlePath = BundlePath.FromJson(path);
-			if (Program.Ripper.IsLoaded && Program.Ripper.GameStructure.FileCollection.TryGetBundle(BundlePath, out Bundle? bundle))
+			if (Program.IsLoaded && Program.GameBundle.TryGetBundle(BundlePath, out Bundle? bundle))
 			{
 				Bundle = bundle;
 				return Page();

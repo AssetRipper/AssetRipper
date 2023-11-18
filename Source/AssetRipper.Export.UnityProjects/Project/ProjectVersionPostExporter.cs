@@ -1,14 +1,16 @@
 ﻿using AssetRipper.Export.Modules.Shaders.IO;
+using AssetRipper.Export.UnityProjects.Configuration;
+using AssetRipper.Processing;
 using System.Text;
 
 namespace AssetRipper.Export.UnityProjects.Project
 {
 	public sealed class ProjectVersionPostExporter : IPostExporter
 	{
-		public void DoPostExport(Ripper ripper)
+		public void DoPostExport(GameData gameData, LibraryConfiguration settings)
 		{
 			// Although Unity 4 and lower don't have this file, we leave it in anyway for user readibility.
-			SaveProjectVersion(ripper.Settings.ProjectSettingsPath, ripper.Settings.Version);
+			SaveProjectVersion(settings.ProjectSettingsPath, settings.Version);
 		}
 
 		private static void SaveProjectVersion(string projectSettingsDirectory, UnityVersion version)

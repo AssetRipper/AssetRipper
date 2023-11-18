@@ -26,7 +26,7 @@ public class ViewModel : PageModel
 		}
 
 		CollectionPath = CollectionPath.FromJson(path);
-		if (Program.Ripper.IsLoaded && Program.Ripper.GameStructure.FileCollection.TryGetCollection(CollectionPath, out AssetCollection? collection) && collection.IsScene)
+		if (Program.IsLoaded && Program.GameBundle.TryGetCollection(CollectionPath, out AssetCollection? collection) && collection.IsScene)
 		{
 			Scene = collection.Scene;
 			return Page();

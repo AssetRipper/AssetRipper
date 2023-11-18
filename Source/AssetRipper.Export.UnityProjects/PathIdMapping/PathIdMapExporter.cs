@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
+using AssetRipper.Export.UnityProjects.Configuration;
+using AssetRipper.Processing;
 using AssetRipper.SourceGenerated.Classes.ClassID_27;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Classes.ClassID_49;
@@ -11,11 +12,10 @@ namespace AssetRipper.Export.UnityProjects.PathIdMapping;
 
 public sealed class PathIdMapExporter : IPostExporter
 {
-	public void DoPostExport(Ripper ripper)
+	public void DoPostExport(GameData gameData, LibraryConfiguration settings)
 	{
 		SerializedGameInfo gameInfo = new();
-		GameBundle gameBundle = ripper.GameStructure.FileCollection;
-		foreach (SerializedAssetCollection collection in gameBundle.FetchAssetCollections().OfType<SerializedAssetCollection>())
+		foreach (SerializedAssetCollection collection in gameData.GameBundle.FetchAssetCollections().OfType<SerializedAssetCollection>())
 		{
 			SerializedFileInfo fileInfo = new()
 			{
@@ -36,7 +36,7 @@ public sealed class PathIdMapExporter : IPostExporter
 			}
 		}
 
-		string outputDirectory = ripper.Settings.AuxiliaryFilesPath;
+		string outputDirectory = settings.AuxiliaryFilesPath;
 		Directory.CreateDirectory(outputDirectory);
 		using FileStream stream = File.Create(Path.Combine(outputDirectory, "path_id_map.json"));
 		JsonSerializer.Serialize(stream, gameInfo, SerializedGameInfoSerializerContext.Default.SerializedGameInfo);

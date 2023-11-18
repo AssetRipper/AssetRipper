@@ -1,5 +1,9 @@
+using AssetRipper.Assets.Bundles;
 using AssetRipper.Export.UnityProjects;
+using AssetRipper.Export.UnityProjects.Configuration;
 using AssetRipper.Import.Logging;
+using AssetRipper.Import.Structure.Assembly.Managers;
+using AssetRipper.Processing;
 using ElectronNET.API;
 using ElectronNET.API.Entities;
 using Microsoft.AspNetCore.Builder;
@@ -20,7 +24,12 @@ public static class Program
 		}
 	}
 
-	public static Ripper Ripper { get; } = new();
+	private static GameData? GameData { get; set; }
+	[MemberNotNullWhen(true, nameof(GameData))]
+	public static bool IsLoaded => GameData is not null;
+	public static GameBundle GameBundle => GameData!.GameBundle;
+	public static IAssemblyManager AssemblyManager => GameData!.AssemblyManager;
+	public static LibraryConfiguration Settings { get; } = new();
 
 	public static async Task Run(string[] args)
 	{
@@ -78,12 +87,14 @@ public static class Program
 					}
 					try
 					{
-						Ripper.Load(result);
+						GameData gameData = Ripper.Load(result, Settings);
+						Ripper.Process(gameData, Ripper.GetDefaultProcessors(Settings));
+						GameData = gameData;
 					}
 					catch (Exception ex)
 					{
 						Logger.Error(LogCategory.Export, null, ex);
-						Ripper.ResetData();
+						GameData = null;
 						await ElectronAPI.Dialog.ShowMessageBoxAsync(MainWindow, new MessageBoxOptions(ex.Message)
 						{
 							Title = "Error",
@@ -110,12 +121,14 @@ public static class Program
 					}
 					try
 					{
-						Ripper.Load(result);
+						GameData gameData = Ripper.Load(result, Settings);
+						Ripper.Process(gameData, Ripper.GetDefaultProcessors(Settings));
+						GameData = gameData;
 					}
 					catch (Exception ex)
 					{
 						Logger.Error(LogCategory.Export, null, ex);
-						Ripper.ResetData();
+						GameData = null;
 						await ElectronAPI.Dialog.ShowMessageBoxAsync(MainWindow, new MessageBoxOptions(ex.Message)
 						{
 							Title = "Error",
@@ -131,7 +144,7 @@ public static class Program
 				Type = MenuType.normal,
 				Click = () =>
 				{
-					Ripper.ResetData();
+					GameData = null;
 					MainWindow.LoadURL(LocalHost.BaseUrl);
 				}
 			},
@@ -188,7 +201,7 @@ public static class Program
 				Type = MenuType.normal,
 				Click = async () =>
 				{
-					if (!Ripper.IsLoaded)
+					if (!IsLoaded)
 					{
 						await ElectronAPI.Dialog.ShowMessageBoxAsync(MainWindow, new MessageBoxOptions("No files loaded")
 						{
@@ -246,12 +259,12 @@ public static class Program
 
 					try
 					{
-						Ripper.ExportProject(result[0]);
+						Ripper.ExportProject(GameData, Settings, result[0]);
 					}
 					catch (Exception ex)
 					{
 						Logger.Error(LogCategory.Export, null, ex);
-						Ripper.GameStructure.FileCollection.ClearTemporaryBundles();
+						GameBundle.ClearTemporaryBundles();
 						await ElectronAPI.Dialog.ShowMessageBoxAsync(MainWindow, new MessageBoxOptions(ex.Message)
 						{
 							Title = "Error",

@@ -9,7 +9,7 @@ public class ViewModel : PageModel
 {
 	private readonly ILogger<ViewModel> _logger;
 
-	public Bundle? Bundle => Program.Ripper.GameStructure.FileCollection.TryGetBundle(ResourcePath.BundlePath);
+	public Bundle? Bundle => Program.GameBundle.TryGetBundle(ResourcePath.BundlePath);
 
 	public string Name => Resource.NameFixed;
 
@@ -33,7 +33,7 @@ public class ViewModel : PageModel
 		}
 
 		ResourcePath = ResourcePath.FromJson(path);
-		if (Program.Ripper.IsLoaded && Program.Ripper.GameStructure.FileCollection.TryGetResource(ResourcePath, out ResourceFile? resource))
+		if (Program.IsLoaded && Program.GameBundle.TryGetResource(ResourcePath, out ResourceFile? resource))
 		{
 			Resource = resource;
 			return Page();

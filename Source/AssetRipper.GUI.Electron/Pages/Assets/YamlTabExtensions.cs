@@ -13,7 +13,7 @@ internal static class YamlTabExtensions
 {
 	public static YamlDocument? GetYamlDocument(this IUnityObjectBase asset)
 	{
-		GameBundle gameBundle = Program.Ripper.GameStructure.FileCollection;
+		GameBundle gameBundle = Program.GameBundle;
 		TemporaryAssetCollection temporaryFile = gameBundle.AddNewTemporaryBundle().AddNew();
 		UIAssetContainer container = new(asset, temporaryFile);
 		YamlDocument? result;
