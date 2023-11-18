@@ -69,7 +69,7 @@ namespace AssetRipper.Export.UnityProjects
 			yield return new SpriteProcessor();
 		}
 
-		public static void ExportProject(GameData gameData, LibraryConfiguration settings, string exportPath, IEnumerable<IPostExporter>? postExporters = null)
+		public static void ExportProject(GameData gameData, LibraryConfiguration settings, string exportPath, IEnumerable<IPostExporter>? postExporters = null, Action<ProjectExporter>? beforeExport = null)
 		{
 			Logger.Info(LogCategory.Export, "Starting export");
 			Logger.Info(LogCategory.Export, $"Attempting to export assets to {exportPath}...");
@@ -80,6 +80,7 @@ namespace AssetRipper.Export.UnityProjects
 			settings.SetProjectSettings(gameData.ProjectVersion, BuildTarget.NoTarget, TransferInstructionFlags.NoTransferInstructionFlags);
 
 			ProjectExporter projectExporter = new(settings, gameData.AssemblyManager);
+			beforeExport?.Invoke(projectExporter);
 			projectExporter.Export(gameData.GameBundle, settings);
 
 			Logger.Info(LogCategory.Export, "Finished exporting assets");

@@ -1,5 +1,4 @@
 using AssetRipper.Assets.Bundles;
-using AssetRipper.Export.UnityProjects;
 using AssetRipper.Export.UnityProjects.Configuration;
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly.Managers;
@@ -30,6 +29,20 @@ public static class Program
 	public static GameBundle GameBundle => GameData!.GameBundle;
 	public static IAssemblyManager AssemblyManager => GameData!.AssemblyManager;
 	public static LibraryConfiguration Settings { get; } = new();
+	private static ExportHandler exportHandler = new(Settings);
+	public static ExportHandler ExportHandler
+	{
+		private get
+		{
+			return exportHandler;
+		}
+		set
+		{
+			ArgumentNullException.ThrowIfNull(value);
+			value.ThrowIfSettingsDontMatch(Settings);
+			exportHandler = value;
+		}
+	}
 
 	public static async Task Run(string[] args)
 	{
@@ -87,9 +100,7 @@ public static class Program
 					}
 					try
 					{
-						GameData gameData = Ripper.Load(result, Settings);
-						Ripper.Process(gameData, Ripper.GetDefaultProcessors(Settings));
-						GameData = gameData;
+						GameData = ExportHandler.LoadAndProcess(result);
 					}
 					catch (Exception ex)
 					{
@@ -121,9 +132,7 @@ public static class Program
 					}
 					try
 					{
-						GameData gameData = Ripper.Load(result, Settings);
-						Ripper.Process(gameData, Ripper.GetDefaultProcessors(Settings));
-						GameData = gameData;
+						GameData = ExportHandler.LoadAndProcess(result);
 					}
 					catch (Exception ex)
 					{
@@ -259,7 +268,7 @@ public static class Program
 
 					try
 					{
-						Ripper.ExportProject(GameData, Settings, result[0]);
+						ExportHandler.Export(GameData, result[0]);
 					}
 					catch (Exception ex)
 					{
