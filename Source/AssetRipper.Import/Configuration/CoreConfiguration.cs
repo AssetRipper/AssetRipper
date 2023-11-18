@@ -1,5 +1,4 @@
-﻿using AssetRipper.Assets;
-using AssetRipper.Import.Logging;
+﻿using AssetRipper.Import.Logging;
 using AssetRipper.Import.Utils;
 using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
@@ -50,30 +49,13 @@ namespace AssetRipper.Import.Configuration
 		public string AssetsPath => Path.Combine(ProjectRootPath, "Assets");
 		public string ProjectSettingsPath => Path.Combine(ProjectRootPath, "ProjectSettings");
 		public string AuxiliaryFilesPath => Path.Combine(ExportRootPath, "AuxiliaryFiles");
-		/// <summary>
-		/// Should objects get exported with dependencies or without?
-		/// </summary>
-		public bool ExportDependencies { get; set; }
 		public BundledAssetsExportMode BundledAssetsExportMode { get; set; }
-		/// <summary>
-		/// A function to determine if an object is allowed to be exported.<br/>
-		/// Set by default to allow everything.
-		/// </summary>
-		public Func<IUnityObjectBase, bool> Filter { get; set; } = DefaultFilterMethod;
 		#endregion
 
 		#region Project Settings
 		public UnityVersion Version { get; private set; }
 		public BuildTarget Platform { get; private set; }
 		public TransferInstructionFlags Flags { get; private set; }
-		#endregion
-
-		#region Default Filter
-		/// <summary>
-		/// The default filter that allows everything
-		/// </summary>
-		public static Func<IUnityObjectBase, bool> DefaultFilter { get; } = DefaultFilterMethod;
-		private static bool DefaultFilterMethod(IUnityObjectBase asset) => true;
 		#endregion
 
 		public CoreConfiguration() => ResetToDefaultValues();
@@ -91,9 +73,7 @@ namespace AssetRipper.Import.Configuration
 			StreamingAssetsMode = StreamingAssetsMode.Extract;
 			DefaultVersion = default;
 			ExportRootPath = ExecutingDirectory.Combine("Ripped");
-			ExportDependencies = false;
 			BundledAssetsExportMode = BundledAssetsExportMode.DirectExport;
-			Filter = DefaultFilter;
 		}
 
 		public virtual void LogConfigurationValues()
@@ -103,7 +83,6 @@ namespace AssetRipper.Import.Configuration
 			Logger.Info(LogCategory.General, $"{nameof(StreamingAssetsMode)}: {StreamingAssetsMode}");
 			Logger.Info(LogCategory.General, $"{nameof(DefaultVersion)}: {DefaultVersion}");
 			Logger.Info(LogCategory.General, $"{nameof(ExportRootPath)}: {ExportRootPath}");
-			Logger.Info(LogCategory.General, $"{nameof(ExportDependencies)}: {ExportDependencies}");
 			Logger.Info(LogCategory.General, $"{nameof(BundledAssetsExportMode)}: {BundledAssetsExportMode}");
 		}
 	}

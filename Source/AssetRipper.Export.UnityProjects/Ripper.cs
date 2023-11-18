@@ -53,7 +53,6 @@ using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Classes.ClassID_49;
 using AssetRipper.SourceGenerated.Classes.ClassID_687078895;
 using AssetRipper.SourceGenerated.Classes.ClassID_83;
-using System.Text;
 
 namespace AssetRipper.Export.UnityProjects
 {
@@ -155,10 +154,7 @@ namespace AssetRipper.Export.UnityProjects
 		}
 
 		[MemberNotNull(nameof(gameStructure))]
-		public void ExportProject(string exportPath, Action<ProjectExporter>? onBeforeExport = null) => ExportProject(exportPath, CoreConfiguration.DefaultFilter, onBeforeExport);
-
-		[MemberNotNull(nameof(gameStructure))]
-		public void ExportProject(string exportPath, Func<IUnityObjectBase, bool> filter, Action<ProjectExporter>? onBeforeExport)
+		public void ExportProject(string exportPath, Action<ProjectExporter>? onBeforeExport = null)
 		{
 			Logger.Info(LogCategory.Export, $"Attempting to export assets to {exportPath}...");
 			ThrowIfGameStructureIsNull();
@@ -169,7 +165,6 @@ namespace AssetRipper.Export.UnityProjects
 			Logger.Info(LogCategory.Export, $"Exporting to Unity version {version}");
 
 			Settings.ExportRootPath = exportPath;
-			Settings.Filter = filter;
 			Settings.SetProjectSettings(version, BuildTarget.NoTarget, TransferInstructionFlags.NoTransferInstructionFlags);
 
 			{
@@ -188,13 +183,11 @@ namespace AssetRipper.Export.UnityProjects
 
 			static string GetListOfVersions(GameBundle gameBundle)
 			{
-				StringBuilder sb = new();
-				foreach (UnityVersion version in gameBundle.FetchAssetCollections().Select(s => s.Version).Distinct())
-				{
-					sb.Append(' ');
-					sb.Append(version.ToString());
-				}
-				return sb.ToString();
+				return string.Join(' ', gameBundle
+					.FetchAssetCollections()
+					.Select(c => c.Version)
+					.Distinct()
+					.Select(v => v.ToString()));
 			}
 
 			static IEnumerable<IPostExporter> GetPostExporters()
@@ -208,15 +201,6 @@ namespace AssetRipper.Export.UnityProjects
 		}
 
 		private void InitializeExporters(ProjectExporter projectExporter)
-		{
-			OverrideNormalExporters(projectExporter);
-			if (!Settings.IgnoreEngineAssets)
-			{
-				OverrideEngineExporters(projectExporter);
-			}
-		}
-
-		private void OverrideNormalExporters(ProjectExporter projectExporter)
 		{
 			//Yaml Exporters
 			YamlStreamedAssetExporter streamedAssetExporter = new();
@@ -318,11 +302,11 @@ namespace AssetRipper.Export.UnityProjects
 
 			//Animator Controller
 			projectExporter.OverrideExporter<IUnityObjectBase>(new AnimatorControllerExporter());
-		}
 
-		private void OverrideEngineExporters(ProjectExporter projectExporter)
-		{
-			projectExporter.OverrideExporter<IUnityObjectBase>(EngineAssetsExporter.CreateFromEmbeddedData(Settings.Version));
+			if (!Settings.IgnoreEngineAssets)
+			{
+				projectExporter.OverrideExporter<IUnityObjectBase>(EngineAssetsExporter.CreateFromEmbeddedData(Settings.Version));
+			}
 		}
 	}
 }

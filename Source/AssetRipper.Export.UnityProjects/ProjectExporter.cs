@@ -2,7 +2,6 @@
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
-using AssetRipper.Assets.Metadata;
 using AssetRipper.Export.UnityProjects.Project;
 using AssetRipper.Export.UnityProjects.RawAssets;
 using AssetRipper.Import.AssetCreation;
@@ -24,7 +23,6 @@ using AssetRipper.SourceGenerated.Classes.ClassID_290;
 using AssetRipper.SourceGenerated.Classes.ClassID_3;
 using AssetRipper.SourceGenerated.Classes.ClassID_6;
 using AssetRipper.SourceGenerated.Classes.ClassID_94;
-using AssetRipper.SourceGenerated.Extensions;
 
 namespace AssetRipper.Export.UnityProjects
 {
@@ -94,10 +92,7 @@ namespace AssetRipper.Export.UnityProjects
 		/// <param name="allowInheritance">Should types that inherit from this type also use the exporter?</param>
 		public void OverrideExporter(Type type, IAssetExporter exporter, bool allowInheritance)
 		{
-			if (exporter == null)
-			{
-				throw new ArgumentNullException(nameof(exporter));
-			}
+			ArgumentNullException.ThrowIfNull(exporter);
 
 			registeredExporters.Add((type, exporter, allowInheritance));
 			if (typeMap.Count > 0)//Just in case an exporter gets added after CreateCollection or ToExportType have already been used
@@ -179,79 +174,11 @@ namespace AssetRipper.Export.UnityProjects
 			OverrideExporter<T>(DummyExporter, true);
 		}
 
-		public void Export(GameBundle fileCollection, CoreConfiguration options) => Export(fileCollection, fileCollection.FetchAssetCollections(), options);
-		public void Export(GameBundle fileCollection, AssetCollection file, CoreConfiguration options) => Export(fileCollection, new AssetCollection[] { file }, options);
-		public void Export(GameBundle fileCollection, IEnumerable<AssetCollection> files, CoreConfiguration options)
+		public void Export(GameBundle fileCollection, CoreConfiguration options)
 		{
 			EventExportPreparationStarted?.Invoke();
-
-			fileCollection.ClearTemporaryBundles();
-			TemporaryAssetCollection virtualFile = fileCollection.AddNewTemporaryBundle().AddNew();
-			virtualFile.SetLayout(options.Version, options.Platform, options.Flags);
-
-			List<IExportCollection> collections = new();
-
-			// speed up fetching
-			List<IUnityObjectBase> depList = new();
-			HashSet<IUnityObjectBase> depSet = new();
-			HashSet<IUnityObjectBase> queued = new();
-
-			foreach (AssetCollection file in files)
-			{
-				foreach (IUnityObjectBase asset in file)
-				{
-					if (!options.Filter(asset))
-					{
-						continue;
-					}
-
-					depList.Add(asset);
-					depSet.Add(asset);
-				}
-			}
-
-
-			for (int i = 0; i < depList.Count; i++)
-			{
-				IUnityObjectBase asset = depList[i];
-				if (!queued.Contains(asset))
-				{
-					IExportCollection collection = CreateCollection(virtualFile, asset);
-					foreach (IUnityObjectBase element in collection.Assets)
-					{
-						queued.Add(element);
-					}
-					collections.Add(collection);
-				}
-
-				if (options.ExportDependencies)
-				{
-					foreach ((string path, PPtr pointer) in asset.FetchDependencies())
-					{
-						if (pointer.IsNull)
-						{
-							continue;
-						}
-
-						IUnityObjectBase? dependency = asset.Collection.TryGetAsset(pointer);
-						if (dependency == null)
-						{
-							string hierarchy = $"[{asset.Collection.Name}]{asset.GetLogString()}.{path}";
-							Logger.Log(LogType.Warning, LogCategory.Export, $"{hierarchy}'s dependency = {ToLogString(pointer, asset.Collection)} wasn't found");
-							continue;
-						}
-
-						if (!depSet.Contains(dependency))
-						{
-							depList.Add(dependency);
-							depSet.Add(dependency);
-						}
-					}
-				}
-			}
-			depList.Clear();
-			depSet.Clear();
-			queued.Clear();
+			TemporaryAssetCollection virtualFile = ClearTemporaryFilesAndCreateNew(fileCollection, options);
+			List<IExportCollection> collections = CreateCollections(fileCollection, virtualFile);
 			EventExportPreparationFinished?.Invoke();
 
 			EventExportStarted?.Invoke();
@@ -274,10 +201,33 @@ namespace AssetRipper.Export.UnityProjects
 			EventExportFinished?.Invoke();
 		}
 
-		private static string ToLogString(PPtr pptr, IAssetContainer container)
+		private static TemporaryAssetCollection ClearTemporaryFilesAndCreateNew(GameBundle fileCollection, CoreConfiguration options)
 		{
-			string depName = pptr.FileID == 0 ? container.Name : container.Dependencies[pptr.FileID - 1]?.Name ?? "Not Found";
-			return $"[{depName}]_{pptr.PathID}";
+			fileCollection.ClearTemporaryBundles();
+			TemporaryAssetCollection virtualFile = fileCollection.AddNewTemporaryBundle().AddNew();
+			virtualFile.SetLayout(options.Version, options.Platform, options.Flags);
+			return virtualFile;
+		}
+
+		private List<IExportCollection> CreateCollections(GameBundle fileCollection, TemporaryAssetCollection virtualFile)
+		{
+			List<IExportCollection> collections = new();
+			HashSet<IUnityObjectBase> queued = new();
+
+			foreach (IUnityObjectBase asset in fileCollection.FetchAssets())
+			{
+				if (!queued.Contains(asset))
+				{
+					IExportCollection collection = CreateCollection(virtualFile, asset);
+					foreach (IUnityObjectBase element in collection.Assets)
+					{
+						queued.Add(element);
+					}
+					collections.Add(collection);
+				}
+			}
+
+			return collections;
 		}
 	}
 }
