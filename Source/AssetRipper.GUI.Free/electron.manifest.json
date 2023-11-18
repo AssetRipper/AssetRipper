@@ -3,14 +3,14 @@
   "splashscreen": {
     "imageFile": ""
   },
-  "name": "AssetRipper Free",
+  "name": "AssetRipper.Free",
   "author": "",
   "singleInstance": false,
   "environment": "Production",
   "build": {
     "appId": "com.AssetRipper.GUI.Free.app",
     "productName": "AssetRipper.GUI.Free",
-    "copyright": "Copyright © 2020",
+    "copyright": "Copyright © 2023",
     "buildVersion": "1.0.0",
     "compression": "maximum",
     "directories": {
