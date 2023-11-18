@@ -1,4 +1,4 @@
-name: Publish Electron UI
+name: Publish
 
 on:
   push:
@@ -31,19 +31,19 @@ jobs:
 
       - name: Publish AssetRipper Windows x64
         run: electronize build /target win
-        working-directory: ./Source/AssetRipper.GUI.Electron/
+        working-directory: ./Source/AssetRipper.GUI.Free/
 
       - name: List Files
         shell: bash
         run: |
-          cd ./Source/AssetRipper.GUI.Electron/bin/Desktop/
+          cd ./Source/AssetRipper.GUI.Free/bin/Desktop/
           ls
 
       - name: Upload AssetRipper Windows x64
         uses: actions/upload-artifact@v3
         with:
           name: AssetRipper_win_x64
-          path: ./Source/AssetRipper.GUI.Electron/bin/Desktop/*.exe
+          path: ./Source/AssetRipper.GUI.Free/bin/Desktop/*.exe
           if-no-files-found: error
 
   publish_linux_x64:
@@ -69,19 +69,19 @@ jobs:
 
       - name: Publish AssetRipper Linux x64
         run: electronize build /target linux
-        working-directory: ./Source/AssetRipper.GUI.Electron/
+        working-directory: ./Source/AssetRipper.GUI.Free/
 
       - name: List Files
         shell: bash
         run: |
-          cd ./Source/AssetRipper.GUI.Electron/bin/Desktop/
+          cd ./Source/AssetRipper.GUI.Free/bin/Desktop/
           ls
         
       - name: Upload AssetRipper Linux x64
         uses: actions/upload-artifact@v3
         with:
           name: AssetRipper_linux_x64
-          path: ./Source/AssetRipper.GUI.Electron/bin/Desktop/*.AppImage
+          path: ./Source/AssetRipper.GUI.Free/bin/Desktop/*.AppImage
           if-no-files-found: error
 
   publish_mac_x64:
@@ -107,17 +107,17 @@ jobs:
 
       - name: Publish AssetRipper Mac x64
         run: electronize build /target osx
-        working-directory: ./Source/AssetRipper.GUI.Electron/
+        working-directory: ./Source/AssetRipper.GUI.Free/
 
       - name: List Files
         shell: bash
         run: |
-          cd ./Source/AssetRipper.GUI.Electron/bin/Desktop/
+          cd ./Source/AssetRipper.GUI.Free/bin/Desktop/
           ls
         
       - name: Upload AssetRipper Mac x64
         uses: actions/upload-artifact@v3
         with:
           name: AssetRipper_mac_x64
-          path: ./Source/AssetRipper.GUI.Electron/bin/Desktop/*.dmg
+          path: ./Source/AssetRipper.GUI.Free/bin/Desktop/*.dmg
           if-no-files-found: error

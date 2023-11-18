@@ -49,7 +49,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{
 		.github\workflows\cla.yml = .github\workflows\cla.yml
 		.github\workflows\docfx_build.yml = .github\workflows\docfx_build.yml
 		.github\workflows\greetings.yml = .github\workflows\greetings.yml
-		.github\workflows\publish_electron.yml = .github\workflows\publish_electron.yml
+		.github\workflows\publish.yml = .github\workflows\publish.yml
 		.github\workflows\test.yml = .github\workflows\test.yml
 	EndProjectSection
 EndProject
@@ -162,6 +162,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Decompilation.CSharp", "Source\AssetRipper.Decompilation.CSharp\AssetRipper.Decompilation.CSharp.csproj", "{82566A68-BF9B-4B2F-8B57-2137B31CF197}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Decompilation.CSharp.SourceGenerator", "Source\AssetRipper.Decompilation.CSharp.SourceGenerator\AssetRipper.Decompilation.CSharp.SourceGenerator.csproj", "{F71711D6-40D2-463A-AAA3-1ABC0C359BC9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.GUI.Free", "Source\AssetRipper.GUI.Free\AssetRipper.GUI.Free.csproj", "{21966500-0147-494A-B389-7CFDE90DA70E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -349,6 +351,10 @@ Global
 		{F71711D6-40D2-463A-AAA3-1ABC0C359BC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F71711D6-40D2-463A-AAA3-1ABC0C359BC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F71711D6-40D2-463A-AAA3-1ABC0C359BC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21966500-0147-494A-B389-7CFDE90DA70E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21966500-0147-494A-B389-7CFDE90DA70E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21966500-0147-494A-B389-7CFDE90DA70E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21966500-0147-494A-B389-7CFDE90DA70E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

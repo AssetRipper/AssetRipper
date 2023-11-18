@@ -2,6 +2,9 @@ using AssetRipper.Export.UnityProjects;
 using AssetRipper.Import.Logging;
 using ElectronNET.API;
 using ElectronNET.API.Entities;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using ElectronAPI = ElectronNET.API.Electron;
 
 namespace AssetRipper.GUI.Electron;
@@ -19,7 +22,7 @@ public static class Program
 
 	public static Ripper Ripper { get; } = new();
 
-	public static async Task Main(string[] args)
+	public static async Task Run(string[] args)
 	{
 		LoggingManager.RegisterLogger();
 		Logger.LogSystemInformation("AssetRipper");
