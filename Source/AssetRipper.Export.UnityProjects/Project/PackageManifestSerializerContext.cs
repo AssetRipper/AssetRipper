@@ -3,7 +3,7 @@
 namespace AssetRipper.Export.UnityProjects.Project;
 
 [JsonSerializable(typeof(PackageManifest))]
-[JsonSourceGenerationOptions(WriteIndented = true, GenerationMode = JsonSourceGenerationMode.Serialization)]
+[JsonSourceGenerationOptions(WriteIndented = true)]
 internal partial class PackageManifestSerializerContext : JsonSerializerContext
 {
 }
