@@ -28,7 +28,9 @@ namespace AssetRipper.Export.Modules.Shaders.Exporters
 				int size = reader.ReadInt32();
 				if (size > 0)
 				{
+					long position = ms.Position;
 					ExportSnippet(writer, ms, offset, size);
+					ms.Position = position;
 				}
 			}
 		}
@@ -36,6 +38,7 @@ namespace AssetRipper.Export.Modules.Shaders.Exporters
 		private void ExportSnippet(TextWriter writer, Stream stream, int offset, int size)
 		{
 			using PartialStream snippetStream = new PartialStream(stream, offset, size);
+			snippetStream.Position = 0;
 			int decodedSize = SmolvDecoder.GetDecodedBufferSize(snippetStream);
 			if (decodedSize == 0)
 			{

@@ -13,12 +13,6 @@ namespace AssetRipper.IO.Files.Streams
 			m_baseOffset = offset;
 			Length = length;
 			m_leaveOpen = leaveOpen;
-
-			m_initialPosition = baseStream.Position;
-			if (Position != 0)
-			{
-				Position = 0;
-			}
 		}
 
 		~PartialStream()
@@ -90,7 +84,6 @@ namespace AssetRipper.IO.Files.Streams
 			{
 				if (!m_isDisposed)
 				{
-					m_stream.Position = m_initialPosition;
 					m_isDisposed = true;
 				}
 			}
@@ -127,7 +120,6 @@ namespace AssetRipper.IO.Files.Streams
 		private readonly Stream m_stream;
 		private readonly long m_baseOffset;
 		private readonly bool m_leaveOpen;
-		private readonly long m_initialPosition;
 
 		private bool m_isDisposed;
 	}
