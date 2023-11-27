@@ -75,6 +75,8 @@ public static partial class LocalizationSourceGenerator
 		using (new CurlyBrackets(writer))
 		{
 			AddLocalizationDictionary(writer);
+			writer.WriteLineNoTabs();
+			AddUnderscoredAndHyphenatedConversion(writer);
 		}
 
 		writer.Flush();
@@ -91,10 +93,51 @@ public static partial class LocalizationSourceGenerator
 		{
 			foreach (string file in localizationFiles)
 			{
-				string languageCode = Path.GetFileNameWithoutExtension(file);
-				string languageName = ExtractCultureName(new CultureInfo(languageCode.Replace('_', '-')));
+				string languageCode = Path.GetFileNameWithoutExtension(file).Replace('_', '-');
+				string languageName = ExtractCultureName(new CultureInfo(languageCode));
 				writer.WriteLine($"{{ \"{languageCode}\", \"{languageName}\" }},");
 			}
+		}
+	}
+
+	private static void AddUnderscoredAndHyphenatedConversion(IndentedTextWriter writer)
+	{
+		string[] localizationFiles = Directory.GetFiles(Paths.LocalizationsPath, "*.json");
+
+		writer.WriteSummaryDocumentation("Convert a language code to its underscored variant.");
+		writer.WriteRemarksDocumentation("This is used by the json file names.");
+		writer.WriteLine("internal static string AsUnderscoredLanguageCode(string value) => value switch");
+		using (new CurlyBracketsWithSemicolon(writer))
+		{
+			foreach (string file in localizationFiles)
+			{
+				string underscoredCode = Path.GetFileNameWithoutExtension(file);
+				if (underscoredCode.Contains('_'))
+				{
+					string hyphenatedCode = underscoredCode.Replace('_', '-');
+					writer.WriteLine($"\"{hyphenatedCode}\" => \"{underscoredCode}\",");
+				}
+			}
+			writer.WriteLine("_ => value");
+		}
+
+		writer.WriteLineNoTabs();
+
+		writer.WriteSummaryDocumentation("Convert a language code to its hyphenated variant.");
+		writer.WriteRemarksDocumentation("This is used by HTML and the IANA Language Subtag Registry.");
+		writer.WriteLine("internal static string AsHyphenatedLanguageCode(string value) => value switch");
+		using (new CurlyBracketsWithSemicolon(writer))
+		{
+			foreach (string file in localizationFiles)
+			{
+				string underscoredCode = Path.GetFileNameWithoutExtension(file);
+				if (underscoredCode.Contains('_'))
+				{
+					string hyphenatedCode = underscoredCode.Replace('_', '-');
+					writer.WriteLine($"\"{underscoredCode}\" => \"{hyphenatedCode}\",");
+				}
+			}
+			writer.WriteLine("_ => value");
 		}
 	}
 

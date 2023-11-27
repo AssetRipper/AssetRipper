@@ -8,6 +8,11 @@ public static partial class LocalizationLoader
 
 	public static Dictionary<string, string> LoadLanguage(string code)
 	{
+		return LoadLanguageInternal(AsUnderscoredLanguageCode(code));
+	}
+
+	private static Dictionary<string, string> LoadLanguageInternal(string code)
+	{
 		using Stream stream = typeof(LocalizationLoader).Assembly.GetManifestResourceStream(LocalizationFilePrefix + code + ".json")
 			?? throw new NullReferenceException($"Could not load language file {code}.json");
 

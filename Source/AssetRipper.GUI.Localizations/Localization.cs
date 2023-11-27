@@ -2,38 +2,45 @@
 
 public static partial class Localization
 {
-	private static Dictionary<string, string> CurrentLocale { get; set; }
-	private static Dictionary<string, string> FallbackLocale { get; }
-	private static string? CurrentLang { get; set; }
+	private static Dictionary<string, string> CurrentDictionary { get; set; }
+	/// <summary>
+	/// The (English) dictionary to use if <see cref="CurrentDictionary"/> doesn't have a key.
+	/// </summary>
+	private static Dictionary<string, string> FallbackDictionary { get; }
+	/// <summary>
+	/// <see href="https://www.iana.org/assignments/language-subtag-registry/language-subtag-registry" >IANA</see> language code
+	/// </summary>
+	public static string CurrentLanguageCode { get; private set; }
 
 	public static event Action OnLanguageChanged = () => { };
 
 	static Localization()
 	{
-		LoadLanguage("en_US");
-		FallbackLocale = CurrentLocale;
+		LoadLanguage("en-US");
+		FallbackDictionary = CurrentDictionary;
 	}
 
-	[MemberNotNull(nameof(CurrentLocale), nameof(CurrentLang))]
+	[MemberNotNull(nameof(CurrentDictionary), nameof(CurrentLanguageCode))]
 	public static void LoadLanguage(string code)
 	{
-		CurrentLang = code;
-		CurrentLocale = LocalizationLoader.LoadLanguage(code);
+		CurrentLanguageCode = LocalizationLoader.AsHyphenatedLanguageCode(code);
+		CurrentDictionary = LocalizationLoader.LoadLanguage(CurrentLanguageCode);
 		OnLanguageChanged();
 	}
 
-	public static string Get(string key)
+	private static string Get(string key)
 	{
-		if (CurrentLocale.TryGetValue(key, out string? ret) && !string.IsNullOrEmpty(ret))
+		if (CurrentDictionary.TryGetValue(key, out string? ret) && !string.IsNullOrEmpty(ret))
 		{
 			return ret;
 		}
 
-		if (FallbackLocale.TryGetValue(key, out ret))
+		if (FallbackDictionary.TryGetValue(key, out ret))
 		{
 			return ret;
 		}
 
+		//This should never happen unless I edit the json without running the source generator.
 		return $"__{key}__?";
 	}
 }
