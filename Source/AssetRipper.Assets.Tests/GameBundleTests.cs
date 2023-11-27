@@ -20,7 +20,7 @@ public class GameBundleTests
 		GameBundle gameBundle = new();
 		TemporaryBundle tempBundle = new();
 		gameBundle.AddTemporaryBundle(tempBundle);
-		CollectionAssert.Contains(gameBundle.TemporaryBundles, tempBundle);
+		Assert.That(gameBundle.TemporaryBundles, Contains.Item(tempBundle));
 	}
 
 	[Test]
@@ -28,7 +28,7 @@ public class GameBundleTests
 	{
 		GameBundle gameBundle = new();
 		TemporaryBundle tempBundle = gameBundle.AddNewTemporaryBundle();
-		CollectionAssert.Contains(gameBundle.TemporaryBundles, tempBundle);
+		Assert.That(gameBundle.TemporaryBundles, Contains.Item(tempBundle));
 	}
 
 	[Test]
@@ -50,7 +50,7 @@ public class GameBundleTests
 			Assert.That(processedCollection.Name, Is.EqualTo(name));
 			Assert.That(processedCollection.Version, Is.EqualTo(version));
 		});
-		CollectionAssert.Contains(gameBundle.FetchAssetCollections(), processedCollection);
+		Assert.That(gameBundle.FetchAssetCollections(), Contains.Item(processedCollection));
 	}
 
 	[Test]

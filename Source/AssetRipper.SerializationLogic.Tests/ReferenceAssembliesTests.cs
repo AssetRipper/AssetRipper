@@ -6,10 +6,10 @@ public class ReferenceAssembliesTests
 	public void ResolutionForUnityTypesWorksAsExpected()
 	{
 		TypeDefinition customMonoBehaviour = ReferenceAssemblies.GetType<NestedMonoBehaviour>();
-		Assert.NotNull(customMonoBehaviour);
-		Assert.NotNull(customMonoBehaviour.BaseType);
+		Assert.That(customMonoBehaviour, Is.Not.Null);
+		Assert.That(customMonoBehaviour.BaseType, Is.Not.Null);
 		TypeDefinition? monoBehaviour = customMonoBehaviour.BaseType?.Resolve();
-		Assert.NotNull(monoBehaviour);
+		Assert.That(monoBehaviour, Is.Not.Null);
 		Assert.That(monoBehaviour?.Name?.ToString(), Is.EqualTo(nameof(UnityEngine.MonoBehaviour)));
 	}
 

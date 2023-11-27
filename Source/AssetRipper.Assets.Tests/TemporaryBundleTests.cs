@@ -16,7 +16,7 @@ public class TemporaryBundleTests
 		TemporaryAssetCollection newCollection = bundle.AddNew();
 
 		// Assert
-		Assert.IsNotNull(newCollection);
+		Assert.That(newCollection, Is.Not.Null);
 		Assert.That(bundle.Collections, Has.Count.EqualTo(previousCount + 1));
 		Assert.That(bundle.Collections, Does.Contain(newCollection));
 	}

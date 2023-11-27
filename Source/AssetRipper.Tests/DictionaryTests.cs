@@ -18,8 +18,8 @@ namespace AssetRipper.Tests
 
 			Assert.Multiple(() =>
 			{
-				Assert.IsTrue(dictionary.ContainsKey(1));
-				Assert.IsFalse(dictionary.ContainsKey(2));
+				Assert.That(dictionary.ContainsKey(1));
+				Assert.That(!dictionary.ContainsKey(2));
 				Assert.That(dictionary[3], Is.EqualTo(4));
 			});
 		}
@@ -37,9 +37,9 @@ namespace AssetRipper.Tests
 			Assert.Multiple(() =>
 			{
 				Assert.That(dictionary.Count, Is.EqualTo(3));
-				Assert.IsTrue(dictionary.ContainsKey(Cast("One")));
-				Assert.IsTrue(dictionary.ContainsKey(Cast("Three")));
-				Assert.IsFalse(dictionary.ContainsKey(Cast("Four")));
+				Assert.That(dictionary.ContainsKey(Cast("One")));
+				Assert.That(dictionary.ContainsKey(Cast("Three")));
+				Assert.That(!dictionary.ContainsKey(Cast("Four")));
 #pragma warning disable NUnit2009 // The same value has been provided as both the actual and the expected argument
 				Assert.That(Cast("Three").GetHashCode(), Is.EqualTo(Cast("Three").GetHashCode()));
 #pragma warning restore NUnit2009 // The same value has been provided as both the actual and the expected argument
@@ -75,9 +75,9 @@ namespace AssetRipper.Tests
 			Assert.Multiple(() =>
 			{
 				Assert.That(dictionary, Has.Count.EqualTo(3));
-				Assert.IsTrue(dictionary.ContainsKey(MakeFastPropertyName("One")));
-				Assert.IsTrue(dictionary.ContainsKey(MakeFastPropertyName("Three")));
-				Assert.IsFalse(dictionary.ContainsKey(MakeFastPropertyName("Four")));
+				Assert.That(dictionary.ContainsKey(MakeFastPropertyName("One")));
+				Assert.That(dictionary.ContainsKey(MakeFastPropertyName("Three")));
+				Assert.That(!dictionary.ContainsKey(MakeFastPropertyName("Four")));
 #pragma warning disable NUnit2009 // The same value has been provided as both the actual and the expected argument
 				Assert.That(MakeFastPropertyName("Three").GetHashCode(), Is.EqualTo(MakeFastPropertyName("Three").GetHashCode()));
 #pragma warning restore NUnit2009 // The same value has been provided as both the actual and the expected argument
