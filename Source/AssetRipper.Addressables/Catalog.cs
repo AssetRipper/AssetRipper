@@ -1,6 +1,8 @@
 ﻿using System.Buffers.Binary;
+using System.Diagnostics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 
 namespace AssetRipper.Addressables;
 
@@ -12,7 +14,7 @@ namespace AssetRipper.Addressables;
 /// The binary parts will be able to index into the internalID's correctly.
 /// The binary parts are little-endian.
 /// </remarks>
-public sealed record class Catalog
+public sealed partial record class Catalog
 {
 	/// <summary>
 	/// Stores the id of the data provider.
@@ -173,4 +175,93 @@ public sealed record class Catalog
 			}
 		}
 	}
+
+	public Dictionary<string, List<Entry>> GetResources()
+	{
+		List<KeyValuePair<ObjectType, object>> keys = Keys.ToList();
+		List<Bucket> buckets = Buckets.ToList();
+		List<Entry> entries = Entries.ToList();
+
+		Dictionary<string, List<Entry>> result = new();
+
+		for (int i = 0; i < buckets.Count; i++)
+		{
+			if (keys[i].Value is string key)
+			{
+				int[] bucketEntries = buckets[i].Entries;
+				List<Entry> locs = new(bucketEntries.Length);
+				for (int j = 0; j < bucketEntries.Length; j++)
+				{
+					locs.Add(entries[bucketEntries[j]]);
+				}
+				result.Add(key, locs);
+			}
+		}
+
+		return result;
+	}
+
+	public void GetGuidMapping(out Dictionary<string, string> assetPathGuids, out Dictionary<string, string> guidAssetPaths)
+	{
+		List<KeyValuePair<ObjectType, object>> keys = Keys.ToList();
+		Dictionary<string, List<Entry>> resources = GetResources();
+		assetPathGuids = new();
+		guidAssetPaths = new();
+		List<KeyValuePair<string, string>> othervalues = new();
+
+		foreach ((string key, List<Entry> locs) in resources)
+		{
+			if (locs.Count == 0)
+			{
+				continue;
+			}
+
+			if (locs.Count > 1 && (locs.DistinctBy(e => e.InternalId).Count() > 1 || locs.DistinctBy(e => e.PrimaryKey).Count() > 1))
+			{
+				//I think these are asset groups, where key is the name of the group and idList is a list of paths in the group.
+#if DEBUG
+				//The values in these lists are not necessarily distinct.
+				List<string> idList = locs.Select(e => InternalIds![e.InternalId]).ToList();
+				List<string> keyList = locs.Select(e => GetString(keys, e.PrimaryKey)).ToList();
+#endif
+				continue;
+			}
+
+			string path = InternalIds![locs[0].InternalId];
+			if (path.StartsWith("{UnityEngine.AddressableAssets.Addressables.RuntimePath}", StringComparison.Ordinal))
+			{
+				Debug.Assert(key.EndsWith(".bundle", StringComparison.Ordinal));
+			}
+			else if (IsGuid(key))
+			{
+				if (GetString(keys, locs[0].PrimaryKey) != key)
+				{
+					assetPathGuids.Add(path, key);
+					guidAssetPaths.Add(key, path);
+				}
+			}
+#if DEBUG
+			//Aliases
+			else if (path.Contains(key, StringComparison.Ordinal))
+			{
+			}
+			else if (path.Contains(key, StringComparison.OrdinalIgnoreCase))
+			{
+			}
+			else
+			{
+			}
+#endif
+		}
+
+		static string GetString(List<KeyValuePair<ObjectType, object>> keys, int index)
+		{
+			return keys[index].Value.ToString() ?? "";
+		}
+	}
+
+	private static bool IsGuid(string str) => GuidRegex().IsMatch(str);
+
+	[GeneratedRegex(@"^[a-fA-F0-9]{32}$")]
+	private static partial Regex GuidRegex();
 }
