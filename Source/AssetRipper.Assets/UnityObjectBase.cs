@@ -80,9 +80,7 @@ public abstract class UnityObjectBase : UnityAssetBase, IUnityObjectBase
 			else
 			{
 				originalPathDetails ??= new();
-				originalPathDetails.Directory = Path.GetDirectoryName(value);
-				originalPathDetails.Name = Path.GetFileNameWithoutExtension(value);
-				originalPathDetails.Extension = RemovePeriod(Path.GetExtension(value));
+				originalPathDetails.FullPath = value;
 			}
 		}
 	}
@@ -137,12 +135,12 @@ public abstract class UnityObjectBase : UnityAssetBase, IUnityObjectBase
 		{
 			if (originalPathDetails is not null)
 			{
-				originalPathDetails.Extension = RemovePeriod(value);
+				originalPathDetails.Extension = value;
 			}
 			else if (value is not null)
 			{
 				originalPathDetails = new();
-				originalPathDetails.Extension = RemovePeriod(value);
+				originalPathDetails.Extension = value;
 			}
 		}
 	}
@@ -152,28 +150,76 @@ public abstract class UnityObjectBase : UnityAssetBase, IUnityObjectBase
 	/// </summary>
 	public string? AssetBundleName { get; set; }
 
-	[return: NotNullIfNotNull(nameof(str))]
-	private static string? RemovePeriod(string? str)
-	{
-		return string.IsNullOrEmpty(str) || str[0] != '.' ? str : str.Substring(1);
-	}
-
 	private sealed class OriginalPathDetails
 	{
-		public string? Directory { get; set; }
-		public string? Name { get; set; }
+		private string? directory;
+		private string? name;
+		private string? extension;
+		private string? fullPath;
+
+		public string? Directory
+		{
+			get => directory;
+			set
+			{
+				directory = value;
+				fullPath = CalculatePath();
+			}
+		}
+
+		public string? Name
+		{
+			get => name;
+			set
+			{
+				name = value;
+				fullPath = CalculatePath();
+			}
+		}
+
 		/// <summary>
 		/// Not including the period
 		/// </summary>
-		public string? Extension { get; set; }
-		public string NameWithExtension => string.IsNullOrEmpty(Extension) ? Name ?? "" : $"{Name}.{Extension}";
-
-		public override string? ToString()
+		public string? Extension
 		{
-			string result = Directory is null
+			get => extension;
+			set
+			{
+				extension = RemovePeriod(value);
+				fullPath = CalculatePath();
+			}
+		}
+
+		public string? FullPath
+		{
+			get => fullPath;
+			set
+			{
+				if (value != fullPath)
+				{
+					fullPath = value;
+					Directory = Path.GetDirectoryName(value);
+					Name = Path.GetFileNameWithoutExtension(value);
+					Extension = RemovePeriod(Path.GetExtension(value));
+				}
+			}
+		}
+
+		private string NameWithExtension => string.IsNullOrEmpty(Extension) ? Name ?? "" : $"{Name}.{Extension}";
+
+		public override string? ToString() => FullPath;
+
+		private string CalculatePath()
+		{
+			return Directory is null
 				? NameWithExtension
 				: Path.Combine(Directory, NameWithExtension);
-			return string.IsNullOrEmpty(result) ? null : result;
+		}
+
+		[return: NotNullIfNotNull(nameof(str))]
+		private static string? RemovePeriod(string? str)
+		{
+			return string.IsNullOrEmpty(str) || str[0] != '.' ? str : str.Substring(1);
 		}
 	}
 }
