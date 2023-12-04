@@ -3,7 +3,7 @@ using System.Text;
 
 namespace AssetRipper.Export.Modules.Shaders.IO
 {
-	public sealed class InvariantStreamWriter : StreamWriter
+	public class InvariantStreamWriter : StreamWriter
 	{
 		public InvariantStreamWriter(Stream stream) : base(stream) { }
 
@@ -21,6 +21,6 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 
 		public InvariantStreamWriter(string path, bool append, Encoding encoding, int bufferSize) : base(path, append, encoding, bufferSize) { }
 
-		public override IFormatProvider FormatProvider => CultureInfo.InvariantCulture;
+		public sealed override IFormatProvider FormatProvider => CultureInfo.InvariantCulture;
 	}
 }

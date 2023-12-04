@@ -11,7 +11,7 @@ using System.Text;
 
 namespace AssetRipper.Export.Modules.Shaders.IO
 {
-	public class ShaderWriter : InvariantStreamWriter
+	public sealed class ShaderWriter : InvariantStreamWriter
 	{
 		public ShaderWriter(Stream stream, IShader shader, Func<GPUPlatform, ShaderTextExporter> exporterInstantiator) : base(stream, new UTF8Encoding(false), 4096, true)
 		{
