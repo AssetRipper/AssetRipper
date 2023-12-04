@@ -1,9 +1,7 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Export;
 using AssetRipper.Export.Modules.Shaders.IO;
-using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
-using AssetRipper.SourceGenerated.Classes.ClassID_49;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Extensions.Enums.Shader.SerializedShader;
 using AssetRipper.SourceGenerated.Subclasses.SerializedProperties;
@@ -40,15 +38,15 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
 			using FileStream fileStream = File.Create(path);
-			ExportShader((IShader)asset, fileStream);
+			using InvariantStreamWriter writer = new InvariantStreamWriter(fileStream);
+			ExportShader((IShader)asset, writer);
 			return true;
 		}
 
-		public static void ExportShader(IShader shader, Stream stream)
+		public static void ExportShader(IShader shader, TextWriter writer)
 		{
 			if (shader.Has_ParsedForm())
 			{
-				using InvariantStreamWriter writer = new InvariantStreamWriter(stream);
 				writer.Write($"Shader \"{shader.ParsedForm.Name}\" {{\n");
 				Export(shader.ParsedForm.PropInfo, writer);
 
@@ -77,10 +75,9 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 				}
 				writer.Write('}');
 			}
-			else if (shader is ITextAsset textAsset)
+			else
 			{
-				using InvariantStreamWriter writer = new InvariantStreamWriter(stream);
-				string header = textAsset.Script_C49.String;
+				string header = shader.Script.String;
 				int subshaderIndex = header.IndexOf("SubShader");
 				writer.WriteString(header, 0, subshaderIndex);
 
@@ -89,10 +86,6 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 				writer.Write(FallbackDummyShader);
 
 				writer.Write('}');
-			}
-			else //should never happen
-			{
-				throw new NotSupportedException();
 			}
 		}
 

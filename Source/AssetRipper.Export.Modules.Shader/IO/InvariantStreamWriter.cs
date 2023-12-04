@@ -3,7 +3,7 @@ using System.Text;
 
 namespace AssetRipper.Export.Modules.Shaders.IO
 {
-	public class InvariantStreamWriter : StreamWriter
+	public sealed class InvariantStreamWriter : StreamWriter
 	{
 		public InvariantStreamWriter(Stream stream) : base(stream) { }
 

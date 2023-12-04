@@ -4,10 +4,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 	{
 		public static void WriteString(this TextWriter writer, string @string, int offset, int length)
 		{
-			for (int i = offset; i < offset + length; i++)
-			{
-				writer.Write(@string[i]);
-			}
+			writer.Write(@string.AsSpan().Slice(offset, length));
 		}
 
 		public static void WriteIndent(this TextWriter writer, int count)

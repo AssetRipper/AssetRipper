@@ -2,6 +2,7 @@ using AsmResolver.DotNet;
 using AssetRipper.Assets;
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Decompilation.CSharp;
+using AssetRipper.Export.Modules.Shaders.IO;
 using AssetRipper.Export.UnityProjects.Audio;
 using AssetRipper.Export.UnityProjects.Scripts;
 using AssetRipper.Export.UnityProjects.Shaders;
@@ -22,7 +23,6 @@ using AssetRipper.SourceGenerated.Classes.ClassID_83;
 using AssetRipper.SourceGenerated.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Text;
 using DirectBitmap = AssetRipper.Export.UnityProjects.Utils.DirectBitmap<AssetRipper.TextureDecoder.Rgb.Formats.ColorBGRA32, byte>;
 
 namespace AssetRipper.GUI.Electron.Pages.Assets
@@ -174,22 +174,9 @@ namespace AssetRipper.GUI.Electron.Pages.Assets
 
 		private static string DumpShaderDataAsText(IShader shader)
 		{
-			MemoryStream stream = new();
-			DummyShaderTextExporter.ExportShader(shader, stream);
-
-			return Encoding.UTF8.GetString(GetStreamData(stream));
-
-			static ReadOnlySpan<byte> GetStreamData(MemoryStream stream)
-			{
-				if (stream.TryGetBuffer(out ArraySegment<byte> buffer))
-				{
-					return buffer;
-				}
-				else
-				{
-					return stream.ToArray();
-				}
-			}
+			InvariantStringWriter writer = new();
+			DummyShaderTextExporter.ExportShader(shader, writer);
+			return writer.ToString();
 		}
 
 		private static string DecompileMonoScript(IMonoScript monoScript)
