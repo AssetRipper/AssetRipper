@@ -12,7 +12,6 @@ using AssetRipper.SourceGenerated.Classes.ClassID_4;
 using AssetRipper.SourceGenerated.Classes.ClassID_90;
 using AssetRipper.SourceGenerated.Classes.ClassID_95;
 using AssetRipper.SourceGenerated.Extensions;
-using System.Text;
 
 namespace AssetRipper.Processing.AnimationClips;
 
@@ -151,18 +150,23 @@ public readonly struct PathChecksumCache
 		}
 	}
 
-	private void AddFieldRecursively(SerializableType.Field field, string path)
+	private void AddFieldRecursively(SerializableType.Field field, string path, int depth = 0)
 	{
-		StringBuilder sb = new();
-		sb.Append(path);
-		sb.Append(field.Name);
-		Add(sb.ToString());
-		sb.Append('.');
-		string basePath = sb.ToString();
+		if (depth > 10)
+		{
+			return;
+		}
+		
+		string thePath = $"{path}{field.Name}";
+		Add(thePath);
+		string basePath = $"{path}{field.Name}.";
 		
 		for (int i = 0; i < field.Type.Fields.Count; i++)
 		{
-			AddFieldRecursively(field.Type.Fields[i], basePath);
+			if (field.Type.IsPrimitive())
+			{
+				AddFieldRecursively(field.Type.Fields[i], basePath, depth + 1);
+			}
 		}
 	}
 
