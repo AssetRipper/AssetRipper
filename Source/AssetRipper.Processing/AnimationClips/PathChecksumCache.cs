@@ -146,8 +146,30 @@ public readonly struct PathChecksumCache
 		for (int f = 0; f < behaviour.Fields.Count; f++)
 		{
 			SerializableType.Field field = behaviour.Fields[f];
+			AddFieldRecursively(field);
+		}
+	}
 
-			Add(field.Name);
+	private void AddFieldRecursively(SerializableType.Field field, string path = "", int depth = 0)
+	{
+		// Time out if we go too deeply to prevent infinite recursion
+		if (depth > 10)
+		{
+			return;
+		}
+		
+		if (field.Type.IsPrimitive())
+		{
+			// Only primitive fields can be animated.
+			Add($"{path}{field.Name}");
+		}
+		else
+		{
+			string basePath = $"{path}{field.Name}.";
+			for (int i = 0; i < field.Type.Fields.Count; i++)
+			{
+				AddFieldRecursively(field.Type.Fields[i], basePath, depth + 1);
+			}
 		}
 	}
 
