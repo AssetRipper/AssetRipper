@@ -102,6 +102,10 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 								new MemoryStream(uncompressedBytes).CopyTo(m_cachedBlockStream);
 								break;
 
+							case CompressionType.Lzham:
+								UnsupportedBundleDecompression.ThrowLzham(entry.PathFixed);
+								break;
+
 							default:
 								UnsupportedBundleDecompression.Throw(entry.PathFixed, compressType);
 								break;

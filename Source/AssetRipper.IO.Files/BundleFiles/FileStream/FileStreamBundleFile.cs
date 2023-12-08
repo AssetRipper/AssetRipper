@@ -92,6 +92,10 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 					}
 					break;
 
+				case CompressionType.Lzham:
+					UnsupportedBundleDecompression.ThrowLzham(NameFixed);
+					break;
+
 				default:
 					UnsupportedBundleDecompression.Throw(NameFixed, metaCompression);
 					break;
