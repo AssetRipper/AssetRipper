@@ -82,11 +82,11 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 						int bytesWritten = LZ4Codec.Decode(compressedBytes, uncompressedBytes);
 						if (bytesWritten < 0)
 						{
-							EncryptedFileException.Throw(NameFixed);
+							DecompressionFailedException.ThrowNoBytesWritten(NameFixed, metaCompression);
 						}
 						else if (bytesWritten != uncompressedSize)
 						{
-							DecompressionFailedException.ThrowIncorrectNumberBytesWritten(NameFixed, uncompressedSize, bytesWritten);
+							DecompressionFailedException.ThrowIncorrectNumberBytesWritten(NameFixed, metaCompression, uncompressedSize, bytesWritten);
 						}
 						ReadMetadata(new MemoryStream(uncompressedBytes), uncompressedSize);
 					}

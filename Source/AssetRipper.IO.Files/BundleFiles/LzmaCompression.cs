@@ -1,5 +1,4 @@
 ﻿using AssetRipper.IO.Files.Exceptions;
-using AssetRipper.IO.Files.Extensions;
 using SharpCompress.Compressors.LZMA;
 using System.Buffers;
 
@@ -28,7 +27,7 @@ namespace AssetRipper.IO.Files.BundleFiles
 
 			if (compressedStream.Position > basePosition + compressedSize)
 			{
-				DecompressionFailedException.ThrowReadMoreThanExpected(compressedSize, compressedStream.Position - basePosition);
+				DecompressionFailedException.ThrowReadMoreThanExpected(CompressionType.Lzma, compressedSize, compressedStream.Position - basePosition);
 			}
 			compressedStream.Position = basePosition + compressedSize;
 		}
@@ -56,7 +55,7 @@ namespace AssetRipper.IO.Files.BundleFiles
 
 			if (compressedStream.Position > basePosition + compressedSize)
 			{
-				DecompressionFailedException.ThrowReadMoreThanExpected(compressedSize, compressedStream.Position - basePosition);
+				DecompressionFailedException.ThrowReadMoreThanExpected(CompressionType.Lzma, compressedSize, compressedStream.Position - basePosition);
 			}
 			compressedStream.Position = basePosition + compressedSize;
 		}

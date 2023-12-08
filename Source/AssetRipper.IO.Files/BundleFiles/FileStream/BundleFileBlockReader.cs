@@ -93,11 +93,11 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 								int bytesWritten = LZ4Codec.Decode(compressedBytes, uncompressedBytes);
 								if (bytesWritten < 0)
 								{
-									EncryptedFileException.Throw(entry.PathFixed);
+									DecompressionFailedException.ThrowNoBytesWritten(entry.PathFixed, compressType);
 								}
 								else if (bytesWritten != uncompressedSize)
 								{
-									DecompressionFailedException.ThrowIncorrectNumberBytesWritten(entry.PathFixed, uncompressedSize, bytesWritten);
+									DecompressionFailedException.ThrowIncorrectNumberBytesWritten(entry.PathFixed, compressType, uncompressedSize, bytesWritten);
 								}
 								new MemoryStream(uncompressedBytes).CopyTo(m_cachedBlockStream);
 								break;
@@ -133,7 +133,7 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 			}
 			if (left < 0)
 			{
-				DecompressionFailedException.ThrowReadMoreThanExpected(entry.Size, entry.Size - left);
+				DecompressionFailedException.ThrowReadMoreThanExpected(entry.PathFixed, entry.Size, entry.Size - left);
 			}
 			entryStream.Position = 0;
 			return entryStream.CreateReference();
