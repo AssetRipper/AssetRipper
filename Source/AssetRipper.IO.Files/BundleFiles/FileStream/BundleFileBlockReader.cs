@@ -107,7 +107,14 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 								break;
 
 							default:
-								UnsupportedBundleDecompression.Throw(entry.PathFixed, compressType);
+								if (ZstdCompression.IsZstd(m_stream))
+								{
+									ZstdCompression.DecompressStream(m_stream, block.CompressedSize, m_cachedBlockStream, block.UncompressedSize);
+								}
+								else
+								{
+									UnsupportedBundleDecompression.Throw(entry.PathFixed, compressType);
+								}
 								break;
 						}
 						blockStream = m_cachedBlockStream;
