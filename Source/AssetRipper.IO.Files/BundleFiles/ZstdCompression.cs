@@ -1,4 +1,4 @@
-﻿using System.Buffers;
+﻿using AssetRipper.IO.Files.Streams;
 using ZstdSharp;
 
 namespace AssetRipper.IO.Files.BundleFiles
@@ -11,7 +11,7 @@ namespace AssetRipper.IO.Files.BundleFiles
 			Span<byte> buffer = stackalloc byte[4];
 
 			long pos = Stream.Position;
-			Stream.Read(buffer);
+			Stream.ReadExactly(buffer);
 			Stream.Position = pos;
 
 			return buffer.SequenceEqual(Signature);
@@ -19,26 +19,10 @@ namespace AssetRipper.IO.Files.BundleFiles
 
 		public static void DecompressStream(Stream compressedStream, long compressedSize, Stream decompressedStream, long decompressedSize)
 		{
-			using DecompressionStream zstdStream = new DecompressionStream(compressedStream, (int)compressedSize, true, true);
-
-			byte[] buffer = ArrayPool<byte>.Shared.Rent(1024);
-			long totalRead = 0;
-			while (totalRead < decompressedSize)
-			{
-				int toRead = (int)Math.Min(buffer.Length, decompressedSize - totalRead);
-				int read = zstdStream.Read(buffer, 0, toRead);
-				if (read > 0)
-				{
-					decompressedStream.Write(buffer, 0, read);
-					totalRead += read;
-				}
-				else
-				{
-					break;
-				}
-			}
-
-			ArrayPool<byte>.Shared.Return(buffer);
+			using PartialStream compressedPartialStream = new PartialStream(compressedStream, compressedStream.Position, compressedSize, true);
+			using PartialStream decompressedPartialStream = new PartialStream(decompressedStream, decompressedStream.Position, decompressedSize, true);
+			using DecompressionStream zstdStream = new DecompressionStream(compressedPartialStream);
+			zstdStream.CopyTo(decompressedPartialStream);
 		}
 	}
 }
