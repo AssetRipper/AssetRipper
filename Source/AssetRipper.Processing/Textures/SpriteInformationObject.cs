@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Metadata;
+using AssetRipper.Assets.Traversal;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_687078895;
@@ -7,7 +8,7 @@ using System.Diagnostics;
 
 namespace AssetRipper.Processing.Textures;
 
-public sealed class SpriteInformationObject : UnityObjectBase, INamed
+public sealed class SpriteInformationObject : InjectedUnityObject, INamed
 {
 	public SpriteInformationObject(AssetInfo assetInfo, ITexture2D texture) : base(assetInfo)
 	{
@@ -22,6 +23,15 @@ public sealed class SpriteInformationObject : UnityObjectBase, INamed
 	{
 		get => Texture.Name;
 		set { }
+	}
+
+	public override void WalkStandard(AssetWalker walker)
+	{
+		if (walker.EnterAsset(this))
+		{
+			WalkPPtrField<SpriteInformationObject, ITexture2D>(walker, Texture);
+			walker.ExitAsset(this);
+		}
 	}
 
 	internal void AddToDictionary(ISprite sprite, ISpriteAtlas? atlas)

@@ -3,6 +3,7 @@ using AssetRipper.Assets.Export;
 using AssetRipper.Assets.IO.Serialization;
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
+using AssetRipper.Assets.Traversal;
 using AssetRipper.IO.Endian;
 using AssetRipper.Yaml;
 using System.Runtime.CompilerServices;
@@ -52,7 +53,19 @@ public abstract class UnityAssetBase : IUnityAssetBase
 
 	public virtual void Deserialize(JsonNode node, IUnityAssetDeserializer deserializer, DeserializationOptions options) => throw MethodNotSupported();
 
-	private Exception MethodNotSupported([CallerMemberName] string? methodName = null)
+	public virtual void WalkEditor(AssetWalker walker)
+	{
+	}
+
+	public virtual void WalkRelease(AssetWalker walker)
+	{
+	}
+
+	public virtual void WalkStandard(AssetWalker walker)
+	{
+	}
+
+	private NotSupportedException MethodNotSupported([CallerMemberName] string? methodName = null)
 	{
 		return new NotSupportedException($"{methodName} is not supported for {GetType().FullName}");
 	}

@@ -3,6 +3,7 @@ using AssetRipper.Assets.Export.Yaml;
 using AssetRipper.Assets.IO.Serialization;
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
+using AssetRipper.Assets.Traversal;
 using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files.SerializedFiles;
 using System.Text.Json.Nodes;
@@ -32,6 +33,21 @@ public interface IUnityAssetBase : IEndianSpanReadable, IAssetWritable, IYamlExp
 	/// <param name="serializer">An optional serializer for overriding serialization.</param>
 	/// <returns>A new <see cref="JsonNode"/> containing this asset's serialized data.</returns>
 	JsonNode SerializeReleaseFields(IUnityAssetSerializer serializer, SerializationOptions options);
+	/// <summary>
+	/// Walk this asset using original naming.
+	/// </summary>
+	/// <param name="walker">A walker for traversal.</param>
+	void WalkEditor(AssetWalker walker);
+	/// <summary>
+	/// Walk this asset using original naming.
+	/// </summary>
+	/// <param name="walker">A walker for traversal.</param>
+	void WalkRelease(AssetWalker walker);
+	/// <summary>
+	/// Walk this asset using standardized naming.
+	/// </summary>
+	/// <param name="walker">A walker for traversal.</param>
+	void WalkStandard(AssetWalker walker);
 	IEnumerable<(string, PPtr)> FetchDependencies();
 }
 public static class UnityAssetBaseExtensions
