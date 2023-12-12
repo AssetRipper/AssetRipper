@@ -24,6 +24,16 @@ public abstract class AssetWalker
 	}
 
 	/// <summary>
+	/// Called between two fields of an asset node during traversal.
+	/// </summary>
+	/// <typeparam name="T">The type of <paramref name="asset"/>.</typeparam>
+	/// <param name="asset">The asset having its fields divided.</param>
+	public virtual void DivideAsset<T>(T asset)
+		where T : IUnityAssetBase
+	{
+	}
+
+	/// <summary>
 	/// Called when exiting an asset node during traversal.
 	/// </summary>
 	/// <typeparam name="T">The type of the asset being exited.</typeparam>
@@ -72,6 +82,16 @@ public abstract class AssetWalker
 	}
 
 	/// <summary>
+	/// Called between two elements of a list node during traversal.
+	/// </summary>
+	/// <typeparam name="T">The type of the list elements being divided.</typeparam>
+	/// <param name="list">The list having its elements divided.</param>
+	public virtual void DivideList<T>(AssetList<T> list)
+		where T : notnull, new()
+	{
+	}
+
+	/// <summary>
 	/// Called when exiting a list node during traversal.
 	/// </summary>
 	/// <typeparam name="T">The type of the list elements.</typeparam>
@@ -99,6 +119,18 @@ public abstract class AssetWalker
 	}
 
 	/// <summary>
+	/// Called between two pairs of a dictionary node during traversal.
+	/// </summary>
+	/// <typeparam name="TKey">The type of dictionary keys.</typeparam>
+	/// <typeparam name="TValue">The type of dictionary values.</typeparam>
+	/// <param name="dictionary">The dictionary having its pairs divided.</param>
+	public virtual void DivideDictionary<TKey, TValue>(AssetDictionary<TKey, TValue> dictionary)
+		where TKey : notnull, new()
+		where TValue : notnull, new()
+	{
+	}
+
+	/// <summary>
 	/// Called when exiting a dictionary node during traversal.
 	/// </summary>
 	/// <typeparam name="TKey">The type of dictionary keys.</typeparam>
@@ -108,6 +140,58 @@ public abstract class AssetWalker
 		where TKey : notnull, new()
 		where TValue : notnull, new()
 	{
+	}
+
+	/// <summary>
+	/// Called when entering a dictionary pair during traversal.
+	/// </summary>
+	/// <remarks>
+	/// This calls <see cref="EnterPair{TKey, TValue}(AssetPair{TKey, TValue})"/> by default.
+	/// </remarks>
+	/// <typeparam name="TKey">The type of the key in the pair.</typeparam>
+	/// <typeparam name="TValue">The type of the value in the pair.</typeparam>
+	/// <param name="pair">The dictionary pair being entered.</param>
+	/// <returns>
+	///   <c>true</c> to continue visiting the key and value of the dictionary pair,
+	///   <c>false</c> to skip visiting the children and not call the exit method.
+	/// </returns>
+	public virtual bool EnterDictionaryPair<TKey, TValue>(AssetPair<TKey, TValue> pair)
+		where TKey : notnull, new()
+		where TValue : notnull, new()
+	{
+		return EnterPair(pair);
+	}
+
+	/// <summary>
+	/// Called between the key and value of a dictionary pair during traversal.
+	/// </summary>
+	/// <remarks>
+	/// This calls <see cref="DividePair{TKey, TValue}(AssetPair{TKey, TValue})"/> by default.
+	/// </remarks>
+	/// <typeparam name="TKey">The type of the key in the pair.</typeparam>
+	/// <typeparam name="TValue">The type of the value in the pair.</typeparam>
+	/// <param name="pair">The dictionary pair having its key and value divided.</param>
+	public virtual void DivideDictionaryPair<TKey, TValue>(AssetPair<TKey, TValue> pair)
+		where TKey : notnull, new()
+		where TValue : notnull, new()
+	{
+		DividePair(pair);
+	}
+
+	/// <summary>
+	/// Called when exiting a dictionary pair during traversal.
+	/// </summary>
+	/// <remarks>
+	/// This calls <see cref="ExitPair{TKey, TValue}(AssetPair{TKey, TValue})"/> by default.
+	/// </remarks>
+	/// <typeparam name="TKey">The type of the key in the pair.</typeparam>
+	/// <typeparam name="TValue">The type of the value in the pair.</typeparam>
+	/// <param name="pair">The dictionary pair being exited.</param>
+	public virtual void ExitDictionaryPair<TKey, TValue>(AssetPair<TKey, TValue> pair)
+		where TKey : notnull, new()
+		where TValue : notnull, new()
+	{
+		ExitPair(pair);
 	}
 
 	/// <summary>
@@ -125,6 +209,18 @@ public abstract class AssetWalker
 		where TValue : notnull, new()
 	{
 		return true;
+	}
+
+	/// <summary>
+	/// Called between the key and value of a key-value pair node during traversal.
+	/// </summary>
+	/// <typeparam name="TKey">The type of the key in the pair.</typeparam>
+	/// <typeparam name="TValue">The type of the value in the pair.</typeparam>
+	/// <param name="pair">The key-value pair having its key and value divided.</param>
+	public virtual void DividePair<TKey, TValue>(AssetPair<TKey, TValue> pair)
+		where TKey : notnull, new()
+		where TValue : notnull, new()
+	{
 	}
 
 	/// <summary>
