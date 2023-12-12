@@ -11,7 +11,7 @@ public abstract class AssetWalker
 	/// <summary>
 	/// Called when entering an asset node during traversal.
 	/// </summary>
-	/// <typeparam name="T">The type of the asset being entered.</typeparam>
+	/// <typeparam name="T">The type of the <paramref name="asset"/> being entered.</typeparam>
 	/// <param name="asset">The asset being entered.</param>
 	/// <returns>
 	///   <c>true</c> to continue visiting the children of the asset node,
@@ -36,7 +36,7 @@ public abstract class AssetWalker
 	/// <summary>
 	/// Called when exiting an asset node during traversal.
 	/// </summary>
-	/// <typeparam name="T">The type of the asset being exited.</typeparam>
+	/// <typeparam name="T">The type of the <paramref name="asset"/> being exited.</typeparam>
 	/// <param name="asset">The asset being exited.</param>
 	public virtual void ExitAsset<T>(T asset)
 		where T : IUnityAssetBase
@@ -46,13 +46,13 @@ public abstract class AssetWalker
 	/// <summary>
 	/// Called when entering a field node during traversal.
 	/// </summary>
-	/// <typeparam name="T">The declaring type of the field being entered.</typeparam>
+	/// <typeparam name="T">The type of the <paramref name="asset"/>.</typeparam>
 	/// <param name="name">The name of the field being entered.</param>
 	/// <returns>
 	///   <c>true</c> to continue visiting the children of the field node,
 	///   <c>false</c> to skip visiting the children and not call the exit method.
 	/// </returns>
-	public virtual bool EnterField<T>(string name)
+	public virtual bool EnterField<T>(T asset, string name)
 	{
 		return true;
 	}
@@ -60,9 +60,9 @@ public abstract class AssetWalker
 	/// <summary>
 	/// Called when exiting a field node during traversal.
 	/// </summary>
-	/// <typeparam name="T">The declaring type of the field being exited.</typeparam>
+	/// <typeparam name="T">The type of the <paramref name="asset"/>.</typeparam>
 	/// <param name="name">The name of the field being exited.</param>
-	public virtual void ExitField<T>(string name)
+	public virtual void ExitField<T>(T asset, string name)
 	{
 	}
 
