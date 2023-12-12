@@ -231,7 +231,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 				IAnimatorState state = states[i];
 				IStateConstant stateConstant = stateMachine.StateConstantArray[i].Data;
 
-				AssetList<PPtr_AnimatorStateTransition_4_0_0>? transitionList;
+				AssetList<PPtr_AnimatorStateTransition_4>? transitionList;
 				if (state.Has_Transitions())
 				{
 					state.Transitions.EnsureCapacity(state.Transitions.Count + stateConstant.TransitionConstantArray.Count);
@@ -242,7 +242,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 					//I'm not sure if this is correct, but it seems to be the only logical way to store the transitions before Unity 5.
 					//IAnimatorStateMachine.LocalTransitions only exists until Unity 4.2.0, so by process of elimination, this is the only option.
 
-					AssetPair<PPtr_AnimatorState_4_0_0, AssetList<PPtr_AnimatorStateTransition_4_0_0>> pair = generatedStateMachine.OrderedTransitions.AddNew();
+					AssetPair<PPtr_AnimatorState_4, AssetList<PPtr_AnimatorStateTransition_4>> pair = generatedStateMachine.OrderedTransitions.AddNew();
 					pair.Key.SetAsset(generatedStateMachine.Collection, state);
 					transitionList = pair.Value;
 				}
@@ -284,9 +284,9 @@ namespace AssetRipper.Processing.AnimatorControllers
 				else
 				{
 					//https://github.com/AssetRipper/AssetRipper/issues/1028
-					AssetList<PPtr_AnimatorStateTransition_4_0_0> newList = generatedStateMachine.OrderedTransitions.AddNew().Value;
+					AssetList<PPtr_AnimatorStateTransition_4> newList = generatedStateMachine.OrderedTransitions.AddNew().Value;
 					newList.Capacity = count;
-					PPtrAccessList<PPtr_AnimatorStateTransition_4_0_0, IAnimatorStateTransition> anyStateTransitions = new(newList, generatedStateMachine.Collection);
+					PPtrAccessList<PPtr_AnimatorStateTransition_4, IAnimatorStateTransition> anyStateTransitions = new(newList, generatedStateMachine.Collection);
 					for (int i = 0; i < count; i++)
 					{
 						ITransitionConstant transitionConstant = stateMachine.AnyStateTransitionConstantArray[i].Data;
@@ -312,13 +312,13 @@ namespace AssetRipper.Processing.AnimatorControllers
 
 			if (generatedStateMachine.Has_ChildStates() && generatedStateMachine.ChildStates.Count > 0)
 			{
-				PPtr_AnimatorState_5_0_0 defaultStatePPtr = generatedStateMachine.ChildStates[(int)stateMachine.DefaultState].State;
+				PPtr_AnimatorState_5 defaultStatePPtr = generatedStateMachine.ChildStates[(int)stateMachine.DefaultState].State;
 
 				generatedStateMachine.DefaultState.CopyValues(defaultStatePPtr, new PPtrConverter(generatedStateMachine));
 			}
 			else if (generatedStateMachine.Has_States() && generatedStateMachine.States.Count > 0)
 			{
-				PPtr_AnimatorState_4_0_0 defaultStatePPtr = generatedStateMachine.States[(int)stateMachine.DefaultState];
+				PPtr_AnimatorState_4 defaultStatePPtr = generatedStateMachine.States[(int)stateMachine.DefaultState];
 
 				generatedStateMachine.DefaultState.CopyValues(defaultStatePPtr, new PPtrConverter(generatedStateMachine));
 			}

@@ -25,7 +25,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 			pair.StateMachineBehaviours.Clear();
 			pair.StateMachineBehaviours.Capacity = behaviours.Length;
-			new PPtrAccessList<PPtr_MonoBehaviour_5_0_0, IMonoBehaviour>(pair.StateMachineBehaviours, controller.Collection).AddRange(behaviours);
+			new PPtrAccessList<PPtr_MonoBehaviour_5, IMonoBehaviour>(pair.StateMachineBehaviours, controller.Collection).AddRange(behaviours);
 		}
 	}
 }

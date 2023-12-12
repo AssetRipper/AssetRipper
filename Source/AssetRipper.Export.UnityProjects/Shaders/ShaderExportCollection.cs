@@ -20,9 +20,9 @@ public class ShaderExportCollection : AssetExportCollection<IShader>
 		if (importer.Has_NonModifiableTextures() && Asset.Has_NonModifiableTextures())
 		{
 			PPtrConverter converter = new(Asset, importer);
-			foreach ((Utf8String name, PPtr_Texture_5_0_0 pptr) in Asset.NonModifiableTextures)
+			foreach ((Utf8String name, PPtr_Texture_5 pptr) in Asset.NonModifiableTextures)
 			{
-				AssetPair<Utf8String, PPtr_Texture_5_0_0> pair = importer.NonModifiableTextures.AddNew();
+				AssetPair<Utf8String, PPtr_Texture_5> pair = importer.NonModifiableTextures.AddNew();
 				pair.Key = name;
 				pair.Value.CopyValues(pptr, converter);
 			}

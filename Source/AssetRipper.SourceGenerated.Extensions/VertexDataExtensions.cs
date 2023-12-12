@@ -408,7 +408,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 					}
 				}
 
-				StreamInfo_4_0_0 newStream = new()
+				StreamInfo_4 newStream = new()
 				{
 					ChannelMask = chnMask,
 					Offset = (uint)offset,

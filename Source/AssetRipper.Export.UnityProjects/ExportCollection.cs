@@ -109,7 +109,7 @@ namespace AssetRipper.Export.UnityProjects
 				IFlare => "flare",
 				ILightingSettings => "lighting",
 				ILightmapParameters => "giparams",
-				IPhysicMaterial => "physicMaterial",
+				IPhysicsMaterial => "physicMaterial",
 				IPhysicsMaterial2D => "physicsMaterial2D",
 				IRenderTexture => "renderTexture",
 				ITerrainLayer => "terrainlayer",

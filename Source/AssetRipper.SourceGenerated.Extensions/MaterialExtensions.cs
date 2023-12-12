@@ -14,19 +14,19 @@ namespace AssetRipper.SourceGenerated.Extensions
 		public static bool TryGetTextureProperty(this IMaterial material, string propertyName, [NotNullWhen(true)] out IUnityTexEnv? property)
 		{
 			IUnityPropertySheet savedProperties = material.SavedProperties_C21;
-			if (savedProperties.Has_TexEnvs_AssetDictionary_Utf8String_UnityTexEnv_5_0_0())
+			if (savedProperties.Has_TexEnvs_AssetDictionary_Utf8String_UnityTexEnv_5())
 			{
-				savedProperties.TexEnvs_AssetDictionary_Utf8String_UnityTexEnv_5_0_0.TryGetValue((Utf8String)propertyName, out UnityTexEnv_5_0_0? texEnv);
+				savedProperties.TexEnvs_AssetDictionary_Utf8String_UnityTexEnv_5.TryGetValue((Utf8String)propertyName, out UnityTexEnv_5? texEnv);
 				property = texEnv;
 			}
-			else if (savedProperties.Has_TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_5_0_0())
+			else if (savedProperties.Has_TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_5())
 			{
-				savedProperties.TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_5_0_0.TryGetValue(new() { Name = propertyName }, out UnityTexEnv_5_0_0? texEnv);
+				savedProperties.TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_5.TryGetValue(new() { Name = propertyName }, out UnityTexEnv_5? texEnv);
 				property = texEnv;
 			}
-			else if (savedProperties.Has_TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_3_5_0())
+			else if (savedProperties.Has_TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_3_5())
 			{
-				savedProperties.TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_3_5_0.TryGetValue(new() { Name = propertyName }, out UnityTexEnv_3_5_0? texEnv);
+				savedProperties.TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_3_5.TryGetValue(new() { Name = propertyName }, out UnityTexEnv_3_5? texEnv);
 				property = texEnv;
 			}
 			else
@@ -39,22 +39,22 @@ namespace AssetRipper.SourceGenerated.Extensions
 		public static IEnumerable<KeyValuePair<Utf8String, IUnityTexEnv>> GetTextureProperties(this IMaterial material)
 		{
 			IUnityPropertySheet savedProperties = material.SavedProperties_C21;
-			if (savedProperties.Has_TexEnvs_AssetDictionary_Utf8String_UnityTexEnv_5_0_0())
+			if (savedProperties.Has_TexEnvs_AssetDictionary_Utf8String_UnityTexEnv_5())
 			{
 				return savedProperties
-					.TexEnvs_AssetDictionary_Utf8String_UnityTexEnv_5_0_0
+					.TexEnvs_AssetDictionary_Utf8String_UnityTexEnv_5
 					.Select(pair => new KeyValuePair<Utf8String, IUnityTexEnv>(pair.Key, pair.Value));
 			}
-			else if (savedProperties.Has_TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_5_0_0())
+			else if (savedProperties.Has_TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_5())
 			{
 				return savedProperties
-					.TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_5_0_0
+					.TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_5
 					.Select(pair => new KeyValuePair<Utf8String, IUnityTexEnv>(pair.Key.Name, pair.Value));
 			}
-			else if (savedProperties.Has_TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_3_5_0())
+			else if (savedProperties.Has_TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_3_5())
 			{
 				return savedProperties
-					.TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_3_5_0
+					.TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_3_5
 					.Select(pair => new KeyValuePair<Utf8String, IUnityTexEnv>(pair.Key.Name, pair.Value));
 			}
 			else

@@ -21,7 +21,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 			data.Packables.Clear();
 			data.Packables.Capacity = atlas.PackedSprites.Count;
-			PPtrAccessList<PPtr_Object_5_0_0, IObject> packables = data.Packables.ToPPtrAccessList<PPtr_Object_5_0_0, IObject>(atlas.Collection);
+			PPtrAccessList<PPtr_Object_5, IObject> packables = data.Packables.ToPPtrAccessList<PPtr_Object_5, IObject>(atlas.Collection);
 			foreach (ISprite? sprite in atlas.PackedSpritesP)
 			{
 				packables.Add(sprite);

@@ -59,17 +59,17 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		private static IEnumerable<Utf8String> GetTexEnvNames(this IUnityPropertySheet sheet)
 		{
-			if (sheet.Has_TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_3_5_0())
+			if (sheet.Has_TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_3_5())
 			{
-				return sheet.TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_3_5_0.Keys.Select(n => n.Name);
+				return sheet.TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_3_5.Keys.Select(n => n.Name);
 			}
-			else if (sheet.Has_TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_5_0_0())
+			else if (sheet.Has_TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_5())
 			{
-				return sheet.TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_5_0_0.Keys.Select(n => n.Name);
+				return sheet.TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_5.Keys.Select(n => n.Name);
 			}
-			else if (sheet.Has_TexEnvs_AssetDictionary_Utf8String_UnityTexEnv_5_0_0())
+			else if (sheet.Has_TexEnvs_AssetDictionary_Utf8String_UnityTexEnv_5())
 			{
-				return sheet.TexEnvs_AssetDictionary_Utf8String_UnityTexEnv_5_0_0.Keys;
+				return sheet.TexEnvs_AssetDictionary_Utf8String_UnityTexEnv_5.Keys;
 			}
 			else
 			{

@@ -19,7 +19,7 @@ Thank you for considering to support me. I have normal expenses like food, elect
 
 # Supported Versions
 
-Unity `3.5.0` to `2023.2.X`
+Unity `3.5.0` to `2023.3.X`
 
 # Links
 

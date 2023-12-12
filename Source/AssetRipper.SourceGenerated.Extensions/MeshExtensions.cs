@@ -138,7 +138,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 			else if (mesh.Has_ShapesList())
 			{
-				foreach (MeshBlendShape_4_1_0 blendShape in mesh.ShapesList)
+				foreach (MeshBlendShape_4_1 blendShape in mesh.ShapesList)
 				{
 					if (blendShape.IsCRCMatch(crc))
 					{

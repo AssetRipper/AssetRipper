@@ -114,14 +114,14 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		private static void SetIDs(this IOcclusionCullingData occlusionCullingData, IExportContainer container, IOcclusionCullingSettings cullingSetting, IOcclusionScene scene)
 		{
-			PPtrAccessList<PPtr_Renderer_5_0_0, IRenderer> renderers = cullingSetting.StaticRenderersP;
+			PPtrAccessList<PPtr_Renderer_5, IRenderer> renderers = cullingSetting.StaticRenderersP;
 			for (int i = 0; i < renderers.Count; i++)
 			{
 				IRenderer? renderer = renderers[i];
 				occlusionCullingData.StaticRenderers[scene.IndexRenderers + i].SetObjectID(container, renderer);
 			}
 
-			PPtrAccessList<PPtr_OcclusionPortal_5_5_0, IOcclusionPortal> portals = cullingSetting.PortalsP;
+			PPtrAccessList<PPtr_OcclusionPortal_5_5, IOcclusionPortal> portals = cullingSetting.PortalsP;
 			for (int i = 0; i < portals.Count; i++)
 			{
 				IOcclusionPortal? portal = portals[i];

@@ -78,7 +78,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		private static IMonoBehaviour?[] GetStateBehaviours(
 			IStateMachineBehaviourVectorDescription controllerStateMachineBehaviourVectorDescription,
-			PPtrAccessList<PPtr_MonoBehaviour_5_0_0, IMonoBehaviour> controllerStateMachineBehaviours,
+			PPtrAccessList<PPtr_MonoBehaviour_5, IMonoBehaviour> controllerStateMachineBehaviours,
 			StateRange range)
 		{
 			IMonoBehaviour?[] stateMachineBehaviours = new IMonoBehaviour?[range.Count];
@@ -125,7 +125,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 								yield return reference;
 							}
 						}
-						foreach (PPtr_MonoBehaviour_5_0_0 stateMachineBehaviour in pair.StateMachineBehaviours)
+						foreach (PPtr_MonoBehaviour_5 stateMachineBehaviour in pair.StateMachineBehaviours)
 						{
 							yield return stateMachineBehaviour.TryGetAsset(animatorController.Collection);
 						}
@@ -227,7 +227,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 				}
 				if (stateMachine.Has_LocalTransitions())
 				{
-					foreach ((PPtr_AnimatorState_4_0_0 statePPtr, AssetList<PPtr_AnimatorStateTransition_4_0_0> list) in stateMachine.LocalTransitions)
+					foreach ((PPtr_AnimatorState_4 statePPtr, AssetList<PPtr_AnimatorStateTransition_4> list) in stateMachine.LocalTransitions)
 					{
 						IAnimatorState? state = statePPtr.TryGetAsset(stateMachine.Collection);
 						if (state is not null)
@@ -237,13 +237,13 @@ namespace AssetRipper.SourceGenerated.Extensions
 								yield return reference;
 							}
 						}
-						foreach (PPtr_AnimatorStateTransition_4_0_0 transition in list)
+						foreach (PPtr_AnimatorStateTransition_4 transition in list)
 						{
 							yield return transition.TryGetAsset(stateMachine.Collection);
 						}
 					}
 				}
-				foreach ((PPtr_AnimatorState_4_0_0 statePPtr, AssetList<PPtr_AnimatorStateTransition_4_0_0> list) in stateMachine.OrderedTransitions)
+				foreach ((PPtr_AnimatorState_4 statePPtr, AssetList<PPtr_AnimatorStateTransition_4> list) in stateMachine.OrderedTransitions)
 				{
 					IAnimatorState? state = statePPtr.TryGetAsset(stateMachine.Collection);
 					if (state is not null)
@@ -253,7 +253,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 							yield return reference;
 						}
 					}
-					foreach (PPtr_AnimatorStateTransition_4_0_0 transition in list)
+					foreach (PPtr_AnimatorStateTransition_4 transition in list)
 					{
 						yield return transition.TryGetAsset(stateMachine.Collection);
 					}

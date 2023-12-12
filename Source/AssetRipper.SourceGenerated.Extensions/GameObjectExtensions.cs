@@ -48,13 +48,13 @@ namespace AssetRipper.SourceGenerated.Extensions
 			{
 				return gameObject.Component_AssetList_ComponentPair.Select(pair => pair.Component);
 			}
-			else if (gameObject.Has_Component_AssetList_AssetPair_Int32_PPtr_Component_3_5_0())
+			else if (gameObject.Has_Component_AssetList_AssetPair_Int32_PPtr_Component_3_5())
 			{
-				return gameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_3_5_0.Select(pair => pair.Value);
+				return gameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_3_5.Select(pair => pair.Value);
 			}
-			else if (gameObject.Has_Component_AssetList_AssetPair_Int32_PPtr_Component_5_0_0())
+			else if (gameObject.Has_Component_AssetList_AssetPair_Int32_PPtr_Component_5())
 			{
-				return gameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_5_0_0.Select(pair => pair.Value);
+				return gameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_5.Select(pair => pair.Value);
 			}
 			else
 			{
@@ -68,13 +68,13 @@ namespace AssetRipper.SourceGenerated.Extensions
 			{
 				return new ComponentPairAccessList(gameObject.Component_AssetList_ComponentPair);
 			}
-			else if (gameObject.Has_Component_AssetList_AssetPair_Int32_PPtr_Component_3_5_0())
+			else if (gameObject.Has_Component_AssetList_AssetPair_Int32_PPtr_Component_3_5())
 			{
-				return new AssetPairAccessList<PPtr_Component_3_5_0>(gameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_3_5_0);
+				return new AssetPairAccessList<PPtr_Component_3_5>(gameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_3_5);
 			}
-			else if (gameObject.Has_Component_AssetList_AssetPair_Int32_PPtr_Component_5_0_0())
+			else if (gameObject.Has_Component_AssetList_AssetPair_Int32_PPtr_Component_5())
 			{
-				return new AssetPairAccessList<PPtr_Component_5_0_0>(gameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_5_0_0);
+				return new AssetPairAccessList<PPtr_Component_5>(gameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_5);
 			}
 			else
 			{
@@ -88,13 +88,13 @@ namespace AssetRipper.SourceGenerated.Extensions
 			{
 				return gameObject.Component_AssetList_ComponentPair.Count;
 			}
-			else if (gameObject.Has_Component_AssetList_AssetPair_Int32_PPtr_Component_3_5_0())
+			else if (gameObject.Has_Component_AssetList_AssetPair_Int32_PPtr_Component_3_5())
 			{
-				return gameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_3_5_0.Count;
+				return gameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_3_5.Count;
 			}
-			else if (gameObject.Has_Component_AssetList_AssetPair_Int32_PPtr_Component_5_0_0())
+			else if (gameObject.Has_Component_AssetList_AssetPair_Int32_PPtr_Component_5())
 			{
-				return gameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_5_0_0.Count;
+				return gameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_5.Count;
 			}
 			else
 			{
@@ -108,15 +108,15 @@ namespace AssetRipper.SourceGenerated.Extensions
 			{
 				gameObject.Component_AssetList_ComponentPair.AddNew().Component.SetAsset(gameObject.Collection, component);
 			}
-			else if (gameObject.Has_Component_AssetList_AssetPair_Int32_PPtr_Component_3_5_0())
+			else if (gameObject.Has_Component_AssetList_AssetPair_Int32_PPtr_Component_3_5())
 			{
-				AssetPair<int, PPtr_Component_3_5_0> pair = gameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_3_5_0.AddNew();
+				AssetPair<int, PPtr_Component_3_5> pair = gameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_3_5.AddNew();
 				pair.Key = (int)classID;
 				pair.Value.SetAsset(gameObject.Collection, component);
 			}
-			else if (gameObject.Has_Component_AssetList_AssetPair_Int32_PPtr_Component_5_0_0())
+			else if (gameObject.Has_Component_AssetList_AssetPair_Int32_PPtr_Component_5())
 			{
-				AssetPair<int, PPtr_Component_5_0_0> pair = gameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_5_0_0.AddNew();
+				AssetPair<int, PPtr_Component_5> pair = gameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_5.AddNew();
 				pair.Key = (int)classID;
 				pair.Value.SetAsset(gameObject.Collection, component);
 			}
