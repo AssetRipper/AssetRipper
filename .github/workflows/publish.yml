@@ -22,18 +22,18 @@ jobs:
         run: dotnet nuget add source --name SamBoy "https://nuget.samboy.dev/v3/index.json"
 
       - name: Publish
-        run: dotnet publish /p:PublishProfile=windows_x64
+        run: dotnet publish -c Release -r win-x64
         working-directory: ./Source/AssetRipper.GUI.Free/
 
       - name: List Files
         shell: bash
-        run: ls ./Source/0Bins/Publish/AssetRipper_win_x64
+        run: ls ./Source/0Bins/AssetRipper.GUI.Free/Release/win-x64/ -R
 
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
           name: AssetRipper_win_x64
-          path: ./Source/0Bins/Publish/AssetRipper_win_x64/*.exe
+          path: ./Source/0Bins/AssetRipper.GUI.Free/Release/win-x64/publish/!( *.pdb )
           if-no-files-found: error
 
   publish_linux_x64:
@@ -50,18 +50,18 @@ jobs:
         run: dotnet nuget add source --name SamBoy "https://nuget.samboy.dev/v3/index.json"
 
       - name: Publish
-        run: dotnet publish /p:PublishProfile=linux_x64
+        run: dotnet publish -c Release -r linux-x64
         working-directory: ./Source/AssetRipper.GUI.Free/
 
       - name: List Files
         shell: bash
-        run: ls ./Source/0Bins/Publish/AssetRipper_linux_x64
+        run: ls ./Source/0Bins/AssetRipper.GUI.Free/Release/linux-x64/ -R
 
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
           name: AssetRipper_linux_x64
-          path: ./Source/0Bins/Publish/AssetRipper_linux_x64/*.AppImage
+          path: ./Source/0Bins/AssetRipper.GUI.Free/Release/linux-x64/publish/!( *.pdb )
           if-no-files-found: error
 
   publish_mac_x64:
@@ -78,16 +78,16 @@ jobs:
         run: dotnet nuget add source --name SamBoy "https://nuget.samboy.dev/v3/index.json"
 
       - name: Publish
-        run: dotnet publish /p:PublishProfile=mac_x64
+        run: dotnet publish -c Release -r osx-x64
         working-directory: ./Source/AssetRipper.GUI.Free/
 
       - name: List Files
         shell: bash
-        run: ls ./Source/0Bins/Publish/AssetRipper_mac_x64
+        run: ls ./Source/0Bins/AssetRipper.GUI.Free/Release/osx-x64/ -R
 
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
           name: AssetRipper_mac_x64
-          path: ./Source/0Bins/Publish/AssetRipper_mac_x64/*.dmg
+          path: ./Source/0Bins/AssetRipper.GUI.Free/Release/osx-x64/publish/!( *.pdb )
           if-no-files-found: error
