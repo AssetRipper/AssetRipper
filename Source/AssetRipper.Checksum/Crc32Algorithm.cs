@@ -1,5 +1,6 @@
 ﻿using System.Buffers;
 using System.Buffers.Binary;
+using System.Diagnostics;
 using System.IO.Hashing;
 using System.Text;
 
@@ -57,6 +58,9 @@ public static partial class Crc32Algorithm
 			rentedArray = null;
 			buffer = stackalloc byte[count];
 		}
+
+		int encoded = Encoding.UTF8.GetBytes(span, buffer);
+		Debug.Assert(encoded == count);
 
 		uint result = HashData(buffer);
 
