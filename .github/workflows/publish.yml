@@ -34,7 +34,7 @@ jobs:
 
       - name: List Files
         shell: bash
-        run: ls ./Source/0Bins/AssetRipper.GUI.Free/Release/ -R
+        run: ls -R ./Source/0Bins/AssetRipper.GUI.Free/Release/
 
       - name: Upload
         uses: actions/upload-artifact@v3
