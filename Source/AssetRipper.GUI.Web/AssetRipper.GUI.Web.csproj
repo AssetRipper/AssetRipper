@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<OutputPath>..\0Bins\Other\AssetRipper.GUI.Web\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.GUI.Web\$(Configuration)\</IntermediateOutputPath>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\AssetRipper.Decompilation.CSharp\AssetRipper.Decompilation.CSharp.csproj" />
+		<ProjectReference Include="..\AssetRipper.Export\AssetRipper.Export.csproj" />
+		<ProjectReference Include="..\AssetRipper.GUI.Licensing\AssetRipper.GUI.Licensing.csproj" />
+		<ProjectReference Include="..\AssetRipper.GUI.Localizations\AssetRipper.GUI.Localizations.csproj" />
+		<ProjectReference Include="..\AssetRipper.Web\AssetRipper.Web.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="StaticContent/css/site.css" />
+		<EmbeddedResource Include="StaticContent/favicon.ico" />
+		<EmbeddedResource Include="StaticContent/js/site.js" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AssetRipper.Text.Html" Version="1.0.0" />
+	</ItemGroup>
+
+</Project>

@@ -3,20 +3,13 @@
 	<PropertyGroup>
 		<ServerGarbageCollection>true</ServerGarbageCollection>
 		<InvariantGlobalization>true</InvariantGlobalization>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)' == 'Release' and false">
 		<PublishAot>true</PublishAot>
+		<OutputPath>..\0Bins\AssetRipper.GUI.Free\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.GUI.Free\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\AssetRipper.GUI.Electron\AssetRipper.GUI.Electron.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Content Update="electron.manifest.json">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
+		<ProjectReference Include="..\AssetRipper.GUI.Web\AssetRipper.GUI.Web.csproj" />
 	</ItemGroup>
 
 </Project>

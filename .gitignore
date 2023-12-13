@@ -4,7 +4,6 @@ packages/
 **/packages.config
 obj
 0Bins/
-Test/
 bin
 *.user
 .idea
@@ -12,4 +11,3 @@ bin
 .vscode
 *.blend1
 launchSettings.json
-AssetRipper.SourceGenerated.xml

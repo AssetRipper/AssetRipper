@@ -18,32 +18,22 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20.x'
-
-      - name: Install ElectronNET.CLI
-        run: dotnet tool install ElectronNET.CLI -g
-
       - name: Add Package Source
         run: dotnet nuget add source --name SamBoy "https://nuget.samboy.dev/v3/index.json"
 
-      - name: Publish AssetRipper Windows x64
-        run: electronize build /target win
+      - name: Publish
+        run: dotnet publish /p:PublishProfile=windows_x64
         working-directory: ./Source/AssetRipper.GUI.Free/
 
       - name: List Files
         shell: bash
-        run: |
-          cd ./Source/AssetRipper.GUI.Free/bin/Desktop/
-          ls
+        run: ls ./Source/0Bins/Publish/AssetRipper_win_x64
 
-      - name: Upload AssetRipper Windows x64
+      - name: Upload
         uses: actions/upload-artifact@v3
         with:
           name: AssetRipper_win_x64
-          path: ./Source/AssetRipper.GUI.Free/bin/Desktop/*.exe
+          path: ./Source/0Bins/Publish/AssetRipper_win_x64/*.exe
           if-no-files-found: error
 
   publish_linux_x64:
@@ -56,32 +46,22 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20.x'
-
-      - name: Install ElectronNET.CLI
-        run: dotnet tool install ElectronNET.CLI -g
-
       - name: Add Package Source
         run: dotnet nuget add source --name SamBoy "https://nuget.samboy.dev/v3/index.json"
 
-      - name: Publish AssetRipper Linux x64
-        run: electronize build /target linux
+      - name: Publish
+        run: dotnet publish /p:PublishProfile=linux_x64
         working-directory: ./Source/AssetRipper.GUI.Free/
 
       - name: List Files
         shell: bash
-        run: |
-          cd ./Source/AssetRipper.GUI.Free/bin/Desktop/
-          ls
-        
-      - name: Upload AssetRipper Linux x64
+        run: ls ./Source/0Bins/Publish/AssetRipper_linux_x64
+
+      - name: Upload
         uses: actions/upload-artifact@v3
         with:
           name: AssetRipper_linux_x64
-          path: ./Source/AssetRipper.GUI.Free/bin/Desktop/*.AppImage
+          path: ./Source/0Bins/Publish/AssetRipper_linux_x64/*.AppImage
           if-no-files-found: error
 
   publish_mac_x64:
@@ -94,30 +74,20 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20.x'
-
-      - name: Install ElectronNET.CLI
-        run: dotnet tool install ElectronNET.CLI -g
-
       - name: Add Package Source
         run: dotnet nuget add source --name SamBoy "https://nuget.samboy.dev/v3/index.json"
 
-      - name: Publish AssetRipper Mac x64
-        run: electronize build /target osx
+      - name: Publish
+        run: dotnet publish /p:PublishProfile=mac_x64
         working-directory: ./Source/AssetRipper.GUI.Free/
 
       - name: List Files
         shell: bash
-        run: |
-          cd ./Source/AssetRipper.GUI.Free/bin/Desktop/
-          ls
-        
-      - name: Upload AssetRipper Mac x64
+        run: ls ./Source/0Bins/Publish/AssetRipper_mac_x64
+
+      - name: Upload
         uses: actions/upload-artifact@v3
         with:
           name: AssetRipper_mac_x64
-          path: ./Source/AssetRipper.GUI.Free/bin/Desktop/*.dmg
+          path: ./Source/0Bins/Publish/AssetRipper_mac_x64/*.dmg
           if-no-files-found: error

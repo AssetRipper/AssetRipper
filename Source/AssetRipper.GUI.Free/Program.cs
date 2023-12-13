@@ -1,9 +1,9 @@
-﻿namespace AssetRipper.GUI.Free;
+namespace AssetRipper.GUI.Web.Free;
 
-internal static class Program
+public static class Program
 {
-	static async Task Main(string[] args)
+	public static void Main()
 	{
-		await Electron.Program.Run(args);
+		WebApplicationLauncher.Launch();
 	}
 }

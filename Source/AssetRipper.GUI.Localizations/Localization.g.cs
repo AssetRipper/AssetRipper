@@ -19,6 +19,16 @@ partial class Localization
 	public static string AssetBundleName => Get("asset_bundle_name");
 	
 	/// <summary>
+	/// AssetRipper Free
+	/// </summary>
+	public static string AssetRipperFree => Get("asset_ripper_free");
+	
+	/// <summary>
+	/// AssetRipper Premium
+	/// </summary>
+	public static string AssetRipperPremium => Get("asset_ripper_premium");
+	
+	/// <summary>
 	/// Audio
 	/// </summary>
 	public static string AssetTabAudio => Get("asset_tab_audio");
@@ -44,9 +54,19 @@ partial class Localization
 	public static string AssetTabBasic => Get("asset_tab_basic");
 	
 	/// <summary>
+	/// Dependencies
+	/// </summary>
+	public static string AssetTabDependencies => Get("asset_tab_dependencies");
+	
+	/// <summary>
 	/// Development
 	/// </summary>
 	public static string AssetTabDevelopment => Get("asset_tab_development");
+	
+	/// <summary>
+	/// Font
+	/// </summary>
+	public static string AssetTabFont => Get("asset_tab_font");
 	
 	/// <summary>
 	/// Hex
@@ -302,6 +322,11 @@ partial class Localization
 	/// Collections
 	/// </summary>
 	public static string Collections => Get("collections");
+	
+	/// <summary>
+	/// Commands
+	/// </summary>
+	public static string Commands => Get("commands");
 	
 	/// <summary>
 	/// Configuration Options
@@ -601,6 +626,11 @@ partial class Localization
 	public static string MenuLanguage => Get("menu_language");
 	
 	/// <summary>
+	/// Load
+	/// </summary>
+	public static string MenuLoad => Get("menu_load");
+	
+	/// <summary>
 	/// Mesh
 	/// </summary>
 	public static string Mesh => Get("mesh");
@@ -804,6 +834,11 @@ partial class Localization
 	/// Select an Asset on the left to view information about it
 	/// </summary>
 	public static string SelectAssetToViewInfo => Get("select_asset_to_view_info");
+	
+	/// <summary>
+	/// Settings
+	/// </summary>
+	public static string Settings => Get("settings");
 	
 	/// <summary>
 	/// Settings can only be changed before loading files.

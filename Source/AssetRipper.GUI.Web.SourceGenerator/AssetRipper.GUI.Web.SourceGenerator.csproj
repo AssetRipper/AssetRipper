@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>exe</OutputType>
+		<IsAotCompatible>false</IsAotCompatible>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="AssetRipper.Text.SourceGeneration" Version="1.1.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\AssetRipper\Source\AssetRipper.Export.UnityProjects\AssetRipper.Export.UnityProjects.csproj" />
+	</ItemGroup>
+
+</Project>

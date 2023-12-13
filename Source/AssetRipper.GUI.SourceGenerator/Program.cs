@@ -9,6 +9,7 @@ public static class Program
 		CleanJsonLocalizationFiles();
 		LocalizationSourceGenerator.MakeLocalizationClass();
 		LocalizationSourceGenerator.MakeLocalizationLoaderClass();
+		SettingsPageGenerator.Run();
 	}
 
 	private static void CleanJsonLocalizationFiles()
