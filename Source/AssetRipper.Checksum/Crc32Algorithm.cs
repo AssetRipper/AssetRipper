@@ -1,4 +1,5 @@
-﻿using System.Buffers.Binary;
+﻿using System.Buffers;
+using System.Buffers.Binary;
 using System.IO.Hashing;
 using System.Text;
 
@@ -9,7 +10,7 @@ public static partial class Crc32Algorithm
 	[ThreadStatic]
 	private static Crc32? crc;
 
-	public static uint HashData(byte[] data)
+	public static uint HashData(ReadOnlySpan<byte> data)
 	{
 		Span<byte> buffer = stackalloc byte[sizeof(uint)];
 		Crc32.Hash(data, buffer);
@@ -37,7 +38,34 @@ public static partial class Crc32Algorithm
 
 	public static uint HashUTF8(string data)
 	{
-		return HashData(Encoding.UTF8.GetBytes(data));
+		return HashUTF8(data.AsSpan());
+	}
+
+	public static uint HashUTF8(ReadOnlySpan<char> span)
+	{
+		int count = (int)(uint)Encoding.UTF8.GetByteCount(span);
+
+		byte[]? rentedArray;
+		scoped Span<byte> buffer;
+		if (count > 1024)
+		{
+			rentedArray = ArrayPool<byte>.Shared.Rent(count);
+			buffer = new Span<byte>(rentedArray, 0, count);
+		}
+		else
+		{
+			rentedArray = null;
+			buffer = stackalloc byte[count];
+		}
+
+		uint result = HashData(buffer);
+
+		if (rentedArray is not null)
+		{
+			ArrayPool<byte>.Shared.Return(rentedArray);
+		}
+
+		return result;
 	}
 
 	public static bool MatchAscii(ReadOnlySpan<char> data, uint hash)
