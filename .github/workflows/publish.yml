@@ -8,8 +8,15 @@ on:
   workflow_dispatch:
 
 jobs:
-  publish_windows_x64:
-    runs-on: windows-latest
+  publish:
+    runs-on: ${{ matrix.config.os }}
+
+    strategy:
+      matrix:
+        config:
+          - { name: win_x64, os: windows-latest, runtime: win-x64, executable: AssetRipper.GUI.Free.exe }
+          - { name: linux_x64, os: ubuntu-latest, runtime: linux-x64, executable: AssetRipper.GUI.Free }
+          - { name: mac_x64, os: macos-latest, runtime: osx-x64, executable: AssetRipper.GUI.Free.dmg }
 
     steps:
       - uses: actions/checkout@v4
@@ -22,72 +29,16 @@ jobs:
         run: dotnet nuget add source --name SamBoy "https://nuget.samboy.dev/v3/index.json"
 
       - name: Publish
-        run: dotnet publish -c Release -r win-x64
+        run: dotnet publish -c Release -r ${{ matrix.config.runtime }}
         working-directory: ./Source/AssetRipper.GUI.Free/
 
       - name: List Files
         shell: bash
-        run: ls ./Source/0Bins/AssetRipper.GUI.Free/Release/win-x64/ -R
+        run: ls ./Source/0Bins/AssetRipper.GUI.Free/Release/ -R
 
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
-          name: AssetRipper_win_x64
-          path: ./Source/0Bins/AssetRipper.GUI.Free/Release/win-x64/publish/!( *.pdb )
-          if-no-files-found: error
-
-  publish_linux_x64:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 8.0.x
-
-      - name: Add Package Source
-        run: dotnet nuget add source --name SamBoy "https://nuget.samboy.dev/v3/index.json"
-
-      - name: Publish
-        run: dotnet publish -c Release -r linux-x64
-        working-directory: ./Source/AssetRipper.GUI.Free/
-
-      - name: List Files
-        shell: bash
-        run: ls ./Source/0Bins/AssetRipper.GUI.Free/Release/linux-x64/ -R
-
-      - name: Upload
-        uses: actions/upload-artifact@v3
-        with:
-          name: AssetRipper_linux_x64
-          path: ./Source/0Bins/AssetRipper.GUI.Free/Release/linux-x64/publish/!( *.pdb )
-          if-no-files-found: error
-
-  publish_mac_x64:
-    runs-on: macos-latest
-
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 8.0.x
-
-      - name: Add Package Source
-        run: dotnet nuget add source --name SamBoy "https://nuget.samboy.dev/v3/index.json"
-
-      - name: Publish
-        run: dotnet publish -c Release -r osx-x64
-        working-directory: ./Source/AssetRipper.GUI.Free/
-
-      - name: List Files
-        shell: bash
-        run: ls ./Source/0Bins/AssetRipper.GUI.Free/Release/osx-x64/ -R
-
-      - name: Upload
-        uses: actions/upload-artifact@v3
-        with:
-          name: AssetRipper_mac_x64
-          path: ./Source/0Bins/AssetRipper.GUI.Free/Release/osx-x64/publish/!( *.pdb )
+          name: AssetRipper_${{ matrix.config.name }}
+          path: ./Source/0Bins/AssetRipper.GUI.Free/Release/${{ matrix.config.runtime }}/native/${{ matrix.config.executable }}
           if-no-files-found: error

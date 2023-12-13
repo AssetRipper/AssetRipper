@@ -3,9 +3,14 @@
 	<PropertyGroup>
 		<ServerGarbageCollection>true</ServerGarbageCollection>
 		<InvariantGlobalization>true</InvariantGlobalization>
+		<EnableUnsafeUTF7Encoding>false</EnableUnsafeUTF7Encoding>
 		<PublishAot>true</PublishAot>
 		<OutputPath>..\0Bins\AssetRipper.GUI.Free\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.GUI.Free\$(Configuration)\</IntermediateOutputPath>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
+		<DebuggerSupport>false</DebuggerSupport>
 	</PropertyGroup>
 
 	<ItemGroup>
