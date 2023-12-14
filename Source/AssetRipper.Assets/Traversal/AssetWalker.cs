@@ -53,6 +53,7 @@ public abstract class AssetWalker
 	///   <c>false</c> to skip visiting the children and not call the exit method.
 	/// </returns>
 	public virtual bool EnterField<T>(T asset, string name)
+		where T : IUnityAssetBase
 	{
 		return true;
 	}
@@ -63,6 +64,7 @@ public abstract class AssetWalker
 	/// <typeparam name="T">The type of the <paramref name="asset"/>.</typeparam>
 	/// <param name="name">The name of the field being exited.</param>
 	public virtual void ExitField<T>(T asset, string name)
+		where T : IUnityAssetBase
 	{
 	}
 
