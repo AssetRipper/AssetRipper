@@ -1,6 +1,8 @@
+using System.Collections;
+
 namespace AssetRipper.Yaml
 {
-	public sealed class YamlMappingNode : YamlNode
+	public sealed class YamlMappingNode : YamlNode, IEnumerable<KeyValuePair<YamlNode, YamlNode>>
 	{
 		public YamlMappingNode() { }
 
@@ -322,6 +324,10 @@ namespace AssetRipper.Yaml
 			KeyValuePair<YamlNode, YamlNode> pair = new(key, value);
 			m_children.Add(pair);
 		}
+
+		IEnumerator<KeyValuePair<YamlNode, YamlNode>> IEnumerable<KeyValuePair<YamlNode, YamlNode>>.GetEnumerator() => m_children.GetEnumerator();
+
+		IEnumerator IEnumerable.GetEnumerator() => m_children.GetEnumerator();
 
 		public static YamlMappingNode Empty { get; } = new YamlMappingNode(MappingStyle.Flow);
 
