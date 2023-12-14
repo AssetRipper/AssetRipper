@@ -12,6 +12,8 @@ namespace AssetRipper.Assets;
 
 public interface IUnityAssetBase : IEndianSpanReadable, IAssetWritable, IYamlExportable
 {
+	int SerializedVersion { get; }
+	bool FlowMappedInYaml { get; }
 	void CopyValues(IUnityAssetBase? source, PPtrConverter converter);
 	void Deserialize(JsonNode node, IUnityAssetDeserializer deserializer, DeserializationOptions options);
 	void Reset();

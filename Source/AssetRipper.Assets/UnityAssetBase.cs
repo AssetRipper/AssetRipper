@@ -16,6 +16,10 @@ namespace AssetRipper.Assets;
 /// </summary>
 public abstract class UnityAssetBase : IUnityAssetBase
 {
+	public virtual int SerializedVersion => 1;
+
+	public virtual bool FlowMappedInYaml => false;
+
 	public virtual void ReadEditor(ref EndianSpanReader reader) => throw MethodNotSupported();
 
 	public virtual void ReadRelease(ref EndianSpanReader reader) => throw MethodNotSupported();
