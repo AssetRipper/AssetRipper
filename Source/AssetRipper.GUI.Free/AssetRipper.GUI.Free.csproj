@@ -4,6 +4,7 @@
 		<ServerGarbageCollection>true</ServerGarbageCollection>
 		<InvariantGlobalization>true</InvariantGlobalization>
 		<EnableUnsafeUTF7Encoding>false</EnableUnsafeUTF7Encoding>
+		<OptimizationPreference>Size</OptimizationPreference>
 		<PublishAot>true</PublishAot>
 		<TrimmerSingleWarn>false</TrimmerSingleWarn>
 		<OutputPath>..\0Bins\AssetRipper.GUI.Free\$(Configuration)\</OutputPath>
