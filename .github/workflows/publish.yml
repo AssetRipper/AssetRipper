@@ -40,5 +40,9 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: AssetRipper_${{ matrix.config.name }}
-          path: ./Source/0Bins/AssetRipper.GUI.Free/Release/${{ matrix.config.runtime }}/native/${{ matrix.config.executable }}
+          path: |
+            ./Source/0Bins/AssetRipper.GUI.Free/Release/${{ matrix.config.runtime }}/publish/${{ matrix.config.executable }}
+            ./Source/0Bins/AssetRipper.GUI.Free/Release/${{ matrix.config.runtime }}/publish/*.dll
+            ./Source/0Bins/AssetRipper.GUI.Free/Release/${{ matrix.config.runtime }}/publish/*.so
+            ./Source/0Bins/AssetRipper.GUI.Free/Release/${{ matrix.config.runtime }}/publish/*.dylib
           if-no-files-found: error
