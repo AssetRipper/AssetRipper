@@ -37,7 +37,7 @@ jobs:
         run: ls -R ./Source/0Bins/AssetRipper.GUI.Free/Release/
 
       - name: Upload
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: AssetRipper_${{ matrix.config.name }}
           path: |
