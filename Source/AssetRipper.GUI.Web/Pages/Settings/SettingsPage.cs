@@ -16,36 +16,154 @@ public sealed partial class SettingsPage : DefaultPage
 
 	public override void WriteInnerContent(TextWriter writer)
 	{
-		new H1(writer).Close(Localization.ConfigOptions);
+		new H1(writer).WithStyle("font-family: Arial, sans-serif;").Close(Localization.ConfigOptions);
 		if (GameFileLoader.IsLoaded)
 		{
-			using (new Div(writer).WithClass("text-center").End())
+			using (new Div(writer).WithStyle("text-align:center; font-family: Arial, sans-serif;").End())
 			{
-				new P(writer).Close(Localization.SettingsCanOnlyBeChangedBeforeLoadingFiles);
+				new P(writer).WithStyle("font-family: Arial, sans-serif;")
+					.Close(Localization.SettingsCanOnlyBeChangedBeforeLoadingFiles);
 			}
 		}
 		else
 		{
-			using (new Form(writer).WithAction("/Settings/Update").WithMethod("post").End())
+			using (new Div(writer).WithClass("container").End())
 			{
-				WriteCheckBoxForEnablePrefabOutlining(writer, Localization.EnablePrefabOutlining);
-				WriteCheckBoxForIgnoreStreamingAssets(writer, Localization.SkipStreamingAssets);
-				WriteCheckBoxForIgnoreEngineAssets(writer, Localization.IgnoreEngineAssets);
-				WriteTextAreaForDefaultVersion(writer);
-				WriteDropDownForAudioExportFormat(writer);
-				WriteDropDownForBundledAssetsExportMode(writer);
-				WriteDropDownForImageExportFormat(writer);
-				WriteDropDownForMeshExportFormat(writer);
-				WriteDropDownForSpriteExportMode(writer);
-				WriteDropDownForTerrainExportMode(writer);
-				WriteDropDownForTextExportMode(writer);
-				WriteDropDownForShaderExportMode(writer);
-				WriteDropDownForScriptExportMode(writer);
-				WriteDropDownForScriptContentLevel(writer);
-				WriteDropDownForScriptLanguageVersion(writer);
-				using (new Div(writer).WithClass("form-group").End())
+				using (new Form(writer).WithAction("/Settings/Update").WithMethod("post").End())
 				{
-					new Input(writer).WithClass("btn btn-primary").WithType("submit").WithValue(Localization.Save).Close();
+					using (new Div(writer)
+						       .WithStyle(
+							       "margin-bottom: 20px; border: 1px solid #ccc; border-radius: 5px; font-family: Arial, sans-serif;")
+						       .End())
+					{
+						using (new Div(writer).WithStyle(
+								       "padding: 10px; border-radius: 5px; font-family: Arial, sans-serif;")
+							       .End())
+						{
+							new H2(writer).WithStyle("font-family: Arial, sans-serif;").Close("Import");
+							
+							using (new Div(writer).WithClass("row").End())
+							{
+								WriteCheckBoxForIgnoreStreamingAssets(writer,
+									Localization.SkipStreamingAssets);
+								
+								using (new Div(writer).WithClass("col").End())
+								{
+									WriteTextAreaForDefaultVersion(writer);
+								}
+							}
+							
+							using (new Div(writer).WithClass("row").End())
+							{
+								
+								using (new Div(writer).WithClass("col").End())
+								{
+									WriteDropDownForBundledAssetsExportMode(writer);
+								}
+								
+								using (new Div(writer).WithClass("col").End())
+								{
+									WriteDropDownForScriptContentLevel(writer);
+								}
+							}
+						}
+
+						new Hr(writer).WithStyle("border-color: #ccc; margin: 0;").Close();
+
+						using (new Div(writer)
+							       .WithStyle(
+								       "padding: 10px; font-family: Arial, sans-serif;")
+							       .End())
+						{
+							new H3(writer).WithStyle("font-family: Arial, sans-serif;").Close("Experimental");
+
+							WriteCheckBoxForEnablePrefabOutlining(writer, Localization.EnablePrefabOutlining);
+						}
+					}
+
+					using (new Div(writer)
+						       .WithStyle(
+							       "margin-bottom: 20px; border: 1px solid #ccc; border-radius: 5px; font-family: Arial, sans-serif;")
+						       .End())
+					{
+						using (new Div(writer).WithStyle(
+								       "padding: 10px; border-radius: 5px; font-family: Arial, sans-serif;")
+							       .End())
+						{
+							new H2(writer).WithStyle("font-family: Arial, sans-serif;").Close(Localization.MenuExport);
+							
+							using (new Div(writer).WithClass("row").End())
+							{
+								using (new Div(writer).WithClass("col").End())
+								{
+									WriteDropDownForAudioExportFormat(writer);
+								}
+								
+								using (new Div(writer).WithClass("col").End())
+								{
+									WriteDropDownForImageExportFormat(writer);
+								}
+								
+								using (new Div(writer).WithClass("col").End())
+								{
+									WriteDropDownForMeshExportFormat(writer);
+								}
+							}
+							
+							using (new Div(writer).WithClass("row").End())
+							{
+								using (new Div(writer).WithClass("col").End())
+								{
+									WriteDropDownForSpriteExportMode(writer);
+								}
+								using (new Div(writer).WithClass("col").End())
+								{
+									WriteDropDownForTerrainExportMode(writer);
+								}
+								using (new Div(writer).WithClass("col").End())
+								{
+									WriteDropDownForTextExportMode(writer);
+								}
+							}
+							
+							using (new Div(writer).WithClass("row").End())
+							{
+								using (new Div(writer).WithClass("col").End())
+								{
+									WriteDropDownForShaderExportMode(writer);
+								}
+								using (new Div(writer).WithClass("col").End())
+								{
+									WriteDropDownForScriptLanguageVersion(writer);
+								}
+								using (new Div(writer).WithClass("col").End())
+								{
+									WriteDropDownForScriptExportMode(writer);
+								}
+							}
+						}
+
+						new Hr(writer).WithStyle("border-color: #ccc; margin: 0;").Close();
+
+						using (new Div(writer)
+							       .WithStyle(
+								       "padding: 10px; font-family: Arial, sans-serif;")
+							       .End())
+						{
+							new H3(writer).WithStyle("font-family: Arial, sans-serif;").Close("Experimental");
+
+							WriteCheckBoxForIgnoreEngineAssets(writer,
+								Localization.IgnoreEngineAssets);
+						}
+					}
+
+					using (new Div(writer).WithStyle("margin: 10px 0;").End())
+					{
+						new Input(writer)
+							.WithStyle(
+								"background-color: #007bff; border-color: #007bff; color: white; padding: 10px 20px; border-radius: 5px; cursor: pointer;")
+							.WithType("submit").WithValue(Localization.Save).Close();
+					}
 				}
 			}
 		}
@@ -53,10 +171,11 @@ public sealed partial class SettingsPage : DefaultPage
 
 	private static void WriteTextAreaForDefaultVersion(TextWriter writer)
 	{
-		new Label(writer).WithClass("form-label").WithFor(nameof(Configuration.DefaultVersion)).Close(Localization.DefaultVersion);
+		new Label(writer).WithStyle("margin-top: 10px;").WithFor(nameof(Configuration.DefaultVersion))
+			.Close(Localization.DefaultVersion);
 		new Input(writer)
 			.WithType("text")
-			.WithClass("form-control")
+			.WithStyle("padding: 10px; border: 1px solid #ccc; border-radius: 5px; width: 100%; margin-Bottom: 10px;")
 			.WithId(nameof(Configuration.DefaultVersion))
 			.WithName(nameof(Configuration.DefaultVersion))
 			.WithValue(Configuration.DefaultVersion.ToString())
@@ -65,14 +184,16 @@ public sealed partial class SettingsPage : DefaultPage
 
 	private static void WriteCheckBox(TextWriter writer, string label, bool @checked, string id)
 	{
-		using (new Div(writer).WithClass("form-check").End())
+		using (new Div(writer).WithStyle("margin-bottom: 10px;").End())
 		{
-			new Input(writer).WithClass("form-check-input").WithType("checkbox").WithValue().WithId(id).WithName(id).MaybeWithChecked(@checked).Close();
-			new Label(writer).WithClass("form-check-label").WithFor(id).Close(label);
+			new Input(writer).WithStyle("margin-right: 10px;").WithType("checkbox").WithValue().WithId(id).WithName(id)
+				.MaybeWithChecked(@checked).Close();
+			new Label(writer).WithFor(id).Close(label);
 		}
 	}
 
-	private static void WriteDropDown<T>(TextWriter writer, DropDownSetting<T> setting, T value, string id) where T : struct, Enum
+	private static void WriteDropDown<T>(TextWriter writer, DropDownSetting<T> setting, T value, string id)
+		where T : struct, Enum
 	{
 		IReadOnlyList<DropDownItem<T>> items = setting.GetValues();
 		new Label(writer).WithClass("form-label").WithFor(id).Close(setting.Title);
@@ -107,6 +228,7 @@ public sealed partial class SettingsPage : DefaultPage
 		{
 			return default;
 		}
+
 		try
 		{
 			return UnityVersion.Parse(version);
@@ -123,6 +245,7 @@ public sealed partial class SettingsPage : DefaultPage
 		{
 			return result;
 		}
+
 		return default;
 	}
 
@@ -133,6 +256,7 @@ public sealed partial class SettingsPage : DefaultPage
 		{
 			action.Invoke(form.ContainsKey(key));
 		}
+
 		foreach ((string key, string? value) in form.Select(pair => (pair.Key, (string?)pair.Value)))
 		{
 			SetProperty(key, value);
