@@ -26,7 +26,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 		/// <summary>
 		/// 5.6.0
 		/// </summary>
-		private static bool AllowUnsetVertexChannel(UnityVersion version) => version.IsEqual(5, 6, 0);
+		private static bool AllowUnsetVertexChannel(UnityVersion version) => version.Equals(5, 6, 0);
 
 		public static ChannelInfo GetChannel(this IVertexData instance, UnityVersion version, ShaderChannel channelType)
 		{
@@ -130,7 +130,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 					BitArray channelMask = new BitArray(BitConverter.GetBytes(m_Stream.ChannelMask));
 					if (channelMask.Get(chn))
 					{
-						if (version.IsLess(2018) && chn == 2 && m_Channel.Format == 2) //kShaderChannelColor && kChannelFormatColor
+						if (version.LessThan(2018) && chn == 2 && m_Channel.Format == 2) //kShaderChannelColor && kChannelFormatColor
 						{
 							m_Channel.SetDataDimension(4);
 						}
@@ -172,7 +172,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 							componentsFloatArray = MeshHelper.BytesToFloatArray(componentBytes, vertexFormat);
 						}
 
-						if (version.IsGreaterEqual(2018))
+						if (version.GreaterThanOrEquals(2018))
 						{
 							switch (chn)
 							{
@@ -259,7 +259,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 									uv1 = MeshHelper.FloatArrayToVector2(componentsFloatArray, m_Channel.GetDataDimension());
 									break;
 								case 5:
-									if (version.IsGreaterEqual(5)) //kShaderChannelTexCoord2
+									if (version.GreaterThanOrEquals(5)) //kShaderChannelTexCoord2
 									{
 										uv2 = MeshHelper.FloatArrayToVector2(componentsFloatArray, m_Channel.GetDataDimension());
 									}

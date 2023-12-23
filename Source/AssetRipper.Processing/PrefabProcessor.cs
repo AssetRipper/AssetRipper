@@ -64,7 +64,7 @@ public sealed class PrefabProcessor : IAssetProcessor
 			{
 				gameObjectsAlreadyProcessed.AddRange(root.FetchHierarchy().OfType<IGameObject>());
 
-				if (!root.Collection.IsScene && processedCollection.Version.IsLess(2018, 3))
+				if (!root.Collection.IsScene && processedCollection.Version.LessThan(2018, 3))
 				{
 					IPrefabInstance prefab = CreatePrefab(processedCollection, root);
 					IPrefabMarker? prefabMarker = prefab as IPrefabMarker;

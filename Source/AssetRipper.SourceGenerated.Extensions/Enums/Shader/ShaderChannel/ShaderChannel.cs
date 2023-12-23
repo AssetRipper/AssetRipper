@@ -41,11 +41,11 @@ namespace AssetRipper.SourceGenerated.Extensions.Enums.Shader.ShaderChannel
 		/// <summary>
 		/// 2018.1 and greater
 		/// </summary>
-		public static bool ShaderChannel2018Relevant(UnityVersion version) => version.IsGreaterEqual(2018);
+		public static bool ShaderChannel2018Relevant(UnityVersion version) => version.GreaterThanOrEquals(2018);
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool ShaderChannel5Relevant(UnityVersion version) => version.IsGreaterEqual(5);
+		public static bool ShaderChannel5Relevant(UnityVersion version) => version.GreaterThanOrEquals(5);
 
 		public static int GetChannelCount(UnityVersion version)
 		{

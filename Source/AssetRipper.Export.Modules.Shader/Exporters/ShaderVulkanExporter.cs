@@ -12,7 +12,7 @@ namespace AssetRipper.Export.Modules.Shaders.Exporters
 		/// <summary>
 		/// 2019.3 and greater
 		/// </summary>
-		public static bool HasProgRayTracing(UnityVersion version) => version.IsGreaterEqual(2019, 3);
+		public static bool HasProgRayTracing(UnityVersion version) => version.GreaterThanOrEquals(2019, 3);
 
 		public override string Name => "ShaderVulkanExporter";
 

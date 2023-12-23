@@ -20,11 +20,11 @@ namespace AssetRipper.SourceGenerated.Extensions.Enums.Shader.VertexFormat
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
-		public static bool VertexFormat2019Relevant(UnityVersion version) => version.IsGreaterEqual(2019);
+		public static bool VertexFormat2019Relevant(UnityVersion version) => version.GreaterThanOrEquals(2019);
 		/// <summary>
 		/// 2017.1 and greater
 		/// </summary>
-		public static bool VertexFormat2017Relevant(UnityVersion version) => version.IsGreaterEqual(2017);
+		public static bool VertexFormat2017Relevant(UnityVersion version) => version.GreaterThanOrEquals(2017);
 
 		public static byte CalculateStride(this VertexFormat _this, UnityVersion version, int dimention)
 		{

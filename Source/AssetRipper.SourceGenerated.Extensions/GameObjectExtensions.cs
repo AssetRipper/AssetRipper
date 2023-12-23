@@ -14,7 +14,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 		/// <summary>
 		/// Less than 4.0.0
 		/// </summary>
-		private static bool IsActiveInherited(UnityVersion version) => version.IsLess(4);
+		private static bool IsActiveInherited(UnityVersion version) => version.LessThan(4);
 
 		public static bool GetIsActive(this IGameObject gameObject)
 		{

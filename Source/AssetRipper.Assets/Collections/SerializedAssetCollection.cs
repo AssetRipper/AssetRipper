@@ -61,7 +61,7 @@ public sealed class SerializedAssetCollection : AssetCollection
 		SerializedAssetCollection collection = new SerializedAssetCollection(bundle)
 		{
 			Name = file.NameFixed,
-			Version = file.Version.IsEqual(0, 0, 0) ? defaultVersion : file.Version,
+			Version = file.Version.Equals(0, 0, 0) ? defaultVersion : file.Version,
 			Platform = file.Platform,
 			Flags = file.Flags,
 			EndianType = file.EndianType,

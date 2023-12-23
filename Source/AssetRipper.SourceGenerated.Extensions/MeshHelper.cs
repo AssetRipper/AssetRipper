@@ -49,7 +49,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static VertexFormat ToVertexFormat(int format, UnityVersion version)
 		{
-			if (version.IsLess(2017))
+			if (version.LessThan(2017))
 			{
 				return (VertexChannelFormat)format switch
 				{
@@ -63,7 +63,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 					_ => throw new ArgumentOutOfRangeException(nameof(format), format, null),
 				};
 			}
-			else if (version.IsLess(2019))
+			else if (version.LessThan(2019))
 			{
 				return (VertexFormat2017)format switch
 				{

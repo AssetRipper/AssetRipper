@@ -10,7 +10,7 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 		{
 			//This code is most likely correct, but not guaranteed.
 			//Reverse engineering it was painful, and it's possible that mistakes were made.
-			return !unityVersion.IsEqual(0, 0, 0) && unityVersion < WriteIDHashForScriptTypeVersion;
+			return !unityVersion.Equals(0, 0, 0) && unityVersion < WriteIDHashForScriptTypeVersion;
 		}
 
 		protected override void ReadTypeDependencies(SerializedReader reader)

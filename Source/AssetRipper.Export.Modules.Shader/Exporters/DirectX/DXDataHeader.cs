@@ -12,7 +12,7 @@ namespace AssetRipper.Export.Modules.Shaders.Exporters.DirectX
 		/// <summary>
 		/// 5.4.0 and greater
 		/// </summary>
-		public static bool HasGSInputPrimitive(UnityVersion version) => version.IsGreaterEqual(5, 4);
+		public static bool HasGSInputPrimitive(UnityVersion version) => version.GreaterThanOrEquals(5, 4);
 
 		public static int GetDataOffset(UnityVersion version, GPUPlatform graphicApi, int headerVersion)
 		{

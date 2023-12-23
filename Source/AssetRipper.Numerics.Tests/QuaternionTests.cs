@@ -13,7 +13,7 @@
 			//Some however are only near equal due to rounding errors
 			Vector3 euler2 = new Vector3(-67f, 45f, 178f);
 			Vector3 converted2 = ConvertEulerToQuaternionAndBackToEuler(euler2);
-			Assert.That(euler2.IsEqualByDot(converted2));
+			Assert.That(euler2.EqualsByDot(converted2));
 		}
 
 		private static Vector3 ConvertEulerToQuaternionAndBackToEuler(Vector3 original)

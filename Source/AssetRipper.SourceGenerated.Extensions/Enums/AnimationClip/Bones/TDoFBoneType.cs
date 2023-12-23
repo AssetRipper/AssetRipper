@@ -36,23 +36,23 @@
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		public static bool IsIncludeHead(UnityVersion version) => version.IsGreaterEqual(2017, 3);
+		public static bool IsIncludeHead(UnityVersion version) => version.GreaterThanOrEquals(2017, 3);
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		public static bool IsIncludeLeftLowerLeg(UnityVersion version) => version.IsGreaterEqual(2017, 3);
+		public static bool IsIncludeLeftLowerLeg(UnityVersion version) => version.GreaterThanOrEquals(2017, 3);
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		public static bool IsIncludeRightLowerLeg(UnityVersion version) => version.IsGreaterEqual(2017, 3);
+		public static bool IsIncludeRightLowerLeg(UnityVersion version) => version.GreaterThanOrEquals(2017, 3);
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		public static bool IsIncludeLeftUpperArm(UnityVersion version) => version.IsGreaterEqual(2017, 3);
+		public static bool IsIncludeLeftUpperArm(UnityVersion version) => version.GreaterThanOrEquals(2017, 3);
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		public static bool IsIncludeRightUpperArm(UnityVersion version) => version.IsGreaterEqual(2017, 3);
+		public static bool IsIncludeRightUpperArm(UnityVersion version) => version.GreaterThanOrEquals(2017, 3);
 
 		public static TDoFBoneType Update(this TDoFBoneType _this, UnityVersion version)
 		{

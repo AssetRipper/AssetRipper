@@ -112,7 +112,7 @@ partial class ProjectExporter
 		}
 
 		//Texture Array exporters
-		if (Settings.Version.IsGreaterEqual(2020, 2))
+		if (Settings.Version.GreaterThanOrEquals(2020, 2))
 		{
 			TextureArrayAssetExporter textureArrayExporter = new(Settings);
 			OverrideExporter<ICubemapArray>(textureArrayExporter);

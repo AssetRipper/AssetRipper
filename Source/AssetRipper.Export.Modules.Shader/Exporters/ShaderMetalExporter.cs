@@ -10,7 +10,7 @@ namespace AssetRipper.Export.Modules.Shaders.Exporters
 		/// <summary>
 		/// 5.3.0 and greater
 		/// </summary>
-		public static bool HasBlob(UnityVersion version) => version.IsGreaterEqual(5, 3);
+		public static bool HasBlob(UnityVersion version) => version.GreaterThanOrEquals(5, 3);
 
 		public override string Name => "ShaderMetalExporter";
 

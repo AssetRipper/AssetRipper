@@ -44,7 +44,7 @@ namespace AssetRipper.Tests.PackedBitVectorTests
 
 			for (int i = 0; i < quaternions.Length; i++)
 			{
-				bool equal = quaternions[i].IsEqualUsingDot(unpackedQuaternions[i]);
+				bool equal = quaternions[i].EqualsByDot(unpackedQuaternions[i]);
 				if (!equal)
 				{
 					throw new Exception($"Index {i}: Original: {quaternions[i]} Unpacked: {unpackedQuaternions[i]} Dot: {quaternions[i].Dot(unpackedQuaternions[i])}");

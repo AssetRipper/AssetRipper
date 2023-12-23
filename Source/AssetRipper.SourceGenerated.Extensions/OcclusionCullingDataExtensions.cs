@@ -57,7 +57,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			// if < 3.0.0 this asset doesn't exist
 
 			// 3.0.0 to 5.5.0 this asset is created by culling settings so it has set data already
-			if (container.Version.IsLess(5, 5))
+			if (container.Version.LessThan(5, 5))
 			{
 				return;
 			}

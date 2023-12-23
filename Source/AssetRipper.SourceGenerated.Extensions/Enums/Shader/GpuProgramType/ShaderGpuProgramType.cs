@@ -48,7 +48,7 @@ namespace AssetRipper.SourceGenerated.Extensions.Enums.Shader.GpuProgramType
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool GpuProgramType55Relevant(UnityVersion version) => version.IsGreaterEqual(5, 5);
+		public static bool GpuProgramType55Relevant(UnityVersion version) => version.GreaterThanOrEquals(5, 5);
 
 		public static bool IsGL(this ShaderGpuProgramType _this)
 		{

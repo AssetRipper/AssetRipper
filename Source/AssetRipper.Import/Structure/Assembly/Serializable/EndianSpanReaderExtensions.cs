@@ -88,7 +88,7 @@ internal static class EndianSpanReaderExtensions
 		return array;
 	}
 
-	private static bool IsAlignArrays(UnityVersion version) => version.IsGreaterEqual(2017);
+	private static bool IsAlignArrays(UnityVersion version) => version.GreaterThanOrEquals(2017);
 
 	private static void ThrowIfNotEnoughSpaceForArray(ref EndianSpanReader reader, int elementNumberToRead, int elementSize)
 	{

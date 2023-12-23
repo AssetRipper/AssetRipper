@@ -44,7 +44,7 @@ namespace AssetRipper.Import.AssetCreation
 
 		public override IUnityObjectBase? ReadAsset(AssetInfo assetInfo, ReadOnlyArraySegment<byte> assetData, SerializedType? assetType)
 		{
-			if (assetInfo.Collection.Version.IsEqual(0, 0, 0))
+			if (assetInfo.Collection.Version.Equals(0, 0, 0))
 			{
 				//Assets with a stripped version can't be read.
 				return new UnreadableObject(assetInfo, assetData.ToArray());

@@ -16,7 +16,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 		/// </summary>
 		public static bool HasCrashReportingSettings(UnityVersion version, BuildTarget platform, TransferInstructionFlags flags)
 		{
-			if (version.IsLess(5, 4))
+			if (version.LessThan(5, 4))
 			{
 				return false;
 			}
@@ -47,7 +47,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 					return true;
 
 				case BuildTarget.Tizen:
-					return version.IsGreaterEqual(5, 6);
+					return version.GreaterThanOrEquals(5, 6);
 
 				default:
 					return false;
@@ -58,7 +58,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 		/// </summary>
 		public static bool HasUnityPurchasingSettings(UnityVersion version, BuildTarget platform, TransferInstructionFlags flags)
 		{
-			if (version.IsLess(5, 4))
+			if (version.LessThan(5, 4))
 			{
 				return true;
 			}
@@ -96,7 +96,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 		/// </summary>
 		public static bool HasUnityAnalyticsSettings(UnityVersion version, BuildTarget platform, TransferInstructionFlags flags)
 		{
-			if (version.IsLess(5, 4))
+			if (version.LessThan(5, 4))
 			{
 				return true;
 			}
@@ -134,7 +134,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 		/// </summary>
 		public static bool HasUnityAdsSettings(UnityVersion version, BuildTarget platform, TransferInstructionFlags flags)
 		{
-			if (version.IsLess(5, 5))
+			if (version.LessThan(5, 5))
 			{
 				return false;
 			}
@@ -172,7 +172,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 		/// </summary>
 		public static bool HasPerformanceReportingSettings(UnityVersion version, BuildTarget platform, TransferInstructionFlags flags)
 		{
-			if (version.IsLess(5, 6))
+			if (version.LessThan(5, 6))
 			{
 				return false;
 			}

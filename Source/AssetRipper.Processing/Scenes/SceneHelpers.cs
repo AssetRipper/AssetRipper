@@ -40,7 +40,7 @@ namespace AssetRipper.Processing.Scenes
 		/// <summary>
 		/// Less than 5.3.0
 		/// </summary>
-		public static bool HasMainData(UnityVersion version) => version.IsLess(5, 3);
+		public static bool HasMainData(UnityVersion version) => version.LessThan(5, 3);
 
 		/// <summary>
 		/// GameObjects, Classes inheriting from LevelGameManager, MonoBehaviours with GameObjects, Components, and PrefabInstances

@@ -12,50 +12,50 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 		/// <summary>
 		/// 2019.1 and greater
 		/// </summary>
-		public static bool HasLocalKeywords(UnityVersion version) => version.IsGreaterEqual(2019);
+		public static bool HasLocalKeywords(UnityVersion version) => version.GreaterThanOrEquals(2019);
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		public static bool HasUAVParameters(UnityVersion version) => version.IsGreaterEqual(5, 5);
+		public static bool HasUAVParameters(UnityVersion version) => version.GreaterThanOrEquals(5, 5);
 		/// <summary>
 		/// 2017.2 and greater
 		/// </summary>
-		public static bool HasSamplerParameters(UnityVersion version) => version.IsGreaterEqual(2017, 1);
+		public static bool HasSamplerParameters(UnityVersion version) => version.GreaterThanOrEquals(2017, 1);
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		public static bool HasMultiSampled(UnityVersion version) => version.IsGreaterEqual(2017, 3);
+		public static bool HasMultiSampled(UnityVersion version) => version.GreaterThanOrEquals(2017, 3);
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		private static bool HasStatsTempRegister(UnityVersion version) => version.IsGreaterEqual(5, 5);
+		private static bool HasStatsTempRegister(UnityVersion version) => version.GreaterThanOrEquals(5, 5);
 		/// <summary>
 		/// 5.5.0 and greater
 		/// </summary>
-		private static bool IsAllParamArgs(UnityVersion version) => version.IsGreaterEqual(5, 5);
+		private static bool IsAllParamArgs(UnityVersion version) => version.GreaterThanOrEquals(5, 5);
 		/// <summary>
 		/// 2017.3 and greater
 		/// </summary>
-		private static bool HasStructParameters(UnityVersion version) => version.IsGreaterEqual(2017, 3);
+		private static bool HasStructParameters(UnityVersion version) => version.GreaterThanOrEquals(2017, 3);
 		/// <summary>
 		/// 2018.2 and greater
 		/// </summary>
-		private static bool HasNewTextureParams(UnityVersion version) => version.IsGreaterEqual(2018, 2);
+		private static bool HasNewTextureParams(UnityVersion version) => version.GreaterThanOrEquals(2018, 2);
 		/// <summary>
 		/// 2021.2 and greater
 		/// </summary>
-		public static bool HasMergedKeywords(UnityVersion version) => version.IsGreaterEqual(2021, 2);
+		public static bool HasMergedKeywords(UnityVersion version) => version.GreaterThanOrEquals(2021, 2);
 		private static int GetExpectedProgramVersion(UnityVersion version)
 		{
 			return version switch
 			{
-				_ when version.IsEqual(5, 3) => 201509030,
-				_ when version.IsEqual(5, 4) => 201510240,
-				_ when version.IsEqual(5, 5) => 201608170,
-				_ when version.IsLess(2017, 3) => 201609010,
-				_ when version.IsLess(2018, 2) => 201708220,
-				_ when version.IsLess(2019) => 201802150,
-				_ when version.IsLess(2021, 2) => 201806140,
+				_ when version.Equals(5, 3) => 201509030,
+				_ when version.Equals(5, 4) => 201510240,
+				_ when version.Equals(5, 5) => 201608170,
+				_ when version.LessThan(2017, 3) => 201609010,
+				_ when version.LessThan(2018, 2) => 201708220,
+				_ when version.LessThan(2019) => 201802150,
+				_ when version.LessThan(2021, 2) => 201806140,
 				_ => 202012090,
 			};
 		}

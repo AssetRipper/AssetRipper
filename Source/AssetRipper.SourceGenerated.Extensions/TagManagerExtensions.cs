@@ -7,7 +7,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 		/// <summary>
 		/// 5.0.0 to 5.5.0 exclusive
 		/// </summary>
-		public static bool IsBrokenCustomTags(UnityVersion version) => version.IsGreaterEqual(5) && version.IsLess(5, 5);
+		public static bool IsBrokenCustomTags(UnityVersion version) => version.GreaterThanOrEquals(5) && version.LessThan(5, 5);
 
 		/// <summary>
 		/// 5.0.0 to 5.5.0 exclusive

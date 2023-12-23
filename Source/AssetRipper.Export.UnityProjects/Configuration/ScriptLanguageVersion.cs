@@ -56,23 +56,23 @@ namespace AssetRipper.Export.UnityProjects.Configuration
 			{
 				return LanguageVersion.CSharp9_0;
 			}
-			else if (unityVersion.IsGreaterEqual(2020, 2))
+			else if (unityVersion.GreaterThanOrEquals(2020, 2))
 			{
 				return LanguageVersion.CSharp8_0;
 			}
-			else if (unityVersion.IsGreaterEqual(2019, 2))
+			else if (unityVersion.GreaterThanOrEquals(2019, 2))
 			{
 				return LanguageVersion.CSharp7_3;
 			}
 			//.NET Standard 2.0 support was added in 2018.1,
 			//But Roslyn and C# 7.3 weren't added until 2018.3.
 			//https://learn.microsoft.com/en-us/dotnet/standard/net-standard?tabs=net-standard-2-0#net-standard-versions
-			else if (experimental && unityVersion.IsGreaterEqual(2018, 3))
+			else if (experimental && unityVersion.GreaterThanOrEquals(2018, 3))
 			{
 				//https://blog.unity.com/technology/introducing-unity-2018-3
 				return LanguageVersion.CSharp7_3;
 			}
-			else if (experimental && unityVersion.IsGreaterEqual(2017, 1))
+			else if (experimental && unityVersion.GreaterThanOrEquals(2017, 1))
 			{
 				return LanguageVersion.CSharp6;
 			}
@@ -100,8 +100,8 @@ namespace AssetRipper.Export.UnityProjects.Configuration
 		/// <returns></returns>
 		private static bool HasCSharp9Support(UnityVersion unityVersion)
 		{
-			return unityVersion.IsGreaterEqual(2022, 1, 0, UnityVersionType.Alpha, 3)
-				|| (unityVersion.IsGreaterEqual(2021, 2, 0, UnityVersionType.Beta, 6) && unityVersion.IsEqual(2021));
+			return unityVersion.GreaterThanOrEquals(2022, 1, 0, UnityVersionType.Alpha, 3)
+				|| (unityVersion.GreaterThanOrEquals(2021, 2, 0, UnityVersionType.Beta, 6) && unityVersion.Equals(2021));
 		}
 	}
 }

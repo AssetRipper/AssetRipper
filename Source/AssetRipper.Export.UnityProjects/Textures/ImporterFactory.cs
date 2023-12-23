@@ -174,7 +174,7 @@ namespace AssetRipper.Export.UnityProjects.Textures
 
 		public static IIHVImageFormatImporter GenerateIHVImporter(IExportContainer container, ITexture2D origin)
 		{
-			if (container.ExportVersion.IsLess(5, 6))
+			if (container.ExportVersion.LessThan(5, 6))
 			{
 				Logger.Warning("IHVImageFormatImporter doesn't exist on versions less than 5.6. A different importer needs to be used on this version");
 			}

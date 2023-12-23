@@ -36,7 +36,7 @@
 		/// <summary>
 		/// 5.6.0 and greater
 		/// </summary>
-		public static bool IsIncludeUpperChest(UnityVersion version) => version.IsGreaterEqual(5, 6);
+		public static bool IsIncludeUpperChest(UnityVersion version) => version.GreaterThanOrEquals(5, 6);
 
 		public static BoneType Update(this BoneType _this, UnityVersion version)
 		{

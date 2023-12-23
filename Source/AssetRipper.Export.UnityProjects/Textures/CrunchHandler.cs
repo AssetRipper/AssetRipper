@@ -21,7 +21,7 @@ namespace AssetRipper.Export.UnityProjects.Textures
 
 		private static bool IsUseUnityCrunch(UnityVersion version, TextureFormat format)
 		{
-			if (version.IsGreaterEqual(2017, 3))
+			if (version.GreaterThanOrEquals(2017, 3))
 			{
 				return true;
 			}

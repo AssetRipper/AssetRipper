@@ -25,7 +25,7 @@ namespace AssetRipper.Processing.AnimationClips.Editor
 				instance.Read(ref reader);
 				array[i] = instance;
 			}
-			if (version.IsGreaterEqual(2017, 1))
+			if (version.GreaterThanOrEquals(2017, 1))
 			{
 				reader.Align();
 			}

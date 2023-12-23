@@ -27,7 +27,7 @@ public record class PackageManifest([property: JsonPropertyName("dependencies")]
 		// This should be accurate to at least 2023
 
 		Dependencies.Add("com.unity.modules.ai", "1.0.0");
-		if (version.IsGreaterEqual(2019, 2))
+		if (version.GreaterThanOrEquals(2019, 2))
 		{
 			Dependencies.Add("com.unity.modules.androidjni", "1.0.0");
 		}

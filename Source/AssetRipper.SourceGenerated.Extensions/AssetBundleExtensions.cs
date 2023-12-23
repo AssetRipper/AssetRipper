@@ -7,7 +7,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 		/// <summary>
 		/// 5.0.0 and greater
 		/// </summary>
-		public static bool HasPathExtension(UnityVersion version) => version.IsGreaterEqual(5);
+		public static bool HasPathExtension(UnityVersion version) => version.GreaterThanOrEquals(5);
 
 		/// <summary>
 		/// 5.0.0 and greater

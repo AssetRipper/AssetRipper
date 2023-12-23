@@ -182,7 +182,7 @@
 		/// <param name="a">The first Quaternion.</param>
 		/// <param name="b">The second Quaternion.</param>
 		/// <returns>True if they are nearly equal.</returns>
-		public static bool IsEqualUsingDot(this Quaternion a, Quaternion b)
+		public static bool EqualsByDot(this Quaternion a, Quaternion b)
 		{
 			return a.Dot(b) > 1.0f - kEpsilon;
 		}

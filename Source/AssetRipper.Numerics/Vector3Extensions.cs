@@ -48,7 +48,7 @@
 			return (instance.X * other.X) + (instance.Y * other.Y) + (instance.Z * other.Z);
 		}
 
-		public static bool IsEqualByDot(this Vector3 instance, Vector3 other)
+		public static bool EqualsByDot(this Vector3 instance, Vector3 other)
 		{
 			float instanceLength = instance.Length();
 			float otherLength = other.Length();

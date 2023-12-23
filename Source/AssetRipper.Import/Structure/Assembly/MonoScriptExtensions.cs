@@ -75,11 +75,11 @@ namespace AssetRipper.Import.Structure.Assembly
 			return assemblyManager.IsPresent(scriptID);
 		}
 
-		public static Hash128 GetPropertiesHash(this IMonoScript monoScript)
+		public static Hash128_5 GetPropertiesHash(this IMonoScript monoScript)
 		{
-			if (monoScript.Has_PropertiesHash_Hash128())
+			if (monoScript.Has_PropertiesHash_Hash128_5())
 			{
-				return monoScript.PropertiesHash_Hash128;
+				return monoScript.PropertiesHash_Hash128_5;
 			}
 			else
 			{

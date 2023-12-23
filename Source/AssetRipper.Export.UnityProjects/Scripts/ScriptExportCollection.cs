@@ -126,7 +126,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 
 			// assembly definitions were added in 2017.3
 			//     see: https://blog.unity.com/technology/unity-2017-3b-feature-preview-assembly-definition-files-and-transform-tool
-			if (assemblyDefinitionDetailsDictionary.Count > 0 && container.ExportVersion.IsGreaterEqual(2017, 3))
+			if (assemblyDefinitionDetailsDictionary.Count > 0 && container.ExportVersion.GreaterThanOrEquals(2017, 3))
 			{
 				foreach (AssemblyDefinitionDetails details in assemblyDefinitionDetailsDictionary.Values)
 				{
