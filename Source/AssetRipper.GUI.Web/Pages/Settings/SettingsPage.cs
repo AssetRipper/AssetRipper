@@ -16,7 +16,7 @@ public sealed partial class SettingsPage : DefaultPage
 
 	public override void WriteInnerContent(TextWriter writer)
 	{
-		new H1(writer).Close(Localization.ConfigOptions);
+		new H1(writer).WithClass("text-center").Close(Localization.ConfigOptions);
 		if (GameFileLoader.IsLoaded)
 		{
 			using (new Div(writer).WithClass("text-center").End())
@@ -28,24 +28,126 @@ public sealed partial class SettingsPage : DefaultPage
 		{
 			using (new Form(writer).WithAction("/Settings/Update").WithMethod("post").End())
 			{
-				WriteCheckBoxForEnablePrefabOutlining(writer, Localization.EnablePrefabOutlining);
-				WriteCheckBoxForIgnoreStreamingAssets(writer, Localization.SkipStreamingAssets);
-				WriteCheckBoxForIgnoreEngineAssets(writer, Localization.IgnoreEngineAssets);
-				WriteTextAreaForDefaultVersion(writer);
-				WriteDropDownForAudioExportFormat(writer);
-				WriteDropDownForBundledAssetsExportMode(writer);
-				WriteDropDownForImageExportFormat(writer);
-				WriteDropDownForMeshExportFormat(writer);
-				WriteDropDownForSpriteExportMode(writer);
-				WriteDropDownForTerrainExportMode(writer);
-				WriteDropDownForTextExportMode(writer);
-				WriteDropDownForShaderExportMode(writer);
-				WriteDropDownForScriptExportMode(writer);
-				WriteDropDownForScriptContentLevel(writer);
-				WriteDropDownForScriptLanguageVersion(writer);
 				using (new Div(writer).WithClass("form-group").End())
 				{
-					new Input(writer).WithClass("btn btn-primary").WithType("submit").WithValue(Localization.Save).Close();
+					using (new Div(writer).WithClass("border rounded p-3 m-2").End())
+					{
+						new H2(writer).Close("Import");
+
+						using (new Div(writer).End())
+						{
+							using (new Div(writer).WithClass("row").End())
+							{
+								using (new Div(writer).WithClass("col").End())
+								{
+									WriteCheckBoxForIgnoreStreamingAssets(writer, Localization.SkipStreamingAssets);
+								}
+							}
+							using (new Div(writer).WithClass("row").End())
+							{
+								using (new Div(writer).WithClass("col").End())
+								{
+									WriteTextAreaForDefaultVersion(writer);
+								}
+							}
+
+							using (new Div(writer).WithClass("row").End())
+							{
+
+								using (new Div(writer).WithClass("col").End())
+								{
+									WriteDropDownForBundledAssetsExportMode(writer);
+								}
+
+								using (new Div(writer).WithClass("col").End())
+								{
+									WriteDropDownForScriptContentLevel(writer);
+								}
+							}
+						}
+
+						new Hr(writer).Close();
+
+						using (new Div(writer).End())
+						{
+							new H3(writer).Close("Experimental");
+
+							WriteCheckBoxForEnablePrefabOutlining(writer, Localization.EnablePrefabOutlining);
+						}
+					}
+
+					using (new Div(writer).WithClass("border rounded p-3 m-2").End())
+					{
+						new H2(writer).Close(Localization.MenuExport);
+
+						using (new Div(writer).End())
+						{
+							using (new Div(writer).WithClass("row").End())
+							{
+								using (new Div(writer).WithClass("col").End())
+								{
+									WriteDropDownForAudioExportFormat(writer);
+								}
+
+								using (new Div(writer).WithClass("col").End())
+								{
+									WriteDropDownForImageExportFormat(writer);
+								}
+
+								using (new Div(writer).WithClass("col").End())
+								{
+									WriteDropDownForMeshExportFormat(writer);
+								}
+							}
+
+							using (new Div(writer).WithClass("row").End())
+							{
+								using (new Div(writer).WithClass("col").End())
+								{
+									WriteDropDownForSpriteExportMode(writer);
+								}
+								using (new Div(writer).WithClass("col").End())
+								{
+									WriteDropDownForTerrainExportMode(writer);
+								}
+								using (new Div(writer).WithClass("col").End())
+								{
+									WriteDropDownForTextExportMode(writer);
+								}
+							}
+
+							using (new Div(writer).WithClass("row").End())
+							{
+								using (new Div(writer).WithClass("col").End())
+								{
+									WriteDropDownForShaderExportMode(writer);
+								}
+								using (new Div(writer).WithClass("col").End())
+								{
+									WriteDropDownForScriptLanguageVersion(writer);
+								}
+								using (new Div(writer).WithClass("col").End())
+								{
+									WriteDropDownForScriptExportMode(writer);
+								}
+							}
+						}
+
+						new Hr(writer).Close();
+
+						using (new Div(writer).End())
+						{
+							new H3(writer).Close("Experimental");
+
+							WriteCheckBoxForIgnoreEngineAssets(writer,
+								Localization.IgnoreEngineAssets);
+						}
+					}
+
+					using (new Div(writer).WithClass("text-center").End())
+					{
+						new Input(writer).WithType("submit").WithValue(Localization.Save).Close();
+					}
 				}
 			}
 		}

@@ -10,9 +10,9 @@ public sealed class IndexPage : DefaultPage
 
 	public override void WriteInnerContent(TextWriter writer)
 	{
-		using (new Div(writer).WithClass("text-center").End())
+		using (new Div(writer).WithClass("text-center container mt-5").End())
 		{
-			new H1(writer).WithClass("display-4").Close(Localization.Welcome);
+			new H1(writer).WithClass("display-4 mb-4").Close(Localization.Welcome);
 			if (GameFileLoader.IsLoaded)
 			{
 				PathLinking.WriteLink(writer, GameFileLoader.GameBundle, Localization.ViewLoadedFiles, "btn btn-success");
@@ -27,10 +27,8 @@ public sealed class IndexPage : DefaultPage
 			}
 			else
 			{
-				new Br(writer).Close();
-				new Br(writer).Close();
-				new P(writer).Close(Localization.DonationMessage);
-				using (new Div(writer).End())
+				new P(writer).WithClass("mt-4").Close(Localization.DonationMessage);
+				using (new Div(writer).WithClass("d-flex justify-content-center mt-3").End())
 				{
 					new A(writer).WithClass("btn btn-primary m-1").WithNewTabAttributes().WithHref("https://patreon.com/ds5678").Close("Patreon");
 					new A(writer).WithClass("btn btn-primary m-1").WithNewTabAttributes().WithHref("https://paypal.me/ds5678").Close("Paypal");
