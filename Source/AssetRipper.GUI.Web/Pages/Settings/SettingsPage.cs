@@ -28,7 +28,7 @@ public sealed partial class SettingsPage : DefaultPage
 		{
 			using (new Form(writer).WithAction("/Settings/Update").WithMethod("post").End())
 			{
-				using (new Div(writer).WithClass("container").End())
+				using (new Div(writer).WithClass("form-group").End())
 				{
 					using (new Div(writer).WithClass("border rounded p-3 m-2").End())
 					{
