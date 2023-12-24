@@ -16,51 +16,49 @@ public sealed partial class SettingsPage : DefaultPage
 
 	public override void WriteInnerContent(TextWriter writer)
 	{
-		new H1(writer).WithStyle("font-family: Arial, sans-serif;").Close(Localization.ConfigOptions);
+		new H1(writer).WithClass("text-center").Close(Localization.ConfigOptions);
 		if (GameFileLoader.IsLoaded)
 		{
-			using (new Div(writer).WithStyle("text-align:center; font-family: Arial, sans-serif;").End())
+			using (new Div(writer).WithClass("text-center").End())
 			{
-				new P(writer).WithStyle("font-family: Arial, sans-serif;")
-					.Close(Localization.SettingsCanOnlyBeChangedBeforeLoadingFiles);
+				new P(writer).Close(Localization.SettingsCanOnlyBeChangedBeforeLoadingFiles);
 			}
 		}
 		else
 		{
-			using (new Div(writer).WithClass("container").End())
+			using (new Form(writer).WithAction("/Settings/Update").WithMethod("post").End())
 			{
-				using (new Form(writer).WithAction("/Settings/Update").WithMethod("post").End())
+				using (new Div(writer).WithClass("container").End())
 				{
-					using (new Div(writer)
-						       .WithStyle(
-							       "margin-bottom: 20px; border: 1px solid #ccc; border-radius: 5px; font-family: Arial, sans-serif;")
-						       .End())
+					using (new Div(writer).WithClass("border rounded p-3 m-2").End())
 					{
-						using (new Div(writer).WithStyle(
-								       "padding: 10px; border-radius: 5px; font-family: Arial, sans-serif;")
-							       .End())
+						new H2(writer).Close("Import");
+
+						using (new Div(writer).End())
 						{
-							new H2(writer).WithStyle("font-family: Arial, sans-serif;").Close("Import");
-							
 							using (new Div(writer).WithClass("row").End())
 							{
-								WriteCheckBoxForIgnoreStreamingAssets(writer,
-									Localization.SkipStreamingAssets);
-								
+								using (new Div(writer).WithClass("col").End())
+								{
+									WriteCheckBoxForIgnoreStreamingAssets(writer, Localization.SkipStreamingAssets);
+								}
+							}
+							using (new Div(writer).WithClass("row").End())
+							{
 								using (new Div(writer).WithClass("col").End())
 								{
 									WriteTextAreaForDefaultVersion(writer);
 								}
 							}
-							
+
 							using (new Div(writer).WithClass("row").End())
 							{
-								
+
 								using (new Div(writer).WithClass("col").End())
 								{
 									WriteDropDownForBundledAssetsExportMode(writer);
 								}
-								
+
 								using (new Div(writer).WithClass("col").End())
 								{
 									WriteDropDownForScriptContentLevel(writer);
@@ -68,48 +66,40 @@ public sealed partial class SettingsPage : DefaultPage
 							}
 						}
 
-						new Hr(writer).WithStyle("border-color: #ccc; margin: 0;").Close();
+						new Hr(writer).Close();
 
-						using (new Div(writer)
-							       .WithStyle(
-								       "padding: 10px; font-family: Arial, sans-serif;")
-							       .End())
+						using (new Div(writer).End())
 						{
-							new H3(writer).WithStyle("font-family: Arial, sans-serif;").Close("Experimental");
+							new H3(writer).Close("Experimental");
 
 							WriteCheckBoxForEnablePrefabOutlining(writer, Localization.EnablePrefabOutlining);
 						}
 					}
 
-					using (new Div(writer)
-						       .WithStyle(
-							       "margin-bottom: 20px; border: 1px solid #ccc; border-radius: 5px; font-family: Arial, sans-serif;")
-						       .End())
+					using (new Div(writer).WithClass("border rounded p-3 m-2").End())
 					{
-						using (new Div(writer).WithStyle(
-								       "padding: 10px; border-radius: 5px; font-family: Arial, sans-serif;")
-							       .End())
+						new H2(writer).Close(Localization.MenuExport);
+
+						using (new Div(writer).End())
 						{
-							new H2(writer).WithStyle("font-family: Arial, sans-serif;").Close(Localization.MenuExport);
-							
 							using (new Div(writer).WithClass("row").End())
 							{
 								using (new Div(writer).WithClass("col").End())
 								{
 									WriteDropDownForAudioExportFormat(writer);
 								}
-								
+
 								using (new Div(writer).WithClass("col").End())
 								{
 									WriteDropDownForImageExportFormat(writer);
 								}
-								
+
 								using (new Div(writer).WithClass("col").End())
 								{
 									WriteDropDownForMeshExportFormat(writer);
 								}
 							}
-							
+
 							using (new Div(writer).WithClass("row").End())
 							{
 								using (new Div(writer).WithClass("col").End())
@@ -125,7 +115,7 @@ public sealed partial class SettingsPage : DefaultPage
 									WriteDropDownForTextExportMode(writer);
 								}
 							}
-							
+
 							using (new Div(writer).WithClass("row").End())
 							{
 								using (new Div(writer).WithClass("col").End())
@@ -143,26 +133,20 @@ public sealed partial class SettingsPage : DefaultPage
 							}
 						}
 
-						new Hr(writer).WithStyle("border-color: #ccc; margin: 0;").Close();
+						new Hr(writer).Close();
 
-						using (new Div(writer)
-							       .WithStyle(
-								       "padding: 10px; font-family: Arial, sans-serif;")
-							       .End())
+						using (new Div(writer).End())
 						{
-							new H3(writer).WithStyle("font-family: Arial, sans-serif;").Close("Experimental");
+							new H3(writer).Close("Experimental");
 
 							WriteCheckBoxForIgnoreEngineAssets(writer,
 								Localization.IgnoreEngineAssets);
 						}
 					}
 
-					using (new Div(writer).WithStyle("margin: 10px 0;").End())
+					using (new Div(writer).WithClass("text-center").End())
 					{
-						new Input(writer)
-							.WithStyle(
-								"background-color: #007bff; border-color: #007bff; color: white; padding: 10px 20px; border-radius: 5px; cursor: pointer;")
-							.WithType("submit").WithValue(Localization.Save).Close();
+						new Input(writer).WithType("submit").WithValue(Localization.Save).Close();
 					}
 				}
 			}
@@ -171,11 +155,10 @@ public sealed partial class SettingsPage : DefaultPage
 
 	private static void WriteTextAreaForDefaultVersion(TextWriter writer)
 	{
-		new Label(writer).WithStyle("margin-top: 10px;").WithFor(nameof(Configuration.DefaultVersion))
-			.Close(Localization.DefaultVersion);
+		new Label(writer).WithClass("form-label").WithFor(nameof(Configuration.DefaultVersion)).Close(Localization.DefaultVersion);
 		new Input(writer)
 			.WithType("text")
-			.WithStyle("padding: 10px; border: 1px solid #ccc; border-radius: 5px; width: 100%; margin-Bottom: 10px;")
+			.WithClass("form-control")
 			.WithId(nameof(Configuration.DefaultVersion))
 			.WithName(nameof(Configuration.DefaultVersion))
 			.WithValue(Configuration.DefaultVersion.ToString())
@@ -184,16 +167,14 @@ public sealed partial class SettingsPage : DefaultPage
 
 	private static void WriteCheckBox(TextWriter writer, string label, bool @checked, string id)
 	{
-		using (new Div(writer).WithStyle("margin-bottom: 10px;").End())
+		using (new Div(writer).WithClass("form-check").End())
 		{
-			new Input(writer).WithStyle("margin-right: 10px;").WithType("checkbox").WithValue().WithId(id).WithName(id)
-				.MaybeWithChecked(@checked).Close();
-			new Label(writer).WithFor(id).Close(label);
+			new Input(writer).WithClass("form-check-input").WithType("checkbox").WithValue().WithId(id).WithName(id).MaybeWithChecked(@checked).Close();
+			new Label(writer).WithClass("form-check-label").WithFor(id).Close(label);
 		}
 	}
 
-	private static void WriteDropDown<T>(TextWriter writer, DropDownSetting<T> setting, T value, string id)
-		where T : struct, Enum
+	private static void WriteDropDown<T>(TextWriter writer, DropDownSetting<T> setting, T value, string id) where T : struct, Enum
 	{
 		IReadOnlyList<DropDownItem<T>> items = setting.GetValues();
 		new Label(writer).WithClass("form-label").WithFor(id).Close(setting.Title);
@@ -228,7 +209,6 @@ public sealed partial class SettingsPage : DefaultPage
 		{
 			return default;
 		}
-
 		try
 		{
 			return UnityVersion.Parse(version);
@@ -245,7 +225,6 @@ public sealed partial class SettingsPage : DefaultPage
 		{
 			return result;
 		}
-
 		return default;
 	}
 
@@ -256,7 +235,6 @@ public sealed partial class SettingsPage : DefaultPage
 		{
 			action.Invoke(form.ContainsKey(key));
 		}
-
 		foreach ((string key, string? value) in form.Select(pair => (pair.Key, (string?)pair.Value)))
 		{
 			SetProperty(key, value);
