@@ -57,13 +57,9 @@ public abstract class UnityAssetBase : IUnityAssetBase
 
 	public virtual void Deserialize(JsonNode node, IUnityAssetDeserializer deserializer, DeserializationOptions options) => throw MethodNotSupported();
 
-	public virtual void WalkEditor(AssetWalker walker)
-	{
-	}
+	public virtual void WalkEditor(AssetWalker walker) => WalkStandard(walker);
 
-	public virtual void WalkRelease(AssetWalker walker)
-	{
-	}
+	public virtual void WalkRelease(AssetWalker walker) => WalkStandard(walker);
 
 	public virtual void WalkStandard(AssetWalker walker)
 	{
