@@ -96,11 +96,11 @@ internal class TextureImporterTests
 
 	private static ITextureImporter CreateImporterWithSwizzleField()
 	{
-		return AssetCreator.CreateAsset<ITextureImporter>(ClassIDType.TextureImporter, new UnityVersion(2022, 2));
+		return AssetCreator.Create<ITextureImporter>(ClassIDType.TextureImporter, new UnityVersion(2022, 2));
 	}
 
 	private static ITextureImporter CreateImporterWithoutSwizzleField()
 	{
-		return AssetCreator.CreateAsset<ITextureImporter>(ClassIDType.TextureImporter, new UnityVersion(2020, 1));
+		return AssetCreator.Create<ITextureImporter>(ClassIDType.TextureImporter, new UnityVersion(2020, 1));
 	}
 }

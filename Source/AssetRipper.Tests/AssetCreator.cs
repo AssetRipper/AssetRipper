@@ -9,12 +9,12 @@ namespace AssetRipper.Tests;
 
 internal static class AssetCreator
 {
-	public static T CreateAsset<T>(ClassIDType classID, UnityVersion version, Func<AssetInfo, T> factory) where T : IUnityObjectBase
+	public static T Create<T>(ClassIDType classID, UnityVersion version, Func<AssetInfo, T> factory) where T : IUnityObjectBase
 	{
 		return MakeCollection(version).CreateAsset<T>((int)classID, factory);
 	}
 
-	public static T CreateAsset<T>(ClassIDType classID, UnityVersion version) where T : IUnityObjectBase
+	public static T Create<T>(ClassIDType classID, UnityVersion version) where T : IUnityObjectBase
 	{
 		return MakeCollection(version).CreateAsset((int)classID, (assetInfo) =>
 		{
