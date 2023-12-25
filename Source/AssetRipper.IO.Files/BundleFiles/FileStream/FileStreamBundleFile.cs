@@ -54,6 +54,8 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 				stream.Position = basePosition + (Header.Size - Header.CompressedBlocksInfoSize);
 			}
 
+			DecompressionFailedException.ThrowIfUncompressedSizeIsNegative(NameFixed, Header.UncompressedBlocksInfoSize);
+
 			CompressionType metaCompression = Header.Flags.GetCompression();
 			switch (metaCompression)
 			{

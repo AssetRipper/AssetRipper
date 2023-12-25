@@ -29,4 +29,12 @@ public sealed class DecompressionFailedException : Exception
 	{
 		throw new DecompressionFailedException($"Incorrect number of bytes written for '{fileName}' while decompressing {compression}. Expected {expected}, but was {actual}.");
 	}
+
+	internal static void ThrowIfUncompressedSizeIsNegative(string fileName, long uncompressedSize)
+	{
+		if (uncompressedSize < 0)
+		{
+			throw new DecompressionFailedException($"Uncompressed size cannot be negative: {uncompressedSize}. File: {fileName}");
+		}
+	}
 }
