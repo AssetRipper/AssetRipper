@@ -8,7 +8,7 @@ using System.Diagnostics;
 
 namespace AssetRipper.Processing.Textures;
 
-public sealed class SpriteInformationObject : InjectedUnityObject<SpriteInformationObject>, INamed
+public sealed class SpriteInformationObject : UnityObjectBase, INamed
 {
 	public SpriteInformationObject(AssetInfo assetInfo, ITexture2D texture) : base(assetInfo)
 	{
@@ -29,7 +29,7 @@ public sealed class SpriteInformationObject : InjectedUnityObject<SpriteInformat
 	{
 		if (walker.EnterAsset(this))
 		{
-			WalkPPtrField(walker, Texture);
+			this.WalkPPtrField(walker, Texture);
 			walker.ExitAsset(this);
 		}
 	}
