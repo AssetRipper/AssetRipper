@@ -36,6 +36,10 @@ jobs:
         shell: bash
         run: ls -R ./Source/0Bins/AssetRipper.GUI.Free/Release/
 
+      - name: List Files
+        shell: bash
+        run: date -u > ./Source/0Bins/AssetRipper.GUI.Free/Release/${{ matrix.config.runtime }}/publish/compile_time.txt
+
       - name: Upload
         uses: actions/upload-artifact@v4
         with:
@@ -45,4 +49,5 @@ jobs:
             ./Source/0Bins/AssetRipper.GUI.Free/Release/${{ matrix.config.runtime }}/publish/*.dll
             ./Source/0Bins/AssetRipper.GUI.Free/Release/${{ matrix.config.runtime }}/publish/*.so
             ./Source/0Bins/AssetRipper.GUI.Free/Release/${{ matrix.config.runtime }}/publish/*.dylib
+            ./Source/0Bins/AssetRipper.GUI.Free/Release/${{ matrix.config.runtime }}/publish/compile_time.txt
           if-no-files-found: error

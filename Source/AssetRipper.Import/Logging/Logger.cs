@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Import.Utils;
 using System.Globalization;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace AssetRipper.Import.Logging
@@ -38,10 +39,7 @@ namespace AssetRipper.Import.Logging
 				return;
 			}
 
-			if (message == null)
-			{
-				throw new ArgumentNullException(nameof(message));
-			}
+			ArgumentNullException.ThrowIfNull(message);
 
 			lock (_lock)
 			{
@@ -54,10 +52,7 @@ namespace AssetRipper.Import.Logging
 
 		public static void Log(LogType type, LogCategory category, string[] messages)
 		{
-			if (messages == null)
-			{
-				throw new ArgumentNullException(nameof(messages));
-			}
+			ArgumentNullException.ThrowIfNull(messages);
 
 			foreach (string message in messages)
 			{
@@ -115,8 +110,7 @@ namespace AssetRipper.Import.Logging
 		private static void LogOperatingSystemInformation()
 		{
 			Log(LogType.Info, LogCategory.System, $"System Version: {Environment.OSVersion.VersionString}");
-			string architecture = Environment.Is64BitOperatingSystem ? "64 bit" : "32 bit";
-			Log(LogType.Info, LogCategory.System, $"Operating System: {GetOsName()} {architecture}");
+			Log(LogType.Info, LogCategory.System, $"Operating System: {GetOsName()} {GetArchitecture()}");
 		}
 
 		private static void ErrorIfBigEndian()
@@ -236,6 +230,30 @@ namespace AssetRipper.Import.Logging
 			else
 			{
 				return "Other";
+			}
+		}
+
+		private static string GetArchitecture()
+		{
+			if (RuntimeInformation.ProcessArchitecture == Architecture.X64)
+			{
+				return "x64";
+			}
+			else if (RuntimeInformation.ProcessArchitecture == Architecture.X86)
+			{
+				return "x86";
+			}
+			else if (RuntimeInformation.ProcessArchitecture == Architecture.Arm)
+			{
+				return "Arm";
+			}
+			else if (RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
+			{
+				return "Arm64";
+			}
+			else
+			{
+				return "Unknown";
 			}
 		}
 
