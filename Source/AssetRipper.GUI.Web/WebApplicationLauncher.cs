@@ -33,7 +33,6 @@ public static class WebApplicationLauncher
 #else
 			EnvironmentName = Environments.Production,
 #endif
-			ApplicationName = "AssetRipper",
 		});
 
 		builder.WebHost.UseUrls("http://127.0.0.1:0");
