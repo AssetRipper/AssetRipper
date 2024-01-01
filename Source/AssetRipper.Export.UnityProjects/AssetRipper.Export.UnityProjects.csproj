@@ -10,7 +10,7 @@
 	<ItemGroup>
 		<PackageReference Include="AssetRipper.HashAlgorithms" Version="1.0.0" />
 		<PackageReference Include="AssetRipper.Mining.PredefinedAssets" Version="1.0.0" />
-		<PackageReference Include="AssetRipper.TextureDecoder" Version="2.1.0" />
+		<PackageReference Include="AssetRipper.TextureDecoder" Version="2.1.1" />
 		<PackageReference Include="AssetRipper.Tpk" Version="1.0.0" />
 		<PackageReference Include="Fmod5Sharp" Version="3.0.1" />
 		<PackageReference Include="ICSharpCode.Decompiler" Version="8.2.0.7535" />
