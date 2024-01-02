@@ -95,7 +95,7 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 				cpp2IlProcessingLayer.Process(GetCurrentAppContext());
 			}
 
-			List<AssemblyDefinition> assemblies = new AsmResolverDummyDllOutputFormat().BuildAssemblies(GetCurrentAppContext());
+			List<AssemblyDefinition> assemblies = new AsmResolverDllOutputFormatDefault().BuildAssemblies(GetCurrentAppContext());
 
 			foreach (AssemblyDefinition assembly in assemblies)
 			{
