@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Primitives;
 using System.Diagnostics;
 
 namespace AssetRipper.GUI.Web;
@@ -98,10 +99,31 @@ public static class WebApplicationLauncher
 		app.MapPost("/Resources/View", Pages.Resources.ViewPage.HandlePostRequest);
 		app.MapPost("/Scenes/View", Pages.Scenes.ViewPage.HandlePostRequest);
 
+		app.MapPost("/Localization", (context) =>
+		{
+			context.Response.DisableCaching();
+			if (context.Request.Query.TryGetValue("code", out StringValues code))
+			{
+				string? language = code;
+				if (language is not null && LocalizationLoader.LanguageNameDictionary.ContainsKey(language))
+				{
+					Localization.LoadLanguage(language);
+				}
+			}
+			return Results.Redirect("/").ExecuteAsync(context);
+		});
+
 		//Commands
 		app.MapPost("/Export", Commands.HandleCommand<Commands.Export>);
-		app.MapPost("/Load", Commands.HandleCommand<Commands.Load>);
+		app.MapPost("/LoadFile", Commands.HandleCommand<Commands.LoadFile>);
+		app.MapPost("/LoadFolder", Commands.HandleCommand<Commands.LoadFolder>);
 		app.MapPost("/Reset", Commands.HandleCommand<Commands.Reset>);
+
+		//Dialogs
+		app.MapGet("/Dialogs/SaveFile", Dialogs.SaveFile.HandleGetRequest);
+		app.MapGet("/Dialogs/OpenFolder", Dialogs.OpenFolder.HandleGetRequest);
+		app.MapGet("/Dialogs/OpenFile", Dialogs.OpenFile.HandleGetRequest);
+		app.MapGet("/Dialogs/OpenFiles", Dialogs.OpenFiles.HandleGetRequest);
 
 		app.Run();
 	}

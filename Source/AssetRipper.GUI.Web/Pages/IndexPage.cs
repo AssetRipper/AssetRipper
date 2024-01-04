@@ -6,7 +6,7 @@ public sealed class IndexPage : DefaultPage
 {
 	public static IndexPage Instance { get; } = new();
 
-	public override string? GetTitle() => "AssetRipper";
+	public override string? GetTitle() => GameFileLoader.Premium ? Localization.AssetRipperPremium : Localization.AssetRipperFree;
 
 	public override void WriteInnerContent(TextWriter writer)
 	{

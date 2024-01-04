@@ -26,7 +26,7 @@ public sealed class CommandsPage : DefaultPage
 		{
 			using (new P(writer).End())
 			{
-				WritePicker(writer, "/Load", Localization.MenuLoad, "btn btn-primary");
+				WritePicker(writer, "/LoadFile", Localization.MenuLoad, "btn btn-primary");
 			}
 		}
 	}

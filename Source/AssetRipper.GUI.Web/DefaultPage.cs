@@ -1,4 +1,5 @@
-﻿using AssetRipper.Web.Content;
+﻿using AssetRipper.GUI.Web.Paths;
+using AssetRipper.Web.Content;
 
 namespace AssetRipper.GUI.Web;
 public abstract class DefaultPage : HtmlPage
@@ -6,7 +7,7 @@ public abstract class DefaultPage : HtmlPage
 	public sealed override void Write(TextWriter writer)
 	{
 		base.Write(writer);
-		using (new Html(writer).WithLang(Localizations.Localization.CurrentLanguageCode).End())
+		using (new Html(writer).WithLang(Localization.CurrentLanguageCode).End())
 		{
 			using (new Head(writer).End())
 			{
@@ -20,37 +21,83 @@ public abstract class DefaultPage : HtmlPage
 			{
 				using (new Header(writer).End())
 				{
-					using (new Nav(writer).WithClass("navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3").End())
+					using (new Div(writer).WithClass("btn-group").End())
 					{
-						using (new Div(writer).WithClass("container").End())
+						using (new Div(writer).WithClass("btn-group dropdown").End())
 						{
-							new A(writer).WithClass("navbar-brand").WithHref("/").Close(GameFileLoader.Premium ? Localization.AssetRipperPremium : Localization.AssetRipperFree);
-							using (new Button(writer)
-								.WithClass("navbar-toggler")
-								.WithType("button")
-								.WithCustomAttribute("data-bs-toggle", "collapse")
-								.WithCustomAttribute("data-bs-target", ".navbar-collapse")
-								.WithCustomAttribute("aria-controls", "navbarSupportedContent")
-								.WithCustomAttribute("aria-expanded", "false")
-								.WithCustomAttribute("aria-label", "Toggle navigation").End())
+							WriteDropdownButton(writer, Localization.MenuFile);
+							using (new Ul(writer).WithClass("dropdown-menu").End())
 							{
-								new Span(writer).WithClass("navbar-toggler-icon").Close();
-							}
-							using (new Div(writer).WithClass("navbar-collapse collapse d-sm-inline-flex justify-content-between").End())
-							{
-								using (new Ul(writer).WithClass("navbar-nav flex-grow-1").End())
+								using (new Li(writer).End())
 								{
-									using (new Li(writer).WithClass("nav-item").End())
+									WritePostLink(writer, "/LoadFile", Localization.MenuFileOpenFile, "dropdown-item");
+								}
+								using (new Li(writer).End())
+								{
+									WritePostLink(writer, "/LoadFolder", Localization.MenuFileOpenFolder, "dropdown-item");
+								}
+								using (new Li(writer).End())
+								{
+									WritePostLink(writer, "/Reset", Localization.MenuFileReset, "dropdown-item");
+								}
+								using (new Li(writer).End())
+								{
+									new Hr(writer).WithClass("dropdown-divider").Close();
+								}
+								using (new Li(writer).End())
+								{
+									new A(writer).WithClass("dropdown-item").WithHref("/Settings/Edit").Close(Localization.Settings);
+								}
+							}
+						}
+						using (new Div(writer).WithClass("btn-group dropdown").End())
+						{
+							WriteDropdownButton(writer, "View");
+							using (new Ul(writer).WithClass("dropdown-menu").End())
+							{
+								using (new Li(writer).End())
+								{
+									new A(writer).WithClass("dropdown-item").WithHref("/").Close(Localization.Home);
+								}
+								using (new Li(writer).End())
+								{
+									new A(writer).WithClass("dropdown-item").WithHref("/Settings/Edit").Close(Localization.Settings);
+								}
+								using (new Li(writer).End())
+								{
+									new A(writer).WithClass("dropdown-item").WithHref("/Commands").Close(Localization.Commands);
+								}
+								using (new Li(writer).End())
+								{
+									new A(writer).WithClass("dropdown-item").WithHref("/Privacy").Close(Localization.Privacy);
+								}
+								using (new Li(writer).End())
+								{
+									new A(writer).WithClass("dropdown-item").WithHref("/Licenses").Close(Localization.Licenses);
+								}
+							}
+						}
+						using (new Div(writer).WithClass("btn-group dropdown").End())
+						{
+							WriteDropdownButton(writer, Localization.MenuExport);
+							using (new Ul(writer).WithClass("dropdown-menu").End())
+							{
+								using (new Li(writer).End())
+								{
+									WritePostLink(writer, "/Export", Localization.MenuExportAll, "dropdown-item");
+								}
+							}
+						}
+						using (new Div(writer).WithClass("btn-group dropdown").End())
+						{
+							WriteDropdownButton(writer, Localization.MenuLanguage);
+							using (new Ul(writer).WithClass("dropdown-menu").End())
+							{
+								foreach ((string code, string name) in Localizations.LocalizationLoader.LanguageNameDictionary)
+								{
+									using (new Li(writer).End())
 									{
-										new A(writer).WithClass("nav-link").WithHref("/").Close(Localization.Home);
-									}
-									using (new Li(writer).WithClass("nav-item").End())
-									{
-										new A(writer).WithClass("nav-link").WithHref("/Settings/Edit").Close("Settings");
-									}
-									using (new Li(writer).WithClass("nav-item").End())
-									{
-										new A(writer).WithClass("nav-link").WithHref("/Commands").Close("Commands");
+										WritePostLink(writer, $"/Localization?code={code}", name, "dropdown-item");
 									}
 								}
 							}
@@ -78,6 +125,23 @@ public abstract class DefaultPage : HtmlPage
 				Bootstrap.WriteScriptReference(writer);
 				new Script(writer).WithSrc("/js/site.js").Close();
 			}
+		}
+	}
+
+	private static void WriteDropdownButton(TextWriter writer, string buttonText)
+	{
+		new Button(writer).WithClass("btn btn-dark dropdown-toggle mx-0")
+			.WithType("button")
+			.WithCustomAttribute("data-bs-toggle", "dropdown")
+			.WithCustomAttribute("aria-expanded", "false")
+			.Close(buttonText);
+	}
+
+	private static void WritePostLink(TextWriter writer, string url, string name, string? @class = null)
+	{
+		using (new Form(writer).WithAction(url).WithMethod("post").End())
+		{
+			new Input(writer).WithType("submit").WithClass(@class).WithValue(name.ToHtml()).Close();
 		}
 	}
 
