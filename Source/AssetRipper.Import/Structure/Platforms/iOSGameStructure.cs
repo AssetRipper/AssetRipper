@@ -61,14 +61,13 @@ namespace AssetRipper.Import.Structure.Platforms
 
 		private static bool GetDataiOSDirectory(DirectoryInfo rootDirectory, [NotNullWhen(true)] out string? dataPath, [NotNullWhen(true)] out string? appPath, [NotNullWhen(true)] out string? appName)
 		{
-			dataPath = null;
-			appPath = null;
-			appName = null;
-
 			string payloadPath = Path.Combine(rootDirectory.FullName, PayloadName);
 			DirectoryInfo payloadDirectory = new DirectoryInfo(payloadPath);
 			if (!payloadDirectory.Exists)
 			{
+				dataPath = null;
+				appPath = null;
+				appName = null;
 				return false;
 			}
 

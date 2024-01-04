@@ -6,7 +6,7 @@ using AssetRipper.Processing;
 
 namespace AssetRipper.GUI.Web;
 
-internal static class GameFileLoader
+public static class GameFileLoader
 {
 	private static GameData? GameData { get; set; }
 	[MemberNotNullWhen(true, nameof(GameData))]
