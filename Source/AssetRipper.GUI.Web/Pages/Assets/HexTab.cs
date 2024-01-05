@@ -35,24 +35,6 @@ internal sealed class HexTab : AssetTab
 
 	private static byte[] GetData(IUnityObjectBase Asset)
 	{
-		if (Asset is RawDataObject rawData)
-		{
-			return rawData.RawData;
-		}
-		else
-		{
-			MemoryStream stream = new();
-			AssetWriter writer = new(stream, Asset.Collection);
-			try
-			{
-				Asset.Write(writer);
-			}
-			catch (NotSupportedException)
-			{
-				//This can only happen if an asset type is not fully implemented, like custom injected assets.
-				return Array.Empty<byte>();
-			}
-			return stream.ToArray();
-		}
+		return (Asset as RawDataObject)?.RawData ?? [];
 	}
 }
