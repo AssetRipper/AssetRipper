@@ -230,6 +230,32 @@ public class DefaultYamlWalker : AssetWalker
 	{
 	}
 
+	public sealed override bool EnterArray<T>(T[] array)
+	{
+		ThrowIfFlowMapping();
+		if (array.Length == 0)
+		{
+			Writer.Write(" []");
+			return false;
+		}
+		else
+		{
+			DivideArray(array);
+			return true;
+		}
+	}
+
+	public sealed override void DivideArray<T>(T[] array)
+	{
+		Writer.WriteLine();
+		Writer.Write("- ");
+		JustEnteredListItem = true;
+	}
+
+	public sealed override void ExitArray<T>(T[] array)
+	{
+	}
+
 	public sealed override bool EnterDictionary<TKey, TValue>(AssetDictionary<TKey, TValue> dictionary)
 	{
 		ThrowIfFlowMapping();
@@ -353,7 +379,7 @@ public class DefaultYamlWalker : AssetWalker
 		}
 		else if (typeof(T) == typeof(char))
 		{
-			Writer.Write(Unsafe.As<T, ushort>(ref value));//Not sure about this
+			Writer.Write(Unsafe.As<T, ushort>(ref value));//Might be signed, rather than unsigned.
 		}
 		else if (typeof(T) == typeof(sbyte))
 		{

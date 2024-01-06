@@ -4,6 +4,7 @@ using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Export.Yaml;
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
+using AssetRipper.Assets.Traversal;
 using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.Yaml;
@@ -212,7 +213,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 			}
 		}
 
-		public void Write(AssetWriter writer, in SerializableType.Field etalon)
+		public readonly void Write(AssetWriter writer, in SerializableType.Field etalon)
 		{
 			switch (etalon.Type.Type)
 			{
@@ -381,7 +382,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 			}
 		}
 
-		public YamlNode ExportYaml(IExportContainer container, in SerializableType.Field etalon)
+		public readonly YamlNode ExportYaml(IExportContainer container, in SerializableType.Field etalon)
 		{
 			if (etalon.IsArray)
 			{
@@ -496,6 +497,200 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 						_ => throw new NotSupportedException(etalon.Type.Type.ToString()),
 					};
 				}
+			}
+		}
+
+		public readonly void WalkEditor(AssetWalker walker, in SerializableType.Field etalon)
+		{
+			if (etalon.IsArray)
+			{
+				if (etalon.Type.Type == PrimitiveType.Complex)
+				{
+					IUnityAssetBase[] structures = (IUnityAssetBase[])CValue;
+					if (walker.EnterArray(structures))
+					{
+						int length = structures.Length;
+						if (length > 0)
+						{
+							int i = 0;
+							while (true)
+							{
+								structures[i].WalkEditor(walker);
+								i++;
+								if (i >= length)
+								{
+									break;
+								}
+								walker.DivideArray(structures);
+							}
+						}
+						walker.ExitArray(structures);
+					}
+				}
+				else
+				{
+					switch (etalon.Type.Type)
+					{
+						case PrimitiveType.Bool:
+							{
+								bool[] array = (bool[])CValue;
+								VisitPrimitiveArray(walker, array);
+								break;
+							}
+						case PrimitiveType.Char:
+							{
+								char[] array = (char[])CValue;
+								VisitPrimitiveArray(walker, array);
+								break;
+							}
+						case PrimitiveType.SByte:
+							{
+								byte[] array = (byte[])CValue;
+								VisitPrimitiveArray(walker, array);
+								break;
+							}
+						case PrimitiveType.Byte:
+							{
+								byte[] array = (byte[])CValue;
+								VisitPrimitiveArray(walker, array);
+								break;
+							}
+						case PrimitiveType.Short:
+							{
+								short[] array = (short[])CValue;
+								VisitPrimitiveArray(walker, array);
+								break;
+							}
+						case PrimitiveType.UShort:
+							{
+								ushort[] array = (ushort[])CValue;
+								VisitPrimitiveArray(walker, array);
+								break;
+							}
+						case PrimitiveType.Int:
+							{
+								int[] array = (int[])CValue;
+								VisitPrimitiveArray(walker, array);
+								break;
+							}
+						case PrimitiveType.UInt:
+							{
+								uint[] array = (uint[])CValue;
+								VisitPrimitiveArray(walker, array);
+								break;
+							}
+						case PrimitiveType.Long:
+							{
+								long[] array = (long[])CValue;
+								VisitPrimitiveArray(walker, array);
+								break;
+							}
+						case PrimitiveType.ULong:
+							{
+								ulong[] array = (ulong[])CValue;
+								VisitPrimitiveArray(walker, array);
+								break;
+							}
+						case PrimitiveType.Single:
+							{
+								float[] array = (float[])CValue;
+								VisitPrimitiveArray(walker, array);
+								break;
+							}
+						case PrimitiveType.Double:
+							{
+								double[] array = (double[])CValue;
+								VisitPrimitiveArray(walker, array);
+								break;
+							}
+						case PrimitiveType.String:
+							{
+								string[] array = (string[])CValue;
+								VisitPrimitiveArray(walker, array);
+								break;
+							}
+						default:
+							throw new NotSupportedException(etalon.Type.Type.ToString());
+					}
+				}
+			}
+			else
+			{
+				if (etalon.Type.Type == PrimitiveType.Complex)
+				{
+					IUnityAssetBase structure = (IUnityAssetBase)CValue;
+					structure.WalkEditor(walker);
+				}
+				else
+				{
+					switch (etalon.Type.Type)
+					{
+						case PrimitiveType.Bool:
+							walker.VisitPrimitive(PValue != 0);
+							break;
+						case PrimitiveType.Char:
+							walker.VisitPrimitive((char)PValue);
+							break;
+						case PrimitiveType.SByte:
+							walker.VisitPrimitive(unchecked((sbyte)PValue));
+							break;
+						case PrimitiveType.Byte:
+							walker.VisitPrimitive((byte)PValue);
+							break;
+						case PrimitiveType.Short:
+							walker.VisitPrimitive(unchecked((short)PValue));
+							break;
+						case PrimitiveType.UShort:
+							walker.VisitPrimitive((ushort)PValue);
+							break;
+						case PrimitiveType.Int:
+							walker.VisitPrimitive(unchecked((int)PValue));
+							break;
+						case PrimitiveType.UInt:
+							walker.VisitPrimitive((uint)PValue);
+							break;
+						case PrimitiveType.Long:
+							walker.VisitPrimitive(unchecked((long)PValue));
+							break;
+						case PrimitiveType.ULong:
+							walker.VisitPrimitive(PValue);
+							break;
+						case PrimitiveType.Single:
+							walker.VisitPrimitive(BitConverter.UInt32BitsToSingle((uint)PValue));
+							break;
+						case PrimitiveType.Double:
+							walker.VisitPrimitive(BitConverter.UInt64BitsToDouble(PValue));
+							break;
+						case PrimitiveType.String:
+							walker.VisitPrimitive((string)CValue);
+							break;
+						default:
+							throw new NotSupportedException(etalon.Type.Type.ToString());
+					}
+				}
+			}
+		}
+
+		private static void VisitPrimitiveArray<T>(AssetWalker walker, T[] array)
+		{
+			if (walker.EnterArray(array))
+			{
+				int length = array.Length;
+				if (length > 0)
+				{
+					int i = 0;
+					while (true)
+					{
+						walker.VisitPrimitive(array[i]);
+						i++;
+						if (i >= length)
+						{
+							break;
+						}
+						walker.DivideArray(array);
+					}
+				}
+				walker.ExitArray(array);
 			}
 		}
 

@@ -104,6 +104,38 @@ public abstract class AssetWalker
 	}
 
 	/// <summary>
+	/// Called when entering an array node during traversal.
+	/// </summary>
+	/// <typeparam name="T">The type of the array elements.</typeparam>
+	/// <param name="array">The array being entered.</param>
+	/// <returns>
+	///   <c>true</c> to continue visiting the children of the array node,
+	///   <c>false</c> to skip visiting the children and not call the exit method.
+	/// </returns>
+	public virtual bool EnterArray<T>(T[] array)
+	{
+		return true;
+	}
+
+	/// <summary>
+	/// Called between two elements of an array node during traversal.
+	/// </summary>
+	/// <typeparam name="T">The type of the array elements being divided.</typeparam>
+	/// <param name="array">The array having its elements divided.</param>
+	public virtual void DivideArray<T>(T[] array)
+	{
+	}
+
+	/// <summary>
+	/// Called when exiting an array node during traversal.
+	/// </summary>
+	/// <typeparam name="T">The type of the array elements.</typeparam>
+	/// <param name="array">The array being exited.</param>
+	public virtual void ExitArray<T>(T[] array)
+	{
+	}
+
+	/// <summary>
 	/// Called when entering a dictionary node during traversal.
 	/// </summary>
 	/// <typeparam name="TKey">The type of dictionary keys.</typeparam>

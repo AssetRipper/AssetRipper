@@ -4,6 +4,7 @@ using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
+using AssetRipper.Assets.Traversal;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.IO.Endian;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
@@ -63,46 +64,31 @@ public sealed class UnloadedStructure : UnityAssetBase
 	}
 
 	#region UnityAssetBase Overrides
-	public override YamlMappingNode ExportYamlEditor(IExportContainer container)
-	{
-		SerializableStructure? structure = LoadStructure();
-		return structure?.ExportYamlEditor(container) ?? new();
-	}
+	public override bool FlowMappedInYaml => LoadStructure()?.FlowMappedInYaml ?? base.FlowMappedInYaml;
 
-	public override YamlMappingNode ExportYamlRelease(IExportContainer container)
-	{
-		SerializableStructure? structure = LoadStructure();
-		return structure?.ExportYamlRelease(container) ?? new();
-	}
+	public override int SerializedVersion => LoadStructure()?.SerializedVersion ?? base.SerializedVersion;
+
+	public override YamlMappingNode ExportYamlEditor(IExportContainer container) => LoadStructure()?.ExportYamlEditor(container) ?? new();
+
+	public override YamlMappingNode ExportYamlRelease(IExportContainer container) => LoadStructure()?.ExportYamlRelease(container) ?? new();
+
+	public override void WalkEditor(AssetWalker walker) => LoadStructure()?.WalkEditor(walker);
+
+	public override void WalkRelease(AssetWalker walker) => LoadStructure()?.WalkRelease(walker);
+
+	public override void WalkStandard(AssetWalker walker) => LoadStructure()?.WalkStandard(walker);
 
 	public override IEnumerable<(string, PPtr)> FetchDependencies()
 	{
-		IUnityAssetBase? structure = LoadStructure();
-		return structure?.FetchDependencies() ?? Enumerable.Empty<(string, PPtr)>();
+		return LoadStructure()?.FetchDependencies() ?? Enumerable.Empty<(string, PPtr)>();
 	}
 
-	public override void WriteEditor(AssetWriter writer)
-	{
-		IUnityAssetBase? structure = LoadStructure();
-		structure?.WriteEditor(writer);
-	}
+	public override void WriteEditor(AssetWriter writer) => LoadStructure()?.WriteEditor(writer);
 
-	public override void WriteRelease(AssetWriter writer)
-	{
-		IUnityAssetBase? structure = LoadStructure();
-		structure?.WriteRelease(writer);
-	}
+	public override void WriteRelease(AssetWriter writer) => LoadStructure()?.WriteRelease(writer);
 
-	public override void CopyValues(IUnityAssetBase? source, PPtrConverter converter)
-	{
-		IUnityAssetBase? structure = LoadStructure();
-		structure?.CopyValues(source, converter);
-	}
+	public override void CopyValues(IUnityAssetBase? source, PPtrConverter converter) => LoadStructure()?.CopyValues(source, converter);
 
-	public override void Reset()
-	{
-		IUnityAssetBase? structure = LoadStructure();
-		structure?.Reset();
-	}
+	public override void Reset() => LoadStructure()?.Reset();
 	#endregion
 }

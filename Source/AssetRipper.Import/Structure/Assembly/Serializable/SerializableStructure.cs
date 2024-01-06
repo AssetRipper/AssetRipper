@@ -4,6 +4,7 @@ using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Export.Yaml;
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
+using AssetRipper.Assets.Traversal;
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly.Mono;
 using AssetRipper.IO.Endian;
@@ -14,6 +15,8 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 {
 	public sealed class SerializableStructure : UnityAssetBase
 	{
+		public override int SerializedVersion => Type.Version;
+
 		internal SerializableStructure(SerializableType type, int depth)
 		{
 			Depth = depth;
@@ -63,6 +66,46 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 		}
 		public override YamlMappingNode ExportYamlEditor(IExportContainer container) => ExportYaml(container);
 		public override YamlMappingNode ExportYamlRelease(IExportContainer container) => ExportYaml(container);
+
+		public override void WalkEditor(AssetWalker walker)
+		{
+			if (walker.EnterAsset(this))
+			{
+				bool hasSerializedVersion = SerializedVersion > 1;
+				if (hasSerializedVersion)
+				{
+					if (walker.EnterField(this, "serializedVersion"))
+					{
+						walker.VisitPrimitive(SerializedVersion);
+						walker.ExitField(this, "serializedVersion");
+					}
+				}
+				bool hasEmittedFirstField = hasSerializedVersion;
+				for (int i = 0; i < Fields.Length; i++)
+				{
+					SerializableType.Field etalon = Type.GetField(i);
+					if (IsAvailable(etalon))
+					{
+						if (hasEmittedFirstField)
+						{
+							walker.DivideAsset(this);
+						}
+						else
+						{
+							hasEmittedFirstField = true;
+						}
+						if (walker.EnterField(this, etalon.Name))
+						{
+							Fields[i].WalkEditor(walker, etalon);
+							walker.ExitField(this, etalon.Name);
+						}
+					}
+				}
+				walker.ExitAsset(this);
+			}
+		}
+		public override void WalkRelease(AssetWalker walker) => WalkEditor(walker);
+		public override void WalkStandard(AssetWalker walker) => WalkEditor(walker);
 
 		public override IEnumerable<(string, PPtr)> FetchDependencies()
 		{

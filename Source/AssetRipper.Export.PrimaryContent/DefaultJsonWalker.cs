@@ -92,6 +92,25 @@ public class DefaultJsonWalker : AssetWalker
 		Writer.Write(']');
 	}
 
+	public override bool EnterArray<T>(T[] array)
+	{
+		Writer.WriteLine('[');
+		Writer.Indent++;
+		return true;
+	}
+
+	public override void DivideArray<T>(T[] array)
+	{
+		Writer.WriteLine(',');
+	}
+
+	public override void ExitArray<T>(T[] array)
+	{
+		Writer.WriteLine();
+		Writer.Indent--;
+		Writer.Write(']');
+	}
+
 	public override bool EnterDictionary<TKey, TValue>(AssetDictionary<TKey, TValue> dictionary)
 	{
 		if (IsString<TKey>())
