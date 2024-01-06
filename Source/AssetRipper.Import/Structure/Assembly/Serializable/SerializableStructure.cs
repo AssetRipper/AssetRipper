@@ -104,6 +104,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 				walker.ExitAsset(this);
 			}
 		}
+		//For now, only the editor version is implemented.
 		public override void WalkRelease(AssetWalker walker) => WalkEditor(walker);
 		public override void WalkStandard(AssetWalker walker) => WalkEditor(walker);
 

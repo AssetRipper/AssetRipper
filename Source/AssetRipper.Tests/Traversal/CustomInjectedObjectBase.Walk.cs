@@ -11,15 +11,11 @@ partial class CustomInjectedObjectBase
 {
 	private void Walk(AssetWalker walker, WalkType walkType)
 	{
-		if (EnterAsset(walker))
+		if (walker.EnterAsset(this))
 		{
 			FieldInfo[] fields = GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 			if (fields.Length > 0)
 			{
-				MethodInfo divideAssetMethod = typeof(AssetWalker)
-					.GetMethod(nameof(AssetWalker.DivideAsset), BindingFlags.Public | BindingFlags.Instance)!
-					.MakeGenericMethod(GetType());
-
 				int i = 0;
 				while (true)
 				{
@@ -29,39 +25,11 @@ partial class CustomInjectedObjectBase
 					{
 						break;
 					}
-					divideAssetMethod.Invoke(walker, [this]);
+					walker.DivideAsset(this);
 				}
 			}
-			ExitAsset(walker);
+			walker.ExitAsset(this);
 		}
-	}
-
-	private bool EnterAsset(AssetWalker walker)
-	{
-		return (bool)typeof(AssetWalker).GetMethod(nameof(AssetWalker.EnterAsset), BindingFlags.Public | BindingFlags.Instance)
-			!.MakeGenericMethod(GetType())
-			.Invoke(walker, [this])!;
-	}
-
-	private void ExitAsset(AssetWalker walker)
-	{
-		typeof(AssetWalker).GetMethod(nameof(AssetWalker.ExitAsset), BindingFlags.Public | BindingFlags.Instance)
-			!.MakeGenericMethod(GetType())
-			.Invoke(walker, [this]);
-	}
-
-	private bool EnterField(AssetWalker walker, string name)
-	{
-		return (bool)typeof(AssetWalker).GetMethod(nameof(AssetWalker.EnterField), BindingFlags.Public | BindingFlags.Instance)
-			!.MakeGenericMethod(GetType())
-			.Invoke(walker, [this, name])!;
-	}
-
-	private void ExitField(AssetWalker walker, string name)
-	{
-		typeof(AssetWalker).GetMethod(nameof(AssetWalker.ExitField), BindingFlags.Public | BindingFlags.Instance)
-			!.MakeGenericMethod(GetType())
-			.Invoke(walker, [this, name]);
 	}
 
 	private bool EnterList(AssetWalker walker, Type elementType, object? list)
@@ -137,11 +105,11 @@ partial class CustomInjectedObjectBase
 	private void WalkField(AssetWalker walker, FieldInfo field, WalkType walkType)
 	{
 		string name = GetName(field, walkType);
-		if (EnterField(walker, name))
+		if (walker.EnterField(this, name))
 		{
 			VisitValue(walker, walkType, field.FieldType, field.GetValue(this));
 
-			ExitField(walker, name);
+			walker.ExitField(this, name);
 		}
 	}
 
@@ -154,7 +122,7 @@ partial class CustomInjectedObjectBase
 		else if (type.IsAssignableTo(typeof(IUnityObjectBase)))
 		{
 			typeof(TraversalHelperMethods).GetMethod(nameof(TraversalHelperMethods.VisitPPtr))!
-				.MakeGenericMethod(GetType(), type)
+				.MakeGenericMethod(type)
 				.Invoke(null, [this, walker, value]);
 		}
 		else if (type.IsAssignableTo(typeof(IPPtr)))

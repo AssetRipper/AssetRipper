@@ -107,13 +107,13 @@ public class DefaultYamlWalker : AssetWalker
 		return result;
 	}
 
-	public sealed override bool EnterAsset<T>(T asset)
+	public sealed override bool EnterAsset(IUnityAssetBase asset)
 	{
 		ThrowIfFlowMapping();
-		if (typeof(T) == typeof(GUID))
+		if (asset is GUID guid)
 		{
 			Writer.Write(' ');
-			Writer.Write(Unsafe.As<T, GUID>(ref asset).ToString());
+			Writer.Write(guid.ToString());
 			JustEnteredListItem = false;
 			return false;
 		}
@@ -155,7 +155,7 @@ public class DefaultYamlWalker : AssetWalker
 		return true;
 	}
 
-	public sealed override void DivideAsset<T>(T asset)
+	public sealed override void DivideAsset(IUnityAssetBase asset)
 	{
 		if (FlowMapping)
 		{
@@ -163,7 +163,7 @@ public class DefaultYamlWalker : AssetWalker
 		}
 	}
 
-	public sealed override void ExitAsset<T>(T asset)
+	public sealed override void ExitAsset(IUnityAssetBase asset)
 	{
 		if (asset.FlowMappedInYaml)
 		{
@@ -176,7 +176,7 @@ public class DefaultYamlWalker : AssetWalker
 		}
 	}
 
-	public sealed override bool EnterField<T>(T asset, string name)
+	public sealed override bool EnterField(IUnityAssetBase asset, string name)
 	{
 		if (FlowMapping)
 		{
@@ -200,7 +200,7 @@ public class DefaultYamlWalker : AssetWalker
 		return true;
 	}
 
-	public sealed override void ExitField<T>(T asset, string name)
+	public sealed override void ExitField(IUnityAssetBase asset, string name)
 	{
 	}
 

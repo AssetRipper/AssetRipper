@@ -11,14 +11,12 @@ public abstract class AssetWalker
 	/// <summary>
 	/// Called when entering an asset node during traversal.
 	/// </summary>
-	/// <typeparam name="T">The type of the <paramref name="asset"/> being entered.</typeparam>
 	/// <param name="asset">The asset being entered.</param>
 	/// <returns>
 	///   <c>true</c> to continue visiting the children of the asset node,
 	///   <c>false</c> to skip visiting the children and not call the exit method.
 	/// </returns>
-	public virtual bool EnterAsset<T>(T asset)
-		where T : IUnityAssetBase
+	public virtual bool EnterAsset(IUnityAssetBase asset)
 	{
 		return true;
 	}
@@ -26,34 +24,28 @@ public abstract class AssetWalker
 	/// <summary>
 	/// Called between two fields of an asset node during traversal.
 	/// </summary>
-	/// <typeparam name="T">The type of <paramref name="asset"/>.</typeparam>
 	/// <param name="asset">The asset having its fields divided.</param>
-	public virtual void DivideAsset<T>(T asset)
-		where T : IUnityAssetBase
+	public virtual void DivideAsset(IUnityAssetBase asset)
 	{
 	}
 
 	/// <summary>
 	/// Called when exiting an asset node during traversal.
 	/// </summary>
-	/// <typeparam name="T">The type of the <paramref name="asset"/> being exited.</typeparam>
 	/// <param name="asset">The asset being exited.</param>
-	public virtual void ExitAsset<T>(T asset)
-		where T : IUnityAssetBase
+	public virtual void ExitAsset(IUnityAssetBase asset)
 	{
 	}
 
 	/// <summary>
 	/// Called when entering a field node during traversal.
 	/// </summary>
-	/// <typeparam name="T">The type of the <paramref name="asset"/>.</typeparam>
 	/// <param name="name">The name of the field being entered.</param>
 	/// <returns>
 	///   <c>true</c> to continue visiting the children of the field node,
 	///   <c>false</c> to skip visiting the children and not call the exit method.
 	/// </returns>
-	public virtual bool EnterField<T>(T asset, string name)
-		where T : IUnityAssetBase
+	public virtual bool EnterField(IUnityAssetBase asset, string name)
 	{
 		return true;
 	}
@@ -61,10 +53,8 @@ public abstract class AssetWalker
 	/// <summary>
 	/// Called when exiting a field node during traversal.
 	/// </summary>
-	/// <typeparam name="T">The type of the <paramref name="asset"/>.</typeparam>
 	/// <param name="name">The name of the field being exited.</param>
-	public virtual void ExitField<T>(T asset, string name)
-		where T : IUnityAssetBase
+	public virtual void ExitField(IUnityAssetBase asset, string name)
 	{
 	}
 
@@ -288,11 +278,9 @@ public abstract class AssetWalker
 	/// This method is called when encountering a generic PPtr node during asset traversal.
 	/// A generic PPtr is a serialized pointer to a Unity object within the asset file.
 	/// </remarks>
-	/// <typeparam name="TPPtr">The type of the generic PPtr.</typeparam>
 	/// <typeparam name="TAsset">The type of the Unity object pointed to by the PPtr.</typeparam>
 	/// <param name="pptr">The generic PPtr instance representing the serialized pointer.</param>
-	public void VisitPPtr<TPPtr, TAsset>(TPPtr pptr)
-		where TPPtr : IPPtr<TAsset>
+	public void VisitPPtr<TAsset>(IPPtr<TAsset> pptr)
 		where TAsset : IUnityObjectBase
 	{
 		VisitPPtr(new PPtr<TAsset>(pptr.FileID, pptr.PathID));

@@ -8,8 +8,7 @@ namespace AssetRipper.Processing;
 
 public static class TraversalHelperMethods
 {
-	public static void WalkPrimitiveField<TSelf, TPrimitive>(this TSelf @this, AssetWalker walker, TPrimitive value, [CallerArgumentExpression(nameof(value))] string name = "")
-		where TSelf : IUnityAssetBase
+	public static void WalkPrimitiveField<TPrimitive>(this IUnityAssetBase @this, AssetWalker walker, TPrimitive value, [CallerArgumentExpression(nameof(value))] string name = "")
 	{
 		if (walker.EnterField(@this, name))
 		{
@@ -18,8 +17,7 @@ public static class TraversalHelperMethods
 		}
 	}
 
-	public static void WalkPrimitiveListField<TSelf, TPrimitive>(this TSelf @this, AssetWalker walker, AssetList<TPrimitive> list, [CallerArgumentExpression(nameof(list))] string name = "")
-		where TSelf : IUnityAssetBase
+	public static void WalkPrimitiveListField<TPrimitive>(this IUnityAssetBase @this, AssetWalker walker, AssetList<TPrimitive> list, [CallerArgumentExpression(nameof(list))] string name = "")
 		where TPrimitive : notnull, new()
 	{
 		if (walker.EnterField(@this, name))
@@ -47,20 +45,17 @@ public static class TraversalHelperMethods
 		}
 	}
 
-	public static void WalkPPtrField<TSelf, TPPtr, TAsset>(this TSelf @this, AssetWalker walker, TPPtr value, [CallerArgumentExpression(nameof(value))] string name = "")
-		where TSelf : IUnityAssetBase
-		where TPPtr : IPPtr<TAsset>
+	public static void WalkPPtrField<TAsset>(this IUnityAssetBase @this, AssetWalker walker, IPPtr<TAsset> value, [CallerArgumentExpression(nameof(value))] string name = "")
 		where TAsset : IUnityObjectBase
 	{
 		if (walker.EnterField(@this, name))
 		{
-			walker.VisitPPtr<TPPtr, TAsset>(value);
+			walker.VisitPPtr<TAsset>(value);
 			walker.ExitField(@this, name);
 		}
 	}
 
-	public static void WalkPPtrField<TSelf, TAsset>(this TSelf @this, AssetWalker walker, PPtr<TAsset> value, [CallerArgumentExpression(nameof(value))] string name = "")
-		where TSelf : IUnityAssetBase
+	public static void WalkPPtrField<TAsset>(this IUnityAssetBase @this, AssetWalker walker, PPtr<TAsset> value, [CallerArgumentExpression(nameof(value))] string name = "")
 		where TAsset : IUnityObjectBase
 	{
 		if (walker.EnterField(@this, name))
@@ -70,8 +65,7 @@ public static class TraversalHelperMethods
 		}
 	}
 
-	public static void WalkPPtrField<TSelf, TAsset>(this TSelf @this, AssetWalker walker, TAsset? asset, [CallerArgumentExpression(nameof(asset))] string name = "")
-		where TSelf : IUnityObjectBase
+	public static void WalkPPtrField<TAsset>(this IUnityObjectBase @this, AssetWalker walker, TAsset? asset, [CallerArgumentExpression(nameof(asset))] string name = "")
 		where TAsset : IUnityObjectBase
 	{
 		if (walker.EnterField(@this, name))
@@ -81,15 +75,13 @@ public static class TraversalHelperMethods
 		}
 	}
 
-	public static void VisitPPtr<TSelf, TAsset>(this TSelf @this, AssetWalker walker, TAsset? asset)
-		where TSelf : IUnityObjectBase
+	public static void VisitPPtr<TAsset>(this IUnityObjectBase @this, AssetWalker walker, TAsset? asset)
 		where TAsset : IUnityObjectBase
 	{
 		walker.VisitPPtr(@this.Collection.ForceCreatePPtr(asset));
 	}
 
-	public static void WalkStandardAssetField<TSelf, TAsset>(this TSelf @this, AssetWalker walker, TAsset asset, [CallerArgumentExpression(nameof(asset))] string name = "")
-		where TSelf : IUnityAssetBase
+	public static void WalkStandardAssetField<TAsset>(this IUnityAssetBase @this, AssetWalker walker, TAsset asset, [CallerArgumentExpression(nameof(asset))] string name = "")
 		where TAsset : IUnityAssetBase
 	{
 		if (walker.EnterField(@this, name))
@@ -99,8 +91,7 @@ public static class TraversalHelperMethods
 		}
 	}
 
-	public static void WalkStandardAssetListField<TSelf, TAsset>(this TSelf @this, AssetWalker walker, AssetList<TAsset> list, [CallerArgumentExpression(nameof(list))] string name = "")
-		where TSelf : IUnityAssetBase
+	public static void WalkStandardAssetListField<TAsset>(this IUnityAssetBase @this, AssetWalker walker, AssetList<TAsset> list, [CallerArgumentExpression(nameof(list))] string name = "")
 		where TAsset : IUnityAssetBase, new()
 	{
 		if (walker.EnterField(@this, name))
