@@ -444,7 +444,7 @@ namespace AssetRipper.Processing.AnimationClips
 			else
 			{
 				// that means that dev exported animation clip with missing component
-				CurveData curve = new CurveData(path, MissedPropertyPrefix + binding.Attribute, ClassIDType.GameObject);
+				CurveData curve = new CurveData(path, GetReversedPath(MissedPropertyPrefix, binding.Attribute), ClassIDType.GameObject);
 				AddFloatKeyframe(curve, time, value);
 			}
 		}
@@ -458,7 +458,7 @@ namespace AssetRipper.Processing.AnimationClips
 
 			if (!m_checksumCache.TryGetPath(binding.Attribute, out string? propertyName))
 			{
-				propertyName = ScriptPropertyPrefix + binding.Attribute;
+				propertyName = GetReversedPath(ScriptPropertyPrefix, binding.Attribute);
 			}
 
 			CurveData curve = new CurveData(path, propertyName, ClassIDType.MonoBehaviour, binding.Script.TryGetAsset(m_clip.Collection));
@@ -470,7 +470,7 @@ namespace AssetRipper.Processing.AnimationClips
 		{
 			if (!FieldHashes.TryGetPath(binding.GetClassID(), binding.Attribute, out string? propertyName))
 			{
-				CurveData curve = new(path, TypeTreePropertyPrefix + binding.Attribute, binding.GetClassID());
+				CurveData curve = new(path, GetReversedPath(TypeTreePropertyPrefix, binding.Attribute), binding.GetClassID());
 				AddFloatKeyframe(curve, time, value);
 			}
 			else
@@ -565,7 +565,7 @@ namespace AssetRipper.Processing.AnimationClips
 			}
 			else
 			{
-				return Crc32Algorithm.ReverseAscii(hash, $"{UnknownPathPrefix}0x{hash:X}_");
+				return GetReversedPath(UnknownPathPrefix, hash);
 			}
 		}
 
@@ -613,6 +613,11 @@ namespace AssetRipper.Processing.AnimationClips
 					}
 				}
 			}
+		}
+
+		private static string GetReversedPath([ConstantExpected] string prefix, uint hash)
+		{
+			return Crc32Algorithm.ReverseAscii(hash, $"{prefix}0x{hash:X}_");
 		}
 
 		private UnityVersion Version => m_clip.Collection.Version;
