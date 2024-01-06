@@ -1,6 +1,7 @@
 using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
+using AssetRipper.Assets.Metadata;
 using AssetRipper.Export.Modules.Shaders.IO;
 using AssetRipper.IO.Files;
 using AssetRipper.Yaml;
@@ -61,5 +62,24 @@ namespace AssetRipper.Export.UnityProjects.Project
 		}
 
 		private static readonly Encoding UTF8 = new UTF8Encoding(false);
+
+		private sealed class YamlWalker(IExportContainer container, TextWriter innerWriter) : DefaultYamlWalker(innerWriter)
+		{
+			public IUnityObjectBase CurrentAsset { get; set; } = null!;
+
+			public override void WritePPtr<TAsset>(PPtr<TAsset> pptr)
+			{
+				TAsset? asset = CurrentAsset.Collection.TryGetAsset(pptr);
+				if (asset is null)
+				{
+					Writer.Write("{fileID: 0}");
+				}
+				else
+				{
+					MetaPtr metaPtr = container.CreateExportPointer(asset);
+					Writer.Write(metaPtr.ToString());
+				}
+			}
+		}
 	}
 }

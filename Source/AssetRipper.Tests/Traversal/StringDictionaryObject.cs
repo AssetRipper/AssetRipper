@@ -21,13 +21,13 @@ internal sealed class StringDictionaryObject : CustomInjectedObjectBase
 		  - key2: value2
 		  normalDictionary:
 		  - _BumpMap:
-		      m_Offset: {x: 0, y: 0}
-		      m_Scale: {x: 1, y: 1}
 		      m_Texture: {m_FileID: 0, m_PathID: 0}
+		      m_Scale: {x: 1, y: 1}
+		      m_Offset: {x: 0, y: 0}
 		  - _DetailAlbedoMap:
-		      m_Offset: {x: 0, y: 0}
-		      m_Scale: {x: 1, y: 1}
 		      m_Texture: {m_FileID: 0, m_PathID: 0}
+		      m_Scale: {x: 1, y: 1}
+		      m_Offset: {x: 0, y: 0}
 
 		""";
 
@@ -41,13 +41,13 @@ internal sealed class StringDictionaryObject : CustomInjectedObjectBase
 		    key2: value2
 		  normalDictionary:
 		    _BumpMap:
-		      m_Offset: {x: 0, y: 0}
-		      m_Scale: {x: 1, y: 1}
 		      m_Texture: {m_FileID: 0, m_PathID: 0}
+		      m_Scale: {x: 1, y: 1}
+		      m_Offset: {x: 0, y: 0}
 		    _DetailAlbedoMap:
-		      m_Offset: {x: 0, y: 0}
-		      m_Scale: {x: 1, y: 1}
 		      m_Texture: {m_FileID: 0, m_PathID: 0}
+		      m_Scale: {x: 1, y: 1}
+		      m_Offset: {x: 0, y: 0}
 
 		""";
 

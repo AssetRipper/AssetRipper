@@ -23,6 +23,6 @@ internal sealed class YamlTab(IUnityObjectBase asset) : AssetTab
 
 	private static string GetYamlString(IUnityObjectBase asset)
 	{
-		return new DefaultYamlWalker().AppendEditor(asset, ExportIdHandler.GetMainExportID(asset)).ToString();
+		return new StringYamlWalker().AppendEditor(asset, ExportIdHandler.GetMainExportID(asset)).ToString()!;
 	}
 }

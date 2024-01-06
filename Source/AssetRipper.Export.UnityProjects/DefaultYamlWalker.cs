@@ -13,13 +13,11 @@ namespace AssetRipper.Export.UnityProjects;
 
 public class DefaultYamlWalker : AssetWalker
 {
-	private readonly StringWriter stringWriter = new(CultureInfo.InvariantCulture) { NewLine = "\n" };
 	protected IndentedTextWriter Writer { get; }
 	protected bool FlowMapping { get; private set; }
 	protected bool FirstField { get; private set; }
 	protected bool JustEnteredListItem { get; private set; }
 	protected bool JustEnteredMonoBehaviourStructure { get; private set; }
-	private string CurrentText => stringWriter.ToString();
 	protected virtual bool UseHyphenInStringDictionary => true;
 
 	private const string Head = """
@@ -28,9 +26,14 @@ public class DefaultYamlWalker : AssetWalker
 		""";
 	private const string IndentString = "  ";
 
-	public DefaultYamlWalker()
+	public DefaultYamlWalker(TextWriter innerWriter)
 	{
-		Writer = new IndentedTextWriter(stringWriter, IndentString);
+		Writer = new IndentedTextWriter(innerWriter, IndentString);
+		WriteHead();
+	}
+
+	protected void WriteHead()
+	{
 		Writer.WriteLine(Head);
 	}
 
@@ -89,22 +92,6 @@ public class DefaultYamlWalker : AssetWalker
 		Writer.WriteLine(exportID);//Anchor
 		Writer.Write(asset.ClassName);//Root
 		Writer.Write(':');
-	}
-
-	public void Reset()
-	{
-		Writer.Flush();
-		stringWriter.GetStringBuilder().Clear();
-		Writer.WriteLine(Head);
-	}
-
-	public sealed override string ToString() => CurrentText;
-
-	public string ToStringAndReset()
-	{
-		string result = ToString();
-		Reset();
-		return result;
 	}
 
 	public sealed override bool EnterAsset(IUnityAssetBase asset)
@@ -480,4 +467,34 @@ public class DefaultYamlWalker : AssetWalker
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 	private static bool IsStringLike<T>() => IsString<T>() || typeof(T) == typeof(GUID);
+}
+public class StringYamlWalker : DefaultYamlWalker
+{
+	private readonly StringWriter stringWriter;
+	private string CurrentText => stringWriter.ToString();
+
+	public StringYamlWalker() : this(new(CultureInfo.InvariantCulture) { NewLine = "\n" })
+	{
+	}
+
+	private StringYamlWalker(StringWriter stringWriter) : base(stringWriter)
+	{
+		this.stringWriter = stringWriter;
+	}
+
+	public void Reset()
+	{
+		Writer.Flush();
+		stringWriter.GetStringBuilder().Clear();
+		WriteHead();
+	}
+
+	public sealed override string ToString() => CurrentText;
+
+	public string ToStringAndReset()
+	{
+		string result = ToString();
+		Reset();
+		return result;
+	}
 }

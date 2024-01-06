@@ -25,25 +25,22 @@ namespace AssetRipper.Assets.Metadata
 			return node;
 		}
 
-		public JsonObject Serialize()
+		/// <summary>
+		/// Write this pointer to a string.
+		/// </summary>
+		/// <remarks>
+		/// This uses the same format as Yaml.
+		/// </remarks>
+		/// <returns>This pointer expressed as a string.</returns>
+		public override string ToString()
 		{
 			if (GUID.IsZero)
 			{
-				return new()
-				{
-					{ "@style", "Flow" },
-					{ FileIDName, FileID }
-				};
+				return $"{{{FileIDName}: {FileID}}}";
 			}
 			else
 			{
-				return new()
-				{
-					{ "@style", "Flow" },
-					{ FileIDName, FileID },
-					{ GuidName, GUID.ToString() },
-					{ TypeName, (int)AssetType }
-				};
+				return $"{{{FileIDName}: {FileID}, {GuidName}: {GUID}, {TypeName}: {(int)AssetType}}}";
 			}
 		}
 
