@@ -1,13 +1,11 @@
 ﻿using AssetRipper.Assets.Cloning;
 using AssetRipper.Assets.Export;
-using AssetRipper.Assets.IO.Serialization;
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Assets.Traversal;
 using AssetRipper.IO.Endian;
 using AssetRipper.Yaml;
 using System.Runtime.CompilerServices;
-using System.Text.Json.Nodes;
 
 namespace AssetRipper.Assets;
 
@@ -48,14 +46,6 @@ public abstract class UnityAssetBase : IUnityAssetBase
 	public virtual void CopyValues(IUnityAssetBase? source, PPtrConverter converter)
 	{
 	}
-
-	public virtual JsonNode SerializeAllFields(IUnityAssetSerializer serializer, SerializationOptions options) => throw MethodNotSupported();
-
-	public virtual JsonNode SerializeReleaseFields(IUnityAssetSerializer serializer, SerializationOptions options) => throw MethodNotSupported();
-
-	public virtual JsonNode SerializeEditorFields(IUnityAssetSerializer serializer, SerializationOptions options) => throw MethodNotSupported();
-
-	public virtual void Deserialize(JsonNode node, IUnityAssetDeserializer deserializer, DeserializationOptions options) => throw MethodNotSupported();
 
 	public virtual void WalkEditor(AssetWalker walker) => WalkStandard(walker);
 
