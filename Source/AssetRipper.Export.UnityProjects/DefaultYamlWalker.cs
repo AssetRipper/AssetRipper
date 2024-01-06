@@ -2,6 +2,8 @@
 using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Assets.Traversal;
+using AssetRipper.SourceGenerated.Classes.ClassID_114;
+using AssetRipper.SourceGenerated.Classes.ClassID_2089858483;
 using AssetRipper.SourceGenerated.Subclasses.GUID;
 using System.CodeDom.Compiler;
 using System.Globalization;
@@ -16,6 +18,7 @@ public class DefaultYamlWalker : AssetWalker
 	protected bool FlowMapping { get; private set; }
 	protected bool FirstField { get; private set; }
 	protected bool JustEnteredListItem { get; private set; }
+	protected bool JustEnteredMonoBehaviourStructure { get; private set; }
 	private string CurrentText => stringWriter.ToString();
 	protected virtual bool UseHyphenInStringDictionary => true;
 
@@ -56,7 +59,6 @@ public class DefaultYamlWalker : AssetWalker
 
 	public DefaultYamlWalker AppendEditor(IUnityObjectBase asset, long exportID)
 	{
-		Reset();
 		WriteTagAnchorRoot(asset, exportID);
 		asset.WalkEditor(this);
 		Writer.WriteLine();
@@ -65,7 +67,6 @@ public class DefaultYamlWalker : AssetWalker
 
 	public DefaultYamlWalker AppendRelease(IUnityObjectBase asset, long exportID)
 	{
-		Reset();
 		WriteTagAnchorRoot(asset, exportID);
 		asset.WalkRelease(this);
 		Writer.WriteLine();
@@ -74,7 +75,6 @@ public class DefaultYamlWalker : AssetWalker
 
 	public DefaultYamlWalker AppendStandard(IUnityObjectBase asset, long exportID)
 	{
-		Reset();
 		WriteTagAnchorRoot(asset, exportID);
 		asset.WalkStandard(this);
 		Writer.WriteLine();
@@ -116,6 +116,11 @@ public class DefaultYamlWalker : AssetWalker
 			Writer.Write(guid.ToString());
 			JustEnteredListItem = false;
 			return false;
+		}
+		else if (JustEnteredMonoBehaviourStructure)
+		{
+			JustEnteredMonoBehaviourStructure = false;
+			return true;
 		}
 		if (asset.FlowMappedInYaml)
 		{
@@ -178,6 +183,11 @@ public class DefaultYamlWalker : AssetWalker
 
 	public sealed override bool EnterField(IUnityAssetBase asset, string name)
 	{
+		if (name is "m_Structure" && asset is IMonoBehaviour or IScriptedImporter)
+		{
+			JustEnteredMonoBehaviourStructure = true;
+			return true;
+		}
 		if (FlowMapping)
 		{
 			Writer.Write(name);
