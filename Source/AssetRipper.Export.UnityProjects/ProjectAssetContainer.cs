@@ -46,7 +46,7 @@ namespace AssetRipper.Export.UnityProjects
 		{
 			if (m_assetCollections.TryGetValue(asset, out IExportCollection? collection))
 			{
-				return collection.GetExportID(asset);
+				return collection.GetExportID(this, asset);
 			}
 
 			return ExportIdHandler.GetMainExportID(asset);
@@ -61,7 +61,7 @@ namespace AssetRipper.Export.UnityProjects
 		{
 			if (m_assetCollections.TryGetValue(asset, out IExportCollection? collection))
 			{
-				return collection.CreateExportPointer(asset, collection == CurrentCollection);
+				return collection.CreateExportPointer(this, asset, collection == CurrentCollection);
 			}
 
 			return MetaPtr.CreateMissingReference(asset.ClassID, AssetType.Meta);

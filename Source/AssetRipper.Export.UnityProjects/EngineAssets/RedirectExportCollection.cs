@@ -56,7 +56,7 @@ public class RedirectExportCollection : IExportCollection
 		missingDictionary.Add(asset, assetType);
 	}
 
-	public MetaPtr CreateExportPointer(IUnityObjectBase asset, bool isLocal)
+	public MetaPtr CreateExportPointer(IExportContainer container, IUnityObjectBase asset, bool isLocal)
 	{
 		if (isLocal)
 		{
@@ -72,7 +72,7 @@ public class RedirectExportCollection : IExportCollection
 		return new MetaPtr(exportID, guid, assetType);
 	}
 
-	public long GetExportID(IUnityObjectBase asset) => redirectionDictionary[asset].Item1;
+	public long GetExportID(IExportContainer container, IUnityObjectBase asset) => redirectionDictionary[asset].Item1;
 
 	public bool Contains(IUnityObjectBase asset) => redirectionDictionary.ContainsKey(asset) || missingDictionary.ContainsKey(asset);
 

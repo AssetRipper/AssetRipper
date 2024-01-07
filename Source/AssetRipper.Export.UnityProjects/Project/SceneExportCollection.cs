@@ -63,14 +63,14 @@ namespace AssetRipper.Export.UnityProjects.Project
 			return m_exportIDs.ContainsKey(asset.AssetInfo);
 		}
 
-		public override long GetExportID(IUnityObjectBase asset)
+		public override long GetExportID(IExportContainer container, IUnityObjectBase asset)
 		{
 			return m_exportIDs[asset.AssetInfo];
 		}
 
-		public override MetaPtr CreateExportPointer(IUnityObjectBase asset, bool isLocal)
+		public override MetaPtr CreateExportPointer(IExportContainer container, IUnityObjectBase asset, bool isLocal)
 		{
-			long exportID = GetExportID(asset);
+			long exportID = GetExportID(container, asset);
 			if (isLocal)
 			{
 				return new MetaPtr(exportID);

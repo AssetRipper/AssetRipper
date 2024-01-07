@@ -40,7 +40,7 @@ namespace AssetRipper.Export.UnityProjects
 			return Asset.AssetInfo == asset.AssetInfo;
 		}
 
-		public override long GetExportID(IUnityObjectBase asset)
+		public override long GetExportID(IExportContainer container, IUnityObjectBase asset)
 		{
 			if (asset.AssetInfo == Asset.AssetInfo)
 			{
@@ -49,9 +49,9 @@ namespace AssetRipper.Export.UnityProjects
 			throw new ArgumentException(null, nameof(asset));
 		}
 
-		public override MetaPtr CreateExportPointer(IUnityObjectBase asset, bool isLocal)
+		public override MetaPtr CreateExportPointer(IExportContainer container, IUnityObjectBase asset, bool isLocal)
 		{
-			long exportID = GetExportID(asset);
+			long exportID = GetExportID(container, asset);
 			return isLocal ?
 				new MetaPtr(exportID) :
 				new MetaPtr(exportID, Asset.GUID, AssetExporter.ToExportType(Asset));
@@ -72,7 +72,7 @@ namespace AssetRipper.Export.UnityProjects
 		protected virtual IUnityObjectBase CreateImporter(IExportContainer container)
 		{
 			INativeFormatImporter importer = NativeFormatImporter.Create(container.File, container.ExportVersion);
-			importer.MainObjectFileID = GetExportID(Asset);
+			importer.MainObjectFileID = GetExportID(container, Asset);
 			if (importer.Has_AssetBundleName_R() && Asset.AssetBundleName is not null)
 			{
 				importer.AssetBundleName_R = Asset.AssetBundleName;

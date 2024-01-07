@@ -29,7 +29,7 @@ namespace AssetRipper.Export.UnityProjects.RawAssets
 
 		public override string Name => Asset.Name;
 
-		public override MetaPtr CreateExportPointer(IUnityObjectBase asset, bool isLocal)
+		public override MetaPtr CreateExportPointer(IExportContainer container, IUnityObjectBase asset, bool isLocal)
 		{
 			return MetaPtr.NullPtr;
 		}
@@ -45,7 +45,7 @@ namespace AssetRipper.Export.UnityProjects.RawAssets
 			return AssetExporter.Export(container, Asset, filePath);
 		}
 
-		public override long GetExportID(IUnityObjectBase asset)
+		public override long GetExportID(IExportContainer container, IUnityObjectBase asset)
 		{
 			throw new NotSupportedException();
 		}

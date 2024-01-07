@@ -22,7 +22,7 @@ namespace AssetRipper.Export.UnityProjects.Project
 			return true;
 		}
 
-		public override long GetExportID(IUnityObjectBase asset)
+		public override long GetExportID(IExportContainer container, IUnityObjectBase asset)
 		{
 			if (asset == Asset)
 			{
@@ -31,7 +31,7 @@ namespace AssetRipper.Export.UnityProjects.Project
 			throw new ArgumentException(null, nameof(asset));
 		}
 
-		public override MetaPtr CreateExportPointer(IUnityObjectBase asset, bool isLocal)
+		public override MetaPtr CreateExportPointer(IExportContainer container, IUnityObjectBase asset, bool isLocal)
 		{
 			throw new NotSupportedException();
 		}

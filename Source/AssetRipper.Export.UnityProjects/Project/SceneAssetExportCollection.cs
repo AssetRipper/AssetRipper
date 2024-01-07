@@ -31,7 +31,7 @@ namespace AssetRipper.Export.UnityProjects.Project
 
 		public string Name => $"{TargetScene.Name} (SceneAsset)";
 
-		public MetaPtr CreateExportPointer(IUnityObjectBase asset, bool isLocal)
+		public MetaPtr CreateExportPointer(IExportContainer container, IUnityObjectBase asset, bool isLocal)
 		{
 			return new MetaPtr(GetExportID(), TargetScene.GUID, AssetType.Meta);
 		}
@@ -46,7 +46,7 @@ namespace AssetRipper.Export.UnityProjects.Project
 			return true;
 		}
 
-		public long GetExportID(IUnityObjectBase asset)
+		public long GetExportID(IExportContainer container, IUnityObjectBase asset)
 		{
 			return GetExportID();
 		}

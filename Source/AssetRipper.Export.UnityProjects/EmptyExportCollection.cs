@@ -24,17 +24,12 @@ namespace AssetRipper.Export.UnityProjects
 			return false;
 		}
 
-		public long GetExportID(IUnityObjectBase asset)
+		public long GetExportID(IExportContainer container, IUnityObjectBase asset)
 		{
 			throw new NotSupportedException();
 		}
 
-		public UnityGuid GetExportGUID(IUnityObjectBase asset)
-		{
-			throw new NotSupportedException();
-		}
-
-		public MetaPtr CreateExportPointer(IUnityObjectBase asset, bool isLocal)
+		public MetaPtr CreateExportPointer(IExportContainer container, IUnityObjectBase asset, bool isLocal)
 		{
 			throw new NotSupportedException();
 		}

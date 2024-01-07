@@ -146,12 +146,12 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 			return m_scripts.ContainsKey(asset);
 		}
 
-		public override long GetExportID(IUnityObjectBase asset)
+		public override long GetExportID(IExportContainer container, IUnityObjectBase asset)
 		{
 			return ExportIdHandler.GetMainExportID(asset);
 		}
 
-		public override MetaPtr CreateExportPointer(IUnityObjectBase asset, bool isLocal)
+		public override MetaPtr CreateExportPointer(IExportContainer container, IUnityObjectBase asset, bool isLocal)
 		{
 			if (isLocal)
 			{
@@ -161,7 +161,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 			IMonoScript script = m_scripts[asset];
 			if (AssetExporter.GetExportType(script.GetAssemblyNameFixed()) is AssemblyExportType.Decompile)
 			{
-				long exportID = GetExportID(asset);
+				long exportID = GetExportID(container, asset);
 				UnityGuid uniqueGUID = ScriptHashing.ComputeScriptGuid(script);
 				return new MetaPtr(exportID, uniqueGUID, AssetExporter.ToExportType(asset));
 			}

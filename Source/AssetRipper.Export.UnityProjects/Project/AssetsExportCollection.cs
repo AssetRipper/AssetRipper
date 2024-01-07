@@ -18,11 +18,11 @@ namespace AssetRipper.Export.UnityProjects.Project
 			return base.Contains(asset) || m_exportIDs.ContainsKey(asset);
 		}
 
-		public override long GetExportID(IUnityObjectBase asset)
+		public override long GetExportID(IExportContainer container, IUnityObjectBase asset)
 		{
 			if (asset.AssetInfo == Asset.AssetInfo)
 			{
-				return base.GetExportID(asset);
+				return base.GetExportID(container, asset);
 			}
 			return m_exportIDs[asset];
 		}

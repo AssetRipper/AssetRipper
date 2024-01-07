@@ -22,8 +22,8 @@ namespace AssetRipper.Export.UnityProjects
 		/// <summary>
 		/// Get the export ID of the asset.
 		/// </summary>
-		long GetExportID(IUnityObjectBase asset);
-		MetaPtr CreateExportPointer(IUnityObjectBase asset, bool isLocal);
+		long GetExportID(IExportContainer container, IUnityObjectBase asset);
+		MetaPtr CreateExportPointer(IExportContainer container, IUnityObjectBase asset, bool isLocal);
 
 		AssetCollection File { get; }
 		TransferInstructionFlags Flags { get; }
