@@ -16,7 +16,6 @@ namespace AssetRipper.Assets.Export
 
 		AssetCollection File { get; }
 
-		IExportCollection CurrentCollection { get; }
 		UnityVersion ExportVersion { get; }
 		BuildTarget ExportPlatform { get; }
 		TransferInstructionFlags ExportFlags { get; }

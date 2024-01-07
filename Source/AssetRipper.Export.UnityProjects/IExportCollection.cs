@@ -1,8 +1,10 @@
-﻿using AssetRipper.Assets.Collections;
+﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.IO.Files.SerializedFiles;
 
-namespace AssetRipper.Assets.Export
+namespace AssetRipper.Export.UnityProjects
 {
 	public interface IExportCollection
 	{

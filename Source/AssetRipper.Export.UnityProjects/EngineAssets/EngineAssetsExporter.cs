@@ -1,5 +1,4 @@
 using AssetRipper.Assets;
-using AssetRipper.Assets.Export;
 using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.Utils;
 using AssetRipper.Mining.PredefinedAssets;
