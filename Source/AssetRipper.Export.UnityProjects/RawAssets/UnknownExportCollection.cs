@@ -50,7 +50,7 @@ namespace AssetRipper.Export.UnityProjects.RawAssets
 			throw new NotSupportedException();
 		}
 
-		public override bool IsContains(IUnityObjectBase asset)
+		public override bool Contains(IUnityObjectBase asset)
 		{
 			return asset == Asset;
 		}

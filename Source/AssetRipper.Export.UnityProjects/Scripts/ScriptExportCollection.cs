@@ -141,7 +141,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 			return true;
 		}
 
-		public override bool IsContains(IUnityObjectBase asset)
+		public override bool Contains(IUnityObjectBase asset)
 		{
 			return m_scripts.ContainsKey(asset);
 		}

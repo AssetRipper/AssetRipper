@@ -74,7 +74,7 @@ public class RedirectExportCollection : IExportCollection
 
 	public long GetExportID(IUnityObjectBase asset) => redirectionDictionary[asset].Item1;
 
-	public bool IsContains(IUnityObjectBase asset) => redirectionDictionary.ContainsKey(asset) || missingDictionary.ContainsKey(asset);
+	public bool Contains(IUnityObjectBase asset) => redirectionDictionary.ContainsKey(asset) || missingDictionary.ContainsKey(asset);
 
 	bool IExportCollection.Export(IExportContainer container, string projectDirectory)
 	{

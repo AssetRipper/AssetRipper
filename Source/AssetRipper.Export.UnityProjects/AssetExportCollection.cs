@@ -35,7 +35,7 @@ namespace AssetRipper.Export.UnityProjects
 			return false;
 		}
 
-		public override bool IsContains(IUnityObjectBase asset)
+		public override bool Contains(IUnityObjectBase asset)
 		{
 			return Asset.AssetInfo == asset.AssetInfo;
 		}

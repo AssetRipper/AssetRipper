@@ -13,9 +13,9 @@ namespace AssetRipper.Export.UnityProjects.Project
 			m_file = asset.Collection;
 		}
 
-		public override bool IsContains(IUnityObjectBase asset)
+		public override bool Contains(IUnityObjectBase asset)
 		{
-			return base.IsContains(asset) || m_exportIDs.ContainsKey(asset);
+			return base.Contains(asset) || m_exportIDs.ContainsKey(asset);
 		}
 
 		public override long GetExportID(IUnityObjectBase asset)

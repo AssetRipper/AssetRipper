@@ -46,7 +46,7 @@ namespace AssetRipper.Export.UnityProjects
 		}
 
 		public abstract bool Export(IExportContainer container, string projectDirectory);
-		public abstract bool IsContains(IUnityObjectBase asset);
+		public abstract bool Contains(IUnityObjectBase asset);
 		public abstract long GetExportID(IUnityObjectBase asset);
 		public abstract MetaPtr CreateExportPointer(IUnityObjectBase asset, bool isLocal);
 

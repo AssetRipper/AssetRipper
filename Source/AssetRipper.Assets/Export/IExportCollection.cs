@@ -14,11 +14,11 @@ namespace AssetRipper.Assets.Export
 		/// <returns>True if export was successful.</returns>
 		bool Export(IExportContainer container, string projectDirectory);
 		/// <summary>
-		/// To be removed
+		/// Is the asset part of this collection?
 		/// </summary>
-		bool IsContains(IUnityObjectBase asset);
+		bool Contains(IUnityObjectBase asset);
 		/// <summary>
-		/// To be removed
+		/// Get the export ID of the asset.
 		/// </summary>
 		long GetExportID(IUnityObjectBase asset);
 		MetaPtr CreateExportPointer(IUnityObjectBase asset, bool isLocal);

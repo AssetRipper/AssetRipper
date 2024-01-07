@@ -19,7 +19,7 @@ namespace AssetRipper.Export.UnityProjects
 			return false;
 		}
 
-		public bool IsContains(IUnityObjectBase asset)
+		public bool Contains(IUnityObjectBase asset)
 		{
 			return false;
 		}

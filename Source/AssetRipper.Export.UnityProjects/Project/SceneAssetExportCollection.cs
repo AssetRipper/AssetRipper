@@ -51,7 +51,7 @@ namespace AssetRipper.Export.UnityProjects.Project
 			return GetExportID();
 		}
 
-		public bool IsContains(IUnityObjectBase asset)
+		public bool Contains(IUnityObjectBase asset)
 		{
 			return asset == Asset;
 		}
