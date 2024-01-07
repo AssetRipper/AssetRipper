@@ -42,6 +42,7 @@ public static class GameFileLoader
 	public static void LoadAndProcess(IReadOnlyList<string> paths)
 	{
 		Reset();
+		Settings.LogConfigurationValues();
 		GameData = ExportHandler.LoadAndProcess(paths);
 	}
 
