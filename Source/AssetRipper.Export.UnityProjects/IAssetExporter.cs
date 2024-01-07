@@ -1,5 +1,4 @@
 using AssetRipper.Assets;
-using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.IO.Files;
 
@@ -7,7 +6,7 @@ namespace AssetRipper.Export.UnityProjects
 {
 	public interface IAssetExporter
 	{
-		bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection);
+		bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection);
 
 		bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{

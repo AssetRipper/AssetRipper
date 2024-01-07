@@ -4,7 +4,6 @@ using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Import.Logging;
 using AssetRipper.IO.Files;
-using AssetRipper.Primitives;
 using AssetRipper.Processing.Scenes;
 using AssetRipper.SourceGenerated.Classes.ClassID_1030;
 using AssetRipper.SourceGenerated.Classes.ClassID_3;
@@ -52,7 +51,7 @@ namespace AssetRipper.Export.UnityProjects.Project
 
 		protected virtual bool ExportScene(IExportContainer container, string folderPath, string filePath, string sceneName)
 		{
-			AssetExporter.Export(container, Assets, filePath);
+			AssetExporter.Export(container, ExportableAssets, filePath);
 			IDefaultImporter sceneImporter = DefaultImporter.Create(container.File, container.ExportVersion);
 			Meta meta = new Meta(GUID, sceneImporter);
 			ExportMeta(container, meta, filePath);
@@ -128,11 +127,6 @@ namespace AssetRipper.Export.UnityProjects.Project
 		/// The <see cref="SceneDefinition.Name"/> of <see cref="Scene"/>.
 		/// </summary>
 		public override string Name => Scene.Name;
-
-		/// <summary>
-		/// The <see cref="AssetCollection.Name"/> of the first <see cref="SerializedAssetCollection"/> in <see cref="SceneDefinition.Collections"/>.
-		/// </summary>
-		public string? FileName => Scene.Collections.FirstOrDefault(c => c is SerializedAssetCollection)?.Name;
 
 		public override AssetCollection File => CurrentFile;
 		public UnityGuid GUID => Scene.GUID;

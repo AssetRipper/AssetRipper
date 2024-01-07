@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Export.UnityProjects.Meshes;
@@ -29,7 +28,7 @@ namespace AssetRipper.Export.UnityProjects.Models
 {
 	public partial class GlbModelExporter : BinaryAssetExporter
 	{
-		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
+		public override bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
 			if (SceneHelpers.IsSceneCompatible(asset))
 			{

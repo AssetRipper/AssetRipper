@@ -1,9 +1,7 @@
 using AssetRipper.Assets;
-using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Export.UnityProjects.Configuration;
 using AssetRipper.SourceGenerated.Classes.ClassID_49;
-using AssetRipper.SourceGenerated.Extensions;
 
 namespace AssetRipper.Export.UnityProjects.Miscellaneous
 {
@@ -15,7 +13,7 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 			ExportMode = configuration.TextExportMode;
 		}
 
-		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
+		public override bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
 			if (asset is ITextAsset textAsset && !textAsset.Script_C49.IsEmpty)
 			{

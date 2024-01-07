@@ -14,12 +14,6 @@ public sealed partial class GameBundle : Bundle
 	public IResourceProvider? ResourceProvider { get; set; }
 
 	/// <summary>
-	/// The current list of temporary bundles.
-	/// </summary>
-	public IReadOnlyList<TemporaryBundle> TemporaryBundles => temporaryBundles;
-	private readonly List<TemporaryBundle> temporaryBundles = new();
-
-	/// <summary>
 	/// The name of this bundle which is 'GameBundle'.
 	/// </summary>
 	public override string Name => nameof(GameBundle);
@@ -71,46 +65,6 @@ public sealed partial class GameBundle : Bundle
 	/// </summary>
 	public new void InitializeAllDependencyLists(IDependencyProvider? dependencyProvider = null) => base.InitializeAllDependencyLists(dependencyProvider);
 
-	/// <summary>
-	/// Clears the list of temporary bundles.
-	/// </summary>
-	public void ClearTemporaryBundles()
-	{
-		temporaryBundles.Clear();
-	}
-
-	/// <summary>
-	/// Adds a temporary bundle to this bundle's list of temporary bundles.
-	/// </summary>
-	/// <param name="bundle">The temporary bundle to add.</param>
-	public void AddTemporaryBundle(TemporaryBundle bundle)
-	{
-		if (bundle.Parent is null)
-		{
-			temporaryBundles.Add(bundle);
-			bundle.Parent = this;
-		}
-		else if (bundle.Parent == this)
-		{
-		}
-		else
-		{
-			throw new ArgumentException($"{nameof(bundle)} already has a parent.", nameof(bundle));
-		}
-	}
-
-	/// <summary>
-	/// Creates a new temporary bundle and adds it to this bundle's list of temporary bundles.
-	/// </summary>
-	public TemporaryBundle AddNewTemporaryBundle()
-	{
-		TemporaryBundle bundle = new();
-		temporaryBundles.Add(bundle);
-		bundle.Parent = this;
-		return bundle;
-	}
-
-	/// <summary>
 	/// Returns true if this bundle has any asset collections.
 	/// </summary>
 	public bool HasAnyAssetCollections()

@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Export.UnityProjects.Configuration;
 using AssetRipper.SourceGenerated.Classes.ClassID_83;
@@ -18,7 +17,7 @@ namespace AssetRipper.Export.UnityProjects.Audio
 			_ => false,
 		};
 
-		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
+		public override bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
 			if (asset is IAudioClip audio && AudioClipDecoder.CanDecode(audio))
 			{

@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.SourceGenerated.Classes.ClassID_329;
 using AssetRipper.SourceGenerated.Extensions;
@@ -8,7 +7,7 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 {
 	public sealed class VideoClipExporter : BinaryAssetExporter
 	{
-		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
+		public override bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
 			if (asset is IVideoClip clip && clip.ExternalResources.CheckIntegrity(clip.Collection))
 			{

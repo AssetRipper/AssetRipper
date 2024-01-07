@@ -121,6 +121,7 @@ namespace AssetRipper.Export.UnityProjects
 		public abstract AssetCollection File { get; }
 		public virtual TransferInstructionFlags Flags => TransferInstructionFlags.NoTransferInstructionFlags;
 		public abstract IEnumerable<IUnityObjectBase> Assets { get; }
+		public virtual IEnumerable<IUnityObjectBase> ExportableAssets => Assets;
 		public abstract string Name { get; }
 
 		private const string MetaExtension = ".meta";

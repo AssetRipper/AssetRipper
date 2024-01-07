@@ -1,5 +1,4 @@
 using AssetRipper.Assets;
-using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.SourceGenerated.Classes.ClassID_128;
 
@@ -7,7 +6,7 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 {
 	public sealed class FontAssetExporter : BinaryAssetExporter
 	{
-		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
+		public override bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
 			if (asset.MainAsset is IFont font && IsValidData(font.FontData))
 			{

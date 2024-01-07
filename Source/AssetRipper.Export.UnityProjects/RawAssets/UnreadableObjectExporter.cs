@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Import.AssetCreation;
 using AssetRipper.IO.Files;
@@ -8,7 +7,7 @@ namespace AssetRipper.Export.UnityProjects.RawAssets
 {
 	internal class UnreadableObjectExporter : IAssetExporter
 	{
-		public bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
+		public bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
 			if (asset is UnreadableObject @object)
 			{

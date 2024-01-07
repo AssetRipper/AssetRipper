@@ -21,6 +21,7 @@ using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_1001;
 using AssetRipper.SourceGenerated.Classes.ClassID_1032;
+using AssetRipper.SourceGenerated.Classes.ClassID_1045;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using AssetRipper.SourceGenerated.Classes.ClassID_116;
@@ -32,6 +33,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_147;
 using AssetRipper.SourceGenerated.Classes.ClassID_150;
 using AssetRipper.SourceGenerated.Classes.ClassID_152;
 using AssetRipper.SourceGenerated.Classes.ClassID_156;
+using AssetRipper.SourceGenerated.Classes.ClassID_159;
 using AssetRipper.SourceGenerated.Classes.ClassID_187;
 using AssetRipper.SourceGenerated.Classes.ClassID_188;
 using AssetRipper.SourceGenerated.Classes.ClassID_2;
@@ -64,8 +66,8 @@ partial class ProjectExporter
 		OverrideExporter<IUnityObjectBase>(new DefaultYamlExporter(), true);
 
 		OverrideExporter<IGlobalGameManager>(new ManagerAssetExporter(), true);
-
-		OverrideExporter<IBuildSettings>(new BuildSettingsExporter(), true);
+		OverrideExporter<IEditorBuildSettings>(new ManagerAssetExporter(), true);//Remove after it inherits from IGlobalGameManager
+		OverrideExporter<IEditorSettings>(new ManagerAssetExporter(), true);//Remove after it inherits from IGlobalGameManager
 
 		OverrideExporter<IMonoBehaviour>(new ScriptableObjectExporter(), true);
 
@@ -75,6 +77,7 @@ partial class ProjectExporter
 		OverrideExporter<IComponent>(sceneExporter, true);
 		OverrideExporter<ILevelGameManager>(sceneExporter, true);
 
+		OverrideDummyExporter<IBuildSettings>(ClassIDType.BuildSettings, true, false);
 		OverrideDummyExporter<IPreloadData>(ClassIDType.PreloadData, true, false);
 		OverrideDummyExporter<IAssetBundle>(ClassIDType.AssetBundle, true, false);
 		OverrideDummyExporter<IAssetBundleManifest>(ClassIDType.AssetBundleManifest, true, false);

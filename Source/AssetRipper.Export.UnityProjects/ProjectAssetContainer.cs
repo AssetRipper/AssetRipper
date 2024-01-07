@@ -3,24 +3,26 @@ using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Export.UnityProjects.Project;
+using AssetRipper.Import.Configuration;
 using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
-using AssetRipper.Primitives;
 using AssetRipper.Processing.Scenes;
 using AssetRipper.SourceGenerated.Classes.ClassID_141;
-using AssetRipper.SourceGenerated.Extensions;
 
 
 namespace AssetRipper.Export.UnityProjects
 {
 	public class ProjectAssetContainer : IExportContainer
 	{
-		public ProjectAssetContainer(ProjectExporter exporter, TemporaryAssetCollection file, IEnumerable<IUnityObjectBase> assets,
+		public ProjectAssetContainer(ProjectExporter exporter, CoreConfiguration options, IEnumerable<IUnityObjectBase> assets,
 			IReadOnlyList<IExportCollection> collections)
 		{
 			m_exporter = exporter ?? throw new ArgumentNullException(nameof(exporter));
-			VirtualFile = file ?? throw new ArgumentNullException(nameof(file));
 			CurrentCollection = null!;
+
+			ExportVersion = options.Version;
+			ExportPlatform = options.Platform;
+			_exportFlags = options.Flags;
 
 			m_buildSettings = assets.OfType<IBuildSettings>().FirstOrDefault();
 
@@ -75,23 +77,11 @@ namespace AssetRipper.Export.UnityProjects
 			return MetaPtr.CreateMissingReference(asset.ClassID, AssetType.Meta);
 		}
 
-		public UnityGuid SceneNameToGUID(string name)
+		public UnityGuid ScenePathToGUID(string path)
 		{
-			if (m_buildSettings == null)
-			{
-				return default;
-			}
-
-			int index = m_buildSettings.Scenes.IndexOf(s => s.String == name);
-			if (index == -1)
-			{
-				throw new Exception($"Scene '{name}' hasn't been found in build settings");
-			}
-
-			string fileName = SceneHelpers.SceneIndexToFileName(index, Version);
 			foreach (SceneExportCollection scene in m_scenes)
 			{
-				if (scene.FileName == fileName)
+				if (scene.Scene.Path == path)
 				{
 					return scene.GUID;
 				}
@@ -102,16 +92,16 @@ namespace AssetRipper.Export.UnityProjects
 		public bool IsSceneDuplicate(int sceneIndex) => SceneHelpers.IsSceneDuplicate(sceneIndex, m_buildSettings);
 
 		public IExportCollection CurrentCollection { get; set; }
-		public TemporaryAssetCollection VirtualFile { get; }
-		public virtual AssetCollection File => CurrentCollection.File;
+		public AssetCollection File => CurrentCollection.File;
 		public string Name => File.Name;
 		public UnityVersion Version => File.Version;
 		public BuildTarget Platform => File.Platform;
 		public TransferInstructionFlags Flags => File.Flags;
-		public UnityVersion ExportVersion => VirtualFile.Version;
-		public BuildTarget ExportPlatform => VirtualFile.Platform;
-		public virtual TransferInstructionFlags ExportFlags => VirtualFile.Flags | CurrentCollection.Flags;
-		public virtual IReadOnlyList<AssetCollection?> Dependencies => File.Dependencies;
+		public UnityVersion ExportVersion { get; }
+		public BuildTarget ExportPlatform { get; }
+		private readonly TransferInstructionFlags _exportFlags;
+		public TransferInstructionFlags ExportFlags => _exportFlags | CurrentCollection.Flags;
+		public IReadOnlyList<AssetCollection?> Dependencies => File.Dependencies;
 
 		private readonly ProjectExporter m_exporter;
 		private readonly Dictionary<IUnityObjectBase, IExportCollection> m_assetCollections = new();

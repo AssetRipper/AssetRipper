@@ -1,5 +1,4 @@
 using AssetRipper.Assets;
-using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.IO.Files;
 using AssetRipper.SourceGenerated;
@@ -23,7 +22,7 @@ namespace AssetRipper.Export.UnityProjects
 			m_metaTypes.Add(classType, isMetaType);
 		}
 
-		public bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
+		public bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
 			if (m_emptyTypes.TryGetValue((ClassIDType)asset.ClassID, out bool isEmptyCollection))
 			{

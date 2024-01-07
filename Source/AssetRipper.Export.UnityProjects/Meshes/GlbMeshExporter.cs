@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
@@ -13,7 +12,7 @@ namespace AssetRipper.Export.UnityProjects.Meshes
 {
 	public sealed class GlbMeshExporter : BinaryAssetExporter
 	{
-		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
+		public override bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
 			if (asset is IMesh mesh && mesh.IsSet())
 			{

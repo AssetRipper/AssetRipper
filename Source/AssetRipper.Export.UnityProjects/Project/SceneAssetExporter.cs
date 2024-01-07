@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.IO.Files;
 using AssetRipper.SourceGenerated.Classes.ClassID_1032;
@@ -8,7 +7,7 @@ namespace AssetRipper.Export.UnityProjects.Project
 {
 	public sealed class SceneAssetExporter : IAssetExporter
 	{
-		public bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
+		public bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
 			if (asset is ISceneAsset sceneAsset)
 			{

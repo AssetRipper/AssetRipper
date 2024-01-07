@@ -29,7 +29,7 @@ namespace AssetRipper.Export.UnityProjects.Project
 
 		protected override bool ExportInner(IExportContainer container, string filePath, string dirPath)
 		{
-			return AssetExporter.Export(container, Assets, filePath);
+			return AssetExporter.Export(container, ExportableAssets, filePath);
 		}
 
 		public override IEnumerable<IUnityObjectBase> Assets

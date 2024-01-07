@@ -9,7 +9,6 @@ using AssetRipper.SourceGenerated.Classes.ClassID_4;
 using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.MarkerInterfaces;
-using System.Diagnostics;
 
 namespace AssetRipper.Processing;
 
@@ -64,15 +63,17 @@ public sealed class PrefabProcessor : IAssetProcessor
 			{
 				gameObjectsAlreadyProcessed.AddRange(root.FetchHierarchy().OfType<IGameObject>());
 
-				if (!root.Collection.IsScene && processedCollection.Version.LessThan(2018, 3))
+				if (!root.Collection.IsScene)
 				{
 					IPrefabInstance prefab = CreatePrefab(processedCollection, root);
-					IPrefabMarker? prefabMarker = prefab as IPrefabMarker;
-					Debug.Assert(prefab is not IPrefabInstanceMarker);
 
-					foreach (IEditorExtension editorExtension in root.FetchHierarchy())
+					//Prior to 2018.3, Prefab was an actual asset inside "*.prefab" files.
+					if (prefab is IPrefabMarker prefabMarker)
 					{
-						editorExtension.PrefabInternal_C18P = prefabMarker;
+						foreach (IEditorExtension editorExtension in root.FetchHierarchy())
+						{
+							editorExtension.PrefabInternal_C18P = prefabMarker;
+						}
 					}
 				}
 			}

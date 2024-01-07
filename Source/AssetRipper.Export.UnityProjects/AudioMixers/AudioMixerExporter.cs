@@ -1,5 +1,4 @@
 using AssetRipper.Assets;
-using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Export.UnityProjects.Project;
 using AssetRipper.SourceGenerated.Classes.ClassID_241;
@@ -8,7 +7,7 @@ namespace AssetRipper.Export.UnityProjects.AudioMixers;
 
 public class AudioMixerExporter : YamlExporterBase
 {
-	public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
+	public override bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection)
 	{
 		// Audio mixer groups and snapshots should be serialized into the audio mixer YAML asset,
 		// precisely the same as a regular Unity project would do.

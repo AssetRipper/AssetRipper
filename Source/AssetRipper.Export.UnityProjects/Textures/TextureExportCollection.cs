@@ -4,7 +4,6 @@ using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Export.UnityProjects.Configuration;
 using AssetRipper.Export.UnityProjects.Project;
-using AssetRipper.Primitives;
 using AssetRipper.Processing.Textures;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1006;

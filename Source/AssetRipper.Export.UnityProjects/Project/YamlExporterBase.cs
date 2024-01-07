@@ -1,5 +1,4 @@
 using AssetRipper.Assets;
-using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Export.Modules.Shaders.IO;
@@ -11,7 +10,7 @@ namespace AssetRipper.Export.UnityProjects.Project
 {
 	public abstract class YamlExporterBase : IAssetExporter
 	{
-		public abstract bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection);
+		public abstract bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection);
 
 		public bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{

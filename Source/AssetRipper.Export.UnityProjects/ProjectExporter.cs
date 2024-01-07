@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Bundles;
-using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Logging;
@@ -85,11 +84,11 @@ namespace AssetRipper.Export.UnityProjects
 			throw new NotSupportedException($"There is no exporter that know {nameof(AssetType)} for unknown asset '{type}'");
 		}
 
-		private IExportCollection CreateCollection(TemporaryAssetCollection file, IUnityObjectBase asset)
+		private IExportCollection CreateCollection(IUnityObjectBase asset)
 		{
 			foreach (IAssetExporter exporter in GetExporterStack(asset))
 			{
-				if (exporter.TryCreateCollection(asset, file, out IExportCollection? collection))
+				if (exporter.TryCreateCollection(asset, out IExportCollection? collection))
 				{
 					return collection;
 				}
@@ -132,12 +131,11 @@ namespace AssetRipper.Export.UnityProjects
 		public void Export(GameBundle fileCollection, CoreConfiguration options)
 		{
 			EventExportPreparationStarted?.Invoke();
-			TemporaryAssetCollection virtualFile = ClearTemporaryFilesAndCreateNew(fileCollection, options);
-			List<IExportCollection> collections = CreateCollections(fileCollection, virtualFile);
+			List<IExportCollection> collections = CreateCollections(fileCollection);
 			EventExportPreparationFinished?.Invoke();
 
 			EventExportStarted?.Invoke();
-			ProjectAssetContainer container = new ProjectAssetContainer(this, virtualFile, fileCollection.FetchAssets(), collections);
+			ProjectAssetContainer container = new ProjectAssetContainer(this, options, fileCollection.FetchAssets(), collections);
 			for (int i = 0; i < collections.Count; i++)
 			{
 				IExportCollection collection = collections[i];
@@ -156,15 +154,7 @@ namespace AssetRipper.Export.UnityProjects
 			EventExportFinished?.Invoke();
 		}
 
-		private static TemporaryAssetCollection ClearTemporaryFilesAndCreateNew(GameBundle fileCollection, CoreConfiguration options)
-		{
-			fileCollection.ClearTemporaryBundles();
-			TemporaryAssetCollection virtualFile = fileCollection.AddNewTemporaryBundle().AddNew();
-			virtualFile.SetLayout(options.Version, options.Platform, options.Flags);
-			return virtualFile;
-		}
-
-		private List<IExportCollection> CreateCollections(GameBundle fileCollection, TemporaryAssetCollection virtualFile)
+		private List<IExportCollection> CreateCollections(GameBundle fileCollection)
 		{
 			List<IExportCollection> collections = new();
 			HashSet<IUnityObjectBase> queued = new();
@@ -173,7 +163,7 @@ namespace AssetRipper.Export.UnityProjects
 			{
 				if (!queued.Contains(asset))
 				{
-					IExportCollection collection = CreateCollection(virtualFile, asset);
+					IExportCollection collection = CreateCollection(asset);
 					foreach (IUnityObjectBase element in collection.Assets)
 					{
 						queued.Add(element);

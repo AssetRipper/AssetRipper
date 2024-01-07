@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Processing.Scenes;
 
@@ -7,7 +6,7 @@ namespace AssetRipper.Export.UnityProjects.Project
 {
 	public class SceneYamlExporter : YamlExporterBase
 	{
-		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
+		public override bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
 			if (SceneHelpers.IsSceneCompatible(asset))
 			{
@@ -17,7 +16,7 @@ namespace AssetRipper.Export.UnityProjects.Project
 				}
 				else if (PrefabExportCollection.IsValidAsset(asset))
 				{
-					exportCollection = new PrefabExportCollection(this, temporaryFile, asset);
+					exportCollection = new PrefabExportCollection(this, asset);
 				}
 				else
 				{

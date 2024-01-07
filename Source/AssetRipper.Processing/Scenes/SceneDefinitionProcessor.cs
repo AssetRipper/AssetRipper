@@ -5,12 +5,16 @@ using AssetRipper.Assets.Generics;
 using AssetRipper.Import.Logging;
 using AssetRipper.IO.Files.Utils;
 using AssetRipper.Processing.Editor;
+using AssetRipper.SourceGenerated;
+using AssetRipper.SourceGenerated.Classes.ClassID_1045;
 using AssetRipper.SourceGenerated.Classes.ClassID_141;
 using AssetRipper.SourceGenerated.Classes.ClassID_142;
+using AssetRipper.SourceGenerated.Classes.ClassID_159;
 using AssetRipper.SourceGenerated.Classes.ClassID_29;
 using AssetRipper.SourceGenerated.Classes.ClassID_3;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.AssetInfo;
+using AssetRipper.SourceGenerated.Subclasses.Scene;
 using System.Diagnostics;
 
 namespace AssetRipper.Processing.Scenes
@@ -107,6 +111,7 @@ namespace AssetRipper.Processing.Scenes
 			}
 
 			//Make the scene definitions
+			List<SceneDefinition> sceneDefinitions = new();
 			foreach (AssetCollection sceneCollection in sceneCollections)
 			{
 				SceneDefinition sceneDefinition;
@@ -120,6 +125,33 @@ namespace AssetRipper.Processing.Scenes
 					sceneDefinition = SceneDefinition.FromName(sceneCollection.Name, guid);
 				}
 				sceneDefinition.AddCollection(sceneCollection);
+				sceneDefinitions.Add(sceneDefinition);
+			}
+
+			//Generate settings for the project
+			{
+				ProcessedAssetCollection processedCollection = gameData.AddNewProcessedCollection("Generated Settings");
+
+				if (buildSettings is not null)
+				{
+					IEditorBuildSettings editorBuildSettings = processedCollection.CreateAsset((int)ClassIDType.EditorBuildSettings, EditorBuildSettings.Create);
+					{
+						int numScenes = buildSettings.Scenes.Count;
+						editorBuildSettings.Scenes.Capacity = numScenes;
+						for (int i = 0; i < numScenes; i++)
+						{
+							IScene scene = editorBuildSettings.Scenes.AddNew();
+							scene.Enabled = true;
+							scene.Path = buildSettings.Scenes[i];
+							//Guid gets handled later.
+						}
+					}
+				}
+
+				//EditorSettings
+				//Is this the best place to create this? It doesn't have anything to do with scenes.
+				processedCollection.CreateAsset((int)ClassIDType.EditorSettings, EditorSettings.Create)
+					.SetToDefaults();
 			}
 		}
 

@@ -1,5 +1,4 @@
 using AssetRipper.Assets;
-using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.SourceGenerated.Classes.ClassID_152;
 
@@ -7,7 +6,7 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 {
 	public sealed class MovieTextureAssetExporter : BinaryAssetExporter
 	{
-		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
+		public override bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
 			if (asset is IMovieTexture texture && IsValidData(texture.MovieData))
 			{

@@ -26,6 +26,7 @@ namespace AssetRipper.Assets.Export
 		AssetCollection File { get; }
 		TransferInstructionFlags Flags { get; }
 		IEnumerable<IUnityObjectBase> Assets { get; }
+		IEnumerable<IUnityObjectBase> ExportableAssets => Assets;
 		string Name { get; }
 	}
 }

@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Export.UnityProjects.Configuration;
 using AssetRipper.Import.Logging;
@@ -22,7 +21,7 @@ public sealed class TextureArrayAssetExporter : BinaryAssetExporter
 		ImageExportFormat = configuration.ImageExportFormat;
 	}
 
-	public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
+	public override bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection)
 	{
 		exportCollection = asset switch
 		{

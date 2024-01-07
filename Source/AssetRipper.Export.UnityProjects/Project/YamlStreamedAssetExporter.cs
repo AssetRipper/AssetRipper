@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.SourceGenerated.Classes.ClassID_117;
 using AssetRipper.SourceGenerated.Classes.ClassID_187;
@@ -11,7 +10,7 @@ namespace AssetRipper.Export.UnityProjects.Project
 {
 	public sealed class YamlStreamedAssetExporter : YamlExporterBase
 	{
-		public override bool TryCreateCollection(IUnityObjectBase asset, TemporaryAssetCollection temporaryFile, [NotNullWhen(true)] out IExportCollection? exportCollection)
+		public override bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
 			//Note: ICubeMap inherits from ITexture2D
 			if (asset is IMesh or ITexture2D or ITexture3D or ITexture2DArray or ICubemapArray)

@@ -10,12 +10,11 @@ using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.IO.Files.Utils;
-using AssetRipper.Primitives;
+using AssetRipper.SourceGenerated.Classes.ClassID_1006;
 using AssetRipper.SourceGenerated.Classes.ClassID_1035;
 using AssetRipper.SourceGenerated.Classes.ClassID_1050;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using AssetRipper.SourceGenerated.Subclasses.PlatformSettingsData_Plugin;
-using System.Diagnostics;
 
 namespace AssetRipper.Export.UnityProjects.Scripts
 {
@@ -203,7 +202,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 		{
 			Span<bool> test = stackalloc bool[1];
 			UnityGuid guid = GetAssemblyGuid(Path.GetFileName(path));
-			IPluginImporter importer = PluginImporter.Create(container.VirtualFile, container.ExportVersion);
+			IPluginImporter importer = PluginImporter.Create(Assets.First().Collection, container.ExportVersion);
 			if (HasPlatformData(importer))
 			{
 				PlatformSettingsData_Plugin anyPlatformSettings = AddPlatformSettings(importer, "Any", Utf8String.Empty);

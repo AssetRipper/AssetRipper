@@ -6,32 +6,6 @@ namespace AssetRipper.Assets.Tests;
 public class GameBundleTests
 {
 	[Test]
-	public void ClearTemporaryBundles_ClearsTemporaryBundles()
-	{
-		GameBundle gameBundle = new();
-		gameBundle.AddNewTemporaryBundle();
-		gameBundle.ClearTemporaryBundles();
-		Assert.That(gameBundle.TemporaryBundles, Is.Empty);
-	}
-
-	[Test]
-	public void AddTemporaryBundle_AddsTemporaryBundle()
-	{
-		GameBundle gameBundle = new();
-		TemporaryBundle tempBundle = new();
-		gameBundle.AddTemporaryBundle(tempBundle);
-		Assert.That(gameBundle.TemporaryBundles, Contains.Item(tempBundle));
-	}
-
-	[Test]
-	public void AddNewTemporaryBundle_AddsNewTemporaryBundle()
-	{
-		GameBundle gameBundle = new();
-		TemporaryBundle tempBundle = gameBundle.AddNewTemporaryBundle();
-		Assert.That(gameBundle.TemporaryBundles, Contains.Item(tempBundle));
-	}
-
-	[Test]
 	public void HasAnyAssetCollections_ReturnsFalse()
 	{
 		GameBundle gameBundle = new();
