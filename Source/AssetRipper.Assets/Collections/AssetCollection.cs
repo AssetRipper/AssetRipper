@@ -10,7 +10,7 @@ namespace AssetRipper.Assets.Collections;
 /// <summary>
 /// A collection of <see cref="IUnityObjectBase"/> assets.
 /// </summary>
-public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>, IAssetContainer
+public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>
 {
 	protected AssetCollection(Bundle bundle)
 	{

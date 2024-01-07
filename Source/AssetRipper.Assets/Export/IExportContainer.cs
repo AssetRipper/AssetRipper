@@ -5,7 +5,7 @@ using AssetRipper.IO.Files.SerializedFiles;
 
 namespace AssetRipper.Assets.Export
 {
-	public interface IExportContainer : IAssetContainer
+	public interface IExportContainer
 	{
 		long GetExportID(IUnityObjectBase asset);
 		AssetType ToExportType(Type type);

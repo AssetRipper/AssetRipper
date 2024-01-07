@@ -42,16 +42,6 @@ namespace AssetRipper.Export.UnityProjects
 			m_scenes = scenes.ToArray();
 		}
 
-		public IUnityObjectBase? TryGetAsset(long pathID)
-		{
-			return File.TryGetAsset(pathID);
-		}
-
-		public virtual IUnityObjectBase? TryGetAsset(int fileIndex, long pathID)
-		{
-			return File.TryGetAsset(fileIndex, pathID);
-		}
-
 		public long GetExportID(IUnityObjectBase asset)
 		{
 			if (m_assetCollections.TryGetValue(asset, out IExportCollection? collection))
@@ -93,16 +83,11 @@ namespace AssetRipper.Export.UnityProjects
 
 		public IExportCollection CurrentCollection { get; set; }
 		public AssetCollection File => CurrentCollection.File;
-		public string Name => File.Name;
-		public UnityVersion Version => File.Version;
-		public BuildTarget Platform => File.Platform;
-		public TransferInstructionFlags Flags => File.Flags;
 		public UnityVersion ExportVersion { get; }
 		public BuildTarget ExportPlatform { get; }
-		private readonly TransferInstructionFlags _exportFlags;
 		public TransferInstructionFlags ExportFlags => _exportFlags | CurrentCollection.Flags;
-		public IReadOnlyList<AssetCollection?> Dependencies => File.Dependencies;
 
+		private readonly TransferInstructionFlags _exportFlags;
 		private readonly ProjectExporter m_exporter;
 		private readonly Dictionary<IUnityObjectBase, IExportCollection> m_assetCollections = new();
 

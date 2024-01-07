@@ -54,21 +54,21 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static void SetExportData(this IOcclusionCullingData occlusionCullingData, IExportContainer container)
 		{
-			// if < 3.0.0 this asset doesn't exist
+			// If < 3.0.0, this asset doesn't exist.
 
-			// 3.0.0 to 5.5.0 this asset is created by culling settings so it has set data already
-			if (container.Version.LessThan(5, 5))
+			// For 3.0.0 to 5.5.0, this asset is created by culling settings, so its data is already set.
+			if (occlusionCullingData.Collection.Version.LessThan(5, 5))
 			{
 				return;
 			}
 
-			// if >= 5.5.0 and !Release this asset containts renderer data
-			if (!container.Flags.IsRelease())
+			// If >= 5.5.0 and not Release, this asset contains renderer data,
+			if (!occlusionCullingData.Collection.Flags.IsRelease())
 			{
 				return;
 			}
 
-			// if >= 5.5.0 and Release this asset doesn't containt renderers data so we need to create it
+			// If >= 5.5.0 and Release. this asset doesn't contain renderer data, so we need to create it.
 			List<IOcclusionCullingSettings> cullingSettings = new();
 			foreach (IUnityObjectBase asset in occlusionCullingData.Collection.Bundle.FetchAssetsInHierarchy())
 			{
@@ -131,10 +131,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		private static void SetObjectID(this ISceneObjectIdentifier sceneObjectIdentifier, IExportContainer container, IUnityObjectBase? asset)
 		{
-			if (sceneObjectIdentifier is null)
-			{
-				throw new ArgumentNullException(nameof(sceneObjectIdentifier));
-			}
+			ArgumentNullException.ThrowIfNull(sceneObjectIdentifier);
 
 			long lid = asset == null ? 0 : container.GetExportID(asset);
 			sceneObjectIdentifier.TargetObject = lid;

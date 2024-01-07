@@ -12,7 +12,7 @@ public static class PPtrExtensions
 		return asset;
 	}
 
-	public static bool IsAsset<T>(this IPPtr<T> pptr, IAssetContainer file, IUnityObjectBase asset) where T : IUnityObjectBase
+	public static bool IsAsset<T>(this IPPtr<T> pptr, AssetCollection file, IUnityObjectBase asset) where T : IUnityObjectBase
 	{
 		if (asset.PathID != pptr.PathID)
 		{
