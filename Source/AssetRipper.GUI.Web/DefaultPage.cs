@@ -1,4 +1,5 @@
-﻿using AssetRipper.GUI.Web.Paths;
+﻿using AssetRipper.GUI.Web.Pages;
+using AssetRipper.GUI.Web.Paths;
 using AssetRipper.Web.Content;
 
 namespace AssetRipper.GUI.Web;
@@ -85,6 +86,14 @@ public abstract class DefaultPage : HtmlPage
 								using (new Li(writer).End())
 								{
 									WritePostLink(writer, "/Export", Localization.MenuExportAll, "dropdown-item");
+								}
+								if (GameFileLoader.IsLoaded)
+								{
+									string version = GameFileLoader.GameBundle.GetMaxUnityVersion().ToString();
+									using (new Li(writer).End())
+									{
+										new A(writer).WithClass("dropdown-item").WithNewTabAttributes().WithHref($"unityhub://{version}").Close(version);
+									}
 								}
 							}
 						}
