@@ -2,6 +2,7 @@
 using DXDecompiler;
 using DXDecompiler.Decompiler;
 using DXDecompiler.Util;
+using System.Buffers.Binary;
 
 namespace AssetRipper.Export.Modules.Shaders.Handlers
 {
@@ -10,14 +11,11 @@ namespace AssetRipper.Export.Modules.Shaders.Handlers
 		public static bool TryDisassemble(byte[] data, int offset, [NotNullWhen(true)] out string? disassemblyText) => TryDisassemble(GetRelevantData(data, offset), out disassemblyText);
 		public static bool TryDisassemble(byte[] data, [NotNullWhen(true)] out string? disassemblyText)
 		{
-			if (data == null)
-			{
-				throw new ArgumentNullException(nameof(data));
-			}
+			ArgumentNullException.ThrowIfNull(data);
 
 			if (data.Length == 0)
 			{
-				throw new ArgumentException("inputData cannot have zero length");
+				throw new ArgumentException("inputData cannot have zero length", nameof(data));
 			}
 
 			try
@@ -45,16 +43,13 @@ namespace AssetRipper.Export.Modules.Shaders.Handlers
 		}
 
 		public static bool TryDecompile(byte[] data, int offset, [NotNullWhen(true)] out string? decompiledText) => TryDecompile(GetRelevantData(data, offset), out decompiledText);
-		public static bool TryDecompile(byte[] data, [NotNullWhen(true)] out string? decompiledText)
+		public static bool TryDecompile([NotNull] byte[] data, [NotNullWhen(true)] out string? decompiledText)
 		{
-			if (data == null)
-			{
-				throw new ArgumentNullException(nameof(data));
-			}
+			ArgumentNullException.ThrowIfNull(data);
 
 			if (data.Length == 0)
 			{
-				throw new ArgumentException("inputData cannot have zero length");
+				throw new ArgumentException("inputData cannot have zero length", nameof(data));
 			}
 
 			try
@@ -82,13 +77,13 @@ namespace AssetRipper.Export.Modules.Shaders.Handlers
 			return false;
 		}
 
-		private static DXProgramType GetProgramType(byte[] data)
+		private static DXProgramType GetProgramType(ReadOnlySpan<byte> data)
 		{
 			if (data.Length < 4)
 			{
 				return DXProgramType.Unknown;
 			}
-			uint dxbcHeader = BitConverter.ToUInt32(data, 0);
+			uint dxbcHeader = BinaryPrimitives.ReadUInt32LittleEndian(data);
 			if (dxbcHeader == "DXBC".ToFourCc())
 			{
 				return DXProgramType.DXBC;
@@ -97,7 +92,7 @@ namespace AssetRipper.Export.Modules.Shaders.Handlers
 			{
 				return DXProgramType.DXBC;
 			}
-			DXDecompiler.DX9Shader.ShaderType dx9ShaderType = (DXDecompiler.DX9Shader.ShaderType)BitConverter.ToUInt16(data, 2);
+			DXDecompiler.DX9Shader.ShaderType dx9ShaderType = (DXDecompiler.DX9Shader.ShaderType)BinaryPrimitives.ReadUInt16LittleEndian(data[2..]);
 			if (dx9ShaderType == DXDecompiler.DX9Shader.ShaderType.Vertex ||
 				dx9ShaderType == DXDecompiler.DX9Shader.ShaderType.Pixel ||
 				dx9ShaderType == DXDecompiler.DX9Shader.ShaderType.Effect)
@@ -107,25 +102,14 @@ namespace AssetRipper.Export.Modules.Shaders.Handlers
 			return DXProgramType.Unknown;
 		}
 
-		private static byte[] GetRelevantData(byte[] bytes, int offset)
+		private static byte[] GetRelevantData(ReadOnlySpan<byte> bytes, int offset)
 		{
-			if (bytes == null)
-			{
-				throw new ArgumentNullException(nameof(bytes));
-			}
-
 			if (offset < 0 || offset > bytes.Length)
 			{
 				throw new ArgumentOutOfRangeException(nameof(offset));
 			}
 
-			int size = bytes.Length - offset;
-			byte[] result = new byte[size];
-			for (int i = 0; i < size; i++)
-			{
-				result[i] = bytes[i + offset];
-			}
-			return result;
+			return bytes[offset..].ToArray();
 		}
 
 		private enum DXProgramType

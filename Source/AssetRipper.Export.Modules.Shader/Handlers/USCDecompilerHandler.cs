@@ -7,6 +7,7 @@ using AssetRipper.Import.Logging;
 using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Extensions.Enums.Shader.GpuProgramType;
 using DXDecompiler.Util;
+using System.Buffers.Binary;
 
 namespace AssetRipper.Export.Modules.Shaders.Handlers
 {
@@ -70,13 +71,13 @@ namespace AssetRipper.Export.Modules.Shaders.Handlers
 			return false;
 		}
 
-		private static DXProgramType GetProgramType(byte[] data)
+		private static DXProgramType GetProgramType(ReadOnlySpan<byte> data)
 		{
 			if (data.Length < 4)
 			{
 				return DXProgramType.Unknown;
 			}
-			uint dxbcHeader = BitConverter.ToUInt32(data, 0);
+			uint dxbcHeader = BinaryPrimitives.ReadUInt32LittleEndian(data);
 			if (dxbcHeader == "DXBC".ToFourCc())
 			{
 				return DXProgramType.DXBC;
@@ -85,7 +86,7 @@ namespace AssetRipper.Export.Modules.Shaders.Handlers
 			{
 				return DXProgramType.DXBC;
 			}
-			DXDecompiler.DX9Shader.ShaderType dx9ShaderType = (DXDecompiler.DX9Shader.ShaderType)BitConverter.ToUInt16(data, 2);
+			DXDecompiler.DX9Shader.ShaderType dx9ShaderType = (DXDecompiler.DX9Shader.ShaderType)BinaryPrimitives.ReadUInt16LittleEndian(data[2..]);
 			if (dx9ShaderType == DXDecompiler.DX9Shader.ShaderType.Vertex ||
 				dx9ShaderType == DXDecompiler.DX9Shader.ShaderType.Pixel ||
 				dx9ShaderType == DXDecompiler.DX9Shader.ShaderType.Effect)
@@ -95,25 +96,14 @@ namespace AssetRipper.Export.Modules.Shaders.Handlers
 			return DXProgramType.Unknown;
 		}
 
-		private static byte[] GetRelevantData(byte[] bytes, int offset)
+		private static byte[] GetRelevantData(ReadOnlySpan<byte> bytes, int offset)
 		{
-			if (bytes == null)
-			{
-				throw new ArgumentNullException(nameof(bytes));
-			}
-
 			if (offset < 0 || offset > bytes.Length)
 			{
 				throw new ArgumentOutOfRangeException(nameof(offset));
 			}
 
-			int size = bytes.Length - offset;
-			byte[] result = new byte[size];
-			for (int i = 0; i < size; i++)
-			{
-				result[i] = bytes[i + offset];
-			}
-			return result;
+			return bytes[offset..].ToArray();
 		}
 
 		private enum DXProgramType

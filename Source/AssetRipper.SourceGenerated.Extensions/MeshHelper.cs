@@ -1,5 +1,7 @@
 ﻿using AssetRipper.Numerics;
+using System.Buffers.Binary;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 
 namespace AssetRipper.SourceGenerated.Extensions
 {
@@ -118,13 +120,8 @@ namespace AssetRipper.SourceGenerated.Extensions
 			return format >= VertexFormat.kVertexFormatUInt8;
 		}
 
-		public static float[] BytesToFloatArray(byte[] inputBytes, VertexFormat format)
+		public static float[] BytesToFloatArray(ReadOnlySpan<byte> inputBytes, VertexFormat format)
 		{
-			if (inputBytes == null)
-			{
-				throw new ArgumentNullException(nameof(inputBytes));
-			}
-
 			int size = GetFormatSize(format);
 			if (inputBytes.Length % size != 0)
 			{
@@ -138,10 +135,10 @@ namespace AssetRipper.SourceGenerated.Extensions
 				switch (format)
 				{
 					case VertexFormat.kVertexFormatFloat:
-						result[i] = BitConverter.ToSingle(inputBytes, i * 4);
+						result[i] = BinaryPrimitives.ReadSingleLittleEndian(inputBytes[(i * sizeof(float))..]);
 						break;
 					case VertexFormat.kVertexFormatFloat16:
-						result[i] = (float)BitConverter.ToHalf(inputBytes, i * 2);
+						result[i] = (float)BinaryPrimitives.ReadHalfLittleEndian(inputBytes[(i * Unsafe.SizeOf<Half>())..]);
 						break;
 					case VertexFormat.kVertexFormatUNorm8:
 						result[i] = inputBytes[i] / 255f;
@@ -150,17 +147,17 @@ namespace AssetRipper.SourceGenerated.Extensions
 						result[i] = Math.Max(unchecked((sbyte)inputBytes[i]) / 127f, -1f);
 						break;
 					case VertexFormat.kVertexFormatUNorm16:
-						result[i] = BitConverter.ToUInt16(inputBytes, i * 2) / 65535f;
+						result[i] = BinaryPrimitives.ReadUInt16LittleEndian(inputBytes[(i * sizeof(ushort))..]) / 65535f;
 						break;
 					case VertexFormat.kVertexFormatSNorm16:
-						result[i] = Math.Max(BitConverter.ToInt16(inputBytes, i * 2) / 32767f, -1f);
+						result[i] = Math.Max(BinaryPrimitives.ReadInt16LittleEndian(inputBytes[(i * sizeof(short))..]) / 32767f, -1f);
 						break;
 				}
 			}
 			return result;
 		}
 
-		public static int[] BytesToIntArray(byte[] inputBytes, VertexFormat format)
+		public static int[] BytesToIntArray(ReadOnlySpan<byte> inputBytes, VertexFormat format)
 		{
 			int size = GetFormatSize(format);
 			int len = inputBytes.Length / size;
@@ -175,11 +172,11 @@ namespace AssetRipper.SourceGenerated.Extensions
 						break;
 					case VertexFormat.kVertexFormatUInt16:
 					case VertexFormat.kVertexFormatSInt16:
-						result[i] = BitConverter.ToInt16(inputBytes, i * 2);
+						result[i] = BinaryPrimitives.ReadInt16LittleEndian(inputBytes[(i * sizeof(short))..]);
 						break;
 					case VertexFormat.kVertexFormatUInt32:
 					case VertexFormat.kVertexFormatSInt32:
-						result[i] = BitConverter.ToInt32(inputBytes, i * 4);
+						result[i] = BinaryPrimitives.ReadInt32LittleEndian(inputBytes[(i * sizeof(int))..]);
 						break;
 				}
 			}
@@ -189,15 +186,9 @@ namespace AssetRipper.SourceGenerated.Extensions
 		public static Vector2[] FloatArrayToVector2(float[] input) => FloatArrayToVector2(input, 2);
 		public static Vector2[] FloatArrayToVector2(float[] input, int dimension)
 		{
-			if (input == null)
-			{
-				throw new ArgumentNullException(nameof(input));
-			}
+			ArgumentNullException.ThrowIfNull(input);
 
-			if (dimension < 1)
-			{
-				throw new ArgumentOutOfRangeException(nameof(dimension));
-			}
+			ArgumentOutOfRangeException.ThrowIfLessThan(dimension, 1);
 
 			if (input.Length % dimension != 0)
 			{
@@ -219,15 +210,9 @@ namespace AssetRipper.SourceGenerated.Extensions
 		public static Vector3[] FloatArrayToVector3(float[] input) => FloatArrayToVector3(input, 3);
 		public static Vector3[] FloatArrayToVector3(float[] input, int dimension)
 		{
-			if (input == null)
-			{
-				throw new ArgumentNullException(nameof(input));
-			}
+			ArgumentNullException.ThrowIfNull(input);
 
-			if (dimension < 1)
-			{
-				throw new ArgumentOutOfRangeException(nameof(dimension));
-			}
+			ArgumentOutOfRangeException.ThrowIfLessThan(dimension, 1);
 
 			if (input.Length % dimension != 0)
 			{
@@ -251,15 +236,9 @@ namespace AssetRipper.SourceGenerated.Extensions
 		public static Vector4[] FloatArrayToVector4(float[] input) => FloatArrayToVector4(input, 4);
 		public static Vector4[] FloatArrayToVector4(float[] input, int dimension)
 		{
-			if (input == null)
-			{
-				throw new ArgumentNullException(nameof(input));
-			}
+			ArgumentNullException.ThrowIfNull(input);
 
-			if (dimension < 1)
-			{
-				throw new ArgumentOutOfRangeException(nameof(dimension));
-			}
+			ArgumentOutOfRangeException.ThrowIfLessThan(dimension, 1);
 
 			if (input.Length % dimension != 0)
 			{
@@ -282,10 +261,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static ColorFloat[] FloatArrayToColorFloat(float[] input)
 		{
-			if (input == null)
-			{
-				throw new ArgumentNullException(nameof(input));
-			}
+			ArgumentNullException.ThrowIfNull(input);
 
 			if (input.Length % 4 != 0)
 			{

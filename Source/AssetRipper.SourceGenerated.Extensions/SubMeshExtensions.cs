@@ -7,6 +7,7 @@ using AssetRipper.SourceGenerated.Extensions.Enums.Shader.ShaderChannel;
 using AssetRipper.SourceGenerated.Subclasses.ChannelInfo;
 using AssetRipper.SourceGenerated.Subclasses.SubMesh;
 using AssetRipper.SourceGenerated.Subclasses.VertexData;
+using System.Buffers.Binary;
 using System.Numerics;
 
 namespace AssetRipper.SourceGenerated.Extensions
@@ -63,11 +64,13 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 			else if (mesh.Is16BitIndices())
 			{
-				FindMinMax16Indices(mesh.IndexBuffer, (int)submesh.FirstByte, (int)submesh.IndexCount, out min, out max);
+				ReadOnlySpan<byte> indexBuffer = new(mesh.IndexBuffer, (int)submesh.FirstByte, (int)submesh.IndexCount * sizeof(ushort));
+				FindMinMax16Indices(indexBuffer, out min, out max);
 			}
 			else
 			{
-				FindMinMax32Indices(mesh.IndexBuffer, (int)submesh.FirstByte, (int)submesh.IndexCount, out min, out max);
+				ReadOnlySpan<byte> indexBuffer = new(mesh.IndexBuffer, (int)submesh.FirstByte, (int)submesh.IndexCount * sizeof(uint));
+				FindMinMax32Indices(indexBuffer, out min, out max);
 			}
 		}
 
@@ -90,14 +93,13 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 		}
 
-		private static void FindMinMax16Indices(byte[] indexBuffer, int offset, int indexCount, out int min, out int max)
+		private static void FindMinMax16Indices(ReadOnlySpan<byte> indexBuffer, out int min, out int max)
 		{
-			min = BitConverter.ToUInt16(indexBuffer, offset);
-			max = BitConverter.ToUInt16(indexBuffer, offset);
-			int end = offset + indexCount * sizeof(ushort);
-			for (int i = offset; i < end; i += sizeof(ushort))
+			min = BinaryPrimitives.ReadUInt16LittleEndian(indexBuffer);//Is this correct on big endian games?
+			max = min;
+			for (int i = 0; i < indexBuffer.Length; i += sizeof(ushort))
 			{
-				int index = BitConverter.ToUInt16(indexBuffer, i);
+				int index = BinaryPrimitives.ReadUInt16LittleEndian(indexBuffer[i..]);
 				if (index > max)
 				{
 					max = index;
@@ -109,14 +111,13 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 		}
 
-		private static void FindMinMax32Indices(byte[] indexBuffer, int offset, int indexCount, out int min, out int max)
+		private static void FindMinMax32Indices(ReadOnlySpan<byte> indexBuffer, out int min, out int max)
 		{
-			min = BitConverter.ToInt32(indexBuffer, offset);
-			max = BitConverter.ToInt32(indexBuffer, offset);
-			int end = offset + indexCount * sizeof(int);
-			for (int i = offset; i < end; i += sizeof(int))
+			min = BinaryPrimitives.ReadInt32LittleEndian(indexBuffer);//Is this correct on big endian games?
+			max = min;
+			for (int i = 0; i < indexBuffer.Length; i += sizeof(ushort))
 			{
-				int index = BitConverter.ToInt32(indexBuffer, i);
+				int index = BinaryPrimitives.ReadInt32LittleEndian(indexBuffer[i..]);
 				if (index > max)
 				{
 					max = index;

@@ -5,16 +5,14 @@ namespace Smolv
 {
 	public static class SmolvDecoder
 	{
-		public static int GetDecodedBufferSize([NotNull] byte[] data)
+		public static int GetDecodedBufferSize(ReadOnlySpan<byte> data)
 		{
-			ArgumentNullException.ThrowIfNull(data);
-
 			if (!CheckSmolHeader(data))
 			{
 				return 0;
 			}
 
-			int size = BitConverter.ToInt32(data, 5 * sizeof(uint));
+			int size = BinaryPrimitives.ReadInt32LittleEndian(data[(5 * sizeof(uint))..]);
 			return size;
 		}
 
@@ -37,7 +35,7 @@ namespace Smolv
 			return size;
 		}
 
-		public static byte[]? Decode([NotNull] byte[] data)
+		public static byte[]? Decode(byte[] data)
 		{
 			int bufferSize = GetDecodedBufferSize(data);
 			if (bufferSize == 0)
@@ -55,7 +53,7 @@ namespace Smolv
 			return null;
 		}
 
-		public static bool Decode([NotNull] byte[] data, [NotNull] byte[] output)
+		public static bool Decode(byte[] data, [NotNull] byte[] output)
 		{
 			ArgumentNullException.ThrowIfNull(output);
 

@@ -322,14 +322,14 @@ namespace AssetRipper.SourceGenerated.Extensions
 			return new MeshOutlineGenerator(vertices, triangles).GenerateOutlines();
 		}
 
-		private static List<Vector2[]> VertexDataToOutline(byte[] indexBuffer, Vector3[] vertices, ISubMesh submesh)
+		private static List<Vector2[]> VertexDataToOutline(ReadOnlySpan<byte> indexBuffer, Vector3[] vertices, ISubMesh submesh)
 		{
 			Vector3i[] triangles = new Vector3i[submesh.IndexCount / 3];
-			for (int o = (int)submesh.FirstByte, ti = 0; ti < triangles.Length; o += 6, ti++)
+			for (int o = (int)submesh.FirstByte, ti = 0; ti < triangles.Length; o += 3 * sizeof(ushort), ti++)
 			{
-				int x = BitConverter.ToUInt16(indexBuffer, o + 0);
-				int y = BitConverter.ToUInt16(indexBuffer, o + 2);
-				int z = BitConverter.ToUInt16(indexBuffer, o + 4);
+				ushort x = BitConverter.ToUInt16(indexBuffer[o..]);
+				ushort y = BitConverter.ToUInt16(indexBuffer[(o + sizeof(ushort))..]);
+				ushort z = BitConverter.ToUInt16(indexBuffer[(o + 2 * sizeof(ushort))..]);
 				triangles[ti] = new Vector3i(x, y, z);
 			}
 

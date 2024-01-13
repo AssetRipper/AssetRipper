@@ -1,6 +1,7 @@
 ﻿using AssetRipper.IO.Files.Exceptions;
 using SharpCompress.Compressors.LZMA;
 using System.Buffers;
+using System.Buffers.Binary;
 
 namespace AssetRipper.IO.Files.BundleFiles
 {
@@ -46,7 +47,7 @@ namespace AssetRipper.IO.Files.BundleFiles
 
 			compressedStream.ReadExactly(properties, 0, PropertiesSize);
 			compressedStream.ReadExactly(sizeBytes, 0, UncompressedSize);
-			long decompressedSize = BitConverter.ToInt64(sizeBytes, 0);
+			long decompressedSize = BinaryPrimitives.ReadInt64LittleEndian(sizeBytes);
 
 			long headSize = compressedStream.Position - basePosition;
 			long headlessSize = compressedSize - headSize;
