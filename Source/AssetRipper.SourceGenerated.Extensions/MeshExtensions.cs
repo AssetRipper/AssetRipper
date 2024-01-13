@@ -64,7 +64,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			uv6 = default;
 			uv7 = default;
 
-			mesh.VertexData?.ReadData(mesh.Collection.Version, mesh.Collection.EndianType, mesh,
+			mesh.VertexData.ReadData(mesh.Collection.Version, mesh.Collection.EndianType, mesh,
 				out vertices,
 				out normals,
 				out tangents,

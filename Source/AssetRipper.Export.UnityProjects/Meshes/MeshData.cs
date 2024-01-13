@@ -77,7 +77,24 @@ namespace AssetRipper.Export.UnityProjects.Meshes
 		public ColorFloat TryGetColorAtIndex(uint index) => TryGetAtIndex(Colors, index);
 		public Vector2 TryGetUV0AtIndex(uint index) => FlipY(TryGetAtIndex(UV0, index));
 		public Vector2 TryGetUV1AtIndex(uint index) => FlipY(TryGetAtIndex(UV1, index));
-		public BoneWeight4 TryGetSkinAtIndex(uint index) => TryGetAtIndex(Skin, index);
+		public BoneWeight4 TryGetSkinAtIndex(uint index)
+		{
+			BoneWeight4 s = TryGetAtIndex(Skin, index);
+			if (s == default || s.AnyWeightsNegative)
+			{
+				//Invalid bone weights, set to a valid default.
+				return new BoneWeight4(.25f, .25f, .25f, .25f, 0, 0, 0, 0);
+			}
+			else if (s.Sum != 1)
+			{
+				return s.NormalizeWeights();
+			}
+			else
+			{
+				return s;
+			}
+		}
+
 		private static Vector2 FlipY(Vector2 uv) => new Vector2(uv.X, 1 - uv.Y);
 
 		public static bool TryMakeFromMesh(IMesh mesh, out MeshData meshData)

@@ -1,4 +1,6 @@
-﻿namespace AssetRipper.Numerics
+﻿using System.Diagnostics.Contracts;
+
+namespace AssetRipper.Numerics
 {
 	public record struct BoneWeight4(
 		float Weight0,
@@ -10,6 +12,10 @@
 		int Index2,
 		int Index3)
 	{
+		public readonly bool AnyWeightsNegative => Weight0 < 0f || Weight1 < 0f || Weight2 < 0f || Weight3 < 0f;
+
+		public readonly float Sum => Weight0 + Weight1 + Weight2 + Weight3;
+
 		public void SetWeight(int index, float value)
 		{
 			switch (index)
@@ -41,6 +47,20 @@
 					Index3 = value; break;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(index), value, null);
+			}
+		}
+
+		public readonly BoneWeight4 NormalizeWeights()
+		{
+			float sum = Sum;
+			if (sum == 0f)
+			{
+				return new BoneWeight4(.25f, .25f, .25f, .25f, Index0, Index1, Index2, Index3);
+			}
+			else
+			{
+				float invSum = 1f / sum;
+				return new BoneWeight4(Weight0 * invSum, Weight1 * invSum, Weight2 * invSum, Weight3 * invSum, Index0, Index1, Index2, Index3);
 			}
 		}
 	}

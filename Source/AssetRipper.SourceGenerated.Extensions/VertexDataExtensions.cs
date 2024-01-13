@@ -124,7 +124,8 @@ namespace AssetRipper.SourceGenerated.Extensions
 			for (int chn = 0; chn < channels.Count; chn++)
 			{
 				ChannelInfo m_Channel = channels[chn];
-				if (m_Channel.GetDataDimension() > 0)
+				byte dimension = m_Channel.GetDataDimension();
+				if (dimension > 0)
 				{
 					IStreamInfo m_Stream = streams[m_Channel.Stream];
 					BitArray channelMask = new BitArray(BitConverter.GetBytes(m_Stream.ChannelMask));
@@ -137,14 +138,14 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 						MeshHelper.VertexFormat vertexFormat = MeshHelper.ToVertexFormat(m_Channel.Format, version);
 						int componentByteSize = MeshHelper.GetFormatSize(vertexFormat);
-						byte[] componentBytes = new byte[vertexCount * m_Channel.GetDataDimension() * componentByteSize];
+						byte[] componentBytes = new byte[vertexCount * dimension * componentByteSize];
 						for (int v = 0; v < vertexCount; v++)
 						{
 							int vertexOffset = (int)m_Stream.Offset + m_Channel.Offset + (int)m_Stream.GetStride() * v;
-							for (int d = 0; d < m_Channel.GetDataDimension(); d++)
+							for (int d = 0; d < dimension; d++)
 							{
 								int componentOffset = vertexOffset + componentByteSize * d;
-								Buffer.BlockCopy(data, componentOffset, componentBytes, componentByteSize * (v * m_Channel.GetDataDimension() + d), componentByteSize);
+								Buffer.BlockCopy(data, componentOffset, componentBytes, componentByteSize * (v * dimension + d), componentByteSize);
 							}
 						}
 
@@ -177,64 +178,64 @@ namespace AssetRipper.SourceGenerated.Extensions
 							switch (chn)
 							{
 								case 0: //kShaderChannelVertex
-									vertices = MeshHelper.FloatArrayToVector3(componentsFloatArray, m_Channel.GetDataDimension());
+									vertices = MeshHelper.FloatArrayToVector3(componentsFloatArray, dimension);
 									break;
 								case 1: //kShaderChannelNormal
-									normals = MeshHelper.FloatArrayToVector3(componentsFloatArray, m_Channel.GetDataDimension());
+									normals = MeshHelper.FloatArrayToVector3(componentsFloatArray, dimension);
 									break;
 								case 2: //kShaderChannelTangent
-									tangents = MeshHelper.FloatArrayToVector4(componentsFloatArray, m_Channel.GetDataDimension());
+									tangents = MeshHelper.FloatArrayToVector4(componentsFloatArray, dimension);
 									break;
 								case 3: //kShaderChannelColor
 									colors = MeshHelper.FloatArrayToColorFloat(componentsFloatArray);
 									break;
 								case 4: //kShaderChannelTexCoord0
-									uv0 = MeshHelper.FloatArrayToVector2(componentsFloatArray, m_Channel.GetDataDimension());
+									uv0 = MeshHelper.FloatArrayToVector2(componentsFloatArray, dimension);
 									break;
 								case 5: //kShaderChannelTexCoord1
-									uv1 = MeshHelper.FloatArrayToVector2(componentsFloatArray, m_Channel.GetDataDimension());
+									uv1 = MeshHelper.FloatArrayToVector2(componentsFloatArray, dimension);
 									break;
 								case 6: //kShaderChannelTexCoord2
-									uv2 = MeshHelper.FloatArrayToVector2(componentsFloatArray, m_Channel.GetDataDimension());
+									uv2 = MeshHelper.FloatArrayToVector2(componentsFloatArray, dimension);
 									break;
 								case 7: //kShaderChannelTexCoord3
-									uv3 = MeshHelper.FloatArrayToVector2(componentsFloatArray, m_Channel.GetDataDimension());
+									uv3 = MeshHelper.FloatArrayToVector2(componentsFloatArray, dimension);
 									break;
 								case 8: //kShaderChannelTexCoord4
-									uv4 = MeshHelper.FloatArrayToVector2(componentsFloatArray, m_Channel.GetDataDimension());
+									uv4 = MeshHelper.FloatArrayToVector2(componentsFloatArray, dimension);
 									break;
 								case 9: //kShaderChannelTexCoord5
-									uv5 = MeshHelper.FloatArrayToVector2(componentsFloatArray, m_Channel.GetDataDimension());
+									uv5 = MeshHelper.FloatArrayToVector2(componentsFloatArray, dimension);
 									break;
 								case 10: //kShaderChannelTexCoord6
-									uv6 = MeshHelper.FloatArrayToVector2(componentsFloatArray, m_Channel.GetDataDimension());
+									uv6 = MeshHelper.FloatArrayToVector2(componentsFloatArray, dimension);
 									break;
 								case 11: //kShaderChannelTexCoord7
-									uv7 = MeshHelper.FloatArrayToVector2(componentsFloatArray, m_Channel.GetDataDimension());
+									uv7 = MeshHelper.FloatArrayToVector2(componentsFloatArray, dimension);
 									break;
 								//2018.2 and up
 								case 12: //kShaderChannelBlendWeight
 									skin ??= MakeInitializedArray<BoneWeight4>(vertexCount);
 									for (int i = 0; i < vertexCount; i++)
 									{
-										for (int j = 0; j < m_Channel.GetDataDimension(); j++)
+										BoneWeight4 boneWeight = skin[i];
+										for (int j = 0; j < dimension; j++)
 										{
-											BoneWeight4 boneWeight = skin[i];
-											boneWeight.SetWeight(j, componentsFloatArray[i * m_Channel.GetDataDimension() + j]);
-											skin[i] = boneWeight;
+											boneWeight.SetWeight(j, componentsFloatArray[i * dimension + j]);
 										}
+										skin[i] = boneWeight;
 									}
 									break;
 								case 13: //kShaderChannelBlendIndices
 									skin ??= MakeInitializedArray<BoneWeight4>(vertexCount);
 									for (int i = 0; i < vertexCount; i++)
 									{
-										for (int j = 0; j < m_Channel.GetDataDimension(); j++)
+										BoneWeight4 boneWeight = skin[i];
+										for (int j = 0; j < dimension; j++)
 										{
-											BoneWeight4 boneWeight = skin[i];
-											boneWeight.SetIndex(j, componentsIntArray[i * m_Channel.GetDataDimension() + j]);
-											skin[i] = boneWeight;
+											boneWeight.SetIndex(j, componentsIntArray[i * dimension + j]);
 										}
+										skin[i] = boneWeight;
 									}
 									break;
 							}
@@ -244,35 +245,35 @@ namespace AssetRipper.SourceGenerated.Extensions
 							switch (chn)
 							{
 								case 0: //kShaderChannelVertex
-									vertices = MeshHelper.FloatArrayToVector3(componentsFloatArray, m_Channel.GetDataDimension());
+									vertices = MeshHelper.FloatArrayToVector3(componentsFloatArray, dimension);
 									break;
 								case 1: //kShaderChannelNormal
-									normals = MeshHelper.FloatArrayToVector3(componentsFloatArray, m_Channel.GetDataDimension());
+									normals = MeshHelper.FloatArrayToVector3(componentsFloatArray, dimension);
 									break;
 								case 2: //kShaderChannelColor
 									colors = MeshHelper.FloatArrayToColorFloat(componentsFloatArray);
 									break;
 								case 3: //kShaderChannelTexCoord0
-									uv0 = MeshHelper.FloatArrayToVector2(componentsFloatArray, m_Channel.GetDataDimension());
+									uv0 = MeshHelper.FloatArrayToVector2(componentsFloatArray, dimension);
 									break;
 								case 4: //kShaderChannelTexCoord1
-									uv1 = MeshHelper.FloatArrayToVector2(componentsFloatArray, m_Channel.GetDataDimension());
+									uv1 = MeshHelper.FloatArrayToVector2(componentsFloatArray, dimension);
 									break;
 								case 5:
 									if (version.GreaterThanOrEquals(5)) //kShaderChannelTexCoord2
 									{
-										uv2 = MeshHelper.FloatArrayToVector2(componentsFloatArray, m_Channel.GetDataDimension());
+										uv2 = MeshHelper.FloatArrayToVector2(componentsFloatArray, dimension);
 									}
 									else //kShaderChannelTangent
 									{
-										tangents = MeshHelper.FloatArrayToVector4(componentsFloatArray, m_Channel.GetDataDimension());
+										tangents = MeshHelper.FloatArrayToVector4(componentsFloatArray, dimension);
 									}
 									break;
 								case 6: //kShaderChannelTexCoord3
-									uv3 = MeshHelper.FloatArrayToVector2(componentsFloatArray, m_Channel.GetDataDimension());
+									uv3 = MeshHelper.FloatArrayToVector2(componentsFloatArray, dimension);
 									break;
 								case 7: //kShaderChannelTangent
-									tangents = MeshHelper.FloatArrayToVector4(componentsFloatArray, m_Channel.GetDataDimension());
+									tangents = MeshHelper.FloatArrayToVector4(componentsFloatArray, dimension);
 									break;
 							}
 						}
