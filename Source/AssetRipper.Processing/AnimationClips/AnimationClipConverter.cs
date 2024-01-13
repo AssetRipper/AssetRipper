@@ -75,9 +75,9 @@ namespace AssetRipper.Processing.AnimationClips
 
 		private void ProcessStreams(IReadOnlyList<StreamedFrame> streamFrames, IAnimationClipBindingConstant bindings, float sampleRate)
 		{
-			Span<float> curveValues = stackalloc float[4] { 0, 0, 0, 0 };
-			Span<float> inSlopeValues = stackalloc float[4] { 0, 0, 0, 0 };
-			Span<float> outSlopeValues = stackalloc float[4] { 0, 0, 0, 0 };
+			Span<float> curveValues = [0, 0, 0, 0];
+			Span<float> inSlopeValues = [0, 0, 0, 0];
+			Span<float> outSlopeValues = [0, 0, 0, 0];
 			float interval = 1.0f / sampleRate;
 
 			// first (index [0]) stream frame is for slope calculation for the first real frame (index [1])
@@ -147,7 +147,7 @@ namespace AssetRipper.Processing.AnimationClips
 			dense.SampleArray.CopyTo(rentedArray);
 			ReadOnlySpan<float> curveValues = new ReadOnlySpan<float>(rentedArray, 0, dense.SampleArray.Count);
 
-			ReadOnlySpan<float> slopeValues = stackalloc float[4] { 0, 0, 0, 0 }; // no slopes - 0 values
+			ReadOnlySpan<float> slopeValues = [0, 0, 0, 0]; // no slopes - 0 values
 
 			int streamCount = (int)clip.StreamedClip.CurveCount;
 			for (int frameIndex = 0; frameIndex < dense.FrameCount; frameIndex++)
@@ -186,7 +186,7 @@ namespace AssetRipper.Processing.AnimationClips
 			constant.Data.CopyTo(rentedArray);
 			ReadOnlySpan<float> curveValues = new ReadOnlySpan<float>(rentedArray, 0, constant.Data.Count);
 
-			ReadOnlySpan<float> slopeValues = stackalloc float[4] { 0, 0, 0, 0 }; // no slopes - 0 values
+			ReadOnlySpan<float> slopeValues = [0, 0, 0, 0]; // no slopes - 0 values
 
 			int streamCount = (int)clip.StreamedClip.CurveCount;
 			int denseCount = (int)clip.DenseClip.CurveCount;
@@ -497,6 +497,7 @@ namespace AssetRipper.Processing.AnimationClips
 				curve.ClassID = (int)curveData.ClassID;
 				curve.Script.SetAsset(m_clip.Collection, curveData.Script as IMonoScript);
 				curve.Curve.SetDefaultRotationOrderAndCurveLoopType();
+				//Todo: set IFloatCurve.Flags or verify that 0 is an acceptable value.
 				m_floats.Add(curveData, curve);
 			}
 
@@ -517,6 +518,9 @@ namespace AssetRipper.Processing.AnimationClips
 				curve.Attribute = curveData.Attribute;
 				curve.ClassID = (int)curveData.ClassID;
 				curve.Script.SetAsset(m_clip.Collection, curveData.Script as IMonoScript);
+				//Not certain this enum is correct, but it seems to be. 2 is the correct value for this field.
+				//See: https://github.com/AssetRipper/AssetRipper/issues/1158
+				curve.Flags = (int)SourceGenerated.NativeEnums.Global.EditorCurveBindingFlags.PPtr;
 				m_pptrs.Add(curveData, curve);
 			}
 
