@@ -1,15 +1,5 @@
-﻿namespace AssetRipper.Export.Modules.Shaders.Resources
+﻿namespace AssetRipper.Export.Modules.Shaders.Resources;
+
+internal record Sampler(string Name, uint BindPoint, bool IsComparisonSampler)
 {
-	internal class Sampler
-	{
-		public string Name;
-		public uint BindPoint;
-		public bool IsComparisonSampler;
-		public Sampler(string name, uint bindPoint, bool isComparisonSampler)
-		{
-			Name = name;
-			BindPoint = bindPoint;
-			IsComparisonSampler = isComparisonSampler;
-		}
-	}
 }

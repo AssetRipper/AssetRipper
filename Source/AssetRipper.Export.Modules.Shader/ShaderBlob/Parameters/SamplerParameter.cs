@@ -1,6 +1,6 @@
 ﻿namespace AssetRipper.Export.Modules.Shaders.ShaderBlob.Parameters
 {
-	public sealed class SamplerParameter
+	public sealed record class SamplerParameter
 	{
 		public SamplerParameter() { }
 

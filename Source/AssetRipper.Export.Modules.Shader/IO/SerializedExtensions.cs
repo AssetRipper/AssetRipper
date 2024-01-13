@@ -463,7 +463,7 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 			writer.Write($"SubProgram \"{graphicApi} ");
 			if (isTier)
 			{
-				writer.Write($"hw_tier{_this.ShaderHardwareTier.ToString("00")} ");
+				writer.Write($"hw_tier{_this.ShaderHardwareTier:00} ");
 			}
 			writer.Write("\" {\n");
 			writer.WriteIndent(5);

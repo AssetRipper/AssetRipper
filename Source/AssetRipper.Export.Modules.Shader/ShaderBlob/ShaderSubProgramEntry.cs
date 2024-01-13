@@ -3,7 +3,7 @@ using AssetRipper.Primitives;
 
 namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 {
-	public sealed class ShaderSubProgramEntry
+	public sealed record class ShaderSubProgramEntry
 	{
 		/// <summary>
 		/// 2019.3 and greater

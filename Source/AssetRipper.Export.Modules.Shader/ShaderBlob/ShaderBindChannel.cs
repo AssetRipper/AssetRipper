@@ -1,21 +1,9 @@
 using AssetRipper.SourceGenerated.Extensions.Enums.Shader;
 
-namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
+namespace AssetRipper.Export.Modules.Shaders.ShaderBlob;
+
+/// <param name="Source">ShaderChannel enum</param>
+/// <param name="Target"></param>
+public sealed record ShaderBindChannel(uint Source, VertexComponent Target)
 {
-	public sealed class ShaderBindChannel
-	{
-		public ShaderBindChannel() { }
-
-		public ShaderBindChannel(uint source, VertexComponent target)
-		{
-			Source = source;
-			Target = target;
-		}
-
-		/// <summary>
-		/// ShaderChannel enum
-		/// </summary>
-		public uint Source { get; set; }
-		public VertexComponent Target { get; set; }
-	}
 }

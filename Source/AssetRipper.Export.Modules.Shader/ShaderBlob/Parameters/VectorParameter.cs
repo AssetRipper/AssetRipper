@@ -1,7 +1,9 @@
 ﻿using AssetRipper.SourceGenerated.Extensions.Enums.Shader;
+using System.Diagnostics;
 
 namespace AssetRipper.Export.Modules.Shaders.ShaderBlob.Parameters
 {
+	[DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
 	public sealed class VectorParameter : NumericShaderParameter
 	{
 		public VectorParameter() { }
@@ -27,6 +29,11 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob.Parameters
 		{
 			get { return RowCount; }
 			set { RowCount = value; }
+		}
+
+		private string? GetDebuggerDisplay()
+		{
+			return Name;
 		}
 	}
 }

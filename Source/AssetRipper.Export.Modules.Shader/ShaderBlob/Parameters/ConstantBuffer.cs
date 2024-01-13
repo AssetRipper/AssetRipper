@@ -1,5 +1,8 @@
+using System.Diagnostics;
+
 namespace AssetRipper.Export.Modules.Shaders.ShaderBlob.Parameters
 {
+	[DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
 	public sealed class ConstantBuffer
 	{
 		public ConstantBuffer() { }
@@ -32,6 +35,11 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob.Parameters
 				VectorParams.CopyTo(shaderParams, MatrixParams.Length);
 				return shaderParams;
 			}
+		}
+
+		private string GetDebuggerDisplay()
+		{
+			return Name;
 		}
 	}
 }

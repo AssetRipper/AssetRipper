@@ -1,5 +1,8 @@
+using System.Diagnostics;
+
 namespace AssetRipper.Export.Modules.Shaders.ShaderBlob.Parameters
 {
+	[DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
 	public sealed class TextureParameter
 	{
 		public TextureParameter() { }
@@ -25,5 +28,10 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob.Parameters
 		public int SamplerIndex { get; set; }
 		public bool MultiSampled { get; set; }
 		public byte Dim { get; set; }
+
+		private string GetDebuggerDisplay()
+		{
+			return Name;
+		}
 	}
 }

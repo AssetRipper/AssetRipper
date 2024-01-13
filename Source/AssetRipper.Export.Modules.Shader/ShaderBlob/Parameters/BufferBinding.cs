@@ -1,6 +1,6 @@
 ﻿namespace AssetRipper.Export.Modules.Shaders.ShaderBlob.Parameters
 {
-	public sealed class BufferBinding
+	public sealed record class BufferBinding
 	{
 		public BufferBinding() { }
 

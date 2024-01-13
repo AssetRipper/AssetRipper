@@ -18,7 +18,7 @@ namespace AssetRipper.Export.Modules.Shaders.Types
 			Rows = 0;
 			Columns = 0;
 			ElementCount = 0;
-			MemberCount = (ushort)Members.Count();
+			MemberCount = (ushort)Members.Length;
 			MemberOffset = 0;
 			m_programType = programType;
 		}
@@ -51,25 +51,17 @@ namespace AssetRipper.Export.Modules.Shaders.Types
 
 		private static ShaderVariableType GetVariableType(ShaderParamType paramType)
 		{
-			switch (paramType)
+			return paramType switch
 			{
-				case ShaderParamType.Bool:
-					return ShaderVariableType.Bool;
-				case ShaderParamType.Float:
-					return ShaderVariableType.Float;
-				case ShaderParamType.Half:
-					return ShaderVariableType.Float;
-				case ShaderParamType.Int:
-					return ShaderVariableType.Int;
-				case ShaderParamType.Short:
-					return ShaderVariableType.Int;
-				case ShaderParamType.TypeCount:
-					return ShaderVariableType.Int; //TODO
-				case ShaderParamType.UInt:
-					return ShaderVariableType.UInt; //TODO
-				default:
-					throw new Exception($"Unexpected param type {paramType}");
-			}
+				ShaderParamType.Bool => ShaderVariableType.Bool,
+				ShaderParamType.Float => ShaderVariableType.Float,
+				ShaderParamType.Half => ShaderVariableType.Float,
+				ShaderParamType.Int => ShaderVariableType.Int,
+				ShaderParamType.Short => ShaderVariableType.Int,
+				ShaderParamType.TypeCount => ShaderVariableType.Int,//TODO
+				ShaderParamType.UInt => ShaderVariableType.UInt,//TODO
+				_ => throw new Exception($"Unexpected param type {paramType}"),
+			};
 		}
 
 		/*public override bool Equals(object obj)

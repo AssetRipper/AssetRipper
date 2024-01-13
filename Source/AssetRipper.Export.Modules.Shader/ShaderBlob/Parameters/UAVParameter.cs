@@ -1,6 +1,6 @@
 ﻿namespace AssetRipper.Export.Modules.Shaders.ShaderBlob.Parameters
 {
-	public sealed class UAVParameter
+	public sealed record class UAVParameter
 	{
 		public UAVParameter() { }
 
