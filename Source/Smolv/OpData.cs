@@ -1,34 +1,21 @@
 namespace Smolv
 {
-	public struct OpData
+	/// <summary>
+	/// Data for each <see cref="SpvOp"/> instruction.
+	/// </summary>
+	/// <param name="HasResult">Does it have result ID?</param>
+	/// <param name="HasType">Does it have type ID?</param>
+	/// <param name="DeltaFromResult">How many words after (optional) type+result to write out as deltas from result?</param>
+	/// <param name="VarRest">Should the rest of words be written in varint encoding?</param>
+	public readonly record struct OpData(byte HasResult, byte HasType, sbyte DeltaFromResult, byte VarRest)
 	{
-		public OpData(byte hasResult, byte hasType, sbyte deltaFromResult, byte varrest)
+		public static OpData Get(SpvOp op)
 		{
-			this.hasResult = hasResult;
-			this.hasType = hasType;
-			this.deltaFromResult = deltaFromResult;
-			this.varrest = varrest;
+			return SpirvOpData[(int)op];
 		}
 
-		/// <summary>
-		/// Does it have result ID?
-		/// </summary>
-		public byte hasResult;
-		/// <summary>
-		/// Does it have type ID?
-		/// </summary>
-		public byte hasType;
-		/// <summary>
-		/// How many words after (optional) type+result to write out as deltas from result?
-		/// </summary>
-		public sbyte deltaFromResult;
-		/// <summary>
-		/// Should the rest of words be written in varint encoding?
-		/// </summary>
-		public byte varrest;
-
-		public static readonly OpData[] SpirvOpData =
-		{
+		private static readonly OpData[] SpirvOpData =
+		[
 			new OpData(0, 0, 0, 0), // Nop
 			new OpData(1, 1, 0, 0), // Undef
 			new OpData(0, 0, 0, 0), // SourceContinued
@@ -396,6 +383,6 @@ namespace Smolv
 			new OpData(1, 1, 1, 1), // GroupNonUniformLogicalXor
 			new OpData(1, 1, 1, 1), // GroupNonUniformQuadBroadcast
 			new OpData(1, 1, 1, 1), // GroupNonUniformQuadSwap
-		};
+		];
 	};
 }

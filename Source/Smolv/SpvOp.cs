@@ -377,7 +377,7 @@ namespace Smolv
 			{
 				return false;
 			}
-			return OpData.SpirvOpData[(int)_this].hasResult != 0;
+			return OpData.Get(_this).HasResult != 0;
 		}
 
 		public static bool OpHasType(this SpvOp _this) => OpHasType(_this, GetKnownOpsCount(0));
@@ -387,7 +387,7 @@ namespace Smolv
 			{
 				return false;
 			}
-			return OpData.SpirvOpData[(int)_this].hasType != 0;
+			return OpData.Get(_this).HasType != 0;
 		}
 
 		public static int OpDeltaFromResult(this SpvOp _this) => OpDeltaFromResult(_this, GetKnownOpsCount(0));
@@ -397,7 +397,7 @@ namespace Smolv
 			{
 				return 0;
 			}
-			return OpData.SpirvOpData[(int)_this].deltaFromResult;
+			return OpData.Get(_this).DeltaFromResult;
 		}
 
 		public static bool OpVarRest(this SpvOp _this) => OpVarRest(_this, GetKnownOpsCount(0));
@@ -407,22 +407,22 @@ namespace Smolv
 			{
 				return false;
 			}
-			return OpData.SpirvOpData[(int)_this].varrest != 0;
+			return OpData.Get(_this).VarRest != 0;
 		}
 
 		public static bool OpDebugInfo(this SpvOp _this) => OpDebugInfo(_this, GetKnownOpsCount(0));
 		public static bool OpDebugInfo(this SpvOp _this, int opsCount)
 		{
-			return
-				_this == SpvOp.SourceContinued ||
-				_this == SpvOp.Source ||
-				_this == SpvOp.SourceExtension ||
-				_this == SpvOp.Name ||
-				_this == SpvOp.MemberName ||
-				_this == SpvOp.String ||
-				_this == SpvOp.Line ||
-				_this == SpvOp.NoLine ||
-				_this == SpvOp.ModuleProcessed;
+			return _this is
+				SpvOp.SourceContinued or
+				SpvOp.Source or
+				SpvOp.SourceExtension or
+				SpvOp.Name or
+				SpvOp.MemberName or
+				SpvOp.String or
+				SpvOp.Line or
+				SpvOp.NoLine or
+				SpvOp.ModuleProcessed;
 		}
 	}
 }

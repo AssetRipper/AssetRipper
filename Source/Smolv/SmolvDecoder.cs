@@ -1,15 +1,13 @@
+using System.Buffers.Binary;
 using System.Text;
 
 namespace Smolv
 {
 	public static class SmolvDecoder
 	{
-		public static int GetDecodedBufferSize(byte[] data)
+		public static int GetDecodedBufferSize([NotNull] byte[] data)
 		{
-			if (data == null)
-			{
-				throw new ArgumentNullException(nameof(data));
-			}
+			ArgumentNullException.ThrowIfNull(data);
 
 			if (!CheckSmolHeader(data))
 			{
@@ -20,12 +18,9 @@ namespace Smolv
 			return size;
 		}
 
-		public static int GetDecodedBufferSize(Stream stream)
+		public static int GetDecodedBufferSize([NotNull] Stream stream)
 		{
-			if (stream == null)
-			{
-				throw new ArgumentNullException(nameof(stream));
-			}
+			ArgumentNullException.ThrowIfNull(stream);
 			if (!stream.CanSeek)
 			{
 				throw new ArgumentException(null, nameof(stream));
@@ -42,13 +37,8 @@ namespace Smolv
 			return size;
 		}
 
-		public static byte[]? Decode(byte[] data)
+		public static byte[]? Decode([NotNull] byte[] data)
 		{
-			if (data == null)
-			{
-				throw new ArgumentNullException(nameof(data));
-			}
-
 			int bufferSize = GetDecodedBufferSize(data);
 			if (bufferSize == 0)
 			{
@@ -65,16 +55,9 @@ namespace Smolv
 			return null;
 		}
 
-		public static bool Decode(byte[] data, byte[] output)
+		public static bool Decode([NotNull] byte[] data, [NotNull] byte[] output)
 		{
-			if (data == null)
-			{
-				throw new ArgumentNullException(nameof(data));
-			}
-			if (output == null)
-			{
-				throw new ArgumentNullException(nameof(output));
-			}
+			ArgumentNullException.ThrowIfNull(output);
 
 			int bufferSize = GetDecodedBufferSize(data);
 			if (bufferSize > output.Length)
@@ -86,26 +69,17 @@ namespace Smolv
 			return Decode(data, outputStream);
 		}
 
-		public static bool Decode(byte[] data, Stream outputStream)
+		public static bool Decode([NotNull] byte[] data, Stream outputStream)
 		{
-			if (data == null)
-			{
-				throw new ArgumentNullException(nameof(data));
-			}
+			ArgumentNullException.ThrowIfNull(data);
 			using MemoryStream inputStream = new MemoryStream(data);
 			return Decode(inputStream, data.Length, outputStream);
 		}
 
-		public static bool Decode(Stream inputStream, int inputSize, Stream outputStream)
+		public static bool Decode([NotNull] Stream inputStream, int inputSize, [NotNull] Stream outputStream)
 		{
-			if (inputStream == null)
-			{
-				throw new ArgumentNullException(nameof(inputStream));
-			}
-			if (outputStream == null)
-			{
-				throw new ArgumentNullException(nameof(outputStream));
-			}
+			ArgumentNullException.ThrowIfNull(inputStream);
+			ArgumentNullException.ThrowIfNull(outputStream);
 			if (inputStream.Length < HeaderSize)
 			{
 				return false;
@@ -351,34 +325,25 @@ namespace Smolv
 			return true;
 		}
 
-		private static bool CheckSmolHeader(byte[] data)
+		private static bool CheckSmolHeader(ReadOnlySpan<byte> data)
 		{
-			if (!CheckGenericHeader(data, SmolHeaderMagic))
-			{
-				return false;
-			}
-
-			return true;
+			return CheckGenericHeader(data, SmolHeaderMagic);
 		}
 
-		private static bool CheckGenericHeader(byte[] data, uint expectedMagic)
+		private static bool CheckGenericHeader(ReadOnlySpan<byte> data, uint expectedMagic)
 		{
-			if (data == null)
-			{
-				return false;
-			}
 			if (data.Length < HeaderSize)
 			{
 				return false;
 			}
 
-			uint headerMagic = BitConverter.ToUInt32(data, 0 * sizeof(uint));
+			uint headerMagic = BinaryPrimitives.ReadUInt32LittleEndian(data);
 			if (headerMagic != expectedMagic)
 			{
 				return false;
 			}
 
-			uint headerVersion = BitConverter.ToUInt32(data, 1 * sizeof(uint));
+			uint headerVersion = BinaryPrimitives.ReadUInt32LittleEndian(data[sizeof(uint)..]);
 			if (headerVersion < 0x00010000 || headerVersion > 0x00010300)
 			{
 				// only support 1.0 through 1.3
@@ -431,109 +396,75 @@ namespace Smolv
 		/// </summary>
 		private static SpvOp RemapOp(SpvOp op)
 		{
-			switch (op)
+			return op switch
 			{
 				// 0: 24%
-				case SpvOp.Decorate:
-					return SpvOp.Nop;
-				case SpvOp.Nop:
-					return SpvOp.Decorate;
+				SpvOp.Decorate => SpvOp.Nop,
+				SpvOp.Nop => SpvOp.Decorate,
 
 				// 1: 17%
-				case SpvOp.Load:
-					return SpvOp.Undef;
-				case SpvOp.Undef:
-					return SpvOp.Load;
+				SpvOp.Load => SpvOp.Undef,
+				SpvOp.Undef => SpvOp.Load,
 
 				// 2: 9%
-				case SpvOp.Store:
-					return SpvOp.SourceContinued;
-				case SpvOp.SourceContinued:
-					return SpvOp.Store;
+				SpvOp.Store => SpvOp.SourceContinued,
+				SpvOp.SourceContinued => SpvOp.Store,
 
 				// 3: 7.2%
-				case SpvOp.AccessChain:
-					return SpvOp.Source;
-				case SpvOp.Source:
-					return SpvOp.AccessChain;
+				SpvOp.AccessChain => SpvOp.Source,
+				SpvOp.Source => SpvOp.AccessChain,
 
 				// 4: 5.0%
 				// Name - already small enum value - 5: 4.4%
 				// MemberName - already small enum value - 6: 2.9% 
-				case SpvOp.VectorShuffle:
-					return SpvOp.SourceExtension;
-				case SpvOp.SourceExtension:
-					return SpvOp.VectorShuffle;
+				SpvOp.VectorShuffle => SpvOp.SourceExtension,
+				SpvOp.SourceExtension => SpvOp.VectorShuffle,
 
 				// 7: 4.0%
-				case SpvOp.MemberDecorate:
-					return SpvOp.String;
-				case SpvOp.String:
-					return SpvOp.MemberDecorate;
+				SpvOp.MemberDecorate => SpvOp.String,
+				SpvOp.String => SpvOp.MemberDecorate,
 
 				// 8: 0.9%
-				case SpvOp.Label:
-					return SpvOp.Line;
-				case SpvOp.Line:
-					return SpvOp.Label;
+				SpvOp.Label => SpvOp.Line,
+				SpvOp.Line => SpvOp.Label,
 
 				// 9: 3.9%
-				case SpvOp.Variable:
-					return (SpvOp)9;
-				case (SpvOp)9:
-					return SpvOp.Variable;
+				SpvOp.Variable => (SpvOp)9,
+				(SpvOp)9 => SpvOp.Variable,
 
 				// 10: 3.9%
-				case SpvOp.FMul:
-					return SpvOp.Extension;
-				case SpvOp.Extension:
-					return SpvOp.FMul;
+				SpvOp.FMul => SpvOp.Extension,
+				SpvOp.Extension => SpvOp.FMul,
 
 				// 11: 2.5%
 				// ExtInst - already small enum value - 12: 1.2%
 				// VectorShuffleCompact - already small enum value - used for compact shuffle encoding
-				case SpvOp.FAdd:
-					return SpvOp.ExtInstImport;
-				case SpvOp.ExtInstImport:
-					return SpvOp.FAdd;
+				SpvOp.FAdd => SpvOp.ExtInstImport,
+				SpvOp.ExtInstImport => SpvOp.FAdd,
 
 				// 14: 2.2%
-				case SpvOp.TypePointer:
-					return SpvOp.MemoryModel;
-				case SpvOp.MemoryModel:
-					return SpvOp.TypePointer;
+				SpvOp.TypePointer => SpvOp.MemoryModel,
+				SpvOp.MemoryModel => SpvOp.TypePointer,
 
 				// 15: 1.1%
-				case SpvOp.FNegate:
-					return SpvOp.EntryPoint;
-				case SpvOp.EntryPoint:
-					return SpvOp.FNegate;
-			}
-			return op;
+				SpvOp.FNegate => SpvOp.EntryPoint,
+				SpvOp.EntryPoint => SpvOp.FNegate,
+
+				_ => op,
+			};
 		}
 
 		private static uint DecodeLen(SpvOp op, uint len)
 		{
-			len++;
-			switch (op)
+			return len + op switch
 			{
-				case SpvOp.VectorShuffle:
-					len += 4;
-					break;
-				case SpvOp.VectorShuffleCompact:
-					len += 4;
-					break;
-				case SpvOp.Decorate:
-					len += 2;
-					break;
-				case SpvOp.Load:
-					len += 3;
-					break;
-				case SpvOp.AccessChain:
-					len += 3;
-					break;
-			}
-			return len;
+				SpvOp.VectorShuffle => 4 + 1,
+				SpvOp.VectorShuffleCompact => 4 + 1,
+				SpvOp.Decorate => 2 + 1,
+				SpvOp.Load => 3 + 1,
+				SpvOp.AccessChain => 3 + 1,
+				_ => (uint)1,
+			};
 		}
 
 		private static int DecorationExtraOps(int dec)
