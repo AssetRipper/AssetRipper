@@ -13,8 +13,8 @@ namespace AssetRipper.Export.UnityProjects.Meshes
 		/// <see cref="VertexPosition"/>
 		/// </summary>
 		Position = 0,
-		Normal = 1,
-		Tangent = 2,
+		Normal = 1 << 0,
+		Tangent = 1 << 1,
 		/// <summary>
 		/// <see cref="VertexPositionNormal"/>
 		/// </summary>
@@ -26,19 +26,19 @@ namespace AssetRipper.Export.UnityProjects.Meshes
 		/// <summary>
 		/// <see cref="VertexColor1"/>
 		/// </summary>
-		Color1 = 4,
-		/// <summary>
-		/// <see cref="VertexColor2"/>
-		/// </summary>
-		Color2 = 8,
+		Color1 = 1 << 2,
 		/// <summary>
 		/// <see cref="VertexTexture1"/>
 		/// </summary>
-		Texture1 = 16,
+		Texture1 = 1 << 3,
 		/// <summary>
 		/// <see cref="VertexTexture2"/>
 		/// </summary>
-		Texture2 = 32,
+		Texture2 = 1 << 4,
+		/// <summary>
+		/// Not implemented yet. Defines a vertex with up to 8 UV channels.
+		/// </summary>
+		TextureN = 1 << 5,
 		/// <summary>
 		/// <see cref="VertexColor1Texture1"/>
 		/// </summary>
@@ -48,20 +48,12 @@ namespace AssetRipper.Export.UnityProjects.Meshes
 		/// </summary>
 		Color1Texture2 = Color1 | Texture2,
 		/// <summary>
-		/// <see cref="VertexColor2Texture1"/>
+		/// Not implemented yet.
 		/// </summary>
-		Color2Texture1 = Color2 | Texture1,
-		/// <summary>
-		/// <see cref="VertexColor2Texture2"/>
-		/// </summary>
-		Color2Texture2 = Color2 | Texture2,
+		Color1TextureN = Color1 | TextureN,
 		/// <summary>
 		/// <see cref="VertexJoints4"/>
 		/// </summary>
-		Joints4 = 64,
-		/// <summary>
-		/// <see cref="VertexJoints8"/>
-		/// </summary>
-		Joints8 = 128,
+		Joints4 = 1 << 6,
 	}
 }

@@ -13,6 +13,12 @@ namespace AssetRipper.Export.UnityProjects.Meshes
 		ColorFloat[]? Colors,
 		Vector2[]? UV0,
 		Vector2[]? UV1,
+		Vector2[]? UV2,
+		Vector2[]? UV3,
+		Vector2[]? UV4,
+		Vector2[]? UV5,
+		Vector2[]? UV6,
+		Vector2[]? UV7,
 		BoneWeight4[]? Skin,
 		uint[] ProcessedIndexBuffer,
 		IMesh Mesh)
@@ -39,7 +45,16 @@ namespace AssetRipper.Export.UnityProjects.Meshes
 				{
 					if (UV1 != null && UV1.Length == Vertices.Length)
 					{
-						meshType |= GlbMeshType.Texture2;
+						if (UV2 != null && UV2.Length == Vertices.Length)
+						{
+							//TODO: Not implemented yet. Defines a vertex with up to 8 UV channels.
+							//meshType |= GlbMeshType.TextureN;
+							meshType |= GlbMeshType.Texture2;
+						}
+						else
+						{
+							meshType |= GlbMeshType.Texture2;
+						}
 					}
 					else
 					{
@@ -107,12 +122,12 @@ namespace AssetRipper.Export.UnityProjects.Meshes
 				out BoneWeight4[]? skin,
 				out Vector2[]? uv0,
 				out Vector2[]? uv1,
-				out Vector2[]? _, //uv2
-				out Vector2[]? _, //uv3
-				out Vector2[]? _, //uv4
-				out Vector2[]? _, //uv5
-				out Vector2[]? _, //uv6
-				out Vector2[]? _, //uv7
+				out Vector2[]? uv2,
+				out Vector2[]? uv3,
+				out Vector2[]? uv4,
+				out Vector2[]? uv5,
+				out Vector2[]? uv6,
+				out Vector2[]? uv7,
 				out _, //bindpose
 				out uint[] processedIndexBuffer);
 
@@ -123,7 +138,7 @@ namespace AssetRipper.Export.UnityProjects.Meshes
 			}
 			else
 			{
-				meshData = new MeshData(vertices, normals, tangents, colors, uv0, uv1, skin, processedIndexBuffer, mesh);
+				meshData = new MeshData(vertices, normals, tangents, colors, uv0, uv1, uv2, uv3, uv4, uv5, uv6, uv7, skin, processedIndexBuffer, mesh);
 				return true;
 			}
 		}
