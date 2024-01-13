@@ -223,12 +223,25 @@ namespace AssetRipper.Export.UnityProjects.Meshes
 							primitiveBuilder.AddLine(
 								GetVertex<TvG, TvM, TvS>(meshData, meshData.ProcessedIndexBuffer[firstIndex + l + 1], positionTransform, normalTransform, tangentTransform),
 								GetVertex<TvG, TvM, TvS>(meshData, meshData.ProcessedIndexBuffer[firstIndex + l], positionTransform, normalTransform, tangentTransform));
+							//The vertex order is currently flipped because triangle and quad vertices need their order flipped, but is that still true for lines?
 						}
 					}
 					break;
 
 				case MeshTopology.LineStrip:
-					Logger.Warning(LogCategory.Export, "LineStrip is not yet supported for GLB mesh export.");
+					//First two indices form a line, and then each new index connects a new vertex to the existing line strip.
+					//https://docs.unity3d.com/ScriptReference/MeshTopology.LineStrip.html
+					if (indexCount > 1)
+					{
+						VertexBuilder<TvG, TvM, TvS> previousVertex = GetVertex<TvG, TvM, TvS>(meshData, meshData.ProcessedIndexBuffer[firstIndex], positionTransform, normalTransform, tangentTransform);
+						for (int l = 1; l < indexCount; l++)
+						{
+							VertexBuilder<TvG, TvM, TvS> currentVertex = GetVertex<TvG, TvM, TvS>(meshData, meshData.ProcessedIndexBuffer[firstIndex + l], positionTransform, normalTransform, tangentTransform);
+							primitiveBuilder.AddLine(currentVertex, previousVertex);
+							//The vertex order is currently flipped because triangle and quad vertices need their order flipped, but is that still true for lines?
+							previousVertex = currentVertex;
+						}
+					}
 					break;
 
 				case MeshTopology.Points:
