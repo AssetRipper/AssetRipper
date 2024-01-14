@@ -9,9 +9,11 @@ using AssetRipper.SourceGenerated.Classes.ClassID_108;
 using AssetRipper.SourceGenerated.Classes.ClassID_1120;
 using AssetRipper.SourceGenerated.Classes.ClassID_157;
 using AssetRipper.SourceGenerated.Classes.ClassID_218;
+using AssetRipper.SourceGenerated.Classes.ClassID_23;
 using AssetRipper.SourceGenerated.Classes.ClassID_25;
 using AssetRipper.SourceGenerated.Classes.ClassID_258;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
+using AssetRipper.SourceGenerated.Classes.ClassID_33;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.LightmapData;
 using AssetRipper.SourceGenerated.Subclasses.RendererData;
@@ -105,8 +107,9 @@ namespace AssetRipper.Processing
 
 		private static void AddRenderer(ILightingDataAsset lightingDataAsset, IRenderer renderer)
 		{
+			//-1 indicates that it's not part of the lightmap.
 			ushort lightmapIndex = renderer.GetLightmapIndex();
-			if (lightmapIndex != ushort.MaxValue || renderer.LightmapIndexDynamic_C25 != ushort.MaxValue)
+			if (lightmapIndex != ushort.MaxValue)// || renderer.LightmapIndexDynamic_C25 != ushort.MaxValue)
 			{
 				//Scene object identifiers for the renderer associated with each value in the lightmapped renderer data array
 				SceneObjectIdentifier identifier = lightingDataAsset.LightmappedRendererDataIDs.AddNew();
@@ -115,9 +118,14 @@ namespace AssetRipper.Processing
 				//The lightmap index, lightmap uv scale/offset value, etc
 				IRendererData rendererData = lightingDataAsset.LightmappedRendererData.AddNew();
 				rendererData.LightmapIndex = lightmapIndex;
-				rendererData.LightmapIndexDynamic = renderer.LightmapIndexDynamic_C25;
+
+				//This seems to crash the editor when it's not set to -1.
+				//See: https://github.com/AssetRipper/AssetRipper/issues/811
+				rendererData.LightmapIndexDynamic = ushort.MaxValue;//renderer.LightmapIndexDynamic_C25;
+
 				rendererData.LightmapST.CopyValues(renderer.LightmapTilingOffset_C25);
 				rendererData.LightmapSTDynamic.CopyValues(renderer.LightmapTilingOffsetDynamic_C25);
+				rendererData.UvMesh.SetAsset(lightingDataAsset.Collection, renderer.GameObject_C25P?.TryGetComponent<IMeshFilter>()?.MeshP);
 			}
 			else
 			{
@@ -127,7 +135,8 @@ namespace AssetRipper.Processing
 
 		private static void AddTerrain(ILightingDataAsset lightingDataAsset, ITerrain terrain)
 		{
-			if (terrain.LightmapIndex != ushort.MaxValue || terrain.LightmapIndexDynamic != ushort.MaxValue)
+			//-1 indicates that it's not part of the lightmap.
+			if (terrain.LightmapIndex != ushort.MaxValue)// || terrain.LightmapIndexDynamic != ushort.MaxValue)
 			{
 				//Scene object identifiers for the terrain associated with each value in the lightmapped renderer data array
 				SceneObjectIdentifier identifier = lightingDataAsset.LightmappedRendererDataIDs.AddNew();
@@ -136,7 +145,11 @@ namespace AssetRipper.Processing
 				//The lightmap index, lightmap uv scale/offset value, etc
 				IRendererData rendererData = lightingDataAsset.LightmappedRendererData.AddNew();
 				rendererData.LightmapIndex = terrain.LightmapIndex;
-				rendererData.LightmapIndexDynamic = terrain.LightmapIndexDynamic;
+
+				//This seems to crash the editor when it's not set to -1.
+				//See: https://github.com/AssetRipper/AssetRipper/issues/811
+				rendererData.LightmapIndexDynamic = ushort.MaxValue;//terrain.LightmapIndexDynamic;
+
 				rendererData.LightmapST.CopyValues(terrain.LightmapTilingOffset);
 				rendererData.LightmapSTDynamic.CopyValues(terrain.LightmapTilingOffsetDynamic);
 
@@ -158,6 +171,7 @@ namespace AssetRipper.Processing
 			SceneObjectIdentifier identifier = lightingDataAsset.Lights.AddNew();
 			identifier.TargetObjectReference = light;
 
+			//Information about whether a light is baked or not
 			lightingDataAsset.LightBakingOutputs?.AddNew().CopyValues(light.BakingOutput);
 		}
 
