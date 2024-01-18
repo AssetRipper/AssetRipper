@@ -9,7 +9,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="AssetRipper.HashAlgorithms" Version="1.0.0" />
-		<PackageReference Include="AssetRipper.Mining.PredefinedAssets" Version="1.0.0" />
+		<PackageReference Include="AssetRipper.Mining.PredefinedAssets" Version="1.1.1" />
 		<PackageReference Include="AssetRipper.SharpGLTF.Toolkit" Version="1.0.2" />
 		<PackageReference Include="AssetRipper.TextureDecoder" Version="2.1.1" />
 		<PackageReference Include="AssetRipper.Tpk" Version="1.0.0" />
