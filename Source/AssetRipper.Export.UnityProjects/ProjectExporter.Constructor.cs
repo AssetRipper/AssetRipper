@@ -190,9 +190,9 @@ partial class ProjectExporter
 		//Animator Controller
 		OverrideExporter<IUnityObjectBase>(new AnimatorControllerExporter());
 
-		if (!Settings.IgnoreEngineAssets)
-		{
-			OverrideExporter<IUnityObjectBase>(EngineAssetsExporter.CreateFromEmbeddedData(Settings.Version));
-		}
+		//Engine assets
+		OverrideExporter<IUnityObjectBase>(Settings.SingletonData.TryGetValue(nameof(EngineAssetsExporter), out string? engineAssetsJson)
+			? EngineAssetsExporter.CreateFromJsonText(engineAssetsJson)
+			: EngineAssetsExporter.CreateFromEmbeddedData(Settings.Version));
 	}
 }

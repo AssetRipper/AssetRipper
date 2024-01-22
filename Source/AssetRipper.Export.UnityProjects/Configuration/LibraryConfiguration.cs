@@ -1,5 +1,7 @@
-﻿using AssetRipper.Import.Configuration;
+﻿using AssetRipper.Export.UnityProjects.EngineAssets;
+using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Logging;
+using AssetRipper.Mining.PredefinedAssets;
 
 namespace AssetRipper.Export.UnityProjects.Configuration
 {
@@ -42,7 +44,20 @@ namespace AssetRipper.Export.UnityProjects.Configuration
 		/// </summary>
 		public TextExportMode TextExportMode { get; set; }
 		public bool EnablePrefabOutlining { get; set; }
-		public bool IgnoreEngineAssets { get; set; }
+		public bool IgnoreEngineAssets
+		{
+			get
+			{
+				return SingletonData[nameof(EngineAssetsExporter)] is not null;
+			}
+			set
+			{
+				SingletonData[nameof(EngineAssetsExporter)] = value ? EmptyEngineData : null;
+			}
+		}
+		private static string EmptyEngineData { get; } = new EngineResourceData().ToJson();
+		public SingletonDataStorage SingletonData { get; } = new();
+		public ListDataStorage ListData { get; } = new();
 
 		public override void ResetToDefaultValues()
 		{
@@ -58,6 +73,8 @@ namespace AssetRipper.Export.UnityProjects.Configuration
 			TextExportMode = TextExportMode.Parse;
 			EnablePrefabOutlining = false;
 			IgnoreEngineAssets = false;
+			SingletonData.Clear();
+			ListData.Clear();
 		}
 
 		public override void LogConfigurationValues()
