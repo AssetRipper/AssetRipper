@@ -1,5 +1,4 @@
 using AssetRipper.Assets;
-using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.Utils;
 using AssetRipper.Mining.PredefinedAssets;
 using AssetRipper.Processing.Textures;
@@ -9,6 +8,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.Tpk;
 using AssetRipper.Tpk.EngineAssets;
+using AssetType = AssetRipper.IO.Files.AssetType;
 
 namespace AssetRipper.Export.UnityProjects.EngineAssets;
 

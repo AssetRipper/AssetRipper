@@ -154,7 +154,8 @@ public static class EngineAssetsFactory
 		return new Mesh()
 		{
 			Name = mesh.Name,
-			VertexCount = mesh.VertexData.VertexCount,
+			VertexCount = (int)mesh.VertexData.VertexCount,
+			SubMeshCount = mesh.SubMeshes.Count,
 		};
 	}
 

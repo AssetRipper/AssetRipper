@@ -351,6 +351,7 @@ namespace AssetRipper.Processing.AnimationClips
 							//Binary analysis may be required.
 							//Example failed attributes:
 							//0xF781B1D9 (4152472025)
+							//0x4CB2F934 (1286797620)
 							//https://github.com/AssetRipper/AssetRipper/issues/1047
 						}
 					}

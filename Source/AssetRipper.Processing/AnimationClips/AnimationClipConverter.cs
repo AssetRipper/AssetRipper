@@ -149,7 +149,7 @@ namespace AssetRipper.Processing.AnimationClips
 
 			ReadOnlySpan<float> slopeValues = [0, 0, 0, 0]; // no slopes - 0 values
 
-			int streamCount = (int)clip.StreamedClip.CurveCount;
+			int streamCount = clip.StreamedClip.CurveCount();
 			for (int frameIndex = 0; frameIndex < dense.FrameCount; frameIndex++)
 			{
 				float time = frameIndex / dense.SampleRate;
@@ -188,7 +188,7 @@ namespace AssetRipper.Processing.AnimationClips
 
 			ReadOnlySpan<float> slopeValues = [0, 0, 0, 0]; // no slopes - 0 values
 
-			int streamCount = (int)clip.StreamedClip.CurveCount;
+			int streamCount = clip.StreamedClip.CurveCount();
 			int denseCount = (int)clip.DenseClip.CurveCount;
 
 			// only first and last frames
@@ -573,7 +573,7 @@ namespace AssetRipper.Processing.AnimationClips
 			}
 		}
 
-		public IReadOnlyList<StreamedFrame> GenerateFramesFromStreamedClip(StreamedClip clip)
+		public IReadOnlyList<StreamedFrame> GenerateFramesFromStreamedClip(IStreamedClip clip)
 		{
 			List<StreamedFrame> frames = new();
 			Span<byte> buffer = new byte[clip.Data.Count * sizeof(uint)];
@@ -595,7 +595,7 @@ namespace AssetRipper.Processing.AnimationClips
 					|| (!BitConverter.IsLittleEndian && collection.EndianType is EndianType.BigEndian);
 			}
 
-			static void CopyDataToBuffer(StreamedClip clip, AssetCollection collection, Span<byte> buffer)
+			static void CopyDataToBuffer(IStreamedClip clip, AssetCollection collection, Span<byte> buffer)
 			{
 				if (CpuEndiannessMatchesCollection(collection))
 				{
