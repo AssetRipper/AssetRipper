@@ -82,7 +82,7 @@ public static class ScriptHashing
 	/// <param name="assemblyName">The name of the assembly (without any file extension) encoded as UTF8.</param>
 	/// <param name="namespace">The namespace of the script encoded as UTF8.</param>
 	/// <param name="className">The name of the script encoded as UTF8.</param>
-	public static UnityGuid ComputeScriptGuid(ReadOnlySpan<byte> assemblyName, ReadOnlySpan<byte> @namespace, ReadOnlySpan<byte> className)
+	public static UnityGuid CalculateScriptGuid(ReadOnlySpan<byte> assemblyName, ReadOnlySpan<byte> @namespace, ReadOnlySpan<byte> className)
 	{
 		int length = assemblyName.Length + @namespace.Length + className.Length;
 		Span<byte> input = length < 1024 ? stackalloc byte[length] : GC.AllocateUninitializedArray<byte>(length);
@@ -98,11 +98,11 @@ public static class ScriptHashing
 	/// <remarks>
 	/// This is for consistency. Script guid's are random when created in Unity.
 	/// </remarks>
-	public static UnityGuid ComputeScriptGuid(IMonoScript script)
+	public static UnityGuid CalculateScriptGuid(IMonoScript script)
 	{
 		//The assembly file name without any extension.
 		ReadOnlySpan<byte> assemblyName = Encoding.UTF8.GetBytes(script.GetAssemblyNameFixed());
-		return ComputeScriptGuid(assemblyName, script.Namespace.Data, script.ClassName_R.Data);
+		return CalculateScriptGuid(assemblyName, script.Namespace.Data, script.ClassName_R.Data);
 	}
 
 	/// <summary>
@@ -113,6 +113,22 @@ public static class ScriptHashing
 	/// </remarks>
 	public static UnityGuid CalculateAssemblyGuid(string assemblyName)
 	{
-		return UnityGuid.Md5Hash(FilenameUtils.RemoveAssemblyFileExtension(assemblyName));
+		return CalculateAssemblyGuidInternal(FilenameUtils.RemoveAssemblyFileExtension(assemblyName));
+	}
+
+	/// <summary>
+	/// Compute a unique hash of an assembly name and use that as the Guid for the assembly.
+	/// </summary>
+	/// <remarks>
+	/// This is for consistency. Assembly guid's are random when created in Unity.
+	/// </remarks>
+	public static UnityGuid CalculateAssemblyGuid(IMonoScript script)
+	{
+		return CalculateAssemblyGuidInternal(script.GetAssemblyNameFixed());
+	}
+
+	private static UnityGuid CalculateAssemblyGuidInternal(string assemblyName)
+	{
+		return UnityGuid.Md5Hash(assemblyName);
 	}
 }

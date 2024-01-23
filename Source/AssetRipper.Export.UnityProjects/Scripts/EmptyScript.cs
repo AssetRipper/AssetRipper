@@ -9,6 +9,11 @@ public static class EmptyScript
 		return GetContent(script.Namespace.String, script.ClassName_R.String);
 	}
 
+	internal static string GetContent(MonoScriptInfo script)
+	{
+		return GetContent(script.Namespace, script.Class);
+	}
+
 	public static string GetContent(string? @namespace, string name)
 	{
 		if (string.IsNullOrEmpty(@namespace))

@@ -1,7 +1,10 @@
 ﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Metadata;
 using AssetRipper.Export.UnityProjects.Configuration;
+using AssetRipper.Import.Structure.Assembly;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.IO.Files;
+using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 
 namespace AssetRipper.Export.UnityProjects.Scripts
@@ -22,12 +25,30 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 		public IAssemblyManager AssemblyManager { get; }
 		public ScriptExportMode ExportMode { get; }
 		internal ScriptDecompiler Decompiler { get; }
+		private bool HasDecompiled { get; set; } = false;
+		private static long MonoScriptDecompiledFileID { get; } = ExportIdHandler.GetMainExportID((int)ClassIDType.MonoScript);
+		private static UnityGuid UnityEngineGUID => new UnityGuid(0x1F55507F, 0xA1948D44, 0x4080F528, 0xC176C90E);
 
 		public bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
 			if (asset is IMonoScript script)
 			{
-				exportCollection = new ScriptExportCollection(this, script.Collection.Bundle);
+				if (HasDecompiled)
+				{
+					exportCollection = new SingleRedirectAssetExportCollection(asset, CreateExportPointer(script));
+				}
+				else
+				{
+					HasDecompiled = true;
+					if (AssemblyManager.IsSet)
+					{
+						exportCollection = new ScriptExportCollection(this, script);
+					}
+					else
+					{
+						exportCollection = new EmptyScriptExportCollection(this, script);
+					}
+				}
 				return true;
 			}
 			else
@@ -35,6 +56,21 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 				exportCollection = null;
 				return false;
 			}
+		}
+
+		public AssemblyExportType GetExportType(IMonoScript script)
+		{
+			return GetExportType(script.GetAssemblyNameFixed());
+		}
+
+		public MetaPtr CreateExportPointer(IMonoScript script)
+		{
+			return GetExportType(script) switch
+			{
+				AssemblyExportType.Decompile => new(MonoScriptDecompiledFileID, ScriptHashing.CalculateScriptGuid(script), AssetType.Meta),
+				AssemblyExportType.Skip => new(ScriptHashing.CalculateScriptFileID(script), UnityEngineGUID, AssetType.Meta),
+				_ => new(ScriptHashing.CalculateScriptFileID(script), ScriptHashing.CalculateAssemblyGuid(script), AssetType.Meta),
+			};
 		}
 
 		public AssemblyExportType GetExportType(string assemblyName)
