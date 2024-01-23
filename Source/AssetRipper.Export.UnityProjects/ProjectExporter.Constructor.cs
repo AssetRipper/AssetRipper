@@ -36,6 +36,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_156;
 using AssetRipper.SourceGenerated.Classes.ClassID_159;
 using AssetRipper.SourceGenerated.Classes.ClassID_187;
 using AssetRipper.SourceGenerated.Classes.ClassID_188;
+using AssetRipper.SourceGenerated.Classes.ClassID_189;
 using AssetRipper.SourceGenerated.Classes.ClassID_2;
 using AssetRipper.SourceGenerated.Classes.ClassID_21;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
@@ -92,10 +93,7 @@ partial class ProjectExporter
 		//Yaml Exporters
 		YamlStreamedAssetExporter streamedAssetExporter = new();
 		OverrideExporter<IMesh>(streamedAssetExporter);
-		OverrideExporter<ITexture2D>(streamedAssetExporter);//ICubemap also by inheritance
-		OverrideExporter<ITexture3D>(streamedAssetExporter);
-		OverrideExporter<ITexture2DArray>(streamedAssetExporter);
-		OverrideExporter<ICubemapArray>(streamedAssetExporter);
+		OverrideExporter<IImageTexture>(streamedAssetExporter);
 
 		//Miscellaneous exporters
 		OverrideExporter<ITextAsset>(new TextAssetExporter(Settings));
