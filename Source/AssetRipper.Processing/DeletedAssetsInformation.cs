@@ -25,6 +25,14 @@ public sealed class DeletedAssetsInformation : UnityObjectBase
 		}
 	}
 
+	public override IEnumerable<(string, PPtr)> FetchDependencies()
+	{
+		foreach (IUnityObjectBase asset in DeletedAssets)
+		{
+			yield return ($"{nameof(DeletedAssets)}[]", Collection.ForceCreatePPtr(asset));
+		}
+	}
+
 	internal void SetMainAsset()
 	{
 		MainAsset = this;

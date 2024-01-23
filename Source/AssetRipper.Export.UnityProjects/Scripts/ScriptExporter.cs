@@ -35,7 +35,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 			{
 				if (HasDecompiled)
 				{
-					exportCollection = new SingleRedirectAssetExportCollection(asset, CreateExportPointer(script));
+					exportCollection = new SingleRedirectExportCollection(asset, CreateExportPointer(script));
 				}
 				else
 				{

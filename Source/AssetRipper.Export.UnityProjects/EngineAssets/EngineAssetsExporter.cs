@@ -116,7 +116,7 @@ public class EngineAssetsExporter : IAssetExporter
 		}
 		else if (Cache.Contains(asset, out long exportID, out UnityGuid guid, out _))
 		{
-			exportCollection = new SingleRedirectAssetExportCollection(asset, exportID, guid, AssetType.Internal);
+			exportCollection = new SingleRedirectExportCollection(asset, exportID, guid, AssetType.Internal);
 			return true;
 		}
 

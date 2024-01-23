@@ -16,9 +16,9 @@ namespace AssetRipper.Export.UnityProjects;
 /// </remarks>
 /// <param name="Asset">The asset being redirected.</param>
 /// <param name="Pointer">The location of <paramref name="Asset"/>.</param>
-public sealed record class SingleRedirectAssetExportCollection(IUnityObjectBase Asset, MetaPtr Pointer) : IExportCollection
+public sealed record class SingleRedirectExportCollection(IUnityObjectBase Asset, MetaPtr Pointer) : IExportCollection
 {
-	public SingleRedirectAssetExportCollection(IUnityObjectBase asset, long fileID, UnityGuid guid, AssetType type) : this(asset, new MetaPtr(fileID, guid, type))
+	public SingleRedirectExportCollection(IUnityObjectBase asset, long fileID, UnityGuid guid, AssetType type) : this(asset, new MetaPtr(fileID, guid, type))
 	{
 	}
 
