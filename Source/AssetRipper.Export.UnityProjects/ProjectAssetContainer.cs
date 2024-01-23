@@ -31,8 +31,7 @@ namespace AssetRipper.Export.UnityProjects
 			{
 				foreach (IUnityObjectBase asset in collection.Assets)
 				{
-#warning TODO: unique asset:collection (m_assetCollections.Add)
-					m_assetCollections[asset] = collection;
+					m_assetCollections.Add(asset, collection);
 				}
 				if (collection is SceneExportCollection scene)
 				{
