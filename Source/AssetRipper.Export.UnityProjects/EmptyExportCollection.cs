@@ -14,29 +14,31 @@ namespace AssetRipper.Export.UnityProjects
 		{
 		}
 
-		public bool Export(IExportContainer container, string projectDirectory)
-		{
-			return false;
-		}
-
-		public bool Contains(IUnityObjectBase asset)
-		{
-			return false;
-		}
-
-		public long GetExportID(IExportContainer container, IUnityObjectBase asset)
+		bool IExportCollection.Export(IExportContainer container, string projectDirectory)
 		{
 			throw new NotSupportedException();
 		}
 
-		public MetaPtr CreateExportPointer(IExportContainer container, IUnityObjectBase asset, bool isLocal)
+		bool IExportCollection.Contains(IUnityObjectBase asset)
+		{
+			return false;
+		}
+
+		long IExportCollection.GetExportID(IExportContainer container, IUnityObjectBase asset)
 		{
 			throw new NotSupportedException();
 		}
 
-		public AssetCollection File => throw new NotSupportedException();
-		public TransferInstructionFlags Flags => throw new NotSupportedException();
-		public IEnumerable<IUnityObjectBase> Assets => Enumerable.Empty<IUnityObjectBase>();
-		public string Name => throw new NotSupportedException();
+		MetaPtr IExportCollection.CreateExportPointer(IExportContainer container, IUnityObjectBase asset, bool isLocal)
+		{
+			throw new NotSupportedException();
+		}
+
+		bool IExportCollection.Exportable => false;
+
+		AssetCollection IExportCollection.File => throw new NotSupportedException();
+		TransferInstructionFlags IExportCollection.Flags => throw new NotSupportedException();
+		IEnumerable<IUnityObjectBase> IExportCollection.Assets => Enumerable.Empty<IUnityObjectBase>();
+		public string Name => nameof(EmptyExportCollection);
 	}
 }

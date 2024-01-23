@@ -29,6 +29,10 @@ namespace AssetRipper.Export.UnityProjects
 		TransferInstructionFlags Flags { get; }
 		IEnumerable<IUnityObjectBase> Assets { get; }
 		IEnumerable<IUnityObjectBase> ExportableAssets => Assets;
+		/// <summary>
+		/// Does this collection save any files?
+		/// </summary>
+		bool Exportable => true;
 		string Name { get; }
 	}
 }

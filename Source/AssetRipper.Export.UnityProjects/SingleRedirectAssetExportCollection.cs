@@ -53,8 +53,10 @@ public sealed record class SingleRedirectAssetExportCollection(IUnityObjectBase 
 
 	bool IExportCollection.Export(IExportContainer container, string projectDirectory)
 	{
-		return true; //successfully redirected
+		throw new NotSupportedException();
 	}
+
+	bool IExportCollection.Exportable => false;
 
 	long IExportCollection.GetExportID(IExportContainer container, IUnityObjectBase asset)
 	{

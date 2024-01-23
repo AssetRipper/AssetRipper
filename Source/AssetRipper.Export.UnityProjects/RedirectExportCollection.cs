@@ -75,8 +75,10 @@ public sealed class RedirectExportCollection : IExportCollection
 
 	bool IExportCollection.Export(IExportContainer container, string projectDirectory)
 	{
-		return true; //successfully redirected
+		throw new NotSupportedException();
 	}
+
+	bool IExportCollection.Exportable => false;
 
 	AssetCollection IExportCollection.File => throw new NotSupportedException();
 
