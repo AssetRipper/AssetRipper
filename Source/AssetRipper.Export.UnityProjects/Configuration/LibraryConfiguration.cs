@@ -1,5 +1,4 @@
-﻿using AssetRipper.Export.UnityProjects.EngineAssets;
-using AssetRipper.Import.Configuration;
+﻿using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Logging;
 using AssetRipper.Mining.PredefinedAssets;
 
@@ -48,16 +47,21 @@ namespace AssetRipper.Export.UnityProjects.Configuration
 		{
 			get
 			{
-				return SingletonData[nameof(EngineAssetsExporter)] is not null;
+				return SingletonData[nameof(EngineResourceData)] is not null;
 			}
 			set
 			{
-				SingletonData[nameof(EngineAssetsExporter)] = value ? EmptyEngineData : null;
+				SingletonData[nameof(EngineResourceData)] = value ? EmptyEngineData : null;
 			}
 		}
 		private static string EmptyEngineData { get; } = new EngineResourceData().ToJson();
 		public SingletonDataStorage SingletonData { get; } = new();
 		public ListDataStorage ListData { get; } = new();
+
+		public LibraryConfiguration()
+		{
+			SingletonData.RegisterKey(nameof(EngineResourceData));
+		}
 
 		public override void ResetToDefaultValues()
 		{

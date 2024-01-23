@@ -17,6 +17,7 @@ using AssetRipper.Export.UnityProjects.Terrains;
 using AssetRipper.Export.UnityProjects.Textures;
 using AssetRipper.Import.AssetCreation;
 using AssetRipper.Import.Structure.Assembly.Managers;
+using AssetRipper.Mining.PredefinedAssets;
 using AssetRipper.Processing.Textures;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
@@ -190,7 +191,7 @@ partial class ProjectExporter
 	public void DoFinalOverrides(LibraryConfiguration settings)
 	{
 		//Engine assets
-		OverrideExporter<IUnityObjectBase>(settings.SingletonData.TryGetValue(nameof(EngineAssetsExporter), out string? engineAssetsJson)
+		OverrideExporter<IUnityObjectBase>(settings.SingletonData.TryGetValue(nameof(EngineResourceData), out string? engineAssetsJson)
 			? EngineAssetsExporter.CreateFromJsonText(engineAssetsJson)
 			: EngineAssetsExporter.CreateFromEmbeddedData(settings.Version));
 

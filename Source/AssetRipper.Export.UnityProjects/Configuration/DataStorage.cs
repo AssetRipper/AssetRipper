@@ -3,6 +3,9 @@
 public class DataStorage<T> where T : class
 {
 	protected readonly Dictionary<string, T> data = new();
+	private readonly HashSet<string> knownKeys = new();
+
+	public IEnumerable<string> KnownKeys => knownKeys;
 
 	public T? this[string key]
 	{
@@ -23,6 +26,11 @@ public class DataStorage<T> where T : class
 	public bool TryGetValue(string key, [NotNullWhen(true)] out T? value)
 	{
 		return data.TryGetValue(key, out value);
+	}
+
+	public void RegisterKey(string key)
+	{
+		knownKeys.Add(key);
 	}
 
 	public void Clear()
