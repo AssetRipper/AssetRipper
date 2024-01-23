@@ -5,11 +5,11 @@ using AssetRipper.Assets.Metadata;
 using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
 
-namespace AssetRipper.Export.UnityProjects.EngineAssets;
+namespace AssetRipper.Export.UnityProjects;
 
-public class RedirectExportCollection : IExportCollection
+public sealed class RedirectExportCollection : IExportCollection
 {
-	private readonly Dictionary<IUnityObjectBase, (long, UnityGuid, AssetType)> redirectionDictionary = new();
+	private readonly Dictionary<IUnityObjectBase, MetaPtr> redirectionDictionary = new();
 	private readonly Dictionary<IUnityObjectBase, AssetType> missingDictionary = new();
 
 	public IEnumerable<IUnityObjectBase> Assets
@@ -35,20 +35,11 @@ public class RedirectExportCollection : IExportCollection
 
 	public void Add(IUnityObjectBase asset, long exportID, UnityGuid guid, AssetType assetType)
 	{
-		ValidateArguments(exportID, guid);
-		redirectionDictionary.Add(asset, (exportID, guid, assetType));
+		ArgumentOutOfRangeException.ThrowIfEqual(exportID, 0);
+		ArgumentOutOfRangeException.ThrowIfEqual(guid, UnityGuid.MissingReference);
+		ArgumentOutOfRangeException.ThrowIfEqual(guid, UnityGuid.Zero);
 
-		static void ValidateArguments(long exportID, UnityGuid guid)
-		{
-			if (exportID == 0)
-			{
-				throw new ArgumentOutOfRangeException(nameof(exportID), "The export id must be nonzero.");
-			}
-			if (guid.IsZero || guid == UnityGuid.MissingReference)
-			{
-				throw new ArgumentException("The guid cannot be zero or missing.", nameof(guid));
-			}
-		}
+		redirectionDictionary.Add(asset, new MetaPtr(exportID, guid, assetType));
 	}
 
 	public void AddMissing(IUnityObjectBase asset, AssetType assetType)
@@ -68,11 +59,10 @@ public class RedirectExportCollection : IExportCollection
 			return MetaPtr.CreateMissingReference(asset.ClassID, missingAssetType);
 		}
 
-		(long exportID, UnityGuid guid, AssetType assetType) = redirectionDictionary[asset];
-		return new MetaPtr(exportID, guid, assetType);
+		return redirectionDictionary[asset];
 	}
 
-	public long GetExportID(IExportContainer container, IUnityObjectBase asset) => redirectionDictionary[asset].Item1;
+	public long GetExportID(IExportContainer container, IUnityObjectBase asset) => redirectionDictionary[asset].FileID;
 
 	public bool Contains(IUnityObjectBase asset) => redirectionDictionary.ContainsKey(asset) || missingDictionary.ContainsKey(asset);
 
