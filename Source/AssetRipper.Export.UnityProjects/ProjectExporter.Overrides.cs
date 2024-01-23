@@ -3,6 +3,7 @@ using AssetRipper.Export.UnityProjects.AnimatorControllers;
 using AssetRipper.Export.UnityProjects.Audio;
 using AssetRipper.Export.UnityProjects.AudioMixers;
 using AssetRipper.Export.UnityProjects.Configuration;
+using AssetRipper.Export.UnityProjects.DeletedAssets;
 using AssetRipper.Export.UnityProjects.EngineAssets;
 using AssetRipper.Export.UnityProjects.Meshes;
 using AssetRipper.Export.UnityProjects.Miscellaneous;
@@ -62,7 +63,7 @@ namespace AssetRipper.Export.UnityProjects;
 
 partial class ProjectExporter
 {
-	public ProjectExporter(LibraryConfiguration Settings, IAssemblyManager assemblyManager)
+	public ProjectExporter(LibraryConfiguration settings, IAssemblyManager assemblyManager)
 	{
 		OverrideExporter<IUnityObjectBase>(new DefaultYamlExporter(), true);
 
@@ -96,16 +97,16 @@ partial class ProjectExporter
 		OverrideExporter<IImageTexture>(streamedAssetExporter);
 
 		//Miscellaneous exporters
-		OverrideExporter<ITextAsset>(new TextAssetExporter(Settings));
+		OverrideExporter<ITextAsset>(new TextAssetExporter(settings));
 		OverrideExporter<IMovieTexture>(new MovieTextureAssetExporter());
 		OverrideExporter<IVideoClip>(new VideoClipExporter());
 
 		//Texture exporters
-		TextureAssetExporter textureExporter = new(Settings);
+		TextureAssetExporter textureExporter = new(settings);
 		OverrideExporter<ITexture2D>(textureExporter); //Texture2D and Cubemap
 		OverrideExporter<ISprite>(textureExporter);
 		OverrideExporter<SpriteInformationObject>(textureExporter);
-		if (Settings.SpriteExportMode == SpriteExportMode.Yaml)
+		if (settings.SpriteExportMode == SpriteExportMode.Yaml)
 		{
 			YamlSpriteExporter spriteExporter = new();
 			OverrideExporter<ISprite>(spriteExporter);
@@ -113,9 +114,9 @@ partial class ProjectExporter
 		}
 
 		//Texture Array exporters
-		if (Settings.Version.GreaterThanOrEquals(2020, 2))
+		if (settings.Version.GreaterThanOrEquals(2020, 2))
 		{
-			TextureArrayAssetExporter textureArrayExporter = new(Settings);
+			TextureArrayAssetExporter textureArrayExporter = new(settings);
 			OverrideExporter<ICubemapArray>(textureArrayExporter);
 			OverrideExporter<ITexture2DArray>(textureArrayExporter);
 			OverrideExporter<ITexture3D>(textureArrayExporter);
@@ -128,7 +129,7 @@ partial class ProjectExporter
 		OverrideExporter<ITexture>(fontAssetExporter);
 
 		//Shader exporters
-		OverrideExporter<IShader>(Settings.ShaderExportMode switch
+		OverrideExporter<IShader>(settings.ShaderExportMode switch
 		{
 			ShaderExportMode.Yaml => new YamlShaderExporter(),
 			ShaderExportMode.Disassembly => new ShaderDisassemblyExporter(),
@@ -139,13 +140,13 @@ partial class ProjectExporter
 
 		//Audio exporters
 		OverrideExporter<IAudioClip>(new YamlAudioExporter());
-		if (Settings.AudioExportFormat == AudioExportFormat.Native)
+		if (settings.AudioExportFormat == AudioExportFormat.Native)
 		{
 			OverrideExporter<IAudioClip>(new NativeAudioExporter());
 		}
-		if (AudioClipExporter.IsSupportedExportFormat(Settings.AudioExportFormat))
+		if (AudioClipExporter.IsSupportedExportFormat(settings.AudioExportFormat))
 		{
-			OverrideExporter<IAudioClip>(new AudioClipExporter(Settings));
+			OverrideExporter<IAudioClip>(new AudioClipExporter(settings));
 		}
 
 		//AudioMixer exporters
@@ -156,7 +157,7 @@ partial class ProjectExporter
 		OverrideExporter<IAudioMixerSnapshot>(audioMixerExporter);
 
 		//Mesh and Model exporters
-		if (Settings.MeshExportFormat == MeshExportFormat.Glb)
+		if (settings.MeshExportFormat == MeshExportFormat.Glb)
 		{
 			OverrideExporter<IMesh>(new GlbMeshExporter());
 			GlbModelExporter glbModelExporter = new();
@@ -166,10 +167,10 @@ partial class ProjectExporter
 		}
 
 		//Terrain and NavMesh exporters
-		switch (Settings.TerrainExportMode)
+		switch (settings.TerrainExportMode)
 		{
 			case TerrainExportMode.Heatmap:
-				OverrideExporter<ITerrainData>(new TerrainHeatmapExporter(Settings));
+				OverrideExporter<ITerrainData>(new TerrainHeatmapExporter(settings));
 				break;
 			case TerrainExportMode.Mesh:
 				OverrideExporter<ITerrainData>(new TerrainMeshExporter());
@@ -183,14 +184,21 @@ partial class ProjectExporter
 		}
 
 		//Script exporter
-		OverrideExporter<IMonoScript>(new ScriptExporter(assemblyManager, Settings));
+		OverrideExporter<IMonoScript>(new ScriptExporter(assemblyManager, settings));
 
 		//Animator Controller
 		OverrideExporter<IUnityObjectBase>(new AnimatorControllerExporter());
+	}
 
+	//These need to be absolutely last
+	public void DoFinalOverrides(LibraryConfiguration settings)
+	{
 		//Engine assets
-		OverrideExporter<IUnityObjectBase>(Settings.SingletonData.TryGetValue(nameof(EngineAssetsExporter), out string? engineAssetsJson)
+		OverrideExporter<IUnityObjectBase>(settings.SingletonData.TryGetValue(nameof(EngineAssetsExporter), out string? engineAssetsJson)
 			? EngineAssetsExporter.CreateFromJsonText(engineAssetsJson)
-			: EngineAssetsExporter.CreateFromEmbeddedData(Settings.Version));
+			: EngineAssetsExporter.CreateFromEmbeddedData(settings.Version));
+
+		//Deleted assets
+		OverrideExporter<IUnityObjectBase>(new DeletedAssetsExporter());
 	}
 }

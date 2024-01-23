@@ -81,6 +81,7 @@ namespace AssetRipper.Export.UnityProjects
 
 			ProjectExporter projectExporter = new(settings, gameData.AssemblyManager);
 			beforeExport?.Invoke(projectExporter);
+			projectExporter.DoFinalOverrides(settings);
 			projectExporter.Export(gameData.GameBundle, settings);
 
 			Logger.Info(LogCategory.Export, "Finished exporting assets");
