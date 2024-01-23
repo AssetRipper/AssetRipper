@@ -4,6 +4,7 @@ using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
+using System.Diagnostics;
 
 namespace AssetRipper.Export.UnityProjects;
 
@@ -49,10 +50,7 @@ public sealed class RedirectExportCollection : IExportCollection
 
 	public MetaPtr CreateExportPointer(IExportContainer container, IUnityObjectBase asset, bool isLocal)
 	{
-		if (isLocal)
-		{
-			throw new NotSupportedException();
-		}
+		ThrowIfLocal(isLocal);
 
 		if (missingDictionary.TryGetValue(asset, out AssetType missingAssetType))
 		{
@@ -60,6 +58,15 @@ public sealed class RedirectExportCollection : IExportCollection
 		}
 
 		return redirectionDictionary[asset];
+
+		[StackTraceHidden]
+		static void ThrowIfLocal(bool isLocal)
+		{
+			if (isLocal)
+			{
+				throw new NotSupportedException();
+			}
+		}
 	}
 
 	public long GetExportID(IExportContainer container, IUnityObjectBase asset) => redirectionDictionary[asset].FileID;
