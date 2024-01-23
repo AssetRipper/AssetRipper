@@ -7,6 +7,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="AssetRipper.CIL" Version="1.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="..\AssetRipper.Import\AssetRipper.Import.csproj" />
 	</ItemGroup>
 
