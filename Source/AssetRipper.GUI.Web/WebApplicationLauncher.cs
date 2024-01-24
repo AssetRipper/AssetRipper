@@ -13,13 +13,49 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
+using System.CommandLine;
 using System.Diagnostics;
 
 namespace AssetRipper.GUI.Web;
 
 public static class WebApplicationLauncher
 {
-	public static void Launch()
+	public static void Launch(string[] args)
+	{
+		RootCommand rootCommand = new() { Description = "AssetRipper" };
+
+		Option<int> portOption = new Option<int>(
+			name: "--port",
+			description: "If nonzero, the application will attempt to host on this port, instead of finding a random unused port.",
+			getDefaultValue: () => 0);
+		rootCommand.AddOption(portOption);
+
+		Option<bool> launchBrowserOption = new Option<bool>(
+			name: "--launch-browser",
+			description: "If true, a browser window will be launched automatically.",
+			getDefaultValue: () => true);
+		rootCommand.AddOption(launchBrowserOption);
+
+		bool shouldRun = false;
+		int port = default;
+		bool launchBrowser = default;
+
+		rootCommand.SetHandler((int portParsed, bool launchBrowserParsed) =>
+		{
+			shouldRun = true;
+			port = portParsed;
+			launchBrowser = launchBrowserParsed;
+		}, portOption, launchBrowserOption);
+
+		rootCommand.Invoke(args);
+
+		if (shouldRun)
+		{
+			Launch(port, launchBrowser);
+		}
+	}
+
+	public static void Launch(int port = 0, bool launchBrowser = true)
 	{
 		WelcomeMessage.Print();
 
@@ -36,7 +72,7 @@ public static class WebApplicationLauncher
 #endif
 		});
 
-		builder.WebHost.UseUrls("http://127.0.0.1:0");
+		builder.WebHost.UseUrls($"http://127.0.0.1:{port}");
 
 		builder.Services.AddTransient<ErrorHandlingMiddleware>(static (_) => new());
 		builder.Services.ConfigureHttpJsonOptions(options =>
@@ -52,14 +88,17 @@ public static class WebApplicationLauncher
 #if !DEBUG
 		app.UseMiddleware<ErrorHandlingMiddleware>();
 #endif
-		app.Lifetime.ApplicationStarted.Register(() =>
+		if (launchBrowser)
 		{
-			string? address = app.Services.GetRequiredService<IServer>().Features.Get<IServerAddressesFeature>()?.Addresses.FirstOrDefault();
-			if (address is not null)
+			app.Lifetime.ApplicationStarted.Register(() =>
 			{
-				OpenUrl(address);
-			}
-		});
+				string? address = app.Services.GetRequiredService<IServer>().Features.Get<IServerAddressesFeature>()?.Addresses.FirstOrDefault();
+				if (address is not null)
+				{
+					OpenUrl(address);
+				}
+			});
+		}
 
 		//Static files
 		app.MapGet("/favicon.ico", async () =>
