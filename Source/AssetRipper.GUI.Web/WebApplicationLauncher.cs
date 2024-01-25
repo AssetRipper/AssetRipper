@@ -20,6 +20,12 @@ namespace AssetRipper.GUI.Web;
 
 public static class WebApplicationLauncher
 {
+	private static class Defaults
+	{
+		public const int Port = 0;
+		public const bool LaunchBrowser = true;
+	}
+
 	public static void Launch(string[] args)
 	{
 		RootCommand rootCommand = new() { Description = "AssetRipper" };
@@ -27,18 +33,18 @@ public static class WebApplicationLauncher
 		Option<int> portOption = new Option<int>(
 			name: "--port",
 			description: "If nonzero, the application will attempt to host on this port, instead of finding a random unused port.",
-			getDefaultValue: () => 0);
+			getDefaultValue: () => Defaults.Port);
 		rootCommand.AddOption(portOption);
 
 		Option<bool> launchBrowserOption = new Option<bool>(
 			name: "--launch-browser",
 			description: "If true, a browser window will be launched automatically.",
-			getDefaultValue: () => true);
+			getDefaultValue: () => Defaults.LaunchBrowser);
 		rootCommand.AddOption(launchBrowserOption);
 
 		bool shouldRun = false;
-		int port = default;
-		bool launchBrowser = default;
+		int port = Defaults.Port;
+		bool launchBrowser = Defaults.LaunchBrowser;
 
 		rootCommand.SetHandler((int portParsed, bool launchBrowserParsed) =>
 		{
@@ -55,7 +61,7 @@ public static class WebApplicationLauncher
 		}
 	}
 
-	public static void Launch(int port = 0, bool launchBrowser = true)
+	public static void Launch(int port = Defaults.Port, bool launchBrowser = Defaults.LaunchBrowser)
 	{
 		WelcomeMessage.Print();
 
