@@ -34,6 +34,7 @@ footer {
 	margin-top: auto; /* Push the footer to the bottom of the container */
 }
 
-.disabled {
+/* This lets the dropdown descriptions in the settings menu render correctly. */
+.dropdown-description.disabled {
 	display: none; /* Hide disabled elements */
 }

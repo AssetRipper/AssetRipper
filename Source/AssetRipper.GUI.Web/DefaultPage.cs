@@ -83,16 +83,23 @@ public abstract class DefaultPage : HtmlPage
 							WriteDropdownButton(writer, Localization.MenuExport);
 							using (new Ul(writer).WithClass("dropdown-menu").End())
 							{
-								using (new Li(writer).End())
-								{
-									WritePostLink(writer, "/Export", Localization.MenuExportAll, "dropdown-item");
-								}
 								if (GameFileLoader.IsLoaded)
 								{
+									using (new Li(writer).End())
+									{
+										WritePostLink(writer, "/Export", Localization.MenuExportAll, "dropdown-item");
+									}
 									string version = GameFileLoader.GameBundle.GetMaxUnityVersion().ToString();
 									using (new Li(writer).End())
 									{
 										new A(writer).WithClass("dropdown-item").WithNewTabAttributes().WithHref($"unityhub://{version}").Close(version);
+									}
+								}
+								else
+								{
+									using (new Li(writer).End())
+									{
+										new A(writer).WithClass("dropdown-item disabled").WithCustomAttribute("aria-diabled", "true").Close(Localization.MenuExportAll);
 									}
 								}
 							}

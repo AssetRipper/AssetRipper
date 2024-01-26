@@ -194,7 +194,10 @@ public sealed partial class SettingsPage : DefaultPage
 		for (int i = 0; i < items.Count; i++)
 		{
 			DropDownItem<T> item = items[i];
-			new P(writer).WithId(CreateUniqueID(id, i)).Close(item.Description);
+			new P(writer)
+				.WithClass("dropdown-description")//Used for CSS selecting
+				.WithId(CreateUniqueID(id, i))
+				.Close(item.Description);
 		}
 
 		static string CreateUniqueID(string selectID, int index)
