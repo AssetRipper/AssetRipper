@@ -30,7 +30,8 @@ public sealed class ViewPage : DefaultPage
 				new DevelopmentTab(Asset),
 			];
 
-		HtmlTab.WriteTabs(writer, tabs);
+		HtmlTab.WriteNavigation(writer, tabs);
+		HtmlTab.WriteContent(writer, tabs);
 	}
 
 	public static Task HandlePostRequest(HttpContext context)
