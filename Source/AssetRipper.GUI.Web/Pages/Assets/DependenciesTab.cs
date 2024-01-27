@@ -4,7 +4,7 @@ using AssetRipper.GUI.Web.Paths;
 
 namespace AssetRipper.GUI.Web.Pages.Assets;
 
-internal sealed class DependenciesTab(IUnityObjectBase asset) : AssetTab
+internal sealed class DependenciesTab(IUnityObjectBase asset) : HtmlTab
 {
 	public override string DisplayName => Localization.AssetTabDependencies;
 	public override string HtmlName => "dependencies";

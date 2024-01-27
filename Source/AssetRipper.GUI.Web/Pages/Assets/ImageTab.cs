@@ -12,7 +12,7 @@ using DirectBitmap = AssetRipper.Export.UnityProjects.Utils.DirectBitmap<AssetRi
 
 namespace AssetRipper.GUI.Web.Pages.Assets;
 
-internal sealed class ImageTab : AssetTab
+internal sealed class ImageTab : HtmlTab
 {
 	private readonly DirectBitmap<ColorBGRA32, byte> bitmap;
 

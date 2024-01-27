@@ -4,7 +4,7 @@ using AssetRipper.Export.UnityProjects;
 
 namespace AssetRipper.GUI.Web.Pages.Assets;
 
-internal sealed class YamlTab(IUnityObjectBase asset) : AssetTab
+internal sealed class YamlTab(IUnityObjectBase asset) : HtmlTab
 {
 	public string Text { get; } = GetYamlString(asset);
 	public string FileName { get; } = $"{asset.GetBestName()}.asset";

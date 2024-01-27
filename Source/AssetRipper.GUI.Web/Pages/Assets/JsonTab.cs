@@ -3,7 +3,7 @@ using AssetRipper.Export.PrimaryContent;
 
 namespace AssetRipper.GUI.Web.Pages.Assets;
 
-internal sealed class JsonTab(IUnityObjectBase asset) : AssetTab
+internal sealed class JsonTab(IUnityObjectBase asset) : HtmlTab
 {
 	public string Text { get; } = GetJsonString(asset);
 	public string FileName { get; } = $"{asset.GetBestName()}.json";

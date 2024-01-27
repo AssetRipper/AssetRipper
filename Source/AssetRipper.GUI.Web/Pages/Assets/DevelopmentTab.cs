@@ -2,13 +2,11 @@
 
 namespace AssetRipper.GUI.Web.Pages.Assets;
 
-internal sealed class DevelopmentTab(IUnityObjectBase asset) : AssetTab
+internal sealed class DevelopmentTab(IUnityObjectBase asset) : HtmlTab
 {
 	public override string DisplayName => Localization.AssetTabDevelopment;
 
 	public override string HtmlName => "development";
-
-	public override bool Enabled => true;
 
 	public override void Write(TextWriter writer)
 	{

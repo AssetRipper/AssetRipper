@@ -4,7 +4,7 @@ using AssetRipper.Import.AssetCreation;
 
 namespace AssetRipper.GUI.Web.Pages.Assets;
 
-internal sealed class HexTab : AssetTab
+internal sealed class HexTab : HtmlTab
 {
 	public byte[] Data { get; }
 

@@ -18,11 +18,10 @@ using AssetRipper.SourceGenerated.Extensions;
 
 namespace AssetRipper.GUI.Web.Pages.Assets;
 
-internal sealed class InformationTab(IUnityObjectBase asset, AssetPath path) : AssetTab
+internal sealed class InformationTab(IUnityObjectBase asset, AssetPath path) : HtmlTab
 {
 	public override string DisplayName => Localization.AssetTabInformation;
 	public override string HtmlName => "information";
-	public override bool Enabled => true;
 
 	public override void Write(TextWriter writer)
 	{

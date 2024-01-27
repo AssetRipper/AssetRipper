@@ -4,7 +4,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_83;
 
 namespace AssetRipper.GUI.Web.Pages.Assets;
 
-internal sealed class AudioTab : AssetTab
+internal sealed class AudioTab : HtmlTab
 {
 	public string Source { get; }
 

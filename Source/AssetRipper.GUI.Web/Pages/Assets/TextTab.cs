@@ -12,7 +12,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_49;
 
 namespace AssetRipper.GUI.Web.Pages.Assets;
 
-internal sealed class TextTab : AssetTab
+internal sealed class TextTab : HtmlTab
 {
 	public string Text { get; }
 

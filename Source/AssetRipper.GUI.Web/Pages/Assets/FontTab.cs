@@ -3,7 +3,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_128;
 
 namespace AssetRipper.GUI.Web.Pages.Assets;
 
-internal sealed class FontTab : AssetTab
+internal sealed class FontTab : HtmlTab
 {
 	public byte[] Data { get; }
 
