@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Assets;
+using AssetRipper.Import.Structure.Assembly;
 using AssetRipper.Mining.PredefinedAssets;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
@@ -337,7 +338,7 @@ public sealed class PredefinedAssetCache
 
 	public bool Contains(IMonoScript monoScript, out long fileID, out UnityGuid guid, out AssetType assetType)
 	{
-		if (monoScriptDictionary.TryGetValue(new MonoScriptKey(monoScript.AssemblyName, monoScript.Namespace, monoScript.ClassName_R), out AssetMetaPtr assetMetaPtr))
+		if (monoScriptDictionary.TryGetValue(new MonoScriptKey(monoScript.GetAssemblyNameFixed(), monoScript.Namespace, monoScript.ClassName_R), out AssetMetaPtr assetMetaPtr))
 		{
 			(fileID, guid, assetType) = assetMetaPtr;
 			return true;
