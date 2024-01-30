@@ -16,4 +16,9 @@ internal static class HtmlExtensions
 	{
 		return selected ? element.WithSelected() : element;
 	}
+
+	public static Div WithTextCenter(this Div element)
+	{
+		return element.WithClass("text-center");
+	}
 }

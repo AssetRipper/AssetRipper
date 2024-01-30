@@ -25,6 +25,12 @@ internal static class Dialogs
 				return Nfd.OpenDialogMultiple(out paths, filters, defaultPath);
 			}
 		}
+
+		public static bool TryGetUserInput([NotNullWhen(true)] out string[]? paths, IDictionary<string, string>? filters = null, string? defaultPath = null)
+		{
+			NfdStatus status = GetUserInput(out paths, filters, defaultPath);
+			return status == NfdStatus.Ok && paths is not null;
+		}
 	}
 
 	public static class OpenFile
@@ -43,6 +49,12 @@ internal static class Dialogs
 			{
 				return Nfd.OpenDialog(out path, filters, defaultPath);
 			}
+		}
+
+		public static bool TryGetUserInput([NotNullWhen(true)] out string? path, IDictionary<string, string>? filters = null, string? defaultPath = null)
+		{
+			NfdStatus status = GetUserInput(out path, filters, defaultPath);
+			return status == NfdStatus.Ok && path is not null;
 		}
 	}
 

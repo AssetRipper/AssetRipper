@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Logging;
 using AssetRipper.Mining.PredefinedAssets;
+using System.Diagnostics;
 
 namespace AssetRipper.Export.UnityProjects.Configuration
 {
@@ -60,6 +61,7 @@ namespace AssetRipper.Export.UnityProjects.Configuration
 
 		public LibraryConfiguration()
 		{
+			AddDebugData();
 			SingletonData.RegisterKey(nameof(EngineResourceData));
 		}
 
@@ -95,6 +97,15 @@ namespace AssetRipper.Export.UnityProjects.Configuration
 			Logger.Info(LogCategory.General, $"{nameof(TextExportMode)}: {TextExportMode}");
 			Logger.Info(LogCategory.General, $"{nameof(EnablePrefabOutlining)}: {EnablePrefabOutlining}");
 			Logger.Info(LogCategory.General, $"{nameof(IgnoreEngineAssets)}: {IgnoreEngineAssets}");
+		}
+
+		[Conditional("DEBUG")]
+		private void AddDebugData()
+		{
+			SingletonData["README"] = "This is a singleton entry. It is used to store information that can be contained in a single file.";
+			ListData["README"] = ["This is a list entry. It is used to store information that might be contained in multiple files."];
+			ListData["Fibonacci"] = ["1", "1", "2", "3", "5", "8", "13", "21", "34", "55"];
+			ListData.RegisterKey("Unused Key");
 		}
 	}
 }

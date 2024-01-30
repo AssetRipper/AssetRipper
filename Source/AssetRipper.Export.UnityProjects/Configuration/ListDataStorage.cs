@@ -13,4 +13,18 @@ public sealed class ListDataStorage : DataStorage<List<string>>
 			data[key] = [value];
 		}
 	}
+
+	public List<string> GetOrAdd(string key)
+	{
+		if (data.TryGetValue(key, out List<string>? list))
+		{
+			return list;
+		}
+		else
+		{
+			List<string> newList = new();
+			data[key] = newList;
+			return newList;
+		}
+	}
 }

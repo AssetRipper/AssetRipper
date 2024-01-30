@@ -18,6 +18,7 @@ public class DataStorage<T> where T : class
 			}
 			else
 			{
+				RegisterKey(key);
 				data[key] = value;
 			}
 		}

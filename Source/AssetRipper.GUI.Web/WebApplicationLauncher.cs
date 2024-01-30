@@ -132,6 +132,18 @@ public static class WebApplicationLauncher
 		app.MapGet("/Commands", () => CommandsPage.Instance.ToResult());
 		app.MapGet("/Privacy", () => PrivacyPage.Instance.ToResult());
 		app.MapGet("/Licenses", () => LicensesPage.Instance.ToResult());
+
+		app.MapGet("/ConfigurationFiles", (context) =>
+		{
+			context.Response.DisableCaching();
+			return ConfigurationFilesPage.Instance.WriteToResponse(context.Response);
+		});
+		app.MapPost("/ConfigurationFiles/Singleton/Add", ConfigurationFilesPage.HandleSingletonAddPostRequest);
+		app.MapPost("/ConfigurationFiles/Singleton/Remove", ConfigurationFilesPage.HandleSingletonRemovePostRequest);
+		app.MapPost("/ConfigurationFiles/List/Add", ConfigurationFilesPage.HandleListAddPostRequest);
+		app.MapPost("/ConfigurationFiles/List/Remove", ConfigurationFilesPage.HandleListRemovePostRequest);
+		app.MapPost("/ConfigurationFiles/List/Replace", ConfigurationFilesPage.HandleListReplacePostRequest);
+
 		app.MapGet("/Settings/Edit", (context) =>
 		{
 			context.Response.DisableCaching();

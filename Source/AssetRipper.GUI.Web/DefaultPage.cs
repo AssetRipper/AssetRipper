@@ -20,106 +20,8 @@ public abstract class DefaultPage : HtmlPage
 			}
 			using (new Body(writer).WithCustomAttribute("data-bs-theme", "dark").End())
 			{
-				using (new Header(writer).End())
-				{
-					using (new Div(writer).WithClass("btn-group").End())
-					{
-						using (new Div(writer).WithClass("btn-group dropdown").End())
-						{
-							WriteDropdownButton(writer, Localization.MenuFile);
-							using (new Ul(writer).WithClass("dropdown-menu").End())
-							{
-								using (new Li(writer).End())
-								{
-									WritePostLink(writer, "/LoadFile", Localization.MenuFileOpenFile, "dropdown-item");
-								}
-								using (new Li(writer).End())
-								{
-									WritePostLink(writer, "/LoadFolder", Localization.MenuFileOpenFolder, "dropdown-item");
-								}
-								using (new Li(writer).End())
-								{
-									WritePostLink(writer, "/Reset", Localization.MenuFileReset, "dropdown-item");
-								}
-								using (new Li(writer).End())
-								{
-									new Hr(writer).WithClass("dropdown-divider").Close();
-								}
-								using (new Li(writer).End())
-								{
-									new A(writer).WithClass("dropdown-item").WithHref("/Settings/Edit").Close(Localization.Settings);
-								}
-							}
-						}
-						using (new Div(writer).WithClass("btn-group dropdown").End())
-						{
-							WriteDropdownButton(writer, "View");
-							using (new Ul(writer).WithClass("dropdown-menu").End())
-							{
-								using (new Li(writer).End())
-								{
-									new A(writer).WithClass("dropdown-item").WithHref("/").Close(Localization.Home);
-								}
-								using (new Li(writer).End())
-								{
-									new A(writer).WithClass("dropdown-item").WithHref("/Settings/Edit").Close(Localization.Settings);
-								}
-								using (new Li(writer).End())
-								{
-									new A(writer).WithClass("dropdown-item").WithHref("/Commands").Close(Localization.Commands);
-								}
-								using (new Li(writer).End())
-								{
-									new A(writer).WithClass("dropdown-item").WithHref("/Privacy").Close(Localization.Privacy);
-								}
-								using (new Li(writer).End())
-								{
-									new A(writer).WithClass("dropdown-item").WithHref("/Licenses").Close(Localization.Licenses);
-								}
-							}
-						}
-						using (new Div(writer).WithClass("btn-group dropdown").End())
-						{
-							WriteDropdownButton(writer, Localization.MenuExport);
-							using (new Ul(writer).WithClass("dropdown-menu").End())
-							{
-								if (GameFileLoader.IsLoaded)
-								{
-									using (new Li(writer).End())
-									{
-										WritePostLink(writer, "/Export", Localization.MenuExportAll, "dropdown-item");
-									}
-									string version = GameFileLoader.GameBundle.GetMaxUnityVersion().ToString();
-									using (new Li(writer).End())
-									{
-										new A(writer).WithClass("dropdown-item").WithNewTabAttributes().WithHref($"unityhub://{version}").Close(version);
-									}
-								}
-								else
-								{
-									using (new Li(writer).End())
-									{
-										new A(writer).WithClass("dropdown-item disabled").WithCustomAttribute("aria-diabled", "true").Close(Localization.MenuExportAll);
-									}
-								}
-							}
-						}
-						using (new Div(writer).WithClass("btn-group dropdown").End())
-						{
-							WriteDropdownButton(writer, Localization.MenuLanguage);
-							using (new Ul(writer).WithClass("dropdown-menu").End())
-							{
-								foreach ((string code, string name) in Localizations.LocalizationLoader.LanguageNameDictionary)
-								{
-									using (new Li(writer).End())
-									{
-										WritePostLink(writer, $"/Localization?code={code}", name, "dropdown-item");
-									}
-								}
-							}
-						}
-					}
-				}
+				WriteHeader(writer);
+
 				using (new Div(writer).WithClass("container").End())
 				{
 					using (new Main(writer).WithRole("main").WithClass("pb-3").End())
@@ -127,19 +29,142 @@ public abstract class DefaultPage : HtmlPage
 						WriteInnerContent(writer);
 					}
 				}
-				using (new Footer(writer).WithClass("border-top footer text-muted").End())
+
+				WriteFooter(writer);
+
+				WriteScriptReferences(writer);
+			}
+		}
+	}
+
+	public abstract string? GetTitle();
+
+	public abstract void WriteInnerContent(TextWriter writer);
+
+	private static void WriteHeader(TextWriter writer)
+	{
+		using (new Header(writer).End())
+		{
+			using (new Div(writer).WithClass("btn-group").End())
+			{
+				WriteFileMenu(writer);
+				WriteViewMenu(writer);
+				WriteExportMenu(writer);
+				WriteLanguageMenu(writer);
+			}
+		}
+	}
+
+	private static void WriteFileMenu(TextWriter writer)
+	{
+		using (new Div(writer).WithClass("btn-group dropdown").End())
+		{
+			WriteDropdownButton(writer, Localization.MenuFile);
+			using (new Ul(writer).WithClass("dropdown-menu").End())
+			{
+				using (new Li(writer).End())
 				{
-					using (new Div(writer).WithClass("container text-center").End())
+					WritePostLink(writer, "/LoadFile", Localization.MenuFileOpenFile, "dropdown-item");
+				}
+				using (new Li(writer).End())
+				{
+					WritePostLink(writer, "/LoadFolder", Localization.MenuFileOpenFolder, "dropdown-item");
+				}
+				using (new Li(writer).End())
+				{
+					WritePostLink(writer, "/Reset", Localization.MenuFileReset, "dropdown-item");
+				}
+				using (new Li(writer).End())
+				{
+					new Hr(writer).WithClass("dropdown-divider").Close();
+				}
+				using (new Li(writer).End())
+				{
+					new A(writer).WithClass("dropdown-item").WithHref("/Settings/Edit").Close(Localization.Settings);
+				}
+			}
+		}
+	}
+
+	private static void WriteViewMenu(TextWriter writer)
+	{
+		using (new Div(writer).WithClass("btn-group dropdown").End())
+		{
+			WriteDropdownButton(writer, "View");
+			using (new Ul(writer).WithClass("dropdown-menu").End())
+			{
+				using (new Li(writer).End())
+				{
+					new A(writer).WithClass("dropdown-item").WithHref("/").Close(Localization.Home);
+				}
+				using (new Li(writer).End())
+				{
+					new A(writer).WithClass("dropdown-item").WithHref("/Settings/Edit").Close(Localization.Settings);
+				}
+				using (new Li(writer).End())
+				{
+					new A(writer).WithClass("dropdown-item").WithHref("/ConfigurationFiles").Close("Configuration Files");
+				}
+				using (new Li(writer).End())
+				{
+					new A(writer).WithClass("dropdown-item").WithHref("/Commands").Close(Localization.Commands);
+				}
+				using (new Li(writer).End())
+				{
+					new A(writer).WithClass("dropdown-item").WithHref("/Privacy").Close(Localization.Privacy);
+				}
+				using (new Li(writer).End())
+				{
+					new A(writer).WithClass("dropdown-item").WithHref("/Licenses").Close(Localization.Licenses);
+				}
+			}
+		}
+	}
+
+	private static void WriteExportMenu(TextWriter writer)
+	{
+		using (new Div(writer).WithClass("btn-group dropdown").End())
+		{
+			WriteDropdownButton(writer, Localization.MenuExport);
+			using (new Ul(writer).WithClass("dropdown-menu").End())
+			{
+				if (GameFileLoader.IsLoaded)
+				{
+					using (new Li(writer).End())
 					{
-						writer.Write("&copy; 2023 - AssetRipper - ");
-						new A(writer).WithHref("/Privacy").Close(Localization.Privacy);
-						writer.Write(" - ");
-						new A(writer).WithHref("/Licenses").Close(Localization.Licenses);
+						WritePostLink(writer, "/Export", Localization.MenuExportAll, "dropdown-item");
+					}
+					string version = GameFileLoader.GameBundle.GetMaxUnityVersion().ToString();
+					using (new Li(writer).End())
+					{
+						new A(writer).WithClass("dropdown-item").WithNewTabAttributes().WithHref($"unityhub://{version}").Close(version);
 					}
 				}
-				writer.Write("""<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>""");
-				Bootstrap.WriteScriptReference(writer);
-				new Script(writer).WithSrc("/js/site.js").Close();
+				else
+				{
+					using (new Li(writer).End())
+					{
+						new A(writer).WithClass("dropdown-item disabled").WithCustomAttribute("aria-diabled", "true").Close(Localization.MenuExportAll);
+					}
+				}
+			}
+		}
+	}
+
+	private static void WriteLanguageMenu(TextWriter writer)
+	{
+		using (new Div(writer).WithClass("btn-group dropdown").End())
+		{
+			WriteDropdownButton(writer, Localization.MenuLanguage);
+			using (new Ul(writer).WithClass("dropdown-menu").End())
+			{
+				foreach ((string code, string name) in Localizations.LocalizationLoader.LanguageNameDictionary)
+				{
+					using (new Li(writer).End())
+					{
+						WritePostLink(writer, $"/Localization?code={code}", name, "dropdown-item");
+					}
+				}
 			}
 		}
 	}
@@ -161,7 +186,24 @@ public abstract class DefaultPage : HtmlPage
 		}
 	}
 
-	public abstract string? GetTitle();
+	private static void WriteFooter(TextWriter writer)
+	{
+		using (new Footer(writer).WithClass("border-top footer text-muted").End())
+		{
+			using (new Div(writer).WithClass("container text-center").End())
+			{
+				writer.Write("&copy; 2023 - AssetRipper - ");
+				new A(writer).WithHref("/Privacy").Close(Localization.Privacy);
+				writer.Write(" - ");
+				new A(writer).WithHref("/Licenses").Close(Localization.Licenses);
+			}
+		}
+	}
 
-	public abstract void WriteInnerContent(TextWriter writer);
+	private static void WriteScriptReferences(TextWriter writer)
+	{
+		writer.Write("""<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>""");
+		Bootstrap.WriteScriptReference(writer);
+		new Script(writer).WithSrc("/js/site.js").Close();
+	}
 }
