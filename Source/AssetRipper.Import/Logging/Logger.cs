@@ -1,7 +1,4 @@
-﻿using AssetRipper.Import.Utils;
-using System.Globalization;
-using System.Runtime.InteropServices;
-using System.Text;
+﻿using System.Text;
 
 namespace AssetRipper.Import.Logging
 {
@@ -28,12 +25,11 @@ namespace AssetRipper.Import.Logging
 
 		public static void Log(LogType type, LogCategory category, string message)
 		{
-#if !DEBUG
-			if (type == LogType.Debug)
+			if (AssetRipperRuntimeInformation.Build.Debug && type == LogType.Debug)
 			{
 				return;
 			}
-#endif
+
 			if (type == LogType.Verbose && !AllowVerbose)
 			{
 				return;
@@ -93,26 +89,6 @@ namespace AssetRipper.Import.Logging
 		public static void Debug(string message) => Log(LogType.Debug, LogCategory.None, message);
 		public static void Debug(LogCategory category, string message) => Log(LogType.Debug, category, message);
 
-		private static void LogReleaseInformation()
-		{
-#if DEBUG
-			Log(LogType.Info, LogCategory.System, $"AssetRipper Build Type: Debug {GetBuildType()}");
-#else
-			Log(LogType.Info, LogCategory.System, $"AssetRipper Build Type: Release {GetBuildType()}");
-#endif
-		}
-
-		private static string GetBuildType()
-		{
-			return File.Exists(ExecutingDirectory.Combine("AssetRipper.Assets.dll")) ? "Compiled" : "Published";
-		}
-
-		private static void LogOperatingSystemInformation()
-		{
-			Log(LogType.Info, LogCategory.System, $"System Version: {Environment.OSVersion.VersionString}");
-			Log(LogType.Info, LogCategory.System, $"Operating System: {GetOsName()} {GetArchitecture()}");
-		}
-
 		private static void ErrorIfBigEndian()
 		{
 			if (!BitConverter.IsLittleEndian)
@@ -124,137 +100,13 @@ namespace AssetRipper.Import.Logging
 		public static void LogSystemInformation(string programName)
 		{
 			Log(LogType.Info, LogCategory.System, programName);
-			LogOperatingSystemInformation();
+			Log(LogType.Info, LogCategory.System, $"System Version: {AssetRipperRuntimeInformation.OS.Version}");
+			Log(LogType.Info, LogCategory.System, $"Operating System: {AssetRipperRuntimeInformation.OS.Name} {AssetRipperRuntimeInformation.ProcessArchitecture}");
 			ErrorIfBigEndian();
-			Log(LogType.Info, LogCategory.System, $"AssetRipper Version: {typeof(Logger).Assembly.GetName().Version}");
-			LogReleaseInformation();
-			Log(LogType.Info, LogCategory.System, $"UTC Current Time: {GetCurrentTime()}");
-			Log(LogType.Info, LogCategory.System, $"UTC Compile Time: {GetCompileTime()}");
-		}
-
-		/// <summary>
-		/// Get the current time.
-		/// </summary>
-		/// <remarks>
-		/// This format matches the format used in <see cref="GetCompileTime"/>
-		/// </remarks>
-		/// <returns>A string like "Thu Nov 24 18:39:37 UTC 2022"</returns>
-		private static string GetCurrentTime()
-		{
-			DateTime now = DateTime.UtcNow;
-			StringBuilder sb = new();
-			sb.Append(now.DayOfWeek switch
-			{
-				DayOfWeek.Sunday => "Sun",
-				DayOfWeek.Monday => "Mon",
-				DayOfWeek.Tuesday => "Tue",
-				DayOfWeek.Wednesday => "Wed",
-				DayOfWeek.Thursday => "Thu",
-				DayOfWeek.Friday => "Fri",
-				DayOfWeek.Saturday => "Sat",
-				_ => throw new NotSupportedException(),
-			});
-			sb.Append(' ');
-			sb.Append(now.Month switch
-			{
-				1 => "Jan",
-				2 => "Feb",
-				3 => "Mar",
-				4 => "Apr",
-				5 => "May",
-				6 => "Jun",
-				7 => "Jul",
-				8 => "Aug",
-				9 => "Sep",
-				10 => "Oct",
-				11 => "Nov",
-				12 => "Dec",
-				_ => throw new NotSupportedException(),
-			});
-			sb.Append(' ');
-			sb.Append($"{now.Day,2}");
-			sb.Append(' ');
-			sb.Append(now.TimeOfDay.Hours.ToString("00", CultureInfo.InvariantCulture));
-			sb.Append(':');
-			sb.Append(now.TimeOfDay.Minutes.ToString("00", CultureInfo.InvariantCulture));
-			sb.Append(':');
-			sb.Append(now.TimeOfDay.Seconds.ToString("00", CultureInfo.InvariantCulture));
-			sb.Append(" UTC ");
-			sb.Append(now.Year);
-			return sb.ToString();
-		}
-
-		private static string GetCompileTime()
-		{
-			string path = ExecutingDirectory.Combine("compile_time.txt");
-			if (File.Exists(path))
-			{
-				return File.ReadAllText(path).Trim();
-			}
-			else
-			{
-				return "Unknown";
-			}
-		}
-
-		private static string GetOsName()
-		{
-			if (OperatingSystem.IsWindows())
-			{
-				return "Windows";
-			}
-			else if (OperatingSystem.IsLinux())
-			{
-				return "Linux";
-			}
-			else if (OperatingSystem.IsMacOS())
-			{
-				return "MacOS";
-			}
-			else if (OperatingSystem.IsBrowser())
-			{
-				return "Browser";
-			}
-			else if (OperatingSystem.IsAndroid())
-			{
-				return "Android";
-			}
-			else if (OperatingSystem.IsIOS())
-			{
-				return "iOS";
-			}
-			else if (OperatingSystem.IsFreeBSD())
-			{
-				return "FreeBSD";
-			}
-			else
-			{
-				return "Other";
-			}
-		}
-
-		private static string GetArchitecture()
-		{
-			if (RuntimeInformation.ProcessArchitecture == Architecture.X64)
-			{
-				return "x64";
-			}
-			else if (RuntimeInformation.ProcessArchitecture == Architecture.X86)
-			{
-				return "x86";
-			}
-			else if (RuntimeInformation.ProcessArchitecture == Architecture.Arm)
-			{
-				return "Arm";
-			}
-			else if (RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
-			{
-				return "Arm64";
-			}
-			else
-			{
-				return "Unknown";
-			}
+			Log(LogType.Info, LogCategory.System, $"AssetRipper Version: {AssetRipperRuntimeInformation.Build.Version}");
+			Log(LogType.Info, LogCategory.System, $"AssetRipper Build Type: {AssetRipperRuntimeInformation.Build.Configuration} {AssetRipperRuntimeInformation.Build.Type}");
+			Log(LogType.Info, LogCategory.System, $"UTC Current Time: {AssetRipperRuntimeInformation.CurrentTime}");
+			Log(LogType.Info, LogCategory.System, $"UTC Compile Time: {AssetRipperRuntimeInformation.CompileTime}");
 		}
 
 		public static void Add(ILogger logger) => loggers.Add(logger);
