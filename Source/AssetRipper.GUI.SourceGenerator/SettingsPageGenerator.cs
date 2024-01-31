@@ -107,7 +107,6 @@ internal static class SettingsPageGenerator
 			[
 				nameof(LibraryConfiguration.EnablePrefabOutlining),
 				nameof(LibraryConfiguration.IgnoreStreamingAssets),
-				nameof(LibraryConfiguration.IgnoreEngineAssets),
 				nameof(LibraryConfiguration.DefaultVersion),
 				nameof(LibraryConfiguration.AudioExportFormat),
 				nameof(LibraryConfiguration.BundledAssetsExportMode),

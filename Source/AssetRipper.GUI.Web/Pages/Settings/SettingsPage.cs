@@ -132,16 +132,6 @@ public sealed partial class SettingsPage : DefaultPage
 								}
 							}
 						}
-
-						new Hr(writer).Close();
-
-						using (new Div(writer).End())
-						{
-							new H3(writer).Close("Experimental");
-
-							WriteCheckBoxForIgnoreEngineAssets(writer,
-								Localization.IgnoreEngineAssets);
-						}
 					}
 
 					using (new Div(writer).WithClass("text-center").End())

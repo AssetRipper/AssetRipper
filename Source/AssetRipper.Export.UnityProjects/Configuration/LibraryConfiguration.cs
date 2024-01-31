@@ -44,18 +44,6 @@ namespace AssetRipper.Export.UnityProjects.Configuration
 		/// </summary>
 		public TextExportMode TextExportMode { get; set; }
 		public bool EnablePrefabOutlining { get; set; }
-		public bool IgnoreEngineAssets
-		{
-			get
-			{
-				return SingletonData[nameof(EngineResourceData)] is not null;
-			}
-			set
-			{
-				SingletonData[nameof(EngineResourceData)] = value ? EmptyEngineData : null;
-			}
-		}
-		private static string EmptyEngineData { get; } = new EngineResourceData().ToJson();
 		public SingletonDataStorage SingletonData { get; } = new();
 		public ListDataStorage ListData { get; } = new();
 
@@ -78,7 +66,6 @@ namespace AssetRipper.Export.UnityProjects.Configuration
 			TerrainExportMode = TerrainExportMode.Yaml;
 			TextExportMode = TextExportMode.Parse;
 			EnablePrefabOutlining = false;
-			IgnoreEngineAssets = false;
 			SingletonData.Clear();
 			ListData.Clear();
 		}
@@ -96,7 +83,6 @@ namespace AssetRipper.Export.UnityProjects.Configuration
 			Logger.Info(LogCategory.General, $"{nameof(TerrainExportMode)}: {TerrainExportMode}");
 			Logger.Info(LogCategory.General, $"{nameof(TextExportMode)}: {TextExportMode}");
 			Logger.Info(LogCategory.General, $"{nameof(EnablePrefabOutlining)}: {EnablePrefabOutlining}");
-			Logger.Info(LogCategory.General, $"{nameof(IgnoreEngineAssets)}: {IgnoreEngineAssets}");
 		}
 
 		[Conditional("DEBUG")]

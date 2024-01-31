@@ -57,7 +57,6 @@ partial class SettingsPage
 	{
 		{ nameof(Configuration.EnablePrefabOutlining), (value) => { Configuration.EnablePrefabOutlining = value; } },
 		{ nameof(Configuration.IgnoreStreamingAssets), (value) => { Configuration.IgnoreStreamingAssets = value; } },
-		{ nameof(Configuration.IgnoreEngineAssets), (value) => { Configuration.IgnoreEngineAssets = value; } },
 	};
 
 	private static void WriteCheckBoxForEnablePrefabOutlining(TextWriter writer, string label)
@@ -68,11 +67,6 @@ partial class SettingsPage
 	private static void WriteCheckBoxForIgnoreStreamingAssets(TextWriter writer, string label)
 	{
 		WriteCheckBox(writer, label, Configuration.IgnoreStreamingAssets, nameof(Configuration.IgnoreStreamingAssets));
-	}
-
-	private static void WriteCheckBoxForIgnoreEngineAssets(TextWriter writer, string label)
-	{
-		WriteCheckBox(writer, label, Configuration.IgnoreEngineAssets, nameof(Configuration.IgnoreEngineAssets));
 	}
 
 	private static void WriteDropDownForAudioExportFormat(TextWriter writer)
