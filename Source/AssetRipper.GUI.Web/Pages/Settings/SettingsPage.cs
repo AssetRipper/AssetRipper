@@ -32,7 +32,7 @@ public sealed partial class SettingsPage : DefaultPage
 				{
 					using (new Div(writer).WithClass("border rounded p-3 m-2").End())
 					{
-						new H2(writer).Close("Import");
+						new H2(writer).Close(Localization.MenuImport);
 
 						using (new Div(writer).End())
 						{
@@ -70,7 +70,7 @@ public sealed partial class SettingsPage : DefaultPage
 
 						using (new Div(writer).End())
 						{
-							new H3(writer).Close("Experimental");
+							new H3(writer).Close(Localization.Experimental);
 
 							WriteCheckBoxForEnablePrefabOutlining(writer, Localization.EnablePrefabOutlining);
 						}

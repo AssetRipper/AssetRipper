@@ -6,7 +6,7 @@ public sealed partial class ConfigurationFilesPage : DefaultPage
 {
 	public static ConfigurationFilesPage Instance { get; } = new();
 
-	public override string? GetTitle() => "Configuration Files";
+	public override string? GetTitle() => Localization.ConfigurationFiles;
 
 	public override void WriteInnerContent(TextWriter writer)
 	{

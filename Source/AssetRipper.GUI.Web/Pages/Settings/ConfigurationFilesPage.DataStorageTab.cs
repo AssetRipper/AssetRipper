@@ -11,7 +11,7 @@ public sealed partial class ConfigurationFilesPage
 			{
 				if (tabs.Length == 0)
 				{
-					new P(writer).WithClass("text-center p-2").Close("There are no keys for this data type.");
+					new P(writer).WithClass("text-center p-2").Close(Localization.ThereAreNoKeysForThisDataType);
 				}
 				else
 				{

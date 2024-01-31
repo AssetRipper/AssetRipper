@@ -49,11 +49,6 @@ partial class Localization
 	public static string AssetTabAudioPlay => Get("asset_tab_audio_play");
 	
 	/// <summary>
-	/// Basic Information
-	/// </summary>
-	public static string AssetTabBasic => Get("asset_tab_basic");
-	
-	/// <summary>
 	/// Dependencies
 	/// </summary>
 	public static string AssetTabDependencies => Get("asset_tab_dependencies");
@@ -89,11 +84,6 @@ partial class Localization
 	public static string AssetTabText => Get("asset_tab_text");
 	
 	/// <summary>
-	/// Yaml
-	/// </summary>
-	public static string AssetTabYaml => Get("asset_tab_yaml");
-	
-	/// <summary>
 	/// Assets
 	/// </summary>
 	public static string Assets => Get("assets");
@@ -124,7 +114,7 @@ partial class Localization
 	public static string AudioFormatForceWav => Get("audio_format_force_wav");
 	
 	/// <summary>
-	/// Convert all audio files to WAV files. Not recommended if importing into unity, as it may recompress files, causing a loss of quality.
+	/// Convert all audio files to WAV files. Not recommended if importing into Unity, as it may recompress files, causing a loss of quality.
 	/// </summary>
 	public static string AudioFormatForceWavDescription => Get("audio_format_force_wav_description");
 	
@@ -340,6 +330,21 @@ partial class Localization
 	public static string ConfigScreenDragDropPrompt => Get("config_screen_drag_drop_prompt");
 	
 	/// <summary>
+	/// Configuration Files
+	/// </summary>
+	public static string ConfigurationFiles => Get("configuration_files");
+	
+	/// <summary>
+	/// Lists
+	/// </summary>
+	public static string ConfigurationFilesLists => Get("configuration_files_lists");
+	
+	/// <summary>
+	/// Singletons
+	/// </summary>
+	public static string ConfigurationFilesSingletons => Get("configuration_files_singletons");
+	
+	/// <summary>
 	/// Count
 	/// </summary>
 	public static string Count => Get("count");
@@ -370,11 +375,6 @@ partial class Localization
 	public static string EnablePrefabOutlining => Get("enable_prefab_outlining");
 	
 	/// <summary>
-	/// Enable Static Mesh Separation
-	/// </summary>
-	public static string EnableStaticMeshSeparation => Get("enable_static_mesh_separation");
-	
-	/// <summary>
 	/// Error
 	/// </summary>
 	public static string Error => Get("error");
@@ -388,6 +388,11 @@ partial class Localization
 	/// Failed to load game content: {0}
 	/// </summary>
 	public static string ErrorImportingWithReason => Get("error_importing_with_reason");
+	
+	/// <summary>
+	/// Experimental
+	/// </summary>
+	public static string Experimental => Get("experimental");
 	
 	/// <summary>
 	/// Export Complete!
@@ -450,17 +455,12 @@ partial class Localization
 	public static string Home => Get("home");
 	
 	/// <summary>
-	/// Ignore Engine Assets
-	/// </summary>
-	public static string IgnoreEngineAssets => Get("ignore_engine_assets");
-	
-	/// <summary>
 	/// Image Export Format
 	/// </summary>
 	public static string ImageExportTitle => Get("image_export_title");
 	
 	/// <summary>
-	/// Affects all exported images
+	/// This affects all exported images.
 	/// </summary>
 	public static string ImageFormatDescription => Get("image_format_description");
 	
@@ -478,6 +478,11 @@ partial class Localization
 	/// Licenses
 	/// </summary>
 	public static string Licenses => Get("licenses");
+	
+	/// <summary>
+	/// Load
+	/// </summary>
+	public static string Load => Get("load");
 	
 	/// <summary>
 	/// Loading Game Content From {0}<br />
@@ -501,7 +506,7 @@ partial class Localization
 	public static string LoadingStepDetectPlatform => Get("loading_step_detect_platform");
 	
 	/// <summary>
-	/// Generating Mono Assemblies from IL2CPP
+	/// Generating Mono Assemblies from IL2Cpp
 	/// </summary>
 	public static string LoadingStepGenerateDummyDll => Get("loading_step_generate_dummy_dll");
 	
@@ -521,7 +526,7 @@ partial class Localization
 	public static string LoadingStepLoadAssetsFromFile => Get("loading_step_load_assets_from_file");
 	
 	/// <summary>
-	/// Scanning IL2CPP Binary for Library Functions
+	/// Scanning IL2Cpp Binary for Library Functions
 	/// </summary>
 	public static string LoadingStepLocateKeyFunctions => Get("loading_step_locate_key_functions");
 	
@@ -536,7 +541,7 @@ partial class Localization
 	public static string LoadingStepParseBundle => Get("loading_step_parse_bundle");
 	
 	/// <summary>
-	/// Parsing IL2CPP Metadata
+	/// Parsing IL2Cpp Metadata
 	/// </summary>
 	public static string LoadingStepParseIl2cppMetadata => Get("loading_step_parse_il2cpp_metadata");
 	
@@ -581,7 +586,7 @@ partial class Localization
 	public static string MenuExport => Get("menu_export");
 	
 	/// <summary>
-	/// Export all Files
+	/// Export All Files
 	/// </summary>
 	public static string MenuExportAll => Get("menu_export_all");
 	
@@ -589,11 +594,6 @@ partial class Localization
 	/// Export Selected File
 	/// </summary>
 	public static string MenuExportSelected => Get("menu_export_selected");
-	
-	/// <summary>
-	/// Export all Files of Selected Type
-	/// </summary>
-	public static string MenuExportSelectedType => Get("menu_export_selected_type");
 	
 	/// <summary>
 	/// File
@@ -621,6 +621,11 @@ partial class Localization
 	public static string MenuFileReset => Get("menu_file_reset");
 	
 	/// <summary>
+	/// Import
+	/// </summary>
+	public static string MenuImport => Get("menu_import");
+	
+	/// <summary>
 	/// Language
 	/// </summary>
 	public static string MenuLanguage => Get("menu_language");
@@ -629,6 +634,11 @@ partial class Localization
 	/// Load
 	/// </summary>
 	public static string MenuLoad => Get("menu_load");
+	
+	/// <summary>
+	/// View
+	/// </summary>
+	public static string MenuView => Get("menu_view");
 	
 	/// <summary>
 	/// Mesh
@@ -656,7 +666,7 @@ partial class Localization
 	public static string MeshFormatNative => Get("mesh_format_native");
 	
 	/// <summary>
-	/// A robust format for using meshes in the editor. Can be converted to other formats by a variety of unity packages.
+	/// A robust format for using meshes in the editor. Can be converted to other formats by a variety of Unity packages.
 	/// </summary>
 	public static string MeshFormatNativeDescription => Get("mesh_format_native_description");
 	
@@ -669,6 +679,11 @@ partial class Localization
 	/// Namespace
 	/// </summary>
 	public static string Namespace => Get("namespace");
+	
+	/// <summary>
+	/// No data has been loaded for this key.
+	/// </summary>
+	public static string NoDataHasBeenLoadedForThisKey => Get("no_data_has_been_loaded_for_this_key");
 	
 	/// <summary>
 	/// No Files Loaded
@@ -709,6 +724,16 @@ partial class Localization
 	/// Privacy
 	/// </summary>
 	public static string Privacy => Get("privacy");
+	
+	/// <summary>
+	/// Remove
+	/// </summary>
+	public static string Remove => Get("remove");
+	
+	/// <summary>
+	/// Replace
+	/// </summary>
+	public static string Replace => Get("replace");
 	
 	/// <summary>
 	/// Resources
@@ -786,7 +811,7 @@ partial class Localization
 	public static string ScriptContentLevelTitle => Get("script_content_level_title");
 	
 	/// <summary>
-	/// Decompiled
+	/// Decompilation
 	/// </summary>
 	public static string ScriptExportFormatDecompiled => Get("script_export_format_decompiled");
 	
@@ -831,11 +856,6 @@ partial class Localization
 	public static string ScriptLanguageVersionTitle => Get("script_language_version_title");
 	
 	/// <summary>
-	/// Select an Asset on the left to view information about it
-	/// </summary>
-	public static string SelectAssetToViewInfo => Get("select_asset_to_view_info");
-	
-	/// <summary>
 	/// Settings
 	/// </summary>
 	public static string Settings => Get("settings");
@@ -856,7 +876,7 @@ partial class Localization
 	public static string ShaderAssetExportTitle => Get("shader_asset_export_title");
 	
 	/// <summary>
-	/// Decompile
+	/// Decompilation
 	/// </summary>
 	public static string ShaderAssetFormatDecompile => Get("shader_asset_format_decompile");
 	
@@ -881,7 +901,7 @@ partial class Localization
 	public static string ShaderAssetFormatDummy => Get("shader_asset_format_dummy");
 	
 	/// <summary>
-	/// Export the shader as a dummy shader. Although it preserves data like the Properties and FallBack, it uses general, opaque shader code.
+	/// Export the shader as a dummy shader. Although it preserves data like the properties and fallback, it uses general, opaque shader code.
 	/// </summary>
 	public static string ShaderAssetFormatDummyDescription => Get("shader_asset_format_dummy_description");
 	
@@ -911,7 +931,7 @@ partial class Localization
 	public static string SpriteFormatNative => Get("sprite_format_native");
 	
 	/// <summary>
-	/// Export in the unity sprite format. Cannot be viewed outside of unity.
+	/// Export in the Unity sprite format. Cannot be viewed outside of Unity.
 	/// </summary>
 	public static string SpriteFormatNativeDescription => Get("sprite_format_native_description");
 	
@@ -921,7 +941,7 @@ partial class Localization
 	public static string SpriteFormatTexture => Get("sprite_format_texture");
 	
 	/// <summary>
-	/// Export as an image of the Sprite Sheet. Can be viewed outside of unity, but slower to export.
+	/// Export as an image of the sprite sheet. Can be viewed outside of Unity, but slower to export.
 	/// </summary>
 	public static string SpriteFormatTextureDescription => Get("sprite_format_texture_description");
 	
@@ -976,7 +996,7 @@ partial class Localization
 	public static string TerrainFormatNative => Get("terrain_format_native");
 	
 	/// <summary>
-	/// Export in the native unity terrain format. Most useful option if you plan to re-import back into unity.
+	/// Export in the native Unity terrain format. Most useful option if you plan to re-import back into Unity.
 	/// </summary>
 	public static string TerrainFormatNativeDescription => Get("terrain_format_native_description");
 	
@@ -991,7 +1011,7 @@ partial class Localization
 	public static string TextAssetFormatBinary => Get("text_asset_format_binary");
 	
 	/// <summary>
-	/// Export the raw bytes of the text asset with a .bytes extension.
+	/// Export the raw data of the text asset as a BYTES file.
 	/// </summary>
 	public static string TextAssetFormatBinaryDescription => Get("text_asset_format_binary_description");
 	
@@ -1001,7 +1021,7 @@ partial class Localization
 	public static string TextAssetFormatParse => Get("text_asset_format_parse");
 	
 	/// <summary>
-	/// Export as a plain text file, but try to guess the correct file extension (e.g. JSON files get the .json extension)
+	/// Export as a plain text file, but try to guess the correct file extension (e.g. JSON files get the .json extension).
 	/// </summary>
 	public static string TextAssetFormatParseDescription => Get("text_asset_format_parse_description");
 	
@@ -1011,7 +1031,7 @@ partial class Localization
 	public static string TextAssetFormatText => Get("text_asset_format_text");
 	
 	/// <summary>
-	/// Export as a plain text file (.txt)
+	/// Export as a plain text file (.txt).
 	/// </summary>
 	public static string TextAssetFormatTextDescription => Get("text_asset_format_text_description");
 	
@@ -1019,6 +1039,11 @@ partial class Localization
 	/// Texture
 	/// </summary>
 	public static string Texture => Get("texture");
+	
+	/// <summary>
+	/// There are no keys for this data type.
+	/// </summary>
+	public static string ThereAreNoKeysForThisDataType => Get("there_are_no_keys_for_this_data_type");
 	
 	/// <summary>
 	/// Transform
@@ -1039,11 +1064,6 @@ partial class Localization
 	/// Welcome
 	/// </summary>
 	public static string Welcome => Get("welcome");
-	
-	/// <summary>
-	/// Welcome To AssetRipper
-	/// </summary>
-	public static string WelcomeTitle => Get("welcome_title");
 	
 	/// <summary>
 	/// Width

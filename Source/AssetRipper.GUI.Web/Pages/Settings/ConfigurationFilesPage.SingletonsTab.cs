@@ -9,7 +9,7 @@ public sealed partial class ConfigurationFilesPage
 	{
 		public static SingletonsTab Instance { get; } = new();
 
-		public override string DisplayName => "Singletons";
+		public override string DisplayName => Localization.ConfigurationFilesSingletons;
 
 		protected override IEnumerable<HtmlTab> GetTabs()
 		{
@@ -29,11 +29,11 @@ public sealed partial class ConfigurationFilesPage
 				{
 					using (new Div(writer).WithTextCenter().End())
 					{
-						new P(writer).WithClass("p-2").Close("No data has been loaded for this key.");
+						new P(writer).WithClass("p-2").Close(Localization.NoDataHasBeenLoadedForThisKey);
 						using (new Form(writer).WithAction("/ConfigurationFiles/Singleton/Add").WithMethod("post").End())
 						{
 							new Input(writer).WithType("hidden").WithName("Key").WithValue(key.ToHtml()).Close();
-							new Input(writer).WithType("submit").WithClass("btn btn-primary mx-1").WithValue("Load").Close();
+							new Input(writer).WithType("submit").WithClass("btn btn-primary mx-1").WithValue(Localization.Load.ToHtml()).Close();
 						}
 					}
 				}
@@ -47,7 +47,7 @@ public sealed partial class ConfigurationFilesPage
 							using (new Form(writer).WithAction("/ConfigurationFiles/Singleton/Add").WithMethod("post").End())
 							{
 								new Input(writer).WithType("hidden").WithName("Key").WithValue(key.ToHtml()).Close();
-								new Input(writer).WithType("submit").WithClass("btn btn-primary mx-1").WithValue("Replace").Close();
+								new Input(writer).WithType("submit").WithClass("btn btn-primary mx-1").WithValue(Localization.Replace.ToHtml()).Close();
 							}
 						}
 						using (new Div(writer).WithClass("col").End())
@@ -55,7 +55,7 @@ public sealed partial class ConfigurationFilesPage
 							using (new Form(writer).WithAction("/ConfigurationFiles/Singleton/Remove").WithMethod("post").End())
 							{
 								new Input(writer).WithType("hidden").WithName("Key").WithValue(key.ToHtml()).Close();
-								new Input(writer).WithType("submit").WithClass("btn btn-danger mx-1").WithValue("Remove").Close();
+								new Input(writer).WithType("submit").WithClass("btn btn-danger mx-1").WithValue(Localization.Remove.ToHtml()).Close();
 							}
 						}
 					}
