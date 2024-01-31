@@ -33,7 +33,7 @@ public sealed class DeletedAssetsInformation : UnityObjectBase
 		}
 	}
 
-	internal void SetMainAsset()
+	public void SetMainAsset()
 	{
 		MainAsset = this;
 		foreach (IUnityObjectBase asset in DeletedAssets)
