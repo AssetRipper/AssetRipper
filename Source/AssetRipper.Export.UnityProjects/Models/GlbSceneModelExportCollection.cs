@@ -12,7 +12,7 @@ namespace AssetRipper.Export.UnityProjects.Models
 
 		protected override bool ExportScene(IExportContainer container, string folderPath, string filePath, string sceneName)
 		{
-			return ((GlbModelExporter)AssetExporter).ExportModel(ExportableAssets, filePath, true);
+			return GlbModelExporter.ExportModel(ExportableAssets, filePath, true);
 		}
 
 		public override string ExportExtension => "glb";

@@ -15,7 +15,7 @@ using System.Diagnostics;
 
 namespace AssetRipper.Export.UnityProjects.Project
 {
-	public sealed class PrefabExportCollection : AssetsExportCollection<IPrefabInstance>
+	public class PrefabExportCollection : AssetsExportCollection<IPrefabInstance>
 	{
 		public PrefabExportCollection(IAssetExporter assetExporter, IUnityObjectBase asset)
 			: this(assetExporter, GetRootGameObjectAndPrefab(asset))

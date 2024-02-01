@@ -38,7 +38,7 @@ namespace AssetRipper.Export.UnityProjects.Models
 				}
 				else if (PrefabExportCollection.IsValidAsset(asset))
 				{
-					exportCollection = new GlbPrefabModelExportCollection(this, GetRoot(asset));
+					exportCollection = new GlbPrefabModelExportCollection(this, asset);
 				}
 				else
 				{
@@ -68,7 +68,7 @@ namespace AssetRipper.Export.UnityProjects.Models
 			return ExportModel(assets, path, false); //Called by the prefab exporter
 		}
 
-		public bool ExportModel(IEnumerable<IUnityObjectBase> assets, string path, bool isScene)
+		public static bool ExportModel(IEnumerable<IUnityObjectBase> assets, string path, bool isScene)
 		{
 			ReadOnlySpan<byte> data = ExportBinary(assets, isScene);
 			if (data.Length == 0)
