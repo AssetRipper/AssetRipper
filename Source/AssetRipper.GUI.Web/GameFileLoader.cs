@@ -1,4 +1,5 @@
 using AssetRipper.Assets.Bundles;
+using AssetRipper.Export.UnityProjects;
 using AssetRipper.Export.UnityProjects.Configuration;
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly.Managers;

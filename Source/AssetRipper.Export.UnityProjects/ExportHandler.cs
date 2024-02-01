@@ -1,8 +1,7 @@
-﻿using AssetRipper.Export.UnityProjects;
-using AssetRipper.Export.UnityProjects.Configuration;
+﻿using AssetRipper.Export.UnityProjects.Configuration;
 using AssetRipper.Processing;
 
-namespace AssetRipper.GUI.Web;
+namespace AssetRipper.Export.UnityProjects;
 
 public class ExportHandler
 {
@@ -56,7 +55,7 @@ public class ExportHandler
 		Export(gameData, outputPath);
 	}
 
-	internal void ThrowIfSettingsDontMatch(LibraryConfiguration settings)
+	public void ThrowIfSettingsDontMatch(LibraryConfiguration settings)
 	{
 		if (Settings != settings)
 		{
