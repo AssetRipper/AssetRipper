@@ -26,7 +26,7 @@ public sealed record DeletedAssetsExportCollection(DeletedAssetsInformation Asse
 
 	MetaPtr IExportCollection.CreateExportPointer(IExportContainer container, IUnityObjectBase asset, bool isLocal)
 	{
-		throw new NotSupportedException();
+		return MetaPtr.CreateMissingReference(asset.ClassID, container.ToExportType(asset.GetType()));
 	}
 
 	bool IExportCollection.Export(IExportContainer container, string projectDirectory)
