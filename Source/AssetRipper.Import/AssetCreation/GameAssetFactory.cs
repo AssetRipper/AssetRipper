@@ -172,12 +172,9 @@ namespace AssetRipper.Import.AssetCreation
 			//unsigned int data[1] // ByteSize{4}, Index{2a}, Version{1}, IsArray{0}, MetaFlag{10}
 			//unsigned int data[2] // ByteSize{4}, Index{2b}, Version{1}, IsArray{0}, MetaFlag{10}
 			//unsigned int data[3] // ByteSize{4}, Index{2c}, Version{1}, IsArray{0}, MetaFlag{10}
-			reader.ReadInt32();
-			reader.ReadInt32();
-			reader.ReadUInt32();
-			reader.ReadUInt32();
-			reader.ReadUInt32();
-			reader.ReadUInt32();
+			texture.OriginalWidth_C28 = reader.ReadInt32();
+			texture.OriginalHeight_C28 = reader.ReadInt32();
+			texture.OriginalAssetGuid_C28.ReadRelease(ref reader);//Release and Editor are the same for GUID.
 			Logger.Warning(LogCategory.Import, $"Texture {texture.Name} had an extra 24 bytes, which were assumed to be non-standard Chinese fields.");
 		}
 
