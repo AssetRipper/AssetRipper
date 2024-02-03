@@ -212,7 +212,8 @@ namespace AssetRipper.SourceGenerated.Extensions
 			int[] weights = compressedMesh.Weights.UnpackInts();
 			int[] boneIndices = compressedMesh.BoneIndices.UnpackInts();
 
-			BoneWeight4[] skin = new BoneWeight4[compressedMesh.Weights.NumItems];
+			//In theory, the array length should be exactly the same as the number of vertices, but it's better to be safe.
+			BoneWeight4[] skin = ArrayPool<BoneWeight4>.Shared.Rent((int)compressedMesh.Weights.NumItems);
 
 			int bonePos = 0;
 			int boneIndexPos = 0;
@@ -224,8 +225,8 @@ namespace AssetRipper.SourceGenerated.Extensions
 				//read bone index and weight.
 				{
 					BoneWeight4 boneWeight = skin[bonePos];
-					boneWeight.SetWeight(j, weights[i] / 31f);
-					boneWeight.SetIndex(j, boneIndices[boneIndexPos++]);
+					boneWeight.Weights[j] = weights[i] / 31f;
+					boneWeight.Indices[j] = boneIndices[boneIndexPos++];
 					skin[bonePos] = boneWeight;
 				}
 				j++;
@@ -237,8 +238,8 @@ namespace AssetRipper.SourceGenerated.Extensions
 					for (; j < 4; j++)
 					{
 						BoneWeight4 boneWeight = skin[bonePos];
-						boneWeight.SetWeight(j, 0);
-						boneWeight.SetIndex(j, 0);
+						boneWeight.Weights[j] = 0;
+						boneWeight.Indices[j] = 0;
 						skin[bonePos] = boneWeight;
 					}
 					bonePos++;
@@ -250,8 +251,8 @@ namespace AssetRipper.SourceGenerated.Extensions
 				else if (j == 3)
 				{
 					BoneWeight4 boneWeight = skin[bonePos];
-					boneWeight.SetWeight(j, (31 - sum) / 31f);
-					boneWeight.SetIndex(j, boneIndices[boneIndexPos++]);
+					boneWeight.Weights[j] = (31 - sum) / 31f;
+					boneWeight.Indices[j] = boneIndices[boneIndexPos++];
 					skin[bonePos] = boneWeight;
 					bonePos++;
 					j = 0;
@@ -259,18 +260,54 @@ namespace AssetRipper.SourceGenerated.Extensions
 				}
 			}
 
-			return skin;
+			BoneWeight4[] result = skin.AsSpan(0, bonePos).ToArray();
+			ArrayPool<BoneWeight4>.Shared.Return(skin);
+			return result;
 		}
 
-		public static void SetWeights(this ICompressedMesh compressedMesh, ReadOnlySpan<BoneWeight4> weights)
+		public static void SetWeights(this ICompressedMesh compressedMesh, ReadOnlySpan<BoneWeight4> skin)
 		{
-			if (weights.Length > 0)
+			if (skin.Length > 0)
 			{
-				throw new NotImplementedException();
+				int i_weight = 0;
+				int i_boneIndex = 0;
+				int[] weightList = ArrayPool<int>.Shared.Rent(skin.Length * 3);
+				int[] boneIndexList = ArrayPool<int>.Shared.Rent(skin.Length * 4);
+
+				foreach (BoneWeight4 boneWeight in skin)
+				{
+					int sum = 0;
+					for (int j = 0; j < 4; j++)
+					{
+						int weight = (int)(boneWeight.Weights[j] * 31);
+						sum += weight;
+						if (j != 3)
+						{
+							//We never store the last weight because it can be calculated from the sum of the other weights.
+							weightList[i_weight] = weight;
+							i_weight++;
+						}
+
+						boneIndexList[i_boneIndex] = boneWeight.Indices[j];
+						i_boneIndex++;
+
+						if (sum >= 31)
+						{
+							break;
+						}
+					}
+				}
+
+				compressedMesh.Weights.PackInts(weightList.AsSpan(0, i_weight));
+				compressedMesh.BoneIndices.PackInts(boneIndexList.AsSpan(0, i_boneIndex));
+
+				ArrayPool<int>.Shared.Return(weightList);
+				ArrayPool<int>.Shared.Return(boneIndexList);
 			}
 			else
 			{
 				compressedMesh.Weights.Reset();
+				compressedMesh.BoneIndices.Reset();
 			}
 		}
 

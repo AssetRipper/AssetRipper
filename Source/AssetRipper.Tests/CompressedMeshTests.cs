@@ -16,6 +16,7 @@ namespace AssetRipper.Tests
 		private static readonly uint[] integers = MakeUInts(24);
 		private static readonly Vector2[] uv0 = MakeUV(VertexCount);
 		private static readonly Vector2[] uv1 = MakeUV(VertexCount);
+		private static readonly BoneWeight4[] boneWeights = MakeBoneWeights(VertexCount);
 
 		private static Vector3[] MakeUnitVectors(int count)
 		{
@@ -84,6 +85,44 @@ namespace AssetRipper.Tests
 					random.NextSingle(),
 					random.NextSingle(),
 					random.NextSingle());
+			}
+			return result;
+		}
+
+		private static BoneWeight4[] MakeBoneWeights(int count)
+		{
+			BoneWeight4[] result = new BoneWeight4[count];
+			for (int i = 0; i < count; i++)
+			{
+				BoneWeight4 item = new();
+				const int MaxSum = 31;
+				const float MaxSumF = MaxSum;
+				int sum = 0;
+				for (int j = 0; j < 4; j++)
+				{
+					if (sum == MaxSum)
+					{
+						item.Weights[j] = 0;
+						item.Indices[j] = 0;
+					}
+					else
+					{
+						int weight;
+						if (j == 3)
+						{
+							weight = MaxSum - sum;
+						}
+						else
+						{
+							weight = random.Next(1, MaxSum + 1 - sum);
+							sum += weight;
+						}
+						item.Weights[j] = weight / MaxSumF;
+						item.Indices[j] = random.Next(0, count);
+						//This might not be the correct range for the index, but it doesn't matter for the tests.
+					}
+				}
+				result[i] = item;
 			}
 			return result;
 		}
@@ -219,6 +258,15 @@ namespace AssetRipper.Tests
 			AreAlmostEqual(uv0, unpackedUV6, 0.000001f);
 		}
 
+		[Test]
+		public void BoneWeightAssignmentSymmetry()
+		{
+			CompressedMesh_5 compressedMesh = new();
+			compressedMesh.SetWeights(boneWeights);
+			BoneWeight4[] unpackedValues = compressedMesh.GetWeights();
+			AreAlmostEqual(boneWeights, unpackedValues, 0.000001f);
+		}
+
 		private static void AreAlmostEqual(ReadOnlySpan<Vector2> expected, ReadOnlySpan<Vector2> actual, float maxDeviation)
 		{
 			if (expected.Length != actual.Length)
@@ -267,6 +315,31 @@ namespace AssetRipper.Tests
 			}
 		}
 
+		private static void AreAlmostEqual(ReadOnlySpan<BoneWeight4> expectedSpan, ReadOnlySpan<BoneWeight4> actualSpan, float maxDeviation)
+		{
+			if (expectedSpan.Length != actualSpan.Length)
+			{
+				Assert.Fail($"Lengths were inequal.\nExpected: {expectedSpan.Length}\nBut was: {actualSpan.Length}");
+			}
+
+			for (int i = 0; i < expectedSpan.Length; i++)
+			{
+				BoneWeight4 expected = expectedSpan[i];
+				BoneWeight4 actual = actualSpan[i];
+				if (expected.Indices != actual.Indices)
+				{
+					Assert.Fail($"Bone Indices significantly differ at span index {i}\nExpected: {expected.Indices}\nBut was: {actual.Indices}");
+				}
+				for (int j = 0; j < BoneWeight4.Count; j++)
+				{
+					if (float.Abs(expected.Weights[j] - actual.Weights[j]) > maxDeviation)
+					{
+						Assert.Fail($"Weights significantly differ at span index {i}, weight index {j}\nExpected: {expected.Weights[j]}\nBut was: {actual.Weights[j]}");
+					}
+				}
+			}
+		}
+
 		private static void AreAlmostEqual(ReadOnlySpan<float> expected, ReadOnlySpan<float> actual, float maxDeviation)
 		{
 			if (expected.Length != actual.Length)
@@ -276,7 +349,7 @@ namespace AssetRipper.Tests
 
 			for (int i = 0; i < expected.Length; i++)
 			{
-				if (MathF.Abs(expected[i] - actual[i]) > maxDeviation)
+				if (float.Abs(expected[i] - actual[i]) > maxDeviation)
 				{
 					Assert.Fail($"Values significantly differ at index {i}\nExpected: {expected[i]}\nBut was: {actual[i]}");
 				}

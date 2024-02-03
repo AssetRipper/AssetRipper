@@ -1,4 +1,5 @@
 ﻿using AssetRipper.SourceGenerated.Subclasses.PackedBitVector_Int32;
+using System.Runtime.InteropServices;
 
 namespace AssetRipper.SourceGenerated.Extensions
 {
@@ -11,6 +12,11 @@ namespace AssetRipper.SourceGenerated.Extensions
 			instance.NumItems = source.NumItems;
 			instance.Data = source.Data.ToArray();
 			instance.BitSize = source.BitSize;
+		}
+
+		public static void PackInts(this PackedBitVector_Int32 packedVector, ReadOnlySpan<int> data)
+		{
+			packedVector.PackUInts(MemoryMarshal.Cast<int, uint>(data));
 		}
 
 		public static void PackUInts(this PackedBitVector_Int32 packedVector, ReadOnlySpan<uint> data)

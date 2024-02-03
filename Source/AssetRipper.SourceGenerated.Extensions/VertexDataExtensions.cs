@@ -221,7 +221,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 										BoneWeight4 boneWeight = skin[i];
 										for (int j = 0; j < dimension; j++)
 										{
-											boneWeight.SetWeight(j, componentsFloatArray[i * dimension + j]);
+											boneWeight.Weights[j] = componentsFloatArray[i * dimension + j];
 										}
 										skin[i] = boneWeight;
 									}
@@ -233,7 +233,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 										BoneWeight4 boneWeight = skin[i];
 										for (int j = 0; j < dimension; j++)
 										{
-											boneWeight.SetIndex(j, componentsIntArray[i * dimension + j]);
+											boneWeight.Indices[j] = componentsIntArray[i * dimension + j];
 										}
 										skin[i] = boneWeight;
 									}
