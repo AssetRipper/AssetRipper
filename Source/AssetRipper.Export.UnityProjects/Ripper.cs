@@ -56,7 +56,6 @@ namespace AssetRipper.Export.UnityProjects
 			}
 			yield return new SceneDefinitionProcessor();
 			yield return new MainAssetProcessor();
-			yield return new LightingDataProcessor();
 			yield return new AnimatorControllerProcessor();
 			yield return new AudioMixerProcessor();
 			yield return new EditorFormatProcessor(settings.BundledAssetsExportMode);
@@ -65,6 +64,7 @@ namespace AssetRipper.Export.UnityProjects
 			{
 				yield return new PrefabOutliningProcessor();
 			}
+			yield return new LightingDataProcessor();//Needs to be after static mesh separation
 			yield return new PrefabProcessor();
 			yield return new SpriteProcessor();
 		}
