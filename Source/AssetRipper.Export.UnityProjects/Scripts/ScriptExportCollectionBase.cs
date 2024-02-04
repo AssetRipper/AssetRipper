@@ -64,7 +64,13 @@ public abstract class ScriptExportCollectionBase : ExportCollection
 
 	protected static string GetScriptsFolderName(string assemblyName)
 	{
-		return assemblyName is "Assembly-CSharp-firstpass" or "Assembly - CSharp - firstpass" ? "Plugins" : "Scripts";
+		return assemblyName
+			is "Assembly-CSharp-firstpass"
+			or "Assembly - CSharp - firstpass"
+			or "Assembly-UnityScript-firstpass"
+			or "Assembly - UnityScript - firstpass"
+			? "Plugins"
+			: "Scripts";
 	}
 
 	protected static void GetExportSubPath(string assembly, string @namespace, string @class, out string folderPath, out string fileName)

@@ -26,25 +26,22 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 			"Assembly-CSharp.dll",
 			"Assembly-CSharp",
 			"Assembly-CSharp-firstpass.dll",
-			"Assembly-CSharp-firstpass"
+			"Assembly-CSharp-firstpass",
+			"Assembly-UnityScript.dll",
+			"Assembly-UnityScript",
+			"Assembly-UnityScript-firstpass.dll",
+			"Assembly-UnityScript-firstpass"
 		};
 
 		public static bool IsPredefinedAssembly(string assemblyName)
 		{
-			if (assemblyName is null)
-			{
-				throw new ArgumentNullException(assemblyName);
-			}
-
+			ArgumentNullException.ThrowIfNull(assemblyName);
 			return predefinedAssemblies.Contains(assemblyName);
 		}
 
 		public static bool IsReferenceAssembly(string assemblyName)
 		{
-			if (assemblyName is null)
-			{
-				throw new ArgumentNullException(assemblyName);
-			}
+			ArgumentNullException.ThrowIfNull(assemblyName);
 
 			if (IsWhiteListAssembly(assemblyName))
 			{
