@@ -105,10 +105,10 @@ namespace AssetRipper.Tools.SystemTester
 		{
 			LibraryConfiguration settings = new();
 			settings.LogConfigurationValues();
-			GameData gameData = Ripper.Load(inputPaths, settings);
-			Ripper.Process(gameData, Ripper.GetDefaultProcessors(settings));
+			ExportHandler exportHandler = new(settings);
+			GameData gameData = exportHandler.LoadAndProcess(inputPaths);
 			PrepareExportDirectory(outputPath);
-			Ripper.ExportProject(gameData, settings, outputPath);
+			exportHandler.Export(gameData, outputPath);
 		}
 
 		private static void PrepareExportDirectory(string path)
