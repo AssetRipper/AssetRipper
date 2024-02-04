@@ -49,34 +49,13 @@ namespace AssetRipper.Import.AssetCreation
 				//Assets with a stripped version can't be read.
 				return new UnreadableObject(assetInfo, assetData.ToArray());
 			}
-			if (assetInfo.ClassID == (int)ClassIDType.MonoBehaviour)
+			else if (assetInfo.ClassID == (int)ClassIDType.MonoBehaviour)
 			{
 				return ReadMonoBehaviour(MonoBehaviour.Create(assetInfo), assetData, AssemblyManager, assetType);
 			}
-			IUnityObjectBase? asset = AssetFactory.Create(assetInfo);
-			if (asset is null)
-			{
-				return new UnknownObject(assetInfo, assetData.ToArray());
-			}
 			else
 			{
-				IUnityObjectBase readAsset = ReadNormalObject(asset, assetData);
-				if (readAsset is UnreadableObject && assetInfo.Collection.Version.Type == UnityVersionType.Patch)
-				{
-					UnityVersion oldVersion = assetInfo.Collection.Version;
-					UnityVersion newVersion = new UnityVersion(oldVersion.Major, oldVersion.Minor, unchecked((ushort)(oldVersion.Build + 1u)));
-					IUnityObjectBase? newAsset = AssetFactory.Create(assetInfo, newVersion);
-					if (newAsset is not null)
-					{
-						IUnityObjectBase newReadAsset = ReadNormalObject(newAsset, assetData);
-						if (newReadAsset is not UnreadableObject)
-						{
-							Logger.Warning(LogCategory.Import, $"The asset with a patch version could not be read. It was successfully read on subsequent build number.");
-							return newReadAsset;
-						}
-					}
-				}
-				return readAsset;
+				return ReadNormalObject(assetInfo, assetData);
 			}
 		}
 
@@ -111,10 +90,39 @@ namespace AssetRipper.Import.AssetCreation
 			return monoBehaviour;
 		}
 
-		private static IUnityObjectBase ReadNormalObject(IUnityObjectBase asset, ReadOnlyArraySegment<byte> assetData)
+		private static IUnityObjectBase ReadNormalObject(AssetInfo assetInfo, ReadOnlyArraySegment<byte> assetData)
 		{
+			IUnityObjectBase asset = TryReadNormalObject(assetInfo, assetData, assetInfo.Collection.Version, out string? error);
+			if (error is null)
+			{
+				return asset;
+			}
+			else if (assetInfo.Collection.Version.Type == UnityVersionType.Patch)
+			{
+				UnityVersion oldVersion = assetInfo.Collection.Version;
+				UnityVersion newVersion = new UnityVersion(oldVersion.Major, oldVersion.Minor, unchecked((ushort)(oldVersion.Build + 1u)));
+				IUnityObjectBase newAsset = TryReadNormalObject(assetInfo, assetData, newVersion, out string? newError);
+				if (newError is null)
+				{
+					return newAsset;
+				}
+			}
+
+			Logger.Error(LogCategory.Import, error);
+			UnreadableObject unreadable = new UnreadableObject(asset.AssetInfo, assetData.ToArray());
+			unreadable.Name = (asset as INamed)?.Name;
+			return unreadable;
+		}
+
+		private static IUnityObjectBase TryReadNormalObject(AssetInfo assetInfo, ReadOnlyArraySegment<byte> assetData, UnityVersion version, out string? error)
+		{
+			IUnityObjectBase? asset = AssetFactory.Create(assetInfo, version);
+			if (asset is null)
+			{
+				error = null;
+				return new UnknownObject(assetInfo, assetData.ToArray());
+			}
 			EndianSpanReader reader = new EndianSpanReader(assetData, asset.Collection.EndianType);
-			bool replaceWithUnreadableObject;
 			try
 			{
 				asset.Read(ref reader);
@@ -124,39 +132,28 @@ namespace AssetRipper.Import.AssetCreation
 					if (reader.Length - reader.Position == 24 && asset is ITexture2D texture)
 					{
 						ReadExtraTextureFields(texture, ref reader);
-						replaceWithUnreadableObject = false;
+						error = null;
 					}
 					else
 					{
-						LogIncorrectNumberOfBytesRead(asset, ref reader);
-						replaceWithUnreadableObject = true;
+						error = MakeError_IncorrectNumberOfBytesRead(asset, ref reader);
 					}
 				}
 				else
 				{
-					replaceWithUnreadableObject = false;
+					error = null;
 				}
 			}
 			catch (Exception ex)
 			{
-				LogReadException(asset, ex);
-				replaceWithUnreadableObject = true;
+				error = MakeError_ReadException(asset, ex);
 			}
-			if (replaceWithUnreadableObject)
-			{
-				UnreadableObject unreadable = new UnreadableObject(asset.AssetInfo, assetData.ToArray());
-				unreadable.Name = (asset as INamed)?.Name;
-				return unreadable;
-			}
-			else
-			{
-				return asset;
-			}
+			return asset;
 		}
 
-		private static void LogIncorrectNumberOfBytesRead(IUnityObjectBase asset, ref EndianSpanReader reader)
+		private static string MakeError_IncorrectNumberOfBytesRead(IUnityObjectBase asset, ref EndianSpanReader reader)
 		{
-			Logger.Error($"Read {reader.Position} but expected {reader.Length} for asset type {(ClassIDType)asset.ClassID}. V: {asset.Collection.Version} P: {asset.Collection.Platform} N: {asset.Collection.Name} Path: {asset.Collection.FilePath}");
+			return $"Read {reader.Position} but expected {reader.Length} for asset type {(ClassIDType)asset.ClassID}. V: {asset.Collection.Version} P: {asset.Collection.Platform} N: {asset.Collection.Name} Path: {asset.Collection.FilePath}";
 		}
 
 		/// <summary>
@@ -183,9 +180,9 @@ namespace AssetRipper.Import.AssetCreation
 			Logger.Error(LogCategory.Import, $"Unable to read {monoBehaviour}, because script {monoBehaviour.Structure} layout mismatched binary content ({ex.GetType().Name}).");
 		}
 
-		private static void LogReadException(IUnityObjectBase asset, Exception ex)
+		private static string MakeError_ReadException(IUnityObjectBase asset, Exception ex)
 		{
-			Logger.Error(LogCategory.Import, $"Error during reading of asset type {(ClassIDType)asset.ClassID}. V: {asset.Collection.Version} P: {asset.Collection.Platform} N: {asset.Collection.Name} Path: {asset.Collection.FilePath}", ex);
+			return $"Error during reading of asset type {(ClassIDType)asset.ClassID}. V: {asset.Collection.Version} P: {asset.Collection.Platform} N: {asset.Collection.Name} Path: {asset.Collection.FilePath}\n{ex}";
 		}
 
 		public static IUnityAssetBase CreateEngineAsset(string name, UnityVersion version)
