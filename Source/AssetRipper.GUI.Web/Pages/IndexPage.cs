@@ -23,7 +23,7 @@ public sealed class IndexPage : DefaultPage
 			}
 			if (GameFileLoader.Premium)
 			{
-				//To do: Patreon Authentication
+				new P(writer).WithClass("mt-4").Close(Localization.AppreciationMessage);
 			}
 			else
 			{

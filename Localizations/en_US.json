@@ -1,5 +1,6 @@
 {
     "an_error_occured_during_decompilation": "An error occurred during decompilation.",
+    "appreciation_message": "Thank you for supporting AssetRipper!",
     "assembly_name": "Assembly Name",
     "asset_bundle_name": "Asset Bundle Name",
     "asset_ripper_free": "AssetRipper Free",
@@ -168,6 +169,8 @@
     "script_export_format_hybrid_description": "Special assemblies like Assembly-CSharp are decompiled. Other assemblies are exported in their compiled Dll form.",
     "script_export_title": "Script Export Format",
     "script_language_version_title": "C# Language Version",
+    "select_file": "Select File",
+    "select_folder": "Select Folder",
     "settings": "Settings",
     "settings_can_only_be_changed_before_loading_files": "Settings can only be changed before loading files.",
     "shader": "Shader",
@@ -209,6 +212,7 @@
     "transform": "Transform",
     "vertex_count": "Vertex Count",
     "view_loaded_files": "View Loaded Files",
+    "warning_this_directory_is_not_empty_all_content_will_be_deleted": "Warning: this directory is not empty. All content will be deleted.",
     "welcome": "Welcome",
     "width": "Width",
     "yaml": "Yaml"

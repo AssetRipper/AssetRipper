@@ -9,6 +9,11 @@ partial class Localization
 	public static string AnErrorOccuredDuringDecompilation => Get("an_error_occured_during_decompilation");
 	
 	/// <summary>
+	/// Thank you for supporting AssetRipper!
+	/// </summary>
+	public static string AppreciationMessage => Get("appreciation_message");
+	
+	/// <summary>
 	/// Assembly Name
 	/// </summary>
 	public static string AssemblyName => Get("assembly_name");
@@ -856,6 +861,16 @@ partial class Localization
 	public static string ScriptLanguageVersionTitle => Get("script_language_version_title");
 	
 	/// <summary>
+	/// Select File
+	/// </summary>
+	public static string SelectFile => Get("select_file");
+	
+	/// <summary>
+	/// Select Folder
+	/// </summary>
+	public static string SelectFolder => Get("select_folder");
+	
+	/// <summary>
 	/// Settings
 	/// </summary>
 	public static string Settings => Get("settings");
@@ -1059,6 +1074,11 @@ partial class Localization
 	/// View Loaded Files
 	/// </summary>
 	public static string ViewLoadedFiles => Get("view_loaded_files");
+	
+	/// <summary>
+	/// Warning: this directory is not empty. All content will be deleted.
+	/// </summary>
+	public static string WarningThisDirectoryIsNotEmptyAllContentWillBeDeleted => Get("warning_this_directory_is_not_empty_all_content_will_be_deleted");
 	
 	/// <summary>
 	/// Welcome
