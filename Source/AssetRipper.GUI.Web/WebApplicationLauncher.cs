@@ -107,21 +107,10 @@ public static class WebApplicationLauncher
 		}
 
 		//Static files
-		app.MapGet("/favicon.ico", async () =>
-		{
-			byte[] data = await StaticContentLoader.Load("favicon.ico");
-			return Results.Bytes(data, "image/x-icon");
-		});
-		app.MapGet("/css/site.css", async () =>
-		{
-			byte[] data = await StaticContentLoader.Load("css/site.css");
-			return Results.Bytes(data, "text/css");
-		});
-		app.MapGet("/js/site.js", async () =>
-		{
-			byte[] data = await StaticContentLoader.Load("js/site.js");
-			return Results.Bytes(data, "text/javascript");
-		});
+		app.MapStaticFile("/favicon.ico", "image/x-icon");
+		app.MapStaticFile("/css/site.css", "text/css");
+		app.MapStaticFile("/js/site.js", "text/javascript");
+		app.MapStaticFile("/js/commands_page.js", "text/javascript");
 
 		//Normal Pages
 		app.MapGet("/", (context) =>
@@ -182,6 +171,48 @@ public static class WebApplicationLauncher
 		app.MapGet("/Dialogs/OpenFile", Dialogs.OpenFile.HandleGetRequest);
 		app.MapGet("/Dialogs/OpenFiles", Dialogs.OpenFiles.HandleGetRequest);
 
+		//File API
+		app.MapGet("/IO/File/Exists", (context) =>
+		{
+			context.Response.DisableCaching();
+			if (context.Request.Query.TryGetValue("Path", out StringValues path))
+			{
+				bool exists = File.Exists(path);
+				return Results.Json(exists, AppJsonSerializerContext.Default.Boolean).ExecuteAsync(context);
+			}
+			else
+			{
+				return Results.BadRequest().ExecuteAsync(context);
+			}
+		});
+		app.MapGet("/IO/Directory/Exists", (context) =>
+		{
+			context.Response.DisableCaching();
+			if (context.Request.Query.TryGetValue("Path", out StringValues path))
+			{
+				bool exists = Directory.Exists(path);
+				return Results.Json(exists, AppJsonSerializerContext.Default.Boolean).ExecuteAsync(context);
+			}
+			else
+			{
+				return Results.BadRequest().ExecuteAsync(context);
+			}
+		});
+		app.MapGet("/IO/Directory/Empty", (context) =>
+		{
+			context.Response.DisableCaching();
+			if (context.Request.Query.TryGetValue("Path", out StringValues stringValues))
+			{
+				string? path = stringValues;
+				bool empty = !Directory.Exists(path) || !Directory.EnumerateFileSystemEntries(path).Any();
+				return Results.Json(empty, AppJsonSerializerContext.Default.Boolean).ExecuteAsync(context);
+			}
+			else
+			{
+				return Results.BadRequest().ExecuteAsync(context);
+			}
+		});
+
 		app.Run();
 	}
 
@@ -238,6 +269,15 @@ public static class WebApplicationLauncher
 		{
 			IResult result = await handler.Invoke();
 			await result.ExecuteAsync(context);
+		});
+	}
+
+	private static void MapStaticFile(this IEndpointRouteBuilder endpoints, [StringSyntax("Route")] string path, string contentType)
+	{
+		endpoints.MapGet(path, async () =>
+		{
+			byte[] data = await StaticContentLoader.Load(path);
+			return Results.Bytes(data, contentType);
 		});
 	}
 }

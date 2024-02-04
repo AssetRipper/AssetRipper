@@ -24,7 +24,7 @@ public abstract class DefaultPage : HtmlPage
 
 				using (new Div(writer).WithClass("container").End())
 				{
-					using (new Main(writer).WithRole("main").WithClass("pb-3").End())
+					using (new Main(writer).WithRole("main").WithId("app").WithClass("pb-3").End())
 					{
 						WriteInnerContent(writer);
 					}
@@ -132,7 +132,7 @@ public abstract class DefaultPage : HtmlPage
 				{
 					using (new Li(writer).End())
 					{
-						WritePostLink(writer, "/Export", Localization.MenuExportAll, "dropdown-item");
+						new A(writer).WithClass("dropdown-item").WithHref("/Commands").Close(Localization.MenuExportAll);
 					}
 					string version = GameFileLoader.GameBundle.GetMaxUnityVersion().ToString();
 					using (new Li(writer).End())
@@ -200,7 +200,7 @@ public abstract class DefaultPage : HtmlPage
 		}
 	}
 
-	private static void WriteScriptReferences(TextWriter writer)
+	protected virtual void WriteScriptReferences(TextWriter writer)
 	{
 		writer.Write("""<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>""");
 		Bootstrap.WriteScriptReference(writer);

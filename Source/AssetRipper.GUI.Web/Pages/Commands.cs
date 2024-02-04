@@ -16,9 +16,13 @@ public static class Commands
 			{
 				paths = values;
 			}
-			else
+			else if (Dialogs.Supported)
 			{
 				Dialogs.OpenFiles.GetUserInput(out paths);
+			}
+			else
+			{
+				paths = null;
 			}
 
 			if (paths is { Length: > 0 })
@@ -39,9 +43,13 @@ public static class Commands
 			{
 				path = values;
 			}
-			else
+			else if (Dialogs.Supported)
 			{
 				Dialogs.OpenFolder.GetUserInput(out path);
+			}
+			else
+			{
+				path = null;
 			}
 
 			if (!string.IsNullOrEmpty(path))
@@ -64,7 +72,7 @@ public static class Commands
 			}
 			else
 			{
-				Dialogs.OpenFolder.GetUserInput(out path);
+				path = null;
 			}
 
 			if (!string.IsNullOrEmpty(path))
