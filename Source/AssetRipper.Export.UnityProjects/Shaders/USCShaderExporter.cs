@@ -12,6 +12,7 @@ using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.DirectXDisassemble
 using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.DirectX;
 using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL;
 using AssetRipper.Export.UnityProjects.Configuration;
+using AssetRipper.Import.Logging;
 using AssetRipper.IO.Files;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Extensions;
@@ -34,8 +35,18 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
 			using Stream fileStream = File.Create(path);
-			ExportBinary((IShader)asset, fileStream, ShaderExporterInstantiator);
-			return true;
+			try
+			{
+				ExportBinary((IShader)asset, fileStream, ShaderExporterInstantiator);
+				return true;
+			}
+			catch (Exception ex)
+			{
+				Logger.Error(ex);
+				fileStream.Position = 0;
+				DummyShaderTextExporter.ExportShader((IShader)asset, new InvariantStreamWriter(fileStream));
+				return false;
+			}
 		}
 
 		private static ShaderTextExporter ShaderExporterInstantiator(GPUPlatform graphicApi)
@@ -80,7 +91,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 			{
 				using ShaderWriter writer = new ShaderWriter(stream, shader, exporterInstantiator);
 				writer.WriteQuotesAroundProgram = false;
-				string header = shader.Script?.String ?? "<unnamed>";
+				string header = shader.Script.String;
 				if (writer.Blobs.Length == 0)
 				{
 					writer.Write(header);
@@ -93,7 +104,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 			else
 			{
 				using BinaryWriter writer = new BinaryWriter(stream);
-				writer.Write(shader.Script?.String ?? "<unnamed>");
+				writer.Write(shader.Script.String);
 			}
 		}
 
