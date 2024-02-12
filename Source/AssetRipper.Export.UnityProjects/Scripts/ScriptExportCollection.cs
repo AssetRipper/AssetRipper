@@ -72,7 +72,16 @@ public sealed class ScriptExportCollection : ScriptExportCollectionBase
 				Logger.Info(LogCategory.Export, $"Decompiling {assemblyName}");
 				string outputDirectory = Path.Combine(assetsDirectoryPath, GetScriptsFolderName(assemblyName), assemblyName);
 				Directory.CreateDirectory(outputDirectory);
-				AssetExporter.Decompiler.DecompileWholeProject(assembly, outputDirectory);
+
+				try
+				{
+					AssetExporter.Decompiler.DecompileWholeProject(assembly, outputDirectory);
+				}
+				catch (Exception exception)
+				{
+					Logger.Error(LogCategory.Export, exception.ToString());
+					continue;
+				}
 
 				assemblyDefinitionDetailsDictionary.TryAdd(assemblyName, new AssemblyDefinitionDetails(assembly, outputDirectory));
 			}
