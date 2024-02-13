@@ -35,6 +35,8 @@ namespace AssetRipper.Processing.AnimatorControllers
 {
 	public static class VirtualAnimationFactory
 	{
+		// Example of default BlendTree Name:
+		// https://github.com/ds5678/Binoculars/blob/d6702ed3a1db39b1a2788956ff195b2590c3d08b/Unity/Assets/Models/binoculars_animator.controller#L106
 		private static Utf8String BlendTreeName { get; } = new Utf8String("Blend Tree");
 
 		private static IMotion? CreateMotion(this IStateConstant stateConstant, ProcessedAssetCollection file, IAnimatorController controller, int nodeIndex)
@@ -130,23 +132,24 @@ namespace AssetRipper.Processing.AnimatorControllers
 			IMotion? motion = state.CreateMotion(file, controller, childNodeIndex);
 			childMotion.Motion.SetAsset(tree.Collection, motion);
 
-			IBlendTreeNodeConstant targetNode = treeConstant.NodeArray[childNodeIndex].Data;
-			if (targetNode.IsBlendTree())
+			IBlendTreeNodeConstant childNode = treeConstant.NodeArray[childNodeIndex].Data;
+			if (childNode.IsBlendTree())
 			{
-				//BlendTree ChildMotions are not allowed to use TimeScale or Mirror
+				// BlendTree ChildMotions are not allowed to use TimeScale or Mirror
+				// https://github.com/Unity-Technologies/UnityCsReference/blob/master/Editor/Mono/Inspector/BlendTreeInspector.cs#L1469
+				// https://github.com/Unity-Technologies/UnityCsReference/blob/master/Editor/Mono/Inspector/BlendTreeInspector.cs#L1488
 				childMotion.TimeScale = 1;
 				childMotion.Mirror = false;
 			}
 			else
 			{
-				childMotion.TimeScale = targetNode.Duration == 0 ? 0.01f : 1/targetNode.Duration;
-				childMotion.Mirror = targetNode.Mirror;
+				childMotion.TimeScale = 1 / childNode.Duration;
+				childMotion.Mirror = childNode.Mirror;
 			}
-			childMotion.CycleOffset = targetNode.CycleOffset;
+			childMotion.CycleOffset = childNode.CycleOffset;
 
 			childMotion.Threshold = node.GetThreshold(childIndex);
 			childMotion.Position?.CopyValues(node.GetPosition(childIndex));
-
 			if (node.TryGetDirectBlendParameter(childIndex, out uint directID))
 			{
 				childMotion.DirectBlendParameter = controller.TOS[directID];
