@@ -136,8 +136,8 @@ namespace AssetRipper.Processing.AnimatorControllers
 			if (childNode.IsBlendTree())
 			{
 				// BlendTree ChildMotions are not allowed to use TimeScale or Mirror
-				// https://github.com/Unity-Technologies/UnityCsReference/blob/master/Editor/Mono/Inspector/BlendTreeInspector.cs#L1469
-				// https://github.com/Unity-Technologies/UnityCsReference/blob/master/Editor/Mono/Inspector/BlendTreeInspector.cs#L1488
+				// https://github.com/Unity-Technologies/UnityCsReference/blob/4e215c07ca8e9a32a589043202fd919bdfc0a26d/Editor/Mono/Inspector/BlendTreeInspector.cs#L1469
+				// https://github.com/Unity-Technologies/UnityCsReference/blob/4e215c07ca8e9a32a589043202fd919bdfc0a26d/Editor/Mono/Inspector/BlendTreeInspector.cs#L1488
 				childMotion.TimeScale = 1;
 				childMotion.Mirror = false;
 			}
