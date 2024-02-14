@@ -48,7 +48,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 			}
 			catch (Exception exception)
 			{
-				Logger.Error(LogCategory.Export, exception);
+				Logger.Error(exception);
 			}
 		}
 	}
