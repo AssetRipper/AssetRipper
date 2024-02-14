@@ -1,5 +1,6 @@
 ﻿using AsmResolver.DotNet;
 using AssetRipper.Import.Configuration;
+using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using ICSharpCode.Decompiler;
@@ -41,7 +42,14 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 
 		private void DecompileWholeProject(WholeProjectDecompiler decompiler, AssemblyDefinition assembly, string outputFolder)
 		{
-			decompiler.DecompileProject(assemblyResolver.Resolve(assembly), outputFolder, new StringWriter());
+			try
+			{
+				decompiler.DecompileProject(assemblyResolver.Resolve(assembly), outputFolder, new StringWriter());
+			}
+			catch (Exception exception)
+			{
+				Logger.Error(exception);
+			}
 		}
 	}
 }
