@@ -35,7 +35,9 @@ namespace AssetRipper.Processing.AnimatorControllers
 {
 	public static class VirtualAnimationFactory
 	{
-		private static Utf8String BlendTreeName { get; } = new Utf8String("BlendTree");
+		// Example of default BlendTree Name:
+		// https://github.com/ds5678/Binoculars/blob/d6702ed3a1db39b1a2788956ff195b2590c3d08b/Unity/Assets/Models/binoculars_animator.controller#L106
+		private static Utf8String BlendTreeName { get; } = new Utf8String("Blend Tree");
 
 		private static IMotion? CreateMotion(this IStateConstant stateConstant, ProcessedAssetCollection file, IAnimatorController controller, int nodeIndex)
 		{
@@ -130,17 +132,28 @@ namespace AssetRipper.Processing.AnimatorControllers
 			IMotion? motion = state.CreateMotion(file, controller, childNodeIndex);
 			childMotion.Motion.SetAsset(tree.Collection, motion);
 
+			IBlendTreeNodeConstant childNode = treeConstant.NodeArray[childNodeIndex].Data;
+			if (childNode.IsBlendTree())
+			{
+				// BlendTree ChildMotions are not allowed to use TimeScale or Mirror
+				// https://github.com/Unity-Technologies/UnityCsReference/blob/4e215c07ca8e9a32a589043202fd919bdfc0a26d/Editor/Mono/Inspector/BlendTreeInspector.cs#L1469
+				// https://github.com/Unity-Technologies/UnityCsReference/blob/4e215c07ca8e9a32a589043202fd919bdfc0a26d/Editor/Mono/Inspector/BlendTreeInspector.cs#L1488
+				childMotion.TimeScale = 1;
+				childMotion.Mirror = false;
+			}
+			else
+			{
+				childMotion.TimeScale = 1 / childNode.Duration;
+				childMotion.Mirror = childNode.Mirror;
+			}
+			childMotion.CycleOffset = childNode.CycleOffset;
+
 			childMotion.Threshold = node.GetThreshold(childIndex);
 			childMotion.Position?.CopyValues(node.GetPosition(childIndex));
-			childMotion.TimeScale = 1.0f;
-			childMotion.CycleOffset = node.CycleOffset;
-
 			if (node.TryGetDirectBlendParameter(childIndex, out uint directID))
 			{
 				childMotion.DirectBlendParameter = controller.TOS[directID];
 			}
-
-			childMotion.Mirror = node.Mirror;
 
 			return childMotion;
 		}
