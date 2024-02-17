@@ -38,7 +38,7 @@ internal sealed class AudioTab : HtmlTab
 
 	private static string TryDecode(IUnityObjectBase asset)
 	{
-		if (asset is IAudioClip clip && AudioClipDecoder.TryGetDecodedAudioClipData(clip, out byte[]? decodedAudioData, out string? extension))
+		if (asset is IAudioClip clip && AudioClipDecoder.TryDecode(clip, out byte[]? decodedAudioData, out string? extension, out _))
 		{
 			return $"data:audio/{extension};base64,{Convert.ToBase64String(decodedAudioData, Base64FormattingOptions.None)}";
 		}

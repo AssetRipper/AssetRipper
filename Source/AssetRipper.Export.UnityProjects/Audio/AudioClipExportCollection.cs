@@ -1,32 +1,36 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Export.UnityProjects.Configuration;
+using AssetRipper.Assets.Export;
 using AssetRipper.SourceGenerated.Classes.ClassID_83;
 
 namespace AssetRipper.Export.UnityProjects.Audio
 {
 	public sealed class AudioClipExportCollection : AudioExportCollection
 	{
-		public AudioClipExportCollection(AudioClipExporter assetExporter, IAudioClip asset) : base(assetExporter, asset)
+		private byte[]? data;
+		private readonly string fileExtension;
+		public AudioClipExportCollection(AudioClipExporter assetExporter, IAudioClip asset, byte[] data, string fileExtension) : base(assetExporter, asset)
 		{
+			this.data = data;
+			this.fileExtension = fileExtension;
+		}
+
+		protected override bool ExportInner(IExportContainer container, string filePath, string dirPath)
+		{
+			if (data is null or { Length: 0 })
+			{
+				return false;
+			}
+			else
+			{
+				System.IO.File.WriteAllBytes(filePath, data);
+				data = null;
+				return true;
+			}
 		}
 
 		protected override string GetExportExtension(IUnityObjectBase asset)
 		{
-			string defaultExtension = AudioClipDecoder.GetFileExtension((IAudioClip)asset);
-			if (IsWavExtension((AudioClipExporter)AssetExporter, defaultExtension))
-			{
-				return "wav";
-			}
-			else
-			{
-				return defaultExtension;
-			}
-		}
-
-		private static bool IsWavExtension(AudioClipExporter assetExporter, string defaultExtension)
-		{
-			return assetExporter.AudioFormat == AudioExportFormat.PreferWav
-				&& defaultExtension == "ogg";
+			return fileExtension;
 		}
 	}
 }

@@ -1,8 +1,8 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Export;
 using AssetRipper.Export.UnityProjects.Configuration;
+using AssetRipper.Import.Logging;
 using AssetRipper.SourceGenerated.Classes.ClassID_83;
-using AssetRipper.SourceGenerated.Extensions;
 
 namespace AssetRipper.Export.UnityProjects.Audio
 {
@@ -19,37 +19,34 @@ namespace AssetRipper.Export.UnityProjects.Audio
 
 		public override bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			if (asset is IAudioClip audio && AudioClipDecoder.CanDecode(audio))
+			if (asset is IAudioClip audio)
 			{
-				exportCollection = new AudioClipExportCollection(this, audio);
-				return true;
+				if (AudioClipDecoder.TryDecode(audio, out byte[]? decodedData, out string? fileExtension, out string? message))
+				{
+					if (AudioFormat == AudioExportFormat.PreferWav && fileExtension == "ogg")
+					{
+						exportCollection = new AudioClipExportCollection(this, audio, AudioConverter.OggToWav(decodedData), "wav");
+					}
+					else
+					{
+						exportCollection = new AudioClipExportCollection(this, audio, decodedData, fileExtension);
+					}
+
+					return true;
+				}
+				else
+				{
+					Logger.Error(LogCategory.Export, message);
+				}
 			}
-			else
-			{
-				exportCollection = null;
-				return false;
-			}
+
+			exportCollection = null;
+			return false;
 		}
 
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
 		{
-			if (!AudioClipDecoder.TryGetDecodedAudioClipData((IAudioClip)asset, out byte[]? decodedData, out string? fileExtension))
-			{
-				return false;
-			}
-
-			if (AudioFormat == AudioExportFormat.PreferWav && fileExtension == "ogg")
-			{
-				decodedData = AudioConverter.OggToWav(decodedData);
-			}
-
-			if (decodedData.IsNullOrEmpty())
-			{
-				return false;
-			}
-
-			File.WriteAllBytes(path, decodedData);
-			return true;
+			throw new NotSupportedException();
 		}
 	}
 }
