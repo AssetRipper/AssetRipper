@@ -32,6 +32,32 @@ namespace AssetRipper.Export.UnityProjects.Audio
 				message = null;
 				return true;
 			}
+			else if (CheckMagic(rawData, "FSB5"u8) && FsbLoader.TryLoadFsbFromByteArray(rawData, out FmodSoundBank? fsbData))
+			{
+				FmodAudioType audioType = fsbData!.Header.AudioType;
+				try
+				{
+					if (audioType.IsSupported() && fsbData.Samples.Single().RebuildAsStandardFileFormat(out decodedData, out fileExtension))
+					{
+						message = null;
+						return true;
+					}
+					else
+					{
+						decodedData = null;
+						fileExtension = null;
+						message = $"Can't decode audio clip '{audioClip.Name}' with default decoder because it's '{audioType}' encoded.";
+						return false;
+					}
+				}
+				catch (Exception ex)
+				{
+					decodedData = null;
+					fileExtension = null;
+					message = $"Failed to convert audio ({Enum.GetName(audioType)})\n{ex}";
+					return false;
+				}
+			}
 			else if (CheckMagic(rawData, "IMPM"u8))
 			{
 				fileExtension = FmodSoundType.It.ToRawExtension();
@@ -68,32 +94,6 @@ namespace AssetRipper.Export.UnityProjects.Audio
 				message = null;
 				return true;
 			}
-			else if (CheckMagic(rawData, "FSB5"u8) && FsbLoader.TryLoadFsbFromByteArray(rawData, out FmodSoundBank? fsbData))
-			{
-				FmodAudioType audioType = fsbData!.Header.AudioType;
-				try
-				{
-					if (audioType.IsSupported() && fsbData.Samples.Single().RebuildAsStandardFileFormat(out decodedData, out fileExtension))
-					{
-						message = null;
-						return true;
-					}
-					else
-					{
-						decodedData = null;
-						fileExtension = null;
-						message = $"Can't decode audio clip '{audioClip.Name}' with default decoder because it's '{audioType}' encoded.";
-						return false;
-					}
-				}
-				catch (Exception ex)
-				{
-					decodedData = null;
-					fileExtension = null;
-					message = $"Failed to convert audio ({Enum.GetName(audioType)})\n{ex}";
-					return false;
-				}
-			}
 			else
 			{
 				decodedData = null;
@@ -105,7 +105,7 @@ namespace AssetRipper.Export.UnityProjects.Audio
 
 		private static bool CheckMagic(byte[] data, ReadOnlySpan<byte> magic, int startIndex = 0)
 		{
-			if (data.Length < magic.Length)
+			if (data.Length < magic.Length + startIndex)
 			{
 				return false;
 			}
