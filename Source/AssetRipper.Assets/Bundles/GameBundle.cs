@@ -85,6 +85,13 @@ public sealed partial class GameBundle : Bundle
 		return processedCollection;
 	}
 
+	public ProcessedBundle AddNewProcessedBundle(string? name = null)
+	{
+		ProcessedBundle processedBundle = new ProcessedBundle(name);
+		AddBundle(processedBundle);
+		return processedBundle;
+	}
+
 	/// <summary>
 	/// Returns the maximum Unity version of all asset collections in this bundle.
 	/// </summary>

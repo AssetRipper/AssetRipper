@@ -15,7 +15,7 @@ public abstract class Bundle : IDisposable
 	/// <summary>
 	/// The parent <see cref="Bundle"/> of this Bundle.
 	/// </summary>
-	public Bundle? Parent { get; internal set; }
+	public Bundle? Parent { get; private set; }
 	/// <summary>
 	/// The list of <see cref="ResourceFile"/>s in this Bundle.
 	/// </summary>

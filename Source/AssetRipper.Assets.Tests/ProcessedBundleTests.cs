@@ -17,19 +17,19 @@ public class ProcessedBundleTests
 	}
 
 	[Test]
-	public void ProcessedBundle_ArgumentConstructor_Null_ShouldThrowException()
+	public void ProcessedBundle_ArgumentConstructor_Null_ShouldNotThrowException()
 	{
 		// Arrange
-		string name = null!;
+		string? name = null;
 
 		// Act
 
 		// Assert
-		Assert.Throws<ArgumentNullException>(() => new ProcessedBundle(name));
+		Assert.DoesNotThrow(() => new ProcessedBundle(name));
 	}
 
 	[Test]
-	public void ProcessedBundle_ArgumentConstructor_EmptyString_ShouldThrowException()
+	public void ProcessedBundle_ArgumentConstructor_EmptyString_ShouldNotThrowException()
 	{
 		// Arrange
 		string name = string.Empty;
@@ -37,7 +37,7 @@ public class ProcessedBundleTests
 		// Act
 
 		// Assert
-		Assert.Throws<ArgumentException>(() => new ProcessedBundle(name));
+		Assert.DoesNotThrow(() => new ProcessedBundle(name));
 	}
 
 	[Test]
