@@ -352,7 +352,8 @@ namespace AssetRipper.Export.UnityProjects.Textures
 
 				case TextureFormat.BGRA32_14:
 				case TextureFormat.BGRA32_37:
-					inputSpan.CopyTo(outputSpan);
+					//This needs sliced because the inputSpan can have mips.
+					inputSpan[..outputSpan.Length].CopyTo(outputSpan);
 					return true;
 
 				case TextureFormat.R16:
