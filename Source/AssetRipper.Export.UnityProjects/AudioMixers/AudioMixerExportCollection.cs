@@ -5,8 +5,6 @@ using AssetRipper.Export.UnityProjects.Project;
 using AssetRipper.Export.UnityProjects.Utils;
 using AssetRipper.SourceGenerated.Classes.ClassID_240;
 using AssetRipper.SourceGenerated.Classes.ClassID_243;
-using AssetRipper.SourceGenerated.Classes.ClassID_244;
-using AssetRipper.SourceGenerated.Classes.ClassID_272;
 using AssetRipper.SourceGenerated.Classes.ClassID_273;
 
 namespace AssetRipper.Export.UnityProjects.AudioMixers
@@ -20,16 +18,10 @@ namespace AssetRipper.Export.UnityProjects.AudioMixers
 				AddAsset(group);
 				if (group is IAudioMixerGroupController controller)
 				{
-					foreach (IAudioMixerEffectController? effect in controller.EffectsP.WhereNotNull())
-					{
-						AddAsset(effect);
-					}
+					AddAssets(controller.EffectsP);
 				}
 			}
-			foreach (IAudioMixerSnapshot snapshot in mixer.Snapshots_C240P.WhereNotNull())
-			{
-				AddAsset(snapshot);
-			}
+			AddAssets(mixer.Snapshots_C240P);
 		}
 
 		private static IEnumerable<IAudioMixerGroup> FindChildren(IAudioMixer mixer)
