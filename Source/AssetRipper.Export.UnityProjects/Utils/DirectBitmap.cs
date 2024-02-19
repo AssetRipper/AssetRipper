@@ -14,6 +14,7 @@ public readonly record struct DirectBitmap<TColor, TChannel>
 	where TChannel : unmanaged
 	where TColor : unmanaged, IColor<TChannel>
 {
+	private static bool UseFastBmp => true;
 	private static readonly ImageWriter imageWriter = new();
 	public DirectBitmap(int width, int height, int depth = 1)
 	{
@@ -140,7 +141,11 @@ public readonly record struct DirectBitmap<TColor, TChannel>
 
 	public void SaveAsBmp(Stream stream)
 	{
-		if (OperatingSystem.IsWindows())
+		if (UseFastBmp)
+		{
+			BmpWriter.WriteBmp(Data, Width, Height * Depth, stream);
+		}
+		else if (OperatingSystem.IsWindows())
 		{
 			SaveUsingSystemDrawing(stream, ImageFormat.Bmp);
 		}

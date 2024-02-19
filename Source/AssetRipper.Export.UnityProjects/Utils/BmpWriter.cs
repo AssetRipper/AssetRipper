@@ -1,11 +1,13 @@
-﻿namespace AssetRipper.Export.UnityProjects.Utils
+﻿using System.Runtime.CompilerServices;
+
+namespace AssetRipper.Export.UnityProjects.Utils
 {
 	/// <summary>
 	/// This is really fast, even in comparison to System.Drawing<br/>
 	/// It could be even faster if it didn't have to flip the pixels in the y direction
 	/// </summary>
 	/// <remarks>
-	/// This has bugs right now. <see href="https://github.com/AssetRipper/AssetRipper/issues/630"/>
+	/// <see href="https://en.wikipedia.org/wiki/BMP_file_format"/>
 	/// </remarks>
 	internal static class BmpWriter
 	{
@@ -14,13 +16,13 @@
 		{
 			//14 bytes
 			0x42, 0x4D,             // Signature 'BM'
-			0xaa, 0x00, 0x00, 0x00, // Size: 170 bytes
+			0x9a, 0x00, 0x00, 0x00, // Size: 154 bytes
 			0x00, 0x00,             // Unused
 			0x00, 0x00,             // Unused
-			0x8a, 0x00, 0x00, 0x00, // Offset to image data, ie 138
+			0x7a, 0x00, 0x00, 0x00, // Offset to image data, ie 122
 
 			//108 bytes
-			0x7c, 0x00, 0x00, 0x00, // DIB header size (124 bytes)
+			0x6c, 0x00, 0x00, 0x00, // DIB header size (108 bytes)
 			0x04, 0x00, 0x00, 0x00, // Width (4px)
 			0x02, 0x00, 0x00, 0x00, // Height (2px)
 			0x01, 0x00,             // Planes (1)
@@ -43,12 +45,6 @@
 			0x00, 0x00, 0x00, 0x00, // Unused Gamma Y entry for color space
 			0x00, 0x00, 0x00, 0x00, // Unused Gamma Z entry for color space
 
-			//16 bytes
-			0x00, 0x00, 0x00, 0x00, // Unknown
-			0x00, 0x00, 0x00, 0x00, // Unknown
-			0x00, 0x00, 0x00, 0x00, // Unknown
-			0x00, 0x00, 0x00, 0x00, // Unknown
-
 			// Image data: 32 bytes
 			0xFF, 0x00, 0x00, 0x7F, // Bottom left pixel
 			0x00, 0xFF, 0x00, 0x7F,
@@ -63,30 +59,11 @@
 
 		public static void WriteBmp(byte[] bgra32Data, int width, int height, Stream stream, bool flip = true)
 		{
-			if (bgra32Data is null)
-			{
-				throw new ArgumentNullException(nameof(bgra32Data));
-			}
-
-			if (stream is null)
-			{
-				throw new ArgumentNullException(nameof(stream));
-			}
-
-			if (width <= 0)
-			{
-				throw new ArgumentOutOfRangeException(nameof(width));
-			}
-
-			if (height <= 0)
-			{
-				throw new ArgumentOutOfRangeException(nameof(height));
-			}
-
-			if (bgra32Data.Length != GetRawImageSize(width, height))
-			{
-				throw new ArgumentException("Length must match 4 * width * height", nameof(bgra32Data));
-			}
+			ArgumentNullException.ThrowIfNull(bgra32Data);
+			ArgumentNullException.ThrowIfNull(stream);
+			ArgumentOutOfRangeException.ThrowIfNegativeOrZero(width);
+			ArgumentOutOfRangeException.ThrowIfNegativeOrZero(height);
+			ThrowIfIncorrectLength(bgra32Data, width, height);
 
 			using BinaryWriter writer = new BinaryWriter(stream);
 
@@ -94,10 +71,10 @@
 			writer.WriteBytes(0x42, 0x4D); // Signature 'BM'
 			writer.Write(GetTotalSize(width, height)); // Size of the file
 			writer.WriteZeroBytes(4); // 2 unused shorts
-			writer.Write((uint)138); // offset to image data
+			writer.Write((uint)(14 + (16 + 92))); // offset to image data
 
 			//16 bytes
-			writer.Write((uint)124); // DIB header size (124 bytes)
+			writer.Write((uint)108); // DIB header size (108 bytes)
 			writer.Write(width); // Width
 			writer.Write(height); // Height
 			writer.Write((ushort)1); // Planes (1)
@@ -122,12 +99,6 @@
 			writer.WriteZeroBytes(4); // Unused Gamma Y entry for color space
 			writer.WriteZeroBytes(4); // Unused Gamma Z entry for color space
 
-			//16 bytes
-			writer.WriteZeroBytes(4); // Unknown
-			writer.WriteZeroBytes(4); // Unknown
-			writer.WriteZeroBytes(4); // Unknown
-			writer.WriteZeroBytes(4); // Unknown
-
 			if (flip)
 			{
 				writer.WriteFlippedY(bgra32Data, width, height);
@@ -136,13 +107,21 @@
 			{
 				writer.Write(bgra32Data.AsSpan());
 			}
+
+			static void ThrowIfIncorrectLength(byte[] bgra32Data, int width, int height, [CallerArgumentExpression(nameof(bgra32Data))] string? paramName = null)
+			{
+				if (bgra32Data.Length != GetRawImageSize(width, height))
+				{
+					throw new ArgumentException("Length must match 4 * width * height", paramName);
+				}
+			}
 		}
 
 		private static void WriteFlippedY(this BinaryWriter writer, byte[] data, int width, int height)
 		{
 			for (int r = height - 1; r >= 0; r--)
 			{
-				writer.Write(data.AsSpan(r * 4, width * 4));
+				writer.Write(data.AsSpan(r * width * 4, width * 4));
 			}
 		}
 
