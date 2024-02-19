@@ -751,6 +751,11 @@ partial class Localization
 	public static string Save => Get("save");
 	
 	/// <summary>
+	/// Save Settings to Disk
+	/// </summary>
+	public static string SaveSettingsToDisk => Get("save_settings_to_disk");
+	
+	/// <summary>
 	/// Scene
 	/// </summary>
 	public static string Scene => Get("scene");

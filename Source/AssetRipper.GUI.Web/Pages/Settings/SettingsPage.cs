@@ -131,6 +131,20 @@ public sealed partial class SettingsPage : DefaultPage
 									WriteDropDownForScriptExportMode(writer);
 								}
 							}
+
+							using (new Div(writer).WithClass("row").End())
+							{
+								using (new Div(writer).WithClass("col").End())
+								{
+								}
+								using (new Div(writer).WithClass("col").End())
+								{
+									WriteCheckBoxForSaveSettingsToDisk(writer, Localization.SaveSettingsToDisk);
+								}
+								using (new Div(writer).WithClass("col").End())
+								{
+								}
+							}
 						}
 					}
 
@@ -231,6 +245,15 @@ public sealed partial class SettingsPage : DefaultPage
 		foreach ((string key, string? value) in form.Select(pair => (pair.Key, (string?)pair.Value)))
 		{
 			SetProperty(key, value);
+		}
+
+		if (Configuration.SaveSettingsToDisk)
+		{
+			Configuration.SaveToDefaultPath();
+		}
+		else
+		{
+			SerializedSettings.DeleteDefaultPath();
 		}
 
 		context.Response.Redirect("/Settings/Edit");

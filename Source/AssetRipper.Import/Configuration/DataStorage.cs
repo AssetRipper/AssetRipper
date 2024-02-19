@@ -25,6 +25,18 @@ public class DataStorage<T> where T : DataEntry
 		}
 	}
 
+	public TValue GetValue<TValue>(string key) where TValue : T
+	{
+		if (TryGetValue(key, out TValue? storedValue))
+		{
+			return storedValue;
+		}
+		else
+		{
+			throw new KeyNotFoundException();
+		}
+	}
+
 	public void Add(string key, T value)
 	{
 		data.Add(key, value);

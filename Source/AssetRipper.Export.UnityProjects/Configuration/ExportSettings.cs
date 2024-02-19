@@ -49,6 +49,8 @@ public sealed record class ExportSettings
 	/// </summary>
 	public TextExportMode TextExportMode { get; set; } = TextExportMode.Parse;
 
+	public bool SaveSettingsToDisk { get; set; }
+
 	public void Log()
 	{
 		Logger.Info(LogCategory.General, $"{nameof(AudioExportFormat)}: {AudioExportFormat}");

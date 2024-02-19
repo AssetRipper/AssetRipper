@@ -60,6 +60,7 @@ partial class SettingsPage
 	{
 		{ nameof(ImportSettings.IgnoreStreamingAssets), (value) => { Configuration.ImportSettings.IgnoreStreamingAssets = value; } },
 		{ nameof(ProcessingSettings.EnablePrefabOutlining), (value) => { Configuration.ProcessingSettings.EnablePrefabOutlining = value; } },
+		{ nameof(ExportSettings.SaveSettingsToDisk), (value) => { Configuration.ExportSettings.SaveSettingsToDisk = value; } },
 	};
 
 	private static void WriteDropDownForScriptContentLevel(TextWriter writer)
@@ -130,5 +131,10 @@ partial class SettingsPage
 	private static void WriteDropDownForTextExportMode(TextWriter writer)
 	{
 		WriteDropDown(writer, TextExportModeDropDownSetting.Instance, Configuration.ExportSettings.TextExportMode, nameof(ExportSettings.TextExportMode));
+	}
+
+	private static void WriteCheckBoxForSaveSettingsToDisk(TextWriter writer, string label)
+	{
+		WriteCheckBox(writer, label, Configuration.ExportSettings.SaveSettingsToDisk, nameof(ExportSettings.SaveSettingsToDisk));
 	}
 }

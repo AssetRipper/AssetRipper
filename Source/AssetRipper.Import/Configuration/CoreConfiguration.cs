@@ -17,6 +17,7 @@ public class CoreConfiguration
 	public ImportSettings ImportSettings
 	{
 		get => SingletonData.GetStoredValue<ImportSettings>(nameof(ImportSettings));
+		set => SingletonData.GetValue<JsonDataInstance<ImportSettings>>(nameof(ImportSettings)).Value = value;
 	}
 
 	#endregion
