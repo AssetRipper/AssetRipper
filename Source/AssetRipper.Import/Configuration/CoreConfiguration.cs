@@ -2,6 +2,7 @@
 using AssetRipper.Import.Utils;
 using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
+using System.Diagnostics;
 
 namespace AssetRipper.Import.Configuration
 {
@@ -58,7 +59,14 @@ namespace AssetRipper.Import.Configuration
 		public TransferInstructionFlags Flags { get; private set; }
 		#endregion
 
-		public CoreConfiguration() => ResetToDefaultValues();
+		public SingletonDataStorage SingletonData { get; } = new();
+		public ListDataStorage ListData { get; } = new();
+
+		public CoreConfiguration()
+		{
+			ResetToDefaultValues();
+			AddDebugData();
+		}
 
 		public void SetProjectSettings(UnityVersion version, BuildTarget platform, TransferInstructionFlags flags)
 		{
@@ -74,6 +82,8 @@ namespace AssetRipper.Import.Configuration
 			DefaultVersion = default;
 			ExportRootPath = ExecutingDirectory.Combine("Ripped");
 			BundledAssetsExportMode = BundledAssetsExportMode.DirectExport;
+			SingletonData.Clear();
+			ListData.Clear();
 		}
 
 		public virtual void LogConfigurationValues()
@@ -84,6 +94,15 @@ namespace AssetRipper.Import.Configuration
 			Logger.Info(LogCategory.General, $"{nameof(DefaultVersion)}: {DefaultVersion}");
 			Logger.Info(LogCategory.General, $"{nameof(ExportRootPath)}: {ExportRootPath}");
 			Logger.Info(LogCategory.General, $"{nameof(BundledAssetsExportMode)}: {BundledAssetsExportMode}");
+		}
+
+		[Conditional("DEBUG")]
+		private void AddDebugData()
+		{
+			SingletonData.Add("README", "This is a singleton entry. It is used to store information that can be contained in a single file.");
+			ListData.Add("README", ["This is a list entry. It is used to store information that might be contained in multiple files."]);
+			ListData.Add("Fibonacci", [1, 1, 2, 3, 5, 8, 13, 21, 34, 55]);
+			ListData.Add("Unused Key", []);
 		}
 	}
 }

@@ -191,8 +191,9 @@ partial class ProjectExporter
 	public void DoFinalOverrides(LibraryConfiguration settings)
 	{
 		//Engine assets
-		OverrideExporter<IUnityObjectBase>(settings.SingletonData.TryGetValue(nameof(EngineResourceData), out string? engineAssetsJson)
-			? EngineAssetsExporter.CreateFromJsonText(engineAssetsJson)
+		OverrideExporter<IUnityObjectBase>(settings.SingletonData.TryGetStoredValue(nameof(EngineResourceData), out EngineResourceData? engineResourceData)
+			&& engineResourceData is not null
+			? EngineAssetsExporter.CreateFromResourceData(engineResourceData.Value)
 			: EngineAssetsExporter.CreateFromEmbeddedData(settings.Version));
 
 		//Deleted assets

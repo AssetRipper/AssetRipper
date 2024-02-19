@@ -1,5 +1,5 @@
-﻿using AssetRipper.Export.UnityProjects.Configuration;
-using AssetRipper.GUI.Web.Paths;
+﻿using AssetRipper.GUI.Web.Paths;
+using AssetRipper.Import.Configuration;
 
 namespace AssetRipper.GUI.Web.Pages.Settings;
 
@@ -14,9 +14,9 @@ public sealed partial class ConfigurationFilesPage
 		protected override IEnumerable<HtmlTab> GetTabs()
 		{
 			SingletonDataStorage dataStorage = GameFileLoader.Settings.SingletonData;
-			foreach (string key in dataStorage.KnownKeys)
+			foreach (string key in dataStorage.Keys)
 			{
-				yield return new FileTab(key, dataStorage[key]);
+				yield return new FileTab(key, dataStorage[key]?.Text);
 			}
 		}
 

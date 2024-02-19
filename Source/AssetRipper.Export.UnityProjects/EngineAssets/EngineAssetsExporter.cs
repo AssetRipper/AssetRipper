@@ -24,10 +24,6 @@ public class EngineAssetsExporter : IAssetExporter
 		Cache = cache;
 	}
 
-	public EngineAssetsExporter(EngineResourceData resourceData) : this(new PredefinedAssetCache(resourceData))
-	{
-	}
-
 	public static EngineAssetsExporter CreateFromEmbeddedData(UnityVersion version) => CreateFromTpkFile(version, EngineAssetsTpk.GetStream());
 
 	public static EngineAssetsExporter CreateFromTpkFile(UnityVersion version, Stream stream)
@@ -67,7 +63,12 @@ public class EngineAssetsExporter : IAssetExporter
 
 	public static EngineAssetsExporter CreateFromJsonText(string json)
 	{
-		return new(EngineResourceData.FromJson(json));
+		return CreateFromResourceData(EngineResourceData.FromJson(json));
+	}
+
+	public static EngineAssetsExporter CreateFromResourceData(EngineResourceData resourceData)
+	{
+		return new(new PredefinedAssetCache(resourceData));
 	}
 
 	public bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection)

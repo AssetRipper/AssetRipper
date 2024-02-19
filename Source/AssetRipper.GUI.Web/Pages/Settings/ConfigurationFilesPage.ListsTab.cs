@@ -1,5 +1,5 @@
-﻿using AssetRipper.Export.UnityProjects.Configuration;
-using AssetRipper.GUI.Web.Paths;
+﻿using AssetRipper.GUI.Web.Paths;
+using AssetRipper.Import.Configuration;
 
 namespace AssetRipper.GUI.Web.Pages.Settings;
 
@@ -14,13 +14,13 @@ public sealed partial class ConfigurationFilesPage
 		protected override IEnumerable<HtmlTab> GetTabs()
 		{
 			ListDataStorage dataStorage = GameFileLoader.Settings.ListData;
-			foreach (string key in dataStorage.KnownKeys)
+			foreach (string key in dataStorage.Keys)
 			{
 				yield return new FileListTab(key, dataStorage[key]);
 			}
 		}
 
-		private sealed class FileListTab(string key, List<string>? list) : HtmlTab
+		private sealed class FileListTab(string key, DataSet? list) : HtmlTab
 		{
 			public override string DisplayName => key;
 			public override void Write(TextWriter writer)
@@ -42,7 +42,7 @@ public sealed partial class ConfigurationFilesPage
 					FileAccordianItem[] items = new FileAccordianItem[list.Count];
 					for (int i = 0; i < list.Count; i++)
 					{
-						items[i] = new FileAccordianItem(key, i, list[i]);
+						items[i] = new FileAccordianItem(key, i, list.Strings[i]);
 					}
 					Accordian.Write(writer, items);
 					using (new Div(writer).WithTextCenter().End())

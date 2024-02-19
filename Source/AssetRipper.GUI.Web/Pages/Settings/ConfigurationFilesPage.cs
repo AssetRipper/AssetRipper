@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AssetRipper.Import.Configuration;
+using AssetRipper.SourceGenerated.Extensions;
+using Microsoft.AspNetCore.Http;
 
 namespace AssetRipper.GUI.Web.Pages.Settings;
 
@@ -31,7 +33,7 @@ public sealed partial class ConfigurationFilesPage : DefaultPage
 
 		if (content is not null)
 		{
-			GameFileLoader.Settings.SingletonData[key] = content;
+			GameFileLoader.Settings.SingletonData.GetOrAdd(key).Text = content;
 		}
 
 		return Results.Redirect("/ConfigurationFiles").ExecuteAsync(context);
@@ -44,7 +46,7 @@ public sealed partial class ConfigurationFilesPage : DefaultPage
 			return Results.BadRequest().ExecuteAsync(context);
 		}
 
-		GameFileLoader.Settings.SingletonData[key] = null;
+		GameFileLoader.Settings.SingletonData[key]?.Clear();
 
 		return Results.Redirect("/ConfigurationFiles").ExecuteAsync(context);
 	}
@@ -58,14 +60,15 @@ public sealed partial class ConfigurationFilesPage : DefaultPage
 
 		if (context.Request.Form.TryGetStringArray("Content", out string?[]? contentArray))
 		{
-			GameFileLoader.Settings.ListData.GetOrAdd(key).AddRange(contentArray.Where(s => s is not null)!);
+			DataSet set = GameFileLoader.Settings.ListData.GetOrAdd(key);
+			set.Strings.AddRange(contentArray.WhereNotNull());
 		}
 		else if (Dialogs.OpenFiles.TryGetUserInput(out string[]? paths))
 		{
-			List<string> list = GameFileLoader.Settings.ListData.GetOrAdd(key);
+			DataSet set = GameFileLoader.Settings.ListData.GetOrAdd(key);
 			foreach (string path in paths)
 			{
-				list.Add(File.ReadAllText(path));
+				set.Strings.Add(File.ReadAllText(path));
 			}
 		}
 
@@ -104,7 +107,8 @@ public sealed partial class ConfigurationFilesPage : DefaultPage
 
 		if (content is not null)
 		{
-			list[index] = content;
+			DataSet.StringAccessor strings = list.Strings;
+			strings[index] = content;
 		}
 
 		return Results.Redirect("/ConfigurationFiles").ExecuteAsync(context);
