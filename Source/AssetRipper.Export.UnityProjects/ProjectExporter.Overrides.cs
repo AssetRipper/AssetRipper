@@ -103,7 +103,7 @@ partial class ProjectExporter
 		OverrideExporter<ITexture2D>(textureExporter); //Texture2D and Cubemap
 		OverrideExporter<ISprite>(textureExporter);
 		OverrideExporter<SpriteInformationObject>(textureExporter);
-		if (settings.SpriteExportMode == SpriteExportMode.Yaml)
+		if (settings.ExportSettings.SpriteExportMode == SpriteExportMode.Yaml)
 		{
 			YamlSpriteExporter spriteExporter = new();
 			OverrideExporter<ISprite>(spriteExporter);
@@ -126,7 +126,7 @@ partial class ProjectExporter
 		OverrideExporter<ITexture>(fontAssetExporter);
 
 		//Shader exporters
-		OverrideExporter<IShader>(settings.ShaderExportMode switch
+		OverrideExporter<IShader>(settings.ExportSettings.ShaderExportMode switch
 		{
 			ShaderExportMode.Yaml => new YamlShaderExporter(),
 			ShaderExportMode.Disassembly => new ShaderDisassemblyExporter(),
@@ -137,11 +137,11 @@ partial class ProjectExporter
 
 		//Audio exporters
 		OverrideExporter<IAudioClip>(new YamlAudioExporter());
-		if (settings.AudioExportFormat == AudioExportFormat.Native)
+		if (settings.ExportSettings.AudioExportFormat == AudioExportFormat.Native)
 		{
 			OverrideExporter<IAudioClip>(new NativeAudioExporter());
 		}
-		if (AudioClipExporter.IsSupportedExportFormat(settings.AudioExportFormat))
+		if (AudioClipExporter.IsSupportedExportFormat(settings.ExportSettings.AudioExportFormat))
 		{
 			OverrideExporter<IAudioClip>(new AudioClipExporter(settings));
 		}
@@ -154,7 +154,7 @@ partial class ProjectExporter
 		OverrideExporter<IAudioMixerSnapshot>(audioMixerExporter);
 
 		//Mesh and Model exporters
-		if (settings.MeshExportFormat == MeshExportFormat.Glb)
+		if (settings.ExportSettings.MeshExportFormat == MeshExportFormat.Glb)
 		{
 			OverrideExporter<IMesh>(new GlbMeshExporter());
 			GlbModelExporter glbModelExporter = new();
@@ -164,7 +164,7 @@ partial class ProjectExporter
 		}
 
 		//Terrain and NavMesh exporters
-		switch (settings.TerrainExportMode)
+		switch (settings.ExportSettings.TerrainExportMode)
 		{
 			case TerrainExportMode.Heatmap:
 				OverrideExporter<ITerrainData>(new TerrainHeatmapExporter(settings));

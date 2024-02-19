@@ -57,7 +57,7 @@ public class ExportHandler
 
 	protected virtual IEnumerable<IAssetProcessor> GetProcessors()
 	{
-		if (Settings.ScriptContentLevel == ScriptContentLevel.Level1)
+		if (Settings.ImportSettings.ScriptContentLevel == ScriptContentLevel.Level1)
 		{
 			yield return new MethodStubbingProcessor();
 		}
@@ -65,9 +65,9 @@ public class ExportHandler
 		yield return new MainAssetProcessor();
 		yield return new AnimatorControllerProcessor();
 		yield return new AudioMixerProcessor();
-		yield return new EditorFormatProcessor(Settings.BundledAssetsExportMode);
+		yield return new EditorFormatProcessor(Settings.ImportSettings.BundledAssetsExportMode);
 		//Static mesh separation goes here
-		if (Settings.EnablePrefabOutlining)
+		if (Settings.ProcessingSettings.EnablePrefabOutlining)
 		{
 			yield return new PrefabOutliningProcessor();
 		}

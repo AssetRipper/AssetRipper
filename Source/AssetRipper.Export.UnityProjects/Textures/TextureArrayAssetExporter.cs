@@ -18,7 +18,7 @@ public sealed class TextureArrayAssetExporter : BinaryAssetExporter
 
 	public TextureArrayAssetExporter(LibraryConfiguration configuration)
 	{
-		ImageExportFormat = configuration.ImageExportFormat;
+		ImageExportFormat = configuration.ExportSettings.ImageExportFormat;
 	}
 
 	public override bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection)

@@ -145,13 +145,13 @@ public sealed partial class SettingsPage : DefaultPage
 
 	private static void WriteTextAreaForDefaultVersion(TextWriter writer)
 	{
-		new Label(writer).WithClass("form-label").WithFor(nameof(Configuration.DefaultVersion)).Close(Localization.DefaultVersion);
+		new Label(writer).WithClass("form-label").WithFor(nameof(Configuration.ImportSettings.DefaultVersion)).Close(Localization.DefaultVersion);
 		new Input(writer)
 			.WithType("text")
 			.WithClass("form-control")
-			.WithId(nameof(Configuration.DefaultVersion))
-			.WithName(nameof(Configuration.DefaultVersion))
-			.WithValue(Configuration.DefaultVersion.ToString())
+			.WithId(nameof(Configuration.ImportSettings.DefaultVersion))
+			.WithName(nameof(Configuration.ImportSettings.DefaultVersion))
+			.WithValue(Configuration.ImportSettings.DefaultVersion.ToString())
 			.Close();
 	}
 

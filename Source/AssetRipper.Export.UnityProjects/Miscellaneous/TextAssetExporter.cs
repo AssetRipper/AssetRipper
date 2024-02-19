@@ -10,7 +10,7 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 		public TextExportMode ExportMode { get; }
 		public TextAssetExporter(LibraryConfiguration configuration)
 		{
-			ExportMode = configuration.TextExportMode;
+			ExportMode = configuration.ExportSettings.TextExportMode;
 		}
 
 		public override bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection)

@@ -1,7 +1,9 @@
 ﻿using AssetRipper.Export.UnityProjects.Configuration;
+using AssetRipper.Import.Configuration;
 using AssetRipper.Text.SourceGeneration;
 using System.CodeDom.Compiler;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace AssetRipper.GUI.SourceGenerator;
 
@@ -28,7 +30,7 @@ internal static class SettingsPageGenerator
 		writer.WriteLine("partial class SettingsPage");
 		using (new CurlyBrackets(writer))
 		{
-			List<PropertyData> properties = GetPropertyNames().Select(name => new PropertyData(name)).ToList();
+			List<PropertyData> properties = GetProperties().ToList();
 			writer.WriteLine("private static void SetProperty(string key, string? value)");
 			using (new CurlyBrackets(writer))
 			{
@@ -40,7 +42,7 @@ internal static class SettingsPageGenerator
 						writer.WriteLine($"case {property.NameOfString}:");
 						using (new Indented(writer))
 						{
-							writer.Write("Configuration.");
+							writer.Write($"Configuration.{property.DeclaringType?.Name}.");
 							writer.Write(property.Name);
 							writer.Write(" = ");
 							if (property.IsUnityVersion)
@@ -72,7 +74,7 @@ internal static class SettingsPageGenerator
 				{
 					if (property.IsBoolean)
 					{
-						writer.WriteLine($"{{ {property.NameOfString}, (value) => {{ Configuration.{property.Name} = value; }} }},");
+						writer.WriteLine($"{{ {property.NameOfString}, (value) => {{ Configuration.{property.DeclaringType?.Name}.{property.Name} = value; }} }},");
 					}
 				}
 			}
@@ -85,7 +87,7 @@ internal static class SettingsPageGenerator
 					writer.WriteLine($"private static void WriteCheckBoxFor{property.Name}(TextWriter writer, string label)");
 					using (new CurlyBrackets(writer))
 					{
-						writer.WriteLine($"WriteCheckBox(writer, label, Configuration.{property.Name}, {property.NameOfString});");
+						writer.WriteLine($"WriteCheckBox(writer, label, Configuration.{property.DeclaringType?.Name}.{property.Name}, {property.NameOfString});");
 					}
 				}
 				else if (property.IsEnum)
@@ -94,31 +96,21 @@ internal static class SettingsPageGenerator
 					writer.WriteLine($"private static void WriteDropDownFor{property.Name}(TextWriter writer)");
 					using (new CurlyBrackets(writer))
 					{
-						writer.WriteLine($"WriteDropDown(writer, {property.PropertyType.Name}DropDownSetting.Instance, Configuration.{property.Name}, {property.NameOfString});");
+						writer.WriteLine($"WriteDropDown(writer, {property.PropertyType.Name}DropDownSetting.Instance, Configuration.{property.DeclaringType?.Name}.{property.Name}, {property.NameOfString});");
 					}
 				}
 			}
 		}
 	}
 
-	static IEnumerable<string> GetPropertyNames()
+	static IEnumerable<PropertyData> GetProperties()
 	{
-		return
-			[
-				nameof(LibraryConfiguration.EnablePrefabOutlining),
-				nameof(LibraryConfiguration.IgnoreStreamingAssets),
-				nameof(LibraryConfiguration.DefaultVersion),
-				nameof(LibraryConfiguration.AudioExportFormat),
-				nameof(LibraryConfiguration.BundledAssetsExportMode),
-				nameof(LibraryConfiguration.ImageExportFormat),
-				nameof(LibraryConfiguration.MeshExportFormat),
-				nameof(LibraryConfiguration.SpriteExportMode),
-				nameof(LibraryConfiguration.TerrainExportMode),
-				nameof(LibraryConfiguration.TextExportMode),
-				nameof(LibraryConfiguration.ShaderExportMode),
-				nameof(LibraryConfiguration.ScriptExportMode),
-				nameof(LibraryConfiguration.ScriptContentLevel),
-				nameof(LibraryConfiguration.ScriptLanguageVersion),
-			];
+		foreach (Type type in (Type[])[typeof(ImportSettings), typeof(ProcessingSettings), typeof(ExportSettings)])
+		{
+			foreach (PropertyInfo property in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+			{
+				yield return new PropertyData(property);
+			}
+		}
 	}
 }

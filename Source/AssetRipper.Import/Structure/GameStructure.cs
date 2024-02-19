@@ -24,7 +24,7 @@ namespace AssetRipper.Import.Structure
 			Logger.SendStatusChange("loading_step_detect_platform");
 			PlatformChecker.CheckPlatform(paths, out PlatformGameStructure? platformStructure, out MixedGameStructure? mixedStructure);
 			PlatformStructure = platformStructure;
-			PlatformStructure?.CollectFiles(configuration.IgnoreStreamingAssets);
+			PlatformStructure?.CollectFiles(configuration.ImportSettings.IgnoreStreamingAssets);
 			MixedStructure = mixedStructure;
 			//MixedStructure?.CollectFiles(configuration.IgnoreStreamingAssets);
 			//The PlatformGameStructure constructor adds all the paths to the Assemblies and Files dictionaries
@@ -36,7 +36,7 @@ namespace AssetRipper.Import.Structure
 
 			Logger.SendStatusChange("loading_step_begin_scheme_processing");
 
-			InitializeGameCollection(configuration.DefaultVersion);
+			InitializeGameCollection(configuration.ImportSettings.DefaultVersion);
 
 			if (!FileCollection.HasAnyAssetCollections())
 			{
@@ -93,7 +93,7 @@ namespace AssetRipper.Import.Structure
 			AssemblyManager = scriptBackend switch
 			{
 				ScriptingBackend.Mono => new MonoManager(OnRequestAssembly),
-				ScriptingBackend.IL2Cpp => new IL2CppManager(OnRequestAssembly, configuration.ScriptContentLevel),
+				ScriptingBackend.IL2Cpp => new IL2CppManager(OnRequestAssembly, configuration.ImportSettings.ScriptContentLevel),
 				_ => new BaseManager(OnRequestAssembly),
 			};
 

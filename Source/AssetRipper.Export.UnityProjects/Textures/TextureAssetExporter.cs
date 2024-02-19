@@ -16,8 +16,8 @@ namespace AssetRipper.Export.UnityProjects.Textures
 
 		public TextureAssetExporter(LibraryConfiguration configuration)
 		{
-			ImageExportFormat = configuration.ImageExportFormat;
-			SpriteExportMode = configuration.SpriteExportMode;
+			ImageExportFormat = configuration.ExportSettings.ImageExportFormat;
+			SpriteExportMode = configuration.ExportSettings.SpriteExportMode;
 		}
 
 		public override bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection)

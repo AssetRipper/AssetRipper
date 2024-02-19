@@ -16,10 +16,10 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 			AssemblyManager = assemblyManager;
 			Decompiler = new ScriptDecompiler(AssemblyManager)
 			{
-				LanguageVersion = configuration.ScriptLanguageVersion.ToCSharpLanguageVersion(configuration.Version),
-				ScriptContentLevel = configuration.ScriptContentLevel,
+				LanguageVersion = configuration.ExportSettings.ScriptLanguageVersion.ToCSharpLanguageVersion(configuration.Version),
+				ScriptContentLevel = configuration.ImportSettings.ScriptContentLevel,
 			};
-			ExportMode = configuration.ScriptExportMode;
+			ExportMode = configuration.ExportSettings.ScriptExportMode;
 		}
 
 		public IAssemblyManager AssemblyManager { get; }

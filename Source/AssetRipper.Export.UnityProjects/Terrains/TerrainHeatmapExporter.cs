@@ -13,7 +13,7 @@ namespace AssetRipper.Export.UnityProjects.Terrains
 		public ImageExportFormat ImageFormat { get; }
 		public TerrainHeatmapExporter(LibraryConfiguration configuration)
 		{
-			ImageFormat = configuration.ImageExportFormat;
+			ImageFormat = configuration.ExportSettings.ImageExportFormat;
 		}
 
 		public override bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection)
