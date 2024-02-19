@@ -95,7 +95,7 @@ namespace AssetRipper.Export.UnityProjects.Project
 		}
 
 		public override AssetCollection File => m_file;
-		private AssetCollection m_file;
+		protected AssetCollection m_file;
 
 		/// <summary>
 		/// A one-to-one dictionary of export id's

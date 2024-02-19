@@ -24,5 +24,10 @@
 				yield return item;
 			}
 		}
+
+		public static IEnumerable<T> MaybeAppend<T>(this IEnumerable<T> enumerable, T? item)
+		{
+			return item is not null ? enumerable.Append(item) : enumerable;
+		}
 	}
 }

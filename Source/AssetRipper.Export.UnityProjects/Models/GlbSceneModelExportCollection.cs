@@ -1,12 +1,12 @@
-﻿using AssetRipper.Assets.Collections;
-using AssetRipper.Assets.Export;
+﻿using AssetRipper.Assets.Export;
 using AssetRipper.Export.UnityProjects.Project;
+using AssetRipper.Processing;
 
 namespace AssetRipper.Export.UnityProjects.Models
 {
 	public sealed class GlbSceneModelExportCollection : SceneExportCollection
 	{
-		public GlbSceneModelExportCollection(GlbModelExporter assetExporter, SceneDefinition scene) : base(assetExporter, scene)
+		public GlbSceneModelExportCollection(GlbModelExporter assetExporter, SceneHierarchyObject asset) : base(assetExporter, asset)
 		{
 		}
 

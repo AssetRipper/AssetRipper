@@ -2,10 +2,9 @@
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Export.UnityProjects.Meshes;
-using AssetRipper.Export.UnityProjects.Project;
 using AssetRipper.Import.Logging;
 using AssetRipper.Numerics;
-using AssetRipper.Processing.Scenes;
+using AssetRipper.Processing;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_137;
 using AssetRipper.SourceGenerated.Classes.ClassID_18;
@@ -30,26 +29,17 @@ namespace AssetRipper.Export.UnityProjects.Models
 	{
 		public override bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			if (SceneHelpers.IsSceneCompatible(asset))
+			switch (asset.MainAsset)
 			{
-				if (asset.Collection.IsScene)
-				{
-					exportCollection = new GlbSceneModelExportCollection(this, asset.Collection.Scene);
-				}
-				else if (PrefabExportCollection.IsValidAsset(asset))
-				{
-					exportCollection = new GlbPrefabModelExportCollection(this, asset);
-				}
-				else
-				{
-					exportCollection = new FailExportCollection(this, asset);
-				}
-				return true;
-			}
-			else
-			{
-				exportCollection = null;
-				return false;
+				case SceneHierarchyObject sceneHierarchyObject:
+					exportCollection = new GlbSceneModelExportCollection(this, sceneHierarchyObject);
+					return true;
+				case PrefabHierarchyObject prefabHierarchyObject:
+					exportCollection = new GlbPrefabModelExportCollection(this, prefabHierarchyObject);
+					return true;
+				default:
+					exportCollection = null;
+					return false;
 			}
 		}
 

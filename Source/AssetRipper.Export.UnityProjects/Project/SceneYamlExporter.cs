@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Assets;
+using AssetRipper.Processing;
 using AssetRipper.Processing.Scenes;
 
 namespace AssetRipper.Export.UnityProjects.Project
@@ -7,26 +8,17 @@ namespace AssetRipper.Export.UnityProjects.Project
 	{
 		public override bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			if (SceneHelpers.IsSceneCompatible(asset))
+			switch (asset.MainAsset)
 			{
-				if (asset.Collection.IsScene)
-				{
-					exportCollection = new SceneExportCollection(this, asset.Collection.Scene);
-				}
-				else if (PrefabExportCollection.IsValidAsset(asset))
-				{
-					exportCollection = new PrefabExportCollection(this, asset);
-				}
-				else
-				{
-					exportCollection = new FailExportCollection(this, asset);
-				}
-				return true;
-			}
-			else
-			{
-				exportCollection = null;
-				return false;
+				case SceneHierarchyObject sceneHierarchyObject:
+					exportCollection = new SceneExportCollection(this, sceneHierarchyObject);
+					return true;
+				case PrefabHierarchyObject prefabHierarchyObject:
+					exportCollection = new PrefabExportCollection(this, prefabHierarchyObject);
+					return true;
+				default:
+					exportCollection = null;
+					return false;
 			}
 		}
 	}

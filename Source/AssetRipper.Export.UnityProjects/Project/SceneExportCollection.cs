@@ -4,6 +4,7 @@ using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Import.Logging;
 using AssetRipper.IO.Files;
+using AssetRipper.Processing;
 using AssetRipper.Processing.Scenes;
 using AssetRipper.SourceGenerated.Classes.ClassID_1030;
 using AssetRipper.SourceGenerated.Classes.ClassID_3;
@@ -12,23 +13,21 @@ namespace AssetRipper.Export.UnityProjects.Project
 {
 	public class SceneExportCollection : ExportCollection, IComparer<IUnityObjectBase>
 	{
-		public SceneExportCollection(IAssetExporter assetExporter, SceneDefinition scene)
+		public SceneExportCollection(IAssetExporter assetExporter, SceneHierarchyObject hierarchy)
 		{
-			AssetExporter = assetExporter ?? throw new ArgumentNullException(nameof(assetExporter));
-			Scene = scene ?? throw new ArgumentNullException(nameof(scene));
-			CurrentFile = scene.Collections[0];//Have to set it to something.
+			ArgumentNullException.ThrowIfNull(assetExporter);
+			ArgumentNullException.ThrowIfNull(hierarchy);
 
-			List<IUnityObjectBase> components = new();
-			foreach (IUnityObjectBase asset in Scene.Collections.SelectMany(c => c))
+			AssetExporter = assetExporter;
+			Hierarchy = hierarchy;
+			CurrentFile = Hierarchy.Collection;//Have to set it to something.
+
+			foreach (IUnityObjectBase asset in Hierarchy.Assets)
 			{
-				if (SceneHelpers.IsSceneCompatible(asset))
-				{
-					components.Add(asset);
-					m_exportIDs.Add(asset.AssetInfo, asset.PathID);
-				}
+				m_exportIDs.Add(asset, asset.Collection is SerializedAssetCollection ? asset.PathID : ExportIdHandler.GetInternalId());
 			}
-			components.Sort(this);
-			componentArray = components.ToArray();
+
+			componentArray = hierarchy.Assets.Order(this).ToArray();
 		}
 
 		public override bool Export(IExportContainer container, string projectDirectory)
@@ -60,12 +59,12 @@ namespace AssetRipper.Export.UnityProjects.Project
 
 		public override bool Contains(IUnityObjectBase asset)
 		{
-			return m_exportIDs.ContainsKey(asset.AssetInfo);
+			return m_exportIDs.ContainsKey(asset);
 		}
 
 		public override long GetExportID(IExportContainer container, IUnityObjectBase asset)
 		{
-			return m_exportIDs[asset.AssetInfo];
+			return m_exportIDs[asset];
 		}
 
 		public override MetaPtr CreateExportPointer(IExportContainer container, IUnityObjectBase asset, bool isLocal)
@@ -113,6 +112,20 @@ namespace AssetRipper.Export.UnityProjects.Project
 		{
 			get
 			{
+				foreach (IUnityObjectBase asset in Hierarchy.Assets)
+				{
+					CurrentFile = asset.Collection;
+					yield return asset;
+				}
+				CurrentFile = Hierarchy.Collection;
+				yield return Hierarchy;
+			}
+		}
+
+		public override IEnumerable<IUnityObjectBase> ExportableAssets
+		{
+			get
+			{
 				foreach (IUnityObjectBase asset in componentArray)
 				{
 					CurrentFile = asset.Collection;
@@ -131,10 +144,11 @@ namespace AssetRipper.Export.UnityProjects.Project
 		public override AssetCollection File => CurrentFile;
 		public UnityGuid GUID => Scene.GUID;
 		public override IAssetExporter AssetExporter { get; }
-		public SceneDefinition Scene { get; }
+		public SceneHierarchyObject Hierarchy { get; }
+		public SceneDefinition Scene => Hierarchy.Scene;
 		private AssetCollection CurrentFile { get; set; }
 
 		private readonly IUnityObjectBase[] componentArray;
-		private readonly Dictionary<AssetInfo, long> m_exportIDs = new();
+		private readonly Dictionary<IUnityObjectBase, long> m_exportIDs = new();
 	}
 }
