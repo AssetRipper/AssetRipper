@@ -124,6 +124,12 @@ namespace AssetRipper.SourceGenerated.Extensions
 			for (int chn = 0; chn < channels.Count; chn++)
 			{
 				ChannelInfo m_Channel = channels[chn];
+
+				if (version.LessThan(2018) && chn == 2 && m_Channel.Format == 2) //kShaderChannelColor && kChannelFormatColor
+				{
+					m_Channel.SetDataDimension(4);
+				}
+
 				byte dimension = m_Channel.GetDataDimension();
 				if (dimension > 0)
 				{
@@ -131,10 +137,6 @@ namespace AssetRipper.SourceGenerated.Extensions
 					BitArray channelMask = new BitArray(BitConverter.GetBytes(m_Stream.ChannelMask));
 					if (channelMask.Get(chn))
 					{
-						if (version.LessThan(2018) && chn == 2 && m_Channel.Format == 2) //kShaderChannelColor && kChannelFormatColor
-						{
-							m_Channel.SetDataDimension(4);
-						}
 
 						MeshHelper.VertexFormat vertexFormat = MeshHelper.ToVertexFormat(m_Channel.Format, version);
 						int componentByteSize = MeshHelper.GetFormatSize(vertexFormat);
