@@ -27,16 +27,15 @@ namespace AssetRipper.SourceGenerated.Extensions
 			// if sprite doesn't belong to an atlas, consider its image as single sprite atlas
 
 			Vector2 cropBotLeft;
-			if (atlas is null || !sprite.Has_RenderDataKey())
+			if (atlas is not null && sprite.Has_RenderDataKey() && atlas.RenderDataMap.TryGetValue(sprite.RenderDataKey, out ISpriteAtlasData? atlasData))
 			{
-				sAtlasRect = sprite.RD.TextureRect.CastToStruct();
-				cropBotLeft = (Vector2)sprite.RD.TextureRectOffset;
+				sAtlasRect = atlasData.TextureRect.CastToStruct();
+				cropBotLeft = (Vector2)atlasData.TextureRectOffset;
 			}
 			else
 			{
-				ISpriteAtlasData atlasData = atlas.RenderDataMap[sprite.RenderDataKey];
-				sAtlasRect = atlasData.TextureRect.CastToStruct();
-				cropBotLeft = (Vector2)atlasData.TextureRectOffset;
+				sAtlasRect = sprite.RD.TextureRect.CastToStruct();
+				cropBotLeft = (Vector2)sprite.RD.TextureRectOffset;
 			}
 
 			Vector2 sizeDelta = sprite.Rect.Size() - sAtlasRect.Size();

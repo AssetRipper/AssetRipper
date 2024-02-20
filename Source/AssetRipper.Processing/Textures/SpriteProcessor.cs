@@ -79,7 +79,7 @@ namespace AssetRipper.Processing.Textures
 			// Otherwise, if a SpriteAtlas reference is serialized into this sprite,
 			// we must recover the m_RD field of the sprite from the SpriteAtlas.
 			ISpriteAtlas? atlas = sprite.SpriteAtlasP;
-			if (atlas is not null && sprite.Has_SpriteAtlas())
+			if (atlas is not null)
 			{
 				if (sprite.Has_RenderDataKey() &&
 					atlas.RenderDataMap.TryGetValue(sprite.RenderDataKey, out ISpriteAtlasData? spriteData))
