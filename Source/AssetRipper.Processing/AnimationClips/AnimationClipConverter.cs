@@ -80,7 +80,6 @@ namespace AssetRipper.Processing.AnimationClips
 			Span<float> curveValues = [0, 0, 0, 0];
 			Span<float> inSlopeValues = [0, 0, 0, 0];
 			Span<float> outSlopeValues = [0, 0, 0, 0];
-			Dictionary<int, IGenericBinding> bindingCache = new();
 
 			if (streamedFrames.Count > 1)
 			{
@@ -96,12 +95,7 @@ namespace AssetRipper.Processing.AnimationClips
 				for (int curveIdx = 0; curveIdx < frame.Curves.Length;)
 				{
 					int curveID = frame.Curves[curveIdx].Index;
-					if (!bindingCache.TryGetValue(curveID, out IGenericBinding? binding))
-					{
-						binding = GetBinding(curveID);
-						bindingCache[curveID] = binding;
-					}
-
+					IGenericBinding binding = GetBinding(curveID);
 					string path = GetCurvePath(binding.Path);
 					StreamedCurveKey curve;
 					if (binding.IsTransform())
