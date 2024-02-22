@@ -120,9 +120,9 @@ namespace AssetRipper.Processing.AnimationClips
 							curveValues[offset] = curve.Value;
 							inSlopeValues[offset] = curve.inSlope;
 							outSlopeValues[offset] = curve.outSlope;
+							curveIdx++;
 						}
 						AddTransformCurve(frame.Time, binding.TransformType(), curveValues, inSlopeValues, outSlopeValues, 0, path);
-						curveIdx += transformDim;
 						continue;
 					}
 					curve = frame.Curves[curveIdx];
@@ -392,15 +392,11 @@ namespace AssetRipper.Processing.AnimationClips
 			switch (binding.GetClassID())
 			{
 				case ClassIDType.GameObject:
-					{
-						AddGameObjectCurve(binding, path, time, value);
-					}
+					AddGameObjectCurve(binding, path, time, value);
 					break;
 
 				case ClassIDType.MonoBehaviour:
-					{
-						AddScriptCurve(binding, path, time, value, inTangent, outTangent);
-					}
+					AddScriptCurve(binding, path, time, value, inTangent, outTangent);
 					break;
 
 				default:
@@ -419,14 +415,13 @@ namespace AssetRipper.Processing.AnimationClips
 
 				default:
 					string attribute = m_customCurveResolver.ToAttributeName((BindingCustomType)binding.CustomType, binding.Attribute, path);
+					CurveData curve = new(path, attribute, binding.GetClassID(), binding.Script.TryGetAsset(m_clip.Collection));
 					if (binding.IsPPtrCurve())
 					{
-						CurveData curve = new(path, attribute, binding.GetClassID(), binding.Script.TryGetAsset(m_clip.Collection));
 						AddPPtrKeyframe(curve, time, (int)value);
 					}
 					else
 					{
-						CurveData curve = new(path, attribute, binding.GetClassID(), binding.Script.TryGetAsset(m_clip.Collection));
 						AddFloatKeyframe(curve, time, value, inTangent, outTangent);
 					}
 					break;
@@ -439,7 +434,6 @@ namespace AssetRipper.Processing.AnimationClips
 			{
 				CurveData curve = new(path, propertyName, ClassIDType.GameObject);
 				AddFloatKeyframe(curve, time, value, 0, 0);
-				return;
 			}
 			else
 			{
@@ -548,29 +542,31 @@ namespace AssetRipper.Processing.AnimationClips
 			{
 				return binding;
 			}
-			else
+			int curves = 0;
+			AccessListBase<IGenericBinding> bindings = m_clip.ClipBindingConstant_C74!.GenericBindings;
+			for (int i = 0; i < bindings.Count; i++)
 			{
-				int curves = 0;
-				AccessListBase<IGenericBinding> bindings = m_clip.ClipBindingConstant_C74!.GenericBindings;
-				for (int i = 0; i < bindings.Count; i++)
+				binding = bindings[i];
+				if (binding.GetClassID() == ClassIDType.Transform)
 				{
-					binding = bindings[i];
-					if (binding.GetClassID() == ClassIDType.Transform)
-					{
-						curves += binding.TransformType().GetDimension();
-					}
-					else
-					{
-						curves += 1;
-					}
-					if (curves > index)
-					{
-						m_bindingsCache[index] = binding;
-						return binding;
-					}
+					curves += binding.TransformType().GetDimension();
 				}
-				throw new ArgumentException($"Binding with index {index} hasn't been found", nameof(index));
+				else
+				{
+					curves += 1;
+				}
+				if (curves > index)
+				{
+					m_bindingsCache[index] = binding;
+					if (binding.IsTransform() && binding.TransformType().GetDimension() < 1)
+					{
+						// avoid infinite FOR loop when processing Transform animations
+						throw new IndexOutOfRangeException("Transform AnimationCurve can't have Dimension less than 1.");
+					}
+					return binding;
+				}
 			}
+			throw new ArgumentException($"Binding with index {index} hasn't been found", nameof(index));
 		}
 
 		private static bool TryGetNextFrame(IReadOnlyList<StreamedFrame> streamedFrames, int currentFrame, int curveID, [MaybeNullWhen(false)] out StreamedFrame nextFrame, out int curveIdx)
