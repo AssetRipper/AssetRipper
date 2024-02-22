@@ -42,7 +42,13 @@ public sealed partial class SettingsPage : DefaultPage
 								{
 									WriteCheckBoxForIgnoreStreamingAssets(writer, Localization.SkipStreamingAssets);
 								}
+
+								using (new Div(writer).WithClass("col").End())
+								{
+									WriteCheckBoxForEnableStaticMeshSeparation(writer, Localization.EnableStaticMeshSeparation);
+								}
 							}
+
 							using (new Div(writer).WithClass("row").End())
 							{
 								using (new Div(writer).WithClass("col").End())
@@ -72,7 +78,18 @@ public sealed partial class SettingsPage : DefaultPage
 						{
 							new H3(writer).Close(Localization.Experimental);
 
-							WriteCheckBoxForEnablePrefabOutlining(writer, Localization.EnablePrefabOutlining);
+							using (new Div(writer).WithClass("row").End())
+							{
+								using (new Div(writer).WithClass("col").End())
+								{
+									WriteCheckBoxForEnablePrefabOutlining(writer, Localization.EnablePrefabOutlining);
+								}
+
+								using (new Div(writer).WithClass("col").End())
+								{
+									WriteCheckBoxForEnableAssetDeduplication(writer, Localization.EnableAssetDeduplication);
+								}
+							}
 						}
 					}
 

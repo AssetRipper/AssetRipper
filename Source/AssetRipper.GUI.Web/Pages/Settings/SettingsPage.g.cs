@@ -60,6 +60,8 @@ partial class SettingsPage
 	{
 		{ nameof(ImportSettings.IgnoreStreamingAssets), (value) => { Configuration.ImportSettings.IgnoreStreamingAssets = value; } },
 		{ nameof(ProcessingSettings.EnablePrefabOutlining), (value) => { Configuration.ProcessingSettings.EnablePrefabOutlining = value; } },
+		{ nameof(ProcessingSettings.EnableStaticMeshSeparation), (value) => { Configuration.ProcessingSettings.EnableStaticMeshSeparation = value; } },
+		{ nameof(ProcessingSettings.EnableAssetDeduplication), (value) => { Configuration.ProcessingSettings.EnableAssetDeduplication = value; } },
 		{ nameof(ExportSettings.SaveSettingsToDisk), (value) => { Configuration.ExportSettings.SaveSettingsToDisk = value; } },
 	};
 
@@ -86,6 +88,16 @@ partial class SettingsPage
 	private static void WriteCheckBoxForEnablePrefabOutlining(TextWriter writer, string label)
 	{
 		WriteCheckBox(writer, label, Configuration.ProcessingSettings.EnablePrefabOutlining, nameof(ProcessingSettings.EnablePrefabOutlining));
+	}
+
+	private static void WriteCheckBoxForEnableStaticMeshSeparation(TextWriter writer, string label)
+	{
+		WriteCheckBox(writer, label, Configuration.ProcessingSettings.EnableStaticMeshSeparation, nameof(ProcessingSettings.EnableStaticMeshSeparation));
+	}
+
+	private static void WriteCheckBoxForEnableAssetDeduplication(TextWriter writer, string label)
+	{
+		WriteCheckBox(writer, label, Configuration.ProcessingSettings.EnableAssetDeduplication, nameof(ProcessingSettings.EnableAssetDeduplication));
 	}
 
 	private static void WriteDropDownForAudioExportFormat(TextWriter writer)

@@ -375,9 +375,19 @@ partial class Localization
 	public static string DonationMessage => Get("donation_message");
 	
 	/// <summary>
+	/// Enable Asset Deduplication
+	/// </summary>
+	public static string EnableAssetDeduplication => Get("enable_asset_deduplication");
+	
+	/// <summary>
 	/// Enable Prefab Outlining
 	/// </summary>
 	public static string EnablePrefabOutlining => Get("enable_prefab_outlining");
+	
+	/// <summary>
+	/// Enable Static Mesh Separation
+	/// </summary>
+	public static string EnableStaticMeshSeparation => Get("enable_static_mesh_separation");
 	
 	/// <summary>
 	/// Error
