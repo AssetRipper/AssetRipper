@@ -22,8 +22,12 @@ public sealed class CommandsPage : VuePage
 					new Input(writer).WithCustomAttribute("v-if", "load_path_exists").WithType("submit").WithClass("btn btn-primary").WithValue(Localization.MenuLoad).Close();
 					new Button(writer).WithCustomAttribute("v-else").WithClass("btn btn-primary").WithCustomAttribute("disabled").Close(Localization.MenuLoad);
 				}
-				new Button(writer).WithCustomAttribute("@click", "handleSelectLoadFile").WithClass("btn btn-success").Close(Localization.SelectFile);
-				new Button(writer).WithCustomAttribute("@click", "handleSelectLoadFolder").WithClass("btn btn-success").Close(Localization.SelectFolder);
+
+				if (Dialogs.Supported)
+				{
+					new Button(writer).WithCustomAttribute("@click", "handleSelectLoadFile").WithClass("btn btn-success").Close(Localization.SelectFile);
+					new Button(writer).WithCustomAttribute("@click", "handleSelectLoadFolder").WithClass("btn btn-success").Close(Localization.SelectFolder);
+				}
 			}
 		}
 		else
@@ -43,7 +47,12 @@ public sealed class CommandsPage : VuePage
 					new Button(writer).WithCustomAttribute("v-else-if", "export_path === ''").WithClass("btn btn-primary").WithCustomAttribute("disabled").Close(Localization.MenuExport);
 					new Input(writer).WithCustomAttribute("v-else").WithType("submit").WithClass("btn btn-primary").WithValue(Localization.MenuExport).Close();
 				}
-				new Button(writer).WithCustomAttribute("@click", "handleSelectExportFolder").WithClass("btn btn-success").Close(Localization.SelectFolder);
+
+				if (Dialogs.Supported)
+				{
+					new Button(writer).WithCustomAttribute("@click", "handleSelectExportFolder").WithClass("btn btn-success").Close(Localization.SelectFolder);
+				}
+
 				using (new Div(writer).WithCustomAttribute("v-if", "export_path_has_files").End())
 				{
 					new P(writer).Close(Localization.WarningThisDirectoryIsNotEmptyAllContentWillBeDeleted);
