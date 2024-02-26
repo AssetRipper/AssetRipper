@@ -2,6 +2,7 @@
 using AsmResolver.DotNet;
 using AsmResolver.DotNet.Code.Cil;
 using AsmResolver.DotNet.Collections;
+using AsmResolver.DotNet.Signatures;
 using AsmResolver.DotNet.Signatures.Types;
 using AssetRipper.Text.SourceGeneration;
 using System.CodeDom.Compiler;
@@ -99,11 +100,6 @@ public class CSharpDecompiler :
 	public IndentedTextWriter Visit(FieldDefinition field, (IndentedTextWriter, NameGenerator) state)
 	{
 		(IndentedTextWriter writer, NameGenerator nameGenerator) = state;
-
-		if (field.IsCompilerGenerated())
-		{
-			writer.WriteComment("Compiler generated field");
-		}
 
 		VisitCustomAttributes(field, state);
 
@@ -243,7 +239,64 @@ public class CSharpDecompiler :
 
 		if (owner.CustomAttributes.Count > 0)
 		{
-			writer.WriteComment("Custom attribute decompilation not implemented yet");
+			foreach (CustomAttribute attribute in owner.CustomAttributes)
+			{
+				ICustomAttributeType? constructor = attribute.Constructor;
+				if (constructor is null)
+				{
+					writer.WriteComment("Custom attribute doesn't have a constructor");
+					continue;
+				}
+				ITypeDefOrRef? attributeType = constructor.DeclaringType;
+				if (attributeType is null)
+				{
+					writer.WriteComment("Custom attribute constructor doesn't have a declaring type");
+				}
+				else
+				{
+					writer.Write('[');
+					writer.Write(nameGenerator.GetFullName(attributeType));
+					if (attribute.Signature is { FixedArguments.Count: > 0 } or { NamedArguments.Count: > 0 })
+					{
+						writer.Write('(');
+						bool first = true;
+						foreach (CustomAttributeArgument fixedArgument in attribute.Signature.FixedArguments)
+						{
+							if (first)
+							{
+								first = false;
+							}
+							else
+							{
+								writer.Write(", ");
+							}
+
+							writer.Write("/* Fixed argument decompilation not implemented yet */ default(");
+							writer.Write(nameGenerator.GetFullName(fixedArgument.ArgumentType));
+							writer.Write(')');
+						}
+						foreach (CustomAttributeNamedArgument namedArgument in attribute.Signature.NamedArguments)
+						{
+							if (first)
+							{
+								first = false;
+							}
+							else
+							{
+								writer.Write(", ");
+							}
+
+							writer.Write("/* Named argument decompilation not implemented yet */ ");
+							writer.Write(namedArgument.MemberName);
+							writer.Write(" = default(");
+							writer.Write(nameGenerator.GetFullName(namedArgument.Argument.ArgumentType));
+							writer.Write(')');
+						}
+						writer.Write(')');
+					}
+					writer.WriteLine(']');
+				}
+			}
 		}
 	}
 

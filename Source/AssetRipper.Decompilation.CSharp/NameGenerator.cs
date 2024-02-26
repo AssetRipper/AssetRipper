@@ -1,4 +1,5 @@
-﻿using AsmResolver.DotNet.Signatures.Types;
+﻿using AsmResolver.DotNet;
+using AsmResolver.DotNet.Signatures.Types;
 using AsmResolver.PE.DotNet.Metadata.Tables.Rows;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -8,6 +9,11 @@ namespace AssetRipper.Decompilation.CSharp;
 public abstract partial class NameGenerator : ITypeSignatureVisitor<StringBuilder, StringBuilder>
 {
 	private protected const string GlobalPrefix = "global::";
+
+	public string GetFullName(ITypeDefOrRef type)
+	{
+		return GetFullName(type.ToTypeSignature());
+	}
 
 	public string GetFullName(TypeSignature signature)
 	{
