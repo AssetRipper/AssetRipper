@@ -1,5 +1,6 @@
 ﻿using AsmResolver;
 using AsmResolver.DotNet;
+using AsmResolver.DotNet.Code.Cil;
 using AsmResolver.DotNet.Collections;
 using AsmResolver.DotNet.Signatures.Types;
 using AssetRipper.Text.SourceGeneration;
@@ -11,6 +12,7 @@ public class CSharpDecompiler :
 	IVisitor<TypeDefinition, (IndentedTextWriter, NameGenerator), IndentedTextWriter>,
 	IVisitor<FieldDefinition, (IndentedTextWriter, NameGenerator), IndentedTextWriter>,
 	IVisitor<MethodDefinition, (IndentedTextWriter, NameGenerator), IndentedTextWriter>,
+	IVisitor<CilMethodBody, (IndentedTextWriter, NameGenerator), IndentedTextWriter>,
 	IVisitor<EventDefinition, (IndentedTextWriter, NameGenerator), IndentedTextWriter>,
 	IVisitor<PropertyDefinition, (IndentedTextWriter, NameGenerator), IndentedTextWriter>
 {
@@ -31,90 +33,6 @@ public class CSharpDecompiler :
 			&& (type.Scope?.GetAssembly()?.IsCorLib ?? false);
 	}
 
-	private static string GetAccessModifier(TypeDefinition type)
-	{
-		if (type.IsNested)
-		{
-			if (type.IsNestedPublic)
-			{
-				return "public";
-			}
-			else if (type.IsNestedAssembly)
-			{
-				return "internal";
-			}
-			else if (type.IsNestedFamily)
-			{
-				return "protected";
-			}
-			else if (type.IsNestedPrivate)
-			{
-				return "private";
-			}
-			else if (type.IsNestedFamilyOrAssembly)
-			{
-				return "protected internal";
-			}
-			else if (type.IsNestedFamilyAndAssembly)
-			{
-				return "private protected";
-			}
-		}
-		else
-		{
-			if (type.IsPublic)
-			{
-				return "public";
-			}
-			else if (type.IsNotPublic)
-			{
-				return "internal";
-			}
-		}
-		throw new NotSupportedException($"Unsupported access modifier for type {type.FullName}");
-	}
-
-	private static string GetTypeCategory(TypeDefinition type)
-	{
-		if (type.IsClass)
-		{
-			return "class";
-		}
-		else if (type.IsInterface)
-		{
-			return "interface";
-		}
-		else if (type.IsEnum)
-		{
-			return "enum";
-		}
-		else if (type.IsValueType)
-		{
-			return "struct";
-		}
-		else if (type.IsDelegate)
-		{
-			return "delegate";
-		}
-		throw new NotSupportedException($"Unsupported type category for type {type.FullName}");
-	}
-
-	private static bool TryGetInheritanceModifier(TypeDefinition type, [NotNullWhen(true)] out string? modifier)
-	{
-		if (type.IsSealed)
-		{
-			modifier = type.IsAbstract ? "static" : "sealed";
-			return true;
-		}
-		else if (type.IsAbstract)
-		{
-			modifier = "abstract";
-			return true;
-		}
-		modifier = null;
-		return false;
-	}
-
 	public IndentedTextWriter Visit(TypeDefinition type, (IndentedTextWriter, NameGenerator) state)
 	{
 		IndentedTextWriter writer = state.Item1;
@@ -125,22 +43,25 @@ public class CSharpDecompiler :
 			writer.WriteFileScopedNamespace(type.Namespace);
 		}
 
-		writer.Write(GetAccessModifier(type));
+		VisitCustomAttributes(type, state);
+
+		writer.Write(type.GetAccessModifier());
 		writer.Write(' ');
 
-		if (TryGetInheritanceModifier(type, out string? inheritanceModifier))
+		if (type.TryGetInheritanceModifier(out string? inheritanceModifier))
 		{
 			writer.Write(inheritanceModifier);
 			writer.Write(' ');
 		}
 
-		writer.Write(GetTypeCategory(type));
+		writer.Write(type.GetTypeCategory());
 		writer.Write(' ');
 
 		writer.Write(type.Name);
 
 		if (type.BaseType is not null && !IsSpecialType(type.BaseType))
 		{
+			writer.Write(" : ");
 			writer.Write(nameGenerator.GetFullName(type.BaseType.ToTypeSignature()));
 		}
 		writer.WriteLine();
@@ -151,10 +72,10 @@ public class CSharpDecompiler :
 				Visit(nestedType, (writer, TypeScopedNameGenerator.Create(nestedType)))
 					.WriteLineNoTabs();
 			}
-			if (type.Fields.Count > 0)
+			foreach (FieldDefinition field in type.Fields)
 			{
-				writer.WriteComment("Field decompilation not implemented yet");
-				writer.WriteLineNoTabs();
+				Visit(field, state)
+					.WriteLineNoTabs();
 			}
 			foreach (MethodDefinition method in type.Methods.Where(m => m.Semantics is null))
 			{
@@ -177,18 +98,49 @@ public class CSharpDecompiler :
 
 	public IndentedTextWriter Visit(FieldDefinition field, (IndentedTextWriter, NameGenerator) state)
 	{
-		throw new NotImplementedException();
+		(IndentedTextWriter writer, NameGenerator nameGenerator) = state;
+
+		if (field.IsCompilerGenerated())
+		{
+			writer.WriteComment("Compiler generated field");
+		}
+
+		VisitCustomAttributes(field, state);
+
+		writer.Write(field.GetAccessModifier());
+		writer.Write(' ');
+
+		if (field.IsStatic)
+		{
+			writer.Write("static ");
+		}
+
+		if (field.Signature is null)
+		{
+			writer.Write("/* Could not determine field type */ ");
+		}
+		else
+		{
+			writer.Write(nameGenerator.GetFullName(field.Signature.FieldType));
+			writer.Write(' ');
+		}
+
+		writer.Write(field.Name);
+		writer.WriteLine(';');
+
+		return writer;
 	}
 
 	public IndentedTextWriter Visit(MethodDefinition method, (IndentedTextWriter, NameGenerator) state)
 	{
-		IndentedTextWriter writer = state.Item1;
-		NameGenerator nameGenerator = state.Item2;
+		(IndentedTextWriter writer, NameGenerator nameGenerator) = state;
+
+		VisitCustomAttributes(method, state);
 
 		if (!method.IsStatic || !method.IsConstructor)
 		{
-			writer.WriteComment("Accessibly modifier not implemented yet");
-			writer.Write("public ");
+			writer.Write(method.GetAccessModifier());
+			writer.Write(' ');
 		}
 
 		if (method.IsStatic)
@@ -248,15 +200,42 @@ public class CSharpDecompiler :
 			//Parameter name stripping is rare. We will worry about name conflicts later.
 		}
 
-		writer.WriteLine(')');
+		writer.Write(')');
 
-		using (new CurlyBrackets(writer))
+		if (method.CilMethodBody is null)
 		{
-			writer.WriteComment("Method body decompilation not implemented yet");
-			writer.WriteLine("throw null;");
+			writer.WriteLine(';');
+		}
+		else
+		{
+			writer.WriteLine();
+			using (new CurlyBrackets(writer))
+			{
+				Visit(method.CilMethodBody, state);
+			}
 		}
 
 		return writer;
+	}
+
+	public IndentedTextWriter Visit(CilMethodBody body, (IndentedTextWriter, NameGenerator) state)
+	{
+		(IndentedTextWriter writer, NameGenerator nameGenerator) = state;
+
+		writer.WriteComment("Method body decompilation not implemented yet");
+		writer.WriteLine("throw null;");
+
+		return writer;
+	}
+
+	private void VisitCustomAttributes(IHasCustomAttribute owner, (IndentedTextWriter, NameGenerator) state)
+	{
+		(IndentedTextWriter writer, NameGenerator nameGenerator) = state;
+
+		if (owner.CustomAttributes.Count > 0)
+		{
+			writer.WriteComment("Custom attribute decompilation not implemented yet");
+		}
 	}
 
 	public IndentedTextWriter Visit(EventDefinition @event, (IndentedTextWriter, NameGenerator) state)
@@ -266,13 +245,18 @@ public class CSharpDecompiler :
 
 	public IndentedTextWriter Visit(PropertyDefinition property, (IndentedTextWriter, NameGenerator) state)
 	{
-		IndentedTextWriter writer = state.Item1;
-		NameGenerator nameGenerator = state.Item2;
+		(IndentedTextWriter writer, NameGenerator nameGenerator) = state;
 
-		writer.WriteComment("Accessibly modifier not implemented yet");
-		writer.Write("public ");
+		MethodDefinition? getMethod = property.GetMethod;
+		MethodDefinition? setMethod = property.SetMethod;
 
-		if (property.GetMethod?.IsStatic ?? property.SetMethod?.IsStatic ?? false)
+		VisitCustomAttributes(property, state);
+
+		string propertyAccessModifier = property.GetAccessModifier();
+		writer.Write(propertyAccessModifier);
+		writer.Write(' ');
+
+		if (getMethod?.IsStatic ?? setMethod?.IsStatic ?? false)
 		{
 			writer.Write("static ");
 		}
@@ -290,14 +274,47 @@ public class CSharpDecompiler :
 		writer.WriteLine(property.Name);
 		using (new CurlyBrackets(writer))
 		{
-			writer.WriteComment("Accessor decompilation not implemented yet.");
-			if (property.GetMethod is not null)
+			if (getMethod is not null)
 			{
-				writer.WriteLine("get => default;");
+				string getAccessModifier = getMethod.GetAccessModifier();
+				if (getAccessModifier != propertyAccessModifier)
+				{
+					writer.Write(getAccessModifier);
+					writer.Write(' ');
+				}
+				if (getMethod.CilMethodBody is null)
+				{
+					writer.WriteLine("get => default;");
+				}
+				else
+				{
+					writer.WriteLine("get");
+					using (new CurlyBrackets(writer))
+					{
+						Visit(getMethod.CilMethodBody, state);
+					}
+				}
 			}
-			if (property.SetMethod is not null)
+			if (setMethod is not null)
 			{
-				writer.WriteLine("set { }");
+				string setAccessModifier = setMethod.GetAccessModifier();
+				if (setAccessModifier != propertyAccessModifier)
+				{
+					writer.Write(setAccessModifier);
+					writer.Write(' ');
+				}
+				if (setMethod.CilMethodBody is null)
+				{
+					writer.WriteLine("set { }");
+				}
+				else
+				{
+					writer.WriteLine("set");
+					using (new CurlyBrackets(writer))
+					{
+						Visit(setMethod.CilMethodBody, state);
+					}
+				}
 			}
 		}
 
