@@ -10,39 +10,39 @@ namespace AssetRipper.Processing.AnimationClips.Editor
 		{
 			Index = index;
 			Coefficient = coefficient;
-			Value = LSV = value;
+			RightSidedLimit = LeftSidedLimit = value;
 		}
 
 		public void Read(ref EndianSpanReader reader)
 		{
 			Index = reader.ReadInt32();
 			Coefficient = new(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
-			Value = reader.ReadSingle();
-			LSV = Value;
+			RightSidedLimit = reader.ReadSingle();
+			LeftSidedLimit = RightSidedLimit;
 		}
 
 		public void CalculateSlopes(float time, float nextTime, StreamedCurveKey nextKey)
 		{
 			if (Coefficient != default) // != (0,0,0) => regular slopes
 			{
-				outSlope = Coefficient.Z;
+				OutSlope = Coefficient.Z;
 				float deltaX = nextTime - time;
 				float _CoeffX = Coefficient.X * deltaX * deltaX;
 				float _CoeffY = Coefficient.Y * deltaX;
-				nextKey.inSlope = 3 * _CoeffX + 2 * _CoeffY + Coefficient.Z;
+				nextKey.InSlope = 3 * _CoeffX + 2 * _CoeffY + Coefficient.Z; // may need some kind of rounding if wanting to get an inSlope of exactly 0
 				//nextKey.inSlope = float.Round(nextKey.inSlope, 4); // amount of decimal places may be more dynamic
 				if (nextKey.Coefficient == default) // calculate LSV only if next slope calculation needs it
 				{
-					nextKey.LSV = (_CoeffX + _CoeffY + Coefficient.Z) * deltaX + Value;
+					nextKey.LeftSidedLimit = (_CoeffX + _CoeffY + Coefficient.Z) * deltaX + RightSidedLimit;
 				}
 				return;
 			}
-			if (Value != LSV)
+			if (RightSidedLimit != LeftSidedLimit)
 			{
 				// check percentage difference
-				float diff = Value > LSV ? Value - LSV : LSV - Value;
-				float AbsVal = Value < 0 ? -Value : Value;
-				float AbsLSV = LSV < 0 ? -LSV : LSV;
+				float diff = RightSidedLimit > LeftSidedLimit ? RightSidedLimit - LeftSidedLimit : LeftSidedLimit - RightSidedLimit;
+				float AbsVal = RightSidedLimit < 0 ? -RightSidedLimit : RightSidedLimit;
+				float AbsLSV = LeftSidedLimit < 0 ? -LeftSidedLimit : LeftSidedLimit;
 				float div = AbsVal > AbsLSV ? AbsVal : AbsLSV;
 				float ROUNDING_ERROR = 1e-5f;
 				// normally the difference between Value and LSV should be "big"/much greater than a rounding error.
@@ -50,22 +50,22 @@ namespace AssetRipper.Processing.AnimationClips.Editor
 				// will still produce a good approximation for the expected curve
 				if (diff/div > ROUNDING_ERROR)
 				{
-					outSlope = float.NegativeInfinity;
-					nextKey.inSlope = 0f;
-					nextKey.LSV = Value;
-					Value = LSV;
+					OutSlope = float.NegativeInfinity;
+					nextKey.InSlope = 0f;
+					nextKey.LeftSidedLimit = RightSidedLimit;
+					RightSidedLimit = LeftSidedLimit;
 					return;
 				}
 			}
-			if (Value == nextKey.Value)
+			if (RightSidedLimit == nextKey.RightSidedLimit)
 			{
-				outSlope = 0f;
-				nextKey.inSlope = 0f;
-				nextKey.LSV = Value;
+				OutSlope = 0f;
+				nextKey.InSlope = 0f;
+				nextKey.LeftSidedLimit = RightSidedLimit;
 				return;
 			}
-			outSlope = float.PositiveInfinity;
-			nextKey.inSlope = 0f;
+			OutSlope = float.PositiveInfinity;
+			nextKey.InSlope = 0f;
 			// don't do nextKey.LSV=Value here, because having 2 consecutive keys
 			// with outSlope +Inf and -Inf is illegal (Editor corrects it)
 		}
@@ -73,11 +73,11 @@ namespace AssetRipper.Processing.AnimationClips.Editor
 		/// <summary>
 		/// Index for its GenericBinding inside AnimationClip's BindingConstant.
 		/// </summary>
-		public int Index { get; set; }
+		public int Index { get; private set; }
 		/// <summary>
 		/// Coefficients of the Cubic Bezier Equation between this Key and the next, for the same Curve.
 		/// </summary>
-		public Vector3 Coefficient { get; set; }
+		public Vector3 Coefficient { get; private set; }
 		/// <summary>
 		/// Value of the key, when approached from its right side.
 		/// </summary>
@@ -85,7 +85,7 @@ namespace AssetRipper.Processing.AnimationClips.Editor
 		/// outSlope=-Infinity creates a discontinuity on the curve,
 		/// making the CurveKey value differ from its left side.
 		/// </remarks>
-		public float Value { get; set; }
+		public float RightSidedLimit { get; private set; }
 		/// <summary>
 		/// Value of the key, when approached from its left side
 		/// </summary>
@@ -93,8 +93,8 @@ namespace AssetRipper.Processing.AnimationClips.Editor
 		/// outSlope=-Infinity creates a discontinuity on the curve,
 		/// making the CurveKey value differ from its right side.
 		/// </remarks>
-		public float LSV { get; set; }
-		public float inSlope = 0;
-		public float outSlope = 0;
+		public float LeftSidedLimit { get; private set; }
+		public float InSlope { get; private set; }
+		public float OutSlope { get; private set; }
 	}
 }
