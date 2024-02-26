@@ -19,7 +19,7 @@ namespace AssetRipper.Import.Structure.Assembly.TypeTrees
 
 		public static SerializableTreeType FromRootNode(TypeTreeNodeStruct rootNode)
 		{
-			SerializableTreeType serializableTreeType = new SerializableTreeType(rootNode.Name, PrimitiveType.Complex, rootNode.Version);
+			SerializableTreeType serializableTreeType = new SerializableTreeType(rootNode.TypeName, PrimitiveType.Complex, rootNode.Version);
 
 			List<Field> fields = new();
 			int startIndex = FindStartingIndex(rootNode);
@@ -44,12 +44,12 @@ namespace AssetRipper.Import.Structure.Assembly.TypeTrees
 				}
 				else
 				{
-					serializableTreeType = FromComplexNode(node.Name, primitiveNode);
+					serializableTreeType = FromComplexNode(node.TypeName, primitiveNode);
 				}
 			}
 			else
 			{
-				serializableTreeType = new SerializableTreeType(node.Name, primitiveType, primitiveNode.Version);
+				serializableTreeType = new SerializableTreeType(node.TypeName, primitiveType, primitiveNode.Version);
 			}
 
 			fields.Add(new Field(serializableTreeType, arrayDepth, node.Name));
