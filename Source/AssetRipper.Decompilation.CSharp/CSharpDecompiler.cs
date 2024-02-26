@@ -223,6 +223,15 @@ public class CSharpDecompiler :
 		(IndentedTextWriter writer, NameGenerator nameGenerator) = state;
 
 		writer.WriteComment("Method body decompilation not implemented yet");
+		if (body.LocalVariables.Count > 0)
+		{
+			writer.WriteLineNoTabs();
+			foreach (CilLocalVariable localVariable in body.LocalVariables)
+			{
+				writer.WriteComment($"Local variable {localVariable.Index}: {nameGenerator.GetFullName(localVariable.VariableType)}");
+			}
+			writer.WriteLineNoTabs();
+		}
 		writer.WriteLine("throw null;");
 
 		return writer;
