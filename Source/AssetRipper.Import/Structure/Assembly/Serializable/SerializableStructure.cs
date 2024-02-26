@@ -9,6 +9,7 @@ using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly.Mono;
 using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files.SerializedFiles;
+using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.Yaml;
 
 namespace AssetRipper.Import.Structure.Assembly.Serializable
@@ -142,11 +143,11 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 			return true;
 		}
 
-		public bool TryRead(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags)
+		public bool TryRead(ref EndianSpanReader reader, IMonoBehaviour monoBehaviour)
 		{
 			try
 			{
-				Read(ref reader, version, flags);
+				Read(ref reader, monoBehaviour.Collection.Version, monoBehaviour.Collection.Flags);
 			}
 			catch (Exception ex)
 			{

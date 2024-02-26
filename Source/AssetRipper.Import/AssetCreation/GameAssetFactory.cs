@@ -69,7 +69,7 @@ namespace AssetRipper.Import.AssetCreation
 				if (type is not null && TypeTreeNodeStruct.TryMakeFromTypeTree(type.OldType, out TypeTreeNodeStruct rootNode))
 				{
 					structure = SerializableTreeType.FromRootNode(rootNode).CreateSerializableStructure();
-					if (structure.TryRead(ref reader, monoBehaviour.Collection.Version, monoBehaviour.Collection.Flags))
+					if (structure.TryRead(ref reader, monoBehaviour))
 					{
 						monoBehaviour.Structure = structure;
 					}
