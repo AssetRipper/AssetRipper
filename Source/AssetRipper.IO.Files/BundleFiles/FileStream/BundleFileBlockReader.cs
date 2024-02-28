@@ -158,7 +158,12 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 
 		private static SmartStream CreateStream(long decompressedSize)
 		{
-			return decompressedSize > MaxMemoryStreamLength ? SmartStream.CreateTemp() : SmartStream.CreateMemory(new byte[decompressedSize]);
+			return decompressedSize switch
+			{
+				> MaxMemoryStreamLength => SmartStream.CreateTemp(),
+				> MaxPreAllocatedMemoryStreamLength => SmartStream.CreateMemory(),
+				_ => SmartStream.CreateMemory(new byte[decompressedSize]),
+			};
 		}
 
 		private static SmartStream CreateTemporaryStream(long decompressedSize, out byte[]? rentedArray)
@@ -176,12 +181,19 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 		}
 
 		/// <summary>
-		/// The arbitrary maximum size of a decompressed stream to be stored in RAM. 1 MB
+		/// The arbitrary maximum size of a decompressed stream to be stored in RAM. 2 GB
 		/// </summary>
 		/// <remarks>
 		/// This number can be set to any integer value, including <see cref="int.MaxValue"/>.
 		/// </remarks>
-		private const int MaxMemoryStreamLength = 1024 * 1024;
+		private const int MaxMemoryStreamLength = int.MaxValue;
+		/// <summary>
+		/// The arbitrary maximum size of a decompressed stream to be pre-allocated. 100 MB
+		/// </summary>
+		/// <remarks>
+		/// This number can be set to any integer value less than <see cref="MaxMemoryStreamLength"/>.
+		/// </remarks>
+		private const int MaxPreAllocatedMemoryStreamLength = 100 * 1024 * 1024;
 		private readonly Stream m_stream;
 		private readonly BlocksInfo m_blocksInfo = new();
 		private readonly long m_dataOffset;
