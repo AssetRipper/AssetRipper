@@ -240,17 +240,24 @@ public static class WebApplicationLauncher
 
 	private static void OpenUrl(string url)
 	{
-		if (OperatingSystem.IsWindows())
+		try
 		{
-			Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+			if (OperatingSystem.IsWindows())
+			{
+				Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+			}
+			else if (OperatingSystem.IsLinux())
+			{
+				Process.Start("xdg-open", url);
+			}
+			else if (OperatingSystem.IsMacOS())
+			{
+				Process.Start("open", url);
+			}
 		}
-		else if (OperatingSystem.IsLinux())
+		catch (Exception ex)
 		{
-			Process.Start("xdg-open", url);
-		}
-		else if (OperatingSystem.IsMacOS())
-		{
-			Process.Start("open", url);
+			Logger.Error($"Failed to launch web browser for: {url}", ex);
 		}
 	}
 
