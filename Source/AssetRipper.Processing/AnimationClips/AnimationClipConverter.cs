@@ -13,6 +13,7 @@ using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Extensions.Enums.AnimationClip;
 using AssetRipper.SourceGenerated.Extensions.Enums.AnimationClip.GenericBinding;
 using AssetRipper.SourceGenerated.Extensions.Enums.Keyframe.TangentMode;
+using AssetRipper.SourceGenerated.Subclasses.AnimationClipBindingConstant;
 using AssetRipper.SourceGenerated.Subclasses.Clip;
 using AssetRipper.SourceGenerated.Subclasses.ConstantClip;
 using AssetRipper.SourceGenerated.Subclasses.DenseClip;
@@ -50,7 +51,7 @@ namespace AssetRipper.Processing.AnimationClips
 
 		private void ProcessInner()
 		{
-			if (m_clip.Has_MuscleClip_C74() && m_clip.Has_ClipBindingConstant_C74())
+			if (m_clip.Has_ClipBindingConstant_C74())
 			{
 				IClip clip = m_clip.MuscleClip_C74.Clip.Data;
 
@@ -63,14 +64,11 @@ namespace AssetRipper.Processing.AnimationClips
 				if (clip.Has_ConstantClip())
 				{
 					int preConstantCurves = streamedCurveCount + (int)clip.DenseClip.CurveCount;
-					float lastConstantTime = CalculateLastConstantTime(streamedFrames);
+					float lastConstantTime = CalculateLastConstantTime(streamedFrames, m_clip.MuscleClip_C74.StopTime);
 					ProcessConstant(clip.ConstantClip, preConstantCurves, lastConstantTime);
 				}
 
-				if (m_clip.Has_MuscleClipInfo_C74())
-				{
-					m_clip.MuscleClipInfo_C74.Initialize(m_clip.MuscleClip_C74);
-				}
+				m_clip.MuscleClipInfo_C74.Initialize(m_clip.MuscleClip_C74);
 			}
 		}
 
@@ -116,7 +114,7 @@ namespace AssetRipper.Processing.AnimationClips
 									curve.CalculateSlopes(frame.Time, nextFrame.Time, nextCurve);
 								}
 							}
-							curveValues[offset] = curve.RightSidedLimit;
+							curveValues[offset] = curve.Value;
 							inSlopeValues[offset] = curve.InSlope;
 							outSlopeValues[offset] = curve.OutSlope;
 							curveIdx++;
@@ -143,11 +141,11 @@ namespace AssetRipper.Processing.AnimationClips
 					}
 					if (binding.CustomType == (byte)BindingCustomType.None)
 					{
-						AddDefaultCurve(binding, path, frame.Time, curve.RightSidedLimit, curve.InSlope, curve.OutSlope);
+						AddDefaultCurve(binding, path, frame.Time, curve.Value, curve.InSlope, curve.OutSlope);
 					}
 					else
 					{
-						AddCustomCurve(binding, path, frame.Time, curve.RightSidedLimit, curve.InSlope, curve.OutSlope);
+						AddCustomCurve(binding, path, frame.Time, curve.Value, curve.InSlope, curve.OutSlope);
 					}
 					curveIdx++;
 				}
@@ -529,7 +527,7 @@ namespace AssetRipper.Processing.AnimationClips
 				m_pptrs.Add(curveData, curve);
 			}
 
-			IPPtr_Object value = m_clip.ClipBindingConstant_C74!.PptrCurveMapping[index];
+			IPPtr_Object value = ClipBindingConstant.PptrCurveMapping[index];
 			IPPtrKeyframe key = curve.Curve.AddNew();
 			key.Time = time;
 			key.Value.CopyValues(value, new PPtrConverter(m_clip));
@@ -542,7 +540,7 @@ namespace AssetRipper.Processing.AnimationClips
 				return binding;
 			}
 			int curves = 0;
-			AccessListBase<IGenericBinding> bindings = m_clip.ClipBindingConstant_C74!.GenericBindings;
+			AccessListBase<IGenericBinding> bindings = ClipBindingConstant.GenericBindings;
 			for (int i = 0; i < bindings.Count; i++)
 			{
 				binding = bindings[i];
@@ -645,9 +643,8 @@ namespace AssetRipper.Processing.AnimationClips
 			}
 		}
 
-		private float CalculateLastConstantTime(IReadOnlyList<StreamedFrame> streamedFrames)
+		private float CalculateLastConstantTime(IReadOnlyList<StreamedFrame> streamedFrames, float stopTime)
 		{
-			float stopTime = m_clip.MuscleClip_C74!.StopTime;
 			if (stopTime == 0f || streamedFrames.Count <= 1) // streamedFrames[streamedFrames.Count-1] has dummy Infinity Time
 			{
 				return stopTime;
@@ -706,5 +703,6 @@ namespace AssetRipper.Processing.AnimationClips
 		private readonly IAnimationClip m_clip;
 		private readonly CustomCurveResolver m_customCurveResolver;
 		private readonly Dictionary<int, IGenericBinding> m_bindingsCache = new(); //cache results from GetBinding(curveID)
+		private IAnimationClipBindingConstant ClipBindingConstant => m_clip.ClipBindingConstant_C74!; //This class only supports 4.3 and newer.
 	}
 }

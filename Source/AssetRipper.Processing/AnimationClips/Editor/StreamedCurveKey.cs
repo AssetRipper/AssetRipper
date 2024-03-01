@@ -31,7 +31,7 @@ namespace AssetRipper.Processing.AnimationClips.Editor
 				float _CoeffY = Coefficient.Y * deltaX;
 				nextKey.InSlope = 3 * _CoeffX + 2 * _CoeffY + Coefficient.Z; // may need some kind of rounding if wanting to get an inSlope of exactly 0
 				//nextKey.inSlope = float.Round(nextKey.inSlope, 4); // amount of decimal places may be more dynamic
-				if (nextKey.Coefficient == default) // calculate LSV only if next slope calculation needs it
+				if (nextKey.Coefficient == default) // calculate LSL only if next slope calculation needs it
 				{
 					nextKey.LeftSidedLimit = (_CoeffX + _CoeffY + Coefficient.Z) * deltaX + RightSidedLimit;
 				}
@@ -44,8 +44,8 @@ namespace AssetRipper.Processing.AnimationClips.Editor
 				float AbsVal = RightSidedLimit < 0 ? -RightSidedLimit : RightSidedLimit;
 				float AbsLSV = LeftSidedLimit < 0 ? -LeftSidedLimit : LeftSidedLimit;
 				float div = AbsVal > AbsLSV ? AbsVal : AbsLSV;
-				float ROUNDING_ERROR = 1e-5f;
-				// normally the difference between Value and LSV should be "big"/much greater than a rounding error.
+				const float ROUNDING_ERROR = 1e-5f; // arbitrary small value
+				// normally the difference between Right and Left Sided Limits should be "big"/much greater than a rounding error.
 				// if the check fails and INCORRECTLY skips this IF block, the next statements
 				// will still produce a good approximation for the expected curve
 				if (diff/div > ROUNDING_ERROR)
@@ -66,7 +66,7 @@ namespace AssetRipper.Processing.AnimationClips.Editor
 			}
 			OutSlope = float.PositiveInfinity;
 			nextKey.InSlope = 0f;
-			// don't do nextKey.LSV=Value here, because having 2 consecutive keys
+			// don't do nextKey.LeftSidedLimit=RightSidedLimit here, because having 2 consecutive keys
 			// with outSlope +Inf and -Inf is illegal (Editor corrects it)
 		}
 
@@ -79,13 +79,20 @@ namespace AssetRipper.Processing.AnimationClips.Editor
 		/// </summary>
 		public Vector3 Coefficient { get; private set; }
 		/// <summary>
+		/// Value of the binded property during this keyframe.
+		/// </summary>
+		/// /// <remarks>
+		/// This value could change after Slope calculation.
+		/// </remarks>
+		public float Value { get => RightSidedLimit; private set => RightSidedLimit = value; }
+		/// <summary>
 		/// Value of the key, when approached from its right side.
 		/// </summary>
 		/// <remarks>
 		/// outSlope=-Infinity creates a discontinuity on the curve,
 		/// making the CurveKey value differ from its left side.
 		/// </remarks>
-		public float RightSidedLimit { get; private set; }
+		private float RightSidedLimit { get; set; }
 		/// <summary>
 		/// Value of the key, when approached from its left side
 		/// </summary>
@@ -93,7 +100,7 @@ namespace AssetRipper.Processing.AnimationClips.Editor
 		/// outSlope=-Infinity creates a discontinuity on the curve,
 		/// making the CurveKey value differ from its right side.
 		/// </remarks>
-		public float LeftSidedLimit { get; private set; }
+		private float LeftSidedLimit { get; set; }
 		public float InSlope { get; private set; }
 		public float OutSlope { get; private set; }
 	}
