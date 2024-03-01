@@ -21,7 +21,7 @@ using System.Text.RegularExpressions;
 
 namespace AssetRipper.Processing.AnimationClips
 {
-	public sealed partial class CustomCurveResolver
+	public partial struct CustomCurveResolver
 	{
 		public CustomCurveResolver(IAnimationClip clip)
 		{

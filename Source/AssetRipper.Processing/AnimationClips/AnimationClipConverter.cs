@@ -1,5 +1,6 @@
 using AssetRipper.Assets.Cloning;
 using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Generics;
 using AssetRipper.Checksum;
 using AssetRipper.IO.Endian;
 using AssetRipper.Processing.AnimationClips.Editor;
@@ -44,120 +45,129 @@ namespace AssetRipper.Processing.AnimationClips
 
 		public static void Process(IAnimationClip clip, PathChecksumCache checksumCache)
 		{
-			AnimationClipConverter converter = new AnimationClipConverter(clip, checksumCache);
+			AnimationClipConverter converter = new(clip, checksumCache);
 			converter.ProcessInner();
 		}
 
 		private void ProcessInner()
 		{
-			if (m_clip.Has_MuscleClip_C74() && m_clip.Has_ClipBindingConstant_C74())
+			if (m_clip.Has_ClipBindingConstant_C74())
 			{
 				IClip clip = m_clip.MuscleClip_C74.Clip.Data;
-				IAnimationClipBindingConstant bindings = m_clip.ClipBindingConstant_C74;
 
 				IReadOnlyList<StreamedFrame> streamedFrames = GenerateFramesFromStreamedClip(clip.StreamedClip);
-				float lastDenseFrame = clip.DenseClip.FrameCount / clip.DenseClip.SampleRate;
-				float lastSampleFrame = streamedFrames.Count > 1 ? streamedFrames[streamedFrames.Count - 2].Time : 0.0f;
-				float lastFrame = Math.Max(lastDenseFrame, lastSampleFrame);
+				ProcessStreams(streamedFrames);
 
-				ProcessStreams(streamedFrames, bindings, clip.DenseClip.SampleRate);
-				ProcessDenses(clip, bindings);
+				int streamedCurveCount = clip.StreamedClip.CurveCount();
+				ProcessDenses(clip.DenseClip, streamedCurveCount);
+
 				if (clip.Has_ConstantClip())
 				{
-					ProcessConstant(clip, clip.ConstantClip, bindings, lastFrame);
+					int preConstantCurves = streamedCurveCount + (int)clip.DenseClip.CurveCount;
+					float lastConstantTime = CalculateLastConstantTime(streamedFrames, m_clip.MuscleClip_C74.StopTime);
+					ProcessConstant(clip.ConstantClip, preConstantCurves, lastConstantTime);
 				}
-				if (m_clip.Has_MuscleClipInfo_C74())
-				{
-					m_clip.MuscleClipInfo_C74.Initialize(m_clip.MuscleClip_C74);
-				}
+
+				m_clip.MuscleClipInfo_C74.Initialize(m_clip.MuscleClip_C74);
 			}
 		}
 
-		private void ProcessStreams(IReadOnlyList<StreamedFrame> streamFrames, IAnimationClipBindingConstant bindings, float sampleRate)
+		private void ProcessStreams(IReadOnlyList<StreamedFrame> streamedFrames)
 		{
 			Span<float> curveValues = [0, 0, 0, 0];
 			Span<float> inSlopeValues = [0, 0, 0, 0];
 			Span<float> outSlopeValues = [0, 0, 0, 0];
-			float interval = 1.0f / sampleRate;
 
-			// first (index [0]) stream frame is for slope calculation for the first real frame (index [1])
-			// last one (index [count - 1]) is +Infinity
-			// it is made for slope processing, but we don't need them
-			bool frameIndex0 = true;
-			for (int frameIndex = 0; frameIndex < streamFrames.Count - 1; frameIndex++)
+			if (streamedFrames.Count > 1)
 			{
-				StreamedFrame frame = streamFrames[frameIndex];
-				for (int curveIndex = 0; curveIndex < frame.Curves.Length;)
-				{
-					StreamedCurveKey curve = frame.Curves[curveIndex];
-					IGenericBinding binding = bindings.FindBinding(curve.Index);
+				streamedFrames[0].Time = 0f; // fix first frame for PPtrCurves to have Time=0 instead of float.MinValue
+			}
+			int frameCount = streamedFrames.Count - 1; // last StreamedFrame is dummy so must be skipped
+			for (int frameIdx = 0; frameIdx < frameCount; frameIdx++)
+			{
+				// last real frame doesn't need outSlope calculation, and will have inSlope from previous iteration
+				bool doSlopeCalc = frameIdx != frameCount - 1;
 
+				StreamedFrame frame = streamedFrames[frameIdx];
+				for (int curveIdx = 0; curveIdx < frame.Curves.Length;)
+				{
+					int curveID = frame.Curves[curveIdx].Index;
+					IGenericBinding binding = GetBinding(curveID);
 					string path = GetCurvePath(binding.Path);
+					StreamedCurveKey curve;
 					if (binding.IsTransform())
 					{
-						if (frameIndex0)
+						int transformDim = binding.TransformType().GetDimension();
+						if (frameIdx == 0) // first StreamedFrame only contains PPtrCurves, skip
 						{
-							curveIndex = GetNextCurve(frame, curveIndex);
+							curveIdx += transformDim;
 							continue;
 						}
-						GetPreviousFrame(streamFrames, curve.Index, frameIndex, out int prevFrameIndex, out int prevCurveIndex);
-						int dimension = binding.TransformType().GetDimension();
-						for (int key = 0; key < dimension; key++)
+						for (int offset = 0; offset < transformDim; offset++)
 						{
-							StreamedCurveKey keyCurve = frame.Curves[curveIndex];//index out of bounds
-							StreamedFrame prevFrame = streamFrames[prevFrameIndex];
-							StreamedCurveKey prevKeyCurve = prevFrame.Curves[prevCurveIndex + key];
-							float deltaTime = frame.Time - prevFrame.Time;
-							curveValues[key] = keyCurve.Value;
-							inSlopeValues[key] = prevKeyCurve.CalculateNextInSlope(deltaTime, keyCurve.Value);
-							outSlopeValues[key] = keyCurve.OutSlope;
-							curveIndex = GetNextCurve(frame, curveIndex);
+							curve = frame.Curves[curveIdx];
+							if (doSlopeCalc)
+							{
+								if (TryGetNextFrame(streamedFrames, frameIdx, curveID, out StreamedFrame? nextFrame, out int nextCurveIdx))
+								{
+									StreamedCurveKey nextCurve = nextFrame.Curves[nextCurveIdx + offset];
+									curve.CalculateSlopes(frame.Time, nextFrame.Time, nextCurve);
+								}
+							}
+							curveValues[offset] = curve.Value;
+							inSlopeValues[offset] = curve.InSlope;
+							outSlopeValues[offset] = curve.OutSlope;
+							curveIdx++;
 						}
-
 						AddTransformCurve(frame.Time, binding.TransformType(), curveValues, inSlopeValues, outSlopeValues, 0, path);
+						continue;
 					}
-					else if (binding.CustomType == (byte)BindingCustomType.None)
+					curve = frame.Curves[curveIdx];
+					if (!binding.IsPPtrCurve()) // Skip slope calculation for PPtrCurves
 					{
-						if (frameIndex0)
+						if (frameIdx == 0) // first StreamedFrame only contains PPtrCurves, skip
 						{
-							curveIndex = GetNextCurve(frame, curveIndex);
+							curveIdx++;
 							continue;
 						}
-						AddDefaultCurve(binding, path, frame.Time, frame.Curves[curveIndex].Value);
-						curveIndex = GetNextCurve(frame, curveIndex);
+						if (doSlopeCalc)
+						{
+							if (TryGetNextFrame(streamedFrames, frameIdx, curveID, out StreamedFrame? nextFrame, out int nextCurveIdx))
+							{
+								StreamedCurveKey nextCurve = nextFrame.Curves[nextCurveIdx];
+								curve.CalculateSlopes(frame.Time, nextFrame.Time, nextCurve);
+							}
+						}
+					}
+					if (binding.CustomType == (byte)BindingCustomType.None)
+					{
+						AddDefaultCurve(binding, path, frame.Time, curve.Value, curve.InSlope, curve.OutSlope);
 					}
 					else
 					{
-						AddCustomCurve(bindings, binding, path, frame.Time, frame.Curves[curveIndex].Value);
-						curveIndex = GetNextCurve(frame, curveIndex);
+						AddCustomCurve(binding, path, frame.Time, curve.Value, curve.InSlope, curve.OutSlope);
 					}
-				}
-				if (frameIndex0)
-				{
-					frameIndex0 = false;
+					curveIdx++;
 				}
 			}
 		}
 
-		private void ProcessDenses(IClip clip, IAnimationClipBindingConstant bindings)
+		private void ProcessDenses(DenseClip dense, int preDenseCurves)
 		{
-			DenseClip dense = clip.DenseClip;
+			ReadOnlySpan<float> slopeValues = [0, 0, 0, 0]; // no slopes - 0 values
 
 			float[] rentedArray = ArrayPool<float>.Shared.Rent(dense.SampleArray.Count);
 			dense.SampleArray.CopyTo(rentedArray);
-			ReadOnlySpan<float> curveValues = new ReadOnlySpan<float>(rentedArray, 0, dense.SampleArray.Count);
+			ReadOnlySpan<float> curveValues = new(rentedArray, 0, dense.SampleArray.Count);
 
-			ReadOnlySpan<float> slopeValues = [0, 0, 0, 0]; // no slopes - 0 values
-
-			int streamCount = clip.StreamedClip.CurveCount();
 			for (int frameIndex = 0; frameIndex < dense.FrameCount; frameIndex++)
 			{
-				float time = frameIndex / dense.SampleRate;
+				float time = frameIndex / dense.SampleRate + dense.BeginTime;
 				int frameOffset = frameIndex * (int)dense.CurveCount;
 				for (int curveIndex = 0; curveIndex < dense.CurveCount;)
 				{
-					int index = streamCount + curveIndex;
-					IGenericBinding binding = bindings.FindBinding(index);
+					int index = preDenseCurves + curveIndex;
+					IGenericBinding binding = GetBinding(index);
 					string path = GetCurvePath(binding.Path);
 					int framePosition = frameOffset + curveIndex;
 					if (binding.IsTransform())
@@ -172,7 +182,7 @@ namespace AssetRipper.Processing.AnimationClips
 					}
 					else
 					{
-						AddCustomCurve(bindings, binding, path, time, dense.SampleArray[framePosition]);
+						AddCustomCurve(binding, path, time, dense.SampleArray[framePosition]);
 						curveIndex++;
 					}
 				}
@@ -180,25 +190,22 @@ namespace AssetRipper.Processing.AnimationClips
 			ArrayPool<float>.Shared.Return(rentedArray);
 		}
 
-		private void ProcessConstant(IClip clip, IConstantClip constant, IAnimationClipBindingConstant bindings, float lastFrame)
+		private void ProcessConstant(IConstantClip constant, int preConstantCurves, float lastFrame)
 		{
 			float[] rentedArray = ArrayPool<float>.Shared.Rent(constant.Data.Count);
 			constant.Data.CopyTo(rentedArray);
-			ReadOnlySpan<float> curveValues = new ReadOnlySpan<float>(rentedArray, 0, constant.Data.Count);
+			ReadOnlySpan<float> curveValues = new(rentedArray, 0, constant.Data.Count);
 
 			ReadOnlySpan<float> slopeValues = [0, 0, 0, 0]; // no slopes - 0 values
 
-			int streamCount = clip.StreamedClip.CurveCount();
-			int denseCount = (int)clip.DenseClip.CurveCount;
-
-			// only first and last frames
-			float time = 0.0f;
-			for (int i = 0; i < 2; i++, time += lastFrame)
+			float time = 0f;
+			int Is1or2Frames = time == lastFrame ? 1 : 2; // a constant curve can be made with 1 or 2 frames
+			for (int i = 0; i < Is1or2Frames; i++, time += lastFrame)
 			{
 				for (int curveIndex = 0; curveIndex < constant.Data.Count;)
 				{
-					int index = streamCount + denseCount + curveIndex;
-					IGenericBinding binding = bindings.FindBinding(index);
+					int index = preConstantCurves + curveIndex;
+					IGenericBinding binding = GetBinding(index);
 					string path = GetCurvePath(binding.Path);
 					if (binding.IsTransform())
 					{
@@ -212,7 +219,7 @@ namespace AssetRipper.Processing.AnimationClips
 					}
 					else
 					{
-						AddCustomCurve(bindings, binding, path, time, constant.Data[curveIndex]);
+						AddCustomCurve(binding, path, time, constant.Data[curveIndex]);
 						curveIndex++;
 					}
 				}
@@ -220,35 +227,24 @@ namespace AssetRipper.Processing.AnimationClips
 			ArrayPool<float>.Shared.Return(rentedArray);
 		}
 
-		private void AddCustomCurve(IAnimationClipBindingConstant bindings, IGenericBinding binding, string path, float time, float value)
+		private void AddCustomCurve(IGenericBinding binding, string path, float time, float value, float inTangent = 0, float outTangent = 0)
 		{
-			bool ProcessStreams_frameIndex0 = time != FrameIndex0Time;
 			switch ((BindingCustomType)binding.CustomType)
 			{
 				case BindingCustomType.AnimatorMuscle:
-					if (ProcessStreams_frameIndex0)
-					{
-						AddAnimatorMuscleCurve(binding, time, value);
-					}
-
+					AddAnimatorMuscleCurve(binding, time, value, inTangent, outTangent);
 					break;
 
 				default:
 					string attribute = m_customCurveResolver.ToAttributeName((BindingCustomType)binding.CustomType, binding.Attribute, path);
+					CurveData curve = new(path, attribute, binding.GetClassID(), binding.Script.TryGetAsset(m_clip.Collection));
 					if (binding.IsPPtrCurve())
 					{
-						if (!ProcessStreams_frameIndex0)
-						{
-							time = 0.0f;
-						}
-
-						CurveData curve = new CurveData(path, attribute, binding.GetClassID(), binding.Script.TryGetAsset(m_clip.Collection));
-						AddPPtrKeyframe(curve, bindings, time, (int)value);
+						AddPPtrKeyframe(curve, time, (int)value);
 					}
-					else if (ProcessStreams_frameIndex0)
+					else
 					{
-						CurveData curve = new CurveData(path, attribute, binding.GetClassID(), binding.Script.TryGetAsset(m_clip.Collection));
-						AddFloatKeyframe(curve, time, value);
+						AddFloatKeyframe(curve, time, value, inTangent, outTangent);
 					}
 					break;
 			}
@@ -411,24 +407,20 @@ namespace AssetRipper.Processing.AnimationClips
 			}
 		}
 
-		private void AddDefaultCurve(IGenericBinding binding, string path, float time, float value)
+		private void AddDefaultCurve(IGenericBinding binding, string path, float time, float value, float inTangent = 0, float outTangent = 0)
 		{
 			switch (binding.GetClassID())
 			{
 				case ClassIDType.GameObject:
-					{
-						AddGameObjectCurve(binding, path, time, value);
-					}
+					AddGameObjectCurve(binding, path, time, value);
 					break;
 
 				case ClassIDType.MonoBehaviour:
-					{
-						AddScriptCurve(binding, path, time, value);
-					}
+					AddScriptCurve(binding, path, time, value, inTangent, outTangent);
 					break;
 
 				default:
-					AddEngineCurve(binding, path, time, value);
+					AddEngineCurve(binding, path, time, value, inTangent, outTangent);
 					break;
 			}
 		}
@@ -437,19 +429,18 @@ namespace AssetRipper.Processing.AnimationClips
 		{
 			if (GameObject.TryGetPath(binding.Attribute, out string? propertyName))
 			{
-				CurveData curve = new CurveData(path, propertyName, ClassIDType.GameObject);
-				AddFloatKeyframe(curve, time, value);
-				return;
+				CurveData curve = new(path, propertyName, ClassIDType.GameObject);
+				AddFloatKeyframe(curve, time, value, 0, 0);
 			}
 			else
 			{
 				// that means that dev exported animation clip with missing component
-				CurveData curve = new CurveData(path, GetReversedPath(MissedPropertyPrefix, binding.Attribute), ClassIDType.GameObject);
-				AddFloatKeyframe(curve, time, value);
+				CurveData curve = new(path, GetReversedPath(MissedPropertyPrefix, binding.Attribute), ClassIDType.GameObject);
+				AddFloatKeyframe(curve, time, value, 0, 0);
 			}
 		}
 
-		private void AddScriptCurve(IGenericBinding binding, string path, float time, float value)
+		private void AddScriptCurve(IGenericBinding binding, string path, float time, float value, float inTangent, float outTangent)
 		{
 			if (binding.Script.TryGetAsset(m_clip.Collection) is IMonoScript script)
 			{
@@ -461,33 +452,45 @@ namespace AssetRipper.Processing.AnimationClips
 				propertyName = GetReversedPath(ScriptPropertyPrefix, binding.Attribute);
 			}
 
-			CurveData curve = new CurveData(path, propertyName, ClassIDType.MonoBehaviour, binding.Script.TryGetAsset(m_clip.Collection));
+			CurveData curve = new(path, propertyName, ClassIDType.MonoBehaviour, binding.Script.TryGetAsset(m_clip.Collection));
 
-			AddFloatKeyframe(curve, time, value);
-		}
-
-		private void AddEngineCurve(IGenericBinding binding, string path, float time, float value)
-		{
-			if (!FieldHashes.TryGetPath(binding.GetClassID(), binding.Attribute, out string? propertyName))
+			if (binding.IsPPtrCurve())
 			{
-				CurveData curve = new(path, GetReversedPath(TypeTreePropertyPrefix, binding.Attribute), binding.GetClassID());
-				AddFloatKeyframe(curve, time, value);
+				AddPPtrKeyframe(curve, time, (int)value);
 			}
 			else
 			{
-				CurveData curve = new(path, propertyName, binding.GetClassID());
-				AddFloatKeyframe(curve, time, value);
+				AddFloatKeyframe(curve, time, value, inTangent, outTangent);
 			}
 		}
 
-		private void AddAnimatorMuscleCurve(IGenericBinding binding, float time, float value)
+		private void AddEngineCurve(IGenericBinding binding, string path, float time, float value, float inTangent, float outTangent)
 		{
-			string attributeString = HumanoidMuscleTypeExtensions.ToAttributeString(binding.GetHumanoidMuscle(Version));
-			CurveData curve = new CurveData(string.Empty, attributeString, ClassIDType.Animator);
-			AddFloatKeyframe(curve, time, value);
+			if (!FieldHashes.TryGetPath(binding.GetClassID(), binding.Attribute, out string? propertyName))
+			{
+				propertyName = GetReversedPath(TypeTreePropertyPrefix, binding.Attribute);
+			}
+
+			CurveData curve = new(path, propertyName, binding.GetClassID());
+
+			if (binding.IsPPtrCurve())
+			{
+				AddPPtrKeyframe(curve, time, (int)value);
+			}
+			else
+			{
+				AddFloatKeyframe(curve, time, value, inTangent, outTangent);
+			}
 		}
 
-		private void AddFloatKeyframe(in CurveData curveData, float time, float value)
+		private void AddAnimatorMuscleCurve(IGenericBinding binding, float time, float value, float inTangent, float outTangent)
+		{
+			string attributeString = HumanoidMuscleTypeExtensions.ToAttributeString(binding.GetHumanoidMuscle(Version));
+			CurveData curve = new(string.Empty, attributeString, ClassIDType.Animator);
+			AddFloatKeyframe(curve, time, value, inTangent, outTangent);
+		}
+
+		private void AddFloatKeyframe(in CurveData curveData, float time, float value, float inTangent, float outTangent)
 		{
 			if (!m_floats.TryGetValue(curveData, out IFloatCurve? curve))
 			{
@@ -502,10 +505,10 @@ namespace AssetRipper.Processing.AnimationClips
 			}
 
 			IKeyframe_Single floatKey = curve.Curve.Curve.AddNew();
-			floatKey.SetValues(Version, time, value, DefaultFloatWeight);
+			floatKey.SetValues(Version, time, value, inTangent, outTangent, DefaultFloatWeight);
 		}
 
-		private void AddPPtrKeyframe(in CurveData curveData, IAnimationClipBindingConstant bindings, float time, int index)
+		private void AddPPtrKeyframe(in CurveData curveData, float time, int index)
 		{
 			if (!m_pptrs.TryGetValue(curveData, out IPPtrCurve? curve))
 			{
@@ -524,41 +527,62 @@ namespace AssetRipper.Processing.AnimationClips
 				m_pptrs.Add(curveData, curve);
 			}
 
-			IPPtr_Object value = bindings.PptrCurveMapping[index];
+			IPPtr_Object value = ClipBindingConstant.PptrCurveMapping[index];
 			IPPtrKeyframe key = curve.Curve.AddNew();
 			key.Time = time;
 			key.Value.CopyValues(value, new PPtrConverter(m_clip));
 		}
 
-		private static void GetPreviousFrame(IReadOnlyList<StreamedFrame> streamFrames, int curveID, int currentFrame, out int frameIndex, out int curveIndex)
+		private IGenericBinding GetBinding(int index)
 		{
-			for (frameIndex = currentFrame - 1; frameIndex >= 0; frameIndex--)
+			if (m_bindingsCache.TryGetValue(index, out IGenericBinding? binding))
 			{
-				StreamedFrame frame = streamFrames[frameIndex];
-				for (curveIndex = 0; curveIndex < frame.Curves.Length; curveIndex++)
+				return binding;
+			}
+			int curves = 0;
+			AccessListBase<IGenericBinding> bindings = ClipBindingConstant.GenericBindings;
+			for (int i = 0; i < bindings.Count; i++)
+			{
+				binding = bindings[i];
+				if (binding.GetClassID() == ClassIDType.Transform)
 				{
-					StreamedCurveKey curve = frame.Curves[curveIndex];
+					curves += binding.TransformType().GetDimension();
+				}
+				else
+				{
+					curves += 1;
+				}
+				if (curves > index)
+				{
+					m_bindingsCache[index] = binding;
+					if (binding.IsTransform() && binding.TransformType().GetDimension() < 1)
+					{
+						// If an animation was malformed, this avoids the possibility of an infinite FOR loop when processing Transform bindings
+						throw new IndexOutOfRangeException("Transform AnimationCurve can't have Dimension less than 1.");
+					}
+					return binding;
+				}
+			}
+			throw new ArgumentException($"Binding with index {index} hasn't been found", nameof(index));
+		}
+
+		private static bool TryGetNextFrame(IReadOnlyList<StreamedFrame> streamedFrames, int currentFrame, int curveID, [MaybeNullWhen(false)] out StreamedFrame nextFrame, out int curveIdx)
+		{
+			for (int frameIndex = currentFrame + 1; frameIndex < streamedFrames.Count; frameIndex++)
+			{
+				nextFrame = streamedFrames[frameIndex];
+				for (curveIdx = 0; curveIdx < nextFrame.Curves.Length; curveIdx++)
+				{
+					StreamedCurveKey curve = nextFrame.Curves[curveIdx];
 					if (curve.Index == curveID)
 					{
-						return;
+						return true;
 					}
 				}
 			}
-			throw new Exception($"There is no curve with index {curveID} in any of previous frames");
-		}
-
-		private static int GetNextCurve(StreamedFrame frame, int currentCurve)
-		{
-			StreamedCurveKey curve = frame.Curves[currentCurve];
-			int i = currentCurve + 1;
-			for (; i < frame.Curves.Length; i++)
-			{
-				if (frame.Curves[i].Index != curve.Index)
-				{
-					return i;
-				}
-			}
-			return i;
+			nextFrame = null;
+			curveIdx = -1;
+			return false;
 		}
 
 		private string GetCurvePath(uint hash)
@@ -580,7 +604,7 @@ namespace AssetRipper.Processing.AnimationClips
 			AssetCollection collection = m_clip.Collection;
 			CopyDataToBuffer(clip, collection, buffer);
 
-			EndianSpanReader reader = new EndianSpanReader(buffer, collection.EndianType);
+			EndianSpanReader reader = new(buffer, collection.EndianType);
 			while (reader.Position < reader.Length)
 			{
 				StreamedFrame frame = new();
@@ -619,6 +643,34 @@ namespace AssetRipper.Processing.AnimationClips
 			}
 		}
 
+		private float CalculateLastConstantTime(IReadOnlyList<StreamedFrame> streamedFrames, float stopTime)
+		{
+			if (stopTime == 0f || streamedFrames.Count <= 1) // streamedFrames[streamedFrames.Count-1] has dummy Infinity Time
+			{
+				return stopTime;
+			}
+			float sampleRate = m_clip.SampleRate_C74;
+			// using frame indexes for precise calculation
+			int lastFrame = (int)float.Round(stopTime * sampleRate);
+			StreamedFrame lastStreamedFrame = streamedFrames[streamedFrames.Count - 2];
+			// careful of streamedFrames[0], has Time=float.MinValue
+			int lastSFFrame = lastStreamedFrame.Time > 0 ? (int)float.Round(lastStreamedFrame.Time * sampleRate) : 0;
+			if (lastFrame - lastSFFrame == 1)
+			{
+				// check if last StreamedFrame has a PPtrCurve, because it adds 1 extra frame to MuscleClip.StopTime
+				foreach (StreamedCurveKey curve in lastStreamedFrame.Curves)
+				{
+					IGenericBinding binding = GetBinding(curve.Index);
+					if (binding.IsPPtrCurve())
+					{
+						// careful of streamedFrames[0], has Time=float.MinValue
+						return lastStreamedFrame.Time > 0 ? lastStreamedFrame.Time : 0f;
+					}
+				}
+			}
+			return stopTime;
+		}
+
 		private static string GetReversedPath([ConstantExpected] string prefix, uint hash)
 		{
 			return Crc32Algorithm.ReverseAscii(hash, $"{prefix}0x{hash:X}_");
@@ -630,11 +682,6 @@ namespace AssetRipper.Processing.AnimationClips
 		private const string MissedPropertyPrefix = "missed_";
 		private const string ScriptPropertyPrefix = "script_";
 		private const string TypeTreePropertyPrefix = "typetree_";
-
-		/// <summary>
-		/// Used to detect when a StreamedFrame is from index 0.
-		/// </summary>
-		private const float FrameIndex0Time = float.MinValue;
 
 		/// <summary>
 		/// The default weight for a keyframe.
@@ -655,5 +702,7 @@ namespace AssetRipper.Processing.AnimationClips
 		private readonly PathChecksumCache m_checksumCache;
 		private readonly IAnimationClip m_clip;
 		private readonly CustomCurveResolver m_customCurveResolver;
+		private readonly Dictionary<int, IGenericBinding> m_bindingsCache = new(); //cache results from GetBinding(curveID)
+		private IAnimationClipBindingConstant ClipBindingConstant => m_clip.ClipBindingConstant_C74!; //This class only supports 4.3 and newer.
 	}
 }
