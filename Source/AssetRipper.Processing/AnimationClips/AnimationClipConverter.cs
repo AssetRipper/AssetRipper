@@ -557,7 +557,7 @@ namespace AssetRipper.Processing.AnimationClips
 					m_bindingsCache[index] = binding;
 					if (binding.IsTransform() && binding.TransformType().GetDimension() < 1)
 					{
-						// avoid infinite FOR loop when processing Transform animations
+						// If an animation was malformed, this avoids the possibility of an infinite FOR loop when processing Transform bindings
 						throw new IndexOutOfRangeException("Transform AnimationCurve can't have Dimension less than 1.");
 					}
 					return binding;
