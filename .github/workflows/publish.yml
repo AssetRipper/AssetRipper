@@ -25,9 +25,6 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
-      - name: Add Package Source
-        run: dotnet nuget add source --name Washi "https://nuget.washi.dev/v3/index.json"
-
       - name: Publish
         run: dotnet publish -c Release -r ${{ matrix.config.runtime }}
         working-directory: ./Source/AssetRipper.GUI.Free/
