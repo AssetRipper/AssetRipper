@@ -4,10 +4,6 @@
 		<IsTrimmable>true</IsTrimmable>
 		<OutputPath>..\0Bins\Other\AssetRipper.Decompilation.CSharp\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.Decompilation.CSharp\$(Configuration)\</IntermediateOutputPath>
-
-		<RestoreAdditionalProjectSources>
-			https://nuget.washi.dev/v3/index.json
-		</RestoreAdditionalProjectSources>
 	</PropertyGroup>
 
 	<ItemGroup>
