@@ -49,6 +49,7 @@ namespace AssetRipper.Import.Structure.Platforms
 
 		protected const string DataName = "data";
 		protected const string DataBundleName = DataName + AssetBundleExtension;
+		protected const string DataPackBundleName = DataName + "pack" + AssetBundleExtension;
 		protected const string MainDataName = "mainData";
 		protected const string GlobalGameManagersName = "globalgamemanagers";
 		protected const string GlobalGameManagerAssetsName = "globalgamemanagers.assets";
@@ -153,7 +154,12 @@ namespace AssetRipper.Import.Structure.Platforms
 		}
 
 		/// <summary>
-		/// Finds data.unity3d when Lz4 compressed
+		/// Finds data.unity3d and datapack.unity3d when Lz4 compressed
+		/// 
+		/// Accoding to comments in Unity source file in the function at
+		/// PlatformDependent/AndroidPlayer/Source/ApkFile.cpp:268,
+		/// the datapack asset is only present if Gradle built an AAB with Unity
+		/// data asset pack inside and then bundletool converted AAB into universal APK.
 		/// </summary>
 		protected void CollectCompressedGameFiles(DirectoryInfo root, IDictionary<string, string> files)
 		{
@@ -162,8 +168,14 @@ namespace AssetRipper.Import.Structure.Platforms
 			{
 				AddAssetBundle(files, DataBundleName, dataBundlePath);
 			}
+			
+			string dataPackBundlePath = Path.Combine(root.FullName, DataPackBundleName);
+			if (MultiFileStream.Exists(dataPackBundlePath))
+			{
+				AddAssetBundle(files, DataPackBundleName, dataPackBundlePath);
+			}
 		}
-
+		
 		/// <summary>
 		/// Collects global game managers and all the level files
 		/// </summary>
