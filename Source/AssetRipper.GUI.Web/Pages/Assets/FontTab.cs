@@ -5,6 +5,8 @@ namespace AssetRipper.GUI.Web.Pages.Assets;
 
 internal sealed class FontTab : HtmlTab
 {
+	public bool Validate { get; }
+
 	public byte[] Data { get; }
 
 	public string Source { get; }
@@ -17,11 +19,12 @@ internal sealed class FontTab : HtmlTab
 
 	public override string HtmlName => "font";
 
-	public override bool Enabled => !string.IsNullOrEmpty(Source);
+	public override bool Enabled => Validate && Data.Length > 0;
 
 	public FontTab(IUnityObjectBase asset)
 	{
-		Source = TryDecode(asset, out byte[] data, out string? fileName, out string? mimeType);
+		Validate = TryDecode(asset, out byte[] data, out string source, out string? fileName, out string? mimeType);
+		Source = source;
 		Data = data;
 		FileName = fileName;
 		MimeType = mimeType;
@@ -46,7 +49,7 @@ internal sealed class FontTab : HtmlTab
 		}
 	}
 
-	private static string TryDecode(IUnityObjectBase asset, out byte[] data, out string? fileName, out string? mimeType)
+	private static bool TryDecode(IUnityObjectBase asset, out byte[] data, out string source,out string? fileName, out string? mimeType)
 	{
 		if (asset is IFont font)
 		{
@@ -62,13 +65,17 @@ internal sealed class FontTab : HtmlTab
 					(0x74, 0x74, 0x63, 0x66) => ("ttc", "collection"),
 					_ => (string.Empty, string.Empty),
 				};
-				return $"data:font/{fontName};base64,{Convert.ToBase64String(data, Base64FormattingOptions.None)}";
+				source = $"data:font/{fontName};base64,{Convert.ToBase64String(data, Base64FormattingOptions.None)}";
+
+				return true;
 			}
 		}
 
 		data = Array.Empty<byte>();
+		source = string.Empty;
 		fileName = null;
 		mimeType = null;
-		return string.Empty;
+
+		return false;
 	}
 }
