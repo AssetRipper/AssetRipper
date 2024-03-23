@@ -364,8 +364,17 @@ namespace AssetRipper.Processing.AnimationClips
 						{
 							return foundPath;
 						}
+						else
+						{
+							//This has at least one ordinal property name,
+							//So the precalculated hashes are insufficient for recovery.
+							//Binary analysis may be required.
+							//Example failed attributes:
+							//0x8D909E70 (2375065200)
+							//https://github.com/AssetRipper/AssetRipper/issues/1239
+						}
 					}
-					return ThrowUnknownAttributeException(type, attribute);
+					return Crc32Algorithm.ReverseAscii(attribute, $"ParticleForceField_0x{attribute:X}_");
 
 				case BindingCustomType.UserDefined:
 					return Crc32Algorithm.ReverseAscii(attribute, $"UserDefined_0x{attribute:X}_");
