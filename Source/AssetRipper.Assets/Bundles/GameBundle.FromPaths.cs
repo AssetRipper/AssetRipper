@@ -63,8 +63,14 @@ partial class GameBundle
 		HashSet<string> serializedFileNames = new();//Includes missing dependencies
 		foreach (string path in paths)
 		{
-			FileBase? file = SchemeReader.LoadFile(path);
-			file?.ReadContentsRecursively();
+			FileBase? file;
+			try {
+				file = SchemeReader.LoadFile(path);
+				file?.ReadContentsRecursively();
+			} catch (Exception e) {
+				Console.WriteLine("Failed to read '{0}' file, skipping! Exception: {1}", path, e);
+				continue;
+			}
 			while (file is CompressedFile compressedFile)
 			{
 				file = compressedFile.UncompressedFile;
