@@ -24,16 +24,7 @@ public sealed partial class GameBundle : Bundle
 	/// <param name="bundle">The bundle to check compatibility with.</param>
 	protected override bool IsCompatibleBundle(Bundle bundle)
 	{
-		return bundle is ProcessedBundle or SerializedBundle;
-	}
-
-	/// <summary>
-	/// Returns true if the given asset collection is compatible with this bundle.
-	/// </summary>
-	/// <param name="collection">The collection to check compatibility with.</param>
-	protected override bool IsCompatibleCollection(AssetCollection collection)
-	{
-		return collection is SerializedAssetCollection or ProcessedAssetCollection;
+		return bundle is not GameBundle;
 	}
 
 	/// <summary>
