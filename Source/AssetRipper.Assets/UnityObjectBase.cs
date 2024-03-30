@@ -42,7 +42,7 @@ public abstract class UnityObjectBase : UnityAssetBase, IUnityObjectBase
 	/// </summary>
 	/// <remarks>
 	/// In order of preference:<br/>
-	/// 1. <see cref="IHasNameString.NameString"/><br/>
+	/// 1. <see cref="INamed.Name"/> (if <see cref="OriginalDirectory"/> is null)<br/>
 	/// 2. <see cref="OriginalName"/><br/>
 	/// 3. <see cref="ClassName"/><br/>
 	/// <see cref="OriginalName"/> has secondary preference because file importers can create assets with a different name from the file.
@@ -51,7 +51,7 @@ public abstract class UnityObjectBase : UnityAssetBase, IUnityObjectBase
 	public string GetBestName()
 	{
 		string? name = (this as INamed)?.Name;
-		if (!string.IsNullOrEmpty(name))
+		if (OriginalDirectory is null && !string.IsNullOrEmpty(name))
 		{
 			return name;
 		}
