@@ -70,6 +70,7 @@ namespace AssetRipper.Export.UnityProjects
 			string fileName = asset switch
 			{
 				IPrefabInstance prefab => prefab.GetName(),
+				IShader shader when !string.IsNullOrEmpty(shader.OriginalName) => shader.OriginalName,
 				_ => asset.GetBestName(),
 			};
 			fileName = FileUtils.RemoveCloneSuffixes(fileName);
