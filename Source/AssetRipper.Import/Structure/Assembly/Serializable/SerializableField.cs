@@ -392,7 +392,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 					YamlSequenceNode node = new YamlSequenceNode(SequenceStyle.Block);
 					foreach (IUnityAssetBase structure in structures)
 					{
-						node.Add(structure.ExportYaml(container));
+						node.Add(structure.ExportYamlEditor(container));
 					}
 					return node;
 				}
@@ -475,7 +475,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 				if (etalon.Type.Type == PrimitiveType.Complex)
 				{
 					IUnityAssetBase structure = (IUnityAssetBase)CValue;
-					return structure.ExportYaml(container);
+					return structure.ExportYamlEditor(container);
 				}
 				else
 				{

@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
-using AssetRipper.Assets.Export.Yaml;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Yaml;
 using System.Diagnostics;
@@ -33,7 +32,7 @@ public abstract class UnityObjectBase : UnityAssetBase, IUnityObjectBase
 		YamlMappingNode root = document.CreateMappingRoot();
 		root.Tag = ClassID.ToString();
 		root.Anchor = container.GetExportID(this).ToString();
-		root.Add(ClassName, this.ExportYaml(container));
+		root.Add(ClassName, this.ExportYamlEditor(container));
 		return document;
 	}
 
