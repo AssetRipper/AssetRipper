@@ -60,7 +60,7 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 			};
 		}
 
-		public void Read(AssetReader reader)
+		public void Read(AssetReader reader, bool readPlayerSubProgram = true, bool readParameter = true)
 		{
 			UnityVersion unityVersion = reader.AssetCollection.Version;
 			int version = reader.ReadInt32();
@@ -69,240 +69,246 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 				throw new Exception($"Shader program version {version} doesn't match");
 			}
 
-			ProgramType = reader.ReadInt32();
-			StatsALU = reader.ReadInt32();
-			StatsTEX = reader.ReadInt32();
-			StatsFlow = reader.ReadInt32();
-			if (HasStatsTempRegister(unityVersion))
+			if (readPlayerSubProgram)
 			{
-				StatsTempRegister = reader.ReadInt32();
-			}
-
-			if (HasMergedKeywords(unityVersion))
-			{
-				reader.ReadStringArray();
-			}
-			else
-			{
-				GlobalKeywords = reader.ReadStringArray();
-				if (HasLocalKeywords(unityVersion))
+				ProgramType = reader.ReadInt32();
+				StatsALU = reader.ReadInt32();
+				StatsTEX = reader.ReadInt32();
+				StatsFlow = reader.ReadInt32();
+				if (HasStatsTempRegister(unityVersion))
 				{
-					LocalKeywords = reader.ReadStringArray();
+					StatsTempRegister = reader.ReadInt32();
 				}
-			}
 
-			ProgramData = reader.ReadByteArray();
-			reader.AlignStream();
-
-			int sourceMap = reader.ReadInt32();
-			int bindCount = reader.ReadInt32();
-			ShaderBindChannel[] channels = new ShaderBindChannel[bindCount];
-			for (int i = 0; i < bindCount; i++)
-			{
-				uint source = reader.ReadUInt32();
-				VertexComponent target = (VertexComponent)reader.ReadUInt32();
-				ShaderBindChannel channel = new ShaderBindChannel(source, target);
-				channels[i] = channel;
-				sourceMap |= 1 << (int)source;
-			}
-			BindChannels = new ParserBindChannels(channels, sourceMap);
-
-			List<VectorParameter> vectors = new List<VectorParameter>();
-			List<MatrixParameter> matrices = new List<MatrixParameter>();
-			List<TextureParameter> textures = new List<TextureParameter>();
-			List<VectorParameter> structVectors = new List<VectorParameter>();
-			List<MatrixParameter> structMatrices = new List<MatrixParameter>();
-			List<BufferBinding> buffers = new List<BufferBinding>();
-			List<UAVParameter>? uavs = HasUAVParameters(unityVersion) ? new List<UAVParameter>() : null;
-			List<SamplerParameter>? samplers = HasSamplerParameters(unityVersion) ? new List<SamplerParameter>() : null;
-			List<BufferBinding> constBindings = new List<BufferBinding>();
-			List<StructParameter> structs = new List<StructParameter>();
-
-			int paramGroupCount = reader.ReadInt32();
-			ConstantBuffers = new ConstantBuffer[paramGroupCount - 1];
-			for (int i = 0; i < paramGroupCount; i++)
-			{
-				vectors.Clear();
-				matrices.Clear();
-				structs.Clear();
-
-				string name = reader.ReadString();
-				int usedSize = reader.ReadInt32();
-				int paramCount = reader.ReadInt32();
-				for (int j = 0; j < paramCount; j++)
+				if (HasMergedKeywords(unityVersion))
 				{
-					string paramName = reader.ReadString();
-					ShaderParamType paramType = (ShaderParamType)reader.ReadInt32();
-					int rows = reader.ReadInt32();
-					int columns = reader.ReadInt32();
-					bool isMatrix = reader.ReadInt32() > 0;
-					int arraySize = reader.ReadInt32();
-					int index = reader.ReadInt32();
-
-					if (isMatrix)
+					reader.ReadStringArray();
+				}
+				else
+				{
+					GlobalKeywords = reader.ReadStringArray();
+					if (HasLocalKeywords(unityVersion))
 					{
-						MatrixParameter matrix = IsAllParamArgs(unityVersion)
-							? new MatrixParameter(paramName, paramType, index, arraySize, rows, columns)
-							: new MatrixParameter(paramName, paramType, index, rows, columns);
-						matrices.Add(matrix);
+						LocalKeywords = reader.ReadStringArray();
+					}
+				}
+
+				ProgramData = reader.ReadByteArray();
+				reader.AlignStream();
+
+				int sourceMap = reader.ReadInt32();
+				int bindCount = reader.ReadInt32();
+				ShaderBindChannel[] channels = new ShaderBindChannel[bindCount];
+				for (int i = 0; i < bindCount; i++)
+				{
+					uint source = reader.ReadUInt32();
+					VertexComponent target = (VertexComponent)reader.ReadUInt32();
+					ShaderBindChannel channel = new ShaderBindChannel(source, target);
+					channels[i] = channel;
+					sourceMap |= 1 << (int)source;
+				}
+				BindChannels = new ParserBindChannels(channels, sourceMap);
+			}
+			
+			if (readParameter)
+			{
+				List<VectorParameter> vectors = new List<VectorParameter>();
+				List<MatrixParameter> matrices = new List<MatrixParameter>();
+				List<TextureParameter> textures = new List<TextureParameter>();
+				List<VectorParameter> structVectors = new List<VectorParameter>();
+				List<MatrixParameter> structMatrices = new List<MatrixParameter>();
+				List<BufferBinding> buffers = new List<BufferBinding>();
+				List<UAVParameter>? uavs = HasUAVParameters(unityVersion) ? new List<UAVParameter>() : null;
+				List<SamplerParameter>? samplers = HasSamplerParameters(unityVersion) ? new List<SamplerParameter>() : null;
+				List<BufferBinding> constBindings = new List<BufferBinding>();
+				List<StructParameter> structs = new List<StructParameter>();
+
+				int paramGroupCount = reader.ReadInt32();
+				ConstantBuffers = new ConstantBuffer[paramGroupCount - 1];
+				for (int i = 0; i < paramGroupCount; i++)
+				{
+					vectors.Clear();
+					matrices.Clear();
+					structs.Clear();
+
+					string name = reader.ReadString();
+					int usedSize = reader.ReadInt32();
+					int paramCount = reader.ReadInt32();
+					for (int j = 0; j < paramCount; j++)
+					{
+						string paramName = reader.ReadString();
+						ShaderParamType paramType = (ShaderParamType)reader.ReadInt32();
+						int rows = reader.ReadInt32();
+						int columns = reader.ReadInt32();
+						bool isMatrix = reader.ReadInt32() > 0;
+						int arraySize = reader.ReadInt32();
+						int index = reader.ReadInt32();
+
+						if (isMatrix)
+						{
+							MatrixParameter matrix = IsAllParamArgs(unityVersion)
+								? new MatrixParameter(paramName, paramType, index, arraySize, rows, columns)
+								: new MatrixParameter(paramName, paramType, index, rows, columns);
+							matrices.Add(matrix);
+						}
+						else
+						{
+							VectorParameter vector = IsAllParamArgs(unityVersion)
+								? new VectorParameter(paramName, paramType, index, arraySize, columns)
+								: new VectorParameter(paramName, paramType, index, columns);
+							vectors.Add(vector);
+						}
+					}
+
+					if (HasStructParameters(unityVersion))
+					{
+						int structCount = reader.ReadInt32();
+						for (int j = 0; j < structCount; j++)
+						{
+							structVectors.Clear();
+							structMatrices.Clear();
+
+							string structName = reader.ReadString();
+							int index = reader.ReadInt32();
+							int arraySize = reader.ReadInt32();
+							int structSize = reader.ReadInt32();
+
+							int strucParamCount = reader.ReadInt32();
+							for (int k = 0; k < strucParamCount; k++)
+							{
+								string paramName = reader.ReadString();
+								paramName = $"{structName}.{paramName}";
+								ShaderParamType paramType = (ShaderParamType)reader.ReadInt32();
+								int rows = reader.ReadInt32();
+								int columns = reader.ReadInt32();
+								bool isMatrix = reader.ReadInt32() > 0;
+								int vectorArraySize = reader.ReadInt32();
+								int paramIndex = reader.ReadInt32();
+
+								if (isMatrix)
+								{
+									MatrixParameter matrix = IsAllParamArgs(unityVersion)
+										? new MatrixParameter(paramName, paramType, paramIndex, vectorArraySize, rows, columns)
+										: new MatrixParameter(paramName, paramType, paramIndex, rows, columns);
+									structMatrices.Add(matrix);
+								}
+								else
+								{
+									VectorParameter vector = IsAllParamArgs(unityVersion)
+										? new VectorParameter(paramName, paramType, paramIndex, vectorArraySize, columns)
+										: new VectorParameter(paramName, paramType, paramIndex, columns);
+									structVectors.Add(vector);
+								}
+							}
+
+							StructParameter @struct = new StructParameter(structName, index, arraySize, structSize, structVectors.ToArray(), structMatrices.ToArray());
+							structs.Add(@struct);
+						}
+					}
+					if (i == 0)
+					{
+						VectorParameters = vectors.ToArray();
+						MatrixParameters = matrices.ToArray();
+						StructParameters = structs.ToArray();
 					}
 					else
 					{
-						VectorParameter vector = IsAllParamArgs(unityVersion)
-							? new VectorParameter(paramName, paramType, index, arraySize, columns)
-							: new VectorParameter(paramName, paramType, index, columns);
-						vectors.Add(vector);
+						ConstantBuffer constBuffer = new ConstantBuffer(name, matrices.ToArray(), vectors.ToArray(), structs.ToArray(), usedSize);
+						ConstantBuffers[i - 1] = constBuffer;
 					}
 				}
 
+				int paramGroup2Count = reader.ReadInt32();
+				for (int i = 0; i < paramGroup2Count; i++)
+				{
+					string name = reader.ReadString();
+					int type = reader.ReadInt32();
+					int index = reader.ReadInt32();
+					int extraValue = reader.ReadInt32();
+
+					if (type == 0)
+					{
+						TextureParameter texture;
+						if (HasNewTextureParams(unityVersion))
+						{
+							uint textureExtraValue = reader.ReadUInt32();
+							bool isMultiSampled = (textureExtraValue & 1) == 1;
+							byte dimension = (byte)(textureExtraValue >> 1);
+							int samplerIndex = extraValue;
+							texture = new TextureParameter(name, index, dimension, samplerIndex, isMultiSampled);
+						}
+						else if (HasMultiSampled(unityVersion))
+						{
+							uint textureExtraValue = reader.ReadUInt32();
+							bool isMultiSampled = textureExtraValue == 1;
+							byte dimension = unchecked((byte)extraValue);
+							int samplerIndex = extraValue >> 8;
+							if (samplerIndex == 0xFFFFFF)
+							{
+								samplerIndex = -1;
+							}
+
+							texture = new TextureParameter(name, index, dimension, samplerIndex, isMultiSampled);
+						}
+						else
+						{
+							byte dimension = unchecked((byte)extraValue);
+							int samplerIndex = extraValue >> 8;
+							if (samplerIndex == 0xFFFFFF)
+							{
+								samplerIndex = -1;
+							}
+
+							texture = new TextureParameter(name, index, dimension, samplerIndex);
+						}
+						textures.Add(texture);
+					}
+					else if (type == 1)
+					{
+						BufferBinding binding = new BufferBinding(name, index);
+						constBindings.Add(binding);
+					}
+					else if (type == 2)
+					{
+						BufferBinding buffer = new BufferBinding(name, index);
+						buffers.Add(buffer);
+					}
+					else if (type == 3 && uavs is not null)
+					{
+						UAVParameter uav = new UAVParameter(name, index, extraValue);
+						uavs.Add(uav);
+					}
+					else if (type == 4 && samplers is not null)
+					{
+						SamplerParameter sampler = new SamplerParameter((uint)extraValue, index);
+						samplers.Add(sampler);
+					}
+					else
+					{
+						throw new Exception($"Unupported parameter type {type}");
+					}
+				}
+				TextureParameters = textures.ToArray();
+				BufferParameters = buffers.ToArray();
+				if (uavs is not null)
+				{
+					UAVParameters = uavs.ToArray();
+				}
+
+				if (samplers is not null)
+				{
+					SamplerParameters = samplers.ToArray();
+				}
+
+				ConstantBufferBindings = constBindings.ToArray();
 				if (HasStructParameters(unityVersion))
 				{
-					int structCount = reader.ReadInt32();
-					for (int j = 0; j < structCount; j++)
-					{
-						structVectors.Clear();
-						structMatrices.Clear();
-
-						string structName = reader.ReadString();
-						int index = reader.ReadInt32();
-						int arraySize = reader.ReadInt32();
-						int structSize = reader.ReadInt32();
-
-						int strucParamCount = reader.ReadInt32();
-						for (int k = 0; k < strucParamCount; k++)
-						{
-							string paramName = reader.ReadString();
-							paramName = $"{structName}.{paramName}";
-							ShaderParamType paramType = (ShaderParamType)reader.ReadInt32();
-							int rows = reader.ReadInt32();
-							int columns = reader.ReadInt32();
-							bool isMatrix = reader.ReadInt32() > 0;
-							int vectorArraySize = reader.ReadInt32();
-							int paramIndex = reader.ReadInt32();
-
-							if (isMatrix)
-							{
-								MatrixParameter matrix = IsAllParamArgs(unityVersion)
-									? new MatrixParameter(paramName, paramType, paramIndex, vectorArraySize, rows, columns)
-									: new MatrixParameter(paramName, paramType, paramIndex, rows, columns);
-								structMatrices.Add(matrix);
-							}
-							else
-							{
-								VectorParameter vector = IsAllParamArgs(unityVersion)
-									? new VectorParameter(paramName, paramType, paramIndex, vectorArraySize, columns)
-									: new VectorParameter(paramName, paramType, paramIndex, columns);
-								structVectors.Add(vector);
-							}
-						}
-
-						StructParameter @struct = new StructParameter(structName, index, arraySize, structSize, structVectors.ToArray(), structMatrices.ToArray());
-						structs.Add(@struct);
-					}
-				}
-				if (i == 0)
-				{
-					VectorParameters = vectors.ToArray();
-					MatrixParameters = matrices.ToArray();
 					StructParameters = structs.ToArray();
 				}
-				else
-				{
-					ConstantBuffer constBuffer = new ConstantBuffer(name, matrices.ToArray(), vectors.ToArray(), structs.ToArray(), usedSize);
-					ConstantBuffers[i - 1] = constBuffer;
-				}
-			}
-
-			int paramGroup2Count = reader.ReadInt32();
-			for (int i = 0; i < paramGroup2Count; i++)
-			{
-				string name = reader.ReadString();
-				int type = reader.ReadInt32();
-				int index = reader.ReadInt32();
-				int extraValue = reader.ReadInt32();
-
-				if (type == 0)
-				{
-					TextureParameter texture;
-					if (HasNewTextureParams(unityVersion))
-					{
-						uint textureExtraValue = reader.ReadUInt32();
-						bool isMultiSampled = (textureExtraValue & 1) == 1;
-						byte dimension = (byte)(textureExtraValue >> 1);
-						int samplerIndex = extraValue;
-						texture = new TextureParameter(name, index, dimension, samplerIndex, isMultiSampled);
-					}
-					else if (HasMultiSampled(unityVersion))
-					{
-						uint textureExtraValue = reader.ReadUInt32();
-						bool isMultiSampled = textureExtraValue == 1;
-						byte dimension = unchecked((byte)extraValue);
-						int samplerIndex = extraValue >> 8;
-						if (samplerIndex == 0xFFFFFF)
-						{
-							samplerIndex = -1;
-						}
-
-						texture = new TextureParameter(name, index, dimension, samplerIndex, isMultiSampled);
-					}
-					else
-					{
-						byte dimension = unchecked((byte)extraValue);
-						int samplerIndex = extraValue >> 8;
-						if (samplerIndex == 0xFFFFFF)
-						{
-							samplerIndex = -1;
-						}
-
-						texture = new TextureParameter(name, index, dimension, samplerIndex);
-					}
-					textures.Add(texture);
-				}
-				else if (type == 1)
-				{
-					BufferBinding binding = new BufferBinding(name, index);
-					constBindings.Add(binding);
-				}
-				else if (type == 2)
-				{
-					BufferBinding buffer = new BufferBinding(name, index);
-					buffers.Add(buffer);
-				}
-				else if (type == 3 && uavs is not null)
-				{
-					UAVParameter uav = new UAVParameter(name, index, extraValue);
-					uavs.Add(uav);
-				}
-				else if (type == 4 && samplers is not null)
-				{
-					SamplerParameter sampler = new SamplerParameter((uint)extraValue, index);
-					samplers.Add(sampler);
-				}
-				else
-				{
-					throw new Exception($"Unupported parameter type {type}");
-				}
-			}
-			TextureParameters = textures.ToArray();
-			BufferParameters = buffers.ToArray();
-			if (uavs is not null)
-			{
-				UAVParameters = uavs.ToArray();
-			}
-
-			if (samplers is not null)
-			{
-				SamplerParameters = samplers.ToArray();
-			}
-
-			ConstantBufferBindings = constBindings.ToArray();
-			if (HasStructParameters(unityVersion))
-			{
-				StructParameters = structs.ToArray();
 			}
 		}
 
-		public void Write(AssetWriter writer) => throw new NotImplementedException();
+		public void Write(AssetWriter writer, bool writePlayerSubProgram = true, bool writeParameter = true) => throw new NotImplementedException();
 
 		public ShaderGpuProgramType GetProgramType(UnityVersion version)
 		{
