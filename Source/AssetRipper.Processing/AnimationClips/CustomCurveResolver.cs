@@ -21,7 +21,13 @@ using System.Text.RegularExpressions;
 
 namespace AssetRipper.Processing.AnimationClips
 {
-	public partial struct CustomCurveResolver
+	/// <summary>
+	/// Resolves the attribute names for custom curves
+	/// </summary>
+	/// <remarks>
+	/// This has to remain a class due to the lazy initialization of <see cref="CustomCurveResolver.Roots"/>.
+	/// </remarks>
+	public partial class CustomCurveResolver
 	{
 		public CustomCurveResolver(IAnimationClip clip)
 		{
