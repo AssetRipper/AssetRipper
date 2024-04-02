@@ -1,4 +1,5 @@
 using AssetRipper.Export.UnityProjects.Configuration;
+using AssetRipper.TextureDecoder.Exr;
 using AssetRipper.TextureDecoder.Rgb;
 using AssetRipper.TextureDecoder.Rgb.Formats;
 using StbImageWriteSharp;
@@ -121,6 +122,9 @@ public readonly record struct DirectBitmap<TColor, TChannel>
 		{
 			case ImageExportFormat.Bmp:
 				SaveAsBmp(stream);
+				break;
+			case ImageExportFormat.Exr:
+				ExrWriter.Write<TColor, TChannel>(stream, Width, Height * Depth, Pixels);
 				break;
 			case ImageExportFormat.Hdr:
 				SaveAsHdr(stream);

@@ -8,6 +8,11 @@
 		/// </summary>
 		Bmp,
 		/// <summary>
+		/// Lossless. OpenEXR<br/>
+		/// <see href="https://en.wikipedia.org/wiki/OpenEXR"/>
+		/// </summary>
+		Exr,
+		/// <summary>
 		/// Lossless. Radiance HDR<br/>
 		/// <see href="https://en.wikipedia.org/wiki/RGBE_image_format"/>
 		/// </summary>
@@ -36,6 +41,7 @@
 			return _this switch
 			{
 				ImageExportFormat.Bmp => "bmp",
+				ImageExportFormat.Exr => "exr",
 				ImageExportFormat.Hdr => "hdr",
 				ImageExportFormat.Jpeg => "jpeg",
 				ImageExportFormat.Png => "png",
