@@ -60,7 +60,7 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 			};
 		}
 
-		public void Read(AssetReader reader, bool readPlayerSubProgram = true, bool readParameter = true)
+		public void Read(AssetReader reader, bool readProgramData = true, bool readParams = true)
 		{
 			UnityVersion unityVersion = reader.AssetCollection.Version;
 			int version = reader.ReadInt32();
@@ -69,17 +69,17 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 				throw new Exception($"Shader program version {version} doesn't match");
 			}
 
-			if (readPlayerSubProgram)
+			if (readProgramData)
 			{
-				ReadPlayerSubProgram(reader);
+				ReadProgramData(reader);
 			}
-			if (readParameter)
+			if (readParams)
 			{
-				ReadParameter(reader);
+				ReadParameters(reader);
 			}
 		}
 
-		private void ReadPlayerSubProgram(AssetReader reader)
+		private void ReadProgramData(AssetReader reader)
 		{
 			UnityVersion unityVersion = reader.AssetCollection.Version;
 
@@ -122,7 +122,7 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 			BindChannels = new ParserBindChannels(channels, sourceMap);
 		}
 
-		private void ReadParameter(AssetReader reader)
+		private void ReadParameters(AssetReader reader)
 		{
 			UnityVersion unityVersion = reader.AssetCollection.Version;
 

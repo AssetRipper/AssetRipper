@@ -107,15 +107,9 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 			using MemoryStream blobMem = new MemoryStream(m_decompressedBlob);
 			using AssetReader blobReader = new AssetReader(blobMem, shaderCollection);
 
-			ShaderSubProgramEntry entry = Entries[blobIndex];
-			blobReader.BaseStream.Position = entry.Offset;
-
 			subProgram = new ShaderSubProgram();
-			subProgram.Read(blobReader);
-			if (blobReader.BaseStream.Position != entry.Offset + entry.Length)
-			{
-				throw new Exception($"Read {blobReader.BaseStream.Position - entry.Offset} less than expected {entry.Length}");
-			}
+			ReadSubProgram(blobReader, subProgram, blobIndex);
+
 			m_cachedSubPrograms.TryAdd((blobIndex, blobIndex), subProgram);
 			return subProgram;
 		}
@@ -130,25 +124,24 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 			using MemoryStream blobMem = new MemoryStream(m_decompressedBlob);
 			using AssetReader blobReader = new AssetReader(blobMem, shaderCollection);
 
-			ShaderSubProgramEntry entry = Entries[blobIndex];
-			blobReader.BaseStream.Position = entry.Offset;
-
 			subProgram = new ShaderSubProgram();
-			subProgram.Read(blobReader, true, false);
-			if (blobReader.BaseStream.Position != entry.Offset + entry.Length)
-			{
-				throw new Exception($"Read {blobReader.BaseStream.Position - entry.Offset} less than expected {entry.Length}");
-			}
+			ReadSubProgram(blobReader, subProgram, blobIndex, true, false);
+			ReadSubProgram(blobReader, subProgram, paramBlobIndex, false, true);
 
-			entry = Entries[paramBlobIndex];
-			blobReader.BaseStream.Position = entry.Offset;
-			subProgram.Read(blobReader, false, true);
-			if (blobReader.BaseStream.Position != entry.Offset + entry.Length)
-			{
-				throw new Exception($"Read {blobReader.BaseStream.Position - entry.Offset} less than expected {entry.Length}");
-			}
 			m_cachedSubPrograms.TryAdd((blobIndex, paramBlobIndex), subProgram);
 			return subProgram;
+		}
+
+		private void ReadSubProgram(AssetReader reader, ShaderSubProgram subProgram, uint index, bool readProgramData = true, bool readParams = true)
+		{
+			ShaderSubProgramEntry entry = Entries[index];
+			reader.BaseStream.Position = entry.Offset;
+
+			subProgram.Read(reader, readProgramData, readParams);
+			if (reader.BaseStream.Position != entry.Offset + entry.Length)
+			{
+				throw new Exception($"Read {reader.BaseStream.Position - entry.Offset} less than expected {entry.Length}");
+			}
 		}
 
 		public ShaderSubProgramEntry[] Entries { get; set; } = Array.Empty<ShaderSubProgramEntry>();

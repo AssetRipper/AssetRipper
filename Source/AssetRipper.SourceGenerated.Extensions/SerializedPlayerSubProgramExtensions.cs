@@ -7,14 +7,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 	{
 		public static ShaderGpuProgramType GetProgramType(this ISerializedPlayerSubProgram subProgram, UnityVersion version)
 		{
-			if (ShaderGpuProgramTypeExtensions.GpuProgramType55Relevant(version))
-			{
-				return ((ShaderGpuProgramType55)subProgram.GpuProgramType).ToGpuProgramType();
-			}
-			else
-			{
-				return ((ShaderGpuProgramType53)subProgram.GpuProgramType).ToGpuProgramType();
-			}
+			return ((ShaderGpuProgramType55)subProgram.GpuProgramType).ToGpuProgramType();
 		}
 	}
 }

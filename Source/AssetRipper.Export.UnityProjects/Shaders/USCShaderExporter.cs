@@ -648,14 +648,11 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 					if (program.Has_PlayerSubPrograms())
 					{
 						ISerializedPlayerSubProgram playerSubProgram = playerSubPrograms[i];
-						if (playerSubProgram.KeywordIndices != null)
+						for (int j = 0; j < playerSubProgram.KeywordIndices.Count; j++)
 						{
-							for (int j = 0; j < playerSubProgram.KeywordIndices.Count; j++)
+							if (pass.NameIndices[INSTANCING_ON] == playerSubProgram.KeywordIndices[j])
 							{
-								if (pass.NameIndices[INSTANCING_ON] == playerSubProgram.KeywordIndices[j])
-								{
-									matched = false;
-								}
+								matched = false;
 							}
 						}
 					}
@@ -694,14 +691,11 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 					if (program.Has_PlayerSubPrograms())
 					{
 						ISerializedPlayerSubProgram playerSubProgram = playerSubPrograms[i];
-						if (playerSubProgram.KeywordIndices != null)
+						for (int j = 0; j < playerSubProgram.KeywordIndices.Count; j++)
 						{
-							for (int j = 0; j < playerSubProgram.KeywordIndices.Count; j++)
+							if (pass.NameIndices[DIRECTIONAL] == playerSubProgram.KeywordIndices[j])
 							{
-								if (pass.NameIndices[DIRECTIONAL] == playerSubProgram.KeywordIndices[j])
-								{
-									matchesDirectional = true;
-								}
+								matchesDirectional = true;
 							}
 						}
 					}
@@ -740,14 +734,11 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 					if (program.Has_PlayerSubPrograms())
 					{
 						ISerializedPlayerSubProgram playerSubProgram = playerSubPrograms[i];
-						if (playerSubProgram.KeywordIndices != null)
+						for (int j = 0; j < playerSubProgram.KeywordIndices.Count; j++)
 						{
-							for (int j = 0; j < playerSubProgram.KeywordIndices.Count; j++)
+							if (pass.NameIndices[POINT] == playerSubProgram.KeywordIndices[j])
 							{
-								if (pass.NameIndices[POINT] == playerSubProgram.KeywordIndices[j])
-								{
-									matchesPoint = true;
-								}
+								matchesPoint = true;
 							}
 						}
 					}
