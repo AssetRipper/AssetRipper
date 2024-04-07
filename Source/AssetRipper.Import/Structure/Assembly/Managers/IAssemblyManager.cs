@@ -14,7 +14,10 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 		bool IsAssemblyLoaded(string assembly);
 		bool IsPresent(ScriptIdentifier scriptID);
 		bool IsValid(ScriptIdentifier scriptID);
-		SerializableType GetSerializableType(ScriptIdentifier scriptID, UnityVersion version);
+		bool TryGetSerializableType(
+			ScriptIdentifier scriptID,
+			[NotNullWhen(true)] out SerializableType? scriptType,
+			[NotNullWhen(false)] out string? failureReason);
 		TypeDefinition GetTypeDefinition(ScriptIdentifier scriptID);
 		IEnumerable<AssemblyDefinition> GetAssemblies();
 		ScriptIdentifier GetScriptID(string assembly, string @namespace, string name);

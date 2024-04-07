@@ -38,10 +38,19 @@ namespace AssetRipper.Import.Structure.Assembly
 
 		public static SerializableType? GetBehaviourType(this IMonoScript monoScript, IAssemblyManager assemblyManager)
 		{
+			return monoScript.GetBehaviourType(assemblyManager, out _);
+		}
+
+		public static SerializableType? GetBehaviourType(this IMonoScript monoScript, IAssemblyManager assemblyManager, out string? failureReason)
+		{
 			ScriptIdentifier scriptID = assemblyManager.GetScriptID(monoScript.GetAssemblyNameFixed(), monoScript.Namespace, monoScript.ClassName_R);
-			if (assemblyManager.IsValid(scriptID))
+			if (!assemblyManager.IsValid(scriptID))
 			{
-				return assemblyManager.GetSerializableType(scriptID, monoScript.Collection.Version);
+				failureReason = "Script ID is invalid";
+			}
+			else if (assemblyManager.TryGetSerializableType(scriptID, out SerializableType? result, out failureReason))
+			{
+				return result;
 			}
 			return null;
 		}

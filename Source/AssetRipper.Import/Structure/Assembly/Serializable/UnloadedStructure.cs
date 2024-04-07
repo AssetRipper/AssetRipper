@@ -5,6 +5,7 @@ using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Assets.Traversal;
+using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.IO.Endian;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
@@ -48,7 +49,8 @@ public sealed class UnloadedStructure : UnityAssetBase
 	public SerializableStructure? LoadStructure()
 	{
 		ThrowIfNotStructure();
-		SerializableStructure? structure = monoBehaviour.ScriptP?.GetBehaviourType(assemblyManager)?.CreateSerializableStructure();
+		string? failureReason = null;
+		SerializableStructure? structure = monoBehaviour.ScriptP?.GetBehaviourType(assemblyManager, out failureReason)?.CreateSerializableStructure();
 		if (structure is not null)
 		{
 			EndianSpanReader reader = new EndianSpanReader(structureData, monoBehaviour.Collection.EndianType);
@@ -57,6 +59,10 @@ public sealed class UnloadedStructure : UnityAssetBase
 				monoBehaviour.Structure = structure;
 				return structure;
 			}
+		}
+		else if (failureReason is not null)
+		{
+			Logger.Error(LogCategory.Import, $"Could not read MonoBehaviour structure for `{monoBehaviour.ScriptP?.GetFullName()}`. Reason: {failureReason}");
 		}
 
 		monoBehaviour.Structure = null;

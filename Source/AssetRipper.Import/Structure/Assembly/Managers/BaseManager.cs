@@ -176,19 +176,35 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 			return new ScriptIdentifier(assembly, type.Namespace ?? "", type.Name ?? "");
 		}
 
-		public virtual SerializableType GetSerializableType(ScriptIdentifier scriptID, UnityVersion version)
+		public bool TryGetSerializableType(
+			ScriptIdentifier scriptID,
+			[NotNullWhen(true)] out SerializableType? scriptType,
+			[NotNullWhen(false)] out string? failureReason)
 		{
-			string uniqueName = scriptID.UniqueName;
-			if (m_serializableTypes.TryGetValue(uniqueName, out SerializableType? sType))
+			if (m_serializableTypes.TryGetValue(scriptID.UniqueName, out scriptType))
 			{
-				return sType;
+				failureReason = null;
+				return true;
 			}
-			TypeDefinition type = FindType(scriptID) ?? throw new ArgumentException($"Can't find type {scriptID.UniqueName}");
-			if (monoTypeCache.TryGetValue(type, out MonoType? monoType))
+			TypeDefinition? type = FindType(scriptID);
+			if (type is null)
 			{
-				return monoType;
+				scriptType = null;
+				failureReason = $"Can't find type: {scriptID.UniqueName}";
+				return false;
 			}
-			return new MonoType(type, monoTypeCache);
+			else if (monoTypeCache.TryGetValue(type, out MonoType? monoType)
+				|| MonoType.TryCreate(type, monoTypeCache, out monoType, out failureReason))
+			{
+				scriptType = monoType;
+				failureReason = null;
+				return true;
+			}
+			else
+			{
+				scriptType = null;
+				return false;
+			}
 		}
 
 		internal void AddSerializableType(ITypeDefOrRef type, SerializableType scriptType)
@@ -200,11 +216,6 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 		internal void InvokeRequestAssemblyCallback(string assemblyName) => m_requestAssemblyCallback.Invoke(assemblyName);
 
 		internal void AddSerializableType(string uniqueName, SerializableType scriptType) => m_serializableTypes.Add(uniqueName, scriptType);
-
-		internal bool TryGetSerializableType(string uniqueName, [NotNullWhen(true)] out SerializableType? scriptType)
-		{
-			return m_serializableTypes.TryGetValue(uniqueName, out scriptType);
-		}
 
 		protected AssemblyDefinition? FindAssembly(string name)
 		{

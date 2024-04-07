@@ -78,10 +78,16 @@ internal static class Program
 
 		try
 		{
-			SerializableType serializableType = AssemblyManager.GetSerializableType(typeId, default);
-			
-			Logger.Info($"Got serializable type: {serializableType}");
-			PrintSerializationInfo(serializableType);
+			if (AssemblyManager.TryGetSerializableType(typeId, out SerializableType? serializableType, out string? failureReason))
+			{
+				Logger.Info($"Got serializable type: {serializableType}");
+				PrintSerializationInfo(serializableType);
+			}
+			else
+			{
+				Logger.Error($"Could not build serializable type - {failureReason}");
+				return 2;
+			}
 		}
 		catch (Exception e)
 		{

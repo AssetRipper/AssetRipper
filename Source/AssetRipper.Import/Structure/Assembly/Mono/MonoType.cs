@@ -3,6 +3,7 @@ using AsmResolver.DotNet.Signatures.Types;
 using AssetRipper.Import.Structure.Assembly.Serializable;
 using AssetRipper.SerializationLogic;
 using AssetRipper.SerializationLogic.Extensions;
+using System.Numerics;
 
 namespace AssetRipper.Import.Structure.Assembly.Mono
 {
@@ -14,43 +15,120 @@ namespace AssetRipper.Import.Structure.Assembly.Mono
 		{
 		}
 
-		public MonoType(TypeDefinition typeDefinition, Dictionary<TypeDefinition, MonoType> typeCache) : this(typeDefinition)
+		private MonoType(ITypeDefOrRef type, IReadOnlyList<Field> fields) : this(type)
 		{
-			typeCache.Add(typeDefinition, this);
-			List<Field> fields = new(typeDefinition.Fields.Count); //Ensure we allocate some initial space so that we have less chance of needing to resize the list.
+			Fields = fields;
+		}
+
+		public static bool TryCreate(
+			TypeDefinition typeDefinition,
+			Dictionary<TypeDefinition, MonoType> typeCache,
+			[NotNullWhen(true)] out MonoType? result,
+			[NotNullWhen(false)] out string? failureReason)
+		{
+			//Ensure we allocate some initial space so that we have less chance of needing to resize the list.
+			List<Field> fields = new(RoundUpToPowerOf2(typeDefinition.Fields.Count));
+
+			//Caching before completion prevents infinite loops.
+			result = new(typeDefinition, fields);
+			typeCache.Add(typeDefinition, result);
+
 			foreach ((FieldDefinition fieldDefinition, TypeSignature fieldType) in FieldQuery.GetFieldsInTypeAndBase(typeDefinition))
 			{
 				if (FieldSerializationLogic.WillUnitySerialize(fieldDefinition, fieldType))
 				{
-					fields.Add(MakeSerializableField(fieldDefinition, fieldType, typeCache));
+					if (FieldSerializationLogic.HasSerializeReferenceAttribute(fieldDefinition))
+					{
+						typeCache.Remove(typeDefinition);
+						return FailBecauseOfSerializeReference(fieldDefinition, out result, out failureReason);
+					}
+					else if (TryCreateSerializableField(fieldDefinition, fieldType, typeCache, out Field field, out failureReason))
+					{
+						fields.Add(field);
+					}
+					else
+					{
+						typeCache.Remove(typeDefinition);
+						result = null;
+						return false;
+					}
 				}
 			}
-			Fields = fields;
+
+			failureReason = null;
+			return true;
 		}
 
-		public MonoType(GenericInstanceTypeSignature genericInst, Dictionary<TypeDefinition, MonoType> typeCache) : this(genericInst.GenericType)
+		public static bool TryCreate(
+			GenericInstanceTypeSignature genericInst,
+			Dictionary<TypeDefinition, MonoType> typeCache,
+			[NotNullWhen(true)] out MonoType? result,
+			[NotNullWhen(false)] out string? failureReason)
 		{
 			List<Field> fields = new();
 			foreach ((FieldDefinition fieldDefinition, TypeSignature fieldType) in FieldQuery.GetFieldsInTypeAndBase(genericInst))
 			{
 				if (FieldSerializationLogic.WillUnitySerialize(fieldDefinition, fieldType))
 				{
-					fields.Add(MakeSerializableField(fieldDefinition, fieldType, typeCache));
+					if (FieldSerializationLogic.HasSerializeReferenceAttribute(fieldDefinition))
+					{
+						return FailBecauseOfSerializeReference(fieldDefinition, out result, out failureReason);
+					}
+					else if (TryCreateSerializableField(fieldDefinition, fieldType, typeCache, out Field field, out failureReason))
+					{
+						fields.Add(field);
+					}
+					else
+					{
+						result = null;
+						return false;
+					}
 				}
 			}
-			Fields = fields;
+
+			result = new(genericInst.GenericType, fields);
+			failureReason = null;
+			return true;
 		}
 
-		private static Field MakeSerializableField(FieldDefinition fieldDefinition, TypeSignature fieldType, Dictionary<TypeDefinition, MonoType> typeCache)
+		private static bool FailBecauseOfSerializeReference(FieldDefinition fieldDefinition, out MonoType? result, out string? failureReason)
 		{
-			return MakeSerializableField(
+			result = null;
+			failureReason = $"{fieldDefinition.DeclaringType?.FullName}.{fieldDefinition.Name} uses the [SerializeReference] attribute, which is currently not supported.";
+			return false;
+		}
+
+		private static int RoundUpToPowerOf2(int value)
+		{
+			unchecked
+			{
+				return (int)BitOperations.RoundUpToPowerOf2((uint)value);
+			}
+		}
+
+		private static bool TryCreateSerializableField(
+			FieldDefinition fieldDefinition,
+			TypeSignature fieldType,
+			Dictionary<TypeDefinition, MonoType> typeCache,
+			out Field result,
+			[NotNullWhen(false)] out string? failureReason)
+		{
+			return TryCreateSerializableField(
 				fieldDefinition.Name ?? throw new NullReferenceException(),
 				fieldType,
 				0,
-				typeCache);
+				typeCache,
+				out result,
+				out failureReason);
 		}
 
-		private static Field MakeSerializableField(string name, TypeSignature typeSignature, int arrayDepth, Dictionary<TypeDefinition, MonoType> typeCache)
+		private static bool TryCreateSerializableField(
+			string name,
+			TypeSignature typeSignature,
+			int arrayDepth,
+			Dictionary<TypeDefinition, MonoType> typeCache,
+			out Field result,
+			[NotNullWhen(false)] out string? failureReason)
 		{
 			switch (typeSignature)
 			{
@@ -80,35 +158,60 @@ namespace AssetRipper.Import.Structure.Assembly.Mono
 						//This needs to come after the InheritsFromObject check so that those fields get properly converted into PPtr assets.
 						fieldType = cachedMonoType;
 					}
+					else if (TryCreate(typeDefinition, typeCache, out MonoType? monoType, out failureReason))
+					{
+						fieldType = monoType;
+					}
 					else
 					{
-						fieldType = new MonoType(typeDefinition, typeCache);
+						result = default;
+						return false;
 					}
 
-					return new Field(fieldType, arrayDepth, name);
+					result = new Field(fieldType, arrayDepth, name);
+					failureReason = null;
+					return true;
 
 				case CorLibTypeSignature corLibTypeSignature:
-					return new Field(SerializablePrimitiveType.GetOrCreate(corLibTypeSignature.ToPrimitiveType()), arrayDepth, name);
+					result = new Field(SerializablePrimitiveType.GetOrCreate(corLibTypeSignature.ToPrimitiveType()), arrayDepth, name);
+					failureReason = null;
+					return true;
 
 				case SzArrayTypeSignature szArrayTypeSignature:
-					return MakeSerializableField(name, szArrayTypeSignature.BaseType, arrayDepth + 1, typeCache);
+					return TryCreateSerializableField(name, szArrayTypeSignature.BaseType, arrayDepth + 1, typeCache, out result, out failureReason);
 
 				case GenericInstanceTypeSignature genericInstanceTypeSignature:
-					return MakeSerializableField(name, genericInstanceTypeSignature, arrayDepth, typeCache);
+					return TryCreateSerializableField(name, genericInstanceTypeSignature, arrayDepth, typeCache, out result, out failureReason);
 
 				default:
-					throw new NotSupportedException(typeSignature.FullName);
+					result = default;
+					failureReason = $"{typeSignature.FullName} not supported.";
+					return false;
 			};
 		}
 
-		private static Field MakeSerializableField(string name, GenericInstanceTypeSignature typeSignature, int arrayDepth, Dictionary<TypeDefinition, MonoType> typeCache)
+		private static bool TryCreateSerializableField(
+			string name,
+			GenericInstanceTypeSignature typeSignature,
+			int arrayDepth,
+			Dictionary<TypeDefinition, MonoType> typeCache,
+			out Field result,
+			[NotNullWhen(false)] out string? failureReason)
 		{
 			if (typeSignature.GenericType.FullName is "System.Collections.Generic.List`1")
 			{
-				return MakeSerializableField(name, typeSignature.TypeArguments[0], arrayDepth + 1, typeCache);
+				return TryCreateSerializableField(name, typeSignature.TypeArguments[0], arrayDepth + 1, typeCache, out result, out failureReason);
 			}
-
-			return new(new MonoType(typeSignature, typeCache), arrayDepth, name);
+			else if (TryCreate(typeSignature, typeCache, out MonoType? monoType, out failureReason))
+			{
+				result = new(monoType, arrayDepth, name);
+				return true;
+			}
+			else
+			{
+				result = default;
+				return false;
+			}
 		}
 	}
 }
