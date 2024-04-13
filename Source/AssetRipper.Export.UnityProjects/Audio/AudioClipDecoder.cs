@@ -32,29 +32,33 @@ namespace AssetRipper.Export.UnityProjects.Audio
 				message = null;
 				return true;
 			}
-			else if (CheckMagic(rawData, "FSB5"u8) && FsbLoader.TryLoadFsbFromByteArray(rawData, out FmodSoundBank? fsbData))
+			else if (CheckMagic(rawData, "FSB5"u8))
 			{
-				FmodAudioType audioType = fsbData!.Header.AudioType;
+				FmodAudioType audioType = (FmodAudioType)uint.MaxValue;
 				try
 				{
-					if (audioType.IsSupported() && fsbData.Samples.Single().RebuildAsStandardFileFormat(out decodedData, out fileExtension))
+					if (FsbLoader.TryLoadFsbFromByteArray(rawData, out FmodSoundBank? fsbData))
 					{
-						message = null;
-						return true;
-					}
-					else
-					{
-						decodedData = null;
-						fileExtension = null;
-						message = $"Can't decode audio clip '{audioClip.Name}' with default decoder because it's '{audioType}' encoded.";
-						return false;
+						audioType = fsbData!.Header.AudioType;
+						if (audioType.IsSupported() && fsbData.Samples.Single().RebuildAsStandardFileFormat(out decodedData, out fileExtension))
+						{
+							message = null;
+							return true;
+						}
+						else
+						{
+							decodedData = null;
+							fileExtension = null;
+							message = $"Can't decode audio clip '{audioClip.Name}' with default decoder because it's '{audioType}' encoded.";
+							return false;
+						}
 					}
 				}
 				catch (Exception ex)
 				{
 					decodedData = null;
 					fileExtension = null;
-					message = $"Failed to convert audio ({Enum.GetName(audioType)})\n{ex}";
+					message = $"Failed to convert audio ({audioType})\n{ex}";
 					return false;
 				}
 			}
@@ -81,26 +85,25 @@ namespace AssetRipper.Export.UnityProjects.Audio
 				return true;
 			}
 			// https://www.aes.id.au/modformat.html
-			else if (CheckMagic(rawData, "M.K."u8, 1080) ||
-			         CheckMagic(rawData, "M!K!"u8, 1080) ||
-			         CheckMagic(rawData, "FLT4"u8, 1080) ||
-			         CheckMagic(rawData, "FLT8"u8, 1080) ||
-			         CheckMagic(rawData, "4CHN"u8, 1080) ||
-			         CheckMagic(rawData, "6CHN"u8, 1080) ||
-			         CheckMagic(rawData, "8CHN"u8, 1080))
+			else if (
+				CheckMagic(rawData, "M.K."u8, 1080) ||
+				CheckMagic(rawData, "M!K!"u8, 1080) ||
+				CheckMagic(rawData, "FLT4"u8, 1080) ||
+				CheckMagic(rawData, "FLT8"u8, 1080) ||
+				CheckMagic(rawData, "4CHN"u8, 1080) ||
+				CheckMagic(rawData, "6CHN"u8, 1080) ||
+				CheckMagic(rawData, "8CHN"u8, 1080))
 			{
 				fileExtension = FmodSoundType.Mod.ToRawExtension();
 				decodedData = rawData;
 				message = null;
 				return true;
 			}
-			else
-			{
-				decodedData = null;
-				fileExtension = null;
-				message = "Failed to convert audio";
-				return false;
-			}
+
+			decodedData = null;
+			fileExtension = null;
+			message = "Failed to convert audio";
+			return false;
 		}
 
 		private static bool CheckMagic(byte[] data, ReadOnlySpan<byte> magic, int startIndex = 0)
