@@ -55,31 +55,31 @@ namespace AssetRipper.Import.AssetCreation
 			else if (assetInfo.ClassID == (int)ClassIDType.MonoBehaviour)
 			{
 				IMonoBehaviour monoBehaviour = ReadMonoBehaviour(MonoBehaviour.Create(assetInfo), assetData, AssemblyManager, assetType);
-				if (ProjectVersion.Equals(0, 0, 0))
-				{
-					return monoBehaviour;
-				}
-				else
+				if (!ProjectVersion.Equals(0, 0, 0))
 				{
 					IMonoBehaviour newMonoBehaviour = MonoBehaviour.Create(assetInfo, ProjectVersion);
-					newMonoBehaviour.CopyValues(monoBehaviour);
-					return newMonoBehaviour;
+					if (monoBehaviour.GetType() != newMonoBehaviour.GetType())
+					{
+						newMonoBehaviour.CopyValues(monoBehaviour);
+						return newMonoBehaviour;
+					}
 				}
+				return monoBehaviour;
 			}
 			else
 			{
 				IUnityObjectBase asset = ReadNormalObject(assetInfo, assetData);
-				if (ProjectVersion.Equals(0, 0, 0))
-				{
-					return asset;
-				}
-				else
+				if (!ProjectVersion.Equals(0, 0, 0))
 				{
 					IUnityObjectBase newAsset = AssetFactory.Create(assetInfo, ProjectVersion);
-					newAsset.CopyValues(asset, new PPtrConverter(asset, newAsset));
-					HandleDifferingFields(asset, newAsset);
-					return asset;
+					if (asset.GetType() != newAsset.GetType())
+					{
+						newAsset.CopyValues(asset, new PPtrConverter(asset, newAsset));
+						HandleDifferingFields(asset, newAsset);
+						return newAsset;
+					}
 				}
+				return asset;
 			}
 		}
 
