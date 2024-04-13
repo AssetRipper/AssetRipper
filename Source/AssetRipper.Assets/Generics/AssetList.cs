@@ -101,6 +101,43 @@
 			return newItem;
 		}
 
+		public void AddRange(IEnumerable<T> enumerable)
+		{
+			ThrowIfElementsNotImmutable();
+			if (enumerable is IReadOnlyCollection<T> collection)
+			{
+				EnsureCapacity(count + collection.Count);
+				switch (collection)
+				{
+					case T[] array:
+						array.AsSpan().CopyTo(items.AsSpan(count, array.Length));
+						count += array.Length;
+						break;
+					case IReadOnlyList<T> list:
+						for (int i = 0; i < list.Count; i++)
+						{
+							items[count + i] = list[i];
+						}
+						count += list.Count;
+						break;
+					default:
+						foreach (T item in enumerable)
+						{
+							items[count] = item;
+							count++;
+						}
+						break;
+				}
+			}
+			else
+			{
+				foreach (T item in enumerable)
+				{
+					AddInternal(item);
+				}
+			}
+		}
+
 		/// <inheritdoc/>
 		public override void Clear()
 		{
@@ -200,10 +237,7 @@
 		/// <returns>The new capacity of this list.</returns>
 		public override int EnsureCapacity(int capacity)
 		{
-			if (capacity < 0)
-			{
-				throw new ArgumentOutOfRangeException(nameof(capacity));
-			}
+			ArgumentOutOfRangeException.ThrowIfNegative(capacity);
 			if (items.Length < capacity)
 			{
 				Grow(capacity);
