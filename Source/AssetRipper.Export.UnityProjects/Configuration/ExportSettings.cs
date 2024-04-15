@@ -15,6 +15,11 @@ public sealed record class ExportSettings
 	public ImageExportFormat ImageExportFormat { get; set; } = ImageExportFormat.Png;
 
 	/// <summary>
+	/// The file format that images (like textures) get exported in.
+	/// </summary>
+	public LightmapTextureExportFormat LightmapTextureExportFormat { get; set; } = LightmapTextureExportFormat.Yaml;
+
+	/// <summary>
 	/// The format that meshes get exported in. Recommended: Native
 	/// </summary>
 	public MeshExportFormat MeshExportFormat { get; set; } = MeshExportFormat.Native;
@@ -55,6 +60,7 @@ public sealed record class ExportSettings
 	{
 		Logger.Info(LogCategory.General, $"{nameof(AudioExportFormat)}: {AudioExportFormat}");
 		Logger.Info(LogCategory.General, $"{nameof(ImageExportFormat)}: {ImageExportFormat}");
+		Logger.Info(LogCategory.General, $"{nameof(LightmapTextureExportFormat)}: {LightmapTextureExportFormat}");
 		Logger.Info(LogCategory.General, $"{nameof(MeshExportFormat)}: {MeshExportFormat}");
 		Logger.Info(LogCategory.General, $"{nameof(ScriptExportMode)}: {ScriptExportMode}");
 		Logger.Info(LogCategory.General, $"{nameof(ScriptLanguageVersion)}: {ScriptLanguageVersion}");

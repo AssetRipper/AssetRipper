@@ -32,6 +32,9 @@ partial class SettingsPage
 			case nameof(ExportSettings.ImageExportFormat):
 				Configuration.ExportSettings.ImageExportFormat = TryParseEnum<ImageExportFormat>(value);
 				break;
+			case nameof(ExportSettings.LightmapTextureExportFormat):
+				Configuration.ExportSettings.LightmapTextureExportFormat = TryParseEnum<LightmapTextureExportFormat>(value);
+				break;
 			case nameof(ExportSettings.MeshExportFormat):
 				Configuration.ExportSettings.MeshExportFormat = TryParseEnum<MeshExportFormat>(value);
 				break;
@@ -108,6 +111,11 @@ partial class SettingsPage
 	private static void WriteDropDownForImageExportFormat(TextWriter writer)
 	{
 		WriteDropDown(writer, ImageExportFormatDropDownSetting.Instance, Configuration.ExportSettings.ImageExportFormat, nameof(ExportSettings.ImageExportFormat));
+	}
+
+	private static void WriteDropDownForLightmapTextureExportFormat(TextWriter writer)
+	{
+		WriteDropDown(writer, LightmapTextureExportFormatDropDownSetting.Instance, Configuration.ExportSettings.LightmapTextureExportFormat, nameof(ExportSettings.LightmapTextureExportFormat));
 	}
 
 	private static void WriteDropDownForMeshExportFormat(TextWriter writer)

@@ -495,6 +495,16 @@ partial class Localization
 	public static string Licenses => Get("licenses");
 	
 	/// <summary>
+	/// Lightmap Texture Export Format
+	/// </summary>
+	public static string LightmapTextureExportTitle => Get("lightmap_texture_export_title");
+	
+	/// <summary>
+	/// This affects all exported lightmap textures.
+	/// </summary>
+	public static string LightmapTextureFormatDescription => Get("lightmap_texture_format_description");
+	
+	/// <summary>
 	/// Load
 	/// </summary>
 	public static string Load => Get("load");

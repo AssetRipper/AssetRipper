@@ -96,6 +96,8 @@
     "json": "Json",
     "length": "Length",
     "licenses": "Licenses",
+    "lightmap_texture_export_title": "Lightmap Texture Export Format",
+    "lightmap_texture_format_description": "This affects all exported lightmap textures.",
     "load": "Load",
     "loading_game_content_from": "Loading Game Content From {0}\n{1}",
     "loading_step_begin_scheme_processing": "Starting Scheme Processing",

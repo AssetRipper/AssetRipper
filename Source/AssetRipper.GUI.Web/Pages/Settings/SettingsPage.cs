@@ -113,7 +113,7 @@ public sealed partial class SettingsPage : DefaultPage
 
 								using (new Div(writer).WithClass("col").End())
 								{
-									WriteDropDownForMeshExportFormat(writer);
+									WriteDropDownForLightmapTextureExportFormat(writer);
 								}
 							}
 
@@ -153,6 +153,7 @@ public sealed partial class SettingsPage : DefaultPage
 							{
 								using (new Div(writer).WithClass("col").End())
 								{
+									WriteDropDownForMeshExportFormat(writer);
 								}
 								using (new Div(writer).WithClass("col").End())
 								{

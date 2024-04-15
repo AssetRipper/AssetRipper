@@ -109,6 +109,12 @@ partial class ProjectExporter
 			OverrideExporter<ISprite>(spriteExporter);
 			OverrideExporter<ISpriteAtlas>(spriteExporter);
 		}
+		if (settings.ExportSettings.LightmapTextureExportFormat is not LightmapTextureExportFormat.Yaml)
+		{
+			OverrideExporter<ITexture2D>(new LightmapTextureAssetExporter(settings.ExportSettings.LightmapTextureExportFormat is LightmapTextureExportFormat.Exr
+				? ImageExportFormat.Exr
+				: settings.ExportSettings.ImageExportFormat));
+		}
 
 		//Texture Array exporters
 		if (settings.Version.GreaterThanOrEquals(2020, 2))
