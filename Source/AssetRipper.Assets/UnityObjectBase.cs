@@ -23,7 +23,6 @@ public abstract class UnityObjectBase : UnityAssetBase, IUnityObjectBase
 	public int ClassID => AssetInfo.ClassID;
 	public long PathID => AssetInfo.PathID;
 	public virtual string ClassName => GetType().Name;
-	public UnityGuid GUID { get; } = UnityGuid.NewGuid();
 	public IUnityObjectBase? MainAsset { get; set; }
 
 	public YamlDocument ExportYamlDocument(IExportContainer container)

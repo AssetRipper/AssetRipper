@@ -19,11 +19,6 @@ internal sealed class DevelopmentTab(IUnityObjectBase asset) : HtmlTab
 					new Th(writer).Close(Localization.CsharpType);
 					new Td(writer).Close(asset.GetType().Name);
 				}
-				using (new Tr(writer).End())
-				{
-					new Th(writer).Close(Localization.Guid);
-					new Td(writer).Close(asset.GUID.ToString());
-				}
 			}
 		}
 	}

@@ -30,6 +30,8 @@ namespace AssetRipper.Export.UnityProjects
 {
 	public abstract class ExportCollection : IExportCollection
 	{
+		public virtual UnityGuid GUID => throw new NotSupportedException();
+
 		protected static void ExportMeta(IExportContainer container, Meta meta, string filePath)
 		{
 			string metaPath = $"{filePath}{MetaExtension}";
@@ -61,7 +63,7 @@ namespace AssetRipper.Export.UnityProjects
 			string uniqueName = FileUtils.GetUniqueName(path, fullName, FileUtils.MaxFileNameLength - MetaExtension.Length);
 			string filePath = Path.Combine(path, uniqueName);
 			AssetExporter.Export(container, asset, filePath);
-			Meta meta = new Meta(asset.GUID, importer);
+			Meta meta = new Meta(GUID, importer);
 			ExportMeta(container, meta, filePath);
 		}
 

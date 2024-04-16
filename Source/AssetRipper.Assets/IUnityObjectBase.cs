@@ -29,13 +29,6 @@ public interface IUnityObjectBase : IUnityAssetBase
 	/// </summary>
 	long PathID { get; }
 	/// <summary>
-	/// A random GUID for this object.
-	/// </summary>
-	/// <remarks>
-	/// This may be overridden by export code, eg for MonoScripts.
-	/// </remarks>
-	UnityGuid GUID { get; }
-	/// <summary>
 	/// The original path of this object, if known.
 	/// </summary>
 	/// <remarks>

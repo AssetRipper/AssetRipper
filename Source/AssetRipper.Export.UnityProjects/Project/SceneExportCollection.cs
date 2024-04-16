@@ -142,7 +142,7 @@ namespace AssetRipper.Export.UnityProjects.Project
 		public override string Name => Scene.Name;
 
 		public override AssetCollection File => CurrentFile;
-		public UnityGuid GUID => Scene.GUID;
+		public override UnityGuid GUID => Scene.GUID;
 		public override IAssetExporter AssetExporter { get; }
 		public SceneHierarchyObject Hierarchy { get; }
 		public SceneDefinition Scene => Hierarchy.Scene;
