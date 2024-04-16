@@ -61,6 +61,14 @@ namespace AssetRipper.Import.AssetCreation
 					if (monoBehaviour.GetType() != newMonoBehaviour.GetType())
 					{
 						newMonoBehaviour.CopyValues(monoBehaviour);
+						if (monoBehaviour.Structure is UnloadedStructure unloadedStructure)
+						{
+							newMonoBehaviour.Structure = new UnloadedStructure(newMonoBehaviour, unloadedStructure.AssemblyManager, unloadedStructure.StructureData);
+						}
+						else
+						{
+							newMonoBehaviour.Structure = monoBehaviour.Structure;
+						}
 						return newMonoBehaviour;
 					}
 				}

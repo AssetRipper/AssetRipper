@@ -22,25 +22,25 @@ public sealed class UnloadedStructure : UnityAssetBase
 	/// <summary>
 	/// The <see cref="IMonoBehaviour"/> that <see langword="this"/> is the <see cref="IMonoBehaviour.Structure"/> for.
 	/// </summary>
-	private readonly IMonoBehaviour monoBehaviour;
+	public IMonoBehaviour MonoBehaviour { get; }
 
-	private readonly IAssemblyManager assemblyManager;
+	public IAssemblyManager AssemblyManager { get; }
 
 	/// <summary>
 	/// The segment of data for this structure.
 	/// </summary>
-	private readonly ReadOnlyArraySegment<byte> structureData;
+	public ReadOnlyArraySegment<byte> StructureData { get; }
 
 	public UnloadedStructure(IMonoBehaviour monoBehaviour, IAssemblyManager assemblyManager, ReadOnlyArraySegment<byte> structureData)
 	{
-		this.monoBehaviour = monoBehaviour;
-		this.assemblyManager = assemblyManager;
-		this.structureData = structureData;
+		MonoBehaviour = monoBehaviour;
+		AssemblyManager = assemblyManager;
+		StructureData = structureData;
 	}
 
 	private void ThrowIfNotStructure()
 	{
-		if (!ReferenceEquals(monoBehaviour.Structure, this))
+		if (!ReferenceEquals(MonoBehaviour.Structure, this))
 		{
 			throw new InvalidOperationException("The MonoBehaviour structure has already been loaded.");
 		}
@@ -50,22 +50,22 @@ public sealed class UnloadedStructure : UnityAssetBase
 	{
 		ThrowIfNotStructure();
 		string? failureReason = null;
-		SerializableStructure? structure = monoBehaviour.ScriptP?.GetBehaviourType(assemblyManager, out failureReason)?.CreateSerializableStructure();
+		SerializableStructure? structure = MonoBehaviour.ScriptP?.GetBehaviourType(AssemblyManager, out failureReason)?.CreateSerializableStructure();
 		if (structure is not null)
 		{
-			EndianSpanReader reader = new EndianSpanReader(structureData, monoBehaviour.Collection.EndianType);
-			if (structure.TryRead(ref reader, monoBehaviour))
+			EndianSpanReader reader = new EndianSpanReader(StructureData, MonoBehaviour.Collection.EndianType);
+			if (structure.TryRead(ref reader, MonoBehaviour))
 			{
-				monoBehaviour.Structure = structure;
+				MonoBehaviour.Structure = structure;
 				return structure;
 			}
 		}
 		else if (failureReason is not null)
 		{
-			Logger.Error(LogCategory.Import, $"Could not read MonoBehaviour structure for `{monoBehaviour.ScriptP?.GetFullName()}`. Reason: {failureReason}");
+			Logger.Error(LogCategory.Import, $"Could not read MonoBehaviour structure for `{MonoBehaviour.ScriptP?.GetFullName()}`. Reason: {failureReason}");
 		}
 
-		monoBehaviour.Structure = null;
+		MonoBehaviour.Structure = null;
 		return null;
 	}
 
