@@ -74,7 +74,7 @@ namespace AssetRipper.Import.AssetCreation
 					IUnityObjectBase newAsset = AssetFactory.Create(assetInfo, ProjectVersion);
 					if (asset.GetType() != newAsset.GetType())
 					{
-						newAsset.CopyValues(asset, new PPtrConverter(asset, newAsset));
+						newAsset.CopyValues(asset);
 						HandleDifferingFields(asset, newAsset);
 						return newAsset;
 					}

@@ -1,4 +1,5 @@
-﻿using AssetRipper.Assets.Collections;
+﻿using AssetRipper.Assets.Cloning;
+using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.IO.Endian;
@@ -61,6 +62,7 @@ public interface IUnityObjectBase : IUnityAssetBase
 
 	YamlDocument ExportYamlDocument(IExportContainer container);
 	string GetBestName();
+	void CopyValues(IUnityObjectBase? source) => CopyValues(source, new PPtrConverter(source, this));
 }
 public static class UnityObjectBaseExtensions
 {
