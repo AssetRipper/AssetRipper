@@ -44,7 +44,11 @@ namespace AssetRipper.Import.Structure.Assembly
 		public static SerializableType? GetBehaviourType(this IMonoScript monoScript, IAssemblyManager assemblyManager, out string? failureReason)
 		{
 			ScriptIdentifier scriptID = assemblyManager.GetScriptID(monoScript.GetAssemblyNameFixed(), monoScript.Namespace, monoScript.ClassName_R);
-			if (!assemblyManager.IsValid(scriptID))
+			if (!assemblyManager.IsSet)
+			{
+				failureReason = null;
+			}
+			else if (!assemblyManager.IsValid(scriptID))
 			{
 				failureReason = "Script ID is invalid";
 			}

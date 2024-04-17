@@ -62,7 +62,7 @@ public sealed class UnloadedStructure : UnityAssetBase
 		}
 		else if (failureReason is not null)
 		{
-			Logger.Error(LogCategory.Import, $"Could not read MonoBehaviour structure for `{MonoBehaviour.ScriptP?.GetFullName()}`. Reason: {failureReason}");
+			Logger.Warning(LogCategory.Import, $"Could not read MonoBehaviour structure for `{MonoBehaviour.ScriptP?.GetFullName()}`. Reason: {failureReason}");
 		}
 
 		MonoBehaviour.Structure = null;
