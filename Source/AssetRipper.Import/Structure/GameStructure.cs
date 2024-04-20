@@ -79,9 +79,10 @@ namespace AssetRipper.Import.Structure
 			FileCollection = GameBundle.FromPaths(
 				filePaths,
 				assetFactory,
-				new StructureDependencyProvider(PlatformStructure, MixedStructure),
-				new CustomResourceProvider(PlatformStructure, MixedStructure),
-				defaultVersion);
+				new DefaultGameInitializer(
+					new StructureDependencyProvider(PlatformStructure, MixedStructure),
+					new CustomResourceProvider(PlatformStructure, MixedStructure),
+					defaultVersion));
 		}
 
 		[MemberNotNull(nameof(AssemblyManager))]
@@ -162,23 +163,7 @@ namespace AssetRipper.Import.Structure
 
 		public string? RequestAssembly(string assembly)
 		{
-			if (PlatformStructure != null)
-			{
-				string? assemblyPath = PlatformStructure.RequestAssembly(assembly);
-				if (assemblyPath != null)
-				{
-					return assemblyPath;
-				}
-			}
-			if (MixedStructure != null)
-			{
-				string? assemblyPath = MixedStructure.RequestAssembly(assembly);
-				if (assemblyPath != null)
-				{
-					return assemblyPath;
-				}
-			}
-			return null;
+			return PlatformStructure?.RequestAssembly(assembly) ?? MixedStructure?.RequestAssembly(assembly);
 		}
 
 		public void Dispose()
@@ -201,14 +186,7 @@ namespace AssetRipper.Import.Structure
 			public FileBase? FindDependency(FileIdentifier identifier)
 			{
 				string? systemFilePath = RequestDependency(identifier.PathName);
-				if (systemFilePath is null)
-				{
-					return null;
-				}
-				else
-				{
-					return SchemeReader.LoadFile(systemFilePath);
-				}
+				return systemFilePath is null ? null : SchemeReader.LoadFile(systemFilePath);
 			}
 
 			/// <summary>
@@ -216,23 +194,7 @@ namespace AssetRipper.Import.Structure
 			/// </summary>
 			private string? RequestDependency(string dependency)
 			{
-				if (PlatformStructure != null)
-				{
-					string? path = PlatformStructure.RequestDependency(dependency);
-					if (path != null)
-					{
-						return path;
-					}
-				}
-				if (MixedStructure != null)
-				{
-					string? path = MixedStructure.RequestDependency(dependency);
-					if (path != null)
-					{
-						return path;
-					}
-				}
-				return null;
+				return PlatformStructure?.RequestDependency(dependency) ?? MixedStructure?.RequestDependency(dependency);
 			}
 
 			public void ReportMissingDependency(FileIdentifier identifier)
@@ -263,23 +225,7 @@ namespace AssetRipper.Import.Structure
 
 			private string? RequestResource(string resource)
 			{
-				if (PlatformStructure != null)
-				{
-					string? path = PlatformStructure.RequestResource(resource);
-					if (path != null)
-					{
-						return path;
-					}
-				}
-				if (MixedStructure != null)
-				{
-					string? path = MixedStructure.RequestResource(resource);
-					if (path != null)
-					{
-						return path;
-					}
-				}
-				return null;
+				return PlatformStructure?.RequestResource(resource) ?? MixedStructure?.RequestResource(resource);
 			}
 		}
 	}
