@@ -114,7 +114,7 @@ public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>
 		return new PPtr<T>(fileIndex, asset.PathID);
 	}
 
-	private protected void AddAsset(IUnityObjectBase asset)
+	protected void AddAsset(IUnityObjectBase asset)
 	{
 		ValidateAsset(asset);
 
@@ -124,11 +124,40 @@ public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>
 		{
 			if (asset.Collection != this)
 			{
-				throw new ArgumentException("Asset info must marked this as its collection.", nameof(asset));
+				throw new ArgumentException("AssetInfo must have this marked as its collection.", nameof(asset));
 			}
 			if (asset.PathID is 0)
 			{
 				throw new ArgumentException("The zero path ID is reserved for null PPtr's.", nameof(asset));
+			}
+		}
+	}
+
+	/// <summary>
+	/// Replace an asset in this collection.
+	/// </summary>
+	/// <remarks>
+	/// This is useful for switching the underlying implementation, such as for version changing.
+	/// </remarks>
+	/// <param name="replacement"></param>
+	public void ReplaceAsset(IUnityObjectBase replacement)
+	{
+		ValidateAsset(replacement);
+		assets[replacement.PathID] = replacement;
+
+		void ValidateAsset(IUnityObjectBase replacement)
+		{
+			if (replacement.Collection != this)
+			{
+				throw new ArgumentException("AssetInfo must have this marked as its collection.", nameof(replacement));
+			}
+			if (!TryGetAsset(replacement.PathID, out IUnityObjectBase? original))
+			{
+				throw new ArgumentException("There is no existing asset with this PathID.", nameof(replacement));
+			}
+			if (replacement.ClassID != original.ClassID)
+			{
+				throw new ArgumentException("The replacement asset's class id is not equal to the original asset's class id.", nameof(replacement));
 			}
 		}
 	}
@@ -153,7 +182,7 @@ public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>
 
 	public bool TryGetAsset(long pathID, [NotNullWhen(true)] out IUnityObjectBase? asset)
 	{
-		return TryGetAsset<IUnityObjectBase>(pathID, out asset);
+		return assets.TryGetValue(pathID, out asset);
 	}
 
 	public bool TryGetAsset<T>(long pathID, [NotNullWhen(true)] out T? asset) where T : IUnityObjectBase

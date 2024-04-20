@@ -33,6 +33,11 @@ public sealed record class ImportSettings
 	/// </summary>
 	public UnityVersion DefaultVersion { get; set; }
 
+	/// <summary>
+	/// The target version to convert all assets to. Experimental
+	/// </summary>
+	public UnityVersion TargetVersion { get; set; }
+
 	public BundledAssetsExportMode BundledAssetsExportMode { get; set; }
 
 	public void Log()
@@ -40,6 +45,7 @@ public sealed record class ImportSettings
 		Logger.Info(LogCategory.General, $"{nameof(ScriptContentLevel)}: {ScriptContentLevel}");
 		Logger.Info(LogCategory.General, $"{nameof(StreamingAssetsMode)}: {StreamingAssetsMode}");
 		Logger.Info(LogCategory.General, $"{nameof(DefaultVersion)}: {DefaultVersion}");
+		Logger.Info(LogCategory.General, $"{nameof(TargetVersion)}: {TargetVersion}");
 		Logger.Info(LogCategory.General, $"{nameof(BundledAssetsExportMode)}: {BundledAssetsExportMode}");
 	}
 }

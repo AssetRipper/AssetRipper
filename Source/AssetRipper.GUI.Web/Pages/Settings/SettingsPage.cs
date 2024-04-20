@@ -90,6 +90,14 @@ public sealed partial class SettingsPage : DefaultPage
 									WriteCheckBoxForEnableAssetDeduplication(writer, Localization.EnableAssetDeduplication);
 								}
 							}
+
+							using (new Div(writer).WithClass("row").End())
+							{
+								using (new Div(writer).WithClass("col").End())
+								{
+									WriteTextAreaForTargetVersion(writer);
+								}
+							}
 						}
 					}
 
@@ -184,6 +192,18 @@ public sealed partial class SettingsPage : DefaultPage
 			.WithId(nameof(Configuration.ImportSettings.DefaultVersion))
 			.WithName(nameof(Configuration.ImportSettings.DefaultVersion))
 			.WithValue(Configuration.ImportSettings.DefaultVersion.ToString())
+			.Close();
+	}
+
+	private static void WriteTextAreaForTargetVersion(TextWriter writer)
+	{
+		new Label(writer).WithClass("form-label").WithFor(nameof(Configuration.ImportSettings.TargetVersion)).Close(Localization.TargetVersionForVersionChanging);
+		new Input(writer)
+			.WithType("text")
+			.WithClass("form-control")
+			.WithId(nameof(Configuration.ImportSettings.TargetVersion))
+			.WithName(nameof(Configuration.ImportSettings.TargetVersion))
+			.WithValue(Configuration.ImportSettings.TargetVersion.ToString())
 			.Close();
 	}
 

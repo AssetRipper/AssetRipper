@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Assets.Cloning;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.IO;
 using AssetRipper.Assets.Metadata;
@@ -13,7 +12,6 @@ using AssetRipper.IO.Files.SerializedFiles.Parser;
 using AssetRipper.IO.Files.SerializedFiles.Parser.TypeTrees;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
-using AssetRipper.SourceGenerated.Classes.ClassID_25;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Subclasses.AABB;
 using AssetRipper.SourceGenerated.Subclasses.AABBInt;
@@ -43,7 +41,6 @@ namespace AssetRipper.Import.AssetCreation
 		}
 
 		private IAssemblyManager AssemblyManager { get; }
-		private UnityVersion ProjectVersion { get; }
 
 		public override IUnityObjectBase? ReadAsset(AssetInfo assetInfo, ReadOnlyArraySegment<byte> assetData, SerializedType? assetType)
 		{
@@ -54,83 +51,11 @@ namespace AssetRipper.Import.AssetCreation
 			}
 			else if (assetInfo.ClassID == (int)ClassIDType.MonoBehaviour)
 			{
-				IMonoBehaviour monoBehaviour = ReadMonoBehaviour(MonoBehaviour.Create(assetInfo), assetData, AssemblyManager, assetType);
-				if (!ProjectVersion.Equals(0, 0, 0))
-				{
-					IMonoBehaviour newMonoBehaviour = MonoBehaviour.Create(assetInfo, ProjectVersion);
-					if (monoBehaviour.GetType() != newMonoBehaviour.GetType())
-					{
-						newMonoBehaviour.CopyValues(monoBehaviour);
-						if (monoBehaviour.Structure is UnloadedStructure unloadedStructure)
-						{
-							newMonoBehaviour.Structure = new UnloadedStructure(newMonoBehaviour, unloadedStructure.AssemblyManager, unloadedStructure.StructureData);
-						}
-						else
-						{
-							newMonoBehaviour.Structure = monoBehaviour.Structure;
-						}
-						return newMonoBehaviour;
-					}
-				}
-				return monoBehaviour;
+				return ReadMonoBehaviour(MonoBehaviour.Create(assetInfo), assetData, AssemblyManager, assetType);
 			}
 			else
 			{
-				IUnityObjectBase asset = ReadNormalObject(assetInfo, assetData);
-				if (!ProjectVersion.Equals(0, 0, 0))
-				{
-					IUnityObjectBase newAsset = AssetFactory.Create(assetInfo, ProjectVersion);
-					if (asset.GetType() != newAsset.GetType())
-					{
-						newAsset.CopyValues(asset);
-						HandleDifferingFields(asset, newAsset);
-						return newAsset;
-					}
-				}
-				return asset;
-			}
-		}
-
-		private static void HandleDifferingFields(IUnityObjectBase asset, IUnityObjectBase newAsset)
-		{
-			if (asset is IRenderer renderer)
-			{
-				IRenderer newRenderer = (IRenderer)newAsset;
-				if (renderer.Has_StaticBatchInfo_C25())
-				{
-					if (newRenderer.Has_SubsetIndices_C25())
-					{
-						AssetList<uint> list = newRenderer.SubsetIndices_C25;
-						list.AddRange(Enumerable.Range(renderer.StaticBatchInfo_C25.FirstSubMesh, renderer.StaticBatchInfo_C25.SubMeshCount).Select(i => (uint)i));
-					}
-				}
-				else
-				{
-					if (newRenderer.Has_StaticBatchInfo_C25())
-					{
-						AssetList<uint> list = renderer.SubsetIndices_C25;
-						unchecked
-						{
-							if (list.Count is > 0 and <= ushort.MaxValue && list[0] <= ushort.MaxValue)
-							{
-								bool compatible = true;
-								for (int i = 0; i < list.Count - 1; i++)
-								{
-									if (list[i] + 1 != list[i + 1])
-									{
-										compatible = false;
-										break;
-									}
-								}
-								if (compatible)
-								{
-									newRenderer.StaticBatchInfo_C25.FirstSubMesh = (ushort)list[0];
-									newRenderer.StaticBatchInfo_C25.SubMeshCount = (ushort)list.Count;
-								}
-							}
-						}
-					}
-				}
+				return ReadNormalObject(assetInfo, assetData);
 			}
 		}
 

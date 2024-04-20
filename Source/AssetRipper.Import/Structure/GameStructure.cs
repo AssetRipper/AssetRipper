@@ -5,10 +5,7 @@ using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.Import.Structure.Platforms;
-using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.ResourceFiles;
-using AssetRipper.IO.Files.SerializedFiles.Parser;
-using AssetRipper.IO.Files.Utils;
 
 namespace AssetRipper.Import.Structure
 {
@@ -36,7 +33,7 @@ namespace AssetRipper.Import.Structure
 
 			Logger.SendStatusChange("loading_step_begin_scheme_processing");
 
-			InitializeGameCollection(configuration.ImportSettings.DefaultVersion);
+			InitializeGameCollection(configuration.ImportSettings.DefaultVersion, configuration.ImportSettings.TargetVersion);
 
 			if (!FileCollection.HasAnyAssetCollections())
 			{
@@ -60,7 +57,7 @@ namespace AssetRipper.Import.Structure
 		}
 
 		[MemberNotNull(nameof(FileCollection))]
-		private void InitializeGameCollection(UnityVersion defaultVersion)
+		private void InitializeGameCollection(UnityVersion defaultVersion, UnityVersion targetVersion)
 		{
 			Logger.SendStatusChange("loading_step_create_file_collection");
 
@@ -79,10 +76,7 @@ namespace AssetRipper.Import.Structure
 			FileCollection = GameBundle.FromPaths(
 				filePaths,
 				assetFactory,
-				new DefaultGameInitializer(
-					new StructureDependencyProvider(PlatformStructure, MixedStructure),
-					new CustomResourceProvider(PlatformStructure, MixedStructure),
-					defaultVersion));
+				new GameInitializer(PlatformStructure, MixedStructure, defaultVersion, targetVersion));
 		}
 
 		[MemberNotNull(nameof(AssemblyManager))]
@@ -176,57 +170,6 @@ namespace AssetRipper.Import.Structure
 		{
 			AssemblyManager?.Dispose();
 			FileCollection?.Dispose();
-		}
-
-		private sealed record class StructureDependencyProvider(
-			PlatformGameStructure? PlatformStructure,
-			PlatformGameStructure? MixedStructure)
-			: IDependencyProvider
-		{
-			public FileBase? FindDependency(FileIdentifier identifier)
-			{
-				string? systemFilePath = RequestDependency(identifier.PathName);
-				return systemFilePath is null ? null : SchemeReader.LoadFile(systemFilePath);
-			}
-
-			/// <summary>
-			/// Attempts to find the path for the dependency with that name.
-			/// </summary>
-			private string? RequestDependency(string dependency)
-			{
-				return PlatformStructure?.RequestDependency(dependency) ?? MixedStructure?.RequestDependency(dependency);
-			}
-
-			public void ReportMissingDependency(FileIdentifier identifier)
-			{
-				Logger.Log(LogType.Warning, LogCategory.Import, $"Dependency '{identifier}' wasn't found");
-			}
-		}
-
-		private sealed record class CustomResourceProvider(
-			PlatformGameStructure? PlatformStructure,
-			PlatformGameStructure? MixedStructure)
-			: IResourceProvider
-		{
-			public ResourceFile? FindResource(string resName)
-			{
-				string fixedName = FilenameUtils.FixResourcePath(resName);
-				string? resPath = RequestResource(fixedName);
-				if (resPath is null)
-				{
-					Logger.Log(LogType.Warning, LogCategory.Import, $"Resource file '{resName}' hasn't been found");
-					return null;
-				}
-
-				ResourceFile resourceFile = new ResourceFile(resPath, fixedName);
-				Logger.Info(LogCategory.Import, $"Resource file '{resName}' has been loaded");
-				return resourceFile;
-			}
-
-			private string? RequestResource(string resource)
-			{
-				return PlatformStructure?.RequestResource(resource) ?? MixedStructure?.RequestResource(resource);
-			}
 		}
 	}
 }

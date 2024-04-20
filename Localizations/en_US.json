@@ -198,6 +198,7 @@
     "sprite_format_yaml_description": "Export as yaml assets which can be viewed in the editor. This is the only mode that ensures a precise recovery of all metadata of sprites.",
     "submesh_count": "Submesh Count",
     "success": "Success!",
+    "target_version_for_version_changing": "Target Version For Version Changing",
     "terrain_export_title": "Terrain Export Format",
     "terrain_format_heatmap": "Heightmap",
     "terrain_format_heatmap_description": "Export a heatmap of the height of the terrain at each location. Only really useful if you don't care about the details or having the terrain in 3D.",

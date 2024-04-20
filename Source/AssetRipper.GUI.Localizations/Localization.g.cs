@@ -1006,6 +1006,11 @@ partial class Localization
 	public static string Success => Get("success");
 	
 	/// <summary>
+	/// Target Version For Version Changing
+	/// </summary>
+	public static string TargetVersionForVersionChanging => Get("target_version_for_version_changing");
+	
+	/// <summary>
 	/// Terrain Export Format
 	/// </summary>
 	public static string TerrainExportTitle => Get("terrain_export_title");

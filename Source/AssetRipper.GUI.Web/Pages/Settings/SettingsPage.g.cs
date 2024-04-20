@@ -23,6 +23,9 @@ partial class SettingsPage
 			case nameof(ImportSettings.DefaultVersion):
 				Configuration.ImportSettings.DefaultVersion = TryParseUnityVersion(value);
 				break;
+			case nameof(ImportSettings.TargetVersion):
+				Configuration.ImportSettings.TargetVersion = TryParseUnityVersion(value);
+				break;
 			case nameof(ImportSettings.BundledAssetsExportMode):
 				Configuration.ImportSettings.BundledAssetsExportMode = TryParseEnum<BundledAssetsExportMode>(value);
 				break;

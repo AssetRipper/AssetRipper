@@ -73,11 +73,11 @@ public sealed class PredefinedAssetCache
 	/// <summary>
 	/// The predefined guid for unity default resources
 	/// </summary>
-	private static UnityGuid EGUID { get; } = new UnityGuid(0x00000000, 0x00000000, 0x0000000E, 0x00000000);
+	internal static UnityGuid EGUID { get; } = new UnityGuid(0x00000000, 0x00000000, 0x0000000E, 0x00000000);
 	/// <summary>
 	/// The predefined guid for unity builtin extra
 	/// </summary>
-	private static UnityGuid FGUID { get; } = new UnityGuid(0x00000000, 0x00000000, 0x0000000F, 0x00000000);
+	internal static UnityGuid FGUID { get; } = new UnityGuid(0x00000000, 0x00000000, 0x0000000F, 0x00000000);
 
 	private readonly Dictionary<NamedObjectKey, AssetMetaPtr> namedObjectDictionary = new();
 	private readonly Dictionary<ComponentKey, AssetMetaPtr> componentDictionary = new();
