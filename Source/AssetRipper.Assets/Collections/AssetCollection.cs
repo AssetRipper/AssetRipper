@@ -151,7 +151,7 @@ public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>
 			{
 				throw new ArgumentException("AssetInfo must have this marked as its collection.", nameof(replacement));
 			}
-			if (!TryGetAsset(replacement.PathID, out IUnityObjectBase? original))
+			if (!assets.TryGetValue(replacement.PathID, out IUnityObjectBase? original))
 			{
 				throw new ArgumentException("There is no existing asset with this PathID.", nameof(replacement));
 			}
@@ -182,7 +182,7 @@ public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>
 
 	public bool TryGetAsset(long pathID, [NotNullWhen(true)] out IUnityObjectBase? asset)
 	{
-		return assets.TryGetValue(pathID, out asset);
+		return TryGetAsset<IUnityObjectBase>(pathID, out asset);
 	}
 
 	public bool TryGetAsset<T>(long pathID, [NotNullWhen(true)] out T? asset) where T : IUnityObjectBase
@@ -191,6 +191,7 @@ public abstract class AssetCollection : IReadOnlyCollection<IUnityObjectBase>
 		{
 			if (typeof(T).IsAssignableTo(typeof(NullObject)))
 			{
+				//T inherits from NullObject, so we allow the null object to be found.
 				switch (@object)
 				{
 					case T t:
