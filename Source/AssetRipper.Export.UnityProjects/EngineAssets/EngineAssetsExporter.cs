@@ -143,12 +143,6 @@ public class EngineAssetsExporter : IAssetExporter
 			guid = PredefinedAssetCache.FGUID;
 			return true;
 		}
-		else if (FilenameUtils.IsEngineGeneratedF(fileName))
-		{
-			//Not sure this is correct
-			guid = PredefinedAssetCache.FGUID;
-			return true;
-		}
 		guid = default;
 		return false;
 	}

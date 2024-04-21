@@ -4,6 +4,7 @@ using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
+using AssetRipper.IO.Files.Utils;
 using AssetRipper.Mining.PredefinedAssets;
 using AssetRipper.SourceGenerated;
 using AssetRipper.Tpk;
@@ -47,8 +48,8 @@ internal sealed partial record class GameInitializer
 
 		public static void InjectEngineFilesIfNecessary(GameBundle gameBundle, UnityVersion targetVersion)
 		{
-			bool injectDefaultResources = gameBundle.ResolveCollection("unity default resources") is null;
-			bool injectExtraResources = gameBundle.ResolveCollection("unity builtin extra") is null;
+			bool injectDefaultResources = gameBundle.ResolveCollection(FilenameUtils.DefaultResourceName1) is null;
+			bool injectExtraResources = gameBundle.ResolveCollection(FilenameUtils.BuiltinExtraName2) is null;
 			if (!injectDefaultResources && !injectExtraResources)
 			{
 				return;
@@ -65,12 +66,12 @@ internal sealed partial record class GameInitializer
 			EngineResourceData data = GetData(targetVersion);
 			if (injectDefaultResources)
 			{
-				InjectedEngineCollection collection = new("unity default resources", targetVersion, bundle);
+				InjectedEngineCollection collection = new(FilenameUtils.DefaultResourceName1, targetVersion, bundle);
 				collection.AddAssets(data.DefaultResources);
 			}
 			if (injectExtraResources)
 			{
-				InjectedEngineCollection collection = new("unity builtin extra", targetVersion, bundle);
+				InjectedEngineCollection collection = new(FilenameUtils.BuiltinExtraName2, targetVersion, bundle);
 				collection.AddAssets(data.ExtraResources);
 			}
 		}

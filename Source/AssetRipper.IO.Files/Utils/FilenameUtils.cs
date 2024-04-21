@@ -22,6 +22,11 @@ namespace AssetRipper.IO.Files.Utils
 			return fileName is BuiltinExtraName1 or BuiltinExtraName2;
 		}
 
+		public static bool IsDefaultResourceOrBuiltinExtra(string? fileName)
+		{
+			return IsDefaultResource(fileName) || IsBuiltinExtra(fileName);
+		}
+
 		public static bool IsEngineGeneratedF(string? fileName)
 		{
 			return fileName is EngineGeneratedF;
