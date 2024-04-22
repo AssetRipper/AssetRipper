@@ -421,6 +421,8 @@ namespace AssetRipper.Yaml
 		private string m_string = string.Empty;
 		private ulong m_value = 0;
 
+		public override string ToString() => Value;
+
 		[GeneratedRegex("(^\\s)|(^-\\s)|(^-$)|(^[\\:\\[\\]'\"*&!@#%{}?<>,\\`])|([:@]\\s)|([\\n\\r])|([:\\s]$)", RegexOptions.Compiled)]
 		private static partial Regex IllegalStringsRegex();
 	}

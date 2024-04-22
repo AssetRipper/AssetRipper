@@ -210,5 +210,10 @@
 		public SequenceStyle Style { get; }
 
 		public List<YamlNode> Children { get; } = new();
+
+		public override string ToString()
+		{
+			return $"Count = {Children.Count}";
+		}
 	}
 }

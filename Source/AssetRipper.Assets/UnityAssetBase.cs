@@ -53,6 +53,10 @@ public abstract class UnityAssetBase : IUnityAssetBase
 
 	public virtual void WalkStandard(AssetWalker walker)
 	{
+		if (walker.EnterAsset(this))
+		{
+			walker.ExitAsset(this);
+		}
 	}
 
 	private NotSupportedException MethodNotSupported([CallerMemberName] string? methodName = null)

@@ -197,7 +197,7 @@ namespace AssetRipper.Yaml
 
 		public void Append(YamlMappingNode map)
 		{
-			foreach (KeyValuePair<YamlNode, YamlNode> child in map.m_children)
+			foreach (KeyValuePair<YamlNode, YamlNode> child in map.Children)
 			{
 				Add(child.Key, child.Value);
 			}
@@ -217,13 +217,10 @@ namespace AssetRipper.Yaml
 
 		public void InsertBegin(YamlNode key, YamlNode value)
 		{
-			if (value == null)
-			{
-				throw new ArgumentNullException(nameof(value));
-			}
+			ArgumentNullException.ThrowIfNull(value);
 
 			KeyValuePair<YamlNode, YamlNode> pair = new(key, value);
-			m_children.Insert(0, pair);
+			Children.Insert(0, pair);
 		}
 
 		internal override void Emit(Emitter emitter)
@@ -231,7 +228,7 @@ namespace AssetRipper.Yaml
 			base.Emit(emitter);
 
 			StartChildren(emitter);
-			foreach (KeyValuePair<YamlNode, YamlNode> kvp in m_children)
+			foreach (KeyValuePair<YamlNode, YamlNode> kvp in Children)
 			{
 				YamlNode key = kvp.Key;
 				YamlNode value = kvp.Value;
@@ -252,7 +249,7 @@ namespace AssetRipper.Yaml
 		{
 			if (Style == MappingStyle.Block)
 			{
-				if (m_children.Count == 0)
+				if (Children.Count == 0)
 				{
 					emitter.Write('{');
 				}
@@ -267,7 +264,7 @@ namespace AssetRipper.Yaml
 		{
 			if (Style == MappingStyle.Block)
 			{
-				if (m_children.Count == 0)
+				if (Children.Count == 0)
 				{
 					emitter.Write('}');
 				}
@@ -316,27 +313,29 @@ namespace AssetRipper.Yaml
 
 		private void InsertEnd(YamlNode key, YamlNode value)
 		{
-			if (value == null)
-			{
-				throw new ArgumentNullException(nameof(value));
-			}
+			ArgumentNullException.ThrowIfNull(value);
 
 			KeyValuePair<YamlNode, YamlNode> pair = new(key, value);
-			m_children.Add(pair);
+			Children.Add(pair);
 		}
 
-		IEnumerator<KeyValuePair<YamlNode, YamlNode>> IEnumerable<KeyValuePair<YamlNode, YamlNode>>.GetEnumerator() => m_children.GetEnumerator();
+		IEnumerator<KeyValuePair<YamlNode, YamlNode>> IEnumerable<KeyValuePair<YamlNode, YamlNode>>.GetEnumerator() => Children.GetEnumerator();
 
-		IEnumerator IEnumerable.GetEnumerator() => m_children.GetEnumerator();
+		IEnumerator IEnumerable.GetEnumerator() => Children.GetEnumerator();
 
 		public static YamlMappingNode Empty { get; } = new YamlMappingNode(MappingStyle.Flow);
 
 		public override YamlNodeType NodeType => YamlNodeType.Mapping;
-		public override bool IsMultiline => Style == MappingStyle.Block && m_children.Count > 0;
+		public override bool IsMultiline => Style == MappingStyle.Block && Children.Count > 0;
 		public override bool IsIndent => Style == MappingStyle.Block;
 
 		public MappingStyle Style { get; set; }
 
-		public readonly List<KeyValuePair<YamlNode, YamlNode>> m_children = new();
+		public List<KeyValuePair<YamlNode, YamlNode>> Children { get; } = new();
+
+		public override string ToString()
+		{
+			return $"Count = {Children.Count}";
+		}
 	}
 }

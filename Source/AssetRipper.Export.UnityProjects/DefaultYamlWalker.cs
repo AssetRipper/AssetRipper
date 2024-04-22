@@ -6,7 +6,6 @@ using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Classes.ClassID_2089858483;
 using AssetRipper.SourceGenerated.Subclasses.GUID;
 using System.CodeDom.Compiler;
-using System.Globalization;
 using System.Runtime.CompilerServices;
 
 namespace AssetRipper.Export.UnityProjects;
@@ -467,34 +466,4 @@ public class DefaultYamlWalker : AssetWalker
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 	private static bool IsStringLike<T>() => IsString<T>() || typeof(T) == typeof(GUID);
-}
-public class StringYamlWalker : DefaultYamlWalker
-{
-	private readonly StringWriter stringWriter;
-	private string CurrentText => stringWriter.ToString();
-
-	public StringYamlWalker() : this(new(CultureInfo.InvariantCulture) { NewLine = "\n" })
-	{
-	}
-
-	private StringYamlWalker(StringWriter stringWriter) : base(stringWriter)
-	{
-		this.stringWriter = stringWriter;
-	}
-
-	public void Reset()
-	{
-		Writer.Flush();
-		stringWriter.GetStringBuilder().Clear();
-		WriteHead();
-	}
-
-	public sealed override string ToString() => CurrentText;
-
-	public string ToStringAndReset()
-	{
-		string result = ToString();
-		Reset();
-		return result;
-	}
 }

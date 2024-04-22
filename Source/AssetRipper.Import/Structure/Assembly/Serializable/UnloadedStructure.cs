@@ -19,6 +19,14 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable;
 /// </summary>
 public sealed class UnloadedStructure : UnityAssetBase
 {
+	private sealed class StatelessAsset : UnityAssetBase
+	{
+		public static StatelessAsset Instance { get; } = new();
+		private StatelessAsset()
+		{
+		}
+	}
+
 	/// <summary>
 	/// The <see cref="IMonoBehaviour"/> that <see langword="this"/> is the <see cref="IMonoBehaviour.Structure"/> for.
 	/// </summary>
@@ -78,11 +86,20 @@ public sealed class UnloadedStructure : UnityAssetBase
 
 	public override YamlMappingNode ExportYamlRelease(IExportContainer container) => LoadStructure()?.ExportYamlRelease(container) ?? new();
 
-	public override void WalkEditor(AssetWalker walker) => LoadStructure()?.WalkEditor(walker);
+	public override void WalkEditor(AssetWalker walker)
+	{
+		((UnityAssetBase?)LoadStructure() ?? StatelessAsset.Instance).WalkEditor(walker);
+	}
 
-	public override void WalkRelease(AssetWalker walker) => LoadStructure()?.WalkRelease(walker);
+	public override void WalkRelease(AssetWalker walker)
+	{
+		((UnityAssetBase?)LoadStructure() ?? StatelessAsset.Instance).WalkRelease(walker);
+	}
 
-	public override void WalkStandard(AssetWalker walker) => LoadStructure()?.WalkStandard(walker);
+	public override void WalkStandard(AssetWalker walker)
+	{
+		((UnityAssetBase?)LoadStructure() ?? StatelessAsset.Instance).WalkStandard(walker);
+	}
 
 	public override IEnumerable<(string, PPtr)> FetchDependencies()
 	{
