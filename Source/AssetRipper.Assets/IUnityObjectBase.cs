@@ -1,9 +1,7 @@
 ﻿using AssetRipper.Assets.Cloning;
 using AssetRipper.Assets.Collections;
-using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.IO.Endian;
-using AssetRipper.Yaml;
 
 namespace AssetRipper.Assets;
 
@@ -60,7 +58,6 @@ public interface IUnityObjectBase : IUnityAssetBase
 	/// </summary>
 	IUnityObjectBase? MainAsset { get; set; }
 
-	YamlDocument ExportYamlDocument(IExportContainer container);
 	string GetBestName();
 	void CopyValues(IUnityObjectBase? source) => CopyValues(source, new PPtrConverter(source, this));
 }

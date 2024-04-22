@@ -1,12 +1,9 @@
-﻿using AssetRipper.Assets.Export;
-using AssetRipper.Assets.Export.Yaml;
-using AssetRipper.IO.Files;
+﻿using AssetRipper.IO.Files;
 using AssetRipper.Yaml;
-using System.Text.Json.Nodes;
 
 namespace AssetRipper.Assets.Metadata
 {
-	public readonly record struct MetaPtr(long FileID, UnityGuid GUID, AssetType AssetType) : IYamlExportable
+	public readonly record struct MetaPtr(long FileID, UnityGuid GUID, AssetType AssetType)
 	{
 		public MetaPtr(long fileID) : this(fileID, UnityGuid.Zero, AssetType.Serialized)
 		{
@@ -50,10 +47,6 @@ namespace AssetRipper.Assets.Metadata
 		{
 			return new MetaPtr(ExportIdHandler.GetMainExportID(classID), UnityGuid.MissingReference, assetType);
 		}
-
-		YamlNode IYamlExportable.ExportYamlEditor(IExportContainer container) => ExportYaml();
-
-		YamlNode IYamlExportable.ExportYamlRelease(IExportContainer container) => ExportYaml();
 
 		private const string FileIDName = "fileID";
 		private const string GuidName = "guid";

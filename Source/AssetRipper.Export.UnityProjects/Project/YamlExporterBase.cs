@@ -16,7 +16,8 @@ namespace AssetRipper.Export.UnityProjects.Project
 			using Stream fileStream = File.Create(path);
 			using InvariantStreamWriter streamWriter = new InvariantStreamWriter(fileStream, UTF8);
 			YamlWriter writer = new();
-			YamlDocument doc = asset.ExportYamlDocument(container);
+			ProjectYamlWalker walker = new(container);
+			YamlDocument doc = walker.ExportYamlDocument(asset);
 			writer.AddDocument(doc);
 			writer.Write(streamWriter);
 			return true;
