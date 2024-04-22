@@ -563,7 +563,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 			writer.Write($"Program \"{type.ToProgramTypeString()}\" {{\n");
 			if (_this.Has_PlayerSubPrograms())
 			{
-				AssetList<SerializedPlayerSubProgram> subPrograms = _this.GetPlayerSubPrograms();
+				IReadOnlyList<ISerializedPlayerSubProgram> subPrograms = _this.GetPlayerSubPrograms();
 				for (int i = 0; i < subPrograms.Count; i++)
 				{
 					subPrograms[i].Export(_this.GetParameterBlobIndices()[i], writer, type);
@@ -586,13 +586,13 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 			List<ShaderSubProgram> matchingPrograms = new();
 			ShaderSubProgram? fallbackProgram = null;
 
-			AssetList<SerializedPlayerSubProgram> playerSubPrograms = program.GetPlayerSubPrograms();
-			for (int i = 0; program.Has_PlayerSubPrograms() ? i < playerSubPrograms.Count : i < program.SubPrograms.Count; i++)
+			int subProgramCount = program.Has_PlayerSubPrograms() ? program.GetPlayerSubPrograms().Count : program.SubPrograms.Count;
+			for (int i = 0; i < subProgramCount; i++)
 			{
 				ShaderGpuProgramType programType;
 				if (program.Has_PlayerSubPrograms())
 				{
-					programType = playerSubPrograms[i].GetProgramType(version);
+					programType = program.GetPlayerSubPrograms()[i].GetProgramType(version);
 				}
 				else
 				{
@@ -633,11 +633,11 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 					int platformIndex = shader.Platforms.IndexOf((uint)graphicApi);
 					if (program.Has_PlayerSubPrograms())
 					{
-						matchedProgram = blobs[platformIndex].GetSubProgram(shader.Collection, playerSubPrograms[i].BlobIndex, program.GetParameterBlobIndices()[i]);
+						matchedProgram = blobs[platformIndex].GetSubProgram(program.GetPlayerSubPrograms()[i].BlobIndex, program.GetParameterBlobIndices()[i]);
 					}
 					else
 					{
-						matchedProgram = blobs[platformIndex].GetSubProgram(shader.Collection, program.SubPrograms[i].BlobIndex);
+						matchedProgram = blobs[platformIndex].GetSubProgram(program.SubPrograms[i].BlobIndex);
 					}
 				}
 
@@ -647,7 +647,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 				{
 					if (program.Has_PlayerSubPrograms())
 					{
-						ISerializedPlayerSubProgram playerSubProgram = playerSubPrograms[i];
+						ISerializedPlayerSubProgram playerSubProgram = program.GetPlayerSubPrograms()[i];
 						for (int j = 0; j < playerSubProgram.KeywordIndices.Count; j++)
 						{
 							if (pass.NameIndices[INSTANCING_ON] == playerSubProgram.KeywordIndices[j])
@@ -690,7 +690,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 					hasDirectional = true;
 					if (program.Has_PlayerSubPrograms())
 					{
-						ISerializedPlayerSubProgram playerSubProgram = playerSubPrograms[i];
+						ISerializedPlayerSubProgram playerSubProgram = program.GetPlayerSubPrograms()[i];
 						for (int j = 0; j < playerSubProgram.KeywordIndices.Count; j++)
 						{
 							if (pass.NameIndices[DIRECTIONAL] == playerSubProgram.KeywordIndices[j])
@@ -733,7 +733,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 					hasPoint = true;
 					if (program.Has_PlayerSubPrograms())
 					{
-						ISerializedPlayerSubProgram playerSubProgram = playerSubPrograms[i];
+						ISerializedPlayerSubProgram playerSubProgram = program.GetPlayerSubPrograms()[i];
 						for (int j = 0; j < playerSubProgram.KeywordIndices.Count; j++)
 						{
 							if (pass.NameIndices[POINT] == playerSubProgram.KeywordIndices[j])

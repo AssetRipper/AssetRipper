@@ -107,7 +107,7 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 			writer.Write($"Program \"{type.ToProgramTypeString()}\" {{\n");
 			if (_this.Has_PlayerSubPrograms())
 			{
-				AssetList<SerializedPlayerSubProgram> subPrograms = _this.GetPlayerSubPrograms();
+				IReadOnlyList<ISerializedPlayerSubProgram> subPrograms = _this.GetPlayerSubPrograms();
 				for (int i = 0; i < subPrograms.Count; i++)
 				{
 					subPrograms[i].Export(_this.GetParameterBlobIndices()[i], writer, type);
@@ -491,7 +491,7 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 			writer.WriteIndent(5);
 
 			int platformIndex = writer.Shader.Platforms!.IndexOf((uint)graphicApi);//ISerializedSubProgram and Platforms both only exist on 5.5+
-			writer.Blobs[platformIndex].GetSubProgram(writer.Shader.Collection, _this.BlobIndex).Export(writer, type);
+			writer.Blobs[platformIndex].GetSubProgram(_this.BlobIndex).Export(writer, type);
 
 			writer.Write('\n');
 			writer.WriteIndent(4);
@@ -509,7 +509,7 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 			writer.WriteIndent(5);
 
 			int platformIndex = writer.Shader.Platforms!.IndexOf((uint)graphicApi);
-			writer.Blobs[platformIndex].GetSubProgram(writer.Shader.Collection, _this.BlobIndex, paramBlobIndex).Export(writer, type);
+			writer.Blobs[platformIndex].GetSubProgram(_this.BlobIndex, paramBlobIndex).Export(writer, type);
 
 			writer.Write('\n');
 			writer.WriteIndent(4);
@@ -616,7 +616,7 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 				}
 
 				// we don't know shader type so pass vertex
-				_this.GetSubProgram(writer.Shader.Collection, (uint)subIndex).Export(writer, ShaderType.Vertex);
+				_this.GetSubProgram((uint)subIndex).Export(writer, ShaderType.Vertex);
 			}
 			writer.WriteString(header, j, header.Length - j);
 		}

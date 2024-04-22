@@ -30,7 +30,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			return tierCount;
 		}
 
-		public static AssetList<SerializedPlayerSubProgram> GetPlayerSubPrograms(this ISerializedProgram program)
+		public static IReadOnlyList<ISerializedPlayerSubProgram> GetPlayerSubPrograms(this ISerializedProgram program)
 		{
 			if (program.Has_PlayerSubPrograms())
 			{
@@ -42,10 +42,10 @@ namespace AssetRipper.SourceGenerated.Extensions
 					}
 				}
 			}
-			return new AssetList<SerializedPlayerSubProgram>();
+			return [];
 		}
 
-		public static AssetList<uint> GetParameterBlobIndices(this ISerializedProgram program)
+		public static IReadOnlyList<uint> GetParameterBlobIndices(this ISerializedProgram program)
 		{
 			if (program.Has_ParameterBlobIndices())
 			{
@@ -57,7 +57,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 					}
 				}
 			}
-			return new AssetList<uint>();
+			return [];
 		}
 
 	}

@@ -60,7 +60,7 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 			};
 		}
 
-		public void Read(AssetReader reader, bool readProgramData = true, bool readParams = true)
+		public void Read(AssetReader reader, bool readProgramData, bool readParams)
 		{
 			UnityVersion unityVersion = reader.AssetCollection.Version;
 			int version = reader.ReadInt32();
@@ -320,8 +320,6 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 				StructParameters = structs.ToArray();
 			}
 		}
-
-		public void Write(AssetWriter writer, bool writePlayerSubProgram = true, bool writeParameter = true) => throw new NotImplementedException();
 
 		public ShaderGpuProgramType GetProgramType(UnityVersion version)
 		{
