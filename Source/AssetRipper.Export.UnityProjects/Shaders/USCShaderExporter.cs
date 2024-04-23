@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Export;
+using AssetRipper.Assets.Generics;
 using AssetRipper.Export.Modules.Shaders.Exporters;
 using AssetRipper.Export.Modules.Shaders.Exporters.DirectX;
 using AssetRipper.Export.Modules.Shaders.Exporters.USCDirectX;
@@ -20,6 +21,7 @@ using AssetRipper.SourceGenerated.Extensions.Enums.Shader;
 using AssetRipper.SourceGenerated.Extensions.Enums.Shader.GpuProgramType;
 using AssetRipper.SourceGenerated.Extensions.Enums.Shader.SerializedShader;
 using AssetRipper.SourceGenerated.Subclasses.SerializedPass;
+using AssetRipper.SourceGenerated.Subclasses.SerializedPlayerSubProgram;
 using AssetRipper.SourceGenerated.Subclasses.SerializedProgram;
 using AssetRipper.SourceGenerated.Subclasses.SerializedShader;
 using AssetRipper.SourceGenerated.Subclasses.SerializedSubProgram;
@@ -542,17 +544,38 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 
 		private static void ExportSerializedProgramDecomp(ISerializedProgram _this, ShaderWriter writer, ShaderType type)
 		{
-			if (_this.SubPrograms.Count == 0)
+			if (_this.Has_PlayerSubPrograms())
 			{
-				return;
+				if (_this.GetPlayerSubPrograms().Count == 0)
+				{
+					return;
+				}
+			}
+			else
+			{
+				if (_this.SubPrograms.Count == 0)
+				{
+					return;
+				}
 			}
 
 			writer.WriteIndent(3);
 			writer.Write($"Program \"{type.ToProgramTypeString()}\" {{\n");
-			int tierCount = _this.GetTierCount();
-			for (int i = 0; i < _this.SubPrograms.Count; i++)
+			if (_this.Has_PlayerSubPrograms())
 			{
-				_this.SubPrograms[i].Export(writer, type, tierCount > 1);
+				IReadOnlyList<ISerializedPlayerSubProgram> subPrograms = _this.GetPlayerSubPrograms();
+				for (int i = 0; i < subPrograms.Count; i++)
+				{
+					subPrograms[i].Export(_this.GetParameterBlobIndices()[i], writer, type);
+				}
+			}
+			else
+			{
+				int tierCount = _this.GetTierCount();
+				for (int i = 0; i < _this.SubPrograms.Count; i++)
+				{
+					_this.SubPrograms[i].Export(writer, type, tierCount > 1);
+				}
 			}
 			writer.WriteIndent(3);
 			writer.Write("}\n");
@@ -562,10 +585,19 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 		{
 			List<ShaderSubProgram> matchingPrograms = new();
 			ShaderSubProgram? fallbackProgram = null;
-			for (int i = 0; i < program.SubPrograms.Count; i++)
+
+			int subProgramCount = program.Has_PlayerSubPrograms() ? program.GetPlayerSubPrograms().Count : program.SubPrograms.Count;
+			for (int i = 0; i < subProgramCount; i++)
 			{
-				ISerializedSubProgram subProgram = program.SubPrograms[i];
-				ShaderGpuProgramType programType = subProgram.GetProgramType(version);
+				ShaderGpuProgramType programType;
+				if (program.Has_PlayerSubPrograms())
+				{
+					programType = program.GetPlayerSubPrograms()[i].GetProgramType(version);
+				}
+				else
+				{
+					programType = program.SubPrograms[i].GetProgramType(version);
+				}
 				GPUPlatform graphicApi = programType.ToGPUPlatform(platform);
 
 				if (graphicApi != GPUPlatform.d3d11)
@@ -599,30 +631,52 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 				if (matched && shader.Has_Platforms())
 				{
 					int platformIndex = shader.Platforms.IndexOf((uint)graphicApi);
-					matchedProgram = blobs[platformIndex].SubPrograms[subProgram.BlobIndex];
+					if (program.Has_PlayerSubPrograms())
+					{
+						matchedProgram = blobs[platformIndex].GetSubProgram(program.GetPlayerSubPrograms()[i].BlobIndex, program.GetParameterBlobIndices()[i]);
+					}
+					else
+					{
+						matchedProgram = blobs[platformIndex].GetSubProgram(program.SubPrograms[i].BlobIndex);
+					}
 				}
 
 				// skip instanced shaders
 				Utf8String INSTANCING_ON = "INSTANCING_ON"u8;
 				if (pass.NameIndices.ContainsKey(INSTANCING_ON))
 				{
-					if (subProgram.GlobalKeywordIndices != null)
+					if (program.Has_PlayerSubPrograms())
 					{
-						for (int j = 0; j < subProgram.GlobalKeywordIndices.Count; j++)
+						ISerializedPlayerSubProgram playerSubProgram = program.GetPlayerSubPrograms()[i];
+						for (int j = 0; j < playerSubProgram.KeywordIndices.Count; j++)
 						{
-							if (pass.NameIndices[INSTANCING_ON] == subProgram.GlobalKeywordIndices[j])
+							if (pass.NameIndices[INSTANCING_ON] == playerSubProgram.KeywordIndices[j])
 							{
 								matched = false;
 							}
 						}
 					}
-					if (subProgram.LocalKeywordIndices != null)
+					else
 					{
-						for (int j = 0; j < subProgram.LocalKeywordIndices.Count; j++)
+						ISerializedSubProgram subProgram = program.SubPrograms[i];
+						if (subProgram.GlobalKeywordIndices != null)
 						{
-							if (pass.NameIndices[INSTANCING_ON] == subProgram.LocalKeywordIndices[j])
+							for (int j = 0; j < subProgram.GlobalKeywordIndices.Count; j++)
 							{
-								matched = false;
+								if (pass.NameIndices[INSTANCING_ON] == subProgram.GlobalKeywordIndices[j])
+								{
+									matched = false;
+								}
+							}
+						}
+						if (subProgram.LocalKeywordIndices != null)
+						{
+							for (int j = 0; j < subProgram.LocalKeywordIndices.Count; j++)
+							{
+								if (pass.NameIndices[INSTANCING_ON] == subProgram.LocalKeywordIndices[j])
+								{
+									matched = false;
+								}
 							}
 						}
 					}
@@ -634,23 +688,38 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 				if (pass.NameIndices.ContainsKey(DIRECTIONAL))
 				{
 					hasDirectional = true;
-					if (subProgram.GlobalKeywordIndices != null)
+					if (program.Has_PlayerSubPrograms())
 					{
-						for (int j = 0; j < subProgram.GlobalKeywordIndices.Count; j++)
+						ISerializedPlayerSubProgram playerSubProgram = program.GetPlayerSubPrograms()[i];
+						for (int j = 0; j < playerSubProgram.KeywordIndices.Count; j++)
 						{
-							if (pass.NameIndices[DIRECTIONAL] == subProgram.GlobalKeywordIndices[j])
+							if (pass.NameIndices[DIRECTIONAL] == playerSubProgram.KeywordIndices[j])
 							{
 								matchesDirectional = true;
 							}
 						}
 					}
-					if (subProgram.LocalKeywordIndices != null)
+					else
 					{
-						for (int j = 0; j < subProgram.LocalKeywordIndices.Count; j++)
+						ISerializedSubProgram subProgram = program.SubPrograms[i];
+						if (subProgram.GlobalKeywordIndices != null)
 						{
-							if (pass.NameIndices[DIRECTIONAL] == subProgram.LocalKeywordIndices[j])
+							for (int j = 0; j < subProgram.GlobalKeywordIndices.Count; j++)
 							{
-								matchesDirectional = true;
+								if (pass.NameIndices[DIRECTIONAL] == subProgram.GlobalKeywordIndices[j])
+								{
+									matchesDirectional = true;
+								}
+							}
+						}
+						if (subProgram.LocalKeywordIndices != null)
+						{
+							for (int j = 0; j < subProgram.LocalKeywordIndices.Count; j++)
+							{
+								if (pass.NameIndices[DIRECTIONAL] == subProgram.LocalKeywordIndices[j])
+								{
+									matchesDirectional = true;
+								}
 							}
 						}
 					}
@@ -662,23 +731,38 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 				if (pass.NameIndices.ContainsKey(POINT))
 				{
 					hasPoint = true;
-					if (subProgram.GlobalKeywordIndices != null)
+					if (program.Has_PlayerSubPrograms())
 					{
-						for (int j = 0; j < subProgram.GlobalKeywordIndices.Count; j++)
+						ISerializedPlayerSubProgram playerSubProgram = program.GetPlayerSubPrograms()[i];
+						for (int j = 0; j < playerSubProgram.KeywordIndices.Count; j++)
 						{
-							if (pass.NameIndices[POINT] == subProgram.GlobalKeywordIndices[j])
+							if (pass.NameIndices[POINT] == playerSubProgram.KeywordIndices[j])
 							{
 								matchesPoint = true;
 							}
 						}
 					}
-					if (subProgram.LocalKeywordIndices != null)
+					else
 					{
-						for (int j = 0; j < subProgram.LocalKeywordIndices.Count; j++)
+						ISerializedSubProgram subProgram = program.SubPrograms[i];
+						if (subProgram.GlobalKeywordIndices != null)
 						{
-							if (pass.NameIndices[POINT] == subProgram.LocalKeywordIndices[j])
+							for (int j = 0; j < subProgram.GlobalKeywordIndices.Count; j++)
 							{
-								matchesPoint = true;
+								if (pass.NameIndices[POINT] == subProgram.GlobalKeywordIndices[j])
+								{
+									matchesPoint = true;
+								}
+							}
+						}
+						if (subProgram.LocalKeywordIndices != null)
+						{
+							for (int j = 0; j < subProgram.LocalKeywordIndices.Count; j++)
+							{
+								if (pass.NameIndices[POINT] == subProgram.LocalKeywordIndices[j])
+								{
+									matchesPoint = true;
+								}
 							}
 						}
 					}

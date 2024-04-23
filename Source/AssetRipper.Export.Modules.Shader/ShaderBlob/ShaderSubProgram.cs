@@ -60,7 +60,7 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 			};
 		}
 
-		public void Read(AssetReader reader)
+		public void Read(AssetReader reader, bool readProgramData, bool readParams)
 		{
 			UnityVersion unityVersion = reader.AssetCollection.Version;
 			int version = reader.ReadInt32();
@@ -68,6 +68,20 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 			{
 				throw new Exception($"Shader program version {version} doesn't match");
 			}
+
+			if (readProgramData)
+			{
+				ReadProgramData(reader);
+			}
+			if (readParams)
+			{
+				ReadParameters(reader);
+			}
+		}
+
+		private void ReadProgramData(AssetReader reader)
+		{
+			UnityVersion unityVersion = reader.AssetCollection.Version;
 
 			ProgramType = reader.ReadInt32();
 			StatsALU = reader.ReadInt32();
@@ -106,6 +120,11 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 				sourceMap |= 1 << (int)source;
 			}
 			BindChannels = new ParserBindChannels(channels, sourceMap);
+		}
+
+		private void ReadParameters(AssetReader reader)
+		{
+			UnityVersion unityVersion = reader.AssetCollection.Version;
 
 			List<VectorParameter> vectors = new List<VectorParameter>();
 			List<MatrixParameter> matrices = new List<MatrixParameter>();
@@ -301,8 +320,6 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 				StructParameters = structs.ToArray();
 			}
 		}
-
-		public void Write(AssetWriter writer) => throw new NotImplementedException();
 
 		public ShaderGpuProgramType GetProgramType(UnityVersion version)
 		{
