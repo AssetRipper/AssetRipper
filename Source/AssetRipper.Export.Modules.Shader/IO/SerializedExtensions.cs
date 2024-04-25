@@ -9,6 +9,7 @@ using AssetRipper.SourceGenerated.Extensions.Enums.Shader.SerializedShader;
 using AssetRipper.SourceGenerated.Subclasses.SerializedPass;
 using AssetRipper.SourceGenerated.Subclasses.SerializedPlayerSubProgram;
 using AssetRipper.SourceGenerated.Subclasses.SerializedProgram;
+using AssetRipper.SourceGenerated.Subclasses.SerializedProgramParameters;
 using AssetRipper.SourceGenerated.Subclasses.SerializedProperties;
 using AssetRipper.SourceGenerated.Subclasses.SerializedProperty;
 using AssetRipper.SourceGenerated.Subclasses.SerializedShader;
@@ -48,29 +49,31 @@ public static class SerializedExtensions
 			{
 				_this.State.Export(writer);
 
-				if ((_this.ProgramMask & ShaderType.Vertex.ToProgramMask()) != 0)
+				IReadOnlyDictionary<int, string> nameIndices = _this.NameIndices;
+
+                if ((_this.ProgramMask & ShaderType.Vertex.ToProgramMask()) != 0)
 				{
-					_this.ProgVertex.Export(writer, ShaderType.Vertex);
+					_this.ProgVertex.Export(writer, ShaderType.Vertex, nameIndices);
 				}
 				if ((_this.ProgramMask & ShaderType.Fragment.ToProgramMask()) != 0)
 				{
-					_this.ProgFragment.Export(writer, ShaderType.Fragment);
+					_this.ProgFragment.Export(writer, ShaderType.Fragment, nameIndices);
 				}
 				if ((_this.ProgramMask & ShaderType.Geometry.ToProgramMask()) != 0)
 				{
-					_this.ProgGeometry.Export(writer, ShaderType.Geometry);
+					_this.ProgGeometry.Export(writer, ShaderType.Geometry, nameIndices);
 				}
 				if ((_this.ProgramMask & ShaderType.Hull.ToProgramMask()) != 0)
 				{
-					_this.ProgHull.Export(writer, ShaderType.Hull);
+					_this.ProgHull.Export(writer, ShaderType.Hull, nameIndices);
 				}
 				if ((_this.ProgramMask & ShaderType.Domain.ToProgramMask()) != 0)
 				{
-					_this.ProgDomain.Export(writer, ShaderType.Domain);
+					_this.ProgDomain.Export(writer, ShaderType.Domain, nameIndices);
 				}
 				if ((_this.ProgramMask & ShaderType.RayTracing.ToProgramMask()) != 0)
 				{
-					_this.ProgDomain.Export(writer, ShaderType.RayTracing);
+					_this.ProgDomain.Export(writer, ShaderType.RayTracing, nameIndices);
 				}
 
 #warning HasInstancingVariant?
@@ -85,7 +88,7 @@ public static class SerializedExtensions
 		}
 	}
 
-	public static void Export(this ISerializedProgram _this, ShaderWriter writer, ShaderType type)
+	public static void Export(this ISerializedProgram _this, ShaderWriter writer, ShaderType type, IReadOnlyDictionary<int, string>? nameIndices)
 	{
 		if (_this.Has_PlayerSubPrograms())
 		{
@@ -109,7 +112,7 @@ public static class SerializedExtensions
 			IReadOnlyList<ISerializedPlayerSubProgram> subPrograms = _this.GetPlayerSubPrograms();
 			for (int i = 0; i < subPrograms.Count; i++)
 			{
-				subPrograms[i].Export(_this.GetParameterBlobIndices()[i], writer, type);
+				subPrograms[i].Export(_this.GetParameterBlobIndices()[i], writer, type, nameIndices, _this.CommonParameters);
 			}
 		}
 		else
@@ -117,7 +120,7 @@ public static class SerializedExtensions
 			int tierCount = _this.GetTierCount();
 			for (int i = 0; i < _this.SubPrograms.Count; i++)
 			{
-				_this.SubPrograms[i].Export(writer, type, tierCount > 1);
+				_this.SubPrograms[i].Export(writer, type, , nameIndices, _this.CommonParameters, tierCount > 1);
 			}
 		}
 		writer.WriteIndent(3);
@@ -491,9 +494,9 @@ public static class SerializedExtensions
 		writer.Write($"ZFail{type.ToSuffixString()} {_this.ZFailValue()}\n");
 	}
 
-	public static void Export(this ISerializedSubProgram _this, ShaderWriter writer, ShaderType type, bool isTier)
-	{
-		writer.WriteIndent(4);
+		public static void Export(this ISerializedSubProgram _this, ShaderWriter writer, ShaderType type, IReadOnlyDictionary<int, string>? nameIndices, ISerializedProgramParameters? commonParams, bool isTier)
+		{
+			writer.WriteIndent(4);
 #warning TODO: convertion (DX to HLSL)
 		ShaderGpuProgramType programType = _this.GetProgramType(writer.Version);
 		GPUPlatform graphicApi = programType.ToGPUPlatform(writer.Platform);
@@ -505,17 +508,23 @@ public static class SerializedExtensions
 		writer.Write("\" {\n");
 		writer.WriteIndent(5);
 
-		int platformIndex = writer.Shader.Platforms!.IndexOf((uint)graphicApi);//ISerializedSubProgram and Platforms both only exist on 5.5+
-		writer.Blobs[platformIndex].GetSubProgram(_this.BlobIndex).Export(writer, type);
+			int platformIndex = writer.Shader.Platforms!.IndexOf((uint)graphicApi);//ISerializedSubProgram and Platforms both only exist on 5.5+
+			writer.Blobs[platformIndex].GetSubProgram(_this.BlobIndex, subProgram =>
+			{
+				if (nameIndices != null && commonParams != null)
+				{
+					subProgram.ApplyCommonParams(commonParams, nameIndices);
+				}
+			}).Export(writer, type);
 
 		writer.Write('\n');
 		writer.WriteIndent(4);
 		writer.Write("}\n");
 	}
 
-	public static void Export(this ISerializedPlayerSubProgram _this, uint paramBlobIndex, ShaderWriter writer, ShaderType type)
-	{
-		writer.WriteIndent(4);
+		public static void Export(this ISerializedPlayerSubProgram _this, uint paramBlobIndex, ShaderWriter writer, ShaderType type, IReadOnlyDictionary<int, string>? nameIndices, ISerializedProgramParameters? commonParams)
+		{
+			writer.WriteIndent(4);
 #warning TODO: convertion (DX to HLSL)
 		ShaderGpuProgramType programType = _this.GetProgramType(writer.Version);
 		GPUPlatform graphicApi = programType.ToGPUPlatform(writer.Platform);
@@ -523,8 +532,14 @@ public static class SerializedExtensions
 		writer.Write("\" {\n");
 		writer.WriteIndent(5);
 
-		int platformIndex = writer.Shader.Platforms!.IndexOf((uint)graphicApi);
-		writer.Blobs[platformIndex].GetSubProgram(_this.BlobIndex, paramBlobIndex).Export(writer, type);
+			int platformIndex = writer.Shader.Platforms!.IndexOf((uint)graphicApi);
+			writer.Blobs[platformIndex].GetSubProgram(_this.BlobIndex, paramBlobIndex, subProgram =>
+			{
+				if (nameIndices != null && commonParams != null)
+				{
+					subProgram.ApplyCommonParams(commonParams, nameIndices);
+				}
+			}).Export(writer, type);
 
 		writer.Write('\n');
 		writer.WriteIndent(4);
@@ -565,10 +580,10 @@ public static class SerializedExtensions
 
 	public static void Export(this ShaderSubProgram _this, ShaderWriter writer, ShaderType type)
 	{
-		if (_this.GlobalKeywords.Length > 0)
+		if (_this.Keywords.Length > 0)
 		{
 			writer.Write("Keywords { ");
-			foreach (string keyword in _this.GlobalKeywords)
+			foreach (string keyword in _this.Keywords)
 			{
 				writer.Write($"\"{keyword}\" ");
 			}
@@ -631,7 +646,7 @@ public static class SerializedExtensions
 			}
 
 			// we don't know shader type so pass vertex
-			_this.GetSubProgram((uint)subIndex).Export(writer, ShaderType.Vertex);
+			_this.GetSubProgram((uint)subIndex, null).Export(writer, ShaderType.Vertex);
 		}
 		writer.WriteString(header, j, header.Length - j);
 	}

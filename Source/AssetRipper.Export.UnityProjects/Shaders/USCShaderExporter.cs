@@ -374,9 +374,9 @@ public sealed class USCShaderExporter : ShaderExporterBase
 				writer.WriteIndent(3);
 				writer.WriteLine("");
 
-				if (hasVertex)
-				{
-					string keywordsList = string.Join(' ', vertexSubProgram!.LocalKeywords.Concat(vertexSubProgram.GlobalKeywords));
+					if (hasVertex)
+					{
+						string keywordsList = string.Join(' ', vertexSubProgram!.Keywords);
 
 					writer.WriteIndent(3);
 					writer.WriteLine($"// Keywords: {keywordsList}");
@@ -395,9 +395,9 @@ public sealed class USCShaderExporter : ShaderExporterBase
 					writer.WriteLine("}");
 				}
 
-				if (hasFragment)
-				{
-					string keywordsList = string.Join(' ', fragmentSubProgram!.LocalKeywords.Concat(fragmentSubProgram.GlobalKeywords));
+					if (hasFragment)
+					{
+						string keywordsList = string.Join(' ', fragmentSubProgram!.Keywords);
 
 					writer.WriteIndent(3);
 					writer.WriteLine($"// Keywords: {keywordsList}");
@@ -539,7 +539,7 @@ public sealed class USCShaderExporter : ShaderExporterBase
 		}
 	}
 
-	private static void ExportSerializedProgramDecomp(ISerializedProgram _this, ShaderWriter writer, ShaderType type)
+	private static void ExportSerializedProgramDecomp(ISerializedProgram _this, ShaderWriter writer, ShaderType type, IReadOnlyDictionary<int, string> nameIndices)
 	{
 		if (_this.Has_PlayerSubPrograms())
 		{
@@ -563,7 +563,7 @@ public sealed class USCShaderExporter : ShaderExporterBase
 			IReadOnlyList<ISerializedPlayerSubProgram> subPrograms = _this.GetPlayerSubPrograms();
 			for (int i = 0; i < subPrograms.Count; i++)
 			{
-				subPrograms[i].Export(_this.GetParameterBlobIndices()[i], writer, type);
+				subPrograms[i].Export(_this.GetParameterBlobIndices()[i], writer, type, nameIndices, _this.CommonParameters);
 			}
 		}
 		else
@@ -571,7 +571,7 @@ public sealed class USCShaderExporter : ShaderExporterBase
 			int tierCount = _this.GetTierCount();
 			for (int i = 0; i < _this.SubPrograms.Count; i++)
 			{
-				_this.SubPrograms[i].Export(writer, type, tierCount > 1);
+				_this.SubPrograms[i].Export(writer, type, nameIndices, _this.CommonParameters, tierCount > 1);
 			}
 		}
 		writer.WriteIndent(3);
@@ -627,14 +627,22 @@ public sealed class USCShaderExporter : ShaderExporterBase
 			ShaderSubProgram? matchedProgram = null;
 			if (matched && shader.Has_Platforms())
 			{
-				int platformIndex = shader.Platforms.IndexOf((uint)graphicApi);
+                void ApplyCommonParams(ShaderSubProgram subProgram)
+                {
+                    if (program.Has_CommonParameters())
+                    {
+                        subProgram.ApplyCommonParams(program.CommonParameters, pass.NameIndices.ToDictionary(k => k.Value, v => (string)v.Key));
+                    }
+                }
+
+                int platformIndex = shader.Platforms.IndexOf((uint)graphicApi);
 				if (program.Has_PlayerSubPrograms())
 				{
-					matchedProgram = blobs[platformIndex].GetSubProgram(program.GetPlayerSubPrograms()[i].BlobIndex, program.GetParameterBlobIndices()[i]);
+					matchedProgram = blobs[platformIndex].GetSubProgram(program.GetPlayerSubPrograms()[i].BlobIndex, program.GetParameterBlobIndices()[i], ApplyCommonParams);
 				}
 				else
 				{
-					matchedProgram = blobs[platformIndex].GetSubProgram(program.SubPrograms[i].BlobIndex);
+					matchedProgram = blobs[platformIndex].GetSubProgram(program.SubPrograms[i].BlobIndex, ApplyCommonParams);
 				}
 			}
 
@@ -810,26 +818,14 @@ public sealed class USCShaderExporter : ShaderExporterBase
 				continue;
 			}
 
-			List<string> keywords = new List<string>();
-
-			if (subProgram.GlobalKeywords.Length > 0)
-			{
-				keywords.AddRange(subProgram.GlobalKeywords);
-			}
-
-			if (subProgram.LocalKeywords.Length > 0)
-			{
-				keywords.AddRange(subProgram.LocalKeywords);
-			}
-
 			// don't have to worry about order I don't think
 			// although it would probably be safer to sort
-			string keywordsStr = string.Join(',', keywords);
+			string keywordsStr = string.Join(',', subProgram.Keywords);
 
 			if (!comboHashes.Contains(keywordsStr))
 			{
 				comboHashes.Add(keywordsStr);
-				combos.Add(keywords.ToArray());
+				combos.Add(subProgram.Keywords);
 			}
 		}
 
