@@ -1,8 +1,11 @@
 using AssetRipper.Assets.IO.Writing;
+using AssetRipper.Export.Modules.Shaders.Extensions;
 using AssetRipper.Export.Modules.Shaders.ShaderBlob.Parameters;
 using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Extensions.Enums.Shader;
 using AssetRipper.SourceGenerated.Extensions.Enums.Shader.GpuProgramType;
+using AssetRipper.SourceGenerated.Subclasses.SerializedProgramParameters;
+using ShaderGpuProgramTypeExtensions = AssetRipper.SourceGenerated.Extensions.Enums.Shader.GpuProgramType.ShaderGpuProgramTypeExtensions;
 
 
 namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
@@ -94,15 +97,16 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 
 			if (HasMergedKeywords(unityVersion))
 			{
-				reader.ReadStringArray();
+				Keywords = reader.ReadStringArray();
 			}
 			else
 			{
-				GlobalKeywords = reader.ReadStringArray();
+				List<string> keywords = reader.ReadStringArray().ToList(); // GlobalKeywords
 				if (HasLocalKeywords(unityVersion))
 				{
-					LocalKeywords = reader.ReadStringArray();
+					keywords.AddRange(reader.ReadStringArray());
 				}
+				Keywords = keywords.ToArray();
 			}
 
 			ProgramData = reader.ReadByteArray();
@@ -321,6 +325,18 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 			}
 		}
 
+		public void ApplyCommonParams(ISerializedProgramParameters commonParams, IReadOnlyDictionary<int, string> nameIndices)
+		{
+			ConstantBuffers = ConstantBuffers.Concat(commonParams.ConstantBuffers.Select(item => item.ToConstantBuffer(nameIndices))).ToArray();
+			VectorParameters = VectorParameters.Concat(commonParams.VectorParams.Select(item => item.ToVectorParameter(nameIndices))).ToArray();
+			MatrixParameters = MatrixParameters.Concat(commonParams.MatrixParams.Select(item => item.ToMatrixParameter(nameIndices))).ToArray();
+			TextureParameters = TextureParameters.Concat(commonParams.TextureParams.Select(item => item.ToTextureParameter(nameIndices))).ToArray();
+			BufferParameters = BufferParameters.Concat(commonParams.BufferParams.Select(item => item.ToBufferBinding(nameIndices))).ToArray();
+			UAVParameters = UAVParameters.Concat(commonParams.UAVParams.Select(item => item.ToUAVParameter(nameIndices))).ToArray();
+			SamplerParameters = SamplerParameters.Concat(commonParams.Samplers.Select(item => item.ToSamplerParameter())).ToArray();
+			ConstantBufferBindings = ConstantBufferBindings.Concat(commonParams.ConstantBufferBindings.Select(item => item.ToBufferBinding(nameIndices))).ToArray();
+		}
+
 		public ShaderGpuProgramType GetProgramType(UnityVersion version)
 		{
 			if (ShaderGpuProgramTypeExtensions.GpuProgramType55Relevant(version))
@@ -338,8 +354,7 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 		public int StatsTEX { get; set; }
 		public int StatsFlow { get; set; }
 		public int StatsTempRegister { get; set; }
-		public string[] GlobalKeywords { get; set; } = Array.Empty<string>();
-		public string[] LocalKeywords { get; set; } = Array.Empty<string>();
+		public string[] Keywords { get; set; } = Array.Empty<string>();
 		public byte[] ProgramData { get; set; } = Array.Empty<byte>();
 		public VectorParameter[] VectorParameters { get; set; } = Array.Empty<VectorParameter>();
 		public MatrixParameter[] MatrixParameters { get; set; } = Array.Empty<MatrixParameter>();

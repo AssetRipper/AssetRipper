@@ -379,7 +379,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 
 					if (hasVertex)
 					{
-						string keywordsList = string.Join(' ', vertexSubProgram!.LocalKeywords.Concat(vertexSubProgram.GlobalKeywords));
+						string keywordsList = string.Join(' ', vertexSubProgram!.Keywords);
 
 						writer.WriteIndent(3);
 						writer.WriteLine($"// Keywords: {keywordsList}");
@@ -400,7 +400,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 
 					if (hasFragment)
 					{
-						string keywordsList = string.Join(' ', fragmentSubProgram!.LocalKeywords.Concat(fragmentSubProgram.GlobalKeywords));
+						string keywordsList = string.Join(' ', fragmentSubProgram!.Keywords);
 
 						writer.WriteIndent(3);
 						writer.WriteLine($"// Keywords: {keywordsList}");
@@ -542,7 +542,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 			}
 		}
 
-		private static void ExportSerializedProgramDecomp(ISerializedProgram _this, ShaderWriter writer, ShaderType type)
+		private static void ExportSerializedProgramDecomp(ISerializedProgram _this, ShaderWriter writer, ShaderType type, IReadOnlyDictionary<int, string> nameIndices)
 		{
 			if (_this.Has_PlayerSubPrograms())
 			{
@@ -566,7 +566,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 				IReadOnlyList<ISerializedPlayerSubProgram> subPrograms = _this.GetPlayerSubPrograms();
 				for (int i = 0; i < subPrograms.Count; i++)
 				{
-					subPrograms[i].Export(_this.GetParameterBlobIndices()[i], writer, type);
+					subPrograms[i].Export(_this.GetParameterBlobIndices()[i], writer, type, nameIndices, _this.CommonParameters);
 				}
 			}
 			else
@@ -574,7 +574,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 				int tierCount = _this.GetTierCount();
 				for (int i = 0; i < _this.SubPrograms.Count; i++)
 				{
-					_this.SubPrograms[i].Export(writer, type, tierCount > 1);
+					_this.SubPrograms[i].Export(writer, type, nameIndices, _this.CommonParameters, tierCount > 1);
 				}
 			}
 			writer.WriteIndent(3);
@@ -630,14 +630,22 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 				ShaderSubProgram? matchedProgram = null;
 				if (matched && shader.Has_Platforms())
 				{
+					void ApplyCommonParams(ShaderSubProgram subProgram)
+					{
+						if (program.Has_CommonParameters())
+						{
+							subProgram.ApplyCommonParams(program.CommonParameters, pass.NameIndices.ToDictionary(k => k.Value, v => (string)v.Key));
+						}
+					}
+
 					int platformIndex = shader.Platforms.IndexOf((uint)graphicApi);
 					if (program.Has_PlayerSubPrograms())
 					{
-						matchedProgram = blobs[platformIndex].GetSubProgram(program.GetPlayerSubPrograms()[i].BlobIndex, program.GetParameterBlobIndices()[i]);
+						matchedProgram = blobs[platformIndex].GetSubProgram(program.GetPlayerSubPrograms()[i].BlobIndex, program.GetParameterBlobIndices()[i], ApplyCommonParams);
 					}
 					else
 					{
-						matchedProgram = blobs[platformIndex].GetSubProgram(program.SubPrograms[i].BlobIndex);
+						matchedProgram = blobs[platformIndex].GetSubProgram(program.SubPrograms[i].BlobIndex, ApplyCommonParams);
 					}
 				}
 
@@ -813,26 +821,14 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 					continue;
 				}
 
-				List<string> keywords = new List<string>();
-
-				if (subProgram.GlobalKeywords.Length > 0)
-				{
-					keywords.AddRange(subProgram.GlobalKeywords);
-				}
-
-				if (subProgram.LocalKeywords.Length > 0)
-				{
-					keywords.AddRange(subProgram.LocalKeywords);
-				}
-
 				// don't have to worry about order I don't think
 				// although it would probably be safer to sort
-				string keywordsStr = string.Join(',', keywords);
+				string keywordsStr = string.Join(',', subProgram.Keywords);
 
 				if (!comboHashes.Contains(keywordsStr))
 				{
 					comboHashes.Add(keywordsStr);
-					combos.Add(keywords.ToArray());
+					combos.Add(subProgram.Keywords);
 				}
 			}
 
