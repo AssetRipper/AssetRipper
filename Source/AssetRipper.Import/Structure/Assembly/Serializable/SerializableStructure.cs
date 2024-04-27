@@ -51,23 +51,6 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 		public override void WriteEditor(AssetWriter writer) => Write(writer);
 		public override void WriteRelease(AssetWriter writer) => Write(writer);
 
-		public YamlMappingNode ExportYaml(IExportContainer container)
-		{
-			YamlMappingNode node = new();
-			node.AddSerializedVersion(Type.Version);
-			for (int i = 0; i < Fields.Length; i++)
-			{
-				SerializableType.Field etalon = Type.GetField(i);
-				if (IsAvailable(etalon))
-				{
-					node.Add(etalon.Name, Fields[i].ExportYaml(container, etalon));
-				}
-			}
-			return node;
-		}
-		public override YamlMappingNode ExportYamlEditor(IExportContainer container) => ExportYaml(container);
-		public override YamlMappingNode ExportYamlRelease(IExportContainer container) => ExportYaml(container);
-
 		public override void WalkEditor(AssetWalker walker)
 		{
 			if (walker.EnterAsset(this))

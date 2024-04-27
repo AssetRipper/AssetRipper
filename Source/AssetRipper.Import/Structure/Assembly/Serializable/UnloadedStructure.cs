@@ -82,10 +82,6 @@ public sealed class UnloadedStructure : UnityAssetBase
 
 	public override int SerializedVersion => LoadStructure()?.SerializedVersion ?? base.SerializedVersion;
 
-	public override YamlMappingNode ExportYamlEditor(IExportContainer container) => LoadStructure()?.ExportYamlEditor(container) ?? new();
-
-	public override YamlMappingNode ExportYamlRelease(IExportContainer container) => LoadStructure()?.ExportYamlRelease(container) ?? new();
-
 	public override void WalkEditor(AssetWalker walker)
 	{
 		((UnityAssetBase?)LoadStructure() ?? StatelessAsset.Instance).WalkEditor(walker);
