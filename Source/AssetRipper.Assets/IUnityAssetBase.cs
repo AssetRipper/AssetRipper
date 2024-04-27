@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Assets.Cloning;
-using AssetRipper.Assets.Export.Yaml;
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Assets.Traversal;
@@ -8,7 +7,7 @@ using AssetRipper.IO.Files.SerializedFiles;
 
 namespace AssetRipper.Assets;
 
-public interface IUnityAssetBase : IEndianSpanReadable, IAssetWritable, IYamlExportable
+public interface IUnityAssetBase : IEndianSpanReadable, IAssetWritable
 {
 	int SerializedVersion { get; }
 	bool FlowMappedInYaml { get; }
