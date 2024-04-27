@@ -22,7 +22,7 @@ public class LightmapTextureAssetExporter : BinaryAssetExporter
 	{
 		if (asset.MainAsset is ILightingDataAsset)
 		{
-			exportCollection = new AssetExportCollection<IUnityObjectBase>(this, asset);
+			exportCollection = new LightmapExportCollection(this, (ITexture2D)asset);
 			return true;
 		}
 		else
@@ -51,6 +51,19 @@ public class LightmapTextureAssetExporter : BinaryAssetExporter
 		{
 			Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to convert '{texture.Name}' to bitmap");
 			return false;
+		}
+	}
+
+	private sealed class LightmapExportCollection(LightmapTextureAssetExporter exporter, ITexture2D lightmap) : AssetExportCollection<ITexture2D>(exporter, lightmap)
+	{
+		protected override string GetExportExtension(IUnityObjectBase asset)
+		{
+			return ((LightmapTextureAssetExporter)AssetExporter).ImageExportFormat.GetFileExtension();
+		}
+
+		protected override IUnityObjectBase CreateImporter(IExportContainer container)
+		{
+			return ImporterFactory.GenerateTextureImporter(container, Asset);
 		}
 	}
 }
