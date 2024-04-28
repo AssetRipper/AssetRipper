@@ -18,6 +18,8 @@ public abstract class UnityAssetBase : IUnityAssetBase
 
 	public virtual bool FlowMappedInYaml => false;
 
+	public virtual bool IgnoreFieldInMetaFiles(string fieldName) => false;
+
 	public virtual void ReadEditor(ref EndianSpanReader reader) => throw MethodNotSupported();
 
 	public virtual void ReadRelease(ref EndianSpanReader reader) => throw MethodNotSupported();

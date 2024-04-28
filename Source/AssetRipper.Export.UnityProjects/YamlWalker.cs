@@ -3,10 +3,10 @@ using AssetRipper.Assets.Export.Yaml;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Assets.Traversal;
+using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Subclasses.GUID;
 using AssetRipper.SourceGenerated.Subclasses.Hash128;
-using AssetRipper.SourceGenerated.Subclasses.SceneObjectIdentifier;
 using AssetRipper.Yaml;
 using AssetRipper.Yaml.Extensions;
 using System.Diagnostics;
@@ -46,8 +46,6 @@ public class YamlWalker : AssetWalker
 		"m_PrefabInternal",
 		"m_PrefabAsset",
 		"m_PrefabInstance",
-		"m_Name",//This field has the flag, but we don't have access.
-		"m_UsedFileIDs",//This field has the flag, but we don't have access.
 	};
 
 	private const string First = "first";
@@ -122,7 +120,7 @@ public class YamlWalker : AssetWalker
 		Debug.Assert(CurrentMappingNode is not null);
 		Debug.Assert(CurrentSequenceNode is null);
 		Debug.Assert(CurrentFieldName is null);
-		if (ExportingAssetImporter && FieldsToSkipInImporters.Contains(name))
+		if (ExportingAssetImporter && (FieldsToSkipInImporters.Contains(name) || asset.IgnoreFieldInMetaFiles(name)))
 		{
 			return false;
 		}
@@ -376,7 +374,13 @@ public class YamlWalker : AssetWalker
 		};
 		mappingNode.Add("m_FileID", pptr.FileID);
 		mappingNode.Add("m_PathID", pptr.PathID);
+		mappingNode.Add("m_TargetClassID", GetClassID(typeof(TAsset)));
 		return mappingNode;
+	}
+
+	protected static int GetClassID(Type type)
+	{
+		return (int)(ClassIDTypeMap.Dictionary.GetValueOrDefault(type, ClassIDType.Object));
 	}
 
 	private bool EnterMap(bool flowmapped = false)
@@ -436,12 +440,12 @@ public class YamlWalker : AssetWalker
 
 	private static class HashHelper
 	{
-		public static YamlNode ExportYaml(IHash128 hash)
+		public static YamlMappingNode ExportYaml(IHash128 hash)
 		{
 			return ExportYaml(hash.Bytes__0, hash.Bytes__1, hash.Bytes__2, hash.Bytes__3, hash.Bytes__4, hash.Bytes__5, hash.Bytes__6, hash.Bytes__7, hash.Bytes__8, hash.Bytes__9, hash.Bytes_10, hash.Bytes_11, hash.Bytes_12, hash.Bytes_13, hash.Bytes_14, hash.Bytes_15, hash.SerializedVersion);
 		}
 
-		private static YamlNode ExportYaml(byte bytes__0, byte bytes__1, byte bytes__2, byte bytes__3, byte bytes__4, byte bytes__5, byte bytes__6, byte bytes__7, byte bytes__8, byte bytes__9, byte bytes_10, byte bytes_11, byte bytes_12, byte bytes_13, byte bytes_14, byte bytes_15, int serializedVersion)
+		private static YamlMappingNode ExportYaml(byte bytes__0, byte bytes__1, byte bytes__2, byte bytes__3, byte bytes__4, byte bytes__5, byte bytes__6, byte bytes__7, byte bytes__8, byte bytes__9, byte bytes_10, byte bytes_11, byte bytes_12, byte bytes_13, byte bytes_14, byte bytes_15, int serializedVersion)
 		{
 			YamlMappingNode node = new();
 			node.AddSerializedVersion(serializedVersion);
