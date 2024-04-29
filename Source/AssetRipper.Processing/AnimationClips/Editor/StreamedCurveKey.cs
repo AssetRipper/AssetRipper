@@ -155,7 +155,7 @@ namespace AssetRipper.Processing.AnimationClips.Editor
 		/// Used only to calculate slopes.
 		/// </summary>
 		/// <remarks>
-		/// Should be <c>true</c> if <c>LeftSidedLimit</c> was set from an arithmetic calculation
+		/// Should be <c>false</c> if <c>LeftSidedLimit</c> was set from an arithmetic calculation
 		/// instead of from <c>Read()</c>, meaning its not 100% reliable for equality comparison.
 		/// </remarks>
 		private bool ExactLeftSidedLimit { get; set; } = true;
