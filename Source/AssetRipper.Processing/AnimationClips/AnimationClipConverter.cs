@@ -77,6 +77,7 @@ namespace AssetRipper.Processing.AnimationClips
 			Span<float> curveValues = [0, 0, 0, 0];
 			Span<float> inSlopeValues = [0, 0, 0, 0];
 			Span<float> outSlopeValues = [0, 0, 0, 0];
+			bool UseNegInfSlopes = m_clip.SupportsNegativeInfinitySlopes();
 
 			if (streamedFrames.Count > 1)
 			{
@@ -111,7 +112,7 @@ namespace AssetRipper.Processing.AnimationClips
 								if (TryGetNextFrame(streamedFrames, frameIdx, curveID, out StreamedFrame? nextFrame, out int nextCurveIdx))
 								{
 									StreamedCurveKey nextCurve = nextFrame.Curves[nextCurveIdx + offset];
-									curve.CalculateSlopes(frame.Time, nextFrame.Time, nextCurve);
+									curve.CalculateSlopes(frame.Time, nextFrame.Time, nextCurve, UseNegInfSlopes);
 								}
 							}
 							curveValues[offset] = curve.Value;
@@ -135,7 +136,7 @@ namespace AssetRipper.Processing.AnimationClips
 							if (TryGetNextFrame(streamedFrames, frameIdx, curveID, out StreamedFrame? nextFrame, out int nextCurveIdx))
 							{
 								StreamedCurveKey nextCurve = nextFrame.Curves[nextCurveIdx];
-								curve.CalculateSlopes(frame.Time, nextFrame.Time, nextCurve);
+								curve.CalculateSlopes(frame.Time, nextFrame.Time, nextCurve, UseNegInfSlopes);
 							}
 						}
 					}

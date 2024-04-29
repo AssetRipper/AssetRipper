@@ -49,5 +49,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 			yield break;
 		}
+
+		public static bool SupportsNegativeInfinitySlopes(this IAnimationClip clip) => clip.Collection.Version.GreaterThan(2021);
 	}
 }
