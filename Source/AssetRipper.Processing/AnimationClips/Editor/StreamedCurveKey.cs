@@ -89,7 +89,7 @@ namespace AssetRipper.Processing.AnimationClips.Editor
 
 			// OutSlope SHOULD be Zero or +Infinity
 			// but +Inf can also recreate Zero curves, so that will be used
-			SetPosInfSlope(nextKey);
+			SetPosInfSlope();
 		}
 
 		private void SetNegInfSlope(StreamedCurveKey nextKey, bool isDiscontinuous)
@@ -110,7 +110,7 @@ namespace AssetRipper.Processing.AnimationClips.Editor
 			}
 		}
 
-		private void SetPosInfSlope(StreamedCurveKey nextKey)
+		private void SetPosInfSlope()
 		{
 			OutSlope = float.PositiveInfinity;
 			// nextKey.InSlope is already 0
@@ -119,13 +119,6 @@ namespace AssetRipper.Processing.AnimationClips.Editor
 			/// If nextKey.LeftSidedLimit is kept equal to nextKey.RightSidedLimit,
 			/// then nextKey can't produce OutSlope of -Infinity
 			/// +Inf outslope followed by -Inf outslope is an "illegal configuration".
-			/*
-			// set next LSL only if next slope calculation needs it
-			if (nextKey.Coefficient == default)
-			{
-				nextKey.LeftSidedLimit = RightSidedLimit;
-			}
-			*/
 		}
 
 		private bool HasDifferentLimits()
@@ -140,7 +133,7 @@ namespace AssetRipper.Processing.AnimationClips.Editor
 				// check percentage difference. this estimation can be source of error
 				double diff = double.Abs((double)RightSidedLimit - LeftSidedLimit);
 				double div = double.Max(double.Abs(LeftSidedLimit), float.Abs(RightSidedLimit));
-				const double ROUNDING_ERROR = 1e-5; // arbitrary small value
+				const float ROUNDING_ERROR = 5e-7f; // arbitrary small value
 				/// normally the difference between Right and Left Sided Limits
 				/// should be "big"/much greater than a rounding error.
 				if (diff / div > ROUNDING_ERROR)
