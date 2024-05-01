@@ -6,7 +6,7 @@ namespace AssetRipper.Tests.Traversal;
 
 internal sealed class ComponentListObject : CustomInjectedObjectBase
 {
-	private readonly AssetList<ComponentPair> m_Component = new();
+	private readonly AssetList<ComponentPair_5_5> m_Component = new();
 
 	public const string Yaml = """
 		%YAML 1.1

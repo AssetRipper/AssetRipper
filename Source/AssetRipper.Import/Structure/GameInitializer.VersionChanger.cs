@@ -110,65 +110,17 @@ internal sealed partial record class GameInitializer
 			{
 				IGameObject newGameObject = (IGameObject)replacement;
 				PPtrConverter converter = new(gameObject, newGameObject);
-				if (gameObject.Has_Component_AssetList_AssetPair_Int32_PPtr_Component_3_5())
+				if (newGameObject.Components.Count > 0 && newGameObject.Components[0].Has_ClassID() && !gameObject.Components[0].Has_ClassID())
 				{
-					if (newGameObject.Has_Component_AssetList_AssetPair_Int32_PPtr_Component_5())
+					foreach (IComponentPair pair in  newGameObject.Components)
 					{
-						foreach (AssetPair<int, PPtr_Component_3_5> pair in gameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_3_5)
+						if (pair.Component.TryGetAsset(newGameObject.Collection, out IComponent? component))
 						{
-							AssetPair<int, PPtr_Component_5> newPair = newGameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_5.AddNew();
-							newPair.Key = pair.Key;
-							newPair.Value.CopyValues(pair.Value, converter);
+							pair.ClassID = component.ClassID;
 						}
-					}
-					else if (newGameObject.Has_Component_AssetList_ComponentPair())
-					{
-						foreach (AssetPair<int, PPtr_Component_3_5> pair in gameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_3_5)
+						else
 						{
-							newGameObject.Component_AssetList_ComponentPair.AddNew().Component.CopyValues(pair.Value, converter);
-						}
-					}
-				}
-				else if (gameObject.Has_Component_AssetList_AssetPair_Int32_PPtr_Component_5())
-				{
-					if (newGameObject.Has_Component_AssetList_AssetPair_Int32_PPtr_Component_3_5())
-					{
-						foreach (AssetPair<int, PPtr_Component_5> pair in gameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_5)
-						{
-							AssetPair<int, PPtr_Component_3_5> newPair = newGameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_3_5.AddNew();
-							newPair.Key = pair.Key;
-							newPair.Value.CopyValues(pair.Value, converter);
-						}
-					}
-					else if (newGameObject.Has_Component_AssetList_ComponentPair())
-					{
-						foreach (AssetPair<int, PPtr_Component_5> pair in gameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_5)
-						{
-							newGameObject.Component_AssetList_ComponentPair.AddNew().Component.CopyValues(pair.Value, converter);
-						}
-					}
-				}
-				else
-				{
-					Debug.Assert(gameObject.Has_Component_AssetList_ComponentPair());
-					if (newGameObject.Has_Component_AssetList_AssetPair_Int32_PPtr_Component_3_5())
-					{
-						foreach (ComponentPair pair in gameObject.Component_AssetList_ComponentPair)
-						{
-							IComponent? component = gameObject.Collection.TryGetAsset<IComponent>(pair.Component);
-							AssetPair<int, PPtr_Component_3_5> newPair = newGameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_3_5.AddNew();
-							newPair.Key = component?.ClassID ?? (int)ClassIDType.Component;
-							newPair.Value.SetAsset(newGameObject.Collection, component);
-						}
-					}
-					else if (newGameObject.Has_Component_AssetList_AssetPair_Int32_PPtr_Component_5())
-					{
-						foreach (ComponentPair pair in gameObject.Component_AssetList_ComponentPair)
-						{
-							IComponent? component = gameObject.Collection.TryGetAsset<IComponent>(pair.Component);
-							AssetPair<int, PPtr_Component_5> newPair = newGameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_5.AddNew();
-							newPair.Key = component?.ClassID ?? (int)ClassIDType.Component;
-							newPair.Value.SetAsset(newGameObject.Collection, component);
+							pair.ClassID = (int)ClassIDType.Component;
 						}
 					}
 				}

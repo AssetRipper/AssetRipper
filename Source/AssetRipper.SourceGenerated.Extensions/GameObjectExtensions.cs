@@ -44,86 +44,24 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static IEnumerable<IPPtr_Component> FetchComponents(this IGameObject gameObject)
 		{
-			if (gameObject.Has_Component_AssetList_ComponentPair())
-			{
-				return gameObject.Component_AssetList_ComponentPair.Select(pair => pair.Component);
-			}
-			else if (gameObject.Has_Component_AssetList_AssetPair_Int32_PPtr_Component_3_5())
-			{
-				return gameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_3_5.Select(pair => pair.Value);
-			}
-			else if (gameObject.Has_Component_AssetList_AssetPair_Int32_PPtr_Component_5())
-			{
-				return gameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_5.Select(pair => pair.Value);
-			}
-			else
-			{
-				throw new Exception("All three component properties returned null");
-			}
+			return gameObject.Components.Select(pair => pair.Component);
 		}
 
 		public static AccessListBase<IPPtr_Component> GetComponentPPtrList(this IGameObject gameObject)
 		{
-			if (gameObject.Has_Component_AssetList_ComponentPair())
-			{
-				return new ComponentPairAccessList(gameObject.Component_AssetList_ComponentPair);
-			}
-			else if (gameObject.Has_Component_AssetList_AssetPair_Int32_PPtr_Component_3_5())
-			{
-				return new AssetPairAccessList<PPtr_Component_3_5>(gameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_3_5);
-			}
-			else if (gameObject.Has_Component_AssetList_AssetPair_Int32_PPtr_Component_5())
-			{
-				return new AssetPairAccessList<PPtr_Component_5>(gameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_5);
-			}
-			else
-			{
-				throw new Exception("All three component properties returned null");
-			}
+			return new ComponentPairAccessList(gameObject.Components);
 		}
 
 		public static int GetComponentCount(this IGameObject gameObject)
 		{
-			if (gameObject.Has_Component_AssetList_ComponentPair())
-			{
-				return gameObject.Component_AssetList_ComponentPair.Count;
-			}
-			else if (gameObject.Has_Component_AssetList_AssetPair_Int32_PPtr_Component_3_5())
-			{
-				return gameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_3_5.Count;
-			}
-			else if (gameObject.Has_Component_AssetList_AssetPair_Int32_PPtr_Component_5())
-			{
-				return gameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_5.Count;
-			}
-			else
-			{
-				throw new Exception("All three component properties returned null");
-			}
+			return gameObject.Components.Count;
 		}
 
 		public static void AddComponent(this IGameObject gameObject, ClassIDType classID, IComponent component)
 		{
-			if (gameObject.Has_Component_AssetList_ComponentPair())
-			{
-				gameObject.Component_AssetList_ComponentPair.AddNew().Component.SetAsset(gameObject.Collection, component);
-			}
-			else if (gameObject.Has_Component_AssetList_AssetPair_Int32_PPtr_Component_3_5())
-			{
-				AssetPair<int, PPtr_Component_3_5> pair = gameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_3_5.AddNew();
-				pair.Key = (int)classID;
-				pair.Value.SetAsset(gameObject.Collection, component);
-			}
-			else if (gameObject.Has_Component_AssetList_AssetPair_Int32_PPtr_Component_5())
-			{
-				AssetPair<int, PPtr_Component_5> pair = gameObject.Component_AssetList_AssetPair_Int32_PPtr_Component_5.AddNew();
-				pair.Key = (int)classID;
-				pair.Value.SetAsset(gameObject.Collection, component);
-			}
-			else
-			{
-				throw new Exception("All three component properties returned null");
-			}
+			IComponentPair pair = gameObject.Components.AddNew();
+			pair.ClassID = (int)classID;
+			pair.Component.SetAsset(gameObject.Collection, component);
 		}
 
 		public static PPtrAccessList<IPPtr_Component, IComponent> GetComponentAccessList(this IGameObject gameObject)
@@ -262,9 +200,9 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		private sealed class ComponentPairAccessList : AccessListBase<IPPtr_Component>
 		{
-			private readonly AssetList<ComponentPair> referenceList;
+			private readonly AccessListBase<IComponentPair> referenceList;
 
-			public ComponentPairAccessList(AssetList<ComponentPair> referenceList)
+			public ComponentPairAccessList(AccessListBase<IComponentPair> referenceList)
 			{
 				this.referenceList = referenceList;
 			}
@@ -286,7 +224,11 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 			public override IPPtr_Component AddNew()
 			{
-				return referenceList.AddNew().Component;
+				IComponentPair componentPair = referenceList.AddNew();
+				componentPair.ClassID = (int)ClassIDType.Component;
+				return componentPair.Component;
+				//throw new NotSupportedException();
+				//Not sure the above code is safe since Unity might rely on the class id being correct.
 			}
 
 			public override void Clear()
@@ -315,92 +257,6 @@ namespace AssetRipper.SourceGenerated.Extensions
 			public override int IndexOf(IPPtr_Component item)
 			{
 				return referenceList.IndexOf(pair => pair.Component.Equals(item));
-			}
-
-			public override void Insert(int index, IPPtr_Component item)
-			{
-				throw new NotSupportedException();
-			}
-
-			public override bool Remove(IPPtr_Component item)
-			{
-				int index = IndexOf(item);
-				if (index < 0)
-				{
-					return false;
-				}
-				else
-				{
-					RemoveAt(index);
-					return true;
-				}
-			}
-
-			public override void RemoveAt(int index)
-			{
-				referenceList.RemoveAt(index);
-			}
-		}
-
-		private sealed class AssetPairAccessList<T> : AccessListBase<IPPtr_Component> where T : IPPtr_Component, new()
-		{
-			private readonly AssetList<AssetPair<int, T>> referenceList;
-
-			public AssetPairAccessList(AssetList<AssetPair<int, T>> referenceList)
-			{
-				this.referenceList = referenceList;
-			}
-
-			public override IPPtr_Component this[int index]
-			{
-				get => referenceList[index].Value;
-				set => throw new NotSupportedException();
-			}
-
-			public override int Count => referenceList.Count;
-
-			public override int Capacity { get => referenceList.Capacity; set => referenceList.Capacity = value; }
-
-			public override void Add(IPPtr_Component item)
-			{
-				throw new NotSupportedException();
-			}
-
-			public override IPPtr_Component AddNew()
-			{
-				//AssetPair<int, T> pair = referenceList.AddNew();
-				//pair.Key = 2;
-				//return pair.Value;
-				throw new NotSupportedException();
-				//Not sure the above code is safe since Unity might rely on the class id being correct.
-			}
-
-			public override void Clear()
-			{
-				referenceList.Clear();
-			}
-
-			public override bool Contains(IPPtr_Component item)
-			{
-				return referenceList.Any(ptr => ptr.Value.Equals(item));
-			}
-
-			public override void CopyTo(IPPtr_Component[] array, int arrayIndex)
-			{
-				for (int i = 0; i < referenceList.Count; i++)
-				{
-					array[i + arrayIndex] = referenceList[i].Value;
-				}
-			}
-
-			public override int EnsureCapacity(int capacity)
-			{
-				return referenceList.EnsureCapacity(capacity);
-			}
-
-			public override int IndexOf(IPPtr_Component item)
-			{
-				return referenceList.IndexOf(pair => pair.Value.Equals(item));
 			}
 
 			public override void Insert(int index, IPPtr_Component item)
