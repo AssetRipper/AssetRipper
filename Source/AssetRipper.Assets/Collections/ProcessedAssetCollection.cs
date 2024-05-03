@@ -54,10 +54,5 @@ public sealed class ProcessedAssetCollection : VirtualAssetCollection
 	{
 		return new AssetInfo(this, ++m_nextId, classID);
 	}
-
-	protected override bool IsCompatibleDependency(AssetCollection dependency)
-	{
-		return dependency is SerializedAssetCollection or ProcessedAssetCollection;
-	}
 }
 

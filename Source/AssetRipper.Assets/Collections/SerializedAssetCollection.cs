@@ -17,12 +17,6 @@ public sealed class SerializedAssetCollection : AssetCollection
 	{
 	}
 
-	/// <inheritdoc/>
-	protected override bool IsCompatibleDependency(AssetCollection dependency)
-	{
-		return dependency is SerializedAssetCollection or ProcessedAssetCollection;
-	}
-
 	internal void InitializeDependencyList(IDependencyProvider? dependencyProvider)
 	{
 		if (Dependencies.Count > 1)
