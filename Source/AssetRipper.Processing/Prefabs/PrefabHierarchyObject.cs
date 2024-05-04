@@ -5,7 +5,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_1001;
 
 namespace AssetRipper.Processing;
 
-public sealed class PrefabHierarchyObject : GameObjectHierarchyObject
+public sealed class PrefabHierarchyObject : GameObjectHierarchyObject, INamed
 {
 	/// <summary>
 	/// The root <see cref="IGameObject"/> of the <see cref="Prefab"/>.
@@ -25,10 +25,17 @@ public sealed class PrefabHierarchyObject : GameObjectHierarchyObject
 
 	public override IEnumerable<IUnityObjectBase> Assets => base.Assets.Append(Prefab);
 
+	public Utf8String Name { get => Root.Name; set => throw new NotSupportedException(); }
+
 	public PrefabHierarchyObject(AssetInfo assetInfo, IGameObject root, IPrefabInstance prefab) : base(assetInfo)
 	{
 		Root = root;
 		Prefab = prefab;
+	}
+
+	public override IEnumerable<(string, PPtr)> FetchDependencies()
+	{
+		return base.FetchDependencies().Append((nameof(Prefab), AssetToPPtr(Prefab)));
 	}
 }
 /*

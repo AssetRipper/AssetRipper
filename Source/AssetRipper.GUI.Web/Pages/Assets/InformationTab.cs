@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.GUI.Web.Paths;
+using AssetRipper.Processing;
 using AssetRipper.Processing.Textures;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
@@ -29,6 +30,17 @@ internal sealed class InformationTab(IUnityObjectBase asset, AssetPath path) : H
 		{
 			using (new Tbody(writer).End())
 			{
+				if (asset.MainAsset is SceneHierarchyObject sceneHierarchyObject)
+				{
+					using (new Tr(writer).End())
+					{
+						new Th(writer).Close(Localization.Scene);
+						using (new Td(writer).End())
+						{
+							PathLinking.WriteLink(writer, (ScenePath)sceneHierarchyObject.Scene.Collections[0].GetPath(), sceneHierarchyObject.Scene.Name);
+						}
+					}
+				}
 				using (new Tr(writer).End())
 				{
 					new Th(writer).Close(Localization.Collection);
