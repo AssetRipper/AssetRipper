@@ -21,32 +21,15 @@ public sealed class PrefabProcessor : IAssetProcessor
 {
 	public void Process(GameData gameData)
 	{
-		ProcessedBundle processedBundle = gameData.GameBundle.AddNewProcessedBundle("Generated Prefab Assets");
-		ProcessedAssetCollection prefabCollection = processedBundle.AddNewProcessedCollection("Prefabs", gameData.ProjectVersion);
+		ProcessedBundle processedBundle = gameData.GameBundle.AddNewProcessedBundle("Generated Hierarchy Assets");
+		ProcessedAssetCollection sceneHierarchyCollection = processedBundle.AddNewProcessedCollection("Scene Hierarchies", gameData.ProjectVersion);
+		ProcessedAssetCollection prefabHierarchyCollection = processedBundle.AddNewProcessedCollection("Prefab Hierarchies", gameData.ProjectVersion);
+		ProcessedAssetCollection prefabInstanceCollection = processedBundle.AddNewProcessedCollection("Generated Prefabs", gameData.ProjectVersion);
+		ProcessedAssetCollection missingPrefabTransformCollection = processedBundle.AddNewProcessedCollection("Missing Prefab Transforms", gameData.ProjectVersion);
 		Dictionary<SceneDefinition, ProcessedAssetCollection> sceneCollectionDictionary = new();
 
-		HashSet<IGameObject> gameObjectsAlreadyProcessed = new();
-		List<IGameObject> gameObjectsWithNoTransform = new();
-		foreach (IUnityObjectBase asset in gameData.GameBundle.FetchAssets())
-		{
-			switch (asset)
-			{
-				case IGameObject gameObject:
-					if (!gameObject.TryGetComponent<ITransform>(out _))
-					{
-						gameObjectsWithNoTransform.Add(gameObject);
-					}
-					break;
-				case IPrefabInstance prefab:
-					if (prefab.RootGameObjectP is { } root)
-					{
-						gameObjectsAlreadyProcessed.Add(root);
-					}
-					break;
-			}
-		}
-
-		foreach (IGameObject gameObject in gameObjectsWithNoTransform)
+		//Add missing Transforms
+		foreach (IGameObject gameObject in gameData.GameBundle.FetchAssets().OfType<IGameObject>().Where<IGameObject>(HasNoTransform))
 		{
 			Logger.Warning(LogCategory.Processing, $"GameObject {gameObject.Name} has no Transform. Adding one.");
 
@@ -67,7 +50,7 @@ public sealed class PrefabProcessor : IAssetProcessor
 			}
 			else
 			{
-				collection = prefabCollection;
+				collection = missingPrefabTransformCollection;
 			}
 
 			ITransform transform = collection.CreateAsset((int)ClassIDType.Transform, Transform.Create);
@@ -78,6 +61,35 @@ public sealed class PrefabProcessor : IAssetProcessor
 			gameObject.AddComponent(ClassIDType.Transform, transform);
 		}
 
+		HashSet<IGameObject> gameObjectsAlreadyProcessed = new();
+
+		//Create scene hierarchies
+		foreach (SceneDefinition scene in gameData.GameBundle.Scenes)
+		{
+			SceneHierarchyObject sceneHierarchy = CreateSceneHierarchyObject(sceneHierarchyCollection, scene);
+			gameObjectsAlreadyProcessed.AddRange(sceneHierarchy.GameObjects);
+		}
+
+		//Create hierarchies for prefabs with an existing PrefabInstance
+		foreach (IPrefabInstance prefab in gameData.GameBundle.FetchAssets().OfType<IPrefabInstance>())
+		{
+			if (prefab.RootGameObjectP is { } root && !gameObjectsAlreadyProcessed.Contains(root))
+			{
+				//Prior to 2018.3, Prefab was an actual asset inside "*.prefab" files.
+				if (prefab is IPrefabMarker prefabMarker)
+				{
+					foreach (IEditorExtension editorExtension in root.FetchHierarchy())
+					{
+						editorExtension.PrefabInternal_C18P = prefabMarker;
+					}
+				}
+
+				PrefabHierarchyObject prefabHierarchy = CreatePrefabHierarchyObject(prefabHierarchyCollection, root, prefab);
+				gameObjectsAlreadyProcessed.AddRange(prefabHierarchy.GameObjects);
+			}
+		}
+
+		//Create hierarchies for prefabs without an existing PrefabInstance
 		foreach (IGameObject asset in gameData.GameBundle.FetchAssets().OfType<IGameObject>())
 		{
 			if (gameObjectsAlreadyProcessed.Contains(asset))
@@ -88,29 +100,19 @@ public sealed class PrefabProcessor : IAssetProcessor
 			IGameObject root = asset.GetRoot();
 			if (gameObjectsAlreadyProcessed.Add(root))
 			{
-				if (root.Collection.IsScene)
-				{
-					SceneHierarchyObject sceneHierarchy = CreateSceneHierarchyObject(prefabCollection, root.Collection.Scene);
-					gameObjectsAlreadyProcessed.AddRange(sceneHierarchy.GameObjects);
-					sceneHierarchy.SetMainAssets();
-				}
-				else
-				{
-					IPrefabInstance prefab = CreatePrefab(prefabCollection, root);
+				IPrefabInstance prefab = CreatePrefab(prefabInstanceCollection, root);
 
-					//Prior to 2018.3, Prefab was an actual asset inside "*.prefab" files.
-					if (prefab is IPrefabMarker prefabMarker)
+				//Prior to 2018.3, Prefab was an actual asset inside "*.prefab" files.
+				if (prefab is IPrefabMarker prefabMarker)
+				{
+					foreach (IEditorExtension editorExtension in root.FetchHierarchy())
 					{
-						foreach (IEditorExtension editorExtension in root.FetchHierarchy())
-						{
-							editorExtension.PrefabInternal_C18P = prefabMarker;
-						}
+						editorExtension.PrefabInternal_C18P = prefabMarker;
 					}
-
-					PrefabHierarchyObject prefabHierarchy = CreatePrefabHierarchyObject(prefabCollection, root, prefab);
-					gameObjectsAlreadyProcessed.AddRange(prefabHierarchy.GameObjects);
-					prefabHierarchy.SetMainAssets();
 				}
+
+				PrefabHierarchyObject prefabHierarchy = CreatePrefabHierarchyObject(prefabHierarchyCollection, root, prefab);
+				gameObjectsAlreadyProcessed.AddRange(prefabHierarchy.GameObjects);
 			}
 		}
 	}
@@ -187,5 +189,10 @@ public sealed class PrefabProcessor : IAssetProcessor
 		prefabHierarchy.SetMainAssets();
 
 		return prefabHierarchy;
+	}
+
+	private static bool HasNoTransform(IGameObject gameObject)
+	{
+		return !gameObject.TryGetComponent<ITransform>(out _);
 	}
 }
