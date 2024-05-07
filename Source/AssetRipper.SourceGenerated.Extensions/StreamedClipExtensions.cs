@@ -8,7 +8,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static int CurveCount(this IStreamedClip clip)
 		{
-			return clip.Has_CurveCount_UInt32() ? (int)clip.CurveCount_UInt32 : clip.CurveCount_UInt16;
+			return clip.Has_CurveCount_UInt32() ? (int)clip.CurveCount_UInt32 : clip.CurveCount_UInt16 + clip.DiscreteCurveCount;
 		}
 	}
 }
