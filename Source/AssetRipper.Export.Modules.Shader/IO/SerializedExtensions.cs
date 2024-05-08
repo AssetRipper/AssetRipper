@@ -333,7 +333,10 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 						writer.Write('A');
 					}
 				}
-				writer.Write($" {index}\n");
+				if (index != -1) { 
+					writer.Write($" {index}");
+				}
+				writer.Write($"\n");
 			}
 		}
 
