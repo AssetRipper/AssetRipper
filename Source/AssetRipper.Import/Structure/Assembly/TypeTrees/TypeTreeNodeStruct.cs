@@ -17,6 +17,7 @@ public readonly struct TypeTreeNodeStruct
 	public IReadOnlyList<TypeTreeNodeStruct> SubNodes => subNodes;
 	public bool AlignBytes => MetaFlag.IsAlignBytes();
 	public bool TreatIntegerAsChar => MetaFlag.IsCharPropertyMask();
+	public bool FlowMappedInYaml => MetaFlag.IsTransferUsingFlowMappingStyle();
 
 	private readonly TypeTreeNodeStruct[] subNodes;
 

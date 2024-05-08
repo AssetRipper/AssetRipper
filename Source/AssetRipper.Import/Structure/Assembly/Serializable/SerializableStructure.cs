@@ -14,6 +14,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 	public sealed class SerializableStructure : UnityAssetBase
 	{
 		public override int SerializedVersion => Type.Version;
+		public override bool FlowMappedInYaml => Type.FlowMappedInYaml;
 
 		internal SerializableStructure(SerializableType type, int depth)
 		{

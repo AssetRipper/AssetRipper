@@ -103,6 +103,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 		public IReadOnlyList<Field> Fields { get; protected set; }
 		public int FieldCount => BaseFieldCount + Fields.Count;
 		public virtual int Version => 1;
+		public virtual bool FlowMappedInYaml => false;
 
 		internal int BaseFieldCount
 		{

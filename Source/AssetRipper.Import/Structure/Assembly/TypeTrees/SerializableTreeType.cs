@@ -5,20 +5,22 @@ namespace AssetRipper.Import.Structure.Assembly.TypeTrees
 {
 	public sealed class SerializableTreeType : SerializableType
 	{
-		private SerializableTreeType(string? @namespace, string name, PrimitiveType type, int version) : base(@namespace, type, name)
+		private SerializableTreeType(string? @namespace, string name, PrimitiveType type, int version, bool flowMappedInYaml) : base(@namespace, type, name)
 		{
 			Version = version;
+			FlowMappedInYaml = flowMappedInYaml;
 		}
 
-		private SerializableTreeType(string name, PrimitiveType type, int version) : this(null, name, type, version)
+		private SerializableTreeType(string name, PrimitiveType type, int version, bool flowMappedInYaml) : this(null, name, type, version, flowMappedInYaml)
 		{
 		}
 
 		public override int Version { get; }
+		public override bool FlowMappedInYaml { get; }
 
 		public static SerializableTreeType FromRootNode(TypeTreeNodeStruct rootNode)
 		{
-			SerializableTreeType serializableTreeType = new SerializableTreeType(rootNode.TypeName, PrimitiveType.Complex, rootNode.Version);
+			SerializableTreeType serializableTreeType = new SerializableTreeType(rootNode.TypeName, PrimitiveType.Complex, rootNode.Version, rootNode.FlowMappedInYaml);
 
 			List<Field> fields = new();
 			int startIndex = FindStartingIndex(rootNode);
@@ -39,7 +41,7 @@ namespace AssetRipper.Import.Structure.Assembly.TypeTrees
 			{
 				if (primitiveNode.IsPPtr)
 				{
-					serializableTreeType = new SerializableTreeType("UnityEngine", "Object", primitiveType, primitiveNode.Version);
+					serializableTreeType = new SerializableTreeType("UnityEngine", "Object", primitiveType, primitiveNode.Version, primitiveNode.FlowMappedInYaml);
 				}
 				else
 				{
@@ -48,7 +50,7 @@ namespace AssetRipper.Import.Structure.Assembly.TypeTrees
 			}
 			else
 			{
-				serializableTreeType = new SerializableTreeType(typeName, primitiveType, primitiveNode.Version);
+				serializableTreeType = new SerializableTreeType(typeName, primitiveType, primitiveNode.Version, primitiveNode.FlowMappedInYaml);
 			}
 
 			fields.Add(new Field(serializableTreeType, arrayDepth, node.Name, alignBytes));
@@ -56,7 +58,7 @@ namespace AssetRipper.Import.Structure.Assembly.TypeTrees
 
 		private static SerializableTreeType FromComplexNode(string name, TypeTreeNodeStruct node)
 		{
-			SerializableTreeType serializableTreeType = new SerializableTreeType(name, PrimitiveType.Complex, node.Version);
+			SerializableTreeType serializableTreeType = new SerializableTreeType(name, PrimitiveType.Complex, node.Version, node.FlowMappedInYaml);
 			List<Field> fields = new();
 			foreach (TypeTreeNodeStruct subNode in node.SubNodes)
 			{
