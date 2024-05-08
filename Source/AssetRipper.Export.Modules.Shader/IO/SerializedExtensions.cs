@@ -472,10 +472,9 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 			writer.WriteIndent(4);
 			if (_this.CompValue() == StencilComp.Disabled)
 			{
-				writer.Write($"Comp{type.ToSuffixString()} [{_this.CompValue()}]\n");
 				writer.Write($"// When the value is set to 'Disabled', it indicates that this is the default value defined using Properties.\n");
-				writer.Write($"// Unity Shader Manual on CompareFunction: https://docs.unity3d.com/Manual/SL-Stencil.html#comparison-operation-values\n");
-				writer.Write($"// Unity Scripting API on CompareFunction: https://docs.unity3d.com/ScriptReference/Rendering.CompareFunction.html\n");
+				writer.Write($"// https://github.com/AssetRipper/AssetRipper/pull/1337\n");
+				writer.Write($"Comp{type.ToSuffixString()} [{_this.CompValue()}]\n");
 			}
 			else 
 			{ 
