@@ -27,7 +27,7 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 		public static void Export(this ISerializedPass _this, ShaderWriter writer)
 		{
 			writer.WriteIndent(2);
-			writer.Write($"{_this.Type.ToString()} ");
+			writer.Write($"{((SerializedPassType)_this.Type).ToString()} ");
 
 			if (_this.Type == (int)SerializedPassType.UsePass)
 			{
