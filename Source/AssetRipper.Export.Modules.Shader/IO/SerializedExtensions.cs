@@ -470,9 +470,12 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 		public static void Export(this ISerializedStencilOp _this, TextWriter writer, StencilType type)
 		{
 			writer.WriteIndent(4);
-			if (_this.Comp.Val == 0)
+			if (_this.CompValue() == StencilComp.Disabled)
 			{
-				writer.Write($"Comp{type.ToSuffixString()} [{_this.CompValue()}] // When the value is set to 'Disabled', it indicates that this is the default value defined using Properties.\n");
+				writer.Write($"Comp{type.ToSuffixString()} [{_this.CompValue()}]\n");
+				writer.Write($"// When the value is set to 'Disabled', it indicates that this is the default value defined using Properties.\n");
+				writer.Write($"// Unity Shader Manual on CompareFunction: https://docs.unity3d.com/Manual/SL-Stencil.html#comparison-operation-values\n");
+				writer.Write($"// Unity Scripting API on CompareFunction: https://docs.unity3d.com/ScriptReference/Rendering.CompareFunction.html\n");
 			}
 			else 
 			{ 
