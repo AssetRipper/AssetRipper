@@ -1,7 +1,5 @@
 using AssetRipper.Assets;
 using AssetRipper.Assets.Cloning;
-using AssetRipper.Assets.Export;
-using AssetRipper.Assets.Export.Yaml;
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Assets.Traversal;
@@ -10,7 +8,6 @@ using AssetRipper.Import.Structure.Assembly.Mono;
 using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
-using AssetRipper.Yaml;
 
 namespace AssetRipper.Import.Structure.Assembly.Serializable
 {
@@ -55,16 +52,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 		{
 			if (walker.EnterAsset(this))
 			{
-				bool hasSerializedVersion = SerializedVersion > 1;
-				if (hasSerializedVersion)
-				{
-					if (walker.EnterField(this, "serializedVersion"))
-					{
-						walker.VisitPrimitive(SerializedVersion);
-						walker.ExitField(this, "serializedVersion");
-					}
-				}
-				bool hasEmittedFirstField = hasSerializedVersion;
+				bool hasEmittedFirstField = false;
 				for (int i = 0; i < Fields.Length; i++)
 				{
 					SerializableType.Field etalon = Type.GetField(i);
@@ -164,6 +152,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 			if (source is null)
 			{
 				Reset();
+				InitializeFields(converter.TargetCollection.Version);
 			}
 			else
 			{
@@ -173,23 +162,39 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 
 		public void CopyValues(SerializableStructure source, PPtrConverter converter)
 		{
-			if (source.Type != Type)
-			{
-				throw new ArgumentException($"Type {source.Type} doesn't match with {Type}", nameof(source));
-			}
 			if (source.Depth != Depth)
 			{
 				throw new ArgumentException($"Depth {source.Depth} doesn't match with {Depth}", nameof(source));
 			}
-			for (int i = 0; i < Fields.Length; i++)
+			if (source.Type == Type)
 			{
-				SerializableField sourceField = source.Fields[i];
-				if (sourceField.CValue is null)
+				for (int i = 0; i < Fields.Length; i++)
 				{
-					Fields[i] = sourceField;
+					SerializableField sourceField = source.Fields[i];
+					if (sourceField.CValue is null)
+					{
+						Fields[i] = sourceField;
+					}
+					else
+					{
+						Fields[i].CopyValues(sourceField, converter.TargetCollection.Version, Depth, Type.Fields[i], converter);
+					}
 				}
-				else
+			}
+			else
+			{
+				for (int i = 0; i < Fields.Length; i++)
 				{
+					string fieldName = Type.Fields[i].Name;
+					int index = -1;
+					for (int j = 0; j < source.Type.Fields.Count; j++)
+					{
+						if (fieldName == source.Type.Fields[j].Name)
+						{
+							index = j;
+						}
+					}
+					SerializableField sourceField = index < 0 ? default : source.Fields[index];
 					Fields[i].CopyValues(sourceField, converter.TargetCollection.Version, Depth, Type.Fields[i], converter);
 				}
 			}
@@ -207,14 +212,28 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 			((Span<SerializableField>)Fields).Clear();
 		}
 
+		public void InitializeFields(UnityVersion version)
+		{
+			for (int i = 0; i < Fields.Length; i++)
+			{
+				SerializableType.Field etalon = Type.Fields[i];
+				if (IsAvailable(etalon))
+				{
+					Fields[i].Initialize(version, Depth, etalon);
+				}
+			}
+		}
+
 		/// <summary>
 		/// 8 might have been an arbitrarily chosen number, but I think it's because the limit was supposedly 7 when mafaca made uTinyRipper.
 		/// An official source is required, but forum posts suggest 7 and later 10 as the limits.
 		/// It may be desirable to increase this number or do a Unity version check.
 		/// </summary>
+		/// <remarks>
+		/// <see href="https://forum.unity.com/threads/serialization-depth-limit-and-recursive-serialization.1263599/"/><br/>
+		/// <see href="https://forum.unity.com/threads/getting-a-serialization-depth-limit-7-error-for-no-reason.529850/"/><br/>
+		/// <see href="https://forum.unity.com/threads/4-5-serialization-depth.248321/"/>
+		/// </remarks>
 		private static int GetMaxDepthLevel() => 8;
-		//https://forum.unity.com/threads/serialization-depth-limit-and-recursive-serialization.1263599/
-		//https://forum.unity.com/threads/getting-a-serialization-depth-limit-7-error-for-no-reason.529850/
-		//https://forum.unity.com/threads/4-5-serialization-depth.248321/
 	}
 }

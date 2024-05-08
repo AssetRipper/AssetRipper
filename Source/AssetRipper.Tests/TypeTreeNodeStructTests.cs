@@ -1,4 +1,5 @@
-﻿using AssetRipper.IO.Files.SerializedFiles.Parser.TypeTrees;
+﻿using AssetRipper.Import.Structure.Assembly.TypeTrees;
+using AssetRipper.IO.Files.SerializedFiles.Parser.TypeTrees;
 
 namespace AssetRipper.Tests;
 

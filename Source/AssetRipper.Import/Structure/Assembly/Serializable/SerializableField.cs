@@ -25,7 +25,6 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 					{
 						PValue = reader.ReadBoolean() ? 1U : 0U;
 					}
-					reader.Align();
 					break;
 
 				case PrimitiveType.Char:
@@ -37,7 +36,6 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 					{
 						PValue = reader.ReadChar();
 					}
-					reader.Align();
 					break;
 
 				case PrimitiveType.SByte:
@@ -49,7 +47,6 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 					{
 						PValue = unchecked((byte)reader.ReadSByte());
 					}
-					reader.Align();
 					break;
 
 				case PrimitiveType.Byte:
@@ -61,7 +58,6 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 					{
 						PValue = reader.ReadByte();
 					}
-					reader.Align();
 					break;
 
 				case PrimitiveType.Short:
@@ -73,7 +69,6 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 					{
 						PValue = unchecked((ushort)reader.ReadInt16());
 					}
-					reader.Align();
 					break;
 
 				case PrimitiveType.UShort:
@@ -85,7 +80,6 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 					{
 						PValue = reader.ReadUInt16();
 					}
-					reader.Align();
 					break;
 
 				case PrimitiveType.Int:
@@ -193,6 +187,11 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 					throw new NotSupportedException(etalon.Type.Type.ToString());
 			}
 
+			if (etalon.Align)
+			{
+				reader.Align();
+			}
+
 			static IUnityAssetBase CreateAndReadComplexStructure(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, int depth, SerializableType.Field etalon)
 			{
 				IUnityAssetBase asset = etalon.Type.CreateInstance(depth + 1, version);
@@ -232,7 +231,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 					}
 					else
 					{
-						writer.Write((char)PValue);
+						writer.Write(unchecked((char)PValue));
 					}
 					writer.AlignStream();
 					break;
@@ -256,7 +255,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 					}
 					else
 					{
-						writer.Write((byte)PValue);
+						writer.Write(unchecked((byte)PValue));
 					}
 					writer.AlignStream();
 					break;
@@ -280,7 +279,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 					}
 					else
 					{
-						writer.Write((ushort)PValue);
+						writer.Write(unchecked((ushort)PValue));
 					}
 					writer.AlignStream();
 					break;
@@ -303,7 +302,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 					}
 					else
 					{
-						writer.Write((uint)PValue);
+						writer.Write(unchecked((uint)PValue));
 					}
 					break;
 
@@ -336,7 +335,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 					}
 					else
 					{
-						writer.Write(BitConverter.UInt32BitsToSingle((uint)PValue));
+						writer.Write(BitConverter.UInt32BitsToSingle(unchecked((uint)PValue)));
 					}
 					break;
 
@@ -507,25 +506,25 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 							walker.VisitPrimitive(PValue != 0);
 							break;
 						case PrimitiveType.Char:
-							walker.VisitPrimitive((char)PValue);
+							walker.VisitPrimitive(unchecked((char)PValue));
 							break;
 						case PrimitiveType.SByte:
 							walker.VisitPrimitive(unchecked((sbyte)PValue));
 							break;
 						case PrimitiveType.Byte:
-							walker.VisitPrimitive((byte)PValue);
+							walker.VisitPrimitive(unchecked((byte)PValue));
 							break;
 						case PrimitiveType.Short:
 							walker.VisitPrimitive(unchecked((short)PValue));
 							break;
 						case PrimitiveType.UShort:
-							walker.VisitPrimitive((ushort)PValue);
+							walker.VisitPrimitive(unchecked((ushort)PValue));
 							break;
 						case PrimitiveType.Int:
 							walker.VisitPrimitive(unchecked((int)PValue));
 							break;
 						case PrimitiveType.UInt:
-							walker.VisitPrimitive((uint)PValue);
+							walker.VisitPrimitive(unchecked((uint)PValue));
 							break;
 						case PrimitiveType.Long:
 							walker.VisitPrimitive(unchecked((long)PValue));
@@ -534,7 +533,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 							walker.VisitPrimitive(PValue);
 							break;
 						case PrimitiveType.Single:
-							walker.VisitPrimitive(BitConverter.UInt32BitsToSingle((uint)PValue));
+							walker.VisitPrimitive(BitConverter.UInt32BitsToSingle(unchecked((uint)PValue)));
 							break;
 						case PrimitiveType.Double:
 							walker.VisitPrimitive(BitConverter.UInt64BitsToDouble(PValue));
@@ -579,16 +578,22 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 				PValue = default;
 				if (etalon.Type.Type == PrimitiveType.Complex)
 				{
-					IUnityAssetBase[] sourceStructures = (IUnityAssetBase[])source.CValue;
-					IUnityAssetBase[] thisStructures = new IUnityAssetBase[sourceStructures.Length];
-					for (int i = 0; i < sourceStructures.Length; i++)
+					if (source.CValue is IUnityAssetBase[] sourceStructures)
 					{
-						IUnityAssetBase sourceStructure = sourceStructures[i];
-						IUnityAssetBase thisStructure = etalon.Type.CreateInstance(depth + 1, version);
-						thisStructure.CopyValues(sourceStructure, converter);
-						thisStructures[i] = thisStructure;
+						IUnityAssetBase[] thisStructures = new IUnityAssetBase[sourceStructures.Length];
+						for (int i = 0; i < sourceStructures.Length; i++)
+						{
+							IUnityAssetBase sourceStructure = sourceStructures[i];
+							IUnityAssetBase thisStructure = etalon.Type.CreateInstance(depth + 1, version);
+							thisStructure.CopyValues(sourceStructure, converter);
+							thisStructures[i] = thisStructure;
+						}
+						CValue = thisStructures;
 					}
-					CValue = thisStructures;
+					else
+					{
+						CValue = Array.Empty<IUnityAssetBase>();
+					}
 				}
 				else
 				{
@@ -596,79 +601,79 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 					{
 						case PrimitiveType.Bool:
 							{
-								ReadOnlySpan<bool> span = (bool[])source.CValue;
+								ReadOnlySpan<bool> span = source.CValue as bool[];
 								CValue = span.ToArray();
 							}
 							break;
 						case PrimitiveType.Char:
 							{
-								ReadOnlySpan<char> span = (char[])source.CValue;
+								ReadOnlySpan<char> span = source.CValue as char[];
 								CValue = span.ToArray();
 							}
 							break;
 						case PrimitiveType.SByte:
 							{
-								ReadOnlySpan<byte> span = (byte[])source.CValue;
+								ReadOnlySpan<byte> span = source.CValue as byte[];
 								CValue = span.ToArray();
 							}
 							break;
 						case PrimitiveType.Byte:
 							{
-								ReadOnlySpan<byte> span = (byte[])source.CValue;
+								ReadOnlySpan<byte> span = source.CValue as byte[];
 								CValue = span.ToArray();
 							}
 							break;
 						case PrimitiveType.Short:
 							{
-								ReadOnlySpan<short> span = (short[])source.CValue;
+								ReadOnlySpan<short> span = source.CValue as short[];
 								CValue = span.ToArray();
 							}
 							break;
 						case PrimitiveType.UShort:
 							{
-								ReadOnlySpan<ushort> span = (ushort[])source.CValue;
+								ReadOnlySpan<ushort> span = source.CValue as ushort[];
 								CValue = span.ToArray();
 							}
 							break;
 						case PrimitiveType.Int:
 							{
-								ReadOnlySpan<int> span = (int[])source.CValue;
+								ReadOnlySpan<int> span = source.CValue as int[];
 								CValue = span.ToArray();
 							}
 							break;
 						case PrimitiveType.UInt:
 							{
-								ReadOnlySpan<uint> span = (uint[])source.CValue;
+								ReadOnlySpan<uint> span = source.CValue as uint[];
 								CValue = span.ToArray();
 							}
 							break;
 						case PrimitiveType.Long:
 							{
-								ReadOnlySpan<long> span = (long[])source.CValue;
+								ReadOnlySpan<long> span = source.CValue as long[];
 								CValue = span.ToArray();
 							}
 							break;
 						case PrimitiveType.ULong:
 							{
-								ReadOnlySpan<ulong> span = (ulong[])source.CValue;
+								ReadOnlySpan<ulong> span = source.CValue as ulong[];
 								CValue = span.ToArray();
 							}
 							break;
 						case PrimitiveType.Single:
 							{
-								ReadOnlySpan<float> span = (float[])source.CValue;
+								ReadOnlySpan<float> span = source.CValue as float[];
 								CValue = span.ToArray();
 							}
 							break;
 						case PrimitiveType.Double:
 							{
-								ReadOnlySpan<double> span = (double[])source.CValue;
+								ReadOnlySpan<double> span = source.CValue as double[];
 								CValue = span.ToArray();
 							}
 							break;
 						case PrimitiveType.String:
 							{
-								ReadOnlySpan<string> span = (string[])source.CValue;
+								ReadOnlySpan<string> span = source.CValue as string[];
 								CValue = span.ToArray();
 							}
 							break;
@@ -679,22 +684,58 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 			}
 			else if (etalon.Type.Type == PrimitiveType.Complex)
 			{
-				IUnityAssetBase sourceStructure = (IUnityAssetBase)source.CValue;
 				IUnityAssetBase thisStructure = etalon.Type.CreateInstance(depth + 1, version);
-				thisStructure.CopyValues(sourceStructure, converter);
+				if (source.CValue is IUnityAssetBase sourceStructure)
+				{
+					thisStructure.CopyValues(sourceStructure, converter);
+				}
 				PValue = default;
 				CValue = thisStructure;
 			}
 			else if (etalon.Type.Type is PrimitiveType.String)
 			{
-				string value = (string)source.CValue;
 				PValue = default;
-				CValue = value;
+				CValue = source.CValue as string ?? "";
 			}
 			else
 			{
 				PValue = source.PValue;
 				CValue = default!;
+			}
+		}
+
+		internal void Initialize(UnityVersion version, int depth, in SerializableType.Field etalon)
+		{
+			PValue = default;
+			if (etalon.IsArray)
+			{
+				CValue = etalon.Type.Type switch
+				{
+					PrimitiveType.Bool => Array.Empty<bool>(),
+					PrimitiveType.Char => Array.Empty<char>(),
+					PrimitiveType.SByte => Array.Empty<sbyte>(),
+					PrimitiveType.Byte => Array.Empty<byte>(),
+					PrimitiveType.Short => Array.Empty<short>(),
+					PrimitiveType.UShort => Array.Empty<ushort>(),
+					PrimitiveType.Int => Array.Empty<int>(),
+					PrimitiveType.UInt => Array.Empty<uint>(),
+					PrimitiveType.Long => Array.Empty<long>(),
+					PrimitiveType.ULong => Array.Empty<ulong>(),
+					PrimitiveType.Single => Array.Empty<float>(),
+					PrimitiveType.Double => Array.Empty<double>(),
+					PrimitiveType.String => Array.Empty<string>(),
+					PrimitiveType.Complex => Array.Empty<IUnityAssetBase>(),
+					_ => throw new NotSupportedException(etalon.Type.Type.ToString()),
+				};
+			}
+			else
+			{
+				CValue = etalon.Type.Type switch
+				{
+					PrimitiveType.String => "",
+					PrimitiveType.Complex => etalon.Type.CreateInstance(depth + 1, version),
+					_ => default!,
+				};
 			}
 		}
 
@@ -724,7 +765,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 			}
 		}
 
-		private string GetDebuggerDisplay()
+		private readonly string GetDebuggerDisplay()
 		{
 			return CValue?.ToString() ?? PValue.ToString();
 		}

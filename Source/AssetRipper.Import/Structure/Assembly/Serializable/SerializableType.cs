@@ -7,15 +7,8 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 {
 	public abstract class SerializableType
 	{
-		public readonly struct Field
+		public readonly record struct Field(SerializableType Type, int ArrayDepth, string Name, bool Align)
 		{
-			public Field(SerializableType type, int arrayDepth, string name)
-			{
-				Type = type;
-				ArrayDepth = arrayDepth;
-				Name = name;
-			}
-
 			public override string? ToString()
 			{
 				if (Type == null)
@@ -26,10 +19,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 				return $"{Type}{string.Concat(Enumerable.Repeat("[]", ArrayDepth))} {Name}";
 			}
 
-			public SerializableType Type { get; }
-			public int ArrayDepth { get; }
-			public bool IsArray => ArrayDepth > 0;
-			public string Name { get; }
+			public bool IsArray => ArrayDepth == 1;
 		}
 
 		protected SerializableType(string? @namespace, PrimitiveType type, string name)
@@ -56,7 +46,9 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 			{
 				return PPtr_Object.Create(version);
 			}
-			return new SerializableStructure(this, depth);
+			SerializableStructure structure = new(this, depth);
+			structure.InitializeFields(version);
+			return structure;
 		}
 
 		public Field GetField(int index)
