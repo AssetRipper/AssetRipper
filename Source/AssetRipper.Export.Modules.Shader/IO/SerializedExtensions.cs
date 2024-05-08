@@ -333,7 +333,10 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 						writer.Write('A');
 					}
 				}
-				writer.Write($" {index}\n");
+				if (index != -1) { 
+					writer.Write($" {index}");
+				}
+				writer.Write($"\n");
 			}
 		}
 
@@ -467,7 +470,16 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 		public static void Export(this ISerializedStencilOp _this, TextWriter writer, StencilType type)
 		{
 			writer.WriteIndent(4);
-			writer.Write($"Comp{type.ToSuffixString()} {_this.CompValue()}\n");
+			if (_this.CompValue() == StencilComp.Disabled)
+			{
+				// When the value is set to 'Disabled', it indicates that this is the default value defined using Properties.
+				// https://github.com/AssetRipper/AssetRipper/pull/1337
+				writer.Write($"Comp{type.ToSuffixString()} [{_this.CompValue()}]\n");
+			}
+			else 
+			{ 
+				writer.Write($"Comp{type.ToSuffixString()} {_this.CompValue()}\n");
+			}
 			writer.WriteIndent(4);
 			writer.Write($"Pass{type.ToSuffixString()} {_this.PassValue()}\n");
 			writer.WriteIndent(4);
