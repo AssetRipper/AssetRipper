@@ -472,8 +472,8 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 			writer.WriteIndent(4);
 			if (_this.CompValue() == StencilComp.Disabled)
 			{
-				writer.Write($"// When the value is set to 'Disabled', it indicates that this is the default value defined using Properties.\n");
-				writer.Write($"// https://github.com/AssetRipper/AssetRipper/pull/1337\n");
+				// When the value is set to 'Disabled', it indicates that this is the default value defined using Properties.
+				// https://github.com/AssetRipper/AssetRipper/pull/1337
 				writer.Write($"Comp{type.ToSuffixString()} [{_this.CompValue()}]\n");
 			}
 			else 
