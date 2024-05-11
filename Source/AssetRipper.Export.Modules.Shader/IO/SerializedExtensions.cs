@@ -175,6 +175,9 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 			switch (_this.GetType_())
 			{
 				case SerializedPropertyType.Color:
+					writer.Write("Color");
+					break;
+
 				case SerializedPropertyType.Vector:
 					writer.Write("Vector");
 					break;
