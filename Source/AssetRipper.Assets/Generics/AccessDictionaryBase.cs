@@ -7,7 +7,7 @@ namespace AssetRipper.Assets.Generics
 	/// </summary>
 	/// <typeparam name="TKey">The exposed key type, such as an interface, base type, or primitive type</typeparam>
 	/// <typeparam name="TValue">The exposed value type, such as an interface, base type, or primitive type</typeparam>
-	public abstract class AccessDictionaryBase<TKey, TValue> : IReadOnlyCollection<AccessPairBase<TKey, TValue>>
+	public abstract class AccessDictionaryBase<TKey, TValue> : IReadOnlyCollection<AccessPairBase<TKey, TValue>>, IReadOnlyCollection<KeyValuePair<TKey, TValue>>
 		where TKey : notnull
 		where TValue : notnull
 	{
@@ -168,6 +168,16 @@ namespace AssetRipper.Assets.Generics
 		public override string ToString()
 		{
 			return $"{nameof(Count)} = {Count}";
+		}
+
+		IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator()
+		{
+			IEnumerator<AccessPairBase<TKey, TValue>> enumerator = GetEnumerator();
+			while (enumerator.MoveNext())
+			{
+				AccessPairBase<TKey, TValue> pair = enumerator.Current;
+				yield return new KeyValuePair<TKey, TValue>(pair.Key, pair.Value);
+			}
 		}
 
 		private class KeyEnumerable : IEnumerable<TKey>

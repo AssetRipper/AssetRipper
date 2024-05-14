@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Assets.Traversal;
 using AssetRipper.Primitives;
@@ -73,45 +72,26 @@ public class DefaultJsonWalker : AssetWalker
 		return true;
 	}
 
-	public override bool EnterList<T>(AssetList<T> list)
+	public override bool EnterList<T>(IReadOnlyList<T> list)
 	{
 		Writer.WriteLine('[');
 		Writer.Indent++;
 		return true;
 	}
 
-	public override void DivideList<T>(AssetList<T> list)
+	public override void DivideList<T>(IReadOnlyList<T> list)
 	{
 		Writer.WriteLine(',');
 	}
 
-	public override void ExitList<T>(AssetList<T> list)
+	public override void ExitList<T>(IReadOnlyList<T> list)
 	{
 		Writer.WriteLine();
 		Writer.Indent--;
 		Writer.Write(']');
 	}
 
-	public override bool EnterArray<T>(T[] array)
-	{
-		Writer.WriteLine('[');
-		Writer.Indent++;
-		return true;
-	}
-
-	public override void DivideArray<T>(T[] array)
-	{
-		Writer.WriteLine(',');
-	}
-
-	public override void ExitArray<T>(T[] array)
-	{
-		Writer.WriteLine();
-		Writer.Indent--;
-		Writer.Write(']');
-	}
-
-	public override bool EnterDictionary<TKey, TValue>(AssetDictionary<TKey, TValue> dictionary)
+	public override bool EnterDictionary<TKey, TValue>(IReadOnlyCollection<KeyValuePair<TKey, TValue>> dictionary)
 	{
 		if (IsString<TKey>())
 		{
@@ -126,12 +106,12 @@ public class DefaultJsonWalker : AssetWalker
 		return true;
 	}
 
-	public override void DivideDictionary<TKey, TValue>(AssetDictionary<TKey, TValue> dictionary)
+	public override void DivideDictionary<TKey, TValue>(IReadOnlyCollection<KeyValuePair<TKey, TValue>> dictionary)
 	{
 		Writer.WriteLine(',');
 	}
 
-	public override void ExitDictionary<TKey, TValue>(AssetDictionary<TKey, TValue> dictionary)
+	public override void ExitDictionary<TKey, TValue>(IReadOnlyCollection<KeyValuePair<TKey, TValue>> dictionary)
 	{
 		if (IsString<TKey>())
 		{
@@ -147,7 +127,7 @@ public class DefaultJsonWalker : AssetWalker
 		}
 	}
 
-	public override bool EnterDictionaryPair<TKey, TValue>(AssetPair<TKey, TValue> pair)
+	public override bool EnterDictionaryPair<TKey, TValue>(KeyValuePair<TKey, TValue> pair)
 	{
 		if (IsString<TKey>())
 		{
@@ -159,7 +139,7 @@ public class DefaultJsonWalker : AssetWalker
 		}
 	}
 
-	public override void DivideDictionaryPair<TKey, TValue>(AssetPair<TKey, TValue> pair)
+	public override void DivideDictionaryPair<TKey, TValue>(KeyValuePair<TKey, TValue> pair)
 	{
 		if (IsString<TKey>())
 		{
@@ -171,7 +151,7 @@ public class DefaultJsonWalker : AssetWalker
 		}
 	}
 
-	public override void ExitDictionaryPair<TKey, TValue>(AssetPair<TKey, TValue> pair)
+	public override void ExitDictionaryPair<TKey, TValue>(KeyValuePair<TKey, TValue> pair)
 	{
 		if (IsString<TKey>())
 		{
@@ -182,7 +162,7 @@ public class DefaultJsonWalker : AssetWalker
 		}
 	}
 
-	public override bool EnterPair<TKey, TValue>(AssetPair<TKey, TValue> pair)
+	public override bool EnterPair<TKey, TValue>(KeyValuePair<TKey, TValue> pair)
 	{
 		Writer.WriteLine('{');
 		Writer.Indent++;
@@ -190,13 +170,13 @@ public class DefaultJsonWalker : AssetWalker
 		return true;
 	}
 
-	public override void DividePair<TKey, TValue>(AssetPair<TKey, TValue> pair)
+	public override void DividePair<TKey, TValue>(KeyValuePair<TKey, TValue> pair)
 	{
 		Writer.WriteLine(',');
 		Writer.Write("\"Value\": ");
 	}
 
-	public override void ExitPair<TKey, TValue>(AssetPair<TKey, TValue> pair)
+	public override void ExitPair<TKey, TValue>(KeyValuePair<TKey, TValue> pair)
 	{
 		Writer.WriteLine();
 		Writer.Indent--;

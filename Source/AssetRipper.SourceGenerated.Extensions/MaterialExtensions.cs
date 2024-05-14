@@ -1,4 +1,6 @@
-﻿using AssetRipper.SourceGenerated.Classes.ClassID_21;
+﻿using AssetRipper.Assets.Generics;
+using AssetRipper.SourceGenerated.Classes.ClassID_21;
+using AssetRipper.SourceGenerated.Subclasses.FastPropertyName;
 using AssetRipper.SourceGenerated.Subclasses.UnityPropertySheet;
 using AssetRipper.SourceGenerated.Subclasses.UnityTexEnv;
 
@@ -43,19 +45,19 @@ namespace AssetRipper.SourceGenerated.Extensions
 			{
 				return savedProperties
 					.TexEnvs_AssetDictionary_Utf8String_UnityTexEnv_5
-					.Select(pair => new KeyValuePair<Utf8String, IUnityTexEnv>(pair.Key, pair.Value));
+					.Select((AccessPairBase<Utf8String, UnityTexEnv_5> pair) => new KeyValuePair<Utf8String, IUnityTexEnv>(pair.Key, pair.Value));
 			}
 			else if (savedProperties.Has_TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_5())
 			{
 				return savedProperties
 					.TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_5
-					.Select(pair => new KeyValuePair<Utf8String, IUnityTexEnv>(pair.Key.Name, pair.Value));
+					.Select((AccessPairBase<FastPropertyName, UnityTexEnv_5> pair) => new KeyValuePair<Utf8String, IUnityTexEnv>(pair.Key.Name, pair.Value));
 			}
 			else if (savedProperties.Has_TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_3_5())
 			{
 				return savedProperties
 					.TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_3_5
-					.Select(pair => new KeyValuePair<Utf8String, IUnityTexEnv>(pair.Key.Name, pair.Value));
+					.Select((AccessPairBase<FastPropertyName, UnityTexEnv_3_5> pair) => new KeyValuePair<Utf8String, IUnityTexEnv>(pair.Key.Name, pair.Value));
 			}
 			else
 			{

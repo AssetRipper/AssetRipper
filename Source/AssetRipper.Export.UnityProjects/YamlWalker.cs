@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Export.Yaml;
-using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Assets.Traversal;
 using AssetRipper.SourceGenerated;
@@ -148,27 +147,17 @@ public class YamlWalker : AssetWalker
 		}
 	}
 
-	public override bool EnterArray<T>(T[] array)
+	public override bool EnterList<T>(IReadOnlyList<T> list)
 	{
 		return EnterSequence(SequenceStyle.Block);
 	}
 
-	public override void ExitArray<T>(T[] array)
+	public override void ExitList<T>(IReadOnlyList<T> list)
 	{
 		ExitSequence();
 	}
 
-	public override bool EnterList<T>(AssetList<T> list)
-	{
-		return EnterSequence(SequenceStyle.Block);
-	}
-
-	public override void ExitList<T>(AssetList<T> list)
-	{
-		ExitSequence();
-	}
-
-	public override bool EnterPair<TKey, TValue>(AssetPair<TKey, TValue> pair)
+	public override bool EnterPair<TKey, TValue>(KeyValuePair<TKey, TValue> pair)
 	{
 		YamlMappingNode node = new YamlMappingNode();
 		ContextStack.Push(new(node));
@@ -179,7 +168,7 @@ public class YamlWalker : AssetWalker
 		return true;
 	}
 
-	public override void DividePair<TKey, TValue>(AssetPair<TKey, TValue> pair)
+	public override void DividePair<TKey, TValue>(KeyValuePair<TKey, TValue> pair)
 	{
 		Debug.Assert(CurrentMappingNode is not null);
 		Debug.Assert(CurrentSequenceNode is null);
@@ -194,12 +183,12 @@ public class YamlWalker : AssetWalker
 		}
 	}
 
-	public override void ExitPair<TKey, TValue>(AssetPair<TKey, TValue> pair)
+	public override void ExitPair<TKey, TValue>(KeyValuePair<TKey, TValue> pair)
 	{
 		ExitMap();
 	}
 
-	public override bool EnterDictionary<TKey, TValue>(AssetDictionary<TKey, TValue> dictionary)
+	public override bool EnterDictionary<TKey, TValue>(IReadOnlyCollection<KeyValuePair<TKey, TValue>> dictionary)
 	{
 		if (IsStringLike<TKey>())
 		{
@@ -211,7 +200,7 @@ public class YamlWalker : AssetWalker
 		}
 	}
 
-	public override void ExitDictionary<TKey, TValue>(AssetDictionary<TKey, TValue> dictionary)
+	public override void ExitDictionary<TKey, TValue>(IReadOnlyCollection<KeyValuePair<TKey, TValue>> dictionary)
 	{
 		if (IsStringLike<TKey>())
 		{
@@ -223,7 +212,7 @@ public class YamlWalker : AssetWalker
 		}
 	}
 
-	public override bool EnterDictionaryPair<TKey, TValue>(AssetPair<TKey, TValue> pair)
+	public override bool EnterDictionaryPair<TKey, TValue>(KeyValuePair<TKey, TValue> pair)
 	{
 		if (IsStringLike<TKey>())
 		{
@@ -244,7 +233,7 @@ public class YamlWalker : AssetWalker
 		return true;
 	}
 
-	public override void DivideDictionaryPair<TKey, TValue>(AssetPair<TKey, TValue> pair)
+	public override void DivideDictionaryPair<TKey, TValue>(KeyValuePair<TKey, TValue> pair)
 	{
 		if (IsStringLike<TKey>())
 		{
@@ -258,7 +247,7 @@ public class YamlWalker : AssetWalker
 		}
 	}
 
-	public override void ExitDictionaryPair<TKey, TValue>(AssetPair<TKey, TValue> pair)
+	public override void ExitDictionaryPair<TKey, TValue>(KeyValuePair<TKey, TValue> pair)
 	{
 		if (IsStringLike<TKey>())
 		{

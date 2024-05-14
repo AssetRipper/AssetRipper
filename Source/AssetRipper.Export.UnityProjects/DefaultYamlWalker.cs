@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Assets.Traversal;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
@@ -200,7 +199,7 @@ public class DefaultYamlWalker : AssetWalker
 	{
 	}
 
-	public sealed override bool EnterList<T>(AssetList<T> list)
+	public sealed override bool EnterList<T>(IReadOnlyList<T> list)
 	{
 		ThrowIfFlowMapping();
 		if (list.Count == 0)
@@ -215,44 +214,18 @@ public class DefaultYamlWalker : AssetWalker
 		}
 	}
 
-	public sealed override void DivideList<T>(AssetList<T> list)
+	public sealed override void DivideList<T>(IReadOnlyList<T> list)
 	{
 		Writer.WriteLine();
 		Writer.Write("- ");
 		JustEnteredListItem = true;
 	}
 
-	public sealed override void ExitList<T>(AssetList<T> list)
+	public sealed override void ExitList<T>(IReadOnlyList<T> list)
 	{
 	}
 
-	public sealed override bool EnterArray<T>(T[] array)
-	{
-		ThrowIfFlowMapping();
-		if (array.Length == 0)
-		{
-			Writer.Write(" []");
-			return false;
-		}
-		else
-		{
-			DivideArray(array);
-			return true;
-		}
-	}
-
-	public sealed override void DivideArray<T>(T[] array)
-	{
-		Writer.WriteLine();
-		Writer.Write("- ");
-		JustEnteredListItem = true;
-	}
-
-	public sealed override void ExitArray<T>(T[] array)
-	{
-	}
-
-	public sealed override bool EnterDictionary<TKey, TValue>(AssetDictionary<TKey, TValue> dictionary)
+	public sealed override bool EnterDictionary<TKey, TValue>(IReadOnlyCollection<KeyValuePair<TKey, TValue>> dictionary)
 	{
 		ThrowIfFlowMapping();
 		if (dictionary.Count == 0)
@@ -267,7 +240,7 @@ public class DefaultYamlWalker : AssetWalker
 		}
 	}
 
-	public sealed override void DivideDictionary<TKey, TValue>(AssetDictionary<TKey, TValue> dictionary)
+	public sealed override void DivideDictionary<TKey, TValue>(IReadOnlyCollection<KeyValuePair<TKey, TValue>> dictionary)
 	{
 		if (IsStringLike<TKey>())
 		{
@@ -275,11 +248,11 @@ public class DefaultYamlWalker : AssetWalker
 		}
 	}
 
-	public sealed override void ExitDictionary<TKey, TValue>(AssetDictionary<TKey, TValue> dictionary)
+	public sealed override void ExitDictionary<TKey, TValue>(IReadOnlyCollection<KeyValuePair<TKey, TValue>> dictionary)
 	{
 	}
 
-	public sealed override bool EnterDictionaryPair<TKey, TValue>(AssetPair<TKey, TValue> pair)
+	public sealed override bool EnterDictionaryPair<TKey, TValue>(KeyValuePair<TKey, TValue> pair)
 	{
 		ThrowIfFlowMapping();
 		if (IsStringLike<TKey>())
@@ -296,7 +269,7 @@ public class DefaultYamlWalker : AssetWalker
 		return true;
 	}
 
-	public sealed override void DivideDictionaryPair<TKey, TValue>(AssetPair<TKey, TValue> pair)
+	public sealed override void DivideDictionaryPair<TKey, TValue>(KeyValuePair<TKey, TValue> pair)
 	{
 		if (IsStringLike<TKey>())
 		{
@@ -311,12 +284,12 @@ public class DefaultYamlWalker : AssetWalker
 		}
 	}
 
-	public sealed override void ExitDictionaryPair<TKey, TValue>(AssetPair<TKey, TValue> pair)
+	public sealed override void ExitDictionaryPair<TKey, TValue>(KeyValuePair<TKey, TValue> pair)
 	{
 		Writer.Indent--;
 	}
 
-	public sealed override bool EnterPair<TKey, TValue>(AssetPair<TKey, TValue> pair)
+	public sealed override bool EnterPair<TKey, TValue>(KeyValuePair<TKey, TValue> pair)
 	{
 		ThrowIfFlowMapping();
 		if (JustEnteredListItem)
@@ -334,13 +307,13 @@ public class DefaultYamlWalker : AssetWalker
 		return true;
 	}
 
-	public sealed override void DividePair<TKey, TValue>(AssetPair<TKey, TValue> pair)
+	public sealed override void DividePair<TKey, TValue>(KeyValuePair<TKey, TValue> pair)
 	{
 		Writer.WriteLine();
 		Writer.Write("second:");
 	}
 
-	public sealed override void ExitPair<TKey, TValue>(AssetPair<TKey, TValue> pair)
+	public sealed override void ExitPair<TKey, TValue>(KeyValuePair<TKey, TValue> pair)
 	{
 		Writer.Indent--;
 	}

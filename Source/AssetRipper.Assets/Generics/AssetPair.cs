@@ -48,5 +48,10 @@
 				throw new NotSupportedException($"Only immutable values can be used in the setter for {nameof(Value)}.");
 			}
 		}
+
+		public static implicit operator KeyValuePair<TKey, TValue>(AssetPair<TKey, TValue> pair)
+		{
+			return new KeyValuePair<TKey, TValue>(pair.Key, pair.Value);
+		}
 	}
 }
