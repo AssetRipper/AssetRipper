@@ -20,7 +20,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 		{
 			Depth = depth;
 			Type = type ?? throw new ArgumentNullException(nameof(type));
-			Fields = new SerializableField[type.FieldCount];
+			Fields = new SerializableValue[type.FieldCount];
 		}
 
 		public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags)
@@ -146,7 +146,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 
 		public int Depth { get; }
 		public SerializableType Type { get; }
-		public SerializableField[] Fields { get; }
+		public SerializableValue[] Fields { get; }
 
 		public override void CopyValues(IUnityAssetBase? source, PPtrConverter converter)
 		{
@@ -171,7 +171,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 			{
 				for (int i = 0; i < Fields.Length; i++)
 				{
-					SerializableField sourceField = source.Fields[i];
+					SerializableValue sourceField = source.Fields[i];
 					if (sourceField.CValue is null)
 					{
 						Fields[i] = sourceField;
@@ -195,7 +195,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 							index = j;
 						}
 					}
-					SerializableField sourceField = index < 0 ? default : source.Fields[index];
+					SerializableValue sourceField = index < 0 ? default : source.Fields[index];
 					Fields[i].CopyValues(sourceField, converter.TargetCollection.Version, Depth, Type.Fields[i], converter);
 				}
 			}
@@ -210,7 +210,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 
 		public override void Reset()
 		{
-			((Span<SerializableField>)Fields).Clear();
+			((Span<SerializableValue>)Fields).Clear();
 		}
 
 		public void InitializeFields(UnityVersion version)

@@ -10,7 +10,7 @@ using System.Diagnostics;
 namespace AssetRipper.Import.Structure.Assembly.Serializable
 {
 	[DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
-	public record struct SerializableField(ulong PValue, object CValue)
+	public record struct SerializableValue(ulong PValue, object CValue)
 	{
 		public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, int depth, in SerializableType.Field etalon)
 		{
@@ -571,7 +571,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 			}
 		}
 
-		internal void CopyValues(SerializableField source, UnityVersion version, int depth, in SerializableType.Field etalon, PPtrConverter converter)
+		internal void CopyValues(SerializableValue source, UnityVersion version, int depth, in SerializableType.Field etalon, PPtrConverter converter)
 		{
 			if (etalon.IsArray)
 			{
