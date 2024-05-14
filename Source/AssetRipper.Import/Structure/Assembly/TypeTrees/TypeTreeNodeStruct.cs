@@ -64,6 +64,50 @@ public readonly struct TypeTreeNodeStruct
 		}
 	}
 
+	public bool IsPair
+	{
+		get
+		{
+			return TypeName is "pair" && SubNodes.Count == 2 && SubNodes[0].Name == "first" && SubNodes[1].Name == "second";
+		}
+	}
+
+	public bool IsMap
+	{
+		get
+		{
+			return TypeName is "map" && SubNodes.Count == 1 && SubNodes[0].IsArray && SubNodes[0].SubNodes[1].IsPair;
+		}
+	}
+
+	/// <summary>
+	/// This contains the data for an asset's [SerializeReference] fields.
+	/// </summary>
+	/// <remarks>
+	/// This is the last top-level field in the asset's type tree.
+	/// </remarks>
+	public bool IsManagedReferencesRegistry
+	{
+		get
+		{
+			return TypeName is "ManagedReferencesRegistry" && Name is "references" && SubNodes.Count > 1;
+		}
+	}
+
+	/// <summary>
+	/// This is the data for a [SerializeReference] object reference.
+	/// </summary>
+	/// <remarks>
+	/// If the type tree is flattened into a list, this is the last entry in the list.
+	/// </remarks>
+	public bool IsReferencedObjectData
+	{
+		get
+		{
+			return TypeName is "ReferencedObjectData" && Name is "data" && SubNodes.Count is 0;
+		}
+	}
+
 	public bool IsPPtr
 	{
 		get
