@@ -378,6 +378,7 @@ namespace AssetRipper.Import.Structure.Assembly.Mono
 			{
 				switch (name)
 				{
+					case "GUID":
 					case Vector2Name:
 					case Vector2IntName:
 					case Vector3Name:

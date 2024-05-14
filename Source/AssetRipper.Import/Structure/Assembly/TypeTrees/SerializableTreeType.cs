@@ -5,14 +5,10 @@ namespace AssetRipper.Import.Structure.Assembly.TypeTrees
 {
 	public sealed class SerializableTreeType : SerializableType
 	{
-		private SerializableTreeType(string? @namespace, string name, PrimitiveType type, int version, bool flowMappedInYaml) : base(@namespace, type, name)
+		private SerializableTreeType(string name, PrimitiveType type, int version, bool flowMappedInYaml) : base("UnityEngine", type, name)
 		{
 			Version = version;
 			FlowMappedInYaml = flowMappedInYaml;
-		}
-
-		private SerializableTreeType(string name, PrimitiveType type, int version, bool flowMappedInYaml) : this(null, name, type, version, flowMappedInYaml)
-		{
 		}
 
 		public override int Version { get; }
@@ -41,7 +37,7 @@ namespace AssetRipper.Import.Structure.Assembly.TypeTrees
 			{
 				if (primitiveNode.IsPPtr)
 				{
-					serializableTreeType = new SerializableTreeType("UnityEngine", "Object", primitiveType, primitiveNode.Version, primitiveNode.FlowMappedInYaml);
+					serializableTreeType = new SerializableTreeType("Object", primitiveType, primitiveNode.Version, primitiveNode.FlowMappedInYaml);
 				}
 				else
 				{
