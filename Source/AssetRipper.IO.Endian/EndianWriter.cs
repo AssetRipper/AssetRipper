@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Primitives;
 using System.Buffers.Binary;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace AssetRipper.IO.Endian
@@ -140,6 +141,23 @@ namespace AssetRipper.IO.Endian
 			Write(count);
 
 			Write(buffer, index, count);
+			if (IsAlignArray)
+			{
+				AlignStream();
+			}
+		}
+
+		public void WriteArray(sbyte[] buffer)
+		{
+			WriteArray(buffer, 0, buffer.Length);
+		}
+
+		public void WriteArray(sbyte[] buffer, int index, int count)
+		{
+			Write(count);
+
+			ReadOnlySpan<byte> span = MemoryMarshal.Cast<sbyte, byte>(buffer.AsSpan(index, count));
+			Write(span);
 			if (IsAlignArray)
 			{
 				AlignStream();
