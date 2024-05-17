@@ -21,7 +21,6 @@ using AssetRipper.SourceGenerated.Classes.ClassID_221;
 using AssetRipper.SourceGenerated.Classes.ClassID_240;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_319;
-using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Classes.ClassID_62;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
@@ -110,7 +109,6 @@ namespace AssetRipper.Export.UnityProjects
 			{
 				IShader => "shader",
 				IMaterial => "mat",
-				IMesh => "mesh",
 				IAnimationClip => "anim",
 				IAnimatorController => "controller",
 				IAnimatorOverrideController => "overrideController",
