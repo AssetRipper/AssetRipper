@@ -90,7 +90,8 @@ namespace AssetRipper.IO.Files.Utils
 		{
 			string invalidChars = GetInvalidFileNameChars();
 			string escapedChars = Regex.Escape(invalidChars);
-			return new Regex($"[{escapedChars}]");
+			// Updated regex to include commas, square brackets, and ASCII control characters
+			return new Regex($"[{escapedChars},\\[\\]\\x00-\\x1F]");
 		}
 
 		/// <summary>

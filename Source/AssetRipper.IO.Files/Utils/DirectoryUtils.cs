@@ -26,7 +26,8 @@ namespace AssetRipper.IO.Files.Utils
 		{
 			string invalidChars = new string(Path.GetInvalidFileNameChars().Except(new char[] { '\\', '/' }).ToArray());
 			string escapedChars = Regex.Escape(invalidChars);
-			return new Regex($"[{escapedChars}]");
+			// Updated regex to include commas, square brackets, and ASCII control characters
+			return new Regex($"[{escapedChars},\\[\\]\\x00-\\x1F]");
 		}
 
 		public static string GetRelativePath(string filePath, string folder)
