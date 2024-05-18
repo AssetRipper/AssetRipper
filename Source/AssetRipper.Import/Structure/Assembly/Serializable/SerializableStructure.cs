@@ -153,7 +153,6 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 			if (source is null)
 			{
 				Reset();
-				InitializeFields(converter.TargetCollection.Version);
 			}
 			else
 			{
@@ -178,7 +177,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 					}
 					else
 					{
-						Fields[i].CopyValues(sourceField, converter.TargetCollection.Version, Depth, Type.Fields[i], converter);
+						Fields[i].CopyValues(sourceField, Depth, Type.Fields[i], converter);
 					}
 				}
 			}
@@ -196,7 +195,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 						}
 					}
 					SerializableValue sourceField = index < 0 ? default : source.Fields[index];
-					Fields[i].CopyValues(sourceField, converter.TargetCollection.Version, Depth, Type.Fields[i], converter);
+					Fields[i].CopyValues(sourceField, Depth, Type.Fields[i], converter);
 				}
 			}
 		}
@@ -210,7 +209,10 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 
 		public override void Reset()
 		{
-			((Span<SerializableValue>)Fields).Clear();
+			foreach (SerializableValue field in Fields)
+			{
+				field.Reset();
+			}
 		}
 
 		public void InitializeFields(UnityVersion version)

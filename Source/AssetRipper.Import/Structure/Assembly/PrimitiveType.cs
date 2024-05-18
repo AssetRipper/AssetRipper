@@ -20,6 +20,8 @@ namespace AssetRipper.Import.Structure.Assembly
 		Single,
 		Double,
 		String,
+		Pair,
+		MapPair,
 		Complex,
 	}
 
@@ -50,6 +52,8 @@ namespace AssetRipper.Import.Structure.Assembly
 				case PrimitiveType.Double:
 					return 8;
 
+				case PrimitiveType.Pair:
+				case PrimitiveType.MapPair:
 				case PrimitiveType.String:
 				case PrimitiveType.Complex:
 					return -1;

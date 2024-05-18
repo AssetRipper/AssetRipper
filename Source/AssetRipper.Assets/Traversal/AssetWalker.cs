@@ -305,8 +305,6 @@ public abstract class AssetWalker
 	///   <c>false</c> to skip visiting the children and not call the exit method.
 	/// </returns>
 	public virtual bool EnterDictionaryPair<TKey, TValue>(KeyValuePair<TKey, TValue> pair)
-		where TKey : notnull, new()
-		where TValue : notnull, new()
 	{
 		return EnterPair(pair);
 	}
@@ -321,8 +319,6 @@ public abstract class AssetWalker
 	/// <typeparam name="TValue">The type of the value in the pair.</typeparam>
 	/// <param name="pair">The dictionary pair having its key and value divided.</param>
 	public virtual void DivideDictionaryPair<TKey, TValue>(KeyValuePair<TKey, TValue> pair)
-		where TKey : notnull, new()
-		where TValue : notnull, new()
 	{
 		DividePair(pair);
 	}
@@ -337,8 +333,6 @@ public abstract class AssetWalker
 	/// <typeparam name="TValue">The type of the value in the pair.</typeparam>
 	/// <param name="pair">The dictionary pair being exited.</param>
 	public virtual void ExitDictionaryPair<TKey, TValue>(KeyValuePair<TKey, TValue> pair)
-		where TKey : notnull, new()
-		where TValue : notnull, new()
 	{
 		ExitPair(pair);
 	}
@@ -397,8 +391,6 @@ public abstract class AssetWalker
 	///   <c>false</c> to skip visiting the children and not call the exit method.
 	/// </returns>
 	public virtual bool EnterPair<TKey, TValue>(KeyValuePair<TKey, TValue> pair)
-		where TKey : notnull, new()
-		where TValue : notnull, new()
 	{
 		return true;
 	}
@@ -410,8 +402,6 @@ public abstract class AssetWalker
 	/// <typeparam name="TValue">The type of the value in the pair.</typeparam>
 	/// <param name="pair">The key-value pair having its key and value divided.</param>
 	public virtual void DividePair<TKey, TValue>(KeyValuePair<TKey, TValue> pair)
-		where TKey : notnull, new()
-		where TValue : notnull, new()
 	{
 	}
 
@@ -422,8 +412,6 @@ public abstract class AssetWalker
 	/// <typeparam name="TValue">The type of the value in the pair.</typeparam>
 	/// <param name="pair">The key-value pair being exited.</param>
 	public virtual void ExitPair<TKey, TValue>(KeyValuePair<TKey, TValue> pair)
-		where TKey : notnull, new()
-		where TValue : notnull, new()
 	{
 	}
 

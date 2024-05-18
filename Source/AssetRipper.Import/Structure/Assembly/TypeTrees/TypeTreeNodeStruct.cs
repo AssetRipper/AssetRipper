@@ -4,11 +4,12 @@ using AssetRipper.SourceGenerated;
 using AssetRipper.Tpk;
 using AssetRipper.Tpk.Shared;
 using AssetRipper.Tpk.TypeTrees;
+using System.Collections;
 using System.Diagnostics;
 
 namespace AssetRipper.Import.Structure.Assembly.TypeTrees;
 
-public readonly struct TypeTreeNodeStruct
+public readonly struct TypeTreeNodeStruct : IReadOnlyList<TypeTreeNodeStruct>
 {
 	public string TypeName { get; }
 	public string Name { get; }
@@ -20,6 +21,12 @@ public readonly struct TypeTreeNodeStruct
 	public bool FlowMappedInYaml => MetaFlag.IsTransferUsingFlowMappingStyle();
 
 	private readonly TypeTreeNodeStruct[] subNodes;
+
+	public int Count => subNodes.Length;
+
+	public TypeTreeNodeStruct this[int index] => subNodes[index];
+
+	public TypeTreeNodeStruct this[string name] => subNodes.First(t => t.Name == name);
 
 	public bool IsArray
 	{
@@ -105,6 +112,22 @@ public readonly struct TypeTreeNodeStruct
 		get
 		{
 			return TypeName is "ReferencedObjectData" && Name is "data" && SubNodes.Count is 0;
+		}
+	}
+
+	public bool IsByte
+	{
+		get
+		{
+			return Count is 0 && TypeName is "char" or "UInt8";
+		}
+	}
+
+	public bool IsString
+	{
+		get
+		{
+			return Count is 1 && TypeName is "string" && this[0].IsArray && this[0][1].IsByte;
 		}
 	}
 
@@ -243,4 +266,8 @@ public readonly struct TypeTreeNodeStruct
 			return new TypeTreeNodeStruct(node, subNodes);
 		}
 	}
+
+	public IEnumerator<TypeTreeNodeStruct> GetEnumerator() => SubNodes.GetEnumerator();
+
+	IEnumerator IEnumerable.GetEnumerator() => SubNodes.GetEnumerator();
 }
