@@ -20,6 +20,7 @@ using AssetRipper.SourceGenerated.Subclasses.ColorRGBAf;
 using AssetRipper.SourceGenerated.Subclasses.Gradient;
 using AssetRipper.SourceGenerated.Subclasses.GUID;
 using AssetRipper.SourceGenerated.Subclasses.GUIStyle;
+using AssetRipper.SourceGenerated.Subclasses.Hash128;
 using AssetRipper.SourceGenerated.Subclasses.LayerMask;
 using AssetRipper.SourceGenerated.Subclasses.Matrix4x4f;
 using AssetRipper.SourceGenerated.Subclasses.Quaternionf;
@@ -202,7 +203,8 @@ namespace AssetRipper.Import.AssetCreation
 		{
 			return name switch
 			{
-				"GUID" => GUID.Create(),
+				MonoUtils.GuidName => GUID.Create(),
+				MonoUtils.Hash128Name => Hash128.Create(version),
 				MonoUtils.Vector2Name => Vector2f.Create(),
 				MonoUtils.Vector2IntName => Vector2Int.Create(),
 				MonoUtils.Vector3Name => Vector3f.Create(),

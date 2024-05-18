@@ -49,6 +49,8 @@ namespace AssetRipper.Import.Structure.Assembly.Mono
 		private const string SerializeFieldName = "SerializeField";
 		private const string EnumValueFieldName = "value__";
 
+		public const string GuidName = "GUID";
+		public const string Hash128Name = "Hash128";
 
 		public const string Vector2Name = "Vector2";
 		public const string Vector2IntName = "Vector2Int";
@@ -378,7 +380,8 @@ namespace AssetRipper.Import.Structure.Assembly.Mono
 			{
 				switch (name)
 				{
-					case "GUID":
+					case GuidName:
+					case Hash128Name:
 					case Vector2Name:
 					case Vector2IntName:
 					case Vector3Name:
