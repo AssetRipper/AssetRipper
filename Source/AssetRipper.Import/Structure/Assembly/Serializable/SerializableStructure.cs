@@ -148,6 +148,54 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 		public SerializableType Type { get; }
 		public SerializableValue[] Fields { get; }
 
+		public ref SerializableValue this[string name]
+		{
+			get
+			{
+				if (TryGetIndex(name, out int index))
+				{
+					return ref Fields[index];
+				}
+				throw new KeyNotFoundException($"Field {name} wasn't found in {Type.Name}");
+			}
+		}
+
+		public bool ContainsField(string name) => TryGetIndex(name, out _);
+
+		public bool TryGetField(string name, out SerializableValue field)
+		{
+			if (TryGetIndex(name, out int index))
+			{
+				field = Fields[index];
+				return true;
+			}
+			field = default;
+			return false;
+		}
+
+		public SerializableValue? TryGetField(string name)
+		{
+			if (TryGetIndex(name, out int index))
+			{
+				return Fields[index];
+			}
+			return null;
+		}
+
+		private bool TryGetIndex(string name, out int index)
+		{
+			for (int i = 0; i < Fields.Length; i++)
+			{
+				if (Type.Fields[i].Name == name)
+				{
+					index = i;
+					return true;
+				}
+			}
+			index = -1;
+			return false;
+		}
+
 		public override void CopyValues(IUnityAssetBase? source, PPtrConverter converter)
 		{
 			if (source is null)

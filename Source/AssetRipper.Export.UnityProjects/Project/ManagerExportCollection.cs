@@ -1,13 +1,12 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.SourceGenerated.Classes.ClassID_6;
 
 namespace AssetRipper.Export.UnityProjects.Project
 {
-	public class ManagerExportCollection : AssetExportCollection<IGlobalGameManager>
+	public class ManagerExportCollection : AssetExportCollection<IUnityObjectBase>
 	{
-		public ManagerExportCollection(IAssetExporter assetExporter, IGlobalGameManager asset) : base(assetExporter, asset) { }
+		public ManagerExportCollection(IAssetExporter assetExporter, IUnityObjectBase asset) : base(assetExporter, asset) { }
 
 		public override bool Export(IExportContainer container, string projectDirectory)
 		{
@@ -40,7 +39,7 @@ namespace AssetRipper.Export.UnityProjects.Project
 		{
 			return typeName switch
 			{
-				PlayerSettingsName => ProjectSettingsName,
+				PlayerSettingsName or "129" => ProjectSettingsName,
 				NavMeshProjectSettingsName => NavMeshAreasName,
 				PhysicsManagerName => DynamicsManagerName,
 				_ => typeName,

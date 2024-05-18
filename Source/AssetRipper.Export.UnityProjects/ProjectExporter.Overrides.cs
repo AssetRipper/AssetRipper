@@ -66,7 +66,9 @@ partial class ProjectExporter
 	{
 		OverrideExporter<IUnityObjectBase>(new DefaultYamlExporter(), true);
 
-		OverrideExporter<IGlobalGameManager>(new ManagerAssetExporter(), true);
+		ManagerAssetExporter managerExporter = new();
+		OverrideExporter<IGlobalGameManager>(managerExporter, true);
+		OverrideExporter<TypeTreeObject>(managerExporter, true);
 
 		OverrideExporter<IMonoBehaviour>(new ScriptableObjectExporter(), true);
 

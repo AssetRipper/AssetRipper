@@ -9,8 +9,9 @@ using AssetRipper.IO.Endian;
 
 namespace AssetRipper.Import.AssetCreation;
 
-internal sealed class TypeTreeObject : NullObject
+public sealed class TypeTreeObject : NullObject
 {
+	public bool IsPlayerSettings => ClassID == 129;
 	public SerializableStructure ReleaseFields { get; }
 	public SerializableStructure EditorFields { get; }
 	public TypeTreeObject(TypeTreeNodeStruct releaseRoot, TypeTreeNodeStruct editorRoot, AssetInfo assetInfo) : base(assetInfo)
