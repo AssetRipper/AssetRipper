@@ -20,7 +20,7 @@ internal sealed class ImageTab : HtmlTab
 
 	public override void Write(TextWriter writer)
 	{
-		string sourcePath = $"/Assets/Image?{AssetAPI.Path}={Asset.GetPath().ToJson().ToUrl()}&{AssetAPI.Extension}=png";
+		string sourcePath = AssetAPI.GetImageUrl(Asset.GetPath(), "png");
 
 		// Click on image to save
 		using (new A(writer).WithHref(sourcePath).WithDownload("extracted_image").End())

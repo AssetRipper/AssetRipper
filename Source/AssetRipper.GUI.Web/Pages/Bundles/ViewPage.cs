@@ -1,8 +1,6 @@
 ﻿using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
 using AssetRipper.GUI.Web.Paths;
-using AssetRipper.Web.Extensions;
-using Microsoft.AspNetCore.Http;
 
 namespace AssetRipper.GUI.Web.Pages.Bundles;
 
@@ -70,38 +68,6 @@ public sealed class ViewPage : DefaultPage
 					}
 				}
 			}
-		}
-	}
-
-	public static Task HandlePostRequest(HttpContext context)
-	{
-		string? json = context.Request.Form[PathLinking.FormKey];
-		if (string.IsNullOrEmpty(json))
-		{
-			return context.Response.NotFound();
-		}
-
-		BundlePath path;
-		try
-		{
-			path = BundlePath.FromJson(json);
-		}
-		catch (Exception ex)
-		{
-			return context.Response.NotFound(ex.ToString());
-		}
-
-		if (!GameFileLoader.IsLoaded)
-		{
-			return context.Response.NotFound("No files loaded.");
-		}
-		else if (!GameFileLoader.GameBundle.TryGetBundle(path, out Bundle? bundle))
-		{
-			return context.Response.NotFound($"Bundle could not be resolved: {path}");
-		}
-		else
-		{
-			return new ViewPage() { Bundle = bundle, Path = path }.WriteToResponse(context.Response);
 		}
 	}
 }

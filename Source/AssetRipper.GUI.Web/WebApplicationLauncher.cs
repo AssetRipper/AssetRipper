@@ -1,4 +1,9 @@
 using AssetRipper.GUI.Web.Pages;
+using AssetRipper.GUI.Web.Pages.Assets;
+using AssetRipper.GUI.Web.Pages.Bundles;
+using AssetRipper.GUI.Web.Pages.Collections;
+using AssetRipper.GUI.Web.Pages.Resources;
+using AssetRipper.GUI.Web.Pages.Scenes;
 using AssetRipper.GUI.Web.Pages.Settings;
 using AssetRipper.Import.Logging;
 using AssetRipper.Web.Extensions;
@@ -118,9 +123,9 @@ public static class WebApplicationLauncher
 			context.Response.DisableCaching();
 			return IndexPage.Instance.WriteToResponse(context.Response);
 		});
-		app.MapGet("/Commands", () => CommandsPage.Instance.ToResult());
-		app.MapGet("/Privacy", () => PrivacyPage.Instance.ToResult());
-		app.MapGet("/Licenses", () => LicensesPage.Instance.ToResult());
+		app.MapGet("/Commands", CommandsPage.Instance.ToResult);
+		app.MapGet("/Privacy", PrivacyPage.Instance.ToResult);
+		app.MapGet("/Licenses", LicensesPage.Instance.ToResult);
 
 		app.MapGet("/ConfigurationFiles", (context) =>
 		{
@@ -139,21 +144,31 @@ public static class WebApplicationLauncher
 			return SettingsPage.Instance.WriteToResponse(context.Response);
 		});
 		app.MapPost("/Settings/Update", SettingsPage.HandlePostRequest);
-		app.MapPost("/Assets/View", Pages.Assets.ViewPage.HandlePostRequest);
-		app.MapPost("/Bundles/View", Pages.Bundles.ViewPage.HandlePostRequest);
-		app.MapPost("/Collections/View", Pages.Collections.ViewPage.HandlePostRequest);
-		app.MapPost("/Resources/View", Pages.Resources.ViewPage.HandlePostRequest);
-		app.MapPost("/Scenes/View", Pages.Scenes.ViewPage.HandlePostRequest);
 
-		//Asset GET API
-		app.MapGet("/Assets/Image", Pages.Assets.AssetAPI.GetImageData);
-		app.MapGet("/Assets/Audio", Pages.Assets.AssetAPI.GetAudioData);
-		app.MapGet("/Assets/Model", Pages.Assets.AssetAPI.GetModelData);
-		app.MapGet("/Assets/Font", Pages.Assets.AssetAPI.GetFontData);
-		app.MapGet("/Assets/Json", Pages.Assets.AssetAPI.GetJson);
-		app.MapGet("/Assets/Yaml", Pages.Assets.AssetAPI.GetYaml);
-		app.MapGet("/Assets/Text", Pages.Assets.AssetAPI.GetText);
-		app.MapGet("/Assets/Binary", Pages.Assets.AssetAPI.GetBinaryData);
+		//Assets
+		app.MapGet(AssetAPI.Urls.View, AssetAPI.GetView);
+		app.MapGet(AssetAPI.Urls.Image, AssetAPI.GetImageData);
+		app.MapGet(AssetAPI.Urls.Audio, AssetAPI.GetAudioData);
+		app.MapGet(AssetAPI.Urls.Model, AssetAPI.GetModelData);
+		app.MapGet(AssetAPI.Urls.Font, AssetAPI.GetFontData);
+		app.MapGet(AssetAPI.Urls.Json, AssetAPI.GetJson);
+		app.MapGet(AssetAPI.Urls.Yaml, AssetAPI.GetYaml);
+		app.MapGet(AssetAPI.Urls.Text, AssetAPI.GetText);
+		app.MapGet(AssetAPI.Urls.Binary, AssetAPI.GetBinaryData);
+
+		//Bundles
+		app.MapGet(BundleAPI.Urls.View, BundleAPI.GetView);
+
+		//Collections
+		app.MapGet(CollectionAPI.Urls.View, CollectionAPI.GetView);
+		app.MapGet(CollectionAPI.Urls.Count, CollectionAPI.GetCount);
+
+		//Resources
+		app.MapGet(ResourceAPI.Urls.View, ResourceAPI.GetView);
+		app.MapGet(ResourceAPI.Urls.Data, ResourceAPI.GetData);
+
+		//Scenes
+		app.MapGet(SceneAPI.Urls.View, SceneAPI.GetView);
 
 		app.MapPost("/Localization", (context) =>
 		{

@@ -1,7 +1,5 @@
 ﻿using AssetRipper.Assets.Collections;
 using AssetRipper.GUI.Web.Paths;
-using AssetRipper.Web.Extensions;
-using Microsoft.AspNetCore.Http;
 
 namespace AssetRipper.GUI.Web.Pages.Scenes;
 
@@ -46,42 +44,6 @@ public sealed class ViewPage : DefaultPage
 					PathLinking.WriteLink(writer, collection);
 				}
 			}
-		}
-	}
-
-	public static Task HandlePostRequest(HttpContext context)
-	{
-		string? json = context.Request.Form[PathLinking.FormKey];
-		if (string.IsNullOrEmpty(json))
-		{
-			return context.Response.NotFound();
-		}
-
-		ScenePath path;
-		try
-		{
-			path = ScenePath.FromJson(json);
-		}
-		catch (Exception ex)
-		{
-			return context.Response.NotFound(ex.ToString());
-		}
-
-		if (!GameFileLoader.IsLoaded)
-		{
-			return context.Response.NotFound("No files loaded.");
-		}
-		else if (!GameFileLoader.GameBundle.TryGetCollection(path.FirstCollection, out AssetCollection? collection))
-		{
-			return context.Response.NotFound($"Scene could not be resolved: {path.FirstCollection}");
-		}
-		else if (!collection.IsScene)
-		{
-			return context.Response.NotFound($"Collection is not a scene: {path.FirstCollection}");
-		}
-		else
-		{
-			return new ViewPage() { Scene = collection.Scene, Path = path }.WriteToResponse(context.Response);
 		}
 	}
 }

@@ -18,10 +18,44 @@ namespace AssetRipper.GUI.Web.Pages.Assets;
 
 internal static class AssetAPI
 {
-	public const string Extension = "Extension";
-	public const string Path = "Path";
+	public static class Urls
+	{
+		public const string Base = "/Assets";
+		public const string View = Base + "/View";
+		public const string Image = Base + "/Image";
+		public const string Audio = Base + "/Audio";
+		public const string Model = Base + "/Model";
+		public const string Font = Base + "/Font";
+		public const string Json = Base + "/Json";
+		public const string Yaml = Base + "/Yaml";
+		public const string Text = Base + "/Text";
+		public const string Binary = Base + "/Binary";
+	}
+	private const string Extension = "Extension";
+	private const string Path = "Path";
+
+	#region View
+	public static string GetViewUrl(AssetPath path) => $"{Urls.View}?{GetPathQuery(path)}";
+	public static Task GetView(HttpContext context)
+	{
+		context.Response.DisableCaching();
+		if (TryGetAssetFromQuery(context, out IUnityObjectBase? asset, out AssetPath path, out Task? failureTask))
+		{
+			return new ViewPage() { Asset = asset, Path = path }.WriteToResponse(context.Response);
+		}
+		else
+		{
+			return failureTask;
+		}
+	}
+	#endregion
 
 	#region Image
+	public static string GetImageUrl(AssetPath path, string? extension = null)
+	{
+		return $"{Urls.Image}?{GetPathQuery(path)}{GetExtensionQuerySuffix(extension)}";
+	}
+
 	public static Task GetImageData(HttpContext context)
 	{
 		context.Response.DisableCaching();
@@ -100,6 +134,10 @@ internal static class AssetAPI
 	#endregion
 
 	#region Audio
+	public static string GetAudioUrl(AssetPath path, string? extension = null)
+	{
+		return $"{Urls.Audio}?{GetPathQuery(path)}{GetExtensionQuerySuffix(extension)}";
+	}
 	public static Task GetAudioData(HttpContext context)
 	{
 		//Accept Path and Extension in the query.
@@ -112,6 +150,11 @@ internal static class AssetAPI
 	#endregion
 
 	#region Model
+	public static string GetModelUrl(AssetPath path)
+	{
+		return $"{Urls.Model}?{GetPathQuery(path)}";
+	}
+
 	public static Task GetModelData(HttpContext context)
 	{
 		//Only accept Path in the query.
@@ -124,6 +167,11 @@ internal static class AssetAPI
 	#endregion
 
 	#region Font
+	public static string GetFontUrl(AssetPath path)
+	{
+		return $"{Urls.Font}?{GetPathQuery(path)}";
+	}
+
 	public static Task GetFontData(HttpContext context)
 	{
 		//Only accept Path in the query.
@@ -136,6 +184,10 @@ internal static class AssetAPI
 	#endregion
 
 	#region Json
+	public static string GetJsonUrl(AssetPath path)
+	{
+		return $"{Urls.Json}?{GetPathQuery(path)}";
+	}
 	public static Task GetJson(HttpContext context)
 	{
 		throw new NotImplementedException();
@@ -143,6 +195,10 @@ internal static class AssetAPI
 	#endregion
 
 	#region Yaml
+	public static string GetYamlUrl(AssetPath path)
+	{
+		return $"{Urls.Yaml}?{GetPathQuery(path)}";
+	}
 	public static Task GetYaml(HttpContext context)
 	{
 		throw new NotImplementedException();
@@ -150,6 +206,10 @@ internal static class AssetAPI
 	#endregion
 
 	#region Text
+	public static string GetTextUrl(AssetPath path)
+	{
+		return $"{Urls.Text}?{GetPathQuery(path)}";
+	}
 	public static Task GetText(HttpContext context)
 	{
 		//Only accept Path in the query. It sensibly determines the file extension.
@@ -162,6 +222,10 @@ internal static class AssetAPI
 	#endregion
 
 	#region Binary Data
+	public static string GetBinaryUrl(AssetPath path)
+	{
+		return $"{Urls.Binary}?{GetPathQuery(path)}";
+	}
 	public static Task GetBinaryData(HttpContext context)
 	{
 		//Only for RawDataObject. This should not call any of the IUnityAssetBase Write methods.
@@ -173,16 +237,25 @@ internal static class AssetAPI
 	}
 	#endregion
 
+	private static string GetPathQuery(AssetPath path) => $"{Path}={path.ToJson().ToUrl()}";
+
+	private static string? GetExtensionQuerySuffix(string? extension) => string.IsNullOrEmpty(extension) ? null : $"&{Extension}={extension}";
+
 	private static bool TryGetAssetFromQuery(HttpContext context, [NotNullWhen(true)] out IUnityObjectBase? asset, [NotNullWhen(false)] out Task? failureTask)
+	{
+		return TryGetAssetFromQuery(context, out asset, out _, out failureTask);
+	}
+
+	private static bool TryGetAssetFromQuery(HttpContext context, [NotNullWhen(true)] out IUnityObjectBase? asset, out AssetPath path, [NotNullWhen(false)] out Task? failureTask)
 	{
 		if (!context.Request.Query.TryGetValue(Path, out string? json) || string.IsNullOrEmpty(json))
 		{
 			asset = null;
+			path = default;
 			failureTask = context.Response.NotFound("The path must be included in the request.");
 			return false;
 		}
 
-		AssetPath path;
 		try
 		{
 			path = AssetPath.FromJson(json);
@@ -190,6 +263,7 @@ internal static class AssetAPI
 		catch (Exception ex)
 		{
 			asset = null;
+			path = default;
 			failureTask = context.Response.NotFound(ex.ToString());
 			return false;
 		}

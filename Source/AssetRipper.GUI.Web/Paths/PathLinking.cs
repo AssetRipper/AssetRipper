@@ -1,12 +1,17 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
+using AssetRipper.GUI.Web.Pages.Assets;
+using AssetRipper.GUI.Web.Pages.Bundles;
+using AssetRipper.GUI.Web.Pages.Collections;
+using AssetRipper.GUI.Web.Pages.Resources;
+using AssetRipper.GUI.Web.Pages.Scenes;
+using System.Runtime.CompilerServices;
 
 namespace AssetRipper.GUI.Web.Paths;
 
 internal static class PathLinking
 {
-	public const string FormKey = "Path";
 	private const string DefaultClasses = "btn btn-dark p-0 m-0";
 
 	public static void WriteLink(TextWriter writer, Bundle bundle, string? name = null, string? @class = DefaultClasses)
@@ -26,39 +31,30 @@ internal static class PathLinking
 
 	public static void WriteLink<T>(TextWriter writer, T path, string name, string? @class = DefaultClasses) where T : IPath<T>
 	{
-		WriteLink(writer, GetUrl<T>(), path.ToJson(), name, @class);
+		new A(writer).WithHref(GetUrl(path)).MaybeWithClass(@class).Close(name);
 	}
 
-	private static void WriteLink(TextWriter writer, string url, string json, string name, string? @class)
-	{
-		using (new Form(writer).WithAction(url).WithMethod("post").End())
-		{
-			new Input(writer).WithType("hidden").WithName(FormKey).WithValue(json.ToHtml()).Close();
-			new Input(writer).WithType("submit").MaybeWithClass(@class).WithValue(name.ToHtml()).Close();
-		}
-	}
-
-	private static string GetUrl<T>() where T : IPath<T>
+	private static string GetUrl<T>(T path) where T : IPath<T>
 	{
 		if (typeof(T) == typeof(AssetPath))
 		{
-			return "/Assets/View";
+			return AssetAPI.GetViewUrl(Unsafe.As<T, AssetPath>(ref path));
 		}
 		else if (typeof(T) == typeof(CollectionPath))
 		{
-			return "/Collections/View";
+			return CollectionAPI.GetViewUrl(Unsafe.As<T, CollectionPath>(ref path));
 		}
 		else if (typeof(T) == typeof(ScenePath))
 		{
-			return "/Scenes/View";
+			return SceneAPI.GetViewUrl(Unsafe.As<T, ScenePath>(ref path));
 		}
 		else if (typeof(T) == typeof(BundlePath))
 		{
-			return "/Bundles/View";
+			return BundleAPI.GetViewUrl(Unsafe.As<T, BundlePath>(ref path));
 		}
 		else if (typeof(T) == typeof(ResourcePath))
 		{
-			return "/Resources/View";
+			return ResourceAPI.GetViewUrl(Unsafe.As<T, ResourcePath>(ref path));
 		}
 		else
 		{
@@ -66,7 +62,7 @@ internal static class PathLinking
 		}
 	}
 
-	private static Input MaybeWithClass(this Input @this, string? @class)
+	private static A MaybeWithClass(this A @this, string? @class)
 	{
 		return @class is null ? @this : @this.WithClass(@class);
 	}
