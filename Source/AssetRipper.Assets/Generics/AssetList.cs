@@ -1,4 +1,6 @@
-﻿namespace AssetRipper.Assets.Generics
+﻿using System.Runtime.CompilerServices;
+
+namespace AssetRipper.Assets.Generics
 {
 	public sealed class AssetList<T> : AccessListBase<T>
 		where T : notnull, new()
@@ -9,12 +11,12 @@
 
 		public AssetList()
 		{
-			items = Array.Empty<T>();
+			items = [];
 		}
 
 		public AssetList(int capacity)
 		{
-			items = capacity == 0 ? Array.Empty<T>() : new T[capacity];
+			items = capacity == 0 ? [] : new T[capacity];
 		}
 
 		/// <inheritdoc/>
@@ -26,10 +28,7 @@
 			get => items.Length;
 			set
 			{
-				if (value < count)
-				{
-					throw new ArgumentOutOfRangeException(nameof(value));
-				}
+				ArgumentOutOfRangeException.ThrowIfLessThan(value, count);
 
 				if (value != items.Length)
 				{
@@ -44,7 +43,7 @@
 					}
 					else
 					{
-						items = Array.Empty<T>();
+						items = [];
 					}
 				}
 			}
@@ -154,10 +153,7 @@
 		/// <inheritdoc/>
 		public override void CopyTo(T[] array, int arrayIndex)
 		{
-			if (array == null)
-			{
-				throw new ArgumentNullException(nameof(array));
-			}
+			ArgumentNullException.ThrowIfNull(array);
 
 			if (arrayIndex < 0 || arrayIndex > array.Length - count)
 			{
@@ -170,6 +166,25 @@
 		public void CopyTo(Span<T> destination)
 		{
 			new ReadOnlySpan<T>(items, 0, count).CopyTo(destination);
+		}
+
+		/// <summary>
+		/// Get a span for this list.
+		/// </summary>
+		/// <remarks>
+		/// <typeparamref name="T"/> must be blittable.
+		/// </remarks>
+		/// <returns>A span for the underlying array, with length equal to <see cref="Count"/>.</returns>
+		public Span<T> GetSpan()
+		{
+			if (!RuntimeHelpers.IsReferenceOrContainsReferences<T>())
+			{
+				return new(items, 0, count);
+			}
+			else
+			{
+				throw new NotSupportedException("Type must be blittable.");
+			}
 		}
 
 		/// <inheritdoc/>

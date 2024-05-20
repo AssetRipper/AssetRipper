@@ -49,5 +49,22 @@
 				_ => throw new ArgumentOutOfRangeException(nameof(_this)),
 			};
 		}
+
+		//When extension types come in C# 13, this will be more convenient to use.
+		public static bool TryGetFromExtension(string extension, out ImageExportFormat format)
+		{
+			format = extension switch
+			{
+				"bmp" => ImageExportFormat.Bmp,
+				"exr" => ImageExportFormat.Exr,
+				"hdr" => ImageExportFormat.Hdr,
+				"jpeg" => ImageExportFormat.Jpeg,
+				"jpg" => ImageExportFormat.Jpeg,
+				"png" => ImageExportFormat.Png,
+				"tga" => ImageExportFormat.Tga,
+				_ => (ImageExportFormat)(-1),
+			};
+			return format >= 0;
+		}
 	}
 }

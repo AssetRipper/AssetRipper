@@ -145,6 +145,16 @@ public static class WebApplicationLauncher
 		app.MapPost("/Resources/View", Pages.Resources.ViewPage.HandlePostRequest);
 		app.MapPost("/Scenes/View", Pages.Scenes.ViewPage.HandlePostRequest);
 
+		//Asset GET API
+		app.MapGet("/Assets/Image", Pages.Assets.AssetAPI.GetImageData);
+		app.MapGet("/Assets/Audio", Pages.Assets.AssetAPI.GetAudioData);
+		app.MapGet("/Assets/Model", Pages.Assets.AssetAPI.GetModelData);
+		app.MapGet("/Assets/Font", Pages.Assets.AssetAPI.GetFontData);
+		app.MapGet("/Assets/Json", Pages.Assets.AssetAPI.GetJson);
+		app.MapGet("/Assets/Yaml", Pages.Assets.AssetAPI.GetYaml);
+		app.MapGet("/Assets/Text", Pages.Assets.AssetAPI.GetText);
+		app.MapGet("/Assets/Binary", Pages.Assets.AssetAPI.GetBinaryData);
+
 		app.MapPost("/Localization", (context) =>
 		{
 			context.Response.DisableCaching();
