@@ -36,7 +36,9 @@ namespace AssetRipper.Processing
 							terrainData.MainAsset = terrainData;
 							foreach (ITexture2D alphaTexture in terrainData.GetSplatAlphaTextures())
 							{
-								alphaTexture.MainAsset = terrainData;
+								//Sometimes TerrainData can be duplicated, but retain the same alpha textures.
+								//https://github.com/AssetRipper/AssetRipper/issues/1356
+								alphaTexture.MainAsset ??= terrainData;
 							}
 						}
 						break;
