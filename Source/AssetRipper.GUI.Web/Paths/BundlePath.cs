@@ -23,6 +23,7 @@ public readonly record struct BundlePath : IPath<BundlePath>
 		_path = path.Length == 0 ? null : path.ToArray();
 	}
 
+	[JsonPropertyName("P")]
 	public ReadOnlyMemory<int> Path => _path;
 
 	[JsonIgnore]

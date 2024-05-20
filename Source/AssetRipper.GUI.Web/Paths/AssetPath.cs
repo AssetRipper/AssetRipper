@@ -1,8 +1,9 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace AssetRipper.GUI.Web.Paths;
 
-public readonly record struct AssetPath(CollectionPath CollectionPath, long PathID) : IPath<AssetPath>
+public readonly record struct AssetPath([property: JsonPropertyName("C")] CollectionPath CollectionPath, [property: JsonPropertyName("D")] long PathID) : IPath<AssetPath>
 {
 	public string ToJson()
 	{

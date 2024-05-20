@@ -1,8 +1,9 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace AssetRipper.GUI.Web.Paths;
 
-public readonly record struct ScenePath(CollectionPath FirstCollection) : IPath<ScenePath>
+public readonly record struct ScenePath([property: JsonPropertyName("C")] CollectionPath FirstCollection) : IPath<ScenePath>
 {
 	public static explicit operator ScenePath(CollectionPath first) => new ScenePath(first);
 

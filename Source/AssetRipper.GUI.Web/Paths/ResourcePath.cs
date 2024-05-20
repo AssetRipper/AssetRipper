@@ -1,8 +1,9 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace AssetRipper.GUI.Web.Paths;
 
-public readonly record struct ResourcePath(BundlePath BundlePath, int Index) : IPath<ResourcePath>
+public readonly record struct ResourcePath([property: JsonPropertyName("B")] BundlePath BundlePath, [property: JsonPropertyName("I")] int Index) : IPath<ResourcePath>
 {
 	public string ToJson()
 	{
