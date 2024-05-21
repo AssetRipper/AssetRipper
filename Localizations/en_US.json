@@ -151,6 +151,7 @@
     "replace": "Replace",
     "resources": "Resources",
     "save": "Save",
+    "save_raw_data": "Save Raw Data",
     "save_settings_to_disk": "Save Settings to Disk",
     "scene": "Scene",
     "script": "Script",

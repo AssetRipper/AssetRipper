@@ -9,8 +9,8 @@ internal static class DataSaveButton
 		new A(writer).WithHref(sourcePath).WithDownload(fileName).WithClass("btn btn-primary").Close(Localization.Save);
 	}
 
-	public static void Write(TextWriter writer, string url, string? fileName = null)
+	public static void Write(TextWriter writer, string url, string? fileName = null, string? text = null)
 	{
-		new A(writer).WithHref(url).WithDownload(fileName).WithClass("btn btn-primary").Close(Localization.Save);
+		new A(writer).WithHref(url).WithDownload(fileName).WithClass("btn btn-primary").Close(text ?? Localization.Save);
 	}
 }

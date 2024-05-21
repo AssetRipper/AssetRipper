@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.GUI.Web.Paths;
+using AssetRipper.IO.Files.Utils;
 
 namespace AssetRipper.GUI.Web.Pages.Assets;
 
@@ -20,15 +21,21 @@ internal sealed class ImageTab : HtmlTab
 
 	public override void Write(TextWriter writer)
 	{
-		string sourcePath = AssetAPI.GetImageUrl(Asset.GetPath(), "png");
+		AssetPath assetPath = Asset.GetPath();
+		string pngUrl = AssetAPI.GetImageUrl(assetPath, "png");
+		string rawUrl = AssetAPI.GetImageUrl(assetPath);
+		string fileName = FileUtils.FixInvalidNameCharacters(Asset.GetBestName());
 
 		// Click on image to save
-		using (new A(writer).WithHref(sourcePath).WithDownload("extracted_image").End())
+		using (new A(writer).WithHref(pngUrl).WithDownload(fileName).End())
 		{
-			new Img(writer).WithSrc(sourcePath).WithStyle("object-fit:contain; width:100%; height:100%").Close();
+			new Img(writer).WithSrc(pngUrl).WithStyle("object-fit:contain; width:100%; height:100%").Close();
 		}
 
-		// Todo: add a button beneath the image to download its raw data
-		// https://github.com/AssetRipper/AssetRipper/issues/1298
+		// Click a button beneath the image to download its raw data
+		using (new Div(writer).WithTextCenter().End())
+		{
+			DataSaveButton.Write(writer, rawUrl, fileName, Localization.SaveRawData);
+		}
 	}
 }
