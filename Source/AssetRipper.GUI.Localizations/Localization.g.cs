@@ -956,6 +956,11 @@ partial class Localization
 	public static string ShaderAssetFormatYamlDescription => Get("shader_asset_format_yaml_description");
 	
 	/// <summary>
+	/// Size
+	/// </summary>
+	public static string Size => Get("size");
+	
+	/// <summary>
 	/// Skip StreamingAssets Folder
 	/// </summary>
 	public static string SkipStreamingAssets => Get("skip_streaming_assets");

@@ -23,6 +23,9 @@ public sealed class ViewPage : DefaultPage
 			PathLinking.WriteLink(writer, Path.BundlePath, bundle.Name);
 		}
 
+		new H2(writer).Close(Localization.Size);
+		new P(writer).Close(Resource.Stream.Length.ToString());
+
 		using (new Div(writer).WithClass("text-center").End())
 		{
 			DataSaveButton.Write(writer, ResourceAPI.GetDataUrl(Path), Resource.NameFixed);

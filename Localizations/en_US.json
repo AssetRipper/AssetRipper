@@ -188,6 +188,7 @@
     "shader_asset_format_dummy_description": "Export the shader as a dummy shader. Although it preserves data like the properties and fallback, it uses general, opaque shader code.",
     "shader_asset_format_yaml": "Yaml Asset",
     "shader_asset_format_yaml_description": "Export the shader as a yaml asset. Experimental and only usable for viewing in the editor. The editor can randomly corrupt these files.",
+    "size": "Size",
     "skip_streaming_assets": "Skip StreamingAssets Folder",
     "sprite_export_title": "Sprite Export Format",
     "sprite_format_native": "Unity",
