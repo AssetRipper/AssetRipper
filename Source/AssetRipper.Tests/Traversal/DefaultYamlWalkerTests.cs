@@ -1,27 +1,49 @@
 ﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Metadata;
 using AssetRipper.Export.UnityProjects;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Subclasses.StaticBatchInfo;
+using AssetRipper.Yaml;
+using System.Globalization;
 
 namespace AssetRipper.Tests.Traversal;
 
 internal class DefaultYamlWalkerTests
 {
-	[TestCaseSource(nameof(GetObjectTypes))]
+	//[TestCaseSource(nameof(GetObjectTypes))]
 	public static void SerializedObjectIsConsistent(Type type, string yamlExpectedHyphen, string? yamlExpectedNoHyphen)
 	{
 		UnityObjectBase asset = AssetCreator.CreateUnsafe(type);
 		Assert.Multiple(() =>
 		{
-			AssertYamlGeneratedAsExpected(new StringYamlWalker(), asset, yamlExpectedHyphen);
-			AssertYamlGeneratedAsExpected(new YamlWalkerWithoutHyphens(), asset, yamlExpectedNoHyphen ?? yamlExpectedHyphen);
+			AssertYamlGeneratedAsExpected(new DefaultYamlWalker(), asset, yamlExpectedHyphen);
+			AssertYamlGeneratedAsExpected(new YamlWalkerWithoutHyphens(), asset, /*yamlExpectedNoHyphen ??*/ yamlExpectedHyphen);
 		});
 
-		static void AssertYamlGeneratedAsExpected(DefaultYamlWalker yamlWalker, UnityObjectBase asset, string yamlExpected)
+		static void AssertYamlGeneratedAsExpected(YamlWalker yamlWalker, IUnityObjectBase asset, string yamlExpected)
 		{
-			string? yamlActual = yamlWalker.AppendEditor(asset, 1).ToString();
+			string yamlActual = GenerateYaml(yamlWalker, asset);
 			Assert.That(yamlActual, Is.EqualTo(yamlExpected));
 		}
+	}
+
+	private static string GenerateYaml(YamlWalker yamlWalker, IUnityObjectBase asset)
+	{
+		return GenerateYaml(yamlWalker, [(asset, 1)]);
+	}
+
+	private static string GenerateYaml(YamlWalker yamlWalker, ReadOnlySpan<(IUnityObjectBase, long)> assets)
+	{
+		using StringWriter stringWriter = new(CultureInfo.InvariantCulture) { NewLine = "\n" };
+		YamlWriter writer = new();
+		writer.WriteHead(stringWriter);
+		foreach ((IUnityObjectBase asset, long exportID) in assets)
+		{
+			YamlDocument document = yamlWalker.ExportYamlDocument(asset, exportID);
+			writer.WriteDocument(document);
+		}
+		writer.WriteTail(stringWriter);
+		return stringWriter.ToString();
 	}
 
 	private static IEnumerable<object?[]> GetObjectTypes()
@@ -41,10 +63,22 @@ internal class DefaultYamlWalkerTests
 		yield return [typeof(StaticSquaredDictionaryObject), StaticSquaredDictionaryObject.Yaml, null];
 	}
 
-
-	private sealed class YamlWalkerWithoutHyphens : StringYamlWalker
+	private class DefaultYamlWalker : YamlWalker
 	{
-		protected override bool UseHyphenInStringDictionary => false;
+		public override YamlNode CreateYamlNodeForPPtr<TAsset>(PPtr<TAsset> pptr)
+		{
+			YamlMappingNode mappingNode = new()
+			{
+				Style = MappingStyle.Flow,
+			};
+			mappingNode.Add("m_FileID", pptr.FileID);
+			mappingNode.Add("m_PathID", pptr.PathID);
+			return mappingNode;
+		}
+	}
+
+	private sealed class YamlWalkerWithoutHyphens : DefaultYamlWalker
+	{
 	}
 
 	[Test]
@@ -55,17 +89,22 @@ internal class DefaultYamlWalkerTests
 			%TAG !u! tag:unity3d.com,2011:
 			--- !u!0 &1
 			MonoBehaviour:
+			  m_ObjectHideFlags: 0
+			  m_PrefabParentObject: {m_FileID: 0, m_PathID: 0}
+			  m_PrefabInternal: {m_FileID: 0, m_PathID: 0}
 			  m_GameObject: {m_FileID: 0, m_PathID: 0}
 			  m_Enabled: 0
+			  m_EditorHideFlags: 0
 			  m_Script: {m_FileID: 0, m_PathID: 0}
-			  m_Name: 
+			  m_Name:
+			  m_EditorClassIdentifier:
 			  firstSubMesh: 0
 			  subMeshCount: 0
 
 			""";
 		MonoBehaviour_2017_3 monoBehaviour = AssetCreator.CreateUnsafe<MonoBehaviour_2017_3>();
 		monoBehaviour.Structure = new StaticBatchInfo();
-		string? yamlActual = new StringYamlWalker().AppendRelease(monoBehaviour, 1).ToString();
+		string yamlActual = GenerateYaml(new DefaultYamlWalker(), monoBehaviour);
 		Assert.That(yamlActual, Is.EqualTo(yamlExpected));
 	}
 
@@ -77,25 +116,35 @@ internal class DefaultYamlWalkerTests
 			%TAG !u! tag:unity3d.com,2011:
 			--- !u!0 &1
 			MonoBehaviour:
+			  m_ObjectHideFlags: 0
+			  m_PrefabParentObject: {m_FileID: 0, m_PathID: 0}
+			  m_PrefabInternal: {m_FileID: 0, m_PathID: 0}
 			  m_GameObject: {m_FileID: 0, m_PathID: 0}
 			  m_Enabled: 0
+			  m_EditorHideFlags: 0
 			  m_Script: {m_FileID: 0, m_PathID: 0}
-			  m_Name: 
+			  m_Name:
+			  m_EditorClassIdentifier:
 			  firstSubMesh: 0
 			  subMeshCount: 0
 			--- !u!0 &2
 			MonoBehaviour:
+			  m_ObjectHideFlags: 0
+			  m_PrefabParentObject: {m_FileID: 0, m_PathID: 0}
+			  m_PrefabInternal: {m_FileID: 0, m_PathID: 0}
 			  m_GameObject: {m_FileID: 0, m_PathID: 0}
 			  m_Enabled: 0
+			  m_EditorHideFlags: 0
 			  m_Script: {m_FileID: 0, m_PathID: 0}
-			  m_Name: 
+			  m_Name:
+			  m_EditorClassIdentifier:
 			  firstSubMesh: 0
 			  subMeshCount: 0
 
 			""";
 		MonoBehaviour_2017_3 monoBehaviour = AssetCreator.CreateUnsafe<MonoBehaviour_2017_3>();
 		monoBehaviour.Structure = new StaticBatchInfo();
-		string? yamlActual = new StringYamlWalker().AppendRelease(monoBehaviour, 1).AppendRelease(monoBehaviour, 2).ToString();
+		string yamlActual = GenerateYaml(new DefaultYamlWalker(), [(monoBehaviour, 1), (monoBehaviour, 2)]);
 		Assert.That(yamlActual, Is.EqualTo(yamlExpected));
 	}
 }

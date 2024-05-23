@@ -1,6 +1,8 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Export.UnityProjects;
+using AssetRipper.Yaml;
+using System.Globalization;
 
 namespace AssetRipper.GUI.Web.Pages.Assets;
 
@@ -23,6 +25,12 @@ internal sealed class YamlTab(IUnityObjectBase asset) : HtmlTab
 
 	private static string GetYamlString(IUnityObjectBase asset)
 	{
-		return new StringYamlWalker().AppendEditor(asset, ExportIdHandler.GetMainExportID(asset)).ToString()!;
+		using StringWriter stringWriter = new(CultureInfo.InvariantCulture) { NewLine = "\n" };
+		YamlWriter writer = new();
+		writer.WriteHead(stringWriter);
+		YamlDocument document = new YamlWalker().ExportYamlDocument(asset, ExportIdHandler.GetMainExportID(asset));
+		writer.WriteDocument(document);
+		writer.WriteTail(stringWriter);
+		return stringWriter.ToString();
 	}
 }
