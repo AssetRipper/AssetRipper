@@ -64,7 +64,7 @@
     "collections": "Colecciones",
     "commands": "Comandos",
     "config_options": "Opciones de configuración",
-    "config_screen_drag_drop_prompt": "Por favor, ten en cuenta que algunos cambios de configuración pueden causar o evitar errores.\nUna vez que estés listo, arrastra y suelta tu archivo/carpeta del juego en esta ventana, o utiliza el menú de la parte superior izquierda para seleccionar algo manualmente."
+    "config_screen_drag_drop_prompt": "Por favor, ten en cuenta que algunos cambios de configuración pueden causar o evitar errores.\nUna vez que estés listo, arrastra y suelta tu archivo/carpeta del juego en esta ventana, o utiliza el menú de la parte superior izquierda para seleccionar algo manualmente.",
     "configuration_files": "Archivos de configuración",
     "configuration_files_lists": "Listas",
     "configuration_files_singletons": "Singletons",
@@ -94,7 +94,7 @@
     "json": "Json",
     "length": "Longitud",
     "licenses": "Licencias",
-    "load": "Cargar"
+    "load": "Cargar",
     "loading_game_content_from": "Cargando contenido del juego desde {0}\n{1}",
     "loading_step_begin_scheme_processing": "Iniciando procesamiento de esquema",
     "loading_step_create_file_collection": "Creando colección de archivos",
