@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
-using AssetRipper.Assets.Export;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_1001;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
@@ -140,16 +139,6 @@ namespace AssetRipper.Processing.Scenes
 			return false;
 		}
 
-		public static bool IsDuplicate(IExportContainer container, AssetCollection serializedFile)
-		{
-			if (IsSceneName(serializedFile.Name))
-			{
-				int index = FileNameToSceneIndex(serializedFile.Name, serializedFile.Version);
-				return container.IsSceneDuplicate(index);
-			}
-			return false;
-		}
-
-		private static bool IsSceneName(string name) => name == MainSceneName || s_sceneNameFormat.IsMatch(name);
+		public static bool IsSceneName(string name) => name == MainSceneName || s_sceneNameFormat.IsMatch(name);
 	}
 }

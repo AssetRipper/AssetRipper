@@ -1,20 +1,20 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Generics;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.SourceGenerated.Classes.ClassID_25;
 using AssetRipper.SourceGenerated.Classes.ClassID_29;
 using AssetRipper.SourceGenerated.Classes.ClassID_363;
 using AssetRipper.SourceGenerated.Classes.ClassID_41;
+using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.GUID;
 using AssetRipper.SourceGenerated.Subclasses.OcclusionScene;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_OcclusionPortal;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Renderer;
 using AssetRipper.SourceGenerated.Subclasses.SceneObjectIdentifier;
 
-namespace AssetRipper.SourceGenerated.Extensions
+namespace AssetRipper.Export.UnityProjects.Extensions
 {
-	public static class OcclusionCullingDataExtensions
+	internal static class OcclusionCullingDataExtensions
 	{
 		public static void Initialize(this IOcclusionCullingData occlusionCullingData, IExportContainer container, IOcclusionCullingSettings cullingSetting)
 		{

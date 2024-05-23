@@ -1,7 +1,5 @@
 using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
-using AssetRipper.Assets.Export;
-using AssetRipper.Assets.Metadata;
 using AssetRipper.Import.Logging;
 using AssetRipper.IO.Files;
 using AssetRipper.Processing;
@@ -35,7 +33,7 @@ namespace AssetRipper.Export.UnityProjects.Project
 			string filePath = Path.Combine(projectDirectory, $"{Scene.Path}.{ExportExtension}");
 			string folderPath = Path.GetDirectoryName(filePath)!;
 
-			if (SceneHelpers.IsDuplicate(container, File))
+			if (IsSceneDuplicate(container))
 			{
 				if (System.IO.File.Exists(filePath))
 				{
@@ -106,6 +104,16 @@ namespace AssetRipper.Export.UnityProjects.Project
 			{
 				return 0;
 			}
+		}
+
+		private bool IsSceneDuplicate(IExportContainer container)
+		{
+			if (SceneHelpers.IsSceneName(File.Name))
+			{
+				int index = SceneHelpers.FileNameToSceneIndex(File.Name, File.Version);
+				return container.IsSceneDuplicate(index);
+			}
+			return false;
 		}
 
 		public override IEnumerable<IUnityObjectBase> Assets

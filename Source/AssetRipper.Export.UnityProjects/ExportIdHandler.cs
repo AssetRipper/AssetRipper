@@ -1,6 +1,7 @@
-﻿using System.Diagnostics;
+﻿using AssetRipper.Assets;
+using System.Diagnostics;
 
-namespace AssetRipper.Assets.Metadata
+namespace AssetRipper.Export.UnityProjects
 {
 	public static class ExportIdHandler
 	{

@@ -1,5 +1,4 @@
-﻿using AssetRipper.Assets.Export;
-using AssetRipper.SourceGenerated.Classes.ClassID_1045;
+﻿using AssetRipper.SourceGenerated.Classes.ClassID_1045;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.Scene;
 

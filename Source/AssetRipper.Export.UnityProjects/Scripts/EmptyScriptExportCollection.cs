@@ -1,5 +1,4 @@
-﻿using AssetRipper.Assets.Export;
-using AssetRipper.Export.UnityProjects.Scripts.AssemblyDefinitions;
+﻿using AssetRipper.Export.UnityProjects.Scripts.AssemblyDefinitions;
 using AssetRipper.Import.Logging;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using System.Diagnostics;

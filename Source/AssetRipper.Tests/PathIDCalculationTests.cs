@@ -1,4 +1,4 @@
-﻿using AssetRipper.Assets.Metadata;
+﻿using AssetRipper.Export.UnityProjects;
 using AssetRipper.HashAlgorithms;
 using AssetRipper.IO.Files;
 using AssetRipper.Primitives;

@@ -1,7 +1,7 @@
 ﻿using AssetRipper.IO.Files;
 using AssetRipper.Yaml;
 
-namespace AssetRipper.Assets.Metadata
+namespace AssetRipper.Export.UnityProjects
 {
 	public readonly record struct MetaPtr(long FileID, UnityGuid GUID, AssetType AssetType)
 	{

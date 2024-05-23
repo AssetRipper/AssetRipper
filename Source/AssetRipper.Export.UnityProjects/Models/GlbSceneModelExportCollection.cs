@@ -1,5 +1,4 @@
-﻿using AssetRipper.Assets.Export;
-using AssetRipper.Export.UnityProjects.Project;
+﻿using AssetRipper.Export.UnityProjects.Project;
 using AssetRipper.Processing;
 
 namespace AssetRipper.Export.UnityProjects.Models

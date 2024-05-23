@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Assets.Metadata;
 using AssetRipper.Export.UnityProjects;
 using AssetRipper.Yaml;
 using System.Globalization;

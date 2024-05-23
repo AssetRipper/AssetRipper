@@ -31,6 +31,7 @@
 		<ProjectReference Include="..\AssetRipper.Export.Modules.Textures\AssetRipper.Export.Modules.Textures.csproj" />
 		<ProjectReference Include="..\AssetRipper.Import\AssetRipper.Import.csproj" />
 		<ProjectReference Include="..\AssetRipper.Processing\AssetRipper.Processing.csproj" />
+		<ProjectReference Include="..\AssetRipper.Yaml\AssetRipper.Yaml.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

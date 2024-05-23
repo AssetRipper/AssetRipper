@@ -1,5 +1,4 @@
 using AssetRipper.Assets;
-using AssetRipper.Assets.Export;
 using AssetRipper.IO.Files;
 
 namespace AssetRipper.Export.UnityProjects

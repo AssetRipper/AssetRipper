@@ -1,7 +1,8 @@
-using AssetRipper.Assets.Metadata;
+using AssetRipper.Assets;
+using AssetRipper.Export.UnityProjects;
 using Moq;
 
-namespace AssetRipper.Assets.Tests;
+namespace AssetRipper.Tests;
 
 public class ExportIdHandlerTests
 {

@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using System.Text;
 
-namespace AssetRipper.Export.UnityProjects;
+namespace AssetRipper.Yaml;
 
 internal static class YamlEscaping
 {

@@ -1,10 +1,8 @@
 ﻿using AssetRipper.Assets.Cloning;
-using AssetRipper.Assets.Export;
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Assets.Traversal;
 using AssetRipper.IO.Endian;
-using AssetRipper.Yaml;
 using System.Runtime.CompilerServices;
 
 namespace AssetRipper.Assets;
@@ -27,10 +25,6 @@ public abstract class UnityAssetBase : IUnityAssetBase
 	public virtual void WriteEditor(AssetWriter writer) => throw MethodNotSupported();
 
 	public virtual void WriteRelease(AssetWriter writer) => throw MethodNotSupported();
-
-	public virtual YamlNode ExportYamlEditor(IExportContainer container) => throw MethodNotSupported();
-
-	public virtual YamlNode ExportYamlRelease(IExportContainer container) => throw MethodNotSupported();
 
 	public virtual IEnumerable<(string, PPtr)> FetchDependencies()
 	{

@@ -1,5 +1,4 @@
 using AssetRipper.Assets;
-using AssetRipper.Assets.Export;
 using AssetRipper.Export.Modules.Shaders.IO;
 using AssetRipper.IO.Files;
 using AssetRipper.Yaml;

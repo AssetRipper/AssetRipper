@@ -1,7 +1,5 @@
 using AssetRipper.Assets;
-using AssetRipper.Assets.Export;
 using AssetRipper.Assets.Generics;
-using AssetRipper.Assets.Metadata;
 using AssetRipper.Export.UnityProjects.Configuration;
 using AssetRipper.Export.UnityProjects.Project;
 using AssetRipper.Processing.Textures;
