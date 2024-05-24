@@ -16,6 +16,7 @@ namespace AssetRipper.IO.Files.SerializedFiles
 		private FileIdentifier[]? m_dependencies;
 		private ObjectInfo[]? m_objects;
 		private SerializedType[]? m_types;
+		private LocalSerializedObjectIdentifier[]? m_scriptTypes;
 		private SerializedTypeReference[]? m_refTypes;
 
 		public FormatVersion Generation { get; private set; }
@@ -57,6 +58,7 @@ namespace AssetRipper.IO.Files.SerializedFiles
 		public ReadOnlySpan<FileIdentifier> Dependencies => m_dependencies;
 		public ReadOnlySpan<ObjectInfo> Objects => m_objects;
 		public ReadOnlySpan<SerializedType> Types => m_types;
+		public ReadOnlySpan<LocalSerializedObjectIdentifier> ScriptTypes => m_scriptTypes;
 		public ReadOnlySpan<SerializedTypeReference> RefTypes => m_refTypes;
 		public bool HasTypeTree { get; private set; }
 
@@ -114,6 +116,7 @@ namespace AssetRipper.IO.Files.SerializedFiles
 			m_dependencies = metadata.Externals;
 			m_objects = metadata.Object;
 			m_types = metadata.Types;
+			m_scriptTypes = metadata.ScriptTypes;
 			m_refTypes = metadata.RefTypes;
 			HasTypeTree = metadata.EnableTypeTree;
 		}
@@ -134,8 +137,9 @@ namespace AssetRipper.IO.Files.SerializedFiles
 				UnityVersion = Version,
 				TargetPlatform = Platform,
 				Externals = m_dependencies ?? Array.Empty<FileIdentifier>(),
-				Object = GetNewObjectInfoArray(m_objects),
+				Object = GetNewObjectInfoArray(m_objects, 8),
 				Types = m_types ?? Array.Empty<SerializedType>(),
+				ScriptTypes = m_scriptTypes ?? Array.Empty<LocalSerializedObjectIdentifier>(),
 				RefTypes = m_refTypes ?? Array.Empty<SerializedTypeReference>(),
 				EnableTypeTree = HasTypeTree,
 			};
@@ -144,9 +148,9 @@ namespace AssetRipper.IO.Files.SerializedFiles
 			long objectDataPosition;
 			if (SerializedFileMetadata.IsMetadataAtTheEnd(Generation))
 			{
-				AlignStream(writer);//Object data must always be aligned.
+				AlignStream(writer, 16); // objectDataPosition must be aligned to 16 bytes
 				objectDataPosition = stream.Position;
-				WriteObjectData(writer, metadata.Object);
+				WriteObjectData(writer, metadata.Object, 8); // each object data must be aligned to 8 bytes
 				metadataPosition = stream.Position;
 				metadata.Write(writer);
 				metadataSize = stream.Position - metadataPosition;
@@ -156,9 +160,9 @@ namespace AssetRipper.IO.Files.SerializedFiles
 				metadataPosition = stream.Position;
 				metadata.Write(writer);
 				metadataSize = stream.Position - metadataPosition;
-				AlignStream(writer);//Object data must always be aligned.
+				AlignStream(writer, 16); // objectDataPosition must be aligned to 16 bytes
 				objectDataPosition = stream.Position;
-				WriteObjectData(writer, metadata.Object);
+				WriteObjectData(writer, metadata.Object, 8); // each object data must be aligned to 8 bytes
 			}
 
 			long finalPosition = stream.Position;
@@ -171,7 +175,7 @@ namespace AssetRipper.IO.Files.SerializedFiles
 
 			stream.Position = finalPosition;
 
-			static void WriteObjectData(SerializedWriter writer, ObjectInfo[] objects)
+			static void WriteObjectData(SerializedWriter writer, ObjectInfo[] objects, long alignment)
 			{
 				foreach (ObjectInfo objectInfo in objects)
 				{
@@ -179,12 +183,11 @@ namespace AssetRipper.IO.Files.SerializedFiles
 					{
 						writer.Write(objectInfo.ObjectData);
 					}
-
-					AlignStream(writer);
+					AlignStream(writer, alignment);
 				}
 			}
 
-			static ObjectInfo[] GetNewObjectInfoArray(ObjectInfo[]? objects)
+			static ObjectInfo[] GetNewObjectInfoArray(ObjectInfo[]? objects, long alignment)
 			{
 				if (objects is null)
 				{
@@ -202,28 +205,20 @@ namespace AssetRipper.IO.Files.SerializedFiles
 					objectInfo.ByteSize = objectInfo.ObjectData?.Length ?? 0;
 
 					byteStart += objectInfo.ByteSize;
-					byteStart += 3 - (byteStart % 4);//Object data must always be aligned.
+					byteStart += (byteStart % alignment) > 0 ?
+						(alignment - (byteStart % alignment)) : 0; // alignment
 				}
 
 				return newObjects;
 			}
 
-			static void AlignStream(SerializedWriter writer)
+			static void AlignStream(SerializedWriter writer, long alignment)
 			{
-				switch (writer.BaseStream.Position % 4)
+				long padding = (writer.BaseStream.Position % alignment) > 0 ?
+					(alignment - (writer.BaseStream.Position % alignment)) : 0; // alignment
+				for (int i = 0; i < padding; i++)
 				{
-					case 1:
-						writer.Write((byte)0);
-						writer.Write((byte)0);
-						writer.Write((byte)0);
-						break;
-					case 2:
-						writer.Write((byte)0);
-						writer.Write((byte)0);
-						break;
-					case 3:
-						writer.Write((byte)0);
-						break;
+					writer.Write((byte)0);
 				}
 			}
 		}
