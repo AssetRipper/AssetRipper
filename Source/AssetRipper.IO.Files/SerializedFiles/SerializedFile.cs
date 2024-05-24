@@ -4,6 +4,9 @@ using AssetRipper.IO.Files.SerializedFiles.IO;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
 using AssetRipper.IO.Files.Streams.Smart;
 using AssetRipper.IO.Files.Utils;
+using System.Diagnostics;
+using System.Numerics;
+using System.Runtime.CompilerServices;
 
 namespace AssetRipper.IO.Files.SerializedFiles
 {
@@ -16,6 +19,7 @@ namespace AssetRipper.IO.Files.SerializedFiles
 		private FileIdentifier[]? m_dependencies;
 		private ObjectInfo[]? m_objects;
 		private SerializedType[]? m_types;
+		private LocalSerializedObjectIdentifier[]? m_scriptTypes;
 		private SerializedTypeReference[]? m_refTypes;
 
 		public FormatVersion Generation { get; private set; }
@@ -57,6 +61,7 @@ namespace AssetRipper.IO.Files.SerializedFiles
 		public ReadOnlySpan<FileIdentifier> Dependencies => m_dependencies;
 		public ReadOnlySpan<ObjectInfo> Objects => m_objects;
 		public ReadOnlySpan<SerializedType> Types => m_types;
+		public ReadOnlySpan<LocalSerializedObjectIdentifier> ScriptTypes => m_scriptTypes;
 		public ReadOnlySpan<SerializedTypeReference> RefTypes => m_refTypes;
 		public bool HasTypeTree { get; private set; }
 
@@ -114,6 +119,7 @@ namespace AssetRipper.IO.Files.SerializedFiles
 			m_dependencies = metadata.Externals;
 			m_objects = metadata.Object;
 			m_types = metadata.Types;
+			m_scriptTypes = metadata.ScriptTypes;
 			m_refTypes = metadata.RefTypes;
 			HasTypeTree = metadata.EnableTypeTree;
 		}
@@ -136,6 +142,7 @@ namespace AssetRipper.IO.Files.SerializedFiles
 				Externals = m_dependencies ?? Array.Empty<FileIdentifier>(),
 				Object = GetNewObjectInfoArray(m_objects),
 				Types = m_types ?? Array.Empty<SerializedType>(),
+				ScriptTypes = m_scriptTypes ?? Array.Empty<LocalSerializedObjectIdentifier>(),
 				RefTypes = m_refTypes ?? Array.Empty<SerializedTypeReference>(),
 				EnableTypeTree = HasTypeTree,
 			};
@@ -144,7 +151,7 @@ namespace AssetRipper.IO.Files.SerializedFiles
 			long objectDataPosition;
 			if (SerializedFileMetadata.IsMetadataAtTheEnd(Generation))
 			{
-				AlignStream(writer);//Object data must always be aligned.
+				AlignStream(writer, 16); // objectDataPosition must be aligned to 16 bytes
 				objectDataPosition = stream.Position;
 				WriteObjectData(writer, metadata.Object);
 				metadataPosition = stream.Position;
@@ -156,7 +163,7 @@ namespace AssetRipper.IO.Files.SerializedFiles
 				metadataPosition = stream.Position;
 				metadata.Write(writer);
 				metadataSize = stream.Position - metadataPosition;
-				AlignStream(writer);//Object data must always be aligned.
+				AlignStream(writer, 16); // objectDataPosition must be aligned to 16 bytes
 				objectDataPosition = stream.Position;
 				WriteObjectData(writer, metadata.Object);
 			}
@@ -179,8 +186,7 @@ namespace AssetRipper.IO.Files.SerializedFiles
 					{
 						writer.Write(objectInfo.ObjectData);
 					}
-
-					AlignStream(writer);
+					AlignStream(writer, 8); // each object data must be aligned to 8 bytes
 				}
 			}
 
@@ -202,28 +208,24 @@ namespace AssetRipper.IO.Files.SerializedFiles
 					objectInfo.ByteSize = objectInfo.ObjectData?.Length ?? 0;
 
 					byteStart += objectInfo.ByteSize;
-					byteStart += 3 - (byteStart % 4);//Object data must always be aligned.
+					byteStart += 8 - (byteStart % 8); // each object data must be aligned to 8 bytes
 				}
 
 				return newObjects;
 			}
 
-			static void AlignStream(SerializedWriter writer)
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			static void AlignStream(SerializedWriter writer, [ConstantExpected] int alignment)
 			{
-				switch (writer.BaseStream.Position % 4)
+				Debug.Assert(alignment > 0);
+				Debug.Assert(BitOperations.IsPow2(alignment));
+				long bytesSinceLastAlignment = writer.BaseStream.Position & (alignment - 1);
+				if (bytesSinceLastAlignment != 0)
 				{
-					case 1:
-						writer.Write((byte)0);
-						writer.Write((byte)0);
-						writer.Write((byte)0);
-						break;
-					case 2:
-						writer.Write((byte)0);
-						writer.Write((byte)0);
-						break;
-					case 3:
-						writer.Write((byte)0);
-						break;
+					int padding = alignment - (int)bytesSinceLastAlignment;
+					Span<byte> buffer = stackalloc byte[padding];
+					buffer.Clear();
+					writer.Write(buffer);
 				}
 			}
 		}
