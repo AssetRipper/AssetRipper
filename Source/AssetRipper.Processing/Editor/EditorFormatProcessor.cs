@@ -123,6 +123,10 @@ namespace AssetRipper.Processing.Editor
 					break;
 				case TypeTreeObject { IsPlayerSettings: true } playerSettings:
 					SerializableStructure editorStructure = playerSettings.EditorFields;
+					if (editorStructure.ContainsField("webGLLinkerTarget"))
+					{
+						editorStructure["webGLLinkerTarget"].AsInt32 = 1;
+					}
 					if (editorStructure.ContainsField("allowUnsafeCode"))
 					{
 						editorStructure["allowUnsafeCode"].AsBoolean = true;
