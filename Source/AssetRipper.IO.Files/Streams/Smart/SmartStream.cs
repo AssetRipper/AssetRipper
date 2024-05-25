@@ -1,4 +1,5 @@
 ﻿using AssetRipper.IO.Files.Streams.MultiFile;
+using AssetRipper.IO.Files.Utils;
 
 namespace AssetRipper.IO.Files.Streams.Smart
 {
@@ -28,7 +29,7 @@ namespace AssetRipper.IO.Files.Streams.Smart
 
 		public static SmartStream CreateTemp()
 		{
-			string tempFile = Path.GetTempFileName();
+			string tempFile = TemporaryFileStorage.CreateTemporaryFile();
 			return new SmartStream(new FileStream(tempFile, FileMode.Open, FileAccess.ReadWrite, FileShare.None, 4096, FileOptions.DeleteOnClose));
 		}
 

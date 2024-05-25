@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Import.Logging;
 using AssetRipper.Import.Utils;
+using AssetRipper.IO.Files.Utils;
 using ICSharpCode.SharpZipLib.Zip;
 
 namespace AssetRipper.Import.Structure
@@ -48,7 +49,7 @@ namespace AssetRipper.Import.Structure
 				return zipFilePath;
 			}
 
-			string outputDirectory = TempFolderManager.CreateNewRandomTempFolder();
+			string outputDirectory = TemporaryFileStorage.CreateTemporaryFolder();
 			DecompressZipArchive(zipFilePath, outputDirectory);
 			return outputDirectory;
 		}
@@ -60,8 +61,8 @@ namespace AssetRipper.Import.Structure
 				return xapkFilePath;
 			}
 
-			string intermediateDirectory = TempFolderManager.CreateNewRandomTempFolder();
-			string outputDirectory = TempFolderManager.CreateNewRandomTempFolder();
+			string intermediateDirectory = TemporaryFileStorage.CreateTemporaryFolder();
+			string outputDirectory = TemporaryFileStorage.CreateTemporaryFolder();
 			DecompressZipArchive(xapkFilePath, intermediateDirectory);
 			foreach (string filePath in Directory.GetFiles(intermediateDirectory))
 			{
