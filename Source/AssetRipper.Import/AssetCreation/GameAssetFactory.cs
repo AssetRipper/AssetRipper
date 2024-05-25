@@ -157,7 +157,7 @@ namespace AssetRipper.Import.AssetCreation
 			IUnityObjectBase? asset = AssetFactory.Create(assetInfo, version);
 			if (asset is null && TypeTreeNodeStruct.TryMakeFromTpk((ClassIDType)assetInfo.ClassID, version, out TypeTreeNodeStruct releaseRoot, out TypeTreeNodeStruct editorRoot))
 			{
-				return new TypeTreeObject(releaseRoot, editorRoot, assetInfo);
+				return TypeTreeObject.Create(releaseRoot, editorRoot, assetInfo);
 			}
 			else
 			{

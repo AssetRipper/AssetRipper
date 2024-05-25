@@ -1,5 +1,7 @@
 ﻿# Serialization Notes
 
+https://docs.unity3d.com/Manual/script-Serialization.html
+
 ## `[SerializeReference]`
 
 The biggest indicator of `[SerializeReference]` in type trees is that the last node is `ReferencedObjectData data`.
