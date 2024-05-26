@@ -9,6 +9,7 @@ using AssetRipper.Import.Structure.Assembly.Serializable;
 using AssetRipper.Import.Structure.Assembly.TypeTrees;
 using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
+using AssetRipper.IO.Files.Utils;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
@@ -96,6 +97,11 @@ namespace AssetRipper.Import.AssetCreation
 			IUnityObjectBase asset = TryReadNormalObject(assetInfo, assetData, assetInfo.Collection.Version, out string? error);
 			if (error is null)
 			{
+				return asset;
+			}
+			else if (FilenameUtils.IsDefaultResourceOrBuiltinExtra(assetInfo.Collection.Name))
+			{
+				Logger.Warning(LogCategory.Import, error);
 				return asset;
 			}
 			else if (assetInfo.Collection.Version.Type == UnityVersionType.Patch)
