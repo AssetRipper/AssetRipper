@@ -275,7 +275,7 @@ public class YamlWalker : AssetWalker
 			}
 			else
 			{
-				Debug.Assert(IsString<T>());
+				Debug.Assert(IsValidDictionaryKey<T>());
 				ContextStack.Push(new(CurrentMappingNode, value?.ToString() ?? ""));
 			}
 		}
