@@ -1,40 +1,30 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Assets.IO.Writing;
-using AssetRipper.Import.AssetCreation;
+using AssetRipper.GUI.Web.Paths;
 
 namespace AssetRipper.GUI.Web.Pages.Assets;
 
-internal sealed class HexTab : HtmlTab
+internal sealed class HexTab : AssetHtmlTab
 {
-	public byte[] Data { get; }
+	public string Url { get; }
 
-	public string? FileName { get; }
+	public string FileName => $"{Asset.GetBestName()}.dat";
 
 	public override string DisplayName => Localization.AssetTabHex;
 
 	public override string HtmlName => "hex";
 
-	public override bool Enabled => Data.Length > 0;
+	public override bool Enabled => AssetAPI.HasBinaryData(Asset);
 
-	public HexTab(IUnityObjectBase asset)
+	public HexTab(IUnityObjectBase asset, AssetPath path) : base(asset)
 	{
-		Data = GetData(asset);
-		if (Data.Length > 0)
-		{
-			FileName = $"{asset.GetBestName()}.dat";
-		}
+		Url = Enabled ? AssetAPI.GetBinaryUrl(path) : "";
 	}
 
 	public override void Write(TextWriter writer)
 	{
 		using (new Div(writer).WithClass("text-center").End())
 		{
-			DataSaveButton.Write(writer, FileName, Data);
+			SaveButton.Write(writer, Url, FileName);
 		}
-	}
-
-	private static byte[] GetData(IUnityObjectBase Asset)
-	{
-		return (Asset as RawDataObject)?.RawData ?? [];
 	}
 }

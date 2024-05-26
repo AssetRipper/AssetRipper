@@ -4,26 +4,25 @@ using AssetRipper.IO.Files.Utils;
 
 namespace AssetRipper.GUI.Web.Pages.Assets;
 
-internal sealed class ImageTab : HtmlTab
+internal sealed class ImageTab : AssetHtmlTab
 {
+	public AssetPath Path { get; }
+
 	public override string DisplayName => Localization.AssetTabImage;
 
 	public override string HtmlName => "image";
 
 	public override bool Enabled => AssetAPI.HasImageData(Asset);
 
-	public IUnityObjectBase Asset { get; }
-
-	public ImageTab(IUnityObjectBase asset)
+	public ImageTab(IUnityObjectBase asset, AssetPath path) : base(asset)
 	{
-		Asset = asset;
+		Path = path;
 	}
 
 	public override void Write(TextWriter writer)
 	{
-		AssetPath assetPath = Asset.GetPath();
-		string pngUrl = AssetAPI.GetImageUrl(assetPath, "png");
-		string rawUrl = AssetAPI.GetImageUrl(assetPath);
+		string pngUrl = AssetAPI.GetImageUrl(Path, "png");
+		string rawUrl = AssetAPI.GetImageUrl(Path);
 		string fileName = FileUtils.FixInvalidNameCharacters(Asset.GetBestName());
 
 		// Click on image to save
@@ -35,7 +34,7 @@ internal sealed class ImageTab : HtmlTab
 		// Click a button beneath the image to download its raw data
 		using (new Div(writer).WithTextCenter().End())
 		{
-			DataSaveButton.Write(writer, rawUrl, fileName, Localization.SaveRawData);
+			SaveButton.Write(writer, rawUrl, fileName, Localization.SaveRawData);
 		}
 	}
 }

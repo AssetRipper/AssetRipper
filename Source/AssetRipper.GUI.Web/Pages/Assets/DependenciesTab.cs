@@ -4,11 +4,11 @@ using AssetRipper.GUI.Web.Paths;
 
 namespace AssetRipper.GUI.Web.Pages.Assets;
 
-internal sealed class DependenciesTab(IUnityObjectBase asset) : HtmlTab
+internal sealed class DependenciesTab(IUnityObjectBase asset) : AssetHtmlTab(asset)
 {
 	public override string DisplayName => Localization.AssetTabDependencies;
 	public override string HtmlName => "dependencies";
-	public override bool Enabled => asset.FetchDependencies().Any(pair => !pair.Item2.IsNull);
+	public override bool Enabled => Asset.FetchDependencies().Any(pair => !pair.Item2.IsNull);
 
 	public override void Write(TextWriter writer)
 	{
@@ -16,7 +16,7 @@ internal sealed class DependenciesTab(IUnityObjectBase asset) : HtmlTab
 		{
 			using (new Tbody(writer).End())
 			{
-				foreach ((string path, PPtr pptr) in asset.FetchDependencies())
+				foreach ((string path, PPtr pptr) in Asset.FetchDependencies())
 				{
 					if (pptr.IsNull)
 					{
@@ -28,7 +28,7 @@ internal sealed class DependenciesTab(IUnityObjectBase asset) : HtmlTab
 						new Th(writer).Close(path);
 						using (new Td(writer).End())
 						{
-							IUnityObjectBase? dependency = asset.Collection.TryGetAsset(pptr);
+							IUnityObjectBase? dependency = Asset.Collection.TryGetAsset(pptr);
 							if (dependency is null)
 							{
 								writer.WriteHtml("Missing");

@@ -1,27 +1,22 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Export.PrimaryContent;
+using AssetRipper.GUI.Web.Paths;
 
 namespace AssetRipper.GUI.Web.Pages.Assets;
 
-internal sealed class JsonTab(IUnityObjectBase asset) : HtmlTab
+internal sealed class JsonTab(IUnityObjectBase asset, AssetPath path) : AssetHtmlTab(asset)
 {
-	public string Text { get; } = GetJsonString(asset);
-	public string FileName { get; } = $"{asset.GetBestName()}.json";
+	public string Url { get; } = AssetAPI.GetJsonUrl(path);
+	public string FileName => $"{Asset.GetBestName()}.json";
 	public override string DisplayName => Localization.Json;
 	public override string HtmlName => "json";
-	public override bool Enabled => Text.Length > 4;
+	public override bool Enabled => true;
 
 	public override void Write(TextWriter writer)
 	{
-		new Pre(writer).WithClass("bg-dark-subtle rounded-3 p-2").Close(Text);
+		new Pre(writer).WithClass("bg-dark-subtle rounded-3 p-2").WithDynamicTextContent(Url).Close();
 		using (new Div(writer).WithClass("text-center").End())
 		{
-			TextSaveButton.Write(writer, FileName, Text);
+			SaveButton.Write(writer, Url, FileName);
 		}
-	}
-
-	private static string GetJsonString(IUnityObjectBase asset)
-	{
-		return new DefaultJsonWalker().SerializeStandard(asset);
 	}
 }

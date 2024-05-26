@@ -1,4 +1,6 @@
-﻿namespace AssetRipper.GUI.Web.Pages;
+﻿using AssetRipper.Assets;
+
+namespace AssetRipper.GUI.Web.Pages;
 
 internal abstract class HtmlTab
 {

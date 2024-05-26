@@ -28,7 +28,7 @@ public sealed class ViewPage : DefaultPage
 
 		using (new Div(writer).WithClass("text-center").End())
 		{
-			DataSaveButton.Write(writer, ResourceAPI.GetDataUrl(Path), Resource.NameFixed);
+			SaveButton.Write(writer, ResourceAPI.GetDataUrl(Path), Resource.NameFixed);
 		}
 	}
 }

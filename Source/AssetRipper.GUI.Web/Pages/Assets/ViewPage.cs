@@ -17,13 +17,13 @@ public sealed class ViewPage : DefaultPage
 		ReadOnlySpan<HtmlTab> tabs =
 			[
 				new InformationTab(Asset, Path),
-				new AudioTab(Asset),
-				new ImageTab(Asset),
-				new TextTab(Asset),
-				new FontTab(Asset),
-				new YamlTab(Asset),
-				new JsonTab(Asset),
-				new HexTab(Asset),
+				new AudioTab(Asset, Path),
+				new ImageTab(Asset, Path),
+				new TextTab(Asset, Path),
+				new FontTab(Asset, Path),
+				new YamlTab(Asset, Path),
+				new JsonTab(Asset, Path),
+				new HexTab(Asset, Path),
 				new DependenciesTab(Asset),
 				new DevelopmentTab(Asset),
 			];

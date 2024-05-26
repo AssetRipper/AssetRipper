@@ -19,7 +19,7 @@ using AssetRipper.SourceGenerated.Extensions;
 
 namespace AssetRipper.GUI.Web.Pages.Assets;
 
-internal sealed class InformationTab(IUnityObjectBase asset, AssetPath path) : HtmlTab
+internal sealed class InformationTab(IUnityObjectBase asset, AssetPath path) : AssetHtmlTab(asset)
 {
 	public override string DisplayName => Localization.AssetTabInformation;
 	public override string HtmlName => "information";
@@ -30,7 +30,7 @@ internal sealed class InformationTab(IUnityObjectBase asset, AssetPath path) : H
 		{
 			using (new Tbody(writer).End())
 			{
-				if (asset.MainAsset is SceneHierarchyObject sceneHierarchyObject)
+				if (Asset.MainAsset is SceneHierarchyObject sceneHierarchyObject)
 				{
 					using (new Tr(writer).End())
 					{
@@ -46,41 +46,41 @@ internal sealed class InformationTab(IUnityObjectBase asset, AssetPath path) : H
 					new Th(writer).Close(Localization.Collection);
 					using (new Td(writer).End())
 					{
-						PathLinking.WriteLink(writer, path.CollectionPath, asset.Collection.Name);
+						PathLinking.WriteLink(writer, path.CollectionPath, Asset.Collection.Name);
 					}
 				}
 				using (new Tr(writer).End())
 				{
 					new Th(writer).Close(Localization.PathId);
-					new Td(writer).Close(asset.PathID.ToString());
+					new Td(writer).Close(Asset.PathID.ToString());
 				}
 				using (new Tr(writer).End())
 				{
 					new Th(writer).Close(Localization.ClassIdTypeNumber);
-					new Td(writer).Close(asset.ClassID.ToString());
+					new Td(writer).Close(Asset.ClassID.ToString());
 				}
 				using (new Tr(writer).End())
 				{
 					new Th(writer).Close(Localization.ClassIdTypeName);
-					new Td(writer).Close(asset.ClassName);
+					new Td(writer).Close(Asset.ClassName);
 				}
-				if (asset.OriginalDirectory is not null || asset.OriginalName is not null || asset.OriginalExtension is not null)
+				if (Asset.OriginalDirectory is not null || Asset.OriginalName is not null || Asset.OriginalExtension is not null)
 				{
 					using (new Tr(writer).End())
 					{
 						new Th(writer).Close(Localization.OriginalPath);
-						new Td(writer).Close(asset.OriginalPath);
+						new Td(writer).Close(Asset.OriginalPath);
 					}
 				}
-				if (!string.IsNullOrEmpty(asset.AssetBundleName))
+				if (!string.IsNullOrEmpty(Asset.AssetBundleName))
 				{
 					using (new Tr(writer).End())
 					{
 						new Th(writer).Close(Localization.AssetBundleName);
-						new Td(writer).Close(asset.AssetBundleName);
+						new Td(writer).Close(Asset.AssetBundleName);
 					}
 				}
-				foreach ((string key, IUnityObjectBase value) in GetCustomReferenceProperties(asset))
+				foreach ((string key, IUnityObjectBase value) in GetCustomReferenceProperties(Asset))
 				{
 					using (new Tr(writer).End())
 					{
@@ -91,7 +91,7 @@ internal sealed class InformationTab(IUnityObjectBase asset, AssetPath path) : H
 						}
 					}
 				}
-				foreach ((string key, string value) in GetCustomStringProperties(asset))
+				foreach ((string key, string value) in GetCustomStringProperties(Asset))
 				{
 					using (new Tr(writer).End())
 					{
@@ -103,13 +103,13 @@ internal sealed class InformationTab(IUnityObjectBase asset, AssetPath path) : H
 		}
 	}
 
-	private static IEnumerable<(string, IUnityObjectBase)> GetCustomReferenceProperties(IUnityObjectBase Asset)
+	private static IEnumerable<(string, IUnityObjectBase)> GetCustomReferenceProperties(IUnityObjectBase asset)
 	{
-		if (Asset.MainAsset is not null && Asset.MainAsset != Asset)
+		if (asset.MainAsset is not null && asset.MainAsset != asset)
 		{
-			yield return (Localization.MainAsset, Asset.MainAsset);
+			yield return (Localization.MainAsset, asset.MainAsset);
 		}
-		switch (Asset)
+		switch (asset)
 		{
 			case IComponent component:
 				{
@@ -161,9 +161,9 @@ internal sealed class InformationTab(IUnityObjectBase asset, AssetPath path) : H
 		}
 	}
 
-	private static IEnumerable<(string, string)> GetCustomStringProperties(IUnityObjectBase Asset)
+	private static IEnumerable<(string, string)> GetCustomStringProperties(IUnityObjectBase asset)
 	{
-		switch (Asset)
+		switch (asset)
 		{
 			case IMonoScript monoScript:
 				{

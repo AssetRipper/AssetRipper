@@ -1,10 +1,9 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Export.UnityProjects.Audio;
-using AssetRipper.SourceGenerated.Classes.ClassID_83;
+using AssetRipper.GUI.Web.Paths;
 
 namespace AssetRipper.GUI.Web.Pages.Assets;
 
-internal sealed class AudioTab : HtmlTab
+internal sealed class AudioTab : AssetHtmlTab
 {
 	public string Source { get; }
 
@@ -12,11 +11,11 @@ internal sealed class AudioTab : HtmlTab
 
 	public override string HtmlName => "audio";
 
-	public override bool Enabled => !string.IsNullOrEmpty(Source);
+	public override bool Enabled => AssetAPI.HasAudioData(Asset);
 
-	public AudioTab(IUnityObjectBase asset)
+	public AudioTab(IUnityObjectBase asset, AssetPath path) : base(asset)
 	{
-		Source = TryDecode(asset);
+		Source = AssetAPI.GetAudioUrl(path);
 	}
 
 	public override void Write(TextWriter writer)
@@ -34,14 +33,5 @@ internal sealed class AudioTab : HtmlTab
 				}
 			}
 		}
-	}
-
-	private static string TryDecode(IUnityObjectBase asset)
-	{
-		if (asset is IAudioClip clip && AudioClipDecoder.TryDecode(clip, out byte[]? decodedAudioData, out string? extension, out _))
-		{
-			return $"data:audio/{extension};base64,{Convert.ToBase64String(decodedAudioData, Base64FormattingOptions.None)}";
-		}
-		return "";
 	}
 }
