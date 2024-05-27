@@ -15,21 +15,43 @@ namespace AssetRipper.Processing.AnimationClips.Editor
 
 		private static StreamedCurveKey[] ReadAssetArray(ref EndianSpanReader reader, UnityVersion version)
 		{
-			int count = reader.ReadInt32();
-			ThrowIfNegative(count);
+			int curveCount = reader.ReadInt32();
+			ThrowIfNegative(curveCount);
 
-			StreamedCurveKey[] array = count == 0 ? Array.Empty<StreamedCurveKey>() : new StreamedCurveKey[count];
-			for (int i = 0; i < count; i++)
+			StreamedCurveKey[] curvesArray = curveCount == 0 ? Array.Empty<StreamedCurveKey>() : new StreamedCurveKey[curveCount];
+			if (curveCount > 0)
 			{
-				StreamedCurveKey instance = new();
-				instance.Read(ref reader);
-				array[i] = instance;
+				StreamedCurveKey instance = ReadNextCurve(ref reader);
+				curvesArray[0] = instance;
+
+				int saveIdx = 1;
+				for (int readIdx = 1; readIdx < curveCount; readIdx++, saveIdx++)
+				{
+					instance = ReadNextCurve(ref reader);
+					if (curvesArray[saveIdx - 1].Index == instance.Index)
+					{
+						saveIdx--; // keep only last curve from sequence of duplicated binding/Index
+					}
+					curvesArray[saveIdx] = instance;
+				}
+				if (saveIdx != curveCount)
+				{
+					curvesArray = curvesArray.AsSpan(0, saveIdx).ToArray();
+				}
 			}
+
 			if (version.GreaterThanOrEquals(2017, 1))
 			{
 				reader.Align();
 			}
-			return array;
+			return curvesArray;
+
+			static StreamedCurveKey ReadNextCurve(ref EndianSpanReader reader)
+			{
+				StreamedCurveKey instance = new();
+				instance.Read(ref reader);
+				return instance;
+			}
 
 			static void ThrowIfNegative(int count)
 			{
