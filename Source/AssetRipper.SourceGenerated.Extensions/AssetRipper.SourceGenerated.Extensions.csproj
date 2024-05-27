@@ -8,11 +8,11 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\AssetRipper.Assets\AssetRipper.Assets.csproj" />
-		<ProjectReference Include="..\AssetRipper.Checksum\AssetRipper.Checksum.csproj" />
 		<ProjectReference Include="..\AssetRipper.Numerics\AssetRipper.Numerics.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="AssetRipper.Checksum" Version="1.0.0" />
 		<PackageReference Include="AssetRipper.SourceGenerated" Version="1.0.14" />
 	</ItemGroup>
 
