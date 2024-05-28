@@ -21,7 +21,7 @@ Thank you for considering to support me. I have normal expenses like food, elect
 
 # Supported Versions
 
-Unity `3.5.0` to `2023.3.X`
+Unity `3.5.0` to `6000.0.X`
 
 # Discord [![](https://img.shields.io/discord/867514400701153281?color=blue&label=AssetRipper)](https://discord.gg/XqXa53W2Yh)
 
