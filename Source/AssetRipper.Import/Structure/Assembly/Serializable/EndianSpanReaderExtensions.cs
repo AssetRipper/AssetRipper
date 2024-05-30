@@ -88,6 +88,31 @@ internal static class EndianSpanReaderExtensions
 		return array;
 	}
 
+	public static string[][] ReadStringArrayArray(this ref EndianSpanReader reader, UnityVersion version)
+	{
+		int count = reader.ReadInt32();
+		int index = 0;
+		ThrowIfNotEnoughSpaceForArray(ref reader, count, sizeof(int));
+		string[][] array = count == 0 ? Array.Empty<string[]>() : new string[count][];
+		while (index < count)
+		{
+			try
+			{
+				array[index] = reader.ReadStringArray(version);
+			}
+			catch (Exception ex)
+			{
+				throw new EndOfStreamException($"End of stream. Read {index}, expected {count} elements", ex);
+			}
+			index++;
+		}
+		if (IsAlignArrays(version))
+		{
+			reader.Align();
+		}
+		return array;
+	}
+
 	private static bool IsAlignArrays(UnityVersion version) => version.GreaterThanOrEquals(2017);
 
 	private static void ThrowIfNotEnoughSpaceForArray(ref EndianSpanReader reader, int elementNumberToRead, int elementSize)

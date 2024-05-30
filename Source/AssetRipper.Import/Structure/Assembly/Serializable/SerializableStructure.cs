@@ -104,7 +104,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 			{
 				return true;
 			}
-			if (field.IsArray)
+			if (field.ArrayDepth > 0)
 			{
 				return false;
 			}

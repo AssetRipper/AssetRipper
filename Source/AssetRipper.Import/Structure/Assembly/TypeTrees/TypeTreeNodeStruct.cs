@@ -32,7 +32,7 @@ public readonly struct TypeTreeNodeStruct : IReadOnlyList<TypeTreeNodeStruct>
 	{
 		get
 		{
-			if (TypeName is "Array" && SubNodes.Count == 2)
+			if (TypeName is "Array" or "TypelessData" && SubNodes.Count == 2)
 			{
 				TypeTreeNodeStruct sizeNode = SubNodes[0];
 				return sizeNode.Name == "size" && sizeNode.SubNodes.Count == 0 && SubNodes[1].Name == "data";
