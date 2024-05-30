@@ -70,7 +70,7 @@ namespace AssetRipper.Import.AssetCreation
 				SerializableStructure? structure;
 				if (type is not null && TypeTreeNodeStruct.TryMakeFromTypeTree(type.OldType, out TypeTreeNodeStruct rootNode))
 				{
-					structure = SerializableTreeType.FromRootNode(rootNode).CreateSerializableStructure();
+					structure = SerializableTreeType.FromRootNode(rootNode, true).CreateSerializableStructure();
 					if (structure.TryRead(ref reader, monoBehaviour))
 					{
 						monoBehaviour.Structure = structure;
@@ -163,7 +163,7 @@ namespace AssetRipper.Import.AssetCreation
 			IUnityObjectBase? asset = AssetFactory.Create(assetInfo, version);
 			if (asset is null && TypeTreeNodeStruct.TryMakeFromTpk((ClassIDType)assetInfo.ClassID, version, out TypeTreeNodeStruct releaseRoot, out TypeTreeNodeStruct editorRoot))
 			{
-				return TypeTreeObject.Create(releaseRoot, editorRoot, assetInfo);
+				return TypeTreeObject.Create(assetInfo, releaseRoot, editorRoot);
 			}
 			else
 			{

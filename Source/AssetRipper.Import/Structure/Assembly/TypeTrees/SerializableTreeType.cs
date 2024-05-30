@@ -14,12 +14,12 @@ namespace AssetRipper.Import.Structure.Assembly.TypeTrees
 		public override int Version { get; }
 		public override bool FlowMappedInYaml { get; }
 
-		public static SerializableTreeType FromRootNode(TypeTreeNodeStruct rootNode)
+		public static SerializableTreeType FromRootNode(TypeTreeNodeStruct rootNode, bool monoBehaviourStructure = false)
 		{
 			SerializableTreeType serializableTreeType = new SerializableTreeType(rootNode.TypeName, PrimitiveType.Complex, rootNode.Version, rootNode.FlowMappedInYaml);
 
 			List<Field> fields = new();
-			int startIndex = FindStartingIndex(rootNode);
+			int startIndex = monoBehaviourStructure ? FindStartingIndexForMonoBehaviour(rootNode) : 0;
 			for (int i = startIndex; i < rootNode.SubNodes.Count; i++)
 			{
 				AddNode(rootNode.SubNodes[i], fields);
@@ -64,7 +64,7 @@ namespace AssetRipper.Import.Structure.Assembly.TypeTrees
 			return serializableTreeType;
 		}
 
-		private static int FindStartingIndex(TypeTreeNodeStruct rootNode)
+		private static int FindStartingIndexForMonoBehaviour(TypeTreeNodeStruct rootNode)
 		{
 			int nameIndex = rootNode.SubNodes.IndexOf(node => node.Name == "m_Name");
 			int editorClassIdIndex = rootNode.SubNodes.IndexOf(node => node.Name == "m_EditorClassIdentifier");

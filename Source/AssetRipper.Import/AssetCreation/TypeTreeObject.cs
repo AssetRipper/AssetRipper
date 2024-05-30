@@ -6,9 +6,11 @@ using AssetRipper.Assets.Traversal;
 using AssetRipper.Import.Structure.Assembly.Serializable;
 using AssetRipper.Import.Structure.Assembly.TypeTrees;
 using AssetRipper.IO.Endian;
+using System.Diagnostics;
 
 namespace AssetRipper.Import.AssetCreation;
 
+[DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
 public abstract class TypeTreeObject : NullObject
 {
 	public bool IsPlayerSettings => ClassID == 129;
@@ -30,9 +32,11 @@ public abstract class TypeTreeObject : NullObject
 
 	public sealed override void WalkEditor(AssetWalker walker) => EditorFields.WalkEditor(walker);
 
-	public static TypeTreeObject Create(TypeTreeNodeStruct root, AssetInfo assetInfo) => new SingleTypeTreeObject(root, assetInfo);
+	public static TypeTreeObject Create(AssetInfo assetInfo, TypeTreeNodeStruct root) => new SingleTypeTreeObject(assetInfo, root);
 
-	public static TypeTreeObject Create(TypeTreeNodeStruct releaseRoot, TypeTreeNodeStruct editorRoot, AssetInfo assetInfo) => new DoubleTypeTreeObject(releaseRoot, editorRoot, assetInfo);
+	public static TypeTreeObject Create(AssetInfo assetInfo, TypeTreeNodeStruct releaseRoot, TypeTreeNodeStruct editorRoot) => new DoubleTypeTreeObject(assetInfo, releaseRoot, editorRoot);
+
+	private string GetDebuggerDisplay() => ClassName;
 
 	private sealed class SingleTypeTreeObject : TypeTreeObject
 	{
@@ -40,7 +44,7 @@ public abstract class TypeTreeObject : NullObject
 		public override SerializableStructure ReleaseFields => Fields;
 		public override SerializableStructure EditorFields => Fields;
 
-		public SingleTypeTreeObject(TypeTreeNodeStruct root, AssetInfo assetInfo) : base(assetInfo)
+		public SingleTypeTreeObject(AssetInfo assetInfo, TypeTreeNodeStruct root) : base(assetInfo)
 		{
 			Fields = SerializableTreeType.FromRootNode(root).CreateSerializableStructure();
 		}
@@ -76,7 +80,7 @@ public abstract class TypeTreeObject : NullObject
 		public override SerializableStructure ReleaseFields { get; }
 		public override SerializableStructure EditorFields { get; }
 
-		public DoubleTypeTreeObject(TypeTreeNodeStruct releaseRoot, TypeTreeNodeStruct editorRoot, AssetInfo assetInfo) : base(assetInfo)
+		public DoubleTypeTreeObject(AssetInfo assetInfo, TypeTreeNodeStruct releaseRoot, TypeTreeNodeStruct editorRoot) : base(assetInfo)
 		{
 			ReleaseFields = SerializableTreeType.FromRootNode(releaseRoot).CreateSerializableStructure();
 			EditorFields = SerializableTreeType.FromRootNode(editorRoot).CreateSerializableStructure();
