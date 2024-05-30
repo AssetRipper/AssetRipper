@@ -276,6 +276,12 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 			set => SetReference(value);
 		}
 
+		public IUnityAssetBase[][] AsAssetArrayArray
+		{
+			readonly get => CValue as IUnityAssetBase[][] ?? [];
+			set => SetReference(value);
+		}
+
 		private void SetPrimitive(ulong value)
 		{
 			if (CValue is not null)
@@ -418,7 +424,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 								{
 									throw new EndOfStreamException($"When reading field {etalon.Name}, Stream only has {remainingBytes} bytes remaining, so {count} pair elements of type {etalon.Type.Name} cannot be read.");
 								}
-								SerializablePair[] pairs = new SerializablePair[count];
+								SerializablePair[] pairs = CreateArray<SerializablePair>(count);
 
 								for (int i = 0; i < count; i++)
 								{
@@ -433,14 +439,9 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 						case PrimitiveType.Complex:
 							{
 								int count = reader.ReadInt32();
+								ThrowIfNotEnoughSpaceToReadArray(reader, etalon, count);
 
-								long remainingBytes = reader.Length - reader.Position;
-								if (remainingBytes < count)
-								{
-									throw new EndOfStreamException($"When reading field {etalon.Name}, Stream only has {remainingBytes} bytes remaining, so {count} complex elements of type {etalon.Type.Name} cannot be read.");
-								}
-
-								IUnityAssetBase[] structures = new IUnityAssetBase[count];
+								IUnityAssetBase[] structures = CreateArray<IUnityAssetBase>(count);
 								for (int i = 0; i < count; i++)
 								{
 									structures[i] = CreateAndReadComplexStructure(ref reader, version, flags, depth, etalon);
@@ -494,6 +495,33 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 						case PrimitiveType.String:
 							AsStringArrayArray = reader.ReadStringArrayArray(version);
 							break;
+						case PrimitiveType.Complex:
+							{
+								int outerCount = reader.ReadInt32();
+								ThrowIfNotEnoughSpaceToReadArray(reader, etalon, outerCount);
+								IUnityAssetBase[][] result = CreateArray<IUnityAssetBase[]>(outerCount);
+
+								for (int i = 0; i < outerCount; i++)
+								{
+									int innerCount = reader.ReadInt32();
+									ThrowIfNotEnoughSpaceToReadArray(reader, etalon, innerCount);
+
+									IUnityAssetBase[] structures = CreateArray<IUnityAssetBase>(innerCount);
+									for (int j = 0; j < innerCount; j++)
+									{
+										structures[j] = CreateAndReadComplexStructure(ref reader, version, flags, depth, etalon);
+									}
+									result[i] = structures;
+
+									if (etalon.Align)
+									{
+										reader.Align();
+									}
+								}
+
+								AsAssetArrayArray = result;
+							}
+							break;
 						default:
 							throw new NotSupportedException(etalon.Type.Type.ToString());
 					}
@@ -520,6 +548,15 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 				}
 
 				return asset;
+			}
+		}
+
+		private static void ThrowIfNotEnoughSpaceToReadArray(EndianSpanReader reader, SerializableType.Field etalon, int count)
+		{
+			long remainingBytes = reader.Length - reader.Position;
+			if (remainingBytes < count)
+			{
+				throw new EndOfStreamException($"When reading field {etalon.Name}, Stream only has {remainingBytes} bytes remaining, so {count} complex elements of type {etalon.Type.Name} cannot be read.");
 			}
 		}
 
@@ -1034,6 +1071,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 					PrimitiveType.Single => Array.Empty<float[]>(),
 					PrimitiveType.Double => Array.Empty<double[]>(),
 					PrimitiveType.String => Array.Empty<string[]>(),
+					PrimitiveType.Complex => Array.Empty<IUnityAssetBase[]>(),
 					_ => throw new NotSupportedException(etalon.Type.Type.ToString()),
 				},
 				_ => throw new NotSupportedException(etalon.ArrayDepth.ToString()),
@@ -1165,6 +1203,9 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 					break;
 				case string[][]:
 					CValue = Array.Empty<string[]>();
+					break;
+				case IUnityAssetBase[][]:
+					CValue = Array.Empty<IUnityAssetBase[]>();
 					break;
 			}
 		}
