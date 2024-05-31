@@ -156,6 +156,11 @@ public static class EngineAssetsFactory
 			Name = mesh.Name,
 			VertexCount = (int)mesh.VertexData.VertexCount,
 			SubMeshCount = mesh.SubMeshes.Count,
+			LocalAABB = new()
+			{
+				Center = mesh.LocalAABB.Center,
+				Extent = mesh.LocalAABB.Extent
+			}
 		};
 	}
 

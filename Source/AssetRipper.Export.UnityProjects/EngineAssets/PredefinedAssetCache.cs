@@ -61,7 +61,7 @@ public sealed class PredefinedAssetCache
 	private readonly record struct MonoBehaviourKey(Utf8String Name, bool Enabled, Utf8String AssemblyName, Utf8String Namespace, Utf8String ClassName, Utf8String? GameObjectName);
 	private readonly record struct MonoScriptKey(Utf8String AssemblyName, Utf8String Namespace, Utf8String ClassName);
 	private readonly record struct AudioClipKey(Utf8String Name, int Channels, int Frequency, float Length);
-	private readonly record struct MeshKey(Utf8String Name, int VertexCount, int SubMeshCount);
+	private readonly record struct MeshKey(Utf8String Name, int VertexCount, int SubMeshCount, AxisAlignedBoundingBox localAABB);
 	private readonly record struct CubeMapKey(Utf8String Name, int Width, int Height);
 	private readonly record struct Texture2DKey(Utf8String Name, int Width, int Height);
 	private readonly record struct ShaderKey(Utf8String Name, int PropertyNamesHash);
@@ -295,7 +295,11 @@ public sealed class PredefinedAssetCache
 
 	public bool Contains(IMesh mesh, out long fileID, out UnityGuid guid, out AssetType assetType)
 	{
-		if (meshDictionary.TryGetValue(new MeshKey(mesh.Name, (int)mesh.VertexData.VertexCount, mesh.SubMeshes.Count), out AssetMetaPtr assetMetaPtr))
+		if (meshDictionary.TryGetValue(new MeshKey(mesh.Name, (int)mesh.VertexData.VertexCount, mesh.SubMeshes.Count, new()
+		    {
+			    Center = mesh.LocalAABB.Center,
+			    Extent = mesh.LocalAABB.Extent
+		    }), out AssetMetaPtr assetMetaPtr))
 		{
 			(fileID, guid, assetType) = assetMetaPtr;
 			return true;
@@ -527,7 +531,11 @@ public sealed class PredefinedAssetCache
 
 	public bool TryAdd(Mesh mesh, long fileID, UnityGuid guid, AssetType assetType)
 	{
-		return meshDictionary.TryAdd(new MeshKey(mesh.Name, mesh.VertexCount, mesh.SubMeshCount), new AssetMetaPtr(fileID, guid, assetType));
+		return meshDictionary.TryAdd(new MeshKey(mesh.Name, mesh.VertexCount, mesh.SubMeshCount, new()
+		{
+			Center = mesh.LocalAABB.Center,
+			Extent = mesh.LocalAABB.Extent
+		}), new AssetMetaPtr(fileID, guid, assetType));
 	}
 
 	public bool TryAdd(AudioClip audioClip, long fileID, UnityGuid guid, AssetType assetType)
