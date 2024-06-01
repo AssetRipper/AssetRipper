@@ -24,34 +24,6 @@ public abstract class UnityObjectBase : UnityAssetBase, IUnityObjectBase
 	public IUnityObjectBase? MainAsset { get; set; }
 
 	/// <summary>
-	/// Get the best name for this object.
-	/// </summary>
-	/// <remarks>
-	/// In order of preference:<br/>
-	/// 1. <see cref="IHasNameString.NameString"/><br/>
-	/// 2. <see cref="OriginalName"/><br/>
-	/// 3. <see cref="ClassName"/><br/>
-	/// <see cref="OriginalName"/> has secondary preference because file importers can create assets with a different name from the file.
-	/// </remarks>
-	/// <returns>A nonempty string.</returns>
-	public string GetBestName()
-	{
-		string? name = (this as INamed)?.Name;
-		if (!string.IsNullOrEmpty(name))
-		{
-			return name;
-		}
-		else if (!string.IsNullOrEmpty(OriginalName))
-		{
-			return OriginalName;
-		}
-		else
-		{
-			return ClassName;
-		}
-	}
-
-	/// <summary>
 	/// The original path of the asset's file, relative to the project root.
 	/// </summary>
 	public string? OriginalPath
