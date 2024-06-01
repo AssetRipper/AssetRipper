@@ -311,6 +311,8 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 		}
 		#endregion
 
+		public readonly ref SerializableValue this[string name] => ref AsStructure[name];
+
 		public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, int depth, in SerializableType.Field etalon)
 		{
 			switch (etalon.ArrayDepth)
