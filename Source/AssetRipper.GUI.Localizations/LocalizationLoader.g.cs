@@ -10,6 +10,7 @@ partial class LocalizationLoader
 	{
 		{ "ar", "العربية" },
 		{ "de", "Deutsch" },
+		{ "el", "Ελληνικά" },
 		{ "en-US", "English (United States)" },
 		{ "es", "español" },
 		{ "fr", "français" },
