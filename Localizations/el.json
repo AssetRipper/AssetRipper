@@ -10,7 +10,7 @@
     "c_sharp_langage_version_config_7_2": "C# 7.2",
     "c_sharp_langage_version_config_7_3": "C# 7.3",
     "c_sharp_langage_version_config_9_0": "C# 9",
-    "c_sharp_langage_version_config_latest": "Τελευταίο C#",
+    "c_sharp_langage_version_config_latest": "Πιο πρόσφατη έκδοση C#",
     "channels": "Κανάλια",
     "class": "Κλάση",
     "class_name": "Όνομα Κλάσης",
@@ -110,5 +110,14 @@
     "text_asset_format_text_description": "Εξαγωγή ως αρχείο απλού κειμένου (.txt).",
     "warning_this_directory_is_not_empty_all_content_will_be_deleted": "Προσοχή: αυτός ο κατάλογος δεν είναι κενός. Όλα τα περιεχόμενα θα διαγραφτούν.",
     "export_preparing": "Προετοιμασία για Εξαγωγή...\nΑυτό μπορεί να πάρει λίγο χρόνο.",
-    "loading_step_create_file_collection": "Δημιουργία Συλλογής Αρχείων"
+    "loading_step_create_file_collection": "Δημιουργία Συλλογής Αρχείων",
+    "audio_export_title": "Μορφή Εξαγωγής Ήχου",
+    "count": "Μέτρημα/Αριθμός",
+    "csharp_type": "Τύπος C#",
+    "script_export_format_dll_with_renaming": "Εξαγωγή DLL Με Μετονομασία",
+    "script_export_format_dll_without_renaming": "Εξαγωγή DLL Χωρίς Μετονομασία",
+    "script_export_title": "Μορφή Εξαγωγής Script",
+    "asset_tab_hex": "Δεκαεξαδικό",
+    "audio_clip": "Κομμάτι Ήχου (AudioClip)",
+    "audio_format_force_wav_description": "Μετατροπή όλων των αρχείων ήχου σε αρχεία WAV. Δεν συνιστάται αν είναι να τα βάλεις στο Unity, καθώς μπορεί να επανασυμπιέσει αρχεία, προκαλώντας απώλεια ποιότητας."
 }
