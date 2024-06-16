@@ -6,6 +6,7 @@ namespace AssetRipper.Yaml.Extensions
 	{
 		public static YamlNode ExportYaml(this byte[] _this)
 		{
+			EnsureSufficientSpace(_this);
 			StringBuilder sb = new StringBuilder(_this.Length * 2);
 			for (int i = 0; i < _this.Length; i++)
 			{
@@ -13,6 +14,15 @@ namespace AssetRipper.Yaml.Extensions
 			}
 
 			return new YamlScalarNode(sb.ToString(), true);
+
+			static void EnsureSufficientSpace(byte[] _this)
+			{
+				long length = (long)_this.Length * 2;
+				if (length > int.MaxValue)
+				{
+					throw new ArgumentException($"Data is too long: {_this.Length}", nameof(_this));
+				}
+			}
 		}
 
 		public static void AddTypelessData(this YamlMappingNode mappingNode, string name, byte[] data)
