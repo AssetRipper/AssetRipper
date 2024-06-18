@@ -43,29 +43,10 @@ namespace AssetRipper.SourceGenerated.Extensions
 			return false;
 		}
 
-		public static IMonoBehaviour?[] GetStateBehaviours(this IAnimatorController controller, int layerIndex)
+		public static IMonoBehaviour?[] GetStateBehaviours(this IAnimatorController controller, int layerIndex, uint stateID)
 		{
 			if (controller.Has_StateMachineBehaviourVectorDescription())
 			{
-				uint layerID = controller.Controller.LayerArray[layerIndex].Data.Binding;
-				StateKey key = new();
-				key.SetValues(layerIndex, layerID);
-				if (controller.StateMachineBehaviourVectorDescription.StateMachineBehaviourRanges.TryGetValue(key, out StateRange? range))
-				{
-					return GetStateBehaviours(controller.StateMachineBehaviourVectorDescription, controller.StateMachineBehavioursP, range);
-				}
-			}
-			return Array.Empty<IMonoBehaviour>();
-		}
-
-		public static IMonoBehaviour?[] GetStateBehaviours(this IAnimatorController controller, int stateMachineIndex, int stateIndex)
-		{
-			if (controller.Has_StateMachineBehaviourVectorDescription())
-			{
-				int layerIndex = controller.Controller.GetLayerIndexByStateMachineIndex(stateMachineIndex);
-				IStateMachineConstant stateMachine = controller.Controller.StateMachineArray[stateMachineIndex].Data;
-				IStateConstant state = stateMachine.StateConstantArray[stateIndex].Data;
-				uint stateID = GetIdForStateConstant(state);
 				StateKey key = new();
 				key.SetValues(layerIndex, stateID);
 				if (controller.StateMachineBehaviourVectorDescription.StateMachineBehaviourRanges.TryGetValue(key, out StateRange? range))
@@ -88,22 +69,6 @@ namespace AssetRipper.SourceGenerated.Extensions
 				stateMachineBehaviours[i] = controllerStateMachineBehaviours[index];
 			}
 			return stateMachineBehaviours;
-		}
-
-		private static uint GetIdForStateConstant(IStateConstant stateConstant)
-		{
-			if (stateConstant.Has_FullPathID())
-			{
-				return stateConstant.FullPathID;
-			}
-			else if (stateConstant.Has_NameID())
-			{
-				return stateConstant.NameID;
-			}
-			else
-			{
-				return stateConstant.ID;
-			}
 		}
 
 		public static IEnumerable<IUnityObjectBase?> FetchEditorHierarchy(this IAnimatorController animatorController)

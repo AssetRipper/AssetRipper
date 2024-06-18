@@ -17,6 +17,7 @@ using AssetRipper.SourceGenerated.Subclasses.AnimatorCondition;
 using AssetRipper.SourceGenerated.Subclasses.BlendTreeConstant;
 using AssetRipper.SourceGenerated.Subclasses.BlendTreeNodeConstant;
 using AssetRipper.SourceGenerated.Subclasses.ChildAnimatorState;
+using AssetRipper.SourceGenerated.Subclasses.ChildAnimatorStateMachine;
 using AssetRipper.SourceGenerated.Subclasses.ChildMotion;
 using AssetRipper.SourceGenerated.Subclasses.ConditionConstant;
 using AssetRipper.SourceGenerated.Subclasses.LayerConstant;
@@ -165,26 +166,32 @@ namespace AssetRipper.Processing.AnimatorControllers
 		}
 
 		private static void CreateEntryTransitions(
-			IAnimatorStateMachine generatedStateMachine,
+			IAnimatorStateMachine stateMachine,
 			IStateMachineConstant stateMachineConstant,
 			ProcessedAssetCollection file,
-			uint ID,
+			uint FullPathID,
 			IReadOnlyList<IAnimatorState> States,
 			AssetDictionary<uint, Utf8String> TOS)
 		{
-			if (generatedStateMachine.Has_EntryTransitions() && stateMachineConstant.Has_SelectorStateConstantArray())
+			if (stateMachine.Has_EntryTransitions() && stateMachineConstant.Has_SelectorStateConstantArray())
 			{
-				foreach (OffsetPtr_SelectorStateConstant selectorPtr in stateMachineConstant.SelectorStateConstantArray)
+				foreach (SelectorStateConstant selector in stateMachineConstant.SelectorStateConstantArray)
 				{
-					SelectorStateConstant selector = selectorPtr;
-					if (selector.FullPathID == ID && selector.IsEntry)
+					if (selector.IsEntry && selector.FullPathID == FullPathID)
 					{
 						for (int i = 0; i < selector.TransitionConstantArray.Count - 1; i++)
 						{
 							SelectorTransitionConstant selectorTrans = selector.TransitionConstantArray[i].Data;
-							IAnimatorTransition transition = CreateAnimatorTransition(file, stateMachineConstant, States, TOS, selectorTrans);
-							generatedStateMachine.EntryTransitionsP.Add(transition);
+							// Entries only point to States; SubStateMachine[] and IAnimatorStateMachine can be null
+							IAnimatorTransition transition = CreateAnimatorTransition(file, stateMachineConstant, States, null, null, TOS, selectorTrans);
+							stateMachine.EntryTransitionsP.Add(transition);
 						}
+
+						// Default State
+						int defaultStateIdx = (int)selector.TransitionConstantArray[^1].Data.Destination;
+						IAnimatorState defaultState = States[defaultStateIdx];
+						stateMachine.DefaultState.CopyValues(defaultState, new PPtrConverter(stateMachine));
+						break;
 					}
 				}
 			}
@@ -192,179 +199,412 @@ namespace AssetRipper.Processing.AnimatorControllers
 
 		public static IAnimatorStateMachine CreateAnimatorStateMachine(ProcessedAssetCollection virtualFile, IAnimatorController controller, int stateMachineIndex)
 		{
-			const float StateOffset = 250.0f;
-
-			IAnimatorStateMachine generatedStateMachine = virtualFile.CreateAsset((int)ClassIDType.AnimatorStateMachine, AnimatorStateMachine.Create);
-			generatedStateMachine.HideFlagsE = HideFlags.HideInHierarchy;
-
+			IStateMachineConstant stateMachineConstant = controller.Controller.StateMachineArray[stateMachineIndex].Data;
 			int layerIndex = controller.Controller.GetLayerIndexByStateMachineIndex(stateMachineIndex);
-			ILayerConstant layer = controller.Controller.LayerArray[layerIndex].Data;
-			generatedStateMachine.Name = controller.TOS[layer.Binding];
 
-			IStateMachineConstant stateMachine = controller.Controller.StateMachineArray[stateMachineIndex].Data;
+			IAnimatorState[] states = InitializeAnimatorStates(virtualFile, controller, layerIndex, stateMachineIndex); // only missing their Transitions
+			SubStateMachine[] stateMachines = InitializeSubStateMachines(virtualFile, controller, stateMachineConstant, layerIndex);
+			IAnimatorStateMachine MainStateMachine = stateMachines[0].stateMachine; // assuming first SelectorStateConstant is always the Main/root StateMachine
 
-			int stateCount = stateMachine.StateConstantArray.Count;
-			int stateMachineCount = 0;
-			int stateAndStateMachineCount = stateCount + stateMachineCount;
-			int side = (int)Math.Ceiling(Math.Sqrt(stateAndStateMachineCount));
-
-			List<IAnimatorState> states = new();
-			if (generatedStateMachine.Has_ChildStates())
+			//AnyStateTransitions for Main StateMachine
 			{
-				generatedStateMachine.ChildStates.Clear();
-				generatedStateMachine.ChildStates.Capacity = stateCount;
-			}
-			else if (generatedStateMachine.Has_States())
-			{
-				generatedStateMachine.States.Clear();
-				generatedStateMachine.States.Capacity = stateCount;
-			}
-			for (int y = 0, stateIndex = 0; y < side && stateIndex < stateCount; y++)
-			{
-				for (int x = 0; x < side && stateIndex < stateCount; x++, stateIndex++)
+				int count = stateMachineConstant.AnyStateTransitionConstantArray.Count;
+				if (MainStateMachine.Has_AnyStateTransitions())
 				{
-					Vector3f position = new() { X = x * StateOffset, Y = y * StateOffset };
-					IAnimatorState state = CreateAnimatorState(virtualFile, controller, stateMachineIndex, stateIndex, position);
-
-					if (generatedStateMachine.Has_ChildStates())
-					{
-						ChildAnimatorState childState = generatedStateMachine.ChildStates.AddNew();
-						childState.Position.CopyValues(position);
-						childState.State.SetAsset(generatedStateMachine.Collection, state);
-					}
-					else if (generatedStateMachine.Has_States())
-					{
-						generatedStateMachine.StatesP.Add(state);
-					}
-
-					states.Add(state);
-				}
-			}
-
-#warning TODO: child StateMachines
-			//generatedStateMachine.ChildStateMachines = new ChildAnimatorStateMachine[stateMachineCount];
-
-			// set destination state for transitions here because all states have only become valid now
-			for (int i = 0; i < stateMachine.StateConstantArray.Count; i++)
-			{
-				IAnimatorState state = states[i];
-				IStateConstant stateConstant = stateMachine.StateConstantArray[i].Data;
-
-				AssetList<PPtr_AnimatorStateTransition_4>? transitionList;
-				if (state.Has_Transitions())
-				{
-					state.Transitions.EnsureCapacity(state.Transitions.Count + stateConstant.TransitionConstantArray.Count);
-					transitionList = null;
-				}
-				else if (generatedStateMachine.Has_OrderedTransitions())
-				{
-					//I'm not sure if this is correct, but it seems to be the only logical way to store the transitions before Unity 5.
-					//IAnimatorStateMachine.LocalTransitions only exists until Unity 4.2.0, so by process of elimination, this is the only option.
-
-					AssetPair<PPtr_AnimatorState_4, AssetList<PPtr_AnimatorStateTransition_4>> pair = generatedStateMachine.OrderedTransitions.AddNew();
-					pair.Key.SetAsset(generatedStateMachine.Collection, state);
-					transitionList = pair.Value;
-				}
-				else
-				{
-					//This should never happen.
-					Logger.Error(LogCategory.Processing, "Loose Transitions will be created. This can only happen when the AnimatorState and AnimatorStateMachine have different Unity versions, specifically on opposite sides of Unity 5.");
-					transitionList = null;
-				}
-
-				for (int j = 0; j < stateConstant.TransitionConstantArray.Count; j++)
-				{
-					ITransitionConstant transitionConstant = stateConstant.TransitionConstantArray[j].Data;
-					IAnimatorStateTransition transition = CreateAnimatorStateTransition(virtualFile, stateMachine, states, controller.TOS, transitionConstant);
-					if (state.Has_Transitions())
-					{
-						state.TransitionsP.Add(transition);
-					}
-					else
-					{
-						transitionList?.AddNew().SetAsset(generatedStateMachine.Collection, transition);
-					}
-				}
-			}
-
-			//AnyStateTransitions
-			{
-				int count = stateMachine.AnyStateTransitionConstantArray.Count;
-				if (generatedStateMachine.Has_AnyStateTransitions())
-				{
-					generatedStateMachine.AnyStateTransitions.Capacity = count;
+					MainStateMachine.AnyStateTransitions.Capacity = count;
 					for (int i = 0; i < count; i++)
 					{
-						ITransitionConstant transitionConstant = stateMachine.AnyStateTransitionConstantArray[i].Data;
-						IAnimatorStateTransition transition = CreateAnimatorStateTransition(virtualFile, stateMachine, states, controller.TOS, transitionConstant);
-						generatedStateMachine.AnyStateTransitionsP.Add(transition);
+						ITransitionConstant transitionConstant = stateMachineConstant.AnyStateTransitionConstantArray[i].Data;
+						IAnimatorStateTransition transition = CreateAnimatorStateTransition(virtualFile, stateMachineConstant, states, stateMachines, stateMachines[0], controller.TOS, transitionConstant);
+						MainStateMachine.AnyStateTransitionsP.Add(transition);
 					}
 				}
 				else
 				{
 					//https://github.com/AssetRipper/AssetRipper/issues/1028
-					AssetList<PPtr_AnimatorStateTransition_4> newList = generatedStateMachine.OrderedTransitions.AddNew().Value;
+					AssetList<PPtr_AnimatorStateTransition_4> newList = MainStateMachine.OrderedTransitions.AddNew().Value;
 					newList.Capacity = count;
-					PPtrAccessList<PPtr_AnimatorStateTransition_4, IAnimatorStateTransition> anyStateTransitions = new(newList, generatedStateMachine.Collection);
+					PPtrAccessList<PPtr_AnimatorStateTransition_4, IAnimatorStateTransition> anyStateTransitions = new(newList, MainStateMachine.Collection);
 					for (int i = 0; i < count; i++)
 					{
-						ITransitionConstant transitionConstant = stateMachine.AnyStateTransitionConstantArray[i].Data;
-						IAnimatorStateTransition transition = CreateAnimatorStateTransition(virtualFile, stateMachine, states, controller.TOS, transitionConstant);
+						ITransitionConstant transitionConstant = stateMachineConstant.AnyStateTransitionConstantArray[i].Data;
+						IAnimatorStateTransition transition = CreateAnimatorStateTransition(virtualFile, stateMachineConstant, states, stateMachines, stateMachines[0], controller.TOS, transitionConstant);
 						anyStateTransitions.Add(transition);
 					}
 				}
 			}
 
-			CreateEntryTransitions(generatedStateMachine, stateMachine, virtualFile, layer.Binding, states, controller.TOS);
+			// Assign States to StateMachines and Create State Transitions
+			ILayerConstant layer = controller.Controller.LayerArray[layerIndex].Data;
+			AssignStatesToStateMachines(virtualFile, stateMachines, states, controller.TOS, stateMachineConstant, layer);
 
-			generatedStateMachine.StateMachineBehaviours?.Clear();
-#warning TEMP: enable when AnimatorStateMachine's child StateMachines has been implemented
-			if (false)
+			// Create Entries and set Default States to StateMachines
+			foreach (SubStateMachine stateMachine in stateMachines)
 			{
-				generatedStateMachine.StateMachineBehavioursP.AddRange(controller.GetStateBehaviours(layerIndex));
+				CreateEntryTransitions(stateMachine.stateMachine, stateMachineConstant, virtualFile, stateMachine.fullPathID, states, controller.TOS);
 			}
 
-			generatedStateMachine.AnyStatePosition.SetValues(0.0f, -StateOffset, 0.0f);
-			generatedStateMachine.EntryPosition?.SetValues(StateOffset, -StateOffset, 0.0f);
-			generatedStateMachine.ExitPosition?.SetValues(2.0f * StateOffset, -StateOffset, 0.0f);
-			generatedStateMachine.ParentStateMachinePosition.SetValues(0.0f, -2.0f * StateOffset, 0.0f);
+			// Assign Child StateMachines to StateMachines
+			AssignChildStateMachines(virtualFile, stateMachines, controller.TOS, stateMachineConstant);
 
-			if (generatedStateMachine.Has_ChildStates() && generatedStateMachine.ChildStates.Count > 0)
+
+
+
+			// Create StateMachineTransitions for StateMachines with solved FullPath aka with Parent
+			// finish solving unknown StateMachines FullPaths aka assign some Parent, then create their StateMachineTransitions
+			//
+
+
+
+
+			// Set StateMachine Children Positions for Editor
+			const float StateOffset = 250.0f;
+			foreach (SubStateMachine ssm in stateMachines)
 			{
-				PPtr_AnimatorState_5 defaultStatePPtr = generatedStateMachine.ChildStates[(int)stateMachine.DefaultState].State;
+				IAnimatorStateMachine stateMachine = ssm.stateMachine;
+				int stateCount = stateMachine.Has_ChildStates() ? stateMachine.ChildStates.Count : stateMachine.StatesP.Count;
+				int stateMachineCount = stateMachine.Has_ChildStateMachines() ? stateMachine.ChildStateMachines.Count : 0; // replace '0' when recovering Unity 5- SubStateMachines
+				int totalChildrenCount = stateCount + stateMachineCount;
+				int side = (int)Math.Ceiling(Math.Sqrt(totalChildrenCount));
 
-				generatedStateMachine.DefaultState.CopyValues(defaultStatePPtr, new PPtrConverter(generatedStateMachine));
+				for (int y = 0, i = 0; y < side && i < totalChildrenCount; y++)
+				{
+					for (int x = 0; x < side && i < totalChildrenCount; x++, i++)
+					{
+						Vector3f position = new() { X = x * StateOffset, Y = y * StateOffset };
+						
+						if (i < stateCount) // Position all Child States first
+						{
+							IAnimatorState? state;
+							if (stateMachine.Has_ChildStates())
+							{
+								ChildAnimatorState childState = stateMachine.ChildStates[i];
+								childState.Position.CopyValues(position);
+								childState.State.TryGetAsset(stateMachine.Collection, out state);
+							}
+							else
+							{
+								state = stateMachine.StatesP[i];
+							}
+							state?.Position.CopyValues(position);
+						}
+						else if (stateMachine.Has_ChildStateMachines()) // Position all Child StateMachines second 
+						{
+							// remember to handle Unity 5- SubStateMachines too
+							ChildAnimatorStateMachine csm = stateMachine.ChildStateMachines[i - stateCount];
+							csm.Position.CopyValues(position);
+						}
+					}
+				}
+
+				stateMachine.AnyStatePosition.SetValues(0.0f, -StateOffset, 0.0f);
+				stateMachine.EntryPosition?.SetValues(StateOffset, -StateOffset, 0.0f);
+				stateMachine.ExitPosition?.SetValues(2.0f * StateOffset, -StateOffset, 0.0f);
+				stateMachine.ParentStateMachinePosition.SetValues(0.0f, -2.0f * StateOffset, 0.0f);
 			}
-			else if (generatedStateMachine.Has_States() && generatedStateMachine.States.Count > 0)
-			{
-				PPtr_AnimatorState_4 defaultStatePPtr = generatedStateMachine.States[(int)stateMachine.DefaultState];
 
-				generatedStateMachine.DefaultState.CopyValues(defaultStatePPtr, new PPtrConverter(generatedStateMachine));
-			}
-
-			return generatedStateMachine;
+			return MainStateMachine;
 		}
 
-		private static IAnimatorState CreateAnimatorState(ProcessedAssetCollection virtualFile, IAnimatorController controller, int stateMachineIndex, int stateIndex, Vector3f position)
+		private static IAnimatorState[] InitializeAnimatorStates(ProcessedAssetCollection virtualFile, IAnimatorController controller, int layerIndex, int stateMachineIndex)
 		{
-			IAnimatorState generatedState = virtualFile.CreateAsset((int)ClassIDType.AnimatorState, AnimatorState.Create);
-			generatedState.HideFlagsE = HideFlags.HideInHierarchy;
-
-			AssetDictionary<uint, Utf8String> tos;
-			if (controller.TOS.ContainsKey(0))
+			if (!controller.TOS.ContainsKey(0))
 			{
-				tos = controller.TOS;
+				controller.TOS[0] = Utf8String.Empty;
+			}
+
+			IStateMachineConstant stateMachine = controller.Controller.StateMachineArray[stateMachineIndex].Data;
+			int stateCount = stateMachine.StateConstantArray.Count;
+
+			IAnimatorState[] states = new IAnimatorState[stateCount];
+			for (int i = 0; i < stateCount; i++)
+			{
+				IStateConstant stateConstant = stateMachine.StateConstantArray[i].Data;
+				IAnimatorState state = CreateAnimatorState(virtualFile, controller, controller.TOS, layerIndex, stateConstant);
+				states[i] = state;
+			}
+			return states;
+		}
+
+		private static SubStateMachine[] InitializeSubStateMachines(ProcessedAssetCollection virtualFile, IAnimatorController controller, IStateMachineConstant stateMachineConstant, int layerIndex)
+		{
+			if (!stateMachineConstant.Has_SelectorStateConstantArray())
+			{
+				// not generating SubStateMachines for Unity 5- (Min to 5) yet
+				IAnimatorStateMachine stateMachine = virtualFile.CreateAsset((int)ClassIDType.AnimatorStateMachine, AnimatorStateMachine.Create);
+				stateMachine.HideFlagsE = HideFlags.HideInHierarchy;
+				return [new SubStateMachine(stateMachine, 0)];
+			}
+			// can have SubStateMachines
+
+			// SelectorStateConstantArray contains Entry and Exit points for StateMachines
+			// SelectorStateConstantArray = [Entry1, Exit1, Entry2, Exit2, ...]
+			// just in case, next code handles StateMachine missing Entry or Exit SelectorStateConstant
+			int stateMachineCount = 0;
+			uint lastFullPathID = 0;
+			foreach (SelectorStateConstant ssc in stateMachineConstant.SelectorStateConstantArray)
+			{
+				if (lastFullPathID != ssc.FullPathID)
+				{
+					lastFullPathID = ssc.FullPathID;
+					stateMachineCount++;
+				}
+			}
+			SubStateMachine[] StateMachines = new SubStateMachine[stateMachineCount];
+
+			stateMachineCount = 0;
+			lastFullPathID = 0;
+			foreach (SelectorStateConstant ssc in stateMachineConstant.SelectorStateConstantArray)
+			{
+				uint sscFullPathID = ssc.FullPathID;
+				if (lastFullPathID != sscFullPathID)
+				{
+					IAnimatorStateMachine stateMachine = virtualFile.CreateAsset((int)ClassIDType.AnimatorStateMachine, AnimatorStateMachine.Create);
+					stateMachine.HideFlagsE = HideFlags.HideInHierarchy;
+					// can set StateMachine behaviours now
+					IMonoBehaviour?[] stateBehaviours = controller.GetStateBehaviours(layerIndex, sscFullPathID);
+					stateMachine.StateMachineBehavioursP.AddRange(stateBehaviours);
+
+					SubStateMachine ssm = new(stateMachine, sscFullPathID); // record class to pair IAnimatorStateMachine with some SelectorStateConstant data
+					StateMachines[stateMachineCount] = ssm;
+
+					lastFullPathID = ssc.FullPathID;
+					stateMachineCount++;
+				}
+			}
+
+			return StateMachines;
+		}
+
+		private static void SetStateMachineCapacity(IAnimatorStateMachine stateMachine, int c)
+		{
+			if (stateMachine.Has_ChildStates())
+			{
+				stateMachine.ChildStates.Capacity = c;
+			}
+			else if (stateMachine.Has_States())
+			{
+				stateMachine.States.Capacity = c;
+			}
+		}
+
+		private static void AddStateToStateMachine(
+			ProcessedAssetCollection virtualFile, AssetDictionary<uint, Utf8String> TOS, IStateMachineConstant stateMachineConstant,
+			SubStateMachine ssm, SubStateMachine[] stateMachines,
+			int stateIdx, IAnimatorState[] states)
+		{
+			// -- add child States to stateMachine --
+			IAnimatorState state = states[stateIdx];
+			IStateConstant stateConstant = stateMachineConstant.StateConstantArray[stateIdx].Data;
+			IAnimatorStateMachine stateMachine = ssm.stateMachine;
+
+			if (stateMachine.Has_ChildStates())
+			{
+				ChildAnimatorState childState = stateMachine.ChildStates.AddNew();
+				// set childState.Position later, when having all Children set
+				childState.State.SetAsset(stateMachine.Collection, state);
 			}
 			else
 			{
-				tos = new AssetDictionary<uint, Utf8String>() { { 0, Utf8String.Empty } };
-				foreach ((uint hash, Utf8String str) in controller.TOS)
+				stateMachine.StatesP.Add(state);
+			}
+			// set state.Position later, when having all Children set
+
+			// -- add State Transitions --
+			AssetList<PPtr_AnimatorStateTransition_4>? transitionList = null;
+			if (state.Has_Transitions())
+			{
+				state.Transitions.Capacity = stateConstant.TransitionConstantArray.Count;
+			}
+			else if (stateMachine.Has_OrderedTransitions())
+			{
+				//I'm not sure if this is correct, but it seems to be the only logical way to store the transitions before Unity 5.
+				//IAnimatorStateMachine.LocalTransitions only exists until Unity 4.2.0, so by process of elimination, this is the only option.
+
+				AssetPair<PPtr_AnimatorState_4, AssetList<PPtr_AnimatorStateTransition_4>> pair = stateMachine.OrderedTransitions.AddNew();
+				pair.Key.SetAsset(stateMachine.Collection, state);
+				transitionList = pair.Value;
+			}
+			for (int j = 0; j < stateConstant.TransitionConstantArray.Count; j++)
+			{
+				ITransitionConstant transitionConstant = stateConstant.TransitionConstantArray[j].Data;
+				IAnimatorStateTransition transition = CreateAnimatorStateTransition(virtualFile, stateMachineConstant, states, stateMachines, ssm, TOS, transitionConstant);
+				if (state.Has_Transitions())
 				{
-					tos.Add(hash, str);
+					state.TransitionsP.Add(transition);
+				}
+				else
+				{
+					transitionList?.AddNew().SetAsset(stateMachine.Collection, transition);
 				}
 			}
-			IStateMachineConstant stateMachine = controller.Controller.StateMachineArray[stateMachineIndex].Data;
-			IStateConstant state = stateMachine.StateConstantArray[stateIndex].Data;
+		}
+
+		private static void AssignStatesToStateMachines(ProcessedAssetCollection virtualFile, SubStateMachine[] stateMachines, IAnimatorState[] states, AssetDictionary<uint, Utf8String> TOS, IStateMachineConstant stateMachineConstant, ILayerConstant layer)
+		{
+			// -- without SubStateMachines --
+			if (!stateMachineConstant.Has_SelectorStateConstantArray())
+			{
+				// Unity Min to 5
+				IAnimatorStateMachine MainStateMachine = stateMachines[0].stateMachine;
+				IStateConstant stateConstant = stateMachineConstant.StateConstantArray[0].Data;
+				MainStateMachine.Name = TOS[layer.Binding].String.Replace('.', '_');
+				SetStateMachineCapacity(MainStateMachine, states.Length);
+				for (int i = 0; i < states.Length; i++)
+				{
+					AddStateToStateMachine(virtualFile, TOS, stateMachineConstant, stateMachines[0], stateMachines, i, states);
+				}
+				return;
+			}
+			// Unity 5 to Max
+			if (stateMachines.Length == 1)
+			{
+				IAnimatorStateMachine MainStateMachine = stateMachines[0].stateMachine;
+				IStateConstant stateConstant = stateMachineConstant.StateConstantArray[0].Data;
+				string stateFullPath = TOS[stateConstant.FullPathID].String;
+				int pathDelimiterPos = stateFullPath.IndexOf('.');
+				MainStateMachine.Name = stateFullPath[..pathDelimiterPos];
+				SetStateMachineCapacity(MainStateMachine, states.Length);
+				for (int i = 0; i < states.Length; i++)
+				{
+					AddStateToStateMachine(virtualFile, TOS, stateMachineConstant, stateMachines[0], stateMachines, i, states);
+				}
+				return;
+			}
+
+			// -- with SubStateMachines --
+
+			Dictionary<string, List<int>?> GroupedStates = new(capacity: stateMachines.Length); // collect State groups and SubStateMachine FullPaths
+			// Going to add possible SubStateMachine FullPaths to TOS, tho it could be a separate Dictionary/lookup
+			for (int i = 0; i < states.Length; i++)
+			{
+				// add State to group
+				IStateConstant stateConstant = stateMachineConstant.StateConstantArray[i].Data;
+				string stateFullPath = TOS[stateConstant.FullPathID].String;
+				int pathDelimiterPos = stateFullPath.LastIndexOf('.');
+				string stateMachineFullPath = stateFullPath[..pathDelimiterPos];
+				if (!GroupedStates.TryGetValue(stateMachineFullPath, out List<int>? group))
+				{
+					uint FullPathID = Checksum.Crc32Algorithm.HashUTF8(stateMachineFullPath);
+					if (!TOS.ContainsKey(FullPathID))
+					{
+						TOS.Add(FullPathID, stateMachineFullPath);// FullPath into TOS
+					}
+				}
+				if (group == null)
+				{
+					group = new();
+					GroupedStates[stateMachineFullPath] = group;
+				}
+				group.Add(i);
+
+				// calculate possible SubStateMachine paths
+				pathDelimiterPos = stateMachineFullPath.LastIndexOf('.');
+				while (pathDelimiterPos != -1)
+				{
+					stateMachineFullPath = stateMachineFullPath[..pathDelimiterPos];
+					if (GroupedStates.ContainsKey(stateMachineFullPath))
+					{
+						break;
+					}
+					else
+					{
+						GroupedStates[stateMachineFullPath] = null;
+						uint FullPathID = Checksum.Crc32Algorithm.HashUTF8(stateMachineFullPath);
+						if (!TOS.ContainsKey(FullPathID))
+						{
+							TOS.Add(FullPathID, stateMachineFullPath);// FullPath into TOS
+						}
+					}
+					pathDelimiterPos = stateMachineFullPath.LastIndexOf('.');
+				}
+			}
+			GroupedStates.RemoveAll(kvp => kvp.Value == null); // remove Keys with null Values. Those were only used to fill TOS
+			GroupedStates.TrimExcess(); // fix Capacity 
+			TOS.Capacity = GroupedStates.Count; // fix Capacity
+
+			// assign Name and Path to SubStateMachines
+			foreach (SubStateMachine ssm in stateMachines)
+			{
+				uint FullPathID = ssm.fullPathID;
+				if (TOS.TryGetValue(FullPathID, out Utf8String? _FullPath))
+				{
+					string FullPath = _FullPath;
+					IAnimatorStateMachine stateMachine = ssm.stateMachine;
+					int pathDelimiterPos = FullPath.LastIndexOf('.');
+					if (pathDelimiterPos != -1)
+					{
+						ssm.path = FullPath[..pathDelimiterPos];
+						stateMachine.Name = FullPath[(pathDelimiterPos+1)..];
+					}
+					else
+					{
+						// if FullPath doesn't have delimiter '.' , it should be Main/root StateMachine. path = ""
+						stateMachine.Name = FullPath;
+					}
+				}
+				/*else
+				{
+					// SubStateMachine with unknown FullPath => because doesn't contain States
+				}*/
+			}
+
+			// assign States and State Transitions
+			// has to be after assigning all Names, to have extra analysis for locating unknown SubStateMachine FullPaths
+			foreach (SubStateMachine ssm in stateMachines)
+			{
+				uint FullPathID = ssm.fullPathID;
+				if (TOS.TryGetValue(FullPathID, out Utf8String? _FullPath))
+				{
+					string FullPath = _FullPath;
+					IAnimatorStateMachine stateMachine = ssm.stateMachine;
+					if (GroupedStates.TryGetValue(FullPath, out List<int>? stateGroup))
+					{
+						SetStateMachineCapacity(stateMachine, stateGroup!.Count);
+						foreach (int stateIdx in stateGroup!)
+						{
+							AddStateToStateMachine(virtualFile, TOS, stateMachineConstant, ssm, stateMachines, stateIdx, states);
+						}
+					}
+				}
+			}
+		}
+
+		private static void AssignChildStateMachines(ProcessedAssetCollection virtualFile, SubStateMachine[] stateMachines, AssetDictionary<uint, Utf8String> TOS, IStateMachineConstant stateMachineConstant)
+		{
+			for (int i = 1; i < stateMachines.Length; i++)
+			{
+				SubStateMachine ssm = stateMachines[i];
+				if (ssm.stateMachine.Name.IsEmpty) // unknown FullPath yet
+				{
+					continue;
+				}
+				foreach (SubStateMachine parent in stateMachines)
+				{
+					if (TOS[parent.fullPathID] == ssm.path)
+					{
+						if (parent.stateMachine.Has_ChildStateMachines())
+						{
+							ChildAnimatorStateMachine child = parent.stateMachine.ChildStateMachines.AddNew();
+							child.StateMachine.SetAsset(parent.stateMachine.Collection, ssm.stateMachine);
+						}
+						/*else if (parent.stateMachine.Has_ChildStateMachine())
+						{
+							// this may be how SubStateMachines are added on Unity Min to 5
+							// but current code only generates SubStateMachines for Unity 5+
+							SourceGenerated.Subclasses.PPtr_AnimatorStateMachine.PPtr_AnimatorStateMachine_4 child = parent.stateMachine.ChildStateMachine.AddNew();
+							child.SetAsset(parent.stateMachine.Collection, ssm.stateMachine);
+						}*/
+						break;
+					}
+				}
+			}
+		}
+
+		private static IAnimatorState CreateAnimatorState(ProcessedAssetCollection virtualFile, IAnimatorController controller, AssetDictionary<uint, Utf8String> tos, int layerIndex, IStateConstant state)
+		{
+			IAnimatorState generatedState = virtualFile.CreateAsset((int)ClassIDType.AnimatorState, AnimatorState.Create);
+			generatedState.HideFlagsE = HideFlags.HideInHierarchy;
 
 			generatedState.Name = tos[state.NameID];
 
@@ -375,25 +615,11 @@ namespace AssetRipper.Processing.AnimatorControllers
 
 			if (generatedState.Has_StateMachineBehaviours())
 			{
-				// exclude StateMachine's behaviours
-				int layerIndex = controller.Controller.GetLayerIndexByStateMachineIndex(stateMachineIndex);
-				IMonoBehaviour?[] machineBehaviours = controller.GetStateBehaviours(layerIndex);
-				IMonoBehaviour?[] stateBehaviours = controller.GetStateBehaviours(stateMachineIndex, stateIndex);
-				IMonoBehaviour?[] behaviours = stateBehaviours;
-#warning TEMP: remove comment when AnimatorStateMachine's child StateMachines has been implemented
-				//List<IMonoBehaviour?> behaviours = new List<IMonoBehaviour?>(stateBehaviours.Length);
-				//foreach (IMonoBehaviour? behaviour in stateBehaviours)
-				//{
-				//	if (!machineBehaviours.Contains(behaviour))
-				//	{
-				//		behaviours.Add(behaviour);
-				//	}
-				//}
-
-				generatedState.StateMachineBehavioursP.AddRange(behaviours);
+				uint stateID = GetIdForStateConstant(state);
+				IMonoBehaviour?[] stateBehaviours = controller.GetStateBehaviours(layerIndex, stateID);
+				generatedState.StateMachineBehavioursP.AddRange(stateBehaviours);
 			}
-
-			generatedState.Position.CopyValues(position);
+			
 			generatedState.IKOnFeet = state.IKOnFeet;
 			generatedState.WriteDefaultValues = state.GetWriteDefaultValues();
 			generatedState.Mirror = state.Mirror;
@@ -419,12 +645,30 @@ namespace AssetRipper.Processing.AnimatorControllers
 			generatedState.TimeParameter = tos[state.TimeParamID];
 
 			return generatedState;
+
+			static uint GetIdForStateConstant(IStateConstant stateConstant)
+			{
+				if (stateConstant.Has_FullPathID())
+				{
+					return stateConstant.FullPathID;
+				}
+				else if (stateConstant.Has_NameID())
+				{
+					return stateConstant.NameID;
+				}
+				else
+				{
+					return stateConstant.ID;
+				}
+			}
 		}
 
 		private static IAnimatorStateTransition CreateAnimatorStateTransition(
 			ProcessedAssetCollection virtualFile,
-			IStateMachineConstant StateMachine,
+			IStateMachineConstant StateMachineConstant,
 			IReadOnlyList<IAnimatorState> States,
+			SubStateMachine[] stateMachines,
+			SubStateMachine parentStateMachine,
 			AssetDictionary<uint, Utf8String> TOS,
 			ITransitionConstant Transition)
 		{
@@ -445,10 +689,37 @@ namespace AssetRipper.Processing.AnimatorControllers
 				}
 			}
 
-			animatorStateTransition.DstStateP = GetDestinationState(Transition.DestinationState, StateMachine, States);
-
+			if (TryGetDestinationState(Transition.DestinationState, StateMachineConstant, States, stateMachines,
+				out IAnimatorState? state, out SubStateMachine? ssm, out bool isEntry))
+			{
+				if (state != null)
+				{
+					animatorStateTransition.DstStateP = state;
+				}
+				else if (ssm != null)
+				{
+					IAnimatorStateMachine stateM = ssm.stateMachine;
+					if (isEntry || stateM != parentStateMachine.stateMachine)
+					{
+						animatorStateTransition.DstStateMachineP = stateM;
+						if (stateM.Name.IsEmpty && isEntry)
+						{
+							// try locate StateMachine of unknown FullPath
+							string parentPath = TOS[parentStateMachine.fullPathID];
+							if (string.IsNullOrEmpty(ssm.path) || IsDeeperHierarchy(ssm.path, parentPath))
+							{
+								ssm.path = parentPath;
+							}
+						}
+					}
+					else
+					{
+						animatorStateTransition.IsExit = true;
+					}
+				}
+			}
+			
 			animatorStateTransition.Name = TOS[Transition.UserID];
-			animatorStateTransition.IsExit = Transition.IsExit();
 
 			animatorStateTransition.Atomic = Transition.Atomic;
 			animatorStateTransition.TransitionDuration = Transition.TransitionDuration;
@@ -465,8 +736,10 @@ namespace AssetRipper.Processing.AnimatorControllers
 
 		private static IAnimatorTransition CreateAnimatorTransition(
 			ProcessedAssetCollection virtualFile,
-			IStateMachineConstant StateMachine,
+			IStateMachineConstant StateMachineConstant,
 			IReadOnlyList<IAnimatorState> States,
+			SubStateMachine[] stateMachines,
+			IAnimatorStateMachine parentStateMachine,
 			AssetDictionary<uint, Utf8String> TOS,
 			SelectorTransitionConstant Transition)
 		{
@@ -486,42 +759,82 @@ namespace AssetRipper.Processing.AnimatorControllers
 				}
 			}
 
-			animatorTransition.DstStateP = GetDestinationState(Transition.Destination, StateMachine, States);
+			if (TryGetDestinationState(Transition.Destination, StateMachineConstant, States, stateMachines,
+				out IAnimatorState? state, out SubStateMachine? ssm, out bool isEntry))
+			{
+				if (state != null)
+				{
+					animatorTransition.DstStateP = state;
+				}
+				else if (ssm != null)
+				{
+					IAnimatorStateMachine stateM = ssm.stateMachine;
+					if (isEntry || stateM != parentStateMachine)
+					{
+						animatorTransition.DstStateMachineP = stateM;
+					}
+					else
+					{
+						animatorTransition.IsExit = true;
+					}
+				}
+			}
 
 			return animatorTransition;
 		}
 
-		private static IAnimatorState? GetDestinationState(uint destinationState, IStateMachineConstant stateMachine, IReadOnlyList<IAnimatorState> states)
+		private static bool TryGetDestinationState(uint destinationState, IStateMachineConstant stateMachineConstant,
+			IReadOnlyList<IAnimatorState> states, SubStateMachine[] stateMachines,
+			out IAnimatorState? state, out SubStateMachine? stateMachine, out bool isEntry)
 		{
+			state = null; stateMachine = null; isEntry = false;
 			if (destinationState == uint.MaxValue)
 			{
-				return null;
+				return false;
 			}
-			else if (destinationState >= 30000)
+			if (destinationState >= 30000)
 			{
-				// Entry and Exit states
-				uint stateIndex = destinationState % 30000;
-				if (stateIndex == 0 || stateIndex == 1)
+				// Entry and Exit from StateMachines
+				if (stateMachineConstant.Has_SelectorStateConstantArray())
 				{
-					// base layer node. Default value is valid
-					return null;
+					uint stateIndex = destinationState % 30000;
+					SelectorStateConstant selectorState = stateMachineConstant.SelectorStateConstantArray[(int)stateIndex].Data;
+					stateMachine = GetStateMachineForId(stateMachines, selectorState.FullPathID);
+					isEntry = selectorState.IsEntry;
+					return true;
 				}
-				else if (stateMachine.Has_SelectorStateConstantArray())
-				{
-					SelectorStateConstant selectorState = stateMachine.SelectorStateConstantArray[(int)stateIndex].Data;
-#warning		HACK: take default Entry destination. TODO: child StateMachines
-					SelectorTransitionConstant selectorTransition = selectorState.TransitionConstantArray[^1].Data;
-					return GetDestinationState(selectorTransition.Destination, stateMachine, states);
-				}
-				else
-				{
-					return null;
-				}
+				return false;
 			}
 			else
 			{
-				return states[(int)destinationState];
+				// State
+				state = states[(int)destinationState];
+				return true;
 			}
+
+			static SubStateMachine? GetStateMachineForId(SubStateMachine[] stateMachines, uint id)
+			{
+				foreach (SubStateMachine ssm in stateMachines)
+				{
+					if (ssm.fullPathID == id)
+					{
+						return ssm;
+					}
+				}
+				return null;
+			}
+		}
+
+		private static bool IsDeeperHierarchy(string currentPath, string newPath)
+		{
+			int currentDepth = currentPath.Count(ch => ch == '.');
+			int newDepth = newPath.Count(ch => ch == '.');
+			return newDepth > currentDepth;
+		}
+
+		private record SubStateMachine (IAnimatorStateMachine stateMachine, uint fullPathID)
+		{
+			public string path = "";
 		}
 	}
 }

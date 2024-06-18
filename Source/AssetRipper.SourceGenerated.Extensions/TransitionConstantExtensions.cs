@@ -60,7 +60,5 @@ namespace AssetRipper.SourceGenerated.Extensions
 				return false;
 			}
 		}
-
-		public static bool IsExit(this ITransitionConstant transitionConstant) => transitionConstant.DestinationState >= 30000;
 	}
 }
