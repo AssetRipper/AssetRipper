@@ -188,10 +188,15 @@ namespace AssetRipper.Processing.AnimatorControllers
 						}
 
 						// Default State
-						int defaultStateIdx = (int)selector.TransitionConstantArray[^1].Data.Destination;
+						uint destination = selector.TransitionConstantArray[^1].Data.Destination;
+						if (destination == uint.MaxValue)
+						{
+							return; // no Default State
+						}
+						int defaultStateIdx = (int)destination;
 						IAnimatorState defaultState = States[defaultStateIdx];
-						stateMachine.DefaultState.CopyValues(defaultState, new PPtrConverter(stateMachine));
-						break;
+						stateMachine.DefaultStateP = defaultState;
+						return;
 					}
 				}
 			}
@@ -615,7 +620,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 
 			if (generatedState.Has_StateMachineBehaviours())
 			{
-				uint stateID = GetIdForStateConstant(state);
+				uint stateID = state.GetId();
 				IMonoBehaviour?[] stateBehaviours = controller.GetStateBehaviours(layerIndex, stateID);
 				generatedState.StateMachineBehavioursP.AddRange(stateBehaviours);
 			}
@@ -645,22 +650,6 @@ namespace AssetRipper.Processing.AnimatorControllers
 			generatedState.TimeParameter = tos[state.TimeParamID];
 
 			return generatedState;
-
-			static uint GetIdForStateConstant(IStateConstant stateConstant)
-			{
-				if (stateConstant.Has_FullPathID())
-				{
-					return stateConstant.FullPathID;
-				}
-				else if (stateConstant.Has_NameID())
-				{
-					return stateConstant.NameID;
-				}
-				else
-				{
-					return stateConstant.ID;
-				}
-			}
 		}
 
 		private static IAnimatorStateTransition CreateAnimatorStateTransition(
