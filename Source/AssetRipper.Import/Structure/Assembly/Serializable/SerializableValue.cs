@@ -791,7 +791,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 						case PrimitiveType.Complex:
 							{
 								IUnityAssetBase[] structures = AsAssetArray;
-								if (walker.EnterArray(structures))
+								if (walker.EnterList(structures))
 								{
 									int length = structures.Length;
 									if (length > 0)
@@ -805,10 +805,10 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 											{
 												break;
 											}
-											walker.DivideArray(structures);
+											walker.DivideList(structures);
 										}
 									}
-									walker.ExitArray(structures);
+									walker.ExitList(structures);
 								}
 							}
 							break;
@@ -836,7 +836,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 
 		private static void VisitPrimitiveArray<T>(AssetWalker walker, T[] array)
 		{
-			if (walker.EnterArray(array))
+			if (walker.EnterList(array))
 			{
 				int length = array.Length;
 				if (length > 0)
@@ -850,10 +850,10 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 						{
 							break;
 						}
-						walker.DivideArray(array);
+						walker.DivideList(array);
 					}
 				}
-				walker.ExitArray(array);
+				walker.ExitList(array);
 			}
 		}
 

@@ -67,43 +67,6 @@ public abstract class AssetWalker
 	///   <c>true</c> to continue visiting the children of the list node,
 	///   <c>false</c> to skip visiting the children and not call the exit method.
 	/// </returns>
-	public bool EnterList<T>(AssetList<T> list)
-		where T : notnull, new()
-	{
-		return EnterList((IReadOnlyList<T>)list);
-	}
-
-	/// <summary>
-	/// Called between two elements of a list node during traversal.
-	/// </summary>
-	/// <typeparam name="T">The type of the list elements being divided.</typeparam>
-	/// <param name="list">The list having its elements divided.</param>
-	public void DivideList<T>(AssetList<T> list)
-		where T : notnull, new()
-	{
-		DivideList((IReadOnlyList<T>)list);
-	}
-
-	/// <summary>
-	/// Called when exiting a list node during traversal.
-	/// </summary>
-	/// <typeparam name="T">The type of the list elements.</typeparam>
-	/// <param name="list">The list being exited.</param>
-	public void ExitList<T>(AssetList<T> list)
-		where T : notnull, new()
-	{
-		ExitList((IReadOnlyList<T>)list);
-	}
-
-	/// <summary>
-	/// Called when entering a list node during traversal.
-	/// </summary>
-	/// <typeparam name="T">The type of the list elements.</typeparam>
-	/// <param name="list">The list being entered.</param>
-	/// <returns>
-	///   <c>true</c> to continue visiting the children of the list node,
-	///   <c>false</c> to skip visiting the children and not call the exit method.
-	/// </returns>
 	public virtual bool EnterList<T>(IReadOnlyList<T> list)
 	{
 		return true;
@@ -125,83 +88,6 @@ public abstract class AssetWalker
 	/// <param name="list">The list being exited.</param>
 	public virtual void ExitList<T>(IReadOnlyList<T> list)
 	{
-	}
-
-	/// <summary>
-	/// Called when entering an array node during traversal.
-	/// </summary>
-	/// <typeparam name="T">The type of the array elements.</typeparam>
-	/// <param name="array">The array being entered.</param>
-	/// <returns>
-	///   <c>true</c> to continue visiting the children of the array node,
-	///   <c>false</c> to skip visiting the children and not call the exit method.
-	/// </returns>
-	public bool EnterArray<T>(T[] array)
-	{
-		return EnterList(array);
-	}
-
-	/// <summary>
-	/// Called between two elements of an array node during traversal.
-	/// </summary>
-	/// <typeparam name="T">The type of the array elements being divided.</typeparam>
-	/// <param name="array">The array having its elements divided.</param>
-	public void DivideArray<T>(T[] array)
-	{
-		DivideList(array);
-	}
-
-	/// <summary>
-	/// Called when exiting an array node during traversal.
-	/// </summary>
-	/// <typeparam name="T">The type of the array elements.</typeparam>
-	/// <param name="array">The array being exited.</param>
-	public void ExitArray<T>(T[] array)
-	{
-		ExitList(array);
-	}
-
-	/// <summary>
-	/// Called when entering a dictionary node during traversal.
-	/// </summary>
-	/// <typeparam name="TKey">The type of dictionary keys.</typeparam>
-	/// <typeparam name="TValue">The type of dictionary values.</typeparam>
-	/// <param name="dictionary">The dictionary being entered.</param>
-	/// <returns>
-	///   <c>true</c> to continue visiting the children of the dictionary node,
-	///   <c>false</c> to skip visiting the children and not call the exit method.
-	/// </returns>
-	public bool EnterDictionary<TKey, TValue>(AssetDictionary<TKey, TValue> dictionary)
-		where TKey : notnull, new()
-		where TValue : notnull, new()
-	{
-		return EnterDictionary((IReadOnlyCollection<KeyValuePair<TKey, TValue>>)dictionary);
-	}
-
-	/// <summary>
-	/// Called between two pairs of a dictionary node during traversal.
-	/// </summary>
-	/// <typeparam name="TKey">The type of dictionary keys.</typeparam>
-	/// <typeparam name="TValue">The type of dictionary values.</typeparam>
-	/// <param name="dictionary">The dictionary having its pairs divided.</param>
-	public void DivideDictionary<TKey, TValue>(AssetDictionary<TKey, TValue> dictionary)
-		where TKey : notnull, new()
-		where TValue : notnull, new()
-	{
-		DivideDictionary((IReadOnlyCollection<KeyValuePair<TKey, TValue>>)dictionary);
-	}
-
-	/// <summary>
-	/// Called when exiting a dictionary node during traversal.
-	/// </summary>
-	/// <typeparam name="TKey">The type of dictionary keys.</typeparam>
-	/// <typeparam name="TValue">The type of dictionary values.</typeparam>
-	/// <param name="dictionary">The dictionary being exited.</param>
-	public void ExitDictionary<TKey, TValue>(AssetDictionary<TKey, TValue> dictionary)
-		where TKey : notnull, new()
-		where TValue : notnull, new()
-	{
-		ExitDictionary((IReadOnlyCollection<KeyValuePair<TKey, TValue>>)dictionary);
 	}
 
 	/// <summary>
@@ -237,58 +123,6 @@ public abstract class AssetWalker
 	/// <param name="dictionary">The dictionary being exited.</param>
 	public virtual void ExitDictionary<TKey, TValue>(IReadOnlyCollection<KeyValuePair<TKey, TValue>> dictionary)
 	{
-	}
-
-	/// <summary>
-	/// Called when entering a dictionary pair during traversal.
-	/// </summary>
-	/// <remarks>
-	/// This calls <see cref="EnterPair{TKey, TValue}(AssetPair{TKey, TValue})"/> by default.
-	/// </remarks>
-	/// <typeparam name="TKey">The type of the key in the pair.</typeparam>
-	/// <typeparam name="TValue">The type of the value in the pair.</typeparam>
-	/// <param name="pair">The dictionary pair being entered.</param>
-	/// <returns>
-	///   <c>true</c> to continue visiting the key and value of the dictionary pair,
-	///   <c>false</c> to skip visiting the children and not call the exit method.
-	/// </returns>
-	public bool EnterDictionaryPair<TKey, TValue>(AssetPair<TKey, TValue> pair)
-		where TKey : notnull, new()
-		where TValue : notnull, new()
-	{
-		return EnterDictionaryPair((KeyValuePair<TKey, TValue>)pair);
-	}
-
-	/// <summary>
-	/// Called between the key and value of a dictionary pair during traversal.
-	/// </summary>
-	/// <remarks>
-	/// This calls <see cref="DividePair{TKey, TValue}(AssetPair{TKey, TValue})"/> by default.
-	/// </remarks>
-	/// <typeparam name="TKey">The type of the key in the pair.</typeparam>
-	/// <typeparam name="TValue">The type of the value in the pair.</typeparam>
-	/// <param name="pair">The dictionary pair having its key and value divided.</param>
-	public void DivideDictionaryPair<TKey, TValue>(AssetPair<TKey, TValue> pair)
-		where TKey : notnull, new()
-		where TValue : notnull, new()
-	{
-		DivideDictionaryPair((KeyValuePair<TKey, TValue>)pair);
-	}
-
-	/// <summary>
-	/// Called when exiting a dictionary pair during traversal.
-	/// </summary>
-	/// <remarks>
-	/// This calls <see cref="ExitPair{TKey, TValue}(AssetPair{TKey, TValue})"/> by default.
-	/// </remarks>
-	/// <typeparam name="TKey">The type of the key in the pair.</typeparam>
-	/// <typeparam name="TValue">The type of the value in the pair.</typeparam>
-	/// <param name="pair">The dictionary pair being exited.</param>
-	public void ExitDictionaryPair<TKey, TValue>(AssetPair<TKey, TValue> pair)
-		where TKey : notnull, new()
-		where TValue : notnull, new()
-	{
-		ExitDictionaryPair((KeyValuePair<TKey, TValue>)pair);
 	}
 
 	/// <summary>
@@ -335,49 +169,6 @@ public abstract class AssetWalker
 	public virtual void ExitDictionaryPair<TKey, TValue>(KeyValuePair<TKey, TValue> pair)
 	{
 		ExitPair(pair);
-	}
-
-	/// <summary>
-	/// Called when entering a key-value pair node during traversal.
-	/// </summary>
-	/// <typeparam name="TKey">The type of the key in the pair.</typeparam>
-	/// <typeparam name="TValue">The type of the value in the pair.</typeparam>
-	/// <param name="pair">The key-value pair being entered.</param>
-	/// <returns>
-	///   <c>true</c> to continue visiting the children of the key-value pair node,
-	///   <c>false</c> to skip visiting the children and not call the exit method.
-	/// </returns>
-	public bool EnterPair<TKey, TValue>(AssetPair<TKey, TValue> pair)
-		where TKey : notnull, new()
-		where TValue : notnull, new()
-	{
-		return EnterPair((KeyValuePair<TKey, TValue>)pair);
-	}
-
-	/// <summary>
-	/// Called between the key and value of a key-value pair node during traversal.
-	/// </summary>
-	/// <typeparam name="TKey">The type of the key in the pair.</typeparam>
-	/// <typeparam name="TValue">The type of the value in the pair.</typeparam>
-	/// <param name="pair">The key-value pair having its key and value divided.</param>
-	public void DividePair<TKey, TValue>(AssetPair<TKey, TValue> pair)
-		where TKey : notnull, new()
-		where TValue : notnull, new()
-	{
-		DividePair((KeyValuePair<TKey, TValue>)pair);
-	}
-
-	/// <summary>
-	/// Called when exiting a key-value pair node during traversal.
-	/// </summary>
-	/// <typeparam name="TKey">The type of the key in the pair.</typeparam>
-	/// <typeparam name="TValue">The type of the value in the pair.</typeparam>
-	/// <param name="pair">The key-value pair being exited.</param>
-	public void ExitPair<TKey, TValue>(AssetPair<TKey, TValue> pair)
-		where TKey : notnull, new()
-		where TValue : notnull, new()
-	{
-		ExitPair((KeyValuePair<TKey, TValue>)pair);
 	}
 
 	/// <summary>

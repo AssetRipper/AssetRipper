@@ -13,7 +13,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="AssetRipper.Checksum" Version="1.0.0" />
-		<PackageReference Include="AssetRipper.SourceGenerated" Version="1.0.16" />
+		<PackageReference Include="AssetRipper.SourceGenerated" Version="1.0.17" />
 	</ItemGroup>
 
 </Project>
