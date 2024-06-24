@@ -23,7 +23,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 			ScriptingBackend = scriptingBackend;
 		}
 
-		public void DecompileWholeProject(AssemblyDefinition assembly, string outputFolder)
+		public void DecompileWholeProject(ModuleDefinition assembly, string outputFolder)
 		{
 			DecompilerSettings settings = new();
 
@@ -40,7 +40,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 			DecompileWholeProject(decompiler, assembly, outputFolder);
 		}
 
-		private void DecompileWholeProject(WholeProjectDecompiler decompiler, AssemblyDefinition assembly, string outputFolder)
+		private void DecompileWholeProject(WholeProjectDecompiler decompiler, ModuleDefinition assembly, string outputFolder)
 		{
 			try
 			{

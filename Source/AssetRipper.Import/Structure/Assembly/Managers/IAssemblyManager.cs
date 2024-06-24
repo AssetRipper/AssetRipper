@@ -19,9 +19,9 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 			[NotNullWhen(true)] out SerializableType? scriptType,
 			[NotNullWhen(false)] out string? failureReason);
 		TypeDefinition GetTypeDefinition(ScriptIdentifier scriptID);
-		IEnumerable<AssemblyDefinition> GetAssemblies();
+		IEnumerable<ModuleDefinition> GetAssemblies();
 		ScriptIdentifier GetScriptID(string assembly, string @namespace, string name);
-		Stream GetStreamForAssembly(AssemblyDefinition assembly);
+		Stream GetStreamForAssembly(ModuleDefinition assembly);
 		void ClearStreamCache();
 
 		bool IsSet { get; }
@@ -29,7 +29,7 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 	}
 	public static class AssemblyManagerExtensions
 	{
-		public static void SaveAssembly(this IAssemblyManager manager, AssemblyDefinition assembly, string path)
+		public static void SaveAssembly(this IAssemblyManager manager, ModuleDefinition assembly, string path)
 		{
 			Stream readStream = manager.GetStreamForAssembly(assembly);
 			using FileStream writeStream = File.Create(path);

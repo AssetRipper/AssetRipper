@@ -12,8 +12,8 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 		public bool IsSet => ScriptingBackend != ScriptingBackend.Unknown;
 		public virtual ScriptingBackend ScriptingBackend => ScriptingBackend.Unknown;
 
-		protected readonly Dictionary<string, AssemblyDefinition?> m_assemblies = new();
-		protected readonly Dictionary<AssemblyDefinition, Stream> m_assemblyStreams = new();
+		protected readonly Dictionary<string, ModuleDefinition?> m_assemblies = new();
+		protected readonly Dictionary<ModuleDefinition, Stream> m_assemblyStreams = new();
 		protected readonly Dictionary<string, bool> m_validTypes = new();
 		private readonly Dictionary<TypeDefinition, MonoType> monoTypeCache = new();
 
@@ -38,10 +38,10 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 
 		public virtual void Load(string filePath)
 		{
-			AssemblyDefinition assembly;
+			ModuleDefinition assembly;
 			try
 			{
-				assembly = AssemblyDefinition.FromFile(filePath);
+				assembly = ModuleDefinition.FromFile(filePath);
 			}
 			catch (BadImageFormatException badImageFormatException)
 			{
@@ -56,7 +56,7 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 			m_assemblyStreams.Add(assembly, stream);
 		}
 
-		public Stream GetStreamForAssembly(AssemblyDefinition assembly)
+		public Stream GetStreamForAssembly(ModuleDefinition assembly)
 		{
 			if (m_assemblyStreams.TryGetValue(assembly, out Stream? result))
 			{
@@ -65,7 +65,7 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 			else
 			{
 				MemoryStream memoryStream = new();
-				assembly.WriteManifest(memoryStream);
+				assembly.Write(memoryStream);
 				m_assemblyStreams.Add(assembly, memoryStream);
 				return memoryStream;
 			}
@@ -76,7 +76,7 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 			m_assemblyStreams.Clear();
 		}
 
-		private static string ToAssemblyName(AssemblyDefinition assembly)
+		private static string ToAssemblyName(ModuleDefinition assembly)
 		{
 			return FilenameUtils.RemoveAssemblyFileExtension(assembly.Name?.ToString() ?? "");
 		}
@@ -85,8 +85,8 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 		{
 			MemoryStream memoryStream = new();
 			stream.CopyTo(memoryStream);
-			AssemblyDefinition assembly = AssemblyDefinition.FromBytes(memoryStream.ToArray());
-			//AssemblyDefinition assembly = AssemblyDefinition.FromImage(stream);//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			ModuleDefinition assembly = ModuleDefinition.FromBytes(memoryStream.ToArray());
+			//ModuleDefinition assembly = ModuleDefinition.FromImage(stream);//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 			assembly.InitializeResolvers(this);
 			fileName = Path.GetFileNameWithoutExtension(fileName);
 			string assemblyName = ToAssemblyName(assembly);
@@ -97,7 +97,7 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 
 		public virtual void Unload(string fileName)
 		{
-			if (m_assemblies.TryGetValue(fileName, out AssemblyDefinition? assembly))
+			if (m_assemblies.TryGetValue(fileName, out ModuleDefinition? assembly))
 			{
 				m_assemblies.Remove(fileName);
 				if (assembly is not null && m_assemblyStreams.TryGetValue(assembly, out Stream? stream))
@@ -217,9 +217,9 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 
 		internal void AddSerializableType(string uniqueName, SerializableType scriptType) => m_serializableTypes.Add(uniqueName, scriptType);
 
-		protected AssemblyDefinition? FindAssembly(string name)
+		protected ModuleDefinition? FindAssembly(string name)
 		{
-			if (m_assemblies.TryGetValue(name, out AssemblyDefinition? assembly))
+			if (m_assemblies.TryGetValue(name, out ModuleDefinition? assembly))
 			{
 				return assembly;
 			}
@@ -235,21 +235,7 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 
 		protected TypeDefinition? FindType(string assembly, string @namespace, string name)
 		{
-			AssemblyDefinition? definition = FindAssembly(assembly);
-			if (definition == null)
-			{
-				return null;
-			}
-
-			foreach (ModuleDefinition module in definition.Modules)
-			{
-				TypeDefinition? type = module.GetType(@namespace, name);
-				if (type != null)
-				{
-					return type;
-				}
-			}
-			return null;
+			return FindAssembly(assembly)?.GetType(@namespace, name);
 		}
 
 		protected TypeDefinition? FindType(ScriptIdentifier scriptID)
@@ -257,7 +243,7 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 			return FindType(scriptID.Assembly, scriptID.Namespace, scriptID.Name);
 		}
 
-		public virtual IEnumerable<AssemblyDefinition> GetAssemblies()
+		public virtual IEnumerable<ModuleDefinition> GetAssemblies()
 		{
 			return m_assemblies.Values.Where(x => x is not null).Distinct()!;
 		}

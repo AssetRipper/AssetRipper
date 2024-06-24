@@ -23,11 +23,8 @@ internal static class ModuleExtensions
 		module.MetadataResolver = new DefaultMetadataResolver(assemblyResolver);
 	}
 
-	public static void InitializeResolvers(this AssemblyDefinition assembly, BaseManager assemblyManager)
+	public static void InitializeResolvers(this ModuleDefinition assembly, BaseManager assemblyManager)
 	{
-		for (int i = 0; i < assembly.Modules.Count; i++)
-		{
-			assembly.Modules[i].SetResolver(assemblyManager.AssemblyResolver);
-		}
+		assembly.SetResolver(assemblyManager.AssemblyResolver);
 	}
 }

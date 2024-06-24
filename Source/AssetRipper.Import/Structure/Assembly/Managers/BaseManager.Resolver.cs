@@ -3,7 +3,6 @@ using AsmResolver.DotNet.Signatures;
 
 namespace AssetRipper.Import.Structure.Assembly.Managers
 {
-
 	public partial class BaseManager
 	{
 		private sealed class Resolver : IAssemblyResolver
@@ -47,7 +46,7 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 
 			public AssemblyDefinition? Resolve(AssemblyDescriptor assembly)
 			{
-				if (cache.TryGetValue(assembly, out var value))
+				if (cache.TryGetValue(assembly, out AssemblyDefinition? value))
 				{
 					return value;
 				}
@@ -62,9 +61,9 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 			private AssemblyDefinition? ResolveImplementation(AssemblyDescriptor assembly)
 			{
 				string? name = assembly.Name;
-				if (name is not null && assemblyManager.m_assemblies.TryGetValue(name, out AssemblyDefinition? assemblyDefinition))
+				if (name is not null && assemblyManager.m_assemblies.TryGetValue(name, out ModuleDefinition? assemblyDefinition))
 				{
-					return assemblyDefinition;
+					return assemblyDefinition?.Assembly;
 				}
 				else
 				{

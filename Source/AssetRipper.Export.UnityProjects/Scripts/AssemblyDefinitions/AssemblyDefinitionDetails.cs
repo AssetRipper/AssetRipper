@@ -6,9 +6,9 @@ namespace AssetRipper.Export.UnityProjects.Scripts.AssemblyDefinitions
 	{
 		public readonly string AssemblyName;
 		public readonly string OutputFolder;
-		public readonly AssemblyDefinition? Assembly;
+		public readonly ModuleDefinition? Assembly;
 
-		public AssemblyDefinitionDetails(AssemblyDefinition assembly, string outputFolder)
+		public AssemblyDefinitionDetails(ModuleDefinition assembly, string outputFolder)
 		{
 			AssemblyName = assembly.Name!;
 			OutputFolder = outputFolder;
@@ -31,7 +31,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts.AssemblyDefinitions
 		{
 			return AssemblyName == other.AssemblyName &&
 				   OutputFolder == other.OutputFolder &&
-				   EqualityComparer<AssemblyDefinition?>.Default.Equals(Assembly, other.Assembly);
+				   EqualityComparer<ModuleDefinition?>.Default.Equals(Assembly, other.Assembly);
 		}
 
 		public override int GetHashCode()
