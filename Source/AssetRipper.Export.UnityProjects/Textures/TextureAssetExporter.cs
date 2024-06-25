@@ -2,6 +2,7 @@ using AssetRipper.Assets;
 using AssetRipper.Export.UnityProjects.Configuration;
 using AssetRipper.Import.Logging;
 using AssetRipper.Processing.Textures;
+using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Extensions;
 using DirectBitmap = AssetRipper.Export.UnityProjects.Utils.DirectBitmap<AssetRipper.TextureDecoder.Rgb.Formats.ColorBGRA32, byte>;
@@ -11,7 +12,8 @@ namespace AssetRipper.Export.UnityProjects.Textures
 	public class TextureAssetExporter : BinaryAssetExporter
 	{
 		public ImageExportFormat ImageExportFormat { get; private set; }
-		public SpriteExportMode SpriteExportMode { get; private set; }
+		private SpriteExportMode SpriteExportMode { get; set; }
+		private bool ExportSprites => SpriteExportMode is not SpriteExportMode.Yaml;
 
 		public TextureAssetExporter(LibraryConfiguration configuration)
 		{
@@ -21,9 +23,9 @@ namespace AssetRipper.Export.UnityProjects.Textures
 
 		public override bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection)
 		{
-			if (asset.MainAsset is SpriteInformationObject spriteInformationObject)
+			if (asset.MainAsset is SpriteInformationObject spriteInformationObject && (ExportSprites || asset is not ISprite))
 			{
-				exportCollection = new TextureExportCollection(this, spriteInformationObject, SpriteExportMode != SpriteExportMode.Yaml);
+				exportCollection = new TextureExportCollection(this, spriteInformationObject, ExportSprites);
 				return true;
 			}
 			else
