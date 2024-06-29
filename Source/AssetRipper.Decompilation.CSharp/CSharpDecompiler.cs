@@ -3,7 +3,6 @@ using AsmResolver.DotNet;
 using AsmResolver.DotNet.Code.Cil;
 using AsmResolver.DotNet.Collections;
 using AsmResolver.DotNet.Signatures;
-using AsmResolver.DotNet.Signatures.Types;
 using AssetRipper.Text.SourceGeneration;
 using System.CodeDom.Compiler;
 

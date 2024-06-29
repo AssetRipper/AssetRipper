@@ -24,7 +24,7 @@ public sealed class MethodStubbingProcessor : IAssetProcessor
 				//RemoveCompilerGeneratedNestedTypes(type);
 				foreach (MethodDefinition method in type.Methods)
 				{
-					method.FillMethodBodyWithStub();
+				   method.ReplaceMethodBodyWithMinimalImplementation();
 				}
 			}
 		}
