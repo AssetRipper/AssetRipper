@@ -102,7 +102,7 @@ namespace AssetRipper.Tools.RawTextureExtractor
 						? FileUtils.FixInvalidNameCharacters(originalName)
 						: $"{texture.ClassName}_{ToValidString(texture.PathID)}";
 					Debug.Assert(name.Length > 0);
-					string uniqueName = FileUtils.GetUniqueName(collectionOutputPath, name, FileUtils.MaxFilePathLength - jsonExtension.Length);
+					string uniqueName = FileUtils.GetUniqueName(collectionOutputPath, name, FileUtils.MaxFileNameLength - jsonExtension.Length);
 					string dataFilePath = Path.Combine(collectionOutputPath, uniqueName);
 					string infoFilePath = dataFilePath + jsonExtension;
 					File.WriteAllBytes(dataFilePath, data);

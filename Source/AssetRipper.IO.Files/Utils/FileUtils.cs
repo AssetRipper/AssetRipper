@@ -79,11 +79,7 @@ namespace AssetRipper.IO.Files.Utils
 
 		public static bool IsReservedName(string name)
 		{
-			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-			{
-				return ReservedNames.Contains(name.ToLower());
-			}
-			return false;
+			return OperatingSystem.IsWindows() && ReservedNames.Contains(name.ToLowerInvariant());
 		}
 
 		private static Regex GenerateFileNameRegex()
@@ -91,7 +87,7 @@ namespace AssetRipper.IO.Files.Utils
 			string invalidChars = GetInvalidFileNameChars();
 			string escapedChars = Regex.Escape(invalidChars);
 			// Updated regex to include commas, square brackets, and ASCII control characters
-			return new Regex($"[{escapedChars},\\[\\]\\x00-\\x1F]");
+			return new Regex($@"[{escapedChars},\[\]\x00-\x1F]");
 		}
 
 		/// <summary>
@@ -112,15 +108,17 @@ namespace AssetRipper.IO.Files.Utils
 			}
 		}
 
-		public const int MaxFileNameLength = 256;
-		public const int MaxFilePathLength = 260;
+		/// <summary>
+		/// <see href="https://en.wikipedia.org/wiki/Comparison_of_file_systems#Limits"/>
+		/// </summary>
+		public const int MaxFileNameLength = 255;
 
-		private static readonly HashSet<string> ReservedNames = new HashSet<string>()
-		{
+		private static readonly HashSet<string> ReservedNames =
+		[
 			"aux", "con", "nul", "prn",
 			"com1", "com2", "com3", "com4", "com5", "com6", "com7", "com8", "com9",
 			"lpt1", "lpt2", "lpt3", "lpt4", "lpt5", "lpt6", "lpt7", "lpt8", "lpt9",
-		};
+		];
 		private static readonly Regex FileNameRegex = GenerateFileNameRegex();
 	}
 }
