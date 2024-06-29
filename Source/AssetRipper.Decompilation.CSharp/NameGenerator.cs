@@ -1,6 +1,6 @@
 ﻿using AsmResolver.DotNet;
-using AsmResolver.DotNet.Signatures.Types;
-using AsmResolver.PE.DotNet.Metadata.Tables.Rows;
+using AsmResolver.DotNet.Signatures;
+using AsmResolver.PE.DotNet.Metadata.Tables;
 using System.Text;
 using System.Text.RegularExpressions;
 
