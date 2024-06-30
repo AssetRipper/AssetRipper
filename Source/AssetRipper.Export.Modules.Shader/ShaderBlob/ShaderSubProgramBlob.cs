@@ -97,7 +97,7 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 		}
 
 
-		public ShaderSubProgram GetSubProgram(uint blobIndex)
+		public ShaderSubProgram GetSubProgram(uint blobIndex, Action<ShaderSubProgram>? onRead)
 		{
 			if (m_cachedSubPrograms.TryGetValue((blobIndex, blobIndex), out ShaderSubProgram? subProgram))
 			{
@@ -110,11 +110,13 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 			subProgram = new ShaderSubProgram();
 			ReadSubProgram(blobReader, subProgram, blobIndex, true, true);
 
+			onRead?.Invoke(subProgram);
+
 			m_cachedSubPrograms.TryAdd((blobIndex, blobIndex), subProgram);
 			return subProgram;
 		}
 
-		public ShaderSubProgram GetSubProgram(uint blobIndex, uint paramBlobIndex)
+		public ShaderSubProgram GetSubProgram(uint blobIndex, uint paramBlobIndex, Action<ShaderSubProgram>? onRead)
 		{
 			if (m_cachedSubPrograms.TryGetValue((blobIndex, paramBlobIndex), out ShaderSubProgram? subProgram))
 			{
@@ -127,6 +129,8 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 			subProgram = new ShaderSubProgram();
 			ReadSubProgram(blobReader, subProgram, blobIndex, true, false);
 			ReadSubProgram(blobReader, subProgram, paramBlobIndex, false, true);
+
+			onRead?.Invoke(subProgram);
 
 			m_cachedSubPrograms.TryAdd((blobIndex, paramBlobIndex), subProgram);
 			return subProgram;
