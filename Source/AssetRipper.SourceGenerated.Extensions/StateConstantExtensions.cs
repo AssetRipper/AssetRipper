@@ -23,5 +23,21 @@ namespace AssetRipper.SourceGenerated.Extensions
 		{
 			return !stateConstant.Has_WriteDefaultValues() || stateConstant.WriteDefaultValues;
 		}
+
+		public static uint GetId(this IStateConstant stateConstant)
+		{
+			if (stateConstant.Has_FullPathID())
+			{
+				return stateConstant.FullPathID;
+			}
+			else if (stateConstant.Has_NameID())
+			{
+				return stateConstant.NameID;
+			}
+			else
+			{
+				return stateConstant.ID;
+			}
+		}
 	}
 }
