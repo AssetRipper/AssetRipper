@@ -54,7 +54,7 @@ namespace AssetRipper.Export.UnityProjects.Models
 			{
 				if (!ImageCache.TryGetValue(texture, out image))
 				{
-					if (TextureConverter.TryConvertToBitmap(texture, out DirectBitmap<ColorBGRA32, byte> bitmap))
+					if (TextureConverter.TryConvertToBitmap(texture, out DirectBitmap bitmap))
 					{
 						using MemoryStream memoryStream = new();
 						bitmap.SaveAsPng(memoryStream);

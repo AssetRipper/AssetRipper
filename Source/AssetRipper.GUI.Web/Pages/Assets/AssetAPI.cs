@@ -10,6 +10,7 @@ using AssetRipper.Export.UnityProjects.Scripts;
 using AssetRipper.Export.UnityProjects.Shaders;
 using AssetRipper.Export.UnityProjects.Terrains;
 using AssetRipper.Export.UnityProjects.Textures;
+using AssetRipper.Export.UnityProjects.Utils;
 using AssetRipper.GUI.Web.Paths;
 using AssetRipper.Import.AssetCreation;
 using AssetRipper.Import.Structure.Assembly;
@@ -29,7 +30,6 @@ using AssetRipper.Yaml;
 using Microsoft.AspNetCore.Http;
 using System.Globalization;
 using System.Runtime.InteropServices;
-using DirectBitmap = AssetRipper.Export.UnityProjects.Utils.DirectBitmap<AssetRipper.TextureDecoder.Rgb.Formats.ColorBGRA32, byte>;
 
 namespace AssetRipper.GUI.Web.Pages.Assets;
 
@@ -110,17 +110,17 @@ internal static class AssetAPI
 			SpriteInformationObject spriteInformationObject => TextureToBitmap(spriteInformationObject.Texture),
 			ISprite sprite => SpriteToBitmap(sprite),
 			ITerrainData terrainData => TerrainHeatmapExporter.GetBitmap(terrainData),
-			_ => default,
+			_ => DirectBitmap.Empty,
 		};
 
 		static DirectBitmap TextureToBitmap(ITexture2D texture)
 		{
-			return TextureConverter.TryConvertToBitmap(texture, out DirectBitmap bitmap) ? bitmap : default;
+			return TextureConverter.TryConvertToBitmap(texture, out DirectBitmap bitmap) ? bitmap : DirectBitmap.Empty;
 		}
 
 		static DirectBitmap SpriteToBitmap(ISprite sprite)
 		{
-			return sprite.TryGetTexture() is { } spriteTexture ? TextureToBitmap(spriteTexture) : default;
+			return sprite.TryGetTexture() is { } spriteTexture ? TextureToBitmap(spriteTexture) : DirectBitmap.Empty;
 		}
 	}
 

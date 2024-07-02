@@ -1,10 +1,10 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Export.UnityProjects.Configuration;
+using AssetRipper.Export.UnityProjects.Utils;
 using AssetRipper.Import.Logging;
 using AssetRipper.SourceGenerated.Classes.ClassID_1120;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Extensions;
-using DirectBitmap = AssetRipper.Export.UnityProjects.Utils.DirectBitmap<AssetRipper.TextureDecoder.Rgb.Formats.ColorBGRA32, byte>;
 
 namespace AssetRipper.Export.UnityProjects.Textures;
 
