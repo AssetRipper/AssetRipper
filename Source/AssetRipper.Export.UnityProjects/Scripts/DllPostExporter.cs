@@ -15,11 +15,11 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 
 			Logger.Info(LogCategory.Export, "Saving game assemblies...");
 			IAssemblyManager assemblyManager = gameData.AssemblyManager;
-			ModuleDefinition[] assemblies = assemblyManager.GetAssemblies().ToArray();
+			AssemblyDefinition[] assemblies = assemblyManager.GetAssemblies().ToArray();
 			if (assemblies.Length != 0)
 			{
 				Directory.CreateDirectory(outputDirectory);
-				foreach (ModuleDefinition assembly in assemblies)
+				foreach (AssemblyDefinition assembly in assemblies)
 				{
 					string filepath = Path.Combine(outputDirectory, FilenameUtils.AddAssemblyFileExtension(assembly.Name!));
 					assemblyManager.SaveAssembly(assembly, filepath);

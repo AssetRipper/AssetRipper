@@ -10,9 +10,10 @@ namespace AssetRipper.Export.UnityProjects.Scripts.AssemblyDefinitions
 			string assetPath = Path.Combine(details.OutputFolder, $"{details.AssemblyName}.asmdef");
 
 			AssemblyDefinitionAsset asset = new AssemblyDefinitionAsset(details.AssemblyName);
-			if (details.Assembly is not null)
+			ModuleDefinition? module = details.Assembly?.ManifestModule;
+			if (module is not null)
 			{
-				foreach (AssemblyReference reference in details.Assembly.AssemblyReferences)
+				foreach (AssemblyReference reference in module.AssemblyReferences)
 				{
 					if (reference.Name is null || ReferenceAssemblies.IsReferenceAssembly(reference.Name))
 					{

@@ -1,7 +1,6 @@
 ﻿using AsmResolver.DotNet;
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly.Managers;
-using AssetRipper.IO.Files.Utils;
 using ICSharpCode.Decompiler.Metadata;
 using System.Collections.Concurrent;
 using IAssemblyResolver = ICSharpCode.Decompiler.Metadata.IAssemblyResolver;
@@ -28,13 +27,12 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 		private readonly UniversalAssemblyResolver backupResolver = new UniversalAssemblyResolver(null, false, null);
 		public CecilAssemblyResolver(IAssemblyManager manager)
 		{
-			foreach (ModuleDefinition assembly in manager.GetAssemblies())
+			foreach (AssemblyDefinition assembly in manager.GetAssemblies())
 			{
 				Stream stream = manager.GetStreamForAssembly(assembly);
 				stream.Position = 0;
-				string name = FilenameUtils.RemoveAssemblyFileExtension(assembly.Name!);
-				PEFile peFile = new PEFile(name, stream);
-				if (!peAssemblies.TryAdd(name, peFile))
+				PEFile peFile = new PEFile(assembly.Name!, stream);
+				if (!peAssemblies.TryAdd(assembly.Name!, peFile))
 				{
 					throw new Exception($"Could not add pe assembly: {assembly.Name} to name dictionary!");
 				}
@@ -59,7 +57,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 			}
 		}
 
-		public PEFile Resolve(ModuleDefinition assembly) => peAssemblies[FilenameUtils.RemoveAssemblyFileExtension(assembly.Name!)];
+		public PEFile Resolve(AssemblyDefinition assembly) => peAssemblies[assembly.Name!];
 
 		public Task<PEFile?> ResolveAsync(IAssemblyReference reference)
 		{

@@ -99,9 +99,8 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 
 			foreach (AssemblyDefinition assembly in assemblies)
 			{
-				ModuleDefinition module = assembly.ManifestModule ?? throw new NullReferenceException();
-				module.InitializeResolvers(this);
-				m_assemblies.Add(assembly.Name ?? throw new NullReferenceException(), module);
+				assembly.InitializeResolvers(this);
+				m_assemblies.Add(assembly.Name ?? throw new NullReferenceException(), assembly);
 			}
 		}
 

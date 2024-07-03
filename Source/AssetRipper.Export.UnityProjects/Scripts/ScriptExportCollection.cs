@@ -61,7 +61,7 @@ public sealed class ScriptExportCollection : ScriptExportCollectionBase
 
 		string pluginsFolder = Path.Combine(assetsDirectoryPath, "Plugins");
 
-		foreach (ModuleDefinition assembly in AssetExporter.AssemblyManager.GetAssemblies())
+		foreach (AssemblyDefinition assembly in AssetExporter.AssemblyManager.GetAssemblies())
 		{
 			string assemblyName = assembly.Name!;
 			AssemblyExportType exportType = AssetExporter.GetExportType(assemblyName);
