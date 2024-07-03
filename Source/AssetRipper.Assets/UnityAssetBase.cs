@@ -55,6 +55,11 @@ public abstract class UnityAssetBase : IUnityAssetBase
 		}
 	}
 
+	public virtual bool? AddToEqualityComparer(IUnityAssetBase other, AssetEqualityComparer comparer)
+	{
+		throw MethodNotSupported();
+	}
+
 	private NotSupportedException MethodNotSupported([CallerMemberName] string? methodName = null)
 	{
 		return new NotSupportedException($"{methodName} is not supported for {GetType().FullName}");

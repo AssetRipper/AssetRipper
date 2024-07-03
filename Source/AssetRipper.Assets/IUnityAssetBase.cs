@@ -38,6 +38,16 @@ public interface IUnityAssetBase : IEndianSpanReadable, IAssetWritable
 	/// <param name="walker">A walker for traversal.</param>
 	void WalkStandard(AssetWalker walker);
 	IEnumerable<(string, PPtr)> FetchDependencies();
+	/// <summary>
+	/// Compares this object to another object for deep value equality.
+	/// </summary>
+	/// <remarks>
+	/// <paramref name="other"/> is expected to be not null and of the same type as this object.
+	/// </remarks>
+	/// <param name="other">The other object.</param>
+	/// <param name="comparer">The <see cref="AssetEqualityComparer"/> to which any dependent comparisons are added.</param>
+	/// <returns>Null if it could not be immediately determined</returns>
+	bool? AddToEqualityComparer(IUnityAssetBase other, AssetEqualityComparer comparer);
 }
 public static class UnityAssetBaseExtensions
 {
