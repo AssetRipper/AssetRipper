@@ -30,9 +30,9 @@ namespace AssetRipper.SourceGenerated.Extensions
 			{
 				return stateConstant.FullPathID;
 			}
-			else if (stateConstant.Has_NameID())
+			else if (stateConstant.Has_PathID())
 			{
-				return stateConstant.NameID;
+				return stateConstant.PathID;
 			}
 			else
 			{
