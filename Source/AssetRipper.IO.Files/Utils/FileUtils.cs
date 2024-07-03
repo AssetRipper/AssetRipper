@@ -1,4 +1,4 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Text;
 using System.Text.RegularExpressions;
 
 namespace AssetRipper.IO.Files.Utils
@@ -39,10 +39,10 @@ namespace AssetRipper.IO.Files.Utils
 			string? name = null;
 			int maxLength = maxNameLength - 4;
 			string validFileName = fileName;
-			if (validFileName.Length > maxLength)
+			if (Encoding.UTF8.GetByteCount(fileName) > maxLength)
 			{
 				ext = Path.GetExtension(validFileName);
-				name = validFileName.Substring(0, maxLength - ext.Length);
+				name = TruncateToUTF8ByteLength(fileName, maxNameLength - ext.Length);
 				validFileName = name + ext;
 			}
 
@@ -120,5 +120,47 @@ namespace AssetRipper.IO.Files.Utils
 			"lpt1", "lpt2", "lpt3", "lpt4", "lpt5", "lpt6", "lpt7", "lpt8", "lpt9",
 		];
 		private static readonly Regex FileNameRegex = GenerateFileNameRegex();
+
+		private static string TruncateToUTF8ByteLength(string str, int byteLength)
+		{
+			byte[] bytes = Encoding.UTF8.GetBytes(str);
+			int validLength = FindValidByteLength(bytes, byteLength);
+			return Encoding.UTF8.GetString(bytes[..validLength]);
+		}
+
+		private static int FindValidByteLength(byte[] bytes, int byteLength)
+		{
+			int validByteLength = byteLength;
+
+			// ascii char:      0_
+			// two-byte char:   110_   10_
+			// three-byte char: 1110_  10_ _10_
+			// three-byte char: 11110_ 10_ _10_ _10
+
+			// move to end of the last full sequence
+			for (int i = byteLength - 1; i >= 0; i--)
+			{
+				byte currentByte = bytes[i];
+
+				if ((currentByte & 0b11_000000) == 0b10_000000)
+				{
+					// continuation byte
+					validByteLength--;
+				}
+				else if ((currentByte & 0b10000000) == 0b10000000)
+				{
+					// start of multi-byte sequence
+					validByteLength--;
+					break;
+				}
+				else
+				{
+					// ascii char
+					break;
+				}
+			}
+
+			return validByteLength;
+		}
 	}
 }
