@@ -31,19 +31,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static void TrimChildStateMachines(this IAnimatorStateMachine stateMachine)
 		{
-			stateMachine.SetChildStateMachineCapacity(stateMachine.GetChildStateMachineCount());
-		}
-
-		private static int GetChildStateMachineCount(this IAnimatorStateMachine stateMachine)
-		{
-			if (stateMachine.Has_ChildStateMachines())
-			{
-				return stateMachine.ChildStateMachines.Count;
-			}
-			else
-			{
-				return stateMachine.ChildStateMachine.Count;
-			}
+			stateMachine.SetChildStateMachineCapacity(stateMachine.ChildStateMachinesCount());
 		}
 
 		public static void SetEntryTransitionsCapacity(this IAnimatorStateMachine stateMachine, int c)
@@ -69,7 +57,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			{
 				return stateMachine.ChildStateMachines.Count;
 			}
-			return stateMachine.ChildStateMachine.Count;
+			return stateMachine.ChildStateMachine.Count; 
 		}
 	}
 }
