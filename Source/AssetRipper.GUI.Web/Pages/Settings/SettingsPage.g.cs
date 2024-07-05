@@ -3,6 +3,7 @@
 using AssetRipper.Export.UnityProjects.Configuration;
 using AssetRipper.GUI.Web.Pages.Settings.DropDown;
 using AssetRipper.Import.Configuration;
+using AssetRipper.Processing.Configuration;
 
 namespace AssetRipper.GUI.Web.Pages.Settings;
 
@@ -26,8 +27,8 @@ partial class SettingsPage
 			case nameof(ImportSettings.TargetVersion):
 				Configuration.ImportSettings.TargetVersion = TryParseUnityVersion(value);
 				break;
-			case nameof(ImportSettings.BundledAssetsExportMode):
-				Configuration.ImportSettings.BundledAssetsExportMode = TryParseEnum<BundledAssetsExportMode>(value);
+			case nameof(ProcessingSettings.BundledAssetsExportMode):
+				Configuration.ProcessingSettings.BundledAssetsExportMode = TryParseEnum<BundledAssetsExportMode>(value);
 				break;
 			case nameof(ExportSettings.AudioExportFormat):
 				Configuration.ExportSettings.AudioExportFormat = TryParseEnum<AudioExportFormat>(value);
@@ -86,11 +87,6 @@ partial class SettingsPage
 		WriteDropDown(writer, StreamingAssetsModeDropDownSetting.Instance, Configuration.ImportSettings.StreamingAssetsMode, nameof(ImportSettings.StreamingAssetsMode));
 	}
 
-	private static void WriteDropDownForBundledAssetsExportMode(TextWriter writer)
-	{
-		WriteDropDown(writer, BundledAssetsExportModeDropDownSetting.Instance, Configuration.ImportSettings.BundledAssetsExportMode, nameof(ImportSettings.BundledAssetsExportMode));
-	}
-
 	private static void WriteCheckBoxForEnablePrefabOutlining(TextWriter writer, string label)
 	{
 		WriteCheckBox(writer, label, Configuration.ProcessingSettings.EnablePrefabOutlining, nameof(ProcessingSettings.EnablePrefabOutlining));
@@ -104,6 +100,11 @@ partial class SettingsPage
 	private static void WriteCheckBoxForEnableAssetDeduplication(TextWriter writer, string label)
 	{
 		WriteCheckBox(writer, label, Configuration.ProcessingSettings.EnableAssetDeduplication, nameof(ProcessingSettings.EnableAssetDeduplication));
+	}
+
+	private static void WriteDropDownForBundledAssetsExportMode(TextWriter writer)
+	{
+		WriteDropDown(writer, BundledAssetsExportModeDropDownSetting.Instance, Configuration.ProcessingSettings.BundledAssetsExportMode, nameof(ProcessingSettings.BundledAssetsExportMode));
 	}
 
 	private static void WriteDropDownForAudioExportFormat(TextWriter writer)

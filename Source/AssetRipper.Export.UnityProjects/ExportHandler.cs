@@ -65,7 +65,7 @@ public class ExportHandler
 		yield return new MainAssetProcessor();
 		yield return new AnimatorControllerProcessor();
 		yield return new AudioMixerProcessor();
-		yield return new EditorFormatProcessor(Settings.ImportSettings.BundledAssetsExportMode);
+		yield return new EditorFormatProcessor(Settings.ProcessingSettings.BundledAssetsExportMode);
 		//Static mesh separation goes here
 		if (Settings.ProcessingSettings.EnablePrefabOutlining)
 		{

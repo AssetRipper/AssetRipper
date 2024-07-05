@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Export.UnityProjects.Configuration;
 using AssetRipper.Import.Configuration;
+using AssetRipper.Processing.Configuration;
 using AssetRipper.Text.SourceGeneration;
 using System.CodeDom.Compiler;
 using System.Diagnostics;
@@ -22,6 +23,7 @@ internal static class SettingsPageGenerator
 		writer.WriteUsing("AssetRipper.Export.UnityProjects.Configuration");
 		writer.WriteUsing("AssetRipper.GUI.Web.Pages.Settings.DropDown");
 		writer.WriteUsing("AssetRipper.Import.Configuration");
+		writer.WriteUsing("AssetRipper.Processing.Configuration");
 		writer.WriteLineNoTabs();
 		writer.WriteFileScopedNamespace("AssetRipper.GUI.Web.Pages.Settings");
 		writer.WriteLineNoTabs();

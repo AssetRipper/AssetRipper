@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Import.Configuration
+﻿namespace AssetRipper.Processing.Configuration
 {
 	public enum BundledAssetsExportMode
 	{

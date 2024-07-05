@@ -1,6 +1,6 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Generics;
-using AssetRipper.Import.Configuration;
+using AssetRipper.Processing.Configuration;
 using AssetRipper.SourceGenerated.Classes.ClassID_142;
 using AssetRipper.SourceGenerated.Classes.ClassID_147;
 using AssetRipper.SourceGenerated.Extensions;

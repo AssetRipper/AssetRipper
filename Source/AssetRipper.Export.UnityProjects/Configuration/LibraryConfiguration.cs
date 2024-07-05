@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Import.Configuration;
 using AssetRipper.Mining.PredefinedAssets;
+using AssetRipper.Processing.Configuration;
 
 namespace AssetRipper.Export.UnityProjects.Configuration;
 

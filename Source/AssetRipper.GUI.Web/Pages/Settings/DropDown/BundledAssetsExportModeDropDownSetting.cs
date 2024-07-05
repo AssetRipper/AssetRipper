@@ -1,4 +1,4 @@
-﻿using AssetRipper.Import.Configuration;
+﻿using AssetRipper.Processing.Configuration;
 
 namespace AssetRipper.GUI.Web.Pages.Settings.DropDown;
 
