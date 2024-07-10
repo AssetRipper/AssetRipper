@@ -120,16 +120,16 @@ namespace AssetRipper.IO.Files.Utils
 		];
 		private static readonly Regex FileNameRegex = GenerateFileNameRegex();
 
-		private static string TruncateToUTF8ByteLength(string str, int byteLength)
+		private static string TruncateToUTF8ByteLength(string str, int maxLength)
 		{
 			byte[] bytes = Encoding.UTF8.GetBytes(str);
-			int validLength = FindValidByteLength(bytes, byteLength);
+			int validLength = FindValidByteLength(bytes, maxLength);
 			return Encoding.UTF8.GetString(bytes[..validLength]);
 		}
 
-		private static int FindValidByteLength(byte[] bytes, int byteLength)
+		private static int FindValidByteLength(byte[] bytes, int maxLength)
 		{
-			int validByteLength = byteLength;
+			int validLength = maxLength;
 
 			// ascii char:      0_
 			// two-byte char:   110_   10_
@@ -137,19 +137,19 @@ namespace AssetRipper.IO.Files.Utils
 			// four-byte char : 11110_ 10_ _10_ _10
 
 			// move to end of the last full sequence
-			for (int i = byteLength - 1; i >= 0; i--)
+			for (int i = maxLength - 1; i >= 0; i--)
 			{
 				byte currentByte = bytes[i];
 
 				if ((currentByte & 0b11_000000) == 0b10_000000)
 				{
 					// continuation byte
-					validByteLength--;
+					validLength--;
 				}
 				else if ((currentByte & 0b10000000) == 0b10000000)
 				{
 					// start of multi-byte sequence
-					validByteLength--;
+					validLength--;
 					break;
 				}
 				else
@@ -159,7 +159,7 @@ namespace AssetRipper.IO.Files.Utils
 				}
 			}
 
-			return validByteLength;
+			return validLength;
 		}
 	}
 }
