@@ -134,7 +134,7 @@ namespace AssetRipper.IO.Files.Utils
 			// ascii char:      0_
 			// two-byte char:   110_   10_
 			// three-byte char: 1110_  10_ _10_
-			// three-byte char: 11110_ 10_ _10_ _10
+			// four-byte char : 11110_ 10_ _10_ _10
 
 			// move to end of the last full sequence
 			for (int i = byteLength - 1; i >= 0; i--)
