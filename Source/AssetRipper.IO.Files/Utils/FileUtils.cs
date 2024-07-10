@@ -136,6 +136,18 @@ namespace AssetRipper.IO.Files.Utils
 			// three-byte char: 1110_  10_ _10_
 			// four-byte char : 11110_ 10_ _10_ _10
 
+			if (maxLength >= bytes.Length)
+			{
+				return bytes.Length;
+			}
+
+			// next byte is a beginning, so we can safely truncate to maxLength
+			byte nextByte = bytes[maxLength];
+			if ((nextByte & 0b11_000000) != 0b10_000000)
+			{
+				return maxLength;
+			}
+
 			// move to end of the last full sequence
 			for (int i = maxLength - 1; i >= 0; i--)
 			{
