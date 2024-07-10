@@ -37,9 +37,8 @@ namespace AssetRipper.IO.Files.Utils
 		{
 			string? ext = null;
 			string? name = null;
-			int maxLength = maxNameLength - 4;
 			string validFileName = fileName;
-			if (Encoding.UTF8.GetByteCount(fileName) > maxLength)
+			if (Encoding.UTF8.GetByteCount(fileName) > maxNameLength)
 			{
 				ext = Path.GetExtension(validFileName);
 				name = TruncateToUTF8ByteLength(fileName, maxNameLength - ext.Length);
