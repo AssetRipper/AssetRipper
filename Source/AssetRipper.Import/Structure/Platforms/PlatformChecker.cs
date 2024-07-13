@@ -1,4 +1,5 @@
-﻿using AssetRipper.Import.Logging;
+using AssetRipper.Import.Logging;
+using AssetRipper.IO.Files.Utils;
 
 namespace AssetRipper.Import.Structure.Platforms
 {
@@ -8,6 +9,8 @@ namespace AssetRipper.Import.Structure.Platforms
 		{
 			platformStructure = null;
 			mixedStructure = null;
+
+			paths = paths.Select(DirectoryUtils.FixInvalidPathCharacters).ToList();
 
 			if (CheckPC(paths, out PCGameStructure? pcGameStructure))
 			{

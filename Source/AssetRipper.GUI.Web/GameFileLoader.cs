@@ -4,6 +4,7 @@ using AssetRipper.Export.UnityProjects.Configuration;
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.Processing;
+using AssetRipper.IO.Files.Utils;
 
 namespace AssetRipper.GUI.Web;
 
@@ -44,7 +45,8 @@ public static class GameFileLoader
 	{
 		Reset();
 		Settings.LogConfigurationValues();
-		GameData = ExportHandler.LoadAndProcess(paths);
+		var fixedPaths = paths.Select(DirectoryUtils.FixInvalidPathCharacters).ToList();
+		GameData = ExportHandler.LoadAndProcess(fixedPaths);
 	}
 
 	public static void Export(string path)
