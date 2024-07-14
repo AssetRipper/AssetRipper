@@ -1,4 +1,5 @@
-﻿using AssetRipper.Import.Logging;
+﻿using AssetRipper.Export.Modules.Textures;
+using AssetRipper.Import.Logging;
 
 namespace AssetRipper.Export.UnityProjects.Configuration;
 

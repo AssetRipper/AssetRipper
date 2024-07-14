@@ -1,5 +1,6 @@
 // Auto-generated code. Do not modify manually.
 
+using AssetRipper.Export.Modules.Textures;
 using AssetRipper.Export.UnityProjects.Configuration;
 using AssetRipper.GUI.Web.Pages.Settings.DropDown;
 using AssetRipper.Import.Configuration;

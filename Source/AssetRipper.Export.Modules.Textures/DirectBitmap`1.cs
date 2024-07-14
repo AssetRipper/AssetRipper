@@ -8,7 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 
-namespace AssetRipper.Export.UnityProjects.Utils;
+namespace AssetRipper.Export.Modules.Textures;
 
 public sealed class DirectBitmap<TColor, TChannel> : DirectBitmap
 	where TChannel : unmanaged
@@ -70,7 +70,7 @@ public sealed class DirectBitmap<TColor, TChannel> : DirectBitmap
 				int first = offset + i;
 				int ci = i % Width;
 				int ri = i / Width;
-				int second = offset + (ci * Width) + ri;
+				int second = offset + ci * Width + ri;
 				(pixels[first], pixels[second]) = (pixels[second], pixels[first]);
 			}
 		}

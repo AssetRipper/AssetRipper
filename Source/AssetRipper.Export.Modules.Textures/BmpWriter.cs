@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace AssetRipper.Export.UnityProjects.Utils
+namespace AssetRipper.Export.Modules.Textures
 {
 	/// <summary>
 	/// This is really fast, even in comparison to System.Drawing<br/>

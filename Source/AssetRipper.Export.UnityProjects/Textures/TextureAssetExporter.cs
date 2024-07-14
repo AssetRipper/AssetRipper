@@ -1,6 +1,6 @@
 using AssetRipper.Assets;
+using AssetRipper.Export.Modules.Textures;
 using AssetRipper.Export.UnityProjects.Configuration;
-using AssetRipper.Export.UnityProjects.Utils;
 using AssetRipper.Import.Logging;
 using AssetRipper.Processing.Textures;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;

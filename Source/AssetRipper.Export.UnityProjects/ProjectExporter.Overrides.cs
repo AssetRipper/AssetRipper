@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Assets;
+using AssetRipper.Export.Modules.Textures;
 using AssetRipper.Export.UnityProjects.AnimatorControllers;
 using AssetRipper.Export.UnityProjects.Audio;
 using AssetRipper.Export.UnityProjects.AudioMixers;

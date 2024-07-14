@@ -1,5 +1,5 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Export.UnityProjects.Utils;
+using AssetRipper.Export.UnityProjects.Project;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 
 namespace AssetRipper.Export.UnityProjects.Shaders
@@ -17,12 +17,12 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 			// This patch uses ShaderUtil.RegisterShader(), which is only available start from Unity 2018.
 			if (container.ExportVersion.GreaterThanOrEquals(2018, 1, 0))
 			{
-				UnityPatchUtils.ApplyPatchFromText(RegisterShaderUnityPatchText, "YamlShaderPostprocessor", dirPath);
+				UnityPatches.ApplyPatchFromText(RegisterShaderUnityPatchText, "YamlShaderPostprocessor", dirPath);
 			}
 			// This patch uses AssetModificationProcessor, which is only available start from Unity 3.5.
 			if (container.ExportVersion.GreaterThanOrEquals(3, 5, 0))
 			{
-				UnityPatchUtils.ApplyPatchFromText(FileLockerUnityPatchText, "AvoidSavingYamlShaders", dirPath);
+				UnityPatches.ApplyPatchFromText(FileLockerUnityPatchText, "AvoidSavingYamlShaders", dirPath);
 			}
 			return base.ExportInner(container, filePath, dirPath);
 		}

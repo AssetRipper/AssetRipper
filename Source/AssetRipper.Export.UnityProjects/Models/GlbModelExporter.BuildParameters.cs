@@ -1,6 +1,5 @@
-﻿using AssetRipper.Export.UnityProjects.Meshes;
-using AssetRipper.Export.UnityProjects.Textures;
-using AssetRipper.Export.UnityProjects.Utils;
+﻿using AssetRipper.Export.Modules.Textures;
+using AssetRipper.Export.UnityProjects.Meshes;
 using AssetRipper.SourceGenerated.Classes.ClassID_21;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;

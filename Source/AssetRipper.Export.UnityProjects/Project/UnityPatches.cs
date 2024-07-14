@@ -1,8 +1,8 @@
 using System.Text;
 
-namespace AssetRipper.Export.UnityProjects.Utils;
+namespace AssetRipper.Export.UnityProjects.Project;
 
-public static class UnityPatchUtils
+public static class UnityPatches
 {
 	private const string RelativePathToPatchesDirectory = "Assets/Editor/AssetRipperPatches/";
 

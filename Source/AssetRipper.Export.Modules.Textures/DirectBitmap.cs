@@ -1,6 +1,4 @@
-using AssetRipper.Export.UnityProjects.Configuration;
-
-namespace AssetRipper.Export.UnityProjects.Utils;
+namespace AssetRipper.Export.Modules.Textures;
 
 public abstract class DirectBitmap
 {

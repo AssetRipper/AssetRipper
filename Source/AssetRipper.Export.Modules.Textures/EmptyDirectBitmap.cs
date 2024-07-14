@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Export.UnityProjects.Utils;
+﻿namespace AssetRipper.Export.Modules.Textures;
 
 internal sealed class EmptyDirectBitmap : DirectBitmap
 {

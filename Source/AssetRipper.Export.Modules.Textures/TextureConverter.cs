@@ -1,4 +1,4 @@
-using AssetRipper.Export.UnityProjects.Utils;
+using AssetRipper.Export.UnityProjects.Textures;
 using AssetRipper.Import.Logging;
 using AssetRipper.SourceGenerated.Classes.ClassID_117;
 using AssetRipper.SourceGenerated.Classes.ClassID_187;
@@ -17,7 +17,7 @@ using AssetRipper.TextureDecoder.Rgb;
 using AssetRipper.TextureDecoder.Rgb.Formats;
 using AssetRipper.TextureDecoder.Yuy2;
 
-namespace AssetRipper.Export.UnityProjects.Textures
+namespace AssetRipper.Export.Modules.Textures
 {
 	public static class TextureConverter
 	{
@@ -539,9 +539,9 @@ namespace AssetRipper.Export.UnityProjects.Textures
 				pixelSpan[3] = a;
 
 				const double MagnitudeSqr = 255 * 255;
-				double vr = (r * 2.0) - 255.0;
-				double vg = (g * 2.0) - 255.0;
-				double hypotenuseSqr = Math.Min((vr * vr) + (vg * vg), MagnitudeSqr);
+				double vr = r * 2.0 - 255.0;
+				double vg = g * 2.0 - 255.0;
+				double hypotenuseSqr = Math.Min(vr * vr + vg * vg, MagnitudeSqr);
 				double b = (Math.Sqrt(MagnitudeSqr - hypotenuseSqr) + 255.0) / 2.0;
 				pixelSpan[0] = (byte)b;
 			}

@@ -3,14 +3,12 @@ using AssetRipper.Assets;
 using AssetRipper.Decompilation.CSharp;
 using AssetRipper.Export.Modules.Audio;
 using AssetRipper.Export.Modules.Shaders.IO;
+using AssetRipper.Export.Modules.Textures;
 using AssetRipper.Export.PrimaryContent;
 using AssetRipper.Export.UnityProjects;
-using AssetRipper.Export.UnityProjects.Configuration;
 using AssetRipper.Export.UnityProjects.Scripts;
 using AssetRipper.Export.UnityProjects.Shaders;
 using AssetRipper.Export.UnityProjects.Terrains;
-using AssetRipper.Export.UnityProjects.Textures;
-using AssetRipper.Export.UnityProjects.Utils;
 using AssetRipper.GUI.Web.Paths;
 using AssetRipper.Import.AssetCreation;
 using AssetRipper.Import.Structure.Assembly;
@@ -109,7 +107,7 @@ internal static class AssetAPI
 			ITexture2D texture => TextureToBitmap(texture),
 			SpriteInformationObject spriteInformationObject => TextureToBitmap(spriteInformationObject.Texture),
 			ISprite sprite => SpriteToBitmap(sprite),
-			ITerrainData terrainData => TerrainHeatmapExporter.GetBitmap(terrainData),
+			ITerrainData terrainData => TerrainHeatmap.GetBitmap(terrainData),
 			_ => DirectBitmap.Empty,
 		};
 
