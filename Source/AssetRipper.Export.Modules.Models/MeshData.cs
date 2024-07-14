@@ -4,7 +4,7 @@ using AssetRipper.SourceGenerated.Extensions;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 
-namespace AssetRipper.Export.UnityProjects.Meshes
+namespace AssetRipper.Export.Modules.Models
 {
 	internal readonly record struct MeshData(
 		Vector3[] Vertices,
@@ -75,7 +75,7 @@ namespace AssetRipper.Export.UnityProjects.Meshes
 				return meshType;
 			}
 		}
-		
+
 		public Vector3 TryGetVertexAtIndex(uint index) => Vertices[index];
 		public Vector3 TryGetNormalAtIndex(uint index) => TryGetAtIndex(Normals, index);
 		public Vector4 TryGetTangentAtIndex(uint index)

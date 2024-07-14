@@ -9,7 +9,7 @@ using SharpGLTF.Transforms;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 
-namespace AssetRipper.Export.UnityProjects.Meshes
+namespace AssetRipper.Export.Modules.Models
 {
 	internal static class GlbSubMeshBuilder
 	{
@@ -116,19 +116,19 @@ namespace AssetRipper.Export.UnityProjects.Meshes
 			Transformation tangentTransform = positionTransform.RemoveTranslation();
 			Transformation normalTransform = parameters.InverseTransform.Transpose();
 			MeshBuilder<TvG, TvM, TvS> meshBuilder = VertexBuilder<TvG, TvM, TvS>.CreateCompatibleMesh();
-			
+
 			for (int i = 0; i < parameters.SubMeshes.Count; i++)
 			{
 				(ISubMesh subMesh, MaterialBuilder material) = parameters.SubMeshes[i];
 				BuildSubMesh(meshBuilder, subMesh, material, parameters.MeshData, positionTransform, tangentTransform, normalTransform);
 			}
-			
+
 			return meshBuilder;
 		}
-		
+
 		private static PrimitiveBuilder<MaterialBuilder, TvG, TvM, TvS> BuildSubMesh<TvG, TvM, TvS>(
-			MeshBuilder<TvG, TvM, TvS> meshBuilder, 
-			ISubMesh subMesh, 
+			MeshBuilder<TvG, TvM, TvS> meshBuilder,
+			ISubMesh subMesh,
 			MaterialBuilder material,
 			MeshData meshData,
 			Transformation positionTransform,
@@ -139,7 +139,7 @@ namespace AssetRipper.Export.UnityProjects.Meshes
 			where TvS : unmanaged, IVertexSkinning
 		{
 			uint firstIndex = meshData.Mesh.Is16BitIndices() ? subMesh.FirstByte / sizeof(ushort) : subMesh.FirstByte / sizeof(uint);
-			
+
 			uint indexCount = subMesh.IndexCount;
 			MeshTopology topology = subMesh.GetTopology();
 
@@ -359,9 +359,9 @@ namespace AssetRipper.Export.UnityProjects.Meshes
 		}
 
 		private readonly record struct BuildSubMeshParameters(
-			ArraySegment<ValueTuple<ISubMesh, MaterialBuilder>> SubMeshes, 
-			MeshData MeshData, 
-			Transformation Transform, 
+			ArraySegment<ValueTuple<ISubMesh, MaterialBuilder>> SubMeshes,
+			MeshData MeshData,
+			Transformation Transform,
 			Transformation InverseTransform)
 		{
 		}

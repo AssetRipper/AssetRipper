@@ -1,6 +1,6 @@
 ﻿using SharpGLTF.Geometry.VertexTypes;
 
-namespace AssetRipper.Export.UnityProjects.Meshes
+namespace AssetRipper.Export.Modules.Models
 {
 	[Flags]
 	internal enum GlbMeshType

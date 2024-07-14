@@ -3,7 +3,7 @@ using SharpGLTF.Memory;
 using SharpGLTF.Schema2;
 using System.Numerics;
 
-namespace AssetRipper.Export.UnityProjects.Meshes;
+namespace AssetRipper.Export.Modules.Models;
 
 /// <summary>
 /// Defines a Vertex attribute with up to 1 color and up to 8 textures.
@@ -89,7 +89,7 @@ internal struct VertexVariable : IVertexMaterial, IEquatable<VertexVariable>
 		{
 			yield return new KeyValuePair<string, AttributeFormat>("COLOR_0", new AttributeFormat(DimensionType.VEC4, EncodingType.UNSIGNED_BYTE, true));
 		}
-		for (int i = 0 ; i < MaxTextCoords; i++)
+		for (int i = 0; i < MaxTextCoords; i++)
 		{
 			yield return new KeyValuePair<string, AttributeFormat>($"TEXCOORD_{i}", new AttributeFormat(DimensionType.VEC2));
 		}

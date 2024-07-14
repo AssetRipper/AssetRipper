@@ -5,7 +5,7 @@ using SharpGLTF.Geometry;
 using SharpGLTF.Materials;
 using SharpGLTF.Scenes;
 
-namespace AssetRipper.Export.UnityProjects.Meshes;
+namespace AssetRipper.Export.Modules.Models;
 
 public static class GlbMeshBuilder
 {

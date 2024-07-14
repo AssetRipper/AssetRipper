@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace AssetRipper.Export.UnityProjects.Meshes
+namespace AssetRipper.Export.Modules.Models
 {
 	internal static class GlbCoordinateConversion
 	{

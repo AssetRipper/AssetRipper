@@ -2,7 +2,6 @@
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Export.Modules.Textures;
-using AssetRipper.Export.UnityProjects.Meshes;
 using AssetRipper.Numerics;
 using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
