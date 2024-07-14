@@ -2,7 +2,7 @@
 using NAudio.Vorbis;
 using NAudio.Wave;
 
-namespace AssetRipper.Export.UnityProjects.Audio
+namespace AssetRipper.Export.Modules.Audio
 {
 	public static class AudioConverter
 	{

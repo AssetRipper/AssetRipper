@@ -1,10 +1,10 @@
 ﻿using AsmResolver.DotNet;
 using AssetRipper.Assets;
 using AssetRipper.Decompilation.CSharp;
+using AssetRipper.Export.Modules.Audio;
 using AssetRipper.Export.Modules.Shaders.IO;
 using AssetRipper.Export.PrimaryContent;
 using AssetRipper.Export.UnityProjects;
-using AssetRipper.Export.UnityProjects.Audio;
 using AssetRipper.Export.UnityProjects.Configuration;
 using AssetRipper.Export.UnityProjects.Scripts;
 using AssetRipper.Export.UnityProjects.Shaders;

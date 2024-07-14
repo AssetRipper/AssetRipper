@@ -8,7 +8,8 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\AssetRipper.Decompilation.CSharp\AssetRipper.Decompilation.CSharp.csproj" />
-		<ProjectReference Include="..\AssetRipper.Export\AssetRipper.Export.csproj" />
+		<ProjectReference Include="..\AssetRipper.Export.PrimaryContent\AssetRipper.Export.PrimaryContent.csproj" />
+		<ProjectReference Include="..\AssetRipper.Export.UnityProjects\AssetRipper.Export.UnityProjects.csproj" />
 		<ProjectReference Include="..\AssetRipper.GUI.Licensing\AssetRipper.GUI.Licensing.csproj" />
 		<ProjectReference Include="..\AssetRipper.GUI.Localizations\AssetRipper.GUI.Localizations.csproj" />
 		<ProjectReference Include="..\AssetRipper.Web\AssetRipper.Web.csproj" />

@@ -5,7 +5,7 @@ using Fmod5Sharp;
 using Fmod5Sharp.FmodTypes;
 using Fmod5Sharp.Util;
 
-namespace AssetRipper.Export.UnityProjects.Audio
+namespace AssetRipper.Export.Modules.Audio
 {
 	public static class AudioClipDecoder
 	{
