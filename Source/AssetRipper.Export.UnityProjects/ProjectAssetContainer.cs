@@ -6,6 +6,7 @@ using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.Processing.Scenes;
 using AssetRipper.SourceGenerated.Classes.ClassID_141;
+using System.Diagnostics;
 
 
 namespace AssetRipper.Export.UnityProjects
@@ -29,6 +30,7 @@ namespace AssetRipper.Export.UnityProjects
 			{
 				foreach (IUnityObjectBase asset in collection.Assets)
 				{
+					CheckIfAlreadyAdded(this, asset, collection);
 					m_assetCollections.Add(asset, collection);
 				}
 				if (collection is SceneExportCollection scene)
@@ -37,6 +39,15 @@ namespace AssetRipper.Export.UnityProjects
 				}
 			}
 			m_scenes = scenes.ToArray();
+
+			[Conditional("DEBUG")]
+			static void CheckIfAlreadyAdded(ProjectAssetContainer container, IUnityObjectBase asset, IExportCollection currentCollection)
+			{
+				if (container.m_assetCollections.TryGetValue(asset, out IExportCollection? previousCollection))
+				{
+					throw new ArgumentException($"Asset {asset} is already added by {previousCollection}");
+				}
+			}
 		}
 
 		public long GetExportID(IUnityObjectBase asset)
