@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputPath>..\0Bins\Other\AssetRipper.Export.Modules.Models\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.Export.Modules.Models\$(Configuration)\</IntermediateOutputPath>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AssetRipper.SharpGLTF.Toolkit" Version="1.0.2" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\AssetRipper.Export.Modules.Textures\AssetRipper.Export.Modules.Textures.csproj" />
+		<ProjectReference Include="..\AssetRipper.Export\AssetRipper.Export.csproj" />
+	</ItemGroup>
+
+</Project>

@@ -8,7 +8,7 @@ namespace AssetRipper.Export.UnityProjects.Meshes;
 /// <summary>
 /// Defines a Vertex attribute with up to 1 color and up to 8 textures.
 /// </summary>
-public struct VertexVariable : IVertexMaterial, IEquatable<VertexVariable>
+internal struct VertexVariable : IVertexMaterial, IEquatable<VertexVariable>
 {
 	#region constructors
 

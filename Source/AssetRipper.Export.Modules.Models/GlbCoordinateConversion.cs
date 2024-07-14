@@ -2,7 +2,7 @@
 
 namespace AssetRipper.Export.UnityProjects.Meshes
 {
-	internal static class GlbConversion
+	internal static class GlbCoordinateConversion
 	{
 		/// <summary>
 		/// Define the transformation between Unity coordinate space and glTF.

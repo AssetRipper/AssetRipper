@@ -3,7 +3,7 @@
 namespace AssetRipper.Export.UnityProjects.Meshes
 {
 	[Flags]
-	public enum GlbMeshType
+	internal enum GlbMeshType
 	{
 		/// <summary>
 		/// <see cref="VertexEmpty"/>

@@ -1,5 +1,4 @@
-﻿using AssetRipper.Import.Logging;
-using AssetRipper.Numerics;
+﻿using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.SubMesh;
@@ -274,22 +273,22 @@ namespace AssetRipper.Export.UnityProjects.Meshes
 		private static TvG GetGeometry<TvG>(MeshData meshData, uint index, Transformation positionTransform, Transformation normalTransform, Transformation tangentTransform)
 			where TvG : unmanaged, IVertexGeometry
 		{
-			Vector3 position = GlbConversion.ToGltfVector3Convert(meshData.TryGetVertexAtIndex(index) * positionTransform);
+			Vector3 position = GlbCoordinateConversion.ToGltfVector3Convert(meshData.TryGetVertexAtIndex(index) * positionTransform);
 			if (typeof(TvG) == typeof(VertexPosition))
 			{
 				return Cast<VertexPosition, TvG>(new VertexPosition(position));
 			}
 			else if (typeof(TvG) == typeof(VertexPositionNormal))
 			{
-				Vector3 normal = GlbConversion.ToGltfVector3Convert(Vector3.Normalize(meshData.TryGetNormalAtIndex(index) * normalTransform));
+				Vector3 normal = GlbCoordinateConversion.ToGltfVector3Convert(Vector3.Normalize(meshData.TryGetNormalAtIndex(index) * normalTransform));
 				return Cast<VertexPositionNormal, TvG>(new VertexPositionNormal(position, normal));
 			}
 			else if (typeof(TvG) == typeof(VertexPositionNormalTangent))
 			{
-				Vector3 normal = GlbConversion.ToGltfVector3Convert(Vector3.Normalize(meshData.TryGetNormalAtIndex(index) * normalTransform));
+				Vector3 normal = GlbCoordinateConversion.ToGltfVector3Convert(Vector3.Normalize(meshData.TryGetNormalAtIndex(index) * normalTransform));
 				Vector4 originalTangent = meshData.TryGetTangentAtIndex(index);
 				Vector3 transformedTangent = Vector3.Normalize(originalTangent.AsVector3() * tangentTransform);
-				Vector4 tangent = GlbConversion.ToGltfTangentConvert(new Vector4(transformedTangent, originalTangent.W));
+				Vector4 tangent = GlbCoordinateConversion.ToGltfTangentConvert(new Vector4(transformedTangent, originalTangent.W));
 				return Cast<VertexPositionNormalTangent, TvG>(new VertexPositionNormalTangent(position, normal, tangent));
 			}
 			else
