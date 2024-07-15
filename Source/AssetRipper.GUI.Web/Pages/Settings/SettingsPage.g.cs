@@ -40,9 +40,6 @@ partial class SettingsPage
 			case nameof(ExportSettings.LightmapTextureExportFormat):
 				Configuration.ExportSettings.LightmapTextureExportFormat = TryParseEnum<LightmapTextureExportFormat>(value);
 				break;
-			case nameof(ExportSettings.MeshExportFormat):
-				Configuration.ExportSettings.MeshExportFormat = TryParseEnum<MeshExportFormat>(value);
-				break;
 			case nameof(ExportSettings.ScriptExportMode):
 				Configuration.ExportSettings.ScriptExportMode = TryParseEnum<ScriptExportMode>(value);
 				break;
@@ -54,9 +51,6 @@ partial class SettingsPage
 				break;
 			case nameof(ExportSettings.SpriteExportMode):
 				Configuration.ExportSettings.SpriteExportMode = TryParseEnum<SpriteExportMode>(value);
-				break;
-			case nameof(ExportSettings.TerrainExportMode):
-				Configuration.ExportSettings.TerrainExportMode = TryParseEnum<TerrainExportMode>(value);
 				break;
 			case nameof(ExportSettings.TextExportMode):
 				Configuration.ExportSettings.TextExportMode = TryParseEnum<TextExportMode>(value);
@@ -123,11 +117,6 @@ partial class SettingsPage
 		WriteDropDown(writer, LightmapTextureExportFormatDropDownSetting.Instance, Configuration.ExportSettings.LightmapTextureExportFormat, nameof(ExportSettings.LightmapTextureExportFormat));
 	}
 
-	private static void WriteDropDownForMeshExportFormat(TextWriter writer)
-	{
-		WriteDropDown(writer, MeshExportFormatDropDownSetting.Instance, Configuration.ExportSettings.MeshExportFormat, nameof(ExportSettings.MeshExportFormat));
-	}
-
 	private static void WriteDropDownForScriptExportMode(TextWriter writer)
 	{
 		WriteDropDown(writer, ScriptExportModeDropDownSetting.Instance, Configuration.ExportSettings.ScriptExportMode, nameof(ExportSettings.ScriptExportMode));
@@ -146,11 +135,6 @@ partial class SettingsPage
 	private static void WriteDropDownForSpriteExportMode(TextWriter writer)
 	{
 		WriteDropDown(writer, SpriteExportModeDropDownSetting.Instance, Configuration.ExportSettings.SpriteExportMode, nameof(ExportSettings.SpriteExportMode));
-	}
-
-	private static void WriteDropDownForTerrainExportMode(TextWriter writer)
-	{
-		WriteDropDown(writer, TerrainExportModeDropDownSetting.Instance, Configuration.ExportSettings.TerrainExportMode, nameof(ExportSettings.TerrainExportMode));
 	}
 
 	private static void WriteDropDownForTextExportMode(TextWriter writer)

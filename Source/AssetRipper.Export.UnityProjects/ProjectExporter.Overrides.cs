@@ -6,10 +6,7 @@ using AssetRipper.Export.UnityProjects.AudioMixers;
 using AssetRipper.Export.UnityProjects.Configuration;
 using AssetRipper.Export.UnityProjects.DeletedAssets;
 using AssetRipper.Export.UnityProjects.EngineAssets;
-using AssetRipper.Export.UnityProjects.Meshes;
 using AssetRipper.Export.UnityProjects.Miscellaneous;
-using AssetRipper.Export.UnityProjects.Models;
-using AssetRipper.Export.UnityProjects.NavMeshes;
 using AssetRipper.Export.UnityProjects.Project;
 using AssetRipper.Export.UnityProjects.RawAssets;
 using AssetRipper.Export.UnityProjects.Scripts;
@@ -41,7 +38,6 @@ using AssetRipper.SourceGenerated.Classes.ClassID_189;
 using AssetRipper.SourceGenerated.Classes.ClassID_2;
 using AssetRipper.SourceGenerated.Classes.ClassID_21;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
-using AssetRipper.SourceGenerated.Classes.ClassID_238;
 using AssetRipper.SourceGenerated.Classes.ClassID_240;
 using AssetRipper.SourceGenerated.Classes.ClassID_244;
 using AssetRipper.SourceGenerated.Classes.ClassID_27;
@@ -162,32 +158,10 @@ partial class ProjectExporter
 		OverrideExporter<IAudioMixerGroup>(audioMixerExporter);
 		OverrideExporter<IAudioMixerSnapshot>(audioMixerExporter);
 
-		//Mesh and Model exporters
-		if (settings.ExportSettings.MeshExportFormat == MeshExportFormat.Glb)
-		{
-			OverrideExporter<IMesh>(new GlbMeshExporter());
-			GlbModelExporter glbModelExporter = new();
-			OverrideExporter<IComponent>(glbModelExporter);
-			OverrideExporter<IGameObject>(glbModelExporter);
-			OverrideExporter<ILevelGameManager>(glbModelExporter);
-		}
-
-		//Terrain and NavMesh exporters
-		switch (settings.ExportSettings.TerrainExportMode)
-		{
-			case TerrainExportMode.Heatmap:
-				OverrideExporter<ITerrainData>(new TerrainHeatmapExporter(settings));
-				break;
-			case TerrainExportMode.Mesh:
-				OverrideExporter<ITerrainData>(new TerrainMeshExporter());
-				OverrideExporter<INavMeshData>(new GlbNavMeshExporter());
-				break;
-			default:
-				TerrainYamlExporter terrainYamlExporter = new();
-				OverrideExporter<ITerrainData>(terrainYamlExporter);
-				OverrideExporter<ITexture2D>(terrainYamlExporter);
-				break;
-		}
+		//Terrain exporter
+		TerrainYamlExporter terrainYamlExporter = new();
+		OverrideExporter<ITerrainData>(terrainYamlExporter);
+		OverrideExporter<ITexture2D>(terrainYamlExporter);
 
 		//Script exporter
 		OverrideExporter<IMonoScript>(new ScriptExporter(assemblyManager, settings));

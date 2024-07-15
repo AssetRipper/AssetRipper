@@ -133,7 +133,7 @@ public sealed partial class SettingsPage : DefaultPage
 								}
 								using (new Div(writer).WithClass("col").End())
 								{
-									WriteDropDownForTerrainExportMode(writer);
+									WriteDropDownForShaderExportMode(writer);
 								}
 								using (new Div(writer).WithClass("col").End())
 								{
@@ -145,15 +145,14 @@ public sealed partial class SettingsPage : DefaultPage
 							{
 								using (new Div(writer).WithClass("col").End())
 								{
-									WriteDropDownForShaderExportMode(writer);
-								}
-								using (new Div(writer).WithClass("col").End())
-								{
 									WriteDropDownForScriptLanguageVersion(writer);
 								}
 								using (new Div(writer).WithClass("col").End())
 								{
 									WriteDropDownForScriptExportMode(writer);
+								}
+								using (new Div(writer).WithClass("col").End())
+								{
 								}
 							}
 
@@ -161,7 +160,6 @@ public sealed partial class SettingsPage : DefaultPage
 							{
 								using (new Div(writer).WithClass("col").End())
 								{
-									WriteDropDownForMeshExportFormat(writer);
 								}
 								using (new Div(writer).WithClass("col").End())
 								{

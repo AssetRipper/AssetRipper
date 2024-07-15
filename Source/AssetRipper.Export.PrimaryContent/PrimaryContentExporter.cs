@@ -1,7 +1,14 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Bundles;
+using AssetRipper.Export.PrimaryContent.Models;
 using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Logging;
+using AssetRipper.Processing;
+using AssetRipper.SourceGenerated.Classes.ClassID_1;
+using AssetRipper.SourceGenerated.Classes.ClassID_156;
+using AssetRipper.SourceGenerated.Classes.ClassID_2;
+using AssetRipper.SourceGenerated.Classes.ClassID_238;
+using AssetRipper.SourceGenerated.Classes.ClassID_3;
 
 namespace AssetRipper.Export.PrimaryContent;
 
@@ -29,6 +36,16 @@ public sealed class PrimaryContentExporter
 	private void RegisterDefaultHandlers()
 	{
 		RegisterHandler<IUnityObjectBase>(new JsonContentExtractor());
+
+		GlbModelExporter modelExporter = new();
+		RegisterHandler<GameObjectHierarchyObject>(modelExporter);
+		RegisterHandler<IGameObject>(modelExporter);
+		RegisterHandler<IComponent>(modelExporter);
+		RegisterHandler<ILevelGameManager>(modelExporter);
+
+		RegisterHandler<INavMeshData>(new GlbNavMeshExporter());
+		RegisterHandler<ITerrainData>(new GlbTerrainExporter());
+
 	}
 
 	public void Export(GameBundle fileCollection, CoreConfiguration options)
