@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Bundles;
+using AssetRipper.Export.PrimaryContent.DeletedAssets;
 using AssetRipper.Export.PrimaryContent.Models;
 using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Logging;
@@ -46,6 +47,9 @@ public sealed class PrimaryContentExporter
 		RegisterHandler<INavMeshData>(new GlbNavMeshExporter());
 		RegisterHandler<ITerrainData>(new GlbTerrainExporter());
 
+		// Deleted assets
+		// This must be the last handler
+		RegisterHandler<IUnityObjectBase>(DeletedAssetsExporter.Instance);
 	}
 
 	public void Export(GameBundle fileCollection, CoreConfiguration options)
