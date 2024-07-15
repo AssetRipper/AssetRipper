@@ -19,21 +19,21 @@ public class DefaultJsonWalker : AssetWalker
 		Writer = new IndentedTextWriter(stringWriter, "\t");
 	}
 
-	public string SerializeEditor<T>(T asset) where T : IUnityAssetBase
+	public string SerializeEditor(IUnityAssetBase asset)
 	{
 		Clear();
 		asset.WalkEditor(this);
 		return stringWriter.ToString();
 	}
 
-	public string SerializeRelease<T>(T asset) where T : IUnityAssetBase
+	public string SerializeRelease(IUnityAssetBase asset)
 	{
 		Clear();
 		asset.WalkRelease(this);
 		return stringWriter.ToString();
 	}
 
-	public string SerializeStandard<T>(T asset) where T : IUnityAssetBase
+	public string SerializeStandard(IUnityAssetBase asset)
 	{
 		Clear();
 		asset.WalkStandard(this);
