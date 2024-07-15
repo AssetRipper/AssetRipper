@@ -15,17 +15,7 @@ namespace AssetRipper.Export.UnityProjects
 		public event Action<int, int>? EventExportProgressUpdated;
 		public event Action? EventExportFinished;
 
-		/// <summary>
-		/// Exact type to the exporters that handle that type
-		/// </summary>
-		private readonly Dictionary<Type, Stack<IAssetExporter>> typeMap = new();
-		/// <summary>
-		/// List of type-exporter-allow pairs<br/>
-		/// Type: the asset type<br/>
-		/// IAssetExporter: the exporter that can handle that asset type<br/>
-		/// Bool: allow the exporter to apply on inherited asset types?
-		/// </summary>
-		private readonly List<(Type, IAssetExporter, bool)> registeredExporters = new();
+		private readonly ObjectHandlerStack<IAssetExporter> assetExporterStack = new();
 
 		//Exporters
 		private DummyAssetExporter DummyExporter { get; } = new DummyAssetExporter();
@@ -36,7 +26,7 @@ namespace AssetRipper.Export.UnityProjects
 		/// <param name="allowInheritance">Should types that inherit from this type also use the exporter?</param>
 		public void OverrideExporter<T>(IAssetExporter exporter, bool allowInheritance = true)
 		{
-			OverrideExporter(typeof(T), exporter, allowInheritance);
+			assetExporterStack.OverrideHandler(typeof(T), exporter, allowInheritance);
 		}
 
 		/// <summary>Adds an exporter to the stack of exporters for this asset type.</summary>
@@ -45,13 +35,7 @@ namespace AssetRipper.Export.UnityProjects
 		/// <param name="allowInheritance">Should types that inherit from this type also use the exporter?</param>
 		public void OverrideExporter(Type type, IAssetExporter exporter, bool allowInheritance)
 		{
-			ArgumentNullException.ThrowIfNull(exporter);
-
-			registeredExporters.Add((type, exporter, allowInheritance));
-			if (typeMap.Count > 0)//Just in case an exporter gets added after CreateCollection or ToExportType have already been used
-			{
-				RecalculateTypeMap();
-			}
+			assetExporterStack.OverrideHandler(type, exporter, allowInheritance);
 		}
 
 		/// <summary>
@@ -72,8 +56,7 @@ namespace AssetRipper.Export.UnityProjects
 
 		public AssetType ToExportType(Type type)
 		{
-			Stack<IAssetExporter> exporters = GetExporterStack(type);
-			foreach (IAssetExporter exporter in exporters)
+			foreach (IAssetExporter exporter in assetExporterStack.GetHandlerStack(type))
 			{
 				if (exporter.ToUnknownExportType(type, out AssetType assetType))
 				{
@@ -85,7 +68,7 @@ namespace AssetRipper.Export.UnityProjects
 
 		private IExportCollection CreateCollection(IUnityObjectBase asset)
 		{
-			foreach (IAssetExporter exporter in GetExporterStack(asset))
+			foreach (IAssetExporter exporter in assetExporterStack.GetHandlerStack(asset.GetType()))
 			{
 				if (exporter.TryCreateCollection(asset, out IExportCollection? collection))
 				{
@@ -93,38 +76,6 @@ namespace AssetRipper.Export.UnityProjects
 				}
 			}
 			throw new Exception($"There is no exporter that can handle '{asset}'");
-		}
-
-		private Stack<IAssetExporter> GetExporterStack(IUnityObjectBase asset) => GetExporterStack(asset.GetType());
-		private Stack<IAssetExporter> GetExporterStack(Type type)
-		{
-			if (!typeMap.TryGetValue(type, out Stack<IAssetExporter>? exporters))
-			{
-				exporters = CalculateAssetExporterStack(type);
-				typeMap.Add(type, exporters);
-			}
-			return exporters;
-		}
-
-		private void RecalculateTypeMap()
-		{
-			foreach (Type type in typeMap.Keys)
-			{
-				typeMap[type] = CalculateAssetExporterStack(type);
-			}
-		}
-
-		private Stack<IAssetExporter> CalculateAssetExporterStack(Type type)
-		{
-			Stack<IAssetExporter> result = new();
-			foreach ((Type baseType, IAssetExporter exporter, bool allowInheritance) in registeredExporters)
-			{
-				if (type == baseType || allowInheritance && type.IsAssignableTo(baseType))
-				{
-					result.Push(exporter);
-				}
-			}
-			return result;
 		}
 
 		public void Export(GameBundle fileCollection, CoreConfiguration options)
