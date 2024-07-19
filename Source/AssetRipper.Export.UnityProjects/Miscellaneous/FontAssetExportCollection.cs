@@ -68,9 +68,7 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 
 		protected override string GetExportExtension(IUnityObjectBase asset)
 		{
-			byte[] fontData = ((IFont)asset).FontData;
-			uint type = BinaryPrimitives.ReadUInt32LittleEndian(fontData);
-			return type == OttoAsciiFourCC ? "otf" : "ttf";
+			return ((IFont)asset).GetFontExtension();
 		}
 
 		protected override long GenerateExportID(IUnityObjectBase asset)
@@ -82,10 +80,5 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 
 			//The font texture is assumed to be 2800000, but has not been verified.
 		}
-
-		/// <summary>
-		/// OTTO ascii
-		/// </summary>
-		private const int OttoAsciiFourCC = 0x4F54544F;
 	}
 }

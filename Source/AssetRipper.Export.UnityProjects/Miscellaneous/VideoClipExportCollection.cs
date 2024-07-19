@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.SourceGenerated.Classes.ClassID_1127;
 using AssetRipper.SourceGenerated.Classes.ClassID_329;
+using AssetRipper.SourceGenerated.Extensions;
 
 namespace AssetRipper.Export.UnityProjects.Miscellaneous
 {
@@ -12,13 +13,7 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 
 		protected override string GetExportExtension(IUnityObjectBase asset)
 		{
-			return GetExtensionFromPath(Asset.OriginalPath_R);
-		}
-
-		private static string GetExtensionFromPath(string path)
-		{
-			string extension = Path.GetExtension(path);
-			return string.IsNullOrEmpty(extension) ? "bytes" : extension.Substring(1);
+			return Asset.GetExtensionFromPath();
 		}
 
 		protected override IVideoClipImporter CreateImporter(IExportContainer container)

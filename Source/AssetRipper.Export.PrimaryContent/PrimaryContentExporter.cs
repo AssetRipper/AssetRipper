@@ -8,10 +8,14 @@ using AssetRipper.Import.Logging;
 using AssetRipper.Processing;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
+using AssetRipper.SourceGenerated.Classes.ClassID_128;
+using AssetRipper.SourceGenerated.Classes.ClassID_152;
 using AssetRipper.SourceGenerated.Classes.ClassID_156;
 using AssetRipper.SourceGenerated.Classes.ClassID_2;
 using AssetRipper.SourceGenerated.Classes.ClassID_238;
 using AssetRipper.SourceGenerated.Classes.ClassID_3;
+using AssetRipper.SourceGenerated.Classes.ClassID_329;
+using AssetRipper.SourceGenerated.Classes.ClassID_49;
 
 namespace AssetRipper.Export.PrimaryContent;
 
@@ -54,6 +58,11 @@ public sealed class PrimaryContentExporter
 
 		RegisterHandler<INavMeshData>(new GlbNavMeshExporter());
 		RegisterHandler<ITerrainData>(new GlbTerrainExporter());
+
+		RegisterHandler<ITextAsset>(BinaryAssetContentExtractor.Instance);
+		RegisterHandler<IFont>(BinaryAssetContentExtractor.Instance);
+		RegisterHandler<IMovieTexture>(BinaryAssetContentExtractor.Instance);
+		RegisterHandler<IVideoClip>(BinaryAssetContentExtractor.Instance);
 
 		RegisterHandler<IMonoScript>(new ScriptContentExtractor(gameData.AssemblyManager));
 

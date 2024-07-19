@@ -2,6 +2,7 @@
 using AssetRipper.SourceGenerated.Classes.ClassID_21;
 using AssetRipper.SourceGenerated.Classes.ClassID_27;
 using AssetRipper.SourceGenerated.Enums;
+using System.Buffers.Binary;
 
 namespace AssetRipper.SourceGenerated.Extensions
 {
@@ -56,5 +57,21 @@ namespace AssetRipper.SourceGenerated.Extensions
 				return false;
 			}
 		}
+
+		public static string GetFontExtension(this IFont font)
+		{
+			byte[] fontData = font.FontData;
+			if (fontData.Length < 4)
+			{
+				return "ttf";// just in case
+			}
+			uint type = BinaryPrimitives.ReadUInt32LittleEndian(fontData);
+			return type == OttoAsciiFourCC ? "otf" : "ttf";
+		}
+
+		/// <summary>
+		/// OTTO ascii
+		/// </summary>
+		private const int OttoAsciiFourCC = 0x4F54544F;
 	}
 }
