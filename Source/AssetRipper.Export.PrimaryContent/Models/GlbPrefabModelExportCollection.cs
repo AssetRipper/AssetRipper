@@ -1,5 +1,4 @@
-﻿using AssetRipper.Assets;
-using AssetRipper.Processing;
+﻿using AssetRipper.Processing;
 
 namespace AssetRipper.Export.PrimaryContent.Models;
 
@@ -10,5 +9,5 @@ public sealed class GlbPrefabModelExportCollection : MultipleExportCollection<Pr
 		AddAssets(asset.Assets);
 	}
 
-	protected override string GetExportExtension(IUnityObjectBase asset) => "glb";
+	protected override string ExportExtension => "glb";
 }

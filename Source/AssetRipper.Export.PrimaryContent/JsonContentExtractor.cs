@@ -23,6 +23,6 @@ public class JsonContentExtractor : IContentExtractor
 		{
 		}
 
-		protected override string GetExportExtension(IUnityObjectBase asset) => "json";
+		protected override string ExportExtension => "json";
 	}
 }

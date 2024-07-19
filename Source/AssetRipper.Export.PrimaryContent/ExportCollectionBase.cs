@@ -17,7 +17,7 @@ public abstract class ExportCollectionBase
 			Directory.CreateDirectory(path);
 		}
 
-		string fullName = $"{name}.{GetExportExtension(asset)}";
+		string fullName = $"{name}.{ExportExtension}";
 		string uniqueName = FileUtils.GetUniqueName(path, fullName, FileUtils.MaxFileNameLength);
 		string filePath = Path.Combine(path, uniqueName);
 		ContentExtractor.Export(asset, filePath);
@@ -43,11 +43,11 @@ public abstract class ExportCollectionBase
 			fileName = FileUtils.FixInvalidNameCharacters(fileName);
 		}
 
-		fileName = $"{fileName}.{GetExportExtension(asset)}";
+		fileName = $"{fileName}.{ExportExtension}";
 		return GetUniqueFileName(dirPath, fileName);
 	}
 
-	protected virtual string GetExportExtension(IUnityObjectBase asset) => "asset";
+	protected virtual string ExportExtension => "asset";
 
 	protected static string GetUniqueFileName(string directoryPath, string fileName)
 	{

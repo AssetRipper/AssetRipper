@@ -8,5 +8,5 @@ public sealed class GlbExportCollection : SingleExportCollection<IUnityObjectBas
 	{
 	}
 
-	protected override string GetExportExtension(IUnityObjectBase asset) => "glb";
+	protected override string ExportExtension => "glb";
 }
