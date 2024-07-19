@@ -2,10 +2,12 @@
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Export.PrimaryContent.DeletedAssets;
 using AssetRipper.Export.PrimaryContent.Models;
+using AssetRipper.Export.PrimaryContent.Scripts;
 using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Logging;
 using AssetRipper.Processing;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
+using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using AssetRipper.SourceGenerated.Classes.ClassID_156;
 using AssetRipper.SourceGenerated.Classes.ClassID_2;
 using AssetRipper.SourceGenerated.Classes.ClassID_238;
@@ -16,6 +18,12 @@ namespace AssetRipper.Export.PrimaryContent;
 public sealed class PrimaryContentExporter
 {
 	private readonly ObjectHandlerStack<IContentExtractor> exporters = new();
+	private readonly GameData gameData;
+
+	private PrimaryContentExporter(GameData gameData)
+	{
+		this.gameData = gameData;
+	}
 
 	public void RegisterHandler<T>(IContentExtractor handler, bool allowInheritance = true) where T : IUnityObjectBase
 	{
@@ -27,9 +35,9 @@ public sealed class PrimaryContentExporter
 		exporters.OverrideHandler(type, handler, allowInheritance);
 	}
 
-	public static PrimaryContentExporter CreateDefault()
+	public static PrimaryContentExporter CreateDefault(GameData gameData)
 	{
-		PrimaryContentExporter exporter = new();
+		PrimaryContentExporter exporter = new(gameData);
 		exporter.RegisterDefaultHandlers();
 		return exporter;
 	}
@@ -46,6 +54,8 @@ public sealed class PrimaryContentExporter
 
 		RegisterHandler<INavMeshData>(new GlbNavMeshExporter());
 		RegisterHandler<ITerrainData>(new GlbTerrainExporter());
+
+		RegisterHandler<IMonoScript>(new ScriptContentExtractor(gameData.AssemblyManager));
 
 		// Deleted assets
 		// This must be the last handler
@@ -77,7 +87,7 @@ public sealed class PrimaryContentExporter
 
 		foreach (IUnityObjectBase asset in fileCollection.FetchAssets())
 		{
-			if (!queued.Contains(asset))
+			if (queued.Add(asset))
 			{
 				ExportCollectionBase collection = CreateCollection(asset);
 				foreach (IUnityObjectBase element in collection.Assets)
