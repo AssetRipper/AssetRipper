@@ -24,21 +24,9 @@ public sealed class GlbMeshExporter : IContentExtractor
 
 	public bool Export(IUnityObjectBase asset, string path)
 	{
-		byte[] data = ExportBinary((IMesh)asset);
-		if (data.Length == 0)
-		{
-			return false;
-		}
-		File.WriteAllBytes(path, data);
+		SceneBuilder sceneBuilder = GlbMeshBuilder.Build((IMesh)asset);
+		using FileStream fileStream = File.Create(path);
+		sceneBuilder.ToGltf2().WriteGLB(fileStream);
 		return true;
-	}
-
-	private static byte[] ExportBinary(IMesh mesh)
-	{
-		SceneBuilder sceneBuilder = GlbMeshBuilder.Build(mesh);
-
-		SharpGLTF.Schema2.WriteSettings writeSettings = new();
-
-		return sceneBuilder.ToGltf2().WriteGLB(writeSettings).ToArray();
 	}
 }

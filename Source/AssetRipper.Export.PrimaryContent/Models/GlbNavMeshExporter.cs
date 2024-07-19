@@ -29,20 +29,11 @@ public sealed class GlbNavMeshExporter : IContentExtractor
 
 	public bool Export(IUnityObjectBase asset, string path)
 	{
-		byte[] data = ExportAssetToGlb((INavMeshData)asset);
-		if (data.Length == 0)
-		{
-			return false;
-		}
-		File.WriteAllBytes(path, data);
-		return true;
-	}
-
-	private static byte[] ExportAssetToGlb(INavMeshData asset)
-	{
 		SceneBuilder sceneBuilder = new SceneBuilder();
-		AddAssetToSceneBuilder(sceneBuilder, asset);
-		return sceneBuilder.ToGltf2().WriteGLB().ToArray();
+		AddAssetToSceneBuilder(sceneBuilder, (INavMeshData)asset);
+		using FileStream fileStream = File.Create(path);
+		sceneBuilder.ToGltf2().WriteGLB(fileStream);
+		return true;
 	}
 
 	private static void AddAssetToSceneBuilder(SceneBuilder sceneBuilder, INavMeshData asset)

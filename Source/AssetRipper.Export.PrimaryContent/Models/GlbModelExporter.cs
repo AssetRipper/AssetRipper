@@ -1,8 +1,6 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Export.Modules.Models;
-using AssetRipper.Import.Logging;
 using AssetRipper.Processing;
-using Microsoft.Win32.SafeHandles;
 using SharpGLTF.Scenes;
 
 namespace AssetRipper.Export.PrimaryContent.Models;
@@ -32,38 +30,9 @@ public class GlbModelExporter : IContentExtractor
 
 	public static bool ExportModel(IEnumerable<IUnityObjectBase> assets, string path, bool isScene)
 	{
-		ReadOnlySpan<byte> data = ExportBinary(assets, isScene);
-		if (data.Length == 0)
-		{
-			return false;
-		}
-
-		WriteAllBytes(path, data);
-		return true;
-	}
-
-	private static void WriteAllBytes(string path, ReadOnlySpan<byte> data)
-	{
-		ArgumentException.ThrowIfNullOrEmpty(path);
-
-		using SafeFileHandle sfh = File.OpenHandle(path, FileMode.Create, FileAccess.Write, FileShare.Read);
-		RandomAccess.Write(sfh, data, 0);
-	}
-
-	private static ArraySegment<byte> ExportBinary(IEnumerable<IUnityObjectBase> assets, bool isScene)
-	{
 		SceneBuilder sceneBuilder = GlbLevelBuilder.Build(assets, isScene);
-
-		SharpGLTF.Schema2.WriteSettings writeSettings = new();
-
-		try
-		{
-			return sceneBuilder.ToGltf2().WriteGLB(writeSettings);
-		}
-		catch (InvalidOperationException ex) when (ex.Message == "Can't merge a buffer larger than 2Gb")
-		{
-			Logger.Error(LogCategory.Export, $"Model was too large to export as GLB.");
-			return default;
-		}
+		using FileStream fileStream = File.Create(path);
+		sceneBuilder.ToGltf2().WriteGLB(fileStream);
+		return true;
 	}
 }

@@ -23,18 +23,9 @@ public sealed class GlbTerrainExporter : IContentExtractor
 
 	public bool Export(IUnityObjectBase asset, string path)
 	{
-		byte[] data = ExportTerrainToGlb((ITerrainData)asset);
-		if (data.Length == 0)
-		{
-			return false;
-		}
-		File.WriteAllBytes(path, data);
+		SceneBuilder sceneBuilder = GlbTerrainBuilder.Build((ITerrainData)asset);
+		using FileStream fileStream = File.Create(path);
+		sceneBuilder.ToGltf2().WriteGLB(fileStream);
 		return true;
-	}
-
-	private static byte[] ExportTerrainToGlb(ITerrainData terrain)
-	{
-		SceneBuilder sceneBuilder = GlbTerrainBuilder.Build(terrain);
-		return sceneBuilder.ToGltf2().WriteGLB().ToArray();
 	}
 }
