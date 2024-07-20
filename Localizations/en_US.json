@@ -85,6 +85,8 @@
     "export_in_progress": "Exporting Asset Files\n{0}%\n{1}/{2}",
     "export_in_progress_no_file_count_yet": "Exporting Asset Files\n0.0%\n?/?",
     "export_preparing": "Preparing for Export...\nThis might take a minute.",
+    "export_primary_content": "Export Primary Content",
+    "export_unity_project": "Export Unity Project",
     "format": "Format",
     "frequency": "Frequency",
     "game_object": "GameObject",

@@ -38,14 +38,29 @@ public sealed class CommandsPage : VuePage
 			}
 			using (new P(writer).End())
 			{
-				using (new Form(writer).WithAction("/Export").WithMethod("post").End())
+				using (new Form(writer).End())
 				{
 					new Input(writer).WithClass("form-control").WithType("text").WithName("Path")
 						.WithCustomAttribute("v-model", "export_path")
 						.WithCustomAttribute("@input", "handleExportPathChange").Close();
-					new Input(writer).WithCustomAttribute("v-if", "export_path_has_files").WithType("submit").WithClass("btn btn-danger").WithValue(Localization.MenuExport).Close();
-					new Button(writer).WithCustomAttribute("v-else-if", "export_path === ''").WithClass("btn btn-primary").WithCustomAttribute("disabled").Close(Localization.MenuExport);
-					new Input(writer).WithCustomAttribute("v-else").WithType("submit").WithClass("btn btn-primary").WithValue(Localization.MenuExport).Close();
+				}
+
+				using (new Form(writer).WithAction("/Export/UnityProject").WithMethod("post").End())
+				{
+					new Input(writer).WithType("hidden").WithName("Path").WithCustomAttribute("v-model", "export_path").Close();
+
+					new Input(writer).WithCustomAttribute("v-if", "export_path_has_files").WithType("submit").WithClass("btn btn-danger").WithValue(Localization.ExportUnityProject).Close();
+					new Button(writer).WithCustomAttribute("v-else-if", "export_path === ''").WithClass("btn btn-primary").WithCustomAttribute("disabled").Close(Localization.ExportUnityProject);
+					new Input(writer).WithCustomAttribute("v-else").WithType("submit").WithClass("btn btn-primary").WithValue(Localization.ExportUnityProject).Close();
+				}
+
+				using (new Form(writer).WithAction("/Export/PrimaryContent").WithMethod("post").End())
+				{
+					new Input(writer).WithType("hidden").WithName("Path").WithCustomAttribute("v-model", "export_path").Close();
+
+					new Input(writer).WithCustomAttribute("v-if", "export_path_has_files").WithType("submit").WithClass("btn btn-danger").WithValue(Localization.ExportPrimaryContent).Close();
+					new Button(writer).WithCustomAttribute("v-else-if", "export_path === ''").WithClass("btn btn-primary").WithCustomAttribute("disabled").Close(Localization.ExportPrimaryContent);
+					new Input(writer).WithCustomAttribute("v-else").WithType("submit").WithClass("btn btn-primary").WithValue(Localization.ExportPrimaryContent).Close();
 				}
 
 				if (Dialogs.Supported)

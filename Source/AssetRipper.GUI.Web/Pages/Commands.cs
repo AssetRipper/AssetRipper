@@ -64,7 +64,7 @@ public static class Commands
 		}
 	}
 
-	public readonly struct Export : ICommand
+	public readonly struct ExportUnityProject : ICommand
 	{
 		static async Task<string?> ICommand.Execute(HttpRequest request)
 		{
@@ -82,7 +82,31 @@ public static class Commands
 
 			if (!string.IsNullOrEmpty(path))
 			{
-				GameFileLoader.Export(path);
+				GameFileLoader.ExportUnityProject(path);
+			}
+			return null;
+		}
+	}
+
+	public readonly struct ExportPrimaryContent : ICommand
+	{
+		static async Task<string?> ICommand.Execute(HttpRequest request)
+		{
+			IFormCollection form = await request.ReadFormAsync();
+
+			string? path;
+			if (form.TryGetValue("Path", out StringValues values))
+			{
+				path = values;
+			}
+			else
+			{
+				return CommandsPath;
+			}
+
+			if (!string.IsNullOrEmpty(path))
+			{
+				GameFileLoader.ExportPrimaryContent(path);
 			}
 			return null;
 		}
