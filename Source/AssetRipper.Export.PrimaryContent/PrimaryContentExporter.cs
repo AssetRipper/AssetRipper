@@ -19,6 +19,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_2;
 using AssetRipper.SourceGenerated.Classes.ClassID_238;
 using AssetRipper.SourceGenerated.Classes.ClassID_3;
 using AssetRipper.SourceGenerated.Classes.ClassID_329;
+using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Classes.ClassID_49;
 using AssetRipper.SourceGenerated.Classes.ClassID_83;
 
@@ -60,6 +61,8 @@ public sealed class PrimaryContentExporter
 		RegisterHandler<IGameObject>(modelExporter);
 		RegisterHandler<IComponent>(modelExporter);
 		RegisterHandler<ILevelGameManager>(modelExporter);
+
+		RegisterHandler<IMesh>(new GlbMeshExporter());
 
 		RegisterHandler<INavMeshData>(new GlbNavMeshExporter());
 		RegisterHandler<ITerrainData>(new GlbTerrainExporter());
