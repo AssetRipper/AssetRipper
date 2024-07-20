@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Bundles;
+using AssetRipper.Export.PrimaryContent.Audio;
 using AssetRipper.Export.PrimaryContent.DeletedAssets;
 using AssetRipper.Export.PrimaryContent.Models;
 using AssetRipper.Export.PrimaryContent.Scripts;
@@ -16,6 +17,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_238;
 using AssetRipper.SourceGenerated.Classes.ClassID_3;
 using AssetRipper.SourceGenerated.Classes.ClassID_329;
 using AssetRipper.SourceGenerated.Classes.ClassID_49;
+using AssetRipper.SourceGenerated.Classes.ClassID_83;
 
 namespace AssetRipper.Export.PrimaryContent;
 
@@ -63,6 +65,8 @@ public sealed class PrimaryContentExporter
 		RegisterHandler<IFont>(BinaryAssetContentExtractor.Instance);
 		RegisterHandler<IMovieTexture>(BinaryAssetContentExtractor.Instance);
 		RegisterHandler<IVideoClip>(BinaryAssetContentExtractor.Instance);
+
+		RegisterHandler<IAudioClip>(new AudioContentExtractor());
 
 		RegisterHandler<IMonoScript>(new ScriptContentExtractor(gameData.AssemblyManager));
 

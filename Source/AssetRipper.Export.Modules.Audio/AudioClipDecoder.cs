@@ -49,7 +49,7 @@ namespace AssetRipper.Export.Modules.Audio
 						{
 							decodedData = null;
 							fileExtension = null;
-							message = $"Can't decode audio clip '{audioClip.Name}' with default decoder because it's '{audioType}' encoded.";
+							message = $"Can't decode audio clip '{audioClip.Name}' with Fmod5Sharp because it's '{audioType}' encoded.";
 							return false;
 						}
 					}
