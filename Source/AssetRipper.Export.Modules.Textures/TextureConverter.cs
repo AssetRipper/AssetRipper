@@ -3,6 +3,7 @@ using AssetRipper.Import.Logging;
 using AssetRipper.SourceGenerated.Classes.ClassID_117;
 using AssetRipper.SourceGenerated.Classes.ClassID_187;
 using AssetRipper.SourceGenerated.Classes.ClassID_188;
+using AssetRipper.SourceGenerated.Classes.ClassID_189;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_89;
 using AssetRipper.SourceGenerated.Enums;
@@ -21,6 +22,24 @@ namespace AssetRipper.Export.Modules.Textures
 {
 	public static class TextureConverter
 	{
+		public static bool TryConvertToBitmap(IImageTexture texture, out DirectBitmap bitmap)
+		{
+			return texture switch
+			{
+				ICubemapArray cubemapArray => TryConvertToBitmap(cubemapArray, out bitmap),
+				ITexture2DArray texture2DArray => TryConvertToBitmap(texture2DArray, out bitmap),
+				ITexture3D texture3D => TryConvertToBitmap(texture3D, out bitmap),
+				ITexture2D texture2D => TryConvertToBitmap(texture2D, out bitmap),
+				_ => ReturnFalse(out bitmap),
+			};
+
+			static bool ReturnFalse(out DirectBitmap bitmap)
+			{
+				bitmap = DirectBitmap.Empty;
+				return false;
+			}
+		}
+
 		public static bool TryConvertToBitmap(ITexture3D texture, out DirectBitmap bitmap)
 		{
 			byte[] buffer = texture.GetImageData();
