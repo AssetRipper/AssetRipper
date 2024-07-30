@@ -2,6 +2,7 @@
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Export.UnityProjects;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
+using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.StaticBatchInfo;
 using AssetRipper.Yaml;
 using System.Globalization;

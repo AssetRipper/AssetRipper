@@ -7,7 +7,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AssetRipper.SourceGenerated" Version="1.1.0" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
 		<PackageReference Include="NUnit" Version="4.1.0" />
 		<PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
@@ -23,6 +22,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\AssetRipper.Assets\AssetRipper.Assets.csproj" />
+		<ProjectReference Include="..\AssetRipper.SourceGenerated.Extensions\AssetRipper.SourceGenerated.Extensions.csproj" />
 	</ItemGroup>
 
 </Project>

@@ -2,22 +2,31 @@
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.Primitives;
-using AssetRipper.SourceGenerated;
 using System.Reflection;
 
-namespace AssetRipper.Tests;
+namespace AssetRipper.SourceGenerated.Extensions;
 
-internal static class AssetCreator
+/// <summary>
+/// A helper class for creating assets, generally for unit testing.
+/// </summary>
+public static class AssetCreator
 {
+	public static T CreateAsset<T>(this ProcessedAssetCollection collection, ClassIDType classID) where T : IUnityObjectBase
+	{
+		return collection.CreateAsset((int)classID, (assetInfo) =>
+		{
+			return (T)AssetFactory.Create(assetInfo);
+		});
+	}
+
 	public static T Create<T>(ClassIDType classID, UnityVersion version, Func<AssetInfo, T> factory) where T : IUnityObjectBase
 	{
-		return MakeCollection(version).CreateAsset<T>((int)classID, factory);
+		return CreateCollection(version).CreateAsset((int)classID, factory);
 	}
 
 	public static T Create<T>(ClassIDType classID, UnityVersion version) where T : IUnityObjectBase
 	{
-		return MakeCollection(version).CreateAsset((int)classID, (assetInfo) =>
+		return CreateCollection(version).CreateAsset((int)classID, (assetInfo) =>
 		{
 			return (T)AssetFactory.Create(assetInfo);
 		});
@@ -31,7 +40,7 @@ internal static class AssetCreator
 	/// </remarks>
 	/// <typeparam name="T">The type of asset to create.</typeparam>
 	/// <returns>A new asset.</returns>
-	public static T CreateUnsafe<T>() where T : UnityObjectBase
+	public static T CreateUnsafe<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)] T>() where T : UnityObjectBase
 	{
 		return Create(default, default, (assetInfo) =>
 		{
@@ -48,15 +57,17 @@ internal static class AssetCreator
 	/// </remarks>
 	/// <param name="type">The type of asset to create.</param>
 	/// <returns>A new asset.</returns>
-	public static UnityObjectBase CreateUnsafe(Type type)
+	[RequiresDynamicCode("")]
+	public static UnityObjectBase CreateUnsafe([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)] Type type)
 	{
+#pragma warning disable IL2111 // Method with parameters or return value with `DynamicallyAccessedMembersAttribute` is accessed via reflection. Trimmer can't guarantee availability of the requirements of the method.
 		return (UnityObjectBase?)typeof(AssetCreator).GetMethod(nameof(CreateUnsafe), 1, BindingFlags.Public | BindingFlags.Static, null, [], null)
 			!.MakeGenericMethod(type)
-			.Invoke(null, null)
-			?? throw new NullReferenceException();
+			.Invoke(null, null) ?? throw new NullReferenceException();
+#pragma warning restore IL2111 // Method with parameters or return value with `DynamicallyAccessedMembersAttribute` is accessed via reflection. Trimmer can't guarantee availability of the requirements of the method.
 	}
 
-	private static ProcessedAssetCollection MakeCollection(UnityVersion version)
+	public static ProcessedAssetCollection CreateCollection(UnityVersion version)
 	{
 		GameBundle gameBundle = new();
 		ProcessedAssetCollection collection = gameBundle.AddNewProcessedCollection(nameof(AssetCreator), version);

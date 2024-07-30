@@ -2,6 +2,7 @@
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Classes.ClassID_142;
+using AssetRipper.SourceGenerated.Extensions;
 
 namespace AssetRipper.Tests.Traversal;
 

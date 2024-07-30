@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Export.PrimaryContent;
+using AssetRipper.SourceGenerated.Extensions;
 using System.Text.Json.Nodes;
 
 namespace AssetRipper.Tests.Traversal;

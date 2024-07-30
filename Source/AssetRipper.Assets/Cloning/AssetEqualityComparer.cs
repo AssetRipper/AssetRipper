@@ -1,11 +1,12 @@
 ﻿using AssetRipper.Assets.Metadata;
+using System.Diagnostics;
 
 namespace AssetRipper.Assets.Cloning
 {
 	public sealed class AssetEqualityComparer : IEqualityComparer<IUnityObjectBase>
 	{
-		private static readonly Dictionary<UnorderedPair, bool> compareCache = new();
-		private static readonly Dictionary<UnorderedPair, List<UnorderedPair>> dependentEqualityPairs = new();
+		private readonly Dictionary<UnorderedPair, bool> compareCache = new();
+		private readonly Dictionary<UnorderedPair, List<UnorderedPair>> dependentEqualityPairs = new();
 		public IUnityObjectBase CallingObject { get; private set; } = default!;
 		public IUnityObjectBase OtherObject { get; private set; } = default!;
 
@@ -60,6 +61,7 @@ namespace AssetRipper.Assets.Cloning
 
 			DoComparison(x, y);
 			EvaluateDependentEqualityComparisons();
+			Debug.Assert(dependentEqualityPairs.Count == 0, "Dependent equality pairs should have been resolved");
 
 			return compareCache[(x, y)];
 		}
@@ -85,10 +87,17 @@ namespace AssetRipper.Assets.Cloning
 						UnorderedPair valuePair = list[i];
 						if (compareCache.TryGetValue(valuePair, out bool value))
 						{
-							compareCache[keyPair] = value;
-							dependentEqualityPairs.Remove(keyPair);
 							hasChanged = true;
-							break;
+							if (value)
+							{
+								list.RemoveAt(i);
+							}
+							else
+							{
+								compareCache[keyPair] = false;
+								dependentEqualityPairs.Remove(keyPair);
+								break;
+							}
 						}
 						else if (!dependentEqualityPairs.ContainsKey(valuePair))
 						{
@@ -107,6 +116,15 @@ namespace AssetRipper.Assets.Cloning
 					}
 				}
 			} while (hasChanged);
+
+			if (dependentEqualityPairs.Count > 0)
+			{
+				foreach ((UnorderedPair keyPair, _) in dependentEqualityPairs)
+				{
+					compareCache[keyPair] = true;
+				}
+				dependentEqualityPairs.Clear();
+			}
 		}
 
 		private void DoComparison(IUnityObjectBase x, IUnityObjectBase y)
