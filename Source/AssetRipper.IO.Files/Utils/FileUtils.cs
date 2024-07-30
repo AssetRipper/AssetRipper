@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Buffers;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace AssetRipper.IO.Files.Utils
@@ -78,7 +79,7 @@ namespace AssetRipper.IO.Files.Utils
 
 		public static bool IsReservedName(string name)
 		{
-			return OperatingSystem.IsWindows() && ReservedNames.Contains(name.ToLowerInvariant());
+			return OperatingSystem.IsWindows() && name.Length is 3 or 4 && ReservedNames.Contains(name.ToLowerInvariant());
 		}
 
 		private static Regex GenerateFileNameRegex()
@@ -122,12 +123,16 @@ namespace AssetRipper.IO.Files.Utils
 
 		private static string TruncateToUTF8ByteLength(string str, int maxLength)
 		{
-			byte[] bytes = Encoding.UTF8.GetBytes(str);
-			int validLength = FindValidByteLength(bytes, maxLength);
-			return Encoding.UTF8.GetString(bytes[..validLength]);
+			int currentByteLength = Encoding.UTF8.GetByteCount(str);
+			byte[] bytes = ArrayPool<byte>.Shared.Rent(currentByteLength);
+			Encoding.UTF8.GetBytes(str, bytes);
+			int validLength = FindValidByteLength(bytes.AsSpan(0, currentByteLength), maxLength);
+			string result = Encoding.UTF8.GetString(bytes.AsSpan(0, validLength));
+			ArrayPool<byte>.Shared.Return(bytes);
+			return result;
 		}
 
-		private static int FindValidByteLength(byte[] bytes, int maxLength)
+		private static int FindValidByteLength(ReadOnlySpan<byte> bytes, int maxLength)
 		{
 			int validLength = maxLength;
 
