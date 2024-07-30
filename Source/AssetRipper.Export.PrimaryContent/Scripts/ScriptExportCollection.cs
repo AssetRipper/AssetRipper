@@ -39,6 +39,7 @@ public sealed class ScriptExportCollection : ExportCollectionBase
 			//Write assembly
 			{
 				string assemblyPath = Path.Combine(assemblyDirectory, assembly.Name + ".dll");
+				assemblyPaths.Add(assemblyPath);
 				using FileStream fileStream = File.Create(assemblyPath);
 				stream.CopyTo(fileStream);
 				stream.Position = 0;
