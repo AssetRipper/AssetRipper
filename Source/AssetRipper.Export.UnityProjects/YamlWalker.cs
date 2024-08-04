@@ -342,9 +342,17 @@ public class YamlWalker : AssetWalker
 			{
 				return new YamlScalarNode(Unsafe.As<T, double>(ref value));
 			}
+			else if (typeof(T) == typeof(string))
+			{
+				return new YamlScalarNode(Unsafe.As<T, string>(ref value));
+			}
+			else if (typeof(T) == typeof(Utf8String))
+			{
+				return new YamlScalarNode(Unsafe.As<T, Utf8String>(ref value));
+			}
 			else
 			{
-				return new YamlScalarNode(value?.ToString() ?? "");//temp
+				return new YamlScalarNode(value?.ToString() ?? "");// Fallback
 			}
 		}
 	}
