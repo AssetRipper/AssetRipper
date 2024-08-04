@@ -227,6 +227,13 @@ namespace AssetRipper.Export.Modules.Textures
 				return false;
 			}
 
+			if (data.Length < imageSize * depth)
+			{
+				Logger.Log(LogType.Error, LogCategory.Export, $"Image data length {data.Length} is less than expected {imageSize * depth}");
+				bitmap = DirectBitmap.Empty;
+				return false;
+			}
+
 			bitmap = new DirectBitmap<TColor, TChannelValue>(width, height, depth);
 			int outputSize = width * height * bitmap.PixelSize;
 			for (int i = 0; i < depth; i++)
