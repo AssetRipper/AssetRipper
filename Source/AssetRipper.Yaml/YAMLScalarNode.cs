@@ -6,13 +6,14 @@ using System.Text.RegularExpressions;
 
 namespace AssetRipper.Yaml
 {
-	public sealed partial class YamlScalarNode : YamlNode
+	public partial class YamlScalarNode : YamlNode
 	{
 		public static YamlScalarNode Create(bool value, bool isHex = false) => new(value, isHex);
 
 		private YamlScalarNode(bool value, bool isHex = false)
 		{
-			SetValue(value);
+			m_value = value ? 1u : 0u;
+			m_objectType = ScalarType.Boolean;
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
@@ -20,7 +21,8 @@ namespace AssetRipper.Yaml
 
 		private YamlScalarNode(byte value, bool isHex = false)
 		{
-			SetValue(value);
+			m_value = value;
+			m_objectType = ScalarType.Byte;
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
@@ -28,7 +30,8 @@ namespace AssetRipper.Yaml
 
 		private YamlScalarNode(sbyte value, bool isHex = false)
 		{
-			SetValue(value);
+			m_value = unchecked((byte)value);
+			m_objectType = ScalarType.SByte;
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
@@ -36,7 +39,8 @@ namespace AssetRipper.Yaml
 
 		private YamlScalarNode(short value, bool isHex = false)
 		{
-			SetValue(value);
+			m_value = unchecked((ushort)value);
+			m_objectType = ScalarType.Int16;
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
@@ -44,7 +48,8 @@ namespace AssetRipper.Yaml
 
 		private YamlScalarNode(ushort value, bool isHex = false)
 		{
-			SetValue(value);
+			m_value = value;
+			m_objectType = ScalarType.UInt16;
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
@@ -52,7 +57,8 @@ namespace AssetRipper.Yaml
 
 		private YamlScalarNode(int value, bool isHex = false)
 		{
-			SetValue(value);
+			m_value = unchecked((uint)value);
+			m_objectType = ScalarType.Int32;
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
@@ -60,7 +66,8 @@ namespace AssetRipper.Yaml
 
 		private YamlScalarNode(uint value, bool isHex = false)
 		{
-			SetValue(value);
+			m_value = value;
+			m_objectType = ScalarType.UInt32;
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
@@ -68,7 +75,8 @@ namespace AssetRipper.Yaml
 
 		private YamlScalarNode(long value, bool isHex = false)
 		{
-			SetValue(value);
+			m_value = unchecked((ulong)value);
+			m_objectType = ScalarType.Int64;
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
@@ -76,103 +84,14 @@ namespace AssetRipper.Yaml
 
 		private YamlScalarNode(ulong value, bool isHex = false)
 		{
-			SetValue(value);
+			m_value = value;
+			m_objectType = ScalarType.UInt64;
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
 		public static YamlScalarNode Create(float value, bool isHex = false) => new(value, isHex);
 
 		private YamlScalarNode(float value, bool isHex = false)
-		{
-			SetValue(value);
-			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
-		}
-
-		public static YamlScalarNode Create(double value, bool isHex = false) => new(value, isHex);
-
-		private YamlScalarNode(double value, bool isHex = false)
-		{
-			SetValue(value);
-			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
-		}
-
-		public static YamlScalarNode Create(string value) => new(value);
-
-		private YamlScalarNode(string value)
-		{
-			SetValue(value);
-			Style = GetStringStyle(value);
-		}
-
-		internal static YamlScalarNode CreatePlain(string value) => new(value, true);
-
-		private YamlScalarNode(string value, bool _)
-		{
-			SetValue(value);
-			Style = ScalarStyle.Plain;
-		}
-
-		public static YamlScalarNode Create(Utf8String value) => new(value);
-
-		private YamlScalarNode(Utf8String value) : this(value.String)
-		{
-		}
-
-		private void SetValue(bool value)
-		{
-			m_value = value ? 1u : 0u;
-			m_objectType = ScalarType.Boolean;
-		}
-
-		private void SetValue(sbyte value)
-		{
-			m_value = unchecked((byte)value);
-			m_objectType = ScalarType.SByte;
-		}
-
-		private void SetValue(byte value)
-		{
-			m_value = value;
-			m_objectType = ScalarType.Byte;
-		}
-
-		private void SetValue(short value)
-		{
-			m_value = unchecked((ushort)value);
-			m_objectType = ScalarType.Int16;
-		}
-
-		private void SetValue(ushort value)
-		{
-			m_value = value;
-			m_objectType = ScalarType.UInt16;
-		}
-
-		private void SetValue(int value)
-		{
-			m_value = unchecked((uint)value);
-			m_objectType = ScalarType.Int32;
-		}
-
-		private void SetValue(uint value)
-		{
-			m_value = value;
-			m_objectType = ScalarType.UInt32;
-		}
-
-		private void SetValue(long value)
-		{
-			m_value = unchecked((ulong)value);
-			m_objectType = ScalarType.Int64;
-		}
-
-		private void SetValue(ulong value)
-		{
-			m_value = value;
-			m_objectType = ScalarType.UInt64;
-		}
-
-		private void SetValue(float value)
 		{
 #if USE_HEX_FLOAT
 			// It is more precise technic but output looks vague and less readable
@@ -183,9 +102,12 @@ namespace AssetRipper.Yaml
 			m_value = BitConverter.SingleToUInt32Bits(value);
 			m_objectType = ScalarType.Single;
 #endif
+			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		private void SetValue(double value)
+		public static YamlScalarNode Create(double value, bool isHex = false) => new(value, isHex);
+
+		private YamlScalarNode(double value, bool isHex = false)
 		{
 #if USE_HEX_FLOAT
 			// It is more precise technic but output looks vague and less readable
@@ -196,12 +118,31 @@ namespace AssetRipper.Yaml
 			m_value = BitConverter.DoubleToUInt64Bits(value);
 			m_objectType = ScalarType.Double;
 #endif
+			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		private void SetValue(string value)
+		public static YamlScalarNode Create(string value) => new(value);
+
+		private YamlScalarNode(string value)
 		{
 			m_string = value;
 			m_objectType = ScalarType.String;
+			Style = GetStringStyle(value);
+		}
+
+		internal static YamlScalarNode CreatePlain(string value) => new(value, true);
+
+		private YamlScalarNode(string value, bool _)
+		{
+			m_string = value;
+			m_objectType = ScalarType.String;
+			Style = ScalarStyle.Plain;
+		}
+
+		public static YamlScalarNode Create(Utf8String value) => new(value);
+
+		private YamlScalarNode(Utf8String value) : this(value.String)
+		{
 		}
 
 		internal Emitter ToString(Emitter emitter)
@@ -423,13 +364,12 @@ namespace AssetRipper.Yaml
 					},
 				};
 			}
-			set => m_string = value;
 		}
 		public ScalarStyle Style { get; }
 
-		private ScalarType m_objectType = ScalarType.String;
-		private string m_string = string.Empty;
-		private ulong m_value = 0;
+		private readonly ScalarType m_objectType = ScalarType.String;
+		private readonly string m_string = string.Empty;
+		private readonly ulong m_value = 0;
 
 		public override string ToString() => Value;
 
