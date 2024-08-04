@@ -4,23 +4,16 @@
 	{
 		public YamlDocument() { }
 
-		public YamlScalarNode CreateScalarRoot()
-		{
-			YamlScalarNode root = new YamlScalarNode();
-			Root = root;
-			return root;
-		}
-
 		public YamlSequenceNode CreateSequenceRoot()
 		{
-			YamlSequenceNode root = new YamlSequenceNode();
+			YamlSequenceNode root = new();
 			Root = root;
 			return root;
 		}
 
 		public YamlMappingNode CreateMappingRoot()
 		{
-			YamlMappingNode root = new YamlMappingNode();
+			YamlMappingNode root = new();
 			Root = root;
 			return root;
 		}
@@ -36,7 +29,7 @@
 			Root.Emit(emitter);
 		}
 
-		[System.Diagnostics.CodeAnalysis.MemberNotNull(nameof(Root))]
+		[MemberNotNull(nameof(Root))]
 		private void ThrowIfNullRoot()
 		{
 			if (Root is null)

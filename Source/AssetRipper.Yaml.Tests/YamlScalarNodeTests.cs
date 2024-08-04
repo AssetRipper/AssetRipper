@@ -7,7 +7,7 @@ public class YamlScalarNodeTests
 	[Test]
 	public void NullCharacterIsDoubleQuotedAndEscaped()
 	{
-		YamlScalarNode node = new("\0");
+		YamlScalarNode node = YamlScalarNode.Create("\0");
 		Assert.Multiple(() =>
 		{
 			Assert.That(node.Value, Is.EqualTo("\0"));
@@ -21,7 +21,7 @@ public class YamlScalarNodeTests
 	public void EndOfTextCharacterCausesDoubleQuoting()
 	{
 		const string someText = "Some text\u0003";
-		YamlScalarNode node = new(someText);
+		YamlScalarNode node = YamlScalarNode.Create(someText);
 		Assert.Multiple(() =>
 		{
 			Assert.That(node.Value, Is.EqualTo(someText));
@@ -35,7 +35,7 @@ public class YamlScalarNodeTests
 	public void AsciiCharactersUsePlainStyle()
 	{
 		const string asciiCharacters = "Ascii Characters";
-		YamlScalarNode node = new(asciiCharacters);
+		YamlScalarNode node = YamlScalarNode.Create(asciiCharacters);
 		Assert.Multiple(() =>
 		{
 			Assert.That(node.Value, Is.EqualTo(asciiCharacters));

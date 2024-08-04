@@ -13,7 +13,7 @@ namespace AssetRipper.Yaml.Extensions
 				sb.AppendHex(bvalue);
 			}
 
-			return new YamlScalarNode(sb.ToString(), true);
+			return YamlScalarNode.CreatePlain(sb.ToString());
 		}
 
 		public static YamlNode ExportYaml(this IReadOnlyList<char> _this)
@@ -24,7 +24,7 @@ namespace AssetRipper.Yaml.Extensions
 				sb.AppendHex(value);
 			}
 
-			return new YamlScalarNode(sb.ToString(), true);
+			return YamlScalarNode.CreatePlain(sb.ToString());
 		}
 
 		public static YamlNode ExportYaml(this IReadOnlyList<byte> _this)
@@ -35,7 +35,7 @@ namespace AssetRipper.Yaml.Extensions
 				sb.AppendHex(value);
 			}
 
-			return new YamlScalarNode(sb.ToString(), true);
+			return YamlScalarNode.CreatePlain(sb.ToString());
 		}
 
 		public static YamlNode ExportYaml(this IReadOnlyList<ushort> _this, bool isRaw)
@@ -48,7 +48,7 @@ namespace AssetRipper.Yaml.Extensions
 					sb.AppendHex(value);
 				}
 
-				return new YamlScalarNode(sb.ToString(), true);
+				return YamlScalarNode.CreatePlain(sb.ToString());
 			}
 			else
 			{
@@ -72,7 +72,7 @@ namespace AssetRipper.Yaml.Extensions
 					sb.AppendHex(value);
 				}
 
-				return new YamlScalarNode(sb.ToString(), true);
+				return YamlScalarNode.CreatePlain(sb.ToString());
 			}
 			else
 			{
@@ -96,7 +96,7 @@ namespace AssetRipper.Yaml.Extensions
 					sb.AppendHex(value);
 				}
 
-				return new YamlScalarNode(sb.ToString(), true);
+				return YamlScalarNode.CreatePlain(sb.ToString());
 			}
 			else
 			{
@@ -131,7 +131,7 @@ namespace AssetRipper.Yaml.Extensions
 					sb.AppendHex(value);
 				}
 
-				return new YamlScalarNode(sb.ToString(), true);
+				return YamlScalarNode.CreatePlain(sb.ToString());
 			}
 			else
 			{
@@ -155,7 +155,7 @@ namespace AssetRipper.Yaml.Extensions
 					sb.AppendHex(value);
 				}
 
-				return new YamlScalarNode(sb.ToString(), true);
+				return YamlScalarNode.CreatePlain(sb.ToString());
 			}
 			else
 			{
@@ -179,7 +179,7 @@ namespace AssetRipper.Yaml.Extensions
 					sb.AppendHex(value);
 				}
 
-				return new YamlScalarNode(sb.ToString(), true);
+				return YamlScalarNode.CreatePlain(sb.ToString());
 			}
 			else
 			{

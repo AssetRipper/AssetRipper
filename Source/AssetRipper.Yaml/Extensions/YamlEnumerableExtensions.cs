@@ -12,7 +12,7 @@ namespace AssetRipper.Yaml.Extensions
 				byte bvalue = unchecked((byte)(value ? 1 : 0));
 				sb.AppendHex(bvalue);
 			}
-			return new YamlScalarNode(sb.ToString(), true);
+			return YamlScalarNode.CreatePlain(sb.ToString());
 		}
 
 		public static YamlNode ExportYaml(this IEnumerable<char> _this)
@@ -23,7 +23,7 @@ namespace AssetRipper.Yaml.Extensions
 				sb.AppendHex(value);
 			}
 
-			return new YamlScalarNode(sb.ToString(), true);
+			return YamlScalarNode.CreatePlain(sb.ToString());
 		}
 
 		public static YamlNode ExportYaml(this IEnumerable<byte> _this)
@@ -34,7 +34,7 @@ namespace AssetRipper.Yaml.Extensions
 				sb.AppendHex(value);
 			}
 
-			return new YamlScalarNode(sb.ToString(), true);
+			return YamlScalarNode.CreatePlain(sb.ToString());
 		}
 
 		public static YamlNode ExportYaml(this IEnumerable<ushort> _this, bool isRaw)
@@ -47,7 +47,7 @@ namespace AssetRipper.Yaml.Extensions
 					sb.AppendHex(value);
 				}
 
-				return new YamlScalarNode(sb.ToString(), true);
+				return YamlScalarNode.CreatePlain(sb.ToString());
 			}
 			else
 			{
@@ -71,7 +71,7 @@ namespace AssetRipper.Yaml.Extensions
 					sb.AppendHex(value);
 				}
 
-				return new YamlScalarNode(sb.ToString(), true);
+				return YamlScalarNode.CreatePlain(sb.ToString());
 			}
 			else
 			{
@@ -95,7 +95,7 @@ namespace AssetRipper.Yaml.Extensions
 					sb.AppendHex(value);
 				}
 
-				return new YamlScalarNode(sb.ToString(), true);
+				return YamlScalarNode.CreatePlain(sb.ToString());
 			}
 			else
 			{
@@ -119,7 +119,7 @@ namespace AssetRipper.Yaml.Extensions
 					sb.AppendHex(value);
 				}
 
-				return new YamlScalarNode(sb.ToString(), true);
+				return YamlScalarNode.CreatePlain(sb.ToString());
 			}
 			else
 			{
@@ -143,7 +143,7 @@ namespace AssetRipper.Yaml.Extensions
 					sb.AppendHex(value);
 				}
 
-				return new YamlScalarNode(sb.ToString(), true);
+				return YamlScalarNode.CreatePlain(sb.ToString());
 			}
 			else
 			{
@@ -167,7 +167,7 @@ namespace AssetRipper.Yaml.Extensions
 					sb.AppendHex(value);
 				}
 
-				return new YamlScalarNode(sb.ToString(), true);
+				return YamlScalarNode.CreatePlain(sb.ToString());
 			}
 			else
 			{

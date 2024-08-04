@@ -13,7 +13,7 @@ namespace AssetRipper.Yaml.Extensions
 				sb.AppendHex(_this[i]);
 			}
 
-			return new YamlScalarNode(sb.ToString(), true);
+			return YamlScalarNode.CreatePlain(sb.ToString());
 
 			static void EnsureSufficientSpace(byte[] _this)
 			{

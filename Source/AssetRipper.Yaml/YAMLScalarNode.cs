@@ -8,139 +8,171 @@ namespace AssetRipper.Yaml
 {
 	public sealed partial class YamlScalarNode : YamlNode
 	{
-		public YamlScalarNode() { }
+		public static YamlScalarNode Create(bool value, bool isHex = false) => new(value, isHex);
 
-		public YamlScalarNode(bool value, bool isHex = false)
+		private YamlScalarNode(bool value, bool isHex = false)
 		{
 			SetValue(value);
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		public YamlScalarNode(byte value, bool isHex = false)
+		public static YamlScalarNode Create(byte value, bool isHex = false) => new(value, isHex);
+
+		private YamlScalarNode(byte value, bool isHex = false)
 		{
 			SetValue(value);
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		public YamlScalarNode(sbyte value, bool isHex = false)
+		public static YamlScalarNode Create(sbyte value, bool isHex = false) => new(value, isHex);
+
+		private YamlScalarNode(sbyte value, bool isHex = false)
 		{
 			SetValue(value);
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		public YamlScalarNode(short value, bool isHex = false)
+		public static YamlScalarNode Create(short value, bool isHex = false) => new(value, isHex);
+
+		private YamlScalarNode(short value, bool isHex = false)
 		{
 			SetValue(value);
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		public YamlScalarNode(ushort value, bool isHex = false)
+		public static YamlScalarNode Create(ushort value, bool isHex = false) => new(value, isHex);
+
+		private YamlScalarNode(ushort value, bool isHex = false)
 		{
 			SetValue(value);
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		public YamlScalarNode(int value, bool isHex = false)
+		public static YamlScalarNode Create(int value, bool isHex = false) => new(value, isHex);
+
+		private YamlScalarNode(int value, bool isHex = false)
 		{
 			SetValue(value);
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		public YamlScalarNode(uint value, bool isHex = false)
+		public static YamlScalarNode Create(uint value, bool isHex = false) => new(value, isHex);
+
+		private YamlScalarNode(uint value, bool isHex = false)
 		{
 			SetValue(value);
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		public YamlScalarNode(long value, bool isHex = false)
+		public static YamlScalarNode Create(long value, bool isHex = false) => new(value, isHex);
+
+		private YamlScalarNode(long value, bool isHex = false)
 		{
 			SetValue(value);
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		public YamlScalarNode(ulong value, bool isHex = false)
+		public static YamlScalarNode Create(ulong value, bool isHex = false) => new(value, isHex);
+
+		private YamlScalarNode(ulong value, bool isHex = false)
 		{
 			SetValue(value);
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		public YamlScalarNode(float value, bool isHex = false)
+		public static YamlScalarNode Create(float value, bool isHex = false) => new(value, isHex);
+
+		private YamlScalarNode(float value, bool isHex = false)
 		{
 			SetValue(value);
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		public YamlScalarNode(double value, bool isHex = false)
+		public static YamlScalarNode Create(double value, bool isHex = false) => new(value, isHex);
+
+		private YamlScalarNode(double value, bool isHex = false)
 		{
 			SetValue(value);
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		public YamlScalarNode(string value)
+		public static YamlScalarNode Create(string value) => new(value);
+
+		private YamlScalarNode(string value)
 		{
 			SetValue(value);
 			Style = GetStringStyle(value);
 		}
 
-		internal YamlScalarNode(string value, bool _)
+		internal static YamlScalarNode CreatePlain(string value) => new(value, true);
+
+		private YamlScalarNode(string value, bool _)
 		{
 			SetValue(value);
 			Style = ScalarStyle.Plain;
 		}
 
-		public YamlScalarNode(Utf8String value) : this(value.String)
+		public static YamlScalarNode Create(Utf8String value) => new(value);
+
+		private YamlScalarNode(Utf8String value) : this(value.String)
 		{
 		}
 
-		public void SetValue(bool value)
+		private void SetValue(bool value)
 		{
 			m_value = value ? 1u : 0u;
 			m_objectType = ScalarType.Boolean;
 		}
 
-		public void SetValue(byte value)
+		private void SetValue(sbyte value)
+		{
+			m_value = unchecked((byte)value);
+			m_objectType = ScalarType.SByte;
+		}
+
+		private void SetValue(byte value)
 		{
 			m_value = value;
 			m_objectType = ScalarType.Byte;
 		}
 
-		public void SetValue(short value)
+		private void SetValue(short value)
 		{
 			m_value = unchecked((ushort)value);
 			m_objectType = ScalarType.Int16;
 		}
 
-		public void SetValue(ushort value)
+		private void SetValue(ushort value)
 		{
 			m_value = value;
 			m_objectType = ScalarType.UInt16;
 		}
 
-		public void SetValue(int value)
+		private void SetValue(int value)
 		{
 			m_value = unchecked((uint)value);
 			m_objectType = ScalarType.Int32;
 		}
 
-		public void SetValue(uint value)
+		private void SetValue(uint value)
 		{
 			m_value = value;
 			m_objectType = ScalarType.UInt32;
 		}
 
-		public void SetValue(long value)
+		private void SetValue(long value)
 		{
 			m_value = unchecked((ulong)value);
 			m_objectType = ScalarType.Int64;
 		}
 
-		public void SetValue(ulong value)
+		private void SetValue(ulong value)
 		{
 			m_value = value;
 			m_objectType = ScalarType.UInt64;
 		}
 
-		public void SetValue(float value)
+		private void SetValue(float value)
 		{
 #if USE_HEX_FLOAT
 			// It is more precise technic but output looks vague and less readable
@@ -153,7 +185,7 @@ namespace AssetRipper.Yaml
 #endif
 		}
 
-		public void SetValue(double value)
+		private void SetValue(double value)
 		{
 #if USE_HEX_FLOAT
 			// It is more precise technic but output looks vague and less readable
@@ -166,7 +198,7 @@ namespace AssetRipper.Yaml
 #endif
 		}
 
-		public void SetValue(string value)
+		private void SetValue(string value)
 		{
 			m_string = value;
 			m_objectType = ScalarType.String;

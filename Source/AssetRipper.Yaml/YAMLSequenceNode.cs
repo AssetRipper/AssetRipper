@@ -11,67 +11,67 @@
 
 		public void Add(bool value)
 		{
-			YamlScalarNode node = new YamlScalarNode(value, Style.IsRaw());
+			YamlScalarNode node = YamlScalarNode.Create(value, Style.IsRaw());
 			Add(node);
 		}
 
 		public void Add(byte value)
 		{
-			YamlScalarNode node = new YamlScalarNode(value, Style.IsRaw());
+			YamlScalarNode node = YamlScalarNode.Create(value, Style.IsRaw());
 			Add(node);
 		}
 
 		public void Add(short value)
 		{
-			YamlScalarNode node = new YamlScalarNode(value, Style.IsRaw());
+			YamlScalarNode node = YamlScalarNode.Create(value, Style.IsRaw());
 			Add(node);
 		}
 
 		public void Add(ushort value)
 		{
-			YamlScalarNode node = new YamlScalarNode(value, Style.IsRaw());
+			YamlScalarNode node = YamlScalarNode.Create(value, Style.IsRaw());
 			Add(node);
 		}
 
 		public void Add(int value)
 		{
-			YamlScalarNode node = new YamlScalarNode(value, Style.IsRaw());
+			YamlScalarNode node = YamlScalarNode.Create(value, Style.IsRaw());
 			Add(node);
 		}
 
 		public void Add(uint value)
 		{
-			YamlScalarNode node = new YamlScalarNode(value, Style.IsRaw());
+			YamlScalarNode node = YamlScalarNode.Create(value, Style.IsRaw());
 			Add(node);
 		}
 
 		public void Add(long value)
 		{
-			YamlScalarNode node = new YamlScalarNode(value, Style.IsRaw());
+			YamlScalarNode node = YamlScalarNode.Create(value, Style.IsRaw());
 			Add(node);
 		}
 
 		public void Add(ulong value)
 		{
-			YamlScalarNode node = new YamlScalarNode(value, Style.IsRaw());
+			YamlScalarNode node = YamlScalarNode.Create(value, Style.IsRaw());
 			Add(node);
 		}
 
 		public void Add(float value)
 		{
-			YamlScalarNode node = new YamlScalarNode(value, Style.IsRaw());
+			YamlScalarNode node = YamlScalarNode.Create(value, Style.IsRaw());
 			Add(node);
 		}
 
 		public void Add(double value)
 		{
-			YamlScalarNode node = new YamlScalarNode(value, Style.IsRaw());
+			YamlScalarNode node = YamlScalarNode.Create(value, Style.IsRaw());
 			Add(node);
 		}
 
 		public void Add(string value)
 		{
-			YamlScalarNode node = new YamlScalarNode(value);
+			YamlScalarNode node = YamlScalarNode.Create(value);
 			Add(node);
 		}
 

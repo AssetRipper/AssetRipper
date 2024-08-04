@@ -296,63 +296,63 @@ public class YamlWalker : AssetWalker
 			}
 			else if (typeof(T) == typeof(bool))
 			{
-				return new YamlScalarNode(Unsafe.As<T, bool>(ref value));
+				return YamlScalarNode.Create(Unsafe.As<T, bool>(ref value));
 			}
 			else if (typeof(T) == typeof(char))
 			{
-				return new YamlScalarNode(Unsafe.As<T, char>(ref value));
+				return YamlScalarNode.Create(Unsafe.As<T, char>(ref value));
 			}
 			else if (typeof(T) == typeof(sbyte))
 			{
-				return new YamlScalarNode(Unsafe.As<T, sbyte>(ref value));
+				return YamlScalarNode.Create(Unsafe.As<T, sbyte>(ref value));
 			}
 			else if (typeof(T) == typeof(byte))
 			{
-				return new YamlScalarNode(Unsafe.As<T, byte>(ref value));
+				return YamlScalarNode.Create(Unsafe.As<T, byte>(ref value));
 			}
 			else if (typeof(T) == typeof(short))
 			{
-				return new YamlScalarNode(Unsafe.As<T, short>(ref value));
+				return YamlScalarNode.Create(Unsafe.As<T, short>(ref value));
 			}
 			else if (typeof(T) == typeof(ushort))
 			{
-				return new YamlScalarNode(Unsafe.As<T, ushort>(ref value));
+				return YamlScalarNode.Create(Unsafe.As<T, ushort>(ref value));
 			}
 			else if (typeof(T) == typeof(int))
 			{
-				return new YamlScalarNode(Unsafe.As<T, int>(ref value));
+				return YamlScalarNode.Create(Unsafe.As<T, int>(ref value));
 			}
 			else if (typeof(T) == typeof(uint))
 			{
-				return new YamlScalarNode(Unsafe.As<T, uint>(ref value));
+				return YamlScalarNode.Create(Unsafe.As<T, uint>(ref value));
 			}
 			else if (typeof(T) == typeof(long))
 			{
-				return new YamlScalarNode(Unsafe.As<T, long>(ref value));
+				return YamlScalarNode.Create(Unsafe.As<T, long>(ref value));
 			}
 			else if (typeof(T) == typeof(ulong))
 			{
-				return new YamlScalarNode(Unsafe.As<T, ulong>(ref value));
+				return YamlScalarNode.Create(Unsafe.As<T, ulong>(ref value));
 			}
 			else if (typeof(T) == typeof(float))
 			{
-				return new YamlScalarNode(Unsafe.As<T, float>(ref value));
+				return YamlScalarNode.Create(Unsafe.As<T, float>(ref value));
 			}
 			else if (typeof(T) == typeof(double))
 			{
-				return new YamlScalarNode(Unsafe.As<T, double>(ref value));
+				return YamlScalarNode.Create(Unsafe.As<T, double>(ref value));
 			}
 			else if (typeof(T) == typeof(string))
 			{
-				return new YamlScalarNode(Unsafe.As<T, string>(ref value));
+				return YamlScalarNode.Create(Unsafe.As<T, string>(ref value));
 			}
 			else if (typeof(T) == typeof(Utf8String))
 			{
-				return new YamlScalarNode(Unsafe.As<T, Utf8String>(ref value));
+				return YamlScalarNode.Create(Unsafe.As<T, Utf8String>(ref value));
 			}
 			else
 			{
-				return new YamlScalarNode(value?.ToString() ?? "");// Fallback
+				return YamlScalarNode.Create(value?.ToString() ?? "");// Fallback
 			}
 		}
 	}

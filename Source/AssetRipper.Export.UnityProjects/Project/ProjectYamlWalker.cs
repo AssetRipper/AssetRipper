@@ -34,8 +34,8 @@ public sealed class ProjectYamlWalker(IExportContainer container) : YamlWalker
 				: sceneObjectIdentifier.TargetPrefab;
 			YamlMappingNode yamlMappingNode = new()
 			{
-				{ new YamlScalarNode("targetObject"), targetObject },
-				{ new YamlScalarNode("targetPrefab"), targetPrefab },
+				{ YamlScalarNode.Create("targetObject"), targetObject },
+				{ YamlScalarNode.Create("targetPrefab"), targetPrefab },
 			};
 			AddNode(yamlMappingNode);
 			return false;
