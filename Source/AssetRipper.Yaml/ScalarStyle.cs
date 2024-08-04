@@ -11,11 +11,6 @@ namespace AssetRipper.Yaml
 		Plain,
 
 		/// <summary>
-		/// 
-		/// </summary>
-		Hex,
-
-		/// <summary>
 		/// The single-quoted scalar style.
 		/// </summary>
 		SingleQuoted,

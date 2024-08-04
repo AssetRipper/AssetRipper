@@ -148,7 +148,15 @@ public class YamlWalker : AssetWalker
 
 	public override bool EnterList<T>(IReadOnlyList<T> list)
 	{
-		return EnterSequence(SequenceStyle.Block);
+		if (typeof(T) == typeof(byte))
+		{
+			VisitPrimitive(list);
+			return false;
+		}
+		else
+		{
+			return EnterSequence(SequenceStyle.Block);
+		}
 	}
 
 	public override void ExitList<T>(IReadOnlyList<T> list)
@@ -290,7 +298,12 @@ public class YamlWalker : AssetWalker
 
 		static YamlNode ToNode(T value)
 		{
-			if (typeof(T) == typeof(byte[]))
+			if (typeof(T) == typeof(IReadOnlyList<byte>))
+			{
+				// This is from EnterList.
+				return Unsafe.As<T, IReadOnlyList<byte>>(ref value).ExportYaml();
+			}
+			else if (typeof(T) == typeof(byte[]))
 			{
 				return Unsafe.As<T, byte[]>(ref value).ExportYaml();
 			}

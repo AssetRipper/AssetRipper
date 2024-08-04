@@ -11,61 +11,61 @@
 
 		public void Add(bool value)
 		{
-			YamlScalarNode node = YamlScalarNode.Create(value, Style.IsRaw());
+			YamlScalarNode node = YamlScalarNode.Create(value);
 			Add(node);
 		}
 
 		public void Add(byte value)
 		{
-			YamlScalarNode node = YamlScalarNode.Create(value, Style.IsRaw());
+			YamlScalarNode node = YamlScalarNode.Create(value);
 			Add(node);
 		}
 
 		public void Add(short value)
 		{
-			YamlScalarNode node = YamlScalarNode.Create(value, Style.IsRaw());
+			YamlScalarNode node = YamlScalarNode.Create(value);
 			Add(node);
 		}
 
 		public void Add(ushort value)
 		{
-			YamlScalarNode node = YamlScalarNode.Create(value, Style.IsRaw());
+			YamlScalarNode node = YamlScalarNode.Create(value);
 			Add(node);
 		}
 
 		public void Add(int value)
 		{
-			YamlScalarNode node = YamlScalarNode.Create(value, Style.IsRaw());
+			YamlScalarNode node = YamlScalarNode.Create(value);
 			Add(node);
 		}
 
 		public void Add(uint value)
 		{
-			YamlScalarNode node = YamlScalarNode.Create(value, Style.IsRaw());
+			YamlScalarNode node = YamlScalarNode.Create(value);
 			Add(node);
 		}
 
 		public void Add(long value)
 		{
-			YamlScalarNode node = YamlScalarNode.Create(value, Style.IsRaw());
+			YamlScalarNode node = YamlScalarNode.Create(value);
 			Add(node);
 		}
 
 		public void Add(ulong value)
 		{
-			YamlScalarNode node = YamlScalarNode.Create(value, Style.IsRaw());
+			YamlScalarNode node = YamlScalarNode.Create(value);
 			Add(node);
 		}
 
 		public void Add(float value)
 		{
-			YamlScalarNode node = YamlScalarNode.Create(value, Style.IsRaw());
+			YamlScalarNode node = YamlScalarNode.Create(value);
 			Add(node);
 		}
 
 		public void Add(double value)
 		{
-			YamlScalarNode node = YamlScalarNode.Create(value, Style.IsRaw());
+			YamlScalarNode node = YamlScalarNode.Create(value);
 			Add(node);
 		}
 
@@ -117,14 +117,6 @@
 				case SequenceStyle.Flow:
 					emitter.Write('[');
 					break;
-
-				case SequenceStyle.Raw:
-					if (Children.Count == 0)
-					{
-						emitter.Write('[');
-					}
-
-					break;
 			}
 		}
 
@@ -152,15 +144,6 @@
 
 				case SequenceStyle.Flow:
 					emitter.WriteClose(']');
-					break;
-
-				case SequenceStyle.Raw:
-					if (Children.Count == 0)
-					{
-						emitter.Write(']');
-					}
-
-					emitter.WriteLine();
 					break;
 			}
 		}
