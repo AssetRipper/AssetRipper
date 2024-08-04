@@ -223,9 +223,12 @@ namespace AssetRipper.Yaml
 
 		private void WriteIndent()
 		{
-			for (int i = 0; i < m_indent * 2; i++)
+			if (m_indent > 0)
 			{
-				m_stream.Write(' ');
+				ArgumentOutOfRangeException.ThrowIfGreaterThan(m_indent, 1000);
+				Span<char> buffer = stackalloc char[m_indent * 2];
+				buffer.Fill(' ');
+				m_stream.Write(buffer);
 			}
 		}
 
