@@ -10,89 +10,67 @@ namespace AssetRipper.Yaml
 	{
 		public YamlScalarNode() { }
 
-		public YamlScalarNode(bool value) : this(value, false) { }
-
-		public YamlScalarNode(bool value, bool isHex)
+		public YamlScalarNode(bool value, bool isHex = false)
 		{
 			SetValue(value);
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		public YamlScalarNode(byte value) : this(value, false) { }
-
-		public YamlScalarNode(byte value, bool isHex)
+		public YamlScalarNode(byte value, bool isHex = false)
 		{
 			SetValue(value);
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		public YamlScalarNode(sbyte value) : this(value, false) { }
-
-		public YamlScalarNode(sbyte value, bool isHex)
+		public YamlScalarNode(sbyte value, bool isHex = false)
 		{
 			SetValue(value);
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		public YamlScalarNode(short value) : this(value, false) { }
-
-		public YamlScalarNode(short value, bool isHex)
+		public YamlScalarNode(short value, bool isHex = false)
 		{
 			SetValue(value);
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		public YamlScalarNode(ushort value) : this(value, false) { }
-
-		public YamlScalarNode(ushort value, bool isHex)
+		public YamlScalarNode(ushort value, bool isHex = false)
 		{
 			SetValue(value);
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		public YamlScalarNode(int value) : this(value, false) { }
-
-		public YamlScalarNode(int value, bool isHex)
+		public YamlScalarNode(int value, bool isHex = false)
 		{
 			SetValue(value);
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		public YamlScalarNode(uint value) : this(value, false) { }
-
-		public YamlScalarNode(uint value, bool isHex)
+		public YamlScalarNode(uint value, bool isHex = false)
 		{
 			SetValue(value);
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		public YamlScalarNode(long value) : this(value, false) { }
-
-		public YamlScalarNode(long value, bool isHex)
+		public YamlScalarNode(long value, bool isHex = false)
 		{
 			SetValue(value);
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		public YamlScalarNode(ulong value) : this(value, false) { }
-
-		public YamlScalarNode(ulong value, bool isHex)
+		public YamlScalarNode(ulong value, bool isHex = false)
 		{
 			SetValue(value);
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		public YamlScalarNode(float value) : this(value, false) { }
-
-		public YamlScalarNode(float value, bool isHex)
+		public YamlScalarNode(float value, bool isHex = false)
 		{
 			SetValue(value);
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
 		}
 
-		public YamlScalarNode(double value) : this(value, false) { }
-
-		public YamlScalarNode(double value, bool isHex)
+		public YamlScalarNode(double value, bool isHex = false)
 		{
 			SetValue(value);
 			Style = isHex ? ScalarStyle.Hex : ScalarStyle.Plain;
@@ -423,7 +401,7 @@ namespace AssetRipper.Yaml
 
 		public override string ToString() => Value;
 
-		[GeneratedRegex("(^\\s)|(^-\\s)|(^-$)|(^[\\:\\[\\]'\"*&!@#%{}?<>,\\`])|([:@]\\s)|([\\n\\r])|([:\\s]$)", RegexOptions.Compiled)]
+		[GeneratedRegex("""(^\s)|(^-\s)|(^-$)|(^[\:\[\]'"*&!@#%{}?<>,\`])|([:@]\s)|([\n\r])|([:\s]$)""", RegexOptions.Compiled)]
 		private static partial Regex IllegalStringsRegex();
 	}
 }
