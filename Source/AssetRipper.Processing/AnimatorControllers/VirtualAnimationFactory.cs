@@ -512,7 +512,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 						}
 					}
 
-					if (StateContext.StateCount == 0)
+					if (!StateContext.HasStates())
 					{
 						// No States to help resolve StateMachine Names
 						// still can give Name to Root StateMachine using Layer
@@ -526,7 +526,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 					// StateMachines don't have FullPaths.
 					// can set Names, Child States (with their Transitions),
 					// Default State and Child StateMachines now
-					if (StateContext.StateCount == 0)
+					if (!StateContext.HasStates())
 					{
 						// empty Main StateMachine. its better to resolve Name now
 						IAnimatorStateMachine stateMachine = CreateStateMachine();
@@ -823,7 +823,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 
 			private void AssignChildStates()
 			{
-				if (!HasSelectorStateConstant() || StateContext.StateCount == 0)
+				if (!HasSelectorStateConstant() || !StateContext.HasStates())
 				{
 					return;
 				}
