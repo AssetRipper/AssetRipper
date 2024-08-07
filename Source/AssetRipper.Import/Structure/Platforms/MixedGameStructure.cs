@@ -1,7 +1,8 @@
-﻿using AssetRipper.Import.Logging;
+using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.IO.Files.Streams.MultiFile;
+using AssetRipper.IO.Files.Utils;
 
 namespace AssetRipper.Import.Structure.Platforms
 {
@@ -10,7 +11,7 @@ namespace AssetRipper.Import.Structure.Platforms
 		public MixedGameStructure(IEnumerable<string> paths)
 		{
 			HashSet<string> dataPaths = new HashSet<string>();
-			foreach (string path in SelectUniquePaths(paths))
+			foreach (string path in SelectUniquePaths(paths.Select(DirectoryUtils.FixInvalidPathCharacters)))
 			{
 				if (MultiFileStream.Exists(path))
 				{
