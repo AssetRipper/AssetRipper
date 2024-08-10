@@ -39,14 +39,14 @@ public readonly record struct BundlePath : IPath<BundlePath>
 	/// If <see cref="IsRoot"/>, then this will return <see langword="default"/>.
 	/// </remarks>
 	[JsonIgnore]
-	public BundlePath Parent => Depth > 1 ? new BundlePath(Path.Span[..^-1]) : default;
+	public BundlePath Parent => Depth > 1 ? new BundlePath(Path.Span[..^1]) : default;
 
 	public BundlePath GetChild(int index)
 	{
 		int[] path;
 		if (_path is null)
 		{
-			path = new int[1] { index };
+			path = [index];
 		}
 		else
 		{
