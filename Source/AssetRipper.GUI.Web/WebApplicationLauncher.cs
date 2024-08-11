@@ -194,6 +194,7 @@ public static class WebApplicationLauncher
 		//Dialogs
 		app.MapGet("/Dialogs/SaveFile", Dialogs.SaveFile.HandleGetRequest);
 		app.MapGet("/Dialogs/OpenFolder", Dialogs.OpenFolder.HandleGetRequest);
+		app.MapGet("/Dialogs/OpenFolders", Dialogs.OpenFolders.HandleGetRequest);
 		app.MapGet("/Dialogs/OpenFile", Dialogs.OpenFile.HandleGetRequest);
 		app.MapGet("/Dialogs/OpenFiles", Dialogs.OpenFiles.HandleGetRequest);
 

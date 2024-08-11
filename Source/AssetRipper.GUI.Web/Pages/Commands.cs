@@ -42,23 +42,23 @@ public static class Commands
 		{
 			IFormCollection form = await request.ReadFormAsync();
 
-			string? path;
+			string[]? paths;
 			if (form.TryGetValue("Path", out StringValues values))
 			{
-				path = values;
+				paths = values;
 			}
 			else if (Dialogs.Supported)
 			{
-				Dialogs.OpenFolder.GetUserInput(out path);
+				Dialogs.OpenFolders.GetUserInput(out paths);
 			}
 			else
 			{
 				return CommandsPath;
 			}
 
-			if (!string.IsNullOrEmpty(path))
+			if (paths is { Length: > 0 })
 			{
-				GameFileLoader.LoadAndProcess([path]);
+				GameFileLoader.LoadAndProcess(paths);
 			}
 			return null;
 		}
