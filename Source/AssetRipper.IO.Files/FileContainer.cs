@@ -33,6 +33,9 @@ namespace AssetRipper.IO.Files
 				case FileContainer fileList:
 					AddFileContainer(fileList);
 					return;
+				case FailedFile failedFile:
+					AddFailedFile(failedFile);
+					return;
 				default:
 					throw new NotSupportedException(file.GetType().ToString());
 			}
@@ -40,20 +43,53 @@ namespace AssetRipper.IO.Files
 
 		public void AddSerializedFile(SerializedFile file)
 		{
-			m_serializedFiles.Add(file);
+			if (m_serializedFiles is null)
+			{
+				m_serializedFiles = [file];
+			}
+			else
+			{
+				m_serializedFiles.Add(file);
+			}
 			OnSerializedFileAdded(file);
 		}
 
 		public void AddFileContainer(FileContainer container)
 		{
-			m_fileLists.Add(container);
+			if (m_fileLists is null)
+			{
+				m_fileLists = [container];
+			}
+			else
+			{
+				m_fileLists.Add(container);
+			}
 			OnFileContainerAdded(container);
 		}
 
 		public void AddResourceFile(ResourceFile resource)
 		{
-			m_resourceFiles.Add(resource);
+			if (m_resourceFiles is null)
+			{
+				m_resourceFiles = [resource];
+			}
+			else
+			{
+				m_resourceFiles.Add(resource);
+			}
 			OnResourceFileAdded(resource);
+		}
+
+		public void AddFailedFile(FailedFile file)
+		{
+			if (m_failedFiles is null)
+			{
+				m_failedFiles = [file];
+			}
+			else
+			{
+				m_failedFiles.Add(file);
+			}
 		}
 
 		protected virtual void OnSerializedFileAdded(SerializedFile file) { }
@@ -64,7 +100,7 @@ namespace AssetRipper.IO.Files
 
 		public override void ReadContents()
 		{
-			if (m_resourceFiles.Count > 0)
+			if (m_resourceFiles is { Count: > 0 })
 			{
 				ResourceFile[] resourceFiles = m_resourceFiles.ToArray();
 				m_resourceFiles.Clear();
@@ -84,9 +120,10 @@ namespace AssetRipper.IO.Files
 			}
 		}
 
-		public IReadOnlyList<SerializedFile> SerializedFiles => m_serializedFiles;
-		public IReadOnlyList<FileContainer> FileLists => m_fileLists;
-		public IReadOnlyList<ResourceFile> ResourceFiles => m_resourceFiles;
+		public IReadOnlyList<SerializedFile> SerializedFiles => m_serializedFiles ?? [];
+		public IReadOnlyList<FileContainer> FileLists => m_fileLists ?? [];
+		public IReadOnlyList<ResourceFile> ResourceFiles => m_resourceFiles ?? [];
+		public IReadOnlyList<FailedFile> FailedFiles => m_failedFiles ?? [];
 
 		public IEnumerable<FileBase> AllFiles
 		{
@@ -104,11 +141,16 @@ namespace AssetRipper.IO.Files
 				{
 					yield return container;
 				}
+				foreach (FailedFile file in FailedFiles)
+				{
+					yield return file;
+				}
 			}
 		}
 
-		private readonly List<SerializedFile> m_serializedFiles = new List<SerializedFile>(0);
-		private readonly List<FileContainer> m_fileLists = new List<FileContainer>(0);
-		private readonly List<ResourceFile> m_resourceFiles = new List<ResourceFile>(0);
+		private List<SerializedFile>? m_serializedFiles;
+		private List<FileContainer>? m_fileLists;
+		private List<ResourceFile>? m_resourceFiles;
+		private List<FailedFile>? m_failedFiles;
 	}
 }

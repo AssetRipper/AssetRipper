@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.IO;
+using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.ResourceFiles;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
@@ -16,21 +17,31 @@ public abstract class Bundle : IDisposable
 	/// The parent <see cref="Bundle"/> of this Bundle.
 	/// </summary>
 	public Bundle? Parent { get; private set; }
+
 	/// <summary>
 	/// The list of <see cref="ResourceFile"/>s in this Bundle.
 	/// </summary>
 	public IReadOnlyList<ResourceFile> Resources => resources;
-	private readonly List<ResourceFile> resources = new();
+	private readonly List<ResourceFile> resources = [];
+
 	/// <summary>
 	/// The list of <see cref="AssetCollection"/>s in this Bundle.
 	/// </summary>
 	public IReadOnlyList<AssetCollection> Collections => collections;
-	private readonly List<AssetCollection> collections = new();
+	private readonly List<AssetCollection> collections = [];
+
 	/// <summary>
 	/// The list of child <see cref="Bundle"/>s in this Bundle.
 	/// </summary>
 	public IReadOnlyList<Bundle> Bundles => bundles;
-	private readonly List<Bundle> bundles = new();
+	private readonly List<Bundle> bundles = [];
+
+	/// <summary>
+	/// The list of <see cref="FailedFile"/>s in this Bundle.
+	/// </summary>
+	public IReadOnlyList<FailedFile> FailedFiles => failedFiles;
+	private readonly List<FailedFile> failedFiles = [];
+
 	private bool disposedValue;
 
 	/// <summary>
@@ -279,6 +290,11 @@ public abstract class Bundle : IDisposable
 		{
 			throw new ArgumentException($"{nameof(bundle)} already has a parent.", nameof(bundle));
 		}
+	}
+
+	public void AddFailed(FailedFile file)
+	{
+		failedFiles.Add(file);
 	}
 
 	/// <summary>

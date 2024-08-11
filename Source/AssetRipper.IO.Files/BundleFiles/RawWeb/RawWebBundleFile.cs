@@ -1,7 +1,6 @@
 using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files.BundleFiles.RawWeb.Raw;
 using AssetRipper.IO.Files.BundleFiles.RawWeb.Web;
-using AssetRipper.IO.Files.Extensions;
 using AssetRipper.IO.Files.ResourceFiles;
 using AssetRipper.IO.Files.Streams.Smart;
 

@@ -32,6 +32,10 @@ public sealed class SerializedBundle : Bundle
 			SerializedBundle childBundle = FromFileContainer(childContainer, factory, defaultVersion);
 			bundle.AddBundle(childBundle);
 		}
+		foreach (FailedFile failedFile in container.FailedFiles)
+		{
+			bundle.AddFailed(failedFile);
+		}
 		return bundle;
 	}
 

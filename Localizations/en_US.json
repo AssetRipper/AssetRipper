@@ -87,6 +87,7 @@
     "export_preparing": "Preparing for Export...\nThis might take a minute.",
     "export_primary_content": "Export Primary Content",
     "export_unity_project": "Export Unity Project",
+    "failed_files": "Failed Files",
     "format": "Format",
     "frequency": "Frequency",
     "game_object": "GameObject",

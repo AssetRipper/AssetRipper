@@ -49,6 +49,9 @@ partial class GameBundle
 				case ResourceFile resourceFile:
 					AddResource(resourceFile);
 					break;
+				case FailedFile failedFile:
+					AddFailed(failedFile);
+					break;
 			}
 		}
 	}
@@ -67,13 +70,26 @@ partial class GameBundle
 		HashSet<string> serializedFileNames = new();//Includes missing dependencies
 		foreach (string path in paths)
 		{
-			FileBase? file = SchemeReader.LoadFile(path);
-			file?.ReadContentsRecursively();
+			FileBase? file;
+			try
+			{
+				file = SchemeReader.LoadFile(path);
+				file.ReadContentsRecursively();
+			}
+			catch (Exception ex)
+			{
+				file = new FailedFile()
+				{
+					Name = Path.GetFileName(path),
+					FilePath = path,
+					StackTrace = ex.ToString(),
+				};
+			}
 			while (file is CompressedFile compressedFile)
 			{
 				file = compressedFile.UncompressedFile;
 			}
-			if (file is ResourceFile resourceFile)
+			if (file is ResourceFile or FailedFile)
 			{
 				files.Add(file);
 			}

@@ -450,6 +450,11 @@ partial class Localization
 	public static string ExportUnityProject => Get("export_unity_project");
 	
 	/// <summary>
+	/// Failed Files
+	/// </summary>
+	public static string FailedFiles => Get("failed_files");
+	
+	/// <summary>
 	/// Format
 	/// </summary>
 	public static string Format => Get("format");

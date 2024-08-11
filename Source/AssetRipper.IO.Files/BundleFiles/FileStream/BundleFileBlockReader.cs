@@ -28,10 +28,7 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 
 		public SmartStream ReadEntry(FileStreamNode entry)
 		{
-			if (m_isDisposed)
-			{
-				throw new ObjectDisposedException(nameof(BundleFileBlockReader));
-			}
+			ObjectDisposedException.ThrowIf(m_isDisposed, typeof(BundleFileBlockReader));
 
 			// find block offsets
 			int blockIndex;

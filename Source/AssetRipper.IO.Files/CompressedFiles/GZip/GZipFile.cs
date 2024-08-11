@@ -11,13 +11,25 @@ namespace AssetRipper.IO.Files.CompressedFiles.GZip
 
 		public override void Read(SmartStream stream)
 		{
-			using SmartStream memoryStream = SmartStream.CreateMemory();
-			using (GZipStream gzipStream = new GZipStream(stream, CompressionMode.Decompress, true))
+			try
 			{
-				gzipStream.CopyTo(memoryStream);
+				using SmartStream memoryStream = SmartStream.CreateMemory();
+				using (GZipStream gzipStream = new GZipStream(stream, CompressionMode.Decompress, true))
+				{
+					gzipStream.CopyTo(memoryStream);
+				}
+				memoryStream.Position = 0;
+				UncompressedFile = new ResourceFile(memoryStream, FilePath, Name);
 			}
-			memoryStream.Position = 0;
-			UncompressedFile = new ResourceFile(memoryStream, FilePath, Name);
+			catch (Exception ex)
+			{
+				UncompressedFile = new FailedFile()
+				{
+					Name = Name,
+					FilePath = FilePath,
+					StackTrace = ex.ToString(),
+				};
+			}
 		}
 
 		public override void Write(Stream stream)

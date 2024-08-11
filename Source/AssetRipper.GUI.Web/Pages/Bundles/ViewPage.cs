@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
 using AssetRipper.GUI.Web.Paths;
+using AssetRipper.IO.Files;
 
 namespace AssetRipper.GUI.Web.Pages.Bundles;
 
@@ -66,6 +67,19 @@ public sealed class ViewPage : DefaultPage
 					{
 						PathLinking.WriteLink(writer, Path.GetResource(i), Bundle.Resources[i].Name);
 					}
+				}
+			}
+		}
+
+		if (Bundle.FailedFiles.Count > 0)
+		{
+			new H2(writer).Close(Localization.FailedFiles);
+			using (new Ul(writer).End())
+			{
+				foreach (FailedFile failedFile in Bundle.FailedFiles)
+				{
+					// Todo: page for failed files
+					new Li(writer).Close(failedFile.Name);
 				}
 			}
 		}
