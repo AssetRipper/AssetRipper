@@ -50,17 +50,11 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 		private static ShaderSubProgramEntry[] ReadAssetArray(AssetReader reader)
 		{
 			int count = reader.ReadInt32();
-			if (count < 0)
-			{
-				throw new ArgumentOutOfRangeException(nameof(count), $"Cannot be negative: {count}");
-			}
 
-			ShaderSubProgramEntry[] array = count == 0 ? Array.Empty<ShaderSubProgramEntry>() : new ShaderSubProgramEntry[count];
+			ShaderSubProgramEntry[] array = CreateAndInitializeArray<ShaderSubProgramEntry>(count);
 			for (int i = 0; i < count; i++)
 			{
-				ShaderSubProgramEntry instance = new();
-				instance.Read(reader);
-				array[i] = instance;
+				array[i].Read(reader);
 			}
 			if (reader.IsAlignArray)
 			{
@@ -78,14 +72,11 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 		/// <exception cref="ArgumentOutOfRangeException">Length less than zero</exception>
 		private static T[] CreateAndInitializeArray<T>(int length) where T : new()
 		{
-			if (length < 0)
-			{
-				throw new ArgumentOutOfRangeException(nameof(length));
-			}
+			ArgumentOutOfRangeException.ThrowIfNegative(length);
 
 			if (length == 0)
 			{
-				return Array.Empty<T>();
+				return [];
 			}
 
 			T[] array = new T[length];
@@ -147,7 +138,7 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 		public ShaderSubProgramEntry[] Entries { get; set; } = Array.Empty<ShaderSubProgramEntry>();
 
 		private AssetCollection m_shaderCollection;
-		private byte[] m_decompressedBlob = Array.Empty<byte>();
+		private byte[] m_decompressedBlob = [];
 		private readonly Dictionary<(uint, uint), ShaderSubProgram> m_cachedSubPrograms = new Dictionary<(uint, uint), ShaderSubProgram>();
 
 		public const string GpuProgramIndexName = "GpuProgramIndex";
