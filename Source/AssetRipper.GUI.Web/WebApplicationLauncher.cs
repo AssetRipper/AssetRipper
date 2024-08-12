@@ -31,6 +31,7 @@ public static class WebApplicationLauncher
 		public const bool LaunchBrowser = true;
 	}
 
+	// Only 2 options
 	public static void Launch(string[] args)
 	{
 		RootCommand rootCommand = new() { Description = "AssetRipper" };

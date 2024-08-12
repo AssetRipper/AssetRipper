@@ -5,6 +5,8 @@ namespace AssetRipper.Import.Structure.Platforms
 {
 	internal sealed class PCGameStructure : PlatformGameStructure
 	{
+		// todo create a derived or similar class special made for a special game
+
 		public PCGameStructure(string rootPath)
 		{
 			if (string.IsNullOrEmpty(rootPath))

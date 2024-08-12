@@ -9,10 +9,23 @@ namespace AssetRipper.Import.Structure.Platforms
 			platformStructure = null;
 			mixedStructure = null;
 
+			Logger.Info("Checking the current platform");
+
+			// check for 7 days to die game first
+
+			if (CheckGame7(paths, out SevenGameStructure? sevenGameStructure)) // we land here for 7 days to die game
+			{
+				Logger.Info("We found our game folder");
+				platformStructure = sevenGameStructure;
+			}
+
+			// don't want to continue here
+			/*
 			if (CheckPC(paths, out PCGameStructure? pcGameStructure))
 			{
 				platformStructure = pcGameStructure;
 			}
+
 			else if (CheckLinux(paths, out LinuxGameStructure? linuxGameStructure))
 			{
 				platformStructure = linuxGameStructure;
@@ -54,8 +67,27 @@ namespace AssetRipper.Import.Structure.Platforms
 			{
 				mixedStructure = mixedGameStructure;
 			}
+			*/
 
 			return platformStructure != null || mixedStructure != null;
+		}
+
+		// Checking for the presence of 7 Days to Die specifically
+		private static bool CheckGame7(List<string> paths, [NotNullWhen(true)] out SevenGameStructure? gameStructure)
+		{
+			foreach (string path in paths)
+			{
+				if (SevenGameStructure.IsGame7Structure(path))
+				{
+					gameStructure = new SevenGameStructure(path);
+					paths.Remove(path);
+					Logger.Info(LogCategory.Import, $"7DTD game structure has been found at '{path}'");
+					return true;
+				}
+			}
+
+			gameStructure = null;
+			return false;
 		}
 
 
@@ -71,6 +103,7 @@ namespace AssetRipper.Import.Structure.Platforms
 					return true;
 				}
 			}
+
 			gameStructure = null;
 			return false;
 		}

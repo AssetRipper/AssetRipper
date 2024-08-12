@@ -18,11 +18,16 @@ namespace AssetRipper.Import.Structure
 
 		private GameStructure(List<string> paths, CoreConfiguration configuration)
 		{
+			// todo add special folders somewhere here
+
 			Logger.SendStatusChange("loading_step_detect_platform");
 			PlatformChecker.CheckPlatform(paths, out PlatformGameStructure? platformStructure, out MixedGameStructure? mixedStructure);
+
 			PlatformStructure = platformStructure;
 			PlatformStructure?.CollectFiles(configuration.ImportSettings.IgnoreStreamingAssets);
+
 			MixedStructure = mixedStructure;
+
 			//MixedStructure?.CollectFiles(configuration.IgnoreStreamingAssets);
 			//The PlatformGameStructure constructor adds all the paths to the Assemblies and Files dictionaries
 			//No bundles or assemblies have been loaded yet
@@ -45,9 +50,11 @@ namespace AssetRipper.Import.Structure
 
 		public string? Name => PlatformStructure?.Name ?? MixedStructure?.Name;
 
+		// only one path incoming from caller
 		public static GameStructure Load(IEnumerable<string> paths, CoreConfiguration configuration)
 		{
 			List<string> toProcess = ZipExtractor.Process(paths);
+
 			if (toProcess.Count == 0)
 			{
 				throw new ArgumentException("Game files not found", nameof(paths));

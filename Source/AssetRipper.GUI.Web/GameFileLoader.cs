@@ -43,8 +43,10 @@ public static class GameFileLoader
 
 	public static void LoadAndProcess(IReadOnlyList<string> paths)
 	{
-		Reset();
+		Reset(); // clear all previously loaded files
+
 		Settings.LogConfigurationValues();
+
 		GameData = ExportHandler.LoadAndProcess(paths);
 	}
 
