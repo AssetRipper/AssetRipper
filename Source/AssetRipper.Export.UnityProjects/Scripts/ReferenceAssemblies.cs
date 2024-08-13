@@ -33,10 +33,17 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 			"Assembly-UnityScript-firstpass"
 		};
 
+		// Must define Hybrid
+		private static readonly HashSet<string> predefinedAssemblies7Days = new()
+		{
+			"Assembly-CSharp.dll", // we only want the main dll decompiled
+			"Assembly-CSharp",
+		};
+
 		public static bool IsPredefinedAssembly(string assemblyName)
 		{
 			ArgumentNullException.ThrowIfNull(assemblyName);
-			return predefinedAssemblies.Contains(assemblyName);
+			return predefinedAssemblies7Days.Contains(assemblyName);
 		}
 
 		public static bool IsReferenceAssembly(string assemblyName)

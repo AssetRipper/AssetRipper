@@ -7,7 +7,7 @@ namespace AssetRipper.Import.Structure.Platforms
 	{
 		// only decompile Assembly-CSharp.dll
 
-		#region Fields
+		#region Constant Fields
 
 		public const string GameName = "7DaysToDie.exe"; // the game we want to rip, awesome game <3
 		public const string ExeExtension = ".exe";
@@ -16,13 +16,16 @@ namespace AssetRipper.Import.Structure.Platforms
 		public const string ModsDir = "Mods";
 		public const string AddressablesDir = "Addressables";
 		public const string BundlesDir = "Bundles";
-		public const string PluginsDir = "Plugins";
+		public const string MainBundleName = "data.unity3d";
+		public readonly string PluginsDir = Path.Combine("Plugins", "x86_64");
 
-		#endregion Fields
+		#endregion Constant Fields
 
 		#region Properties
 
 		public string? ConfigDataPath { get; protected set; }
+		public string? PluginsPath { get; protected set; }
+		public Dictionary<string, string> PluginAssemblies { get; } = new Dictionary<string, string>();
 
 		#endregion Properties
 
@@ -38,21 +41,22 @@ namespace AssetRipper.Import.Structure.Platforms
 		{
 			if (string.IsNullOrEmpty(rootPath))
 			{
-				throw new ArgumentNullException(nameof(rootPath));
+				throw new ArgumentNullException("Failed to provide a path to the game directory.");
 			}
 
-			if (IsGame7Structure(rootPath))
+			// check root path for filename or directory
+
+			if (IsGame7Structure(rootPath)) // check the current directory
 			{
-				Logger.Info("yay");
+				Logger.Info("Found proper 7 Days To Die directory.");
 				m_root = new DirectoryInfo(rootPath);
 			}
-			else if (IsExecutableFile(rootPath))
+			// might be redundant
+			else if (IsExecutableFile(rootPath)) // check if the executable file was supplied instead of the entire folder
 			{
 				Logger.Info(LogCategory.Import, "7 Days game executable found. Setting root to parent directory");
-				m_root = new FileInfo(rootPath).Directory ?? throw new Exception("File has no directory");
+				m_root = new FileInfo(Path.GetDirectoryName(rootPath)).Directory ?? throw new Exception("File has no directory");
 			}
-
-			// if is directory where main executable is check here
 
 			// if not found throw
 
@@ -68,9 +72,9 @@ namespace AssetRipper.Import.Structure.Platforms
 			ResourcesPath = Path.Combine(GameDataPath, ResourcesName);
 			ManagedPath = Path.Combine(GameDataPath, ManagedName);
 			UnityPlayerPath = Path.Combine(RootPath, DefaultUnityPlayerName);
-			Version = null;
-
+			Version = GetUnityVersionFromBundleFile(Path.Combine(GameDataPath, MainBundleName)); // currently 2022.3.29f1 for version 1.0 b333
 			ConfigDataPath = GetConfigDataPath();
+			PluginsPath = Path.Combine(GameDataPath, PluginsDir);
 
 			if (HasMonoAssemblies(ManagedPath))
 			{
@@ -78,7 +82,8 @@ namespace AssetRipper.Import.Structure.Platforms
 			}
 			else
 			{
-				Backend = ScriptingBackend.Unknown;
+				//Backend = ScriptingBackend.Unknown;
+				throw new Exception("Failed to locate the Managed directory containing all the assemblies.");
 			}
 
 			DataPaths = new string[] { dataPath };
@@ -97,7 +102,7 @@ namespace AssetRipper.Import.Structure.Platforms
 				throw new Exception("Failed to find the Config Data folder.");
 			}
 
-			return "";
+			return configDataDir;
 		}
 
 		public override void CollectFiles(bool skipStreamingAssets)
@@ -108,14 +113,14 @@ namespace AssetRipper.Import.Structure.Platforms
 				CollectGameFiles(dataDirectory, Files);
 			}
 
-			var addressablesDir = new DirectoryInfo(Path.Combine(RootPath, "Data", "Addressables", "Standalone"));
+			var addressablesDir = new DirectoryInfo(Path.Combine(RootPath, ConfigDataName, AddressablesDir, "Standalone"));
 			CollectAddressablesBundles(addressablesDir, Files);
 
-			var bundlesDir = new DirectoryInfo(Path.Combine(RootPath, "Data", "Bundles", "Entities"));
+			var bundlesDir = new DirectoryInfo(Path.Combine(RootPath, ConfigDataName, BundlesDir, "Entities"));
 			CollectMiscBundles(bundlesDir, Files);
 
-			//var pluginsDir = new DirectoryInfo(Path.Combine(RootPath, "7DaysToDie_Data", "Plugins", "x86_64"));
-			//CollectPlugins(pluginsDir, Files);
+			var pluginsDir = new DirectoryInfo(PluginsPath);
+			CollectPlugins(pluginsDir, Files);
 
 			CollectMainAssemblies();
 
@@ -157,13 +162,18 @@ namespace AssetRipper.Import.Structure.Platforms
 
 		protected void CollectPlugins(DirectoryInfo root, IDictionary<string, string> files)
 		{
-			foreach (FileInfo file in root.EnumerateFiles())
+			foreach (FileInfo file in root.EnumerateFiles("*.dll", SearchOption.AllDirectories))
 			{
 				//if (file.Extension == AssetBundleExtension || file.Extension == AlternateBundleExtension)
-				if (IsMiscBundle(file.FullName))
+				if (IsDLL(file.FullName))
 				{
 					string name = Path.GetFileNameWithoutExtension(file.Name).ToLowerInvariant();
-					AddAssetBundle(files, name, file.FullName);
+
+					// todo finish fix
+
+					// add plugin assembly to dictionary
+
+					//AddAssetBundle(files, name, file.FullName);
 				}
 			}
 		}
@@ -175,9 +185,11 @@ namespace AssetRipper.Import.Structure.Platforms
 
 		public static bool IsAddressableBundle(string path)
 		{
-			Logger.Info($"IsAddressableBundle: {path}");
+			//Logger.Info($"IsAddressableBundle: {path}");
+			if (path.ToLower().Contains("bundle"))
+				return true;
 
-			return true;
+			return false;
 		}
 
 		public static bool IsMiscBundle(string path)
@@ -192,50 +204,59 @@ namespace AssetRipper.Import.Structure.Platforms
 
 		public static bool IsDLL(string path)
 		{
-			Logger.Info($"IsDLL: {path}");
+			//Logger.Info($"IsDLL: {path}");
+			if (path.ToLower().Contains("dll"))
+				return true;
 
-			return true;
+			return false;
 		}
 
 		public static bool IsGame7Structure(string path)
 		{
-			DirectoryInfo dirInfo;
+			// check if path is folder or file name
+			var directoryX = path;
 
-			if (IsExecutableFile(path)) // first check if the executable is in this director/folder
+			if (!Directory.Exists(directoryX))
 			{
-				dirInfo = new FileInfo(path).Directory ?? throw new Exception("File has no directory");
+				// directory doesn't exist, check if this is a file
+				if (!File.Exists(path))
+				{
+					Logger.Error($"Path supplied is not a valid directory or File: {path}");
+					return false;
+				}
+
+				Logger.Warning($"The supplied path is a file: {path}");
+
+				// get directory of this file
+				directoryX = Path.GetDirectoryName(path);
+
+				if (!Directory.Exists(directoryX))
+				{
+					Logger.Error($"Path supplied is not a valid directory: {path}");
+					return false;
+				}
 			}
 
 			// check for unity data dir 7DaysToDie_Data
-
-
-			// check for config data dir
-
-			//     addressables - 15 bundles, *.bundle
-
-			//     bundles - 2, no extension - trees, entities? empty??
-
-			return true;
-
-			/*
-			else if (IsUnityDataDirectory(path))
+			var unityDataDir = Path.Combine(directoryX, GameUnityDataDir);
+			if (!Directory.Exists(unityDataDir))
 			{
-				return true;
-			}
-			else
-			{
-				dinfo = new DirectoryInfo(path);
-			}
-
-			if (!dinfo.Exists)
-			{
+				Logger.Error($"Path supplied is not a valid game directory: {path}");
 				return false;
 			}
-			else
-			{
-				return IsRootGameDirectory(dinfo);
-			}*/
 
+			// check for Config data dir
+			var configDataDir = Path.Combine(directoryX, ConfigDataName);
+			if (!Directory.Exists(configDataDir))
+			{
+				Logger.Error($"Path supplied is not a valid game directory: {path}");
+				return false;
+			}
+
+			//     Addressables - 15 bundles, *.bundle
+			//     Bundles - 2, no extension - trees, entities is empty??
+
+			return true;
 		}
 
 		private static bool IsUnityDataDirectory(string folderPath)
@@ -268,7 +289,7 @@ namespace AssetRipper.Import.Structure.Platforms
 		private static bool IsExecutableFile(string filePath)
 		{
 			// looking for 7DaysToDie.exe
-			return !string.IsNullOrEmpty(filePath) && File.Exists(Path.Combine(filePath, GameName));
+			return !string.IsNullOrEmpty(filePath) && (File.Exists(filePath) || File.Exists(Path.Combine(filePath, GameName)));
 		}
 
 		private static bool IsRootGameDirectory(DirectoryInfo rootDirectory)
