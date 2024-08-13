@@ -82,6 +82,9 @@ namespace AssetRipper.Export.Modules.Textures
 				return false;
 			}
 
+			// error occurs here
+			// todo fix for texture 2d arrays
+
 			if (!TryConvertToBitmap(
 				texture.FormatE,
 				texture.Width,

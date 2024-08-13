@@ -53,6 +53,9 @@ public sealed class TextureArrayAssetExporter : BinaryAssetExporter
 						WarnResourceFileNotFound(texture2DArray.Name, texture2DArray.StreamData);
 						return false;
 					}
+
+					// todo fix texture 2d arrays 
+
 					success = TextureConverter.TryConvertToBitmap(texture2DArray, out bitmap);
 				}
 				break;

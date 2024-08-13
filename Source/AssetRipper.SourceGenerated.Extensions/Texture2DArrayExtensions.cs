@@ -22,6 +22,8 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static bool CheckAssetIntegrity(this ITexture2DArray texture)
 		{
+			// todo fix - tfp texture arrays are Length 0 - why?
+
 			if (texture.ImageData.Length > 0)
 			{
 				return true;

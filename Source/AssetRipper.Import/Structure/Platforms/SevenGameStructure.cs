@@ -148,6 +148,8 @@ namespace AssetRipper.Import.Structure.Platforms
 		{
 			// only search for two misc bundles here: Entities and Trees
 			// the only two files without an extension
+			// Trees.manifest has the correct output path: Assets/AssetBundles/Automatic/Entities/Trees/
+			// todo fix add code when ripping Trees bundle to add to correct folder
 
 			foreach (FileInfo file in root.EnumerateFiles())
 			{
