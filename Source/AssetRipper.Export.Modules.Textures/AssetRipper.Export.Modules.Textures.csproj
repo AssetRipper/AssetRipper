@@ -19,7 +19,7 @@
 		<PackageReference Include="Kyaru.Texture2DDecoder.macOS" Version="0.1.0" />
 		<PackageReference Include="Kyaru.Texture2DDecoder.Linux" Version="0.1.0" />
 		<PackageReference Include="StbImageWriteSharp" Version="1.16.7" />
-		<PackageReference Include="System.Drawing.Common" Version="8.0.7" />
+		<PackageReference Include="System.Drawing.Common" Version="8.0.8" />
 	</ItemGroup>
 
 	<ItemGroup>
