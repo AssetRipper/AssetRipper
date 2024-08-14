@@ -46,9 +46,11 @@ namespace AssetRipper.Import.AssetCreation
 
 		public override IUnityObjectBase? ReadAsset(AssetInfo assetInfo, ReadOnlyArraySegment<byte> assetData, SerializedType? assetType)
 		{
-			if (assetInfo.Collection.Version.Equals(0, 0, 0))
+			if (assetInfo.Collection.Version.LessThan(3, 5))
 			{
 				//Assets with a stripped version can't be read.
+				//Similarly, Unity versions before 3.5 are not supported.
+				//Most asset types changed in 3.5, so this has minimal impact.
 				return new UnreadableObject(assetInfo, assetData.ToArray());
 			}
 			else if (assetInfo.ClassID == (int)ClassIDType.MonoBehaviour)
