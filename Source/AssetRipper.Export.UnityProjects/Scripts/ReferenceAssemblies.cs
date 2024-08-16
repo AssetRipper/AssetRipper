@@ -38,6 +38,8 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 		{
 			"Assembly-CSharp.dll", // we only want the main dll decompiled
 			"Assembly-CSharp",
+			"Assembly-CSharp-firstpass.dll", // and the firstpass also
+			"Assembly-CSharp-firstpass",
 		};
 
 		public static bool IsPredefinedAssembly(string assemblyName)

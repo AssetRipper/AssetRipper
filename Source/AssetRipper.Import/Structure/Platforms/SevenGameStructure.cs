@@ -46,16 +46,15 @@ namespace AssetRipper.Import.Structure.Platforms
 
 			// check root path for filename or directory
 
-			if (IsGame7Structure(rootPath)) // check the current directory
+			if (IsExecutableFile(rootPath)) // check if the executable file was supplied instead of the entire folder
+			{
+				Logger.Info(LogCategory.Import, "7 Days game executable found. Setting root to parent directory");
+				m_root = new FileInfo(rootPath).Directory ?? throw new Exception("File has no directory");
+			}
+			else if (IsGame7Structure(rootPath)) // check the current directory
 			{
 				Logger.Info("Found proper 7 Days To Die directory.");
 				m_root = new DirectoryInfo(rootPath);
-			}
-			// might be redundant
-			else if (IsExecutableFile(rootPath)) // check if the executable file was supplied instead of the entire folder
-			{
-				Logger.Info(LogCategory.Import, "7 Days game executable found. Setting root to parent directory");
-				m_root = new FileInfo(Path.GetDirectoryName(rootPath)).Directory ?? throw new Exception("File has no directory");
 			}
 
 			// if not found throw
@@ -72,7 +71,7 @@ namespace AssetRipper.Import.Structure.Platforms
 			ResourcesPath = Path.Combine(GameDataPath, ResourcesName);
 			ManagedPath = Path.Combine(GameDataPath, ManagedName);
 			UnityPlayerPath = Path.Combine(RootPath, DefaultUnityPlayerName);
-			Version = GetUnityVersionFromBundleFile(Path.Combine(GameDataPath, MainBundleName)); // currently 2022.3.29f1 for version 1.0 b333
+			Version = GetUnityVersionFromBundleFile(Path.Combine(GameDataPath, MainBundleName)); // currently 2022.3.29f1 for version 1.0 b333, b336
 			ConfigDataPath = GetConfigDataPath();
 			PluginsPath = Path.Combine(GameDataPath, PluginsDir);
 
@@ -131,7 +130,7 @@ namespace AssetRipper.Import.Structure.Platforms
 		protected void CollectAddressablesBundles(DirectoryInfo root, IDictionary<string, string> files)
 		{
 			// search recursively all sub folders here
-			// Should find 15 files currently as of V1.0
+			// Should find 15 files currently as of V1.0 b336
 
 			foreach (FileInfo file in root.EnumerateFiles("*.bundle", SearchOption.AllDirectories))
 			{
@@ -153,7 +152,6 @@ namespace AssetRipper.Import.Structure.Platforms
 
 			foreach (FileInfo file in root.EnumerateFiles())
 			{
-				//if (file.Extension == AssetBundleExtension || file.Extension == AlternateBundleExtension)
 				if (IsMiscBundle(file.FullName))
 				{
 					string name = Path.GetFileNameWithoutExtension(file.Name).ToLowerInvariant();
@@ -166,7 +164,6 @@ namespace AssetRipper.Import.Structure.Platforms
 		{
 			foreach (FileInfo file in root.EnumerateFiles("*.dll", SearchOption.AllDirectories))
 			{
-				//if (file.Extension == AssetBundleExtension || file.Extension == AlternateBundleExtension)
 				if (IsDLL(file.FullName))
 				{
 					string name = Path.GetFileNameWithoutExtension(file.Name).ToLowerInvariant();
@@ -174,7 +171,7 @@ namespace AssetRipper.Import.Structure.Platforms
 					// todo finish fix
 
 					// add plugin assembly to dictionary
-
+					// only need 3
 					//AddAssetBundle(files, name, file.FullName);
 				}
 			}
@@ -196,8 +193,7 @@ namespace AssetRipper.Import.Structure.Platforms
 
 		public static bool IsMiscBundle(string path)
 		{
-			Logger.Info($"IsMiscBundle: {path}");
-
+			//Logger.Info($"IsMiscBundle: {path}");
 			if (path.ToLower().Contains("manifest"))
 				return false;
 
@@ -216,7 +212,7 @@ namespace AssetRipper.Import.Structure.Platforms
 		public static bool IsGame7Structure(string path)
 		{
 			// check if path is folder or file name
-			var directoryX = path;
+			string? directoryX = path;
 
 			if (!Directory.Exists(directoryX))
 			{
@@ -240,7 +236,7 @@ namespace AssetRipper.Import.Structure.Platforms
 			}
 
 			// check for unity data dir 7DaysToDie_Data
-			var unityDataDir = Path.Combine(directoryX, GameUnityDataDir);
+			string unityDataDir = Path.Combine(directoryX, GameUnityDataDir);
 			if (!Directory.Exists(unityDataDir))
 			{
 				Logger.Error($"Path supplied is not a valid game directory: {path}");
@@ -248,7 +244,7 @@ namespace AssetRipper.Import.Structure.Platforms
 			}
 
 			// check for Config data dir
-			var configDataDir = Path.Combine(directoryX, ConfigDataName);
+			string configDataDir = Path.Combine(directoryX, ConfigDataName);
 			if (!Directory.Exists(configDataDir))
 			{
 				Logger.Error($"Path supplied is not a valid game directory: {path}");
