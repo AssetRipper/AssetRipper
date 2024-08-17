@@ -27,9 +27,9 @@ namespace AssetRipper.Import.Structure.Platforms
 		public IReadOnlyList<string> DataPaths { get; protected set; } = Array.Empty<string>();
 
 		/// <summary>Name : FullName</summary>
-		public Dictionary<string, string> Files { get; } = new Dictionary<string, string>();
+		public List<KeyValuePair<string, string>> Files { get; } = [];
 		/// <summary>AssemblyName : AssemblyPath</summary>
-		public Dictionary<string, string> Assemblies { get; } = new Dictionary<string, string>();
+		public Dictionary<string, string> Assemblies { get; } = [];
 
 		protected DirectoryInfo m_root { get; set; }
 
@@ -77,7 +77,8 @@ namespace AssetRipper.Import.Structure.Platforms
 		/// <summary>Attempts to find the path for the dependency with that name.</summary>
 		public string? RequestDependency(string dependency)
 		{
-			if (Files.TryGetValue(dependency, out string? dependencyPath))
+			string? dependencyPath = Files.FirstOrDefault(t => t.Key == dependency).Value;
+			if (!string.IsNullOrEmpty(dependencyPath))
 			{
 				return dependencyPath;
 			}
@@ -142,11 +143,11 @@ namespace AssetRipper.Import.Structure.Platforms
 			CollectMainAssemblies();
 			if (!skipStreamingAssets)
 			{
-				CollectStreamingAssets(Files);
+				CollectStreamingAssets();
 			}
 		}
 
-		protected void CollectGameFiles(DirectoryInfo root, IDictionary<string, string> files)
+		protected static void CollectGameFiles(DirectoryInfo root, List<KeyValuePair<string, string>> files)
 		{
 			Logger.Info(LogCategory.Import, "Collecting game files...");
 			CollectCompressedGameFiles(root, files);
@@ -161,7 +162,7 @@ namespace AssetRipper.Import.Structure.Platforms
 		/// the datapack asset is only present if Gradle built an AAB with Unity
 		/// data asset pack inside and then bundletool converted AAB into universal APK.
 		/// </summary>
-		protected void CollectCompressedGameFiles(DirectoryInfo root, IDictionary<string, string> files)
+		protected static void CollectCompressedGameFiles(DirectoryInfo root, List<KeyValuePair<string, string>> files)
 		{
 			string dataBundlePath = Path.Combine(root.FullName, DataBundleName);
 			if (MultiFileStream.Exists(dataBundlePath))
@@ -179,7 +180,7 @@ namespace AssetRipper.Import.Structure.Platforms
 		/// <summary>
 		/// Collects global game managers and all the level files
 		/// </summary>
-		protected void CollectSerializedGameFiles(DirectoryInfo root, IDictionary<string, string> files)
+		protected static void CollectSerializedGameFiles(DirectoryInfo root, List<KeyValuePair<string, string>> files)
 		{
 			string filePath = Path.Combine(root.FullName, GlobalGameManagersName);
 			if (MultiFileStream.Exists(filePath))
@@ -208,7 +209,7 @@ namespace AssetRipper.Import.Structure.Platforms
 		/// <summary>
 		/// Collect bundles from the Streaming Assets folder
 		/// </summary>
-		protected void CollectStreamingAssets(IDictionary<string, string> files)
+		protected void CollectStreamingAssets()
 		{
 			if (string.IsNullOrWhiteSpace(StreamingAssetsPath))
 			{
@@ -219,14 +220,14 @@ namespace AssetRipper.Import.Structure.Platforms
 			DirectoryInfo streamingDirectory = new DirectoryInfo(StreamingAssetsPath);
 			if (streamingDirectory.Exists)
 			{
-				CollectAssetBundlesRecursively(streamingDirectory, files);
+				CollectAssetBundlesRecursively(streamingDirectory, Files);
 			}
 		}
 
 		/// <summary>
 		/// Collect asset bundles only from this directory
 		/// </summary>
-		protected void CollectAssetBundles(DirectoryInfo root, IDictionary<string, string> files)
+		protected static void CollectAssetBundles(DirectoryInfo root, List<KeyValuePair<string, string>> files)
 		{
 			foreach (FileInfo file in root.EnumerateFiles())
 			{
@@ -242,7 +243,7 @@ namespace AssetRipper.Import.Structure.Platforms
 		/// <summary>
 		/// Collect asset bundles from this directory and all subdirectories
 		/// </summary>
-		protected void CollectAssetBundlesRecursively(DirectoryInfo root, IDictionary<string, string> files)
+		protected static void CollectAssetBundlesRecursively(DirectoryInfo root, List<KeyValuePair<string, string>> files)
 		{
 			CollectAssetBundles(root, files);
 			foreach (DirectoryInfo directory in root.EnumerateDirectories())
@@ -251,13 +252,13 @@ namespace AssetRipper.Import.Structure.Platforms
 			}
 		}
 
-		protected static void CollectAssemblies(DirectoryInfo root, IDictionary<string, string> assemblies)
+		protected static void CollectAssemblies(DirectoryInfo root, Dictionary<string, string> assemblies)
 		{
 			foreach (FileInfo file in root.EnumerateFiles())
 			{
 				if (MonoManager.IsMonoAssembly(file.Name))
 				{
-					assemblies.Add(file.Name, file.FullName);
+					assemblies.TryAdd(file.Name, file.FullName);
 				}
 			}
 		}
@@ -285,7 +286,7 @@ namespace AssetRipper.Import.Structure.Platforms
 			}
 		}
 
-		private string? FindEngineDependency(string path, string dependency)
+		private static string? FindEngineDependency(string path, string dependency)
 		{
 			string filePath = Path.Combine(path, dependency);
 			if (File.Exists(filePath))
@@ -313,22 +314,15 @@ namespace AssetRipper.Import.Structure.Platforms
 		/// <summary>
 		/// Add game file
 		/// </summary>
-		protected void AddFile(IDictionary<string, string> files, string name, string path)
+		protected static void AddFile(List<KeyValuePair<string, string>> files, string name, string path)
 		{
 			files.Add(name, path);
 			Logger.Info(LogCategory.Import, $"Game file '{name}' has been found");
 		}
 
-		protected void AddAssetBundle(IDictionary<string, string> files, string name, string path)
+		protected static void AddAssetBundle(List<KeyValuePair<string, string>> files, string name, string path)
 		{
-#warning TEMP HACK:
-			int i = 0;
-			string uniqueName = name;
-			while (files.ContainsKey(uniqueName))
-			{
-				uniqueName = name + i++;
-			}
-			files.Add(uniqueName, path);
+			files.Add(name, path);
 			Logger.Info(LogCategory.Import, $"Asset bundle '{name}' has been found");
 		}
 

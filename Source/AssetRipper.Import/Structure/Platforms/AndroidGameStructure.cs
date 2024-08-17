@@ -133,7 +133,7 @@
 			return matches;
 		}
 
-		private void CollectApkAssetBundles(IDictionary<string, string> files)
+		private void CollectApkAssetBundles(List<KeyValuePair<string, string>> files)
 		{
 			string assetPath = Path.Combine(m_root.FullName, AssetName);
 			DirectoryInfo root = new DirectoryInfo(assetPath);

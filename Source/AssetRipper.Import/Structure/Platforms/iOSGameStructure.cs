@@ -91,7 +91,7 @@ namespace AssetRipper.Import.Structure.Platforms
 			return false;
 		}
 
-		private void CollectiOSStreamingAssets(DirectoryInfo root, IDictionary<string, string> files)
+		private static void CollectiOSStreamingAssets(DirectoryInfo root, List<KeyValuePair<string, string>> files)
 		{
 			string streamingPath = Path.Combine(root.FullName, iOSStreamingName);
 			DirectoryInfo streamingDirectory = new DirectoryInfo(streamingPath);
