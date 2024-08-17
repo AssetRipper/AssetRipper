@@ -14,6 +14,14 @@ internal struct VertexVariable : IVertexMaterial, IEquatable<VertexVariable>
 
 	public VertexVariable(
 		int maxColors,
+		int maxTextCoords)
+	{
+		MaxColors = int.Clamp(maxColors, 0, 1);
+		MaxTextCoords = int.Clamp(maxTextCoords, 0, 8);
+	}
+
+	public VertexVariable(
+		int maxColors,
 		int maxTextCoords,
 		Vector4 color = default,
 		Vector2 texcoord0 = default,
@@ -83,7 +91,7 @@ internal struct VertexVariable : IVertexMaterial, IEquatable<VertexVariable>
 	public readonly int MaxColors { get; }
 	public readonly int MaxTextCoords { get; }
 
-	IEnumerable<KeyValuePair<string, AttributeFormat>> IVertexReflection.GetEncodingAttributes()
+	readonly IEnumerable<KeyValuePair<string, AttributeFormat>> IVertexReflection.GetEncodingAttributes()
 	{
 		if (MaxColors == 1)
 		{
@@ -141,7 +149,21 @@ internal struct VertexVariable : IVertexMaterial, IEquatable<VertexVariable>
 
 	public readonly VertexMaterialDelta Subtract(IVertexMaterial baseValue)
 	{
-		throw new NotSupportedException();
+		if (MaxTextCoords <= 4)
+		{
+			return new()
+			{
+				Color0Delta = baseValue.MaxColors > 0 ? Color - baseValue.GetColor(0) : default,
+				TexCoord0Delta = baseValue.MaxTextCoords > 0 ? TexCoord0 - baseValue.GetTexCoord(0) : default,
+				TexCoord1Delta = baseValue.MaxTextCoords > 1 ? TexCoord1 - baseValue.GetTexCoord(1) : default,
+				TexCoord2Delta = baseValue.MaxTextCoords > 2 ? TexCoord2 - baseValue.GetTexCoord(2) : default,
+				TexCoord3Delta = baseValue.MaxTextCoords > 3 ? TexCoord3 - baseValue.GetTexCoord(3) : default,
+			};
+		}
+		else
+		{
+			throw new NotSupportedException();
+		}
 	}
 	public void Add(in VertexMaterialDelta delta)
 	{
@@ -153,10 +175,8 @@ internal struct VertexVariable : IVertexMaterial, IEquatable<VertexVariable>
 	}
 	void IVertexMaterial.SetColor(int index, Vector4 color)
 	{
-		if (index == 0)
-		{
-			Color = color;
-		}
+		ArgumentOutOfRangeException.ThrowIfNotEqual(index, 0);
+		Color = color;
 	}
 	void IVertexMaterial.SetTexCoord(int index, Vector2 coord)
 	{
@@ -174,11 +194,8 @@ internal struct VertexVariable : IVertexMaterial, IEquatable<VertexVariable>
 	}
 	public readonly Vector4 GetColor(int index)
 	{
-		return index switch
-		{
-			0 => Color,
-			_ => throw new ArgumentOutOfRangeException(nameof(index)),
-		};
+		ArgumentOutOfRangeException.ThrowIfNotEqual(index, 0);
+		return Color;
 	}
 	public readonly Vector2 GetTexCoord(int index)
 	{

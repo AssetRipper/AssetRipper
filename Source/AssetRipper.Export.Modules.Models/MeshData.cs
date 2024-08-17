@@ -29,9 +29,9 @@ namespace AssetRipper.Export.Modules.Models
 			{
 				GlbMeshType meshType = default;
 
-				if (Normals != null && Normals.Length == Vertices.Length)
+				if (HasNormals)
 				{
-					if (Tangents != null && Tangents.Length == Vertices.Length)
+					if (HasTangents)
 					{
 						meshType |= GlbMeshType.PositionNormalTangent;
 					}
@@ -41,38 +41,76 @@ namespace AssetRipper.Export.Modules.Models
 					}
 				}
 
-				if (UV0 != null && UV0.Length == Vertices.Length)
+				meshType |= UVCount switch
 				{
-					if (UV1 != null && UV1.Length == Vertices.Length)
-					{
-						if (UV2 != null && UV2.Length == Vertices.Length)
-						{
-							//TODO: Not implemented yet. Defines a vertex with up to 8 UV channels.
-							//meshType |= GlbMeshType.TextureN;
-							meshType |= GlbMeshType.Texture2;
-						}
-						else
-						{
-							meshType |= GlbMeshType.Texture2;
-						}
-					}
-					else
-					{
-						meshType |= GlbMeshType.Texture1;
-					}
-				}
+					0 => default,
+					1 => GlbMeshType.Texture1,
+					2 => GlbMeshType.Texture2,
+					_ => GlbMeshType.TextureN,
+				};
 
-				if (Colors != null && Colors.Length == Vertices.Length)
+				if (HasColors)
 				{
 					meshType |= GlbMeshType.Color1;
 				}
 
-				if (Skin != null && Skin.Length == Vertices.Length)
+				if (HasSkin)
 				{
 					meshType |= GlbMeshType.Joints4;
 				}
 
 				return meshType;
+			}
+		}
+
+		public bool HasNormals => Normals != null && Normals.Length == Vertices.Length;
+
+		public bool HasTangents => Tangents != null && Tangents.Length == Vertices.Length;
+
+		public bool HasColors => Colors != null && Colors.Length == Vertices.Length;
+
+		public bool HasSkin => Skin != null && Skin.Length == Vertices.Length;
+
+		public int UVCount
+		{
+			get
+			{
+				if (UV0 is null || UV0.Length != Vertices.Length)
+				{
+					return 0;
+				}
+				else if (UV1 is null || UV1.Length != Vertices.Length)
+				{
+					return 1;
+				}
+				else if (UV2 is null || UV2.Length != Vertices.Length)
+				{
+					return 2;
+				}
+				else if (UV3 is null || UV3.Length != Vertices.Length)
+				{
+					return 3;
+				}
+				else if (UV4 is null || UV4.Length != Vertices.Length)
+				{
+					return 4;
+				}
+				else if (UV5 is null || UV5.Length != Vertices.Length)
+				{
+					return 5;
+				}
+				else if (UV6 is null || UV6.Length != Vertices.Length)
+				{
+					return 6;
+				}
+				else if (UV7 is null || UV7.Length != Vertices.Length)
+				{
+					return 7;
+				}
+				else
+				{
+					return 8;
+				}
 			}
 		}
 
@@ -92,6 +130,12 @@ namespace AssetRipper.Export.Modules.Models
 		public ColorFloat TryGetColorAtIndex(uint index) => TryGetAtIndex(Colors, index);
 		public Vector2 TryGetUV0AtIndex(uint index) => FlipY(TryGetAtIndex(UV0, index));
 		public Vector2 TryGetUV1AtIndex(uint index) => FlipY(TryGetAtIndex(UV1, index));
+		public Vector2 TryGetUV2AtIndex(uint index) => FlipY(TryGetAtIndex(UV2, index));
+		public Vector2 TryGetUV3AtIndex(uint index) => FlipY(TryGetAtIndex(UV3, index));
+		public Vector2 TryGetUV4AtIndex(uint index) => FlipY(TryGetAtIndex(UV4, index));
+		public Vector2 TryGetUV5AtIndex(uint index) => FlipY(TryGetAtIndex(UV5, index));
+		public Vector2 TryGetUV6AtIndex(uint index) => FlipY(TryGetAtIndex(UV6, index));
+		public Vector2 TryGetUV7AtIndex(uint index) => FlipY(TryGetAtIndex(UV7, index));
 		public BoneWeight4 TryGetSkinAtIndex(uint index)
 		{
 			BoneWeight4 s = TryGetAtIndex(Skin, index);
