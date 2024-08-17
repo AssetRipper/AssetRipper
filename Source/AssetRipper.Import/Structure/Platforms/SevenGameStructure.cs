@@ -287,7 +287,7 @@ namespace AssetRipper.Import.Structure.Platforms
 		private static bool IsExecutableFile(string filePath)
 		{
 			// looking for 7DaysToDie.exe
-			return !string.IsNullOrEmpty(filePath) && (File.Exists(filePath) || File.Exists(Path.Combine(filePath, GameName)));
+			return !string.IsNullOrEmpty(filePath) && (File.Exists(filePath));
 		}
 
 		private static bool IsRootGameDirectory(DirectoryInfo rootDirectory)
