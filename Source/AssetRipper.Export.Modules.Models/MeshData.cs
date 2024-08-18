@@ -46,7 +46,7 @@ namespace AssetRipper.Export.Modules.Models
 					0 => default,
 					1 => GlbMeshType.Texture1,
 					2 => GlbMeshType.Texture2,
-					_ => GlbMeshType.Texture2,
+					_ => GlbMeshType.TextureN,
 				};
 
 				if (HasColors)

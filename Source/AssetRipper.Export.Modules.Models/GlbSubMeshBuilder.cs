@@ -62,13 +62,13 @@ namespace AssetRipper.Export.Modules.Models
 
 				case GlbMeshType.Position | GlbMeshType.TextureN | GlbMeshType.Empty:
 				case GlbMeshType.Position | GlbMeshType.Color1TextureN | GlbMeshType.Empty:
-					return BuildSubMeshes<VertexPosition, VertexVariable, VertexEmpty>(parameters);
+					return BuildSubMeshes<VertexPosition, VertexColor1Texture8, VertexEmpty>(parameters);
 				case GlbMeshType.PositionNormal | GlbMeshType.TextureN | GlbMeshType.Empty:
 				case GlbMeshType.PositionNormal | GlbMeshType.Color1TextureN | GlbMeshType.Empty:
-					return BuildSubMeshes<VertexPositionNormal, VertexVariable, VertexEmpty>(parameters);
+					return BuildSubMeshes<VertexPositionNormal, VertexColor1Texture8, VertexEmpty>(parameters);
 				case GlbMeshType.PositionNormalTangent | GlbMeshType.TextureN | GlbMeshType.Empty:
 				case GlbMeshType.PositionNormalTangent | GlbMeshType.Color1TextureN | GlbMeshType.Empty:
-					return BuildSubMeshes<VertexPositionNormalTangent, VertexVariable, VertexEmpty>(parameters);
+					return BuildSubMeshes<VertexPositionNormalTangent, VertexColor1Texture8, VertexEmpty>(parameters);
 
 				case GlbMeshType.Position | GlbMeshType.Empty | GlbMeshType.Joints4:
 					return BuildSubMeshes<VertexPosition, VertexEmpty, VertexJoints4>(parameters);
@@ -114,13 +114,13 @@ namespace AssetRipper.Export.Modules.Models
 
 				case GlbMeshType.Position | GlbMeshType.TextureN | GlbMeshType.Joints4:
 				case GlbMeshType.Position | GlbMeshType.Color1TextureN | GlbMeshType.Joints4:
-					return BuildSubMeshes<VertexPosition, VertexVariable, VertexJoints4>(parameters);
+					return BuildSubMeshes<VertexPosition, VertexColor1Texture8, VertexJoints4>(parameters);
 				case GlbMeshType.PositionNormal | GlbMeshType.TextureN | GlbMeshType.Joints4:
 				case GlbMeshType.PositionNormal | GlbMeshType.Color1TextureN | GlbMeshType.Joints4:
-					return BuildSubMeshes<VertexPositionNormal, VertexVariable, VertexJoints4>(parameters);
+					return BuildSubMeshes<VertexPositionNormal, VertexColor1Texture8, VertexJoints4>(parameters);
 				case GlbMeshType.PositionNormalTangent | GlbMeshType.TextureN | GlbMeshType.Joints4:
 				case GlbMeshType.PositionNormalTangent | GlbMeshType.Color1TextureN | GlbMeshType.Joints4:
-					return BuildSubMeshes<VertexPositionNormalTangent, VertexVariable, VertexJoints4>(parameters);
+					return BuildSubMeshes<VertexPositionNormalTangent, VertexColor1Texture8, VertexJoints4>(parameters);
 
 				default:
 					throw new ArgumentOutOfRangeException(nameof(meshData), meshData.MeshType, "Mesh type not supported.");
@@ -336,9 +336,9 @@ namespace AssetRipper.Export.Modules.Models
 			{
 				return Cast<VertexColor1Texture2, TvM>(new VertexColor1Texture2(meshData.TryGetColorAtIndex(index).Vector, meshData.TryGetUV0AtIndex(index), meshData.TryGetUV1AtIndex(index)));
 			}
-			else if (typeof(TvM) == typeof(VertexVariable))
+			else if (typeof(TvM) == typeof(VertexColor1Texture8))
 			{
-				VertexVariable result = new(meshData.HasColors ? 1 : 0, meshData.UVCount)
+				VertexColor1Texture8 result = new()
 				{
 					Color = meshData.TryGetColorAtIndex(index).Vector,
 					TexCoord0 = meshData.TryGetUV0AtIndex(index),
@@ -350,7 +350,7 @@ namespace AssetRipper.Export.Modules.Models
 					TexCoord6 = meshData.TryGetUV6AtIndex(index),
 					TexCoord7 = meshData.TryGetUV7AtIndex(index),
 				};
-				return Cast<VertexVariable, TvM>(result);
+				return Cast<VertexColor1Texture8, TvM>(result);
 			}
 			else
 			{
