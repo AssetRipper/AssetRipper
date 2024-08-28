@@ -31,11 +31,13 @@ public sealed record class ImportSettings
 	/// <summary>
 	/// The default version used when no version is specified, ie when the version has been stripped.
 	/// </summary>
+	[JsonConverter(typeof(UnityVersionJsonConverter))]
 	public UnityVersion DefaultVersion { get; set; }
 
 	/// <summary>
 	/// The target version to convert all assets to. Experimental
 	/// </summary>
+	[JsonConverter(typeof(UnityVersionJsonConverter))]
 	public UnityVersion TargetVersion { get; set; }
 
 	public void Log()
