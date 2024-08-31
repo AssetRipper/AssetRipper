@@ -34,6 +34,19 @@ public sealed class SpriteInformationObject : UnityObjectBase, INamed
 		}
 	}
 
+	public override IEnumerable<(string, PPtr)> FetchDependencies()
+	{
+		yield return (nameof(Texture), Collection.ForceCreatePPtr(Texture));
+		foreach ((ISprite sprite, ISpriteAtlas? atlas) in dictionary)
+		{
+			yield return (nameof(Sprites) + "[].Key", Collection.ForceCreatePPtr(sprite));
+			if (atlas is not null)
+			{
+				yield return (nameof(Sprites) + "[].Value", Collection.ForceCreatePPtr(atlas));
+			}
+		}
+	}
+
 	internal void AddToDictionary(ISprite sprite, ISpriteAtlas? atlas)
 	{
 		if (dictionary.TryGetValue(sprite, out ISpriteAtlas? mappedAtlas))
