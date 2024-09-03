@@ -2,13 +2,13 @@
 using AssetRipper.Assets;
 using AssetRipper.Decompilation.CSharp;
 using AssetRipper.Export.Modules.Audio;
+using AssetRipper.Export.Modules.Models;
 using AssetRipper.Export.Modules.Shaders.IO;
 using AssetRipper.Export.Modules.Textures;
 using AssetRipper.Export.PrimaryContent;
 using AssetRipper.Export.UnityProjects;
 using AssetRipper.Export.UnityProjects.Scripts;
 using AssetRipper.Export.UnityProjects.Shaders;
-using AssetRipper.Export.UnityProjects.Terrains;
 using AssetRipper.GUI.Web.Paths;
 using AssetRipper.Import.AssetCreation;
 using AssetRipper.Import.Structure.Assembly;
@@ -19,6 +19,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_128;
 using AssetRipper.SourceGenerated.Classes.ClassID_156;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
+using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Classes.ClassID_49;
 using AssetRipper.SourceGenerated.Classes.ClassID_83;
@@ -26,6 +27,7 @@ using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.Web.Extensions;
 using AssetRipper.Yaml;
 using Microsoft.AspNetCore.Http;
+using SharpGLTF.Scenes;
 using System.Globalization;
 using System.Runtime.InteropServices;
 
@@ -39,7 +41,7 @@ internal static class AssetAPI
 		public const string View = Base + "/View";
 		public const string Image = Base + "/Image";
 		public const string Audio = Base + "/Audio";
-		public const string Model = Base + "/Model";
+		public const string Model = Base + "/Model.glb";
 		public const string Font = Base + "/Font";
 		public const string Json = Base + "/Json";
 		public const string Yaml = Base + "/Yaml";
@@ -190,12 +192,28 @@ internal static class AssetAPI
 
 	public static Task GetModelData(HttpContext context)
 	{
-		//Only accept Path in the query.
-		throw new NotImplementedException();
+		context.Response.DisableCaching();
+		if (!TryGetAssetFromQuery(context, out IUnityObjectBase? asset, out Task? failureTask))
+		{
+			return failureTask;
+		}
+
+		if (asset is not IMesh mesh)
+		{
+			return context.Response.NotFound("Asset was not a mesh.");
+		}
+		else
+		{
+			MemoryStream stream = new();
+			SceneBuilder sceneBuilder = GlbMeshBuilder.Build(mesh);
+			sceneBuilder.ToGltf2().WriteGLB(stream);
+			return Results.Bytes(stream.ToArray(), "model/gltf-binary", "model.glb").ExecuteAsync(context);
+		}
 	}
+
 	public static bool HasModelData(IUnityObjectBase asset)
 	{
-		throw new NotImplementedException();
+		return asset is IMesh;
 	}
 	#endregion
 

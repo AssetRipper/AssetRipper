@@ -84,6 +84,11 @@ partial class Localization
 	public static string AssetTabInformation => Get("asset_tab_information");
 	
 	/// <summary>
+	/// Model
+	/// </summary>
+	public static string AssetTabModel => Get("asset_tab_model");
+	
+	/// <summary>
 	/// Text
 	/// </summary>
 	public static string AssetTabText => Get("asset_tab_text");
