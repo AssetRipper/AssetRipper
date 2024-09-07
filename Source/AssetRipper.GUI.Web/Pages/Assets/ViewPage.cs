@@ -36,8 +36,7 @@ public sealed class ViewPage : DefaultPage
 	protected override void WriteScriptReferences(TextWriter writer)
 	{
 		base.WriteScriptReferences(writer);
-		new Script(writer).WithSrc("https://cdn.babylonjs.com/babylon.js").Close();
-		new Script(writer).WithSrc("https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js").Close();
+		OnlineDependencies.Babylon.WriteScriptReference(writer);
 		new Script(writer).WithSrc("/js/mesh_preview.js").Close();
 	}
 }

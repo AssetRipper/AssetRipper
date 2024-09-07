@@ -15,7 +15,7 @@ public abstract class DefaultPage : HtmlPage
 				new Meta(writer).WithCharset("utf-8").Close();
 				new Meta(writer).WithName("viewport").WithContent("width=device-width, initial-scale=1.0").Close();
 				new Title(writer).Close(GetTitle());
-				Bootstrap.WriteStyleSheetReference(writer);
+				OnlineDependencies.Bootstrap.WriteStyleSheetReference(writer);
 				new Link(writer).WithRel("stylesheet").WithHref("/css/site.css").Close();
 			}
 			using (new Body(writer).WithCustomAttribute("data-bs-theme", "dark").End())
@@ -202,8 +202,8 @@ public abstract class DefaultPage : HtmlPage
 
 	protected virtual void WriteScriptReferences(TextWriter writer)
 	{
-		writer.Write("""<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>""");
-		Bootstrap.WriteScriptReference(writer);
+		OnlineDependencies.Popper.WriteScriptReference(writer);
+		OnlineDependencies.Bootstrap.WriteScriptReference(writer);
 		new Script(writer).WithSrc("/js/site.js").Close();
 	}
 }

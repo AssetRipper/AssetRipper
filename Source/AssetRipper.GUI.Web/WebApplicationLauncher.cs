@@ -47,16 +47,40 @@ public static class WebApplicationLauncher
 			getDefaultValue: () => Defaults.LaunchBrowser);
 		rootCommand.AddOption(launchBrowserOption);
 
+		Option<string[]> localWebFilesOption = new Option<string[]>(
+			name: "--local-web-file",
+			description: "Files provided with this option will replace online sources.",
+			getDefaultValue: () => []);
+		rootCommand.AddOption(localWebFilesOption);
+
 		bool shouldRun = false;
 		int port = Defaults.Port;
 		bool launchBrowser = Defaults.LaunchBrowser;
 
-		rootCommand.SetHandler((int portParsed, bool launchBrowserParsed) =>
+		rootCommand.SetHandler((int portParsed, bool launchBrowserParsed, string[] localWebFilesParsed) =>
 		{
 			shouldRun = true;
 			port = portParsed;
 			launchBrowser = launchBrowserParsed;
-		}, portOption, launchBrowserOption);
+			foreach (string localWebFile in localWebFilesParsed)
+			{
+				if (File.Exists(localWebFile))
+				{
+					string fileName = Path.GetFileName(localWebFile);
+					string webPrefix = Path.GetExtension(fileName) switch
+					{
+						".css" => "/css/",
+						".js" => "/js/",
+						_ => "/"
+					};
+					StaticContentLoader.Cache.TryAdd(webPrefix + fileName, File.ReadAllBytes(localWebFile));
+				}
+				else
+				{
+					Console.WriteLine($"File '{localWebFile}' does not exist.");
+				}
+			}
+		}, portOption, launchBrowserOption, localWebFilesOption);
 
 		rootCommand.Invoke(args);
 

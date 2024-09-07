@@ -6,7 +6,7 @@ namespace AssetRipper.GUI.Web;
 public static partial class StaticContentLoader
 {
 	private const string Prefix = "AssetRipper.GUI.Web.StaticContent.";
-	private static readonly ConcurrentDictionary<string, byte[]> Cache = new();
+	public static ConcurrentDictionary<string, byte[]> Cache { get; } = new();
 
 	public static async ValueTask<byte[]> Load(string path)
 	{
