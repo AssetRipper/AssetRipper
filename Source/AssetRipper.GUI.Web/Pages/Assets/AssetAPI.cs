@@ -11,6 +11,7 @@ using AssetRipper.Export.UnityProjects.Scripts;
 using AssetRipper.Export.UnityProjects.Shaders;
 using AssetRipper.GUI.Web.Paths;
 using AssetRipper.Import.AssetCreation;
+using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.Processing.Textures;
@@ -205,8 +206,16 @@ internal static class AssetAPI
 		else
 		{
 			MemoryStream stream = new();
-			SceneBuilder sceneBuilder = GlbMeshBuilder.Build(mesh);
-			sceneBuilder.ToGltf2().WriteGLB(stream);
+			try
+			{
+				SceneBuilder sceneBuilder = GlbMeshBuilder.Build(mesh);
+				sceneBuilder.ToGltf2().WriteGLB(stream);
+			}
+			catch (Exception ex)
+			{
+				Logger.Error(ex);
+				return context.Response.NotFound("Model data could not be decoded.");
+			}
 			return Results.Bytes(stream.ToArray(), "model/gltf-binary", "model.glb").ExecuteAsync(context);
 		}
 	}
