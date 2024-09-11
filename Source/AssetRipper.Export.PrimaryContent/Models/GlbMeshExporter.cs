@@ -3,6 +3,7 @@ using AssetRipper.Export.Modules.Models;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Extensions;
 using SharpGLTF.Scenes;
+using SharpGLTF.Schema2;
 
 namespace AssetRipper.Export.PrimaryContent.Models;
 
@@ -26,7 +27,7 @@ public sealed class GlbMeshExporter : IContentExtractor
 	{
 		SceneBuilder sceneBuilder = GlbMeshBuilder.Build((IMesh)asset);
 		using FileStream fileStream = File.Create(path);
-		sceneBuilder.ToGltf2().WriteGLB(fileStream);
+		sceneBuilder.ToGltf2().WriteGLB(fileStream, new WriteSettings() { MergeBuffers = false });
 		return true;
 	}
 }

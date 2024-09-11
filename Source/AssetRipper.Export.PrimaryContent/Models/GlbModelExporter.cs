@@ -2,6 +2,7 @@
 using AssetRipper.Export.Modules.Models;
 using AssetRipper.Processing;
 using SharpGLTF.Scenes;
+using SharpGLTF.Schema2;
 
 namespace AssetRipper.Export.PrimaryContent.Models;
 
@@ -32,7 +33,7 @@ public class GlbModelExporter : IContentExtractor
 	{
 		SceneBuilder sceneBuilder = GlbLevelBuilder.Build(assets, isScene);
 		using FileStream fileStream = File.Create(path);
-		sceneBuilder.ToGltf2().WriteGLB(fileStream);
+		sceneBuilder.ToGltf2().WriteGLB(fileStream, new WriteSettings() { MergeBuffers = false });
 		return true;
 	}
 }

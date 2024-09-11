@@ -29,6 +29,7 @@ using AssetRipper.Web.Extensions;
 using AssetRipper.Yaml;
 using Microsoft.AspNetCore.Http;
 using SharpGLTF.Scenes;
+using SharpGLTF.Schema2;
 using System.Globalization;
 using System.Runtime.InteropServices;
 
@@ -209,7 +210,7 @@ internal static class AssetAPI
 			try
 			{
 				SceneBuilder sceneBuilder = GlbMeshBuilder.Build(mesh);
-				sceneBuilder.ToGltf2().WriteGLB(stream);
+				sceneBuilder.ToGltf2().WriteGLB(stream, new WriteSettings() { MergeBuffers = false });
 			}
 			catch (Exception ex)
 			{

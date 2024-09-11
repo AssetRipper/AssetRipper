@@ -7,6 +7,7 @@ using SharpGLTF.Geometry;
 using SharpGLTF.Geometry.VertexTypes;
 using SharpGLTF.Materials;
 using SharpGLTF.Scenes;
+using SharpGLTF.Schema2;
 using System.Numerics;
 
 namespace AssetRipper.Export.PrimaryContent.Models;
@@ -32,7 +33,7 @@ public sealed class GlbNavMeshExporter : IContentExtractor
 		SceneBuilder sceneBuilder = new SceneBuilder();
 		AddAssetToSceneBuilder(sceneBuilder, (INavMeshData)asset);
 		using FileStream fileStream = File.Create(path);
-		sceneBuilder.ToGltf2().WriteGLB(fileStream);
+		sceneBuilder.ToGltf2().WriteGLB(fileStream, new WriteSettings() { MergeBuffers = false });
 		return true;
 	}
 

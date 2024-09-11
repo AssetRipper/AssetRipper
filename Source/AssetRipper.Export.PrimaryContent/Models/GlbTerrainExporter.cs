@@ -2,6 +2,7 @@
 using AssetRipper.Export.Modules.Models;
 using AssetRipper.SourceGenerated.Classes.ClassID_156;
 using SharpGLTF.Scenes;
+using SharpGLTF.Schema2;
 
 namespace AssetRipper.Export.PrimaryContent.Models;
 
@@ -25,7 +26,7 @@ public sealed class GlbTerrainExporter : IContentExtractor
 	{
 		SceneBuilder sceneBuilder = GlbTerrainBuilder.Build((ITerrainData)asset);
 		using FileStream fileStream = File.Create(path);
-		sceneBuilder.ToGltf2().WriteGLB(fileStream);
+		sceneBuilder.ToGltf2().WriteGLB(fileStream, new WriteSettings() { MergeBuffers = false });
 		return true;
 	}
 }
