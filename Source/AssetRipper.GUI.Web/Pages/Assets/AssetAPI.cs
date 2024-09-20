@@ -300,8 +300,15 @@ internal static class AssetAPI
 			return failureTask;
 		}
 
-		string text = new DefaultJsonWalker().SerializeStandard(asset);
-		return Results.Text(text, "application/json").ExecuteAsync(context);
+		try
+		{
+			string text = new DefaultJsonWalker().SerializeStandard(asset);
+			return Results.Text(text, "application/json").ExecuteAsync(context);
+		}
+		catch (Exception ex)
+		{
+			return Results.Text(ex.ToString()).ExecuteAsync(context);
+		}
 	}
 	#endregion
 
@@ -318,17 +325,24 @@ internal static class AssetAPI
 			return failureTask;
 		}
 
-		string text;
-		using (StringWriter stringWriter = new(CultureInfo.InvariantCulture) { NewLine = "\n" })
+		try
 		{
-			YamlWriter writer = new();
-			writer.WriteHead(stringWriter);
-			YamlDocument document = new YamlWalker().ExportYamlDocument(asset, ExportIdHandler.GetMainExportID(asset));
-			writer.WriteDocument(document);
-			writer.WriteTail(stringWriter);
-			text = stringWriter.ToString();
+			string text;
+			using (StringWriter stringWriter = new(CultureInfo.InvariantCulture) { NewLine = "\n" })
+			{
+				YamlWriter writer = new();
+				writer.WriteHead(stringWriter);
+				YamlDocument document = new YamlWalker().ExportYamlDocument(asset, ExportIdHandler.GetMainExportID(asset));
+				writer.WriteDocument(document);
+				writer.WriteTail(stringWriter);
+				text = stringWriter.ToString();
+			}
+			return Results.Text(text, "application/yaml").ExecuteAsync(context);
 		}
-		return Results.Text(text, "application/yaml").ExecuteAsync(context);
+		catch (Exception ex)
+		{
+			return Results.Text(ex.ToString()).ExecuteAsync(context);
+		}
 	}
 	#endregion
 

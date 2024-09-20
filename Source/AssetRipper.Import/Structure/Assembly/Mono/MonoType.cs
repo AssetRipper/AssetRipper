@@ -22,7 +22,7 @@ namespace AssetRipper.Import.Structure.Assembly.Mono
 
 		public static bool TryCreate(
 			TypeDefinition typeDefinition,
-			Dictionary<TypeDefinition, MonoType> typeCache,
+			Dictionary<ITypeDefOrRef, MonoType> typeCache,
 			[NotNullWhen(true)] out MonoType? result,
 			[NotNullWhen(false)] out string? failureReason)
 		{
@@ -61,11 +61,15 @@ namespace AssetRipper.Import.Structure.Assembly.Mono
 
 		public static bool TryCreate(
 			GenericInstanceTypeSignature genericInst,
-			Dictionary<TypeDefinition, MonoType> typeCache,
+			Dictionary<ITypeDefOrRef, MonoType> typeCache,
 			[NotNullWhen(true)] out MonoType? result,
 			[NotNullWhen(false)] out string? failureReason)
 		{
 			List<Field> fields = new();
+
+			result = new(genericInst.GenericType, fields);
+			typeCache.Add(genericInst.ToTypeDefOrRef(), result);
+
 			foreach ((FieldDefinition fieldDefinition, TypeSignature fieldType) in FieldQuery.GetFieldsInTypeAndBase(genericInst))
 			{
 				if (FieldSerializationLogic.WillUnitySerialize(fieldDefinition, fieldType))
@@ -80,13 +84,13 @@ namespace AssetRipper.Import.Structure.Assembly.Mono
 					}
 					else
 					{
+						typeCache.Remove(genericInst.ToTypeDefOrRef());
 						result = null;
 						return false;
 					}
 				}
 			}
 
-			result = new(genericInst.GenericType, fields);
 			failureReason = null;
 			return true;
 		}
@@ -109,7 +113,7 @@ namespace AssetRipper.Import.Structure.Assembly.Mono
 		private static bool TryCreateSerializableField(
 			FieldDefinition fieldDefinition,
 			TypeSignature fieldType,
-			Dictionary<TypeDefinition, MonoType> typeCache,
+			Dictionary<ITypeDefOrRef, MonoType> typeCache,
 			out Field result,
 			[NotNullWhen(false)] out string? failureReason)
 		{
@@ -126,7 +130,7 @@ namespace AssetRipper.Import.Structure.Assembly.Mono
 			string name,
 			TypeSignature typeSignature,
 			int arrayDepth,
-			Dictionary<TypeDefinition, MonoType> typeCache,
+			Dictionary<ITypeDefOrRef, MonoType> typeCache,
 			out Field result,
 			[NotNullWhen(false)] out string? failureReason)
 		{
@@ -181,6 +185,12 @@ namespace AssetRipper.Import.Structure.Assembly.Mono
 					return TryCreateSerializableField(name, szArrayTypeSignature.BaseType, arrayDepth + 1, typeCache, out result, out failureReason);
 
 				case GenericInstanceTypeSignature genericInstanceTypeSignature:
+					if (typeCache.TryGetValue(genericInstanceTypeSignature.ToTypeDefOrRef(), out MonoType? cachedGenericMonoType))
+					{
+						result = new Field(cachedGenericMonoType, arrayDepth, name, true);
+						failureReason = null;
+						return true;
+					}
 					return TryCreateSerializableField(name, genericInstanceTypeSignature, arrayDepth, typeCache, out result, out failureReason);
 
 				default:
@@ -194,7 +204,7 @@ namespace AssetRipper.Import.Structure.Assembly.Mono
 			string name,
 			GenericInstanceTypeSignature typeSignature,
 			int arrayDepth,
-			Dictionary<TypeDefinition, MonoType> typeCache,
+			Dictionary<ITypeDefOrRef, MonoType> typeCache,
 			out Field result,
 			[NotNullWhen(false)] out string? failureReason)
 		{
