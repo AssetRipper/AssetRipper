@@ -116,7 +116,7 @@ internal static class OriginalPathHelper
 				string pathSection = splitPath[i];
 				if (string.Equals(pathSection, AssetsKeyword, StringComparison.OrdinalIgnoreCase))
 				{
-					return string.Join(DirectorySeparator, new ArraySegment<string>(splitPath, i, splitPath.Length - i));
+					return string.Join(DirectorySeparator, new ReadOnlySpan<string?>(splitPath, i, splitPath.Length - i));
 				}
 			}
 			return string.Empty;
