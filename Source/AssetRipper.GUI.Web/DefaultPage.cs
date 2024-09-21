@@ -1,4 +1,5 @@
-﻿using AssetRipper.GUI.Web.Pages;
+﻿using AssetRipper.GUI.Web.Documentation;
+using AssetRipper.GUI.Web.Pages;
 using AssetRipper.GUI.Web.Paths;
 using AssetRipper.Web.Content;
 
@@ -116,6 +117,14 @@ public abstract class DefaultPage : HtmlPage
 				using (new Li(writer).End())
 				{
 					new A(writer).WithClass("dropdown-item").WithHref("/Licenses").Close(Localization.Licenses);
+				}
+				using (new Li(writer).End())
+				{
+					new A(writer).WithClass("dropdown-item").WithHref(DocumentationPaths.OpenApi).Close(Localization.OpenApiJson);
+				}
+				using (new Li(writer).End())
+				{
+					new A(writer).WithClass("dropdown-item").WithHref(DocumentationPaths.Swagger).Close(Localization.SwaggerDocumentation);
 				}
 			}
 		}

@@ -1,3 +1,4 @@
+using AssetRipper.GUI.Web.Documentation;
 using AssetRipper.GUI.Web.Pages;
 using AssetRipper.GUI.Web.Pages.Assets;
 using AssetRipper.GUI.Web.Pages.Bundles;
@@ -5,6 +6,7 @@ using AssetRipper.GUI.Web.Pages.Collections;
 using AssetRipper.GUI.Web.Pages.Resources;
 using AssetRipper.GUI.Web.Pages.Scenes;
 using AssetRipper.GUI.Web.Pages.Settings;
+using AssetRipper.GUI.Web.Paths;
 using AssetRipper.Import.Logging;
 using AssetRipper.Web.Extensions;
 using Microsoft.AspNetCore.Builder;
@@ -18,6 +20,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
+using Microsoft.OpenApi.Models;
 using System.CommandLine;
 using System.Diagnostics;
 
@@ -113,7 +116,19 @@ public static class WebApplicationLauncher
 		builder.Services.ConfigureHttpJsonOptions(options =>
 		{
 			options.SerializerOptions.TypeInfoResolverChain.Insert(0, AppJsonSerializerContext.Default);
+			options.SerializerOptions.TypeInfoResolverChain.Insert(1, PathSerializerContext.Default);
+			options.SerializerOptions.TypeInfoResolverChain.Insert(2, NullSerializerContext.Instance);
 		});
+
+		builder.Services.AddOpenApi(options =>
+		{
+			options.AddOperationTransformer(new ClearOperationTagsTransformer());
+			options.AddOperationTransformer(new InsertionOperationTransformer());
+			options.AddDocumentTransformer(new ClearDocumentTagsTransformer());
+			options.AddDocumentTransformer(new SortDocumentPathsTransformer());
+		});
+
+		builder.Services.AddEndpointsApiExplorer();
 
 		builder.Logging.ConfigureLoggingLevel();
 
@@ -135,6 +150,13 @@ public static class WebApplicationLauncher
 			});
 		}
 
+		app.MapOpenApi(DocumentationPaths.OpenApi);
+		app.UseSwaggerUI(c =>
+		{
+			// Point to the static OpenAPI file
+			c.SwaggerEndpoint(DocumentationPaths.OpenApi, "AssetRipper API");
+		});
+
 		//Static files
 		app.MapStaticFile("/favicon.ico", "image/x-icon");
 		app.MapStaticFile("/css/site.css", "text/css");
@@ -147,16 +169,18 @@ public static class WebApplicationLauncher
 		{
 			context.Response.DisableCaching();
 			return IndexPage.Instance.WriteToResponse(context.Response);
-		});
-		app.MapGet("/Commands", CommandsPage.Instance.ToResult);
-		app.MapGet("/Privacy", PrivacyPage.Instance.ToResult);
-		app.MapGet("/Licenses", LicensesPage.Instance.ToResult);
+		})
+			.WithSummary("The home page")
+			.ProducesHtmlPage();
+		app.MapGet("/Commands", CommandsPage.Instance.ToResult).ProducesHtmlPage();
+		app.MapGet("/Privacy", PrivacyPage.Instance.ToResult).ProducesHtmlPage();
+		app.MapGet("/Licenses", LicensesPage.Instance.ToResult).ProducesHtmlPage();
 
 		app.MapGet("/ConfigurationFiles", (context) =>
 		{
 			context.Response.DisableCaching();
 			return ConfigurationFilesPage.Instance.WriteToResponse(context.Response);
-		});
+		}).ProducesHtmlPage();
 		app.MapPost("/ConfigurationFiles/Singleton/Add", ConfigurationFilesPage.HandleSingletonAddPostRequest);
 		app.MapPost("/ConfigurationFiles/Singleton/Remove", ConfigurationFilesPage.HandleSingletonRemovePostRequest);
 		app.MapPost("/ConfigurationFiles/List/Add", ConfigurationFilesPage.HandleListAddPostRequest);
@@ -167,33 +191,53 @@ public static class WebApplicationLauncher
 		{
 			context.Response.DisableCaching();
 			return SettingsPage.Instance.WriteToResponse(context.Response);
-		});
+		}).ProducesHtmlPage();
 		app.MapPost("/Settings/Update", SettingsPage.HandlePostRequest);
 
 		//Assets
-		app.MapGet(AssetAPI.Urls.View, AssetAPI.GetView);
-		app.MapGet(AssetAPI.Urls.Image, AssetAPI.GetImageData);
-		app.MapGet(AssetAPI.Urls.Audio, AssetAPI.GetAudioData);
-		app.MapGet(AssetAPI.Urls.Model, AssetAPI.GetModelData);
-		app.MapGet(AssetAPI.Urls.Font, AssetAPI.GetFontData);
-		app.MapGet(AssetAPI.Urls.Json, AssetAPI.GetJson);
-		app.MapGet(AssetAPI.Urls.Yaml, AssetAPI.GetYaml);
-		app.MapGet(AssetAPI.Urls.Text, AssetAPI.GetText);
-		app.MapGet(AssetAPI.Urls.Binary, AssetAPI.GetBinaryData);
+		app.MapGet(AssetAPI.Urls.View, AssetAPI.GetView).ProducesHtmlPage();
+		app.MapGet(AssetAPI.Urls.Image, AssetAPI.GetImageData)
+			.Produces<byte[]>(contentType: "application/octet-stream")
+			.WithAssetPathParameter()
+			.WithImageExtensionParameter();
+		app.MapGet(AssetAPI.Urls.Audio, AssetAPI.GetAudioData)
+			.Produces<byte[]>(contentType: "application/octet-stream")
+			.WithAssetPathParameter();
+		app.MapGet(AssetAPI.Urls.Model, AssetAPI.GetModelData)
+			.Produces<byte[]>(contentType: "application/octet-stream")
+			.WithAssetPathParameter();
+		app.MapGet(AssetAPI.Urls.Font, AssetAPI.GetFontData)
+			.Produces<byte[]>(contentType: "application/octet-stream")
+			.WithAssetPathParameter();
+		app.MapGet(AssetAPI.Urls.Json, AssetAPI.GetJson)
+			.Produces<string>(contentType: "application/json")
+			.WithAssetPathParameter();
+		app.MapGet(AssetAPI.Urls.Yaml, AssetAPI.GetYaml)
+			.Produces<string>(contentType: "text/yaml")
+			.WithAssetPathParameter();
+		app.MapGet(AssetAPI.Urls.Text, AssetAPI.GetText)
+			.Produces<string>(contentType: "text/plain")
+			.WithAssetPathParameter();
+		app.MapGet(AssetAPI.Urls.Binary, AssetAPI.GetBinaryData)
+			.Produces<byte[]>(contentType: "application/octet-stream")
+			.WithAssetPathParameter();
 
 		//Bundles
-		app.MapGet(BundleAPI.Urls.View, BundleAPI.GetView);
+		app.MapGet(BundleAPI.Urls.View, BundleAPI.GetView).ProducesHtmlPage();
 
 		//Collections
-		app.MapGet(CollectionAPI.Urls.View, CollectionAPI.GetView);
-		app.MapGet(CollectionAPI.Urls.Count, CollectionAPI.GetCount);
+		app.MapGet(CollectionAPI.Urls.View, CollectionAPI.GetView).ProducesHtmlPage();
+		app.MapGet(CollectionAPI.Urls.Count, CollectionAPI.GetCount)
+			.WithSummary("Get the number of elements in the collection.")
+			.Produces<int>();
 
 		//Resources
-		app.MapGet(ResourceAPI.Urls.View, ResourceAPI.GetView);
-		app.MapGet(ResourceAPI.Urls.Data, ResourceAPI.GetData);
+		app.MapGet(ResourceAPI.Urls.View, ResourceAPI.GetView).ProducesHtmlPage();
+		app.MapGet(ResourceAPI.Urls.Data, ResourceAPI.GetData)
+			.Produces<byte[]>(contentType: "application/octet-stream");
 
 		//Scenes
-		app.MapGet(SceneAPI.Urls.View, SceneAPI.GetView);
+		app.MapGet(SceneAPI.Urls.View, SceneAPI.GetView).ProducesHtmlPage();
 
 		app.MapPost("/Localization", (context) =>
 		{
@@ -207,21 +251,33 @@ public static class WebApplicationLauncher
 				}
 			}
 			return Results.Redirect("/").ExecuteAsync(context);
-		});
+		})
+			.WithQueryStringParameter("Code", "Language code", true)
+			.Produces(StatusCodes.Status302Found);
 
 		//Commands
-		app.MapPost("/Export/UnityProject", Commands.HandleCommand<Commands.ExportUnityProject>);
-		app.MapPost("/Export/PrimaryContent", Commands.HandleCommand<Commands.ExportPrimaryContent>);
-		app.MapPost("/LoadFile", Commands.HandleCommand<Commands.LoadFile>);
-		app.MapPost("/LoadFolder", Commands.HandleCommand<Commands.LoadFolder>);
-		app.MapPost("/Reset", Commands.HandleCommand<Commands.Reset>);
+		app.MapPost("/Export/UnityProject", Commands.HandleCommand<Commands.ExportUnityProject>)
+			.WithQueryStringParameter("Path")
+			.Produces(StatusCodes.Status302Found);
+		app.MapPost("/Export/PrimaryContent", Commands.HandleCommand<Commands.ExportPrimaryContent>)
+			.WithQueryStringParameter("Path")
+			.Produces(StatusCodes.Status302Found);
+		app.MapPost("/LoadFile", Commands.HandleCommand<Commands.LoadFile>)
+			.WithQueryStringParameter("Path")
+			.Produces(StatusCodes.Status302Found);
+		app.MapPost("/LoadFolder", Commands.HandleCommand<Commands.LoadFolder>)
+			.WithQueryStringParameter("Path")
+			.Produces(StatusCodes.Status302Found);
+		app.MapPost("/Reset", Commands.HandleCommand<Commands.Reset>)
+			.WithQueryStringParameter("Path")
+			.Produces(StatusCodes.Status302Found);
 
 		//Dialogs
-		app.MapGet("/Dialogs/SaveFile", Dialogs.SaveFile.HandleGetRequest);
-		app.MapGet("/Dialogs/OpenFolder", Dialogs.OpenFolder.HandleGetRequest);
-		app.MapGet("/Dialogs/OpenFolders", Dialogs.OpenFolders.HandleGetRequest);
-		app.MapGet("/Dialogs/OpenFile", Dialogs.OpenFile.HandleGetRequest);
-		app.MapGet("/Dialogs/OpenFiles", Dialogs.OpenFiles.HandleGetRequest);
+		app.MapGet("/Dialogs/SaveFile", Dialogs.SaveFile.HandleGetRequest).Produces<string>();
+		app.MapGet("/Dialogs/OpenFolder", Dialogs.OpenFolder.HandleGetRequest).Produces<string>();
+		app.MapGet("/Dialogs/OpenFolders", Dialogs.OpenFolders.HandleGetRequest).Produces<string>();
+		app.MapGet("/Dialogs/OpenFile", Dialogs.OpenFile.HandleGetRequest).Produces<string>();
+		app.MapGet("/Dialogs/OpenFiles", Dialogs.OpenFiles.HandleGetRequest).Produces<string>();
 
 		//File API
 		app.MapGet("/IO/File/Exists", (context) =>
@@ -236,7 +292,10 @@ public static class WebApplicationLauncher
 			{
 				return Results.BadRequest().ExecuteAsync(context);
 			}
-		});
+		})
+			.Produces<bool>()
+			.WithQueryStringParameter("Path", required: true);
+
 		app.MapGet("/IO/Directory/Exists", (context) =>
 		{
 			context.Response.DisableCaching();
@@ -249,7 +308,10 @@ public static class WebApplicationLauncher
 			{
 				return Results.BadRequest().ExecuteAsync(context);
 			}
-		});
+		})
+			.Produces<bool>()
+			.WithQueryStringParameter("Path", required: true);
+
 		app.MapGet("/IO/Directory/Empty", (context) =>
 		{
 			context.Response.DisableCaching();
@@ -263,7 +325,9 @@ public static class WebApplicationLauncher
 			{
 				return Results.BadRequest().ExecuteAsync(context);
 			}
-		});
+		})
+			.Produces<bool>()
+			.WithQueryStringParameter("Path", required: true);
 
 		app.Run();
 	}
@@ -313,30 +377,46 @@ public static class WebApplicationLauncher
 		}
 	}
 
-	private static void MapGet(this IEndpointRouteBuilder endpoints, [StringSyntax("Route")] string pattern, Func<IResult> handler)
+	private static RouteHandlerBuilder MapGet(this IEndpointRouteBuilder endpoints, [StringSyntax("Route")] string pattern, RequestDelegate requestDelegate)
 	{
-		endpoints.MapGet(pattern, (context) =>
+		// RouteHandlerBuilder is always returned from this method.
+		// We cast it, so we can access Produces<T> and similar methods.
+		RouteHandlerBuilder mapped = (RouteHandlerBuilder)EndpointRouteBuilderExtensions.MapGet(endpoints, pattern, requestDelegate);
+
+		// We need to add MethodInfo to the metadata, so that it will be used in the api explorer.
+		// https://github.com/dotnet/aspnetcore/issues/44005#issuecomment-1248717069
+		// https://github.com/dotnet/aspnetcore/issues/44970
+		return mapped.WithMetadata(requestDelegate.Method);
+	}
+
+	private static RouteHandlerBuilder MapPost(this IEndpointRouteBuilder endpoints, [StringSyntax("Route")] string pattern, RequestDelegate requestDelegate)
+	{
+		// RouteHandlerBuilder is always returned from this method.
+		// We cast it, so we can access Produces<T> and similar methods.
+		RouteHandlerBuilder mapped = (RouteHandlerBuilder)EndpointRouteBuilderExtensions.MapPost(endpoints, pattern, requestDelegate);
+
+		// We need to add MethodInfo to the metadata, so that it will be used in the api explorer.
+		// https://github.com/dotnet/aspnetcore/issues/44005#issuecomment-1248717069
+		// https://github.com/dotnet/aspnetcore/issues/44970
+		return mapped.WithMetadata(requestDelegate.Method);
+	}
+
+	private static RouteHandlerBuilder MapGet(this IEndpointRouteBuilder endpoints, [StringSyntax("Route")] string pattern, Func<IResult> handler)
+	{
+		return endpoints.MapGet(pattern, (context) =>
 		{
 			IResult result = handler.Invoke();
 			return result.ExecuteAsync(context);
 		});
 	}
 
-	private static void MapGet(this IEndpointRouteBuilder endpoints, [StringSyntax("Route")] string pattern, Func<Task<IResult>> handler)
+	private static RouteHandlerBuilder MapStaticFile(this IEndpointRouteBuilder endpoints, [StringSyntax("Route")] string path, string contentType)
 	{
-		endpoints.MapGet(pattern, async (context) =>
+		return endpoints.MapGet(path, async (context) =>
 		{
-			IResult result = await handler.Invoke();
-			await result.ExecuteAsync(context);
-		});
-	}
-
-	private static void MapStaticFile(this IEndpointRouteBuilder endpoints, [StringSyntax("Route")] string path, string contentType)
-	{
-		endpoints.MapGet(path, async () =>
-		{
+			string fileName = Path.GetFileName(path);
 			byte[] data = await StaticContentLoader.Load(path);
-			return Results.Bytes(data, contentType);
-		});
+			await Results.Bytes(data, contentType, fileName).ExecuteAsync(context);
+		}).Produces<byte[]>(StatusCodes.Status200OK, contentType);
 	}
 }

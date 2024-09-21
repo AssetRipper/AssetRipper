@@ -9,6 +9,7 @@ using AssetRipper.Export.PrimaryContent;
 using AssetRipper.Export.UnityProjects;
 using AssetRipper.Export.UnityProjects.Scripts;
 using AssetRipper.Export.UnityProjects.Shaders;
+using AssetRipper.GUI.Web.Documentation;
 using AssetRipper.GUI.Web.Paths;
 using AssetRipper.Import.AssetCreation;
 using AssetRipper.Import.Logging;
@@ -27,6 +28,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_83;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.Web.Extensions;
 using AssetRipper.Yaml;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using SharpGLTF.Scenes;
 using SharpGLTF.Schema2;
@@ -497,5 +499,15 @@ internal static class AssetAPI
 			failureTask = null;
 			return true;
 		}
+	}
+
+	public static RouteHandlerBuilder WithAssetPathParameter(this RouteHandlerBuilder builder)
+	{
+		return builder.WithQueryStringParameter(Path, "Path to the asset", true);
+	}
+
+	public static RouteHandlerBuilder WithImageExtensionParameter(this RouteHandlerBuilder builder)
+	{
+		return builder.WithQueryStringParameter(Extension, "Extension for decoding the image.", true);
 	}
 }
