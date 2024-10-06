@@ -46,6 +46,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IssueTemplates", "IssueTemp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{88179FFC-0863-4C4F-9860-68EB1471E59F}"
 	ProjectSection(SolutionItems) = preProject
+		.github\workflows\analysis.yml = .github\workflows\analysis.yml
 		.github\workflows\cla.yml = .github\workflows\cla.yml
 		.github\workflows\docfx_build.yml = .github\workflows\docfx_build.yml
 		.github\workflows\greetings.yml = .github\workflows\greetings.yml
