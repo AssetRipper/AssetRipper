@@ -23,6 +23,7 @@ partial class LocalizationLoader
 		{ "pt-BR", "português (Brasil)" },
 		{ "ro", "română" },
 		{ "ru", "русский" },
+		{ "th", "ไทย" },
 		{ "tr", "Türkçe" },
 		{ "uk", "українська" },
 		{ "zh-Hans", "中文（简体）" },
