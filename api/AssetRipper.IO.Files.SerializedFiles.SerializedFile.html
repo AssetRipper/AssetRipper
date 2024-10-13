@@ -1,0 +1,763 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class SerializedFile
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class SerializedFile
+   ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="AssetRipper.IO.Files.SerializedFiles.SerializedFile">
+  
+  
+  <h1 id="AssetRipper_IO_Files_SerializedFiles_SerializedFile" data-uid="AssetRipper.IO.Files.SerializedFiles.SerializedFile" class="text-break">Class SerializedFile
+  </h1>
+  <div class="markdown level0 summary"><p>Serialized files contain binary serialized objects and optional run-time type information.
+They have file name extensions like .asset, .assets, .sharedAssets but may also have no extension at all</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="AssetRipper.IO.Files.FileBase.html">FileBase</a></div>
+    <div class="level2"><span class="xref">SerializedFile</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="AssetRipper.IO.Files.FileBase.html#AssetRipper_IO_Files_FileBase_FilePath">FileBase.FilePath</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.IO.Files.FileBase.html#AssetRipper_IO_Files_FileBase_Name">FileBase.Name</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.IO.Files.FileBase.html#AssetRipper_IO_Files_FileBase_NameFixed">FileBase.NameFixed</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.IO.Files.FileBase.html#AssetRipper_IO_Files_FileBase_ReadContents">FileBase.ReadContents()</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.IO.Files.FileBase.html#AssetRipper_IO_Files_FileBase_ReadContentsRecursively">FileBase.ReadContentsRecursively()</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.IO.Files.FileBase.html#AssetRipper_IO_Files_FileBase_ToByteArray">FileBase.ToByteArray()</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.IO.Files.FileBase.html#AssetRipper_IO_Files_FileBase_Dispose_System_Boolean_">FileBase.Dispose(Boolean)</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.IO.Files.FileBase.html#AssetRipper_IO_Files_FileBase_Dispose">FileBase.Dispose()</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="AssetRipper.IO.Files.SerializedFiles.html">AssetRipper.IO.Files.SerializedFiles</a></h6>
+  <h6><strong>Assembly</strong>: AssetRipper.IO.Files.dll</h6>
+  <h5 id="AssetRipper_IO_Files_SerializedFiles_SerializedFile_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class SerializedFile : FileBase</code></pre>
+  </div>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_SerializedFiles_SerializedFile_Dependencies.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.SerializedFiles.SerializedFile.Dependencies%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/SerializedFiles/SerializedFile.cs/#L61">View Source</a>
+  </span>
+  <a id="AssetRipper_IO_Files_SerializedFiles_SerializedFile_Dependencies_" data-uid="AssetRipper.IO.Files.SerializedFiles.SerializedFile.Dependencies*"></a>
+  <h4 id="AssetRipper_IO_Files_SerializedFiles_SerializedFile_Dependencies" data-uid="AssetRipper.IO.Files.SerializedFiles.SerializedFile.Dependencies">Dependencies</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ReadOnlySpan&lt;FileIdentifier&gt; Dependencies { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">ReadOnlySpan</span>&lt;<a class="xref" href="AssetRipper.IO.Files.SerializedFiles.Parser.FileIdentifier.html">FileIdentifier</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_SerializedFiles_SerializedFile_EndianType.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.SerializedFiles.SerializedFile.EndianType%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/SerializedFiles/SerializedFile.cs/#L60">View Source</a>
+  </span>
+  <a id="AssetRipper_IO_Files_SerializedFiles_SerializedFile_EndianType_" data-uid="AssetRipper.IO.Files.SerializedFiles.SerializedFile.EndianType*"></a>
+  <h4 id="AssetRipper_IO_Files_SerializedFiles_SerializedFile_EndianType" data-uid="AssetRipper.IO.Files.SerializedFiles.SerializedFile.EndianType">EndianType</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public EndianType EndianType { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">AssetRipper.IO.Endian.EndianType</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_SerializedFiles_SerializedFile_Flags.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.SerializedFiles.SerializedFile.Flags%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/SerializedFiles/SerializedFile.cs/#L28">View Source</a>
+  </span>
+  <a id="AssetRipper_IO_Files_SerializedFiles_SerializedFile_Flags_" data-uid="AssetRipper.IO.Files.SerializedFiles.SerializedFile.Flags*"></a>
+  <h4 id="AssetRipper_IO_Files_SerializedFiles_SerializedFile_Flags" data-uid="AssetRipper.IO.Files.SerializedFiles.SerializedFile.Flags">Flags</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TransferInstructionFlags Flags { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.IO.Files.SerializedFiles.TransferInstructionFlags.html">TransferInstructionFlags</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_SerializedFiles_SerializedFile_Generation.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.SerializedFiles.SerializedFile.Generation%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/SerializedFiles/SerializedFile.cs/#L25">View Source</a>
+  </span>
+  <a id="AssetRipper_IO_Files_SerializedFiles_SerializedFile_Generation_" data-uid="AssetRipper.IO.Files.SerializedFiles.SerializedFile.Generation*"></a>
+  <h4 id="AssetRipper_IO_Files_SerializedFiles_SerializedFile_Generation" data-uid="AssetRipper.IO.Files.SerializedFiles.SerializedFile.Generation">Generation</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public FormatVersion Generation { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.IO.Files.SerializedFiles.FormatVersion.html">FormatVersion</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_SerializedFiles_SerializedFile_HasTypeTree.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.SerializedFiles.SerializedFile.HasTypeTree%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/SerializedFiles/SerializedFile.cs/#L66">View Source</a>
+  </span>
+  <a id="AssetRipper_IO_Files_SerializedFiles_SerializedFile_HasTypeTree_" data-uid="AssetRipper.IO.Files.SerializedFiles.SerializedFile.HasTypeTree*"></a>
+  <h4 id="AssetRipper_IO_Files_SerializedFiles_SerializedFile_HasTypeTree" data-uid="AssetRipper.IO.Files.SerializedFiles.SerializedFile.HasTypeTree">HasTypeTree</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool HasTypeTree { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_SerializedFiles_SerializedFile_Objects.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.SerializedFiles.SerializedFile.Objects%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/SerializedFiles/SerializedFile.cs/#L62">View Source</a>
+  </span>
+  <a id="AssetRipper_IO_Files_SerializedFiles_SerializedFile_Objects_" data-uid="AssetRipper.IO.Files.SerializedFiles.SerializedFile.Objects*"></a>
+  <h4 id="AssetRipper_IO_Files_SerializedFiles_SerializedFile_Objects" data-uid="AssetRipper.IO.Files.SerializedFiles.SerializedFile.Objects">Objects</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ReadOnlySpan&lt;ObjectInfo&gt; Objects { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">ReadOnlySpan</span>&lt;<a class="xref" href="AssetRipper.IO.Files.SerializedFiles.Parser.ObjectInfo.html">ObjectInfo</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_SerializedFiles_SerializedFile_Platform.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.SerializedFiles.SerializedFile.Platform%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/SerializedFiles/SerializedFile.cs/#L27">View Source</a>
+  </span>
+  <a id="AssetRipper_IO_Files_SerializedFiles_SerializedFile_Platform_" data-uid="AssetRipper.IO.Files.SerializedFiles.SerializedFile.Platform*"></a>
+  <h4 id="AssetRipper_IO_Files_SerializedFiles_SerializedFile_Platform" data-uid="AssetRipper.IO.Files.SerializedFiles.SerializedFile.Platform">Platform</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public BuildTarget Platform { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.IO.Files.BuildTarget.html">BuildTarget</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_SerializedFiles_SerializedFile_RefTypes.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.SerializedFiles.SerializedFile.RefTypes%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/SerializedFiles/SerializedFile.cs/#L65">View Source</a>
+  </span>
+  <a id="AssetRipper_IO_Files_SerializedFiles_SerializedFile_RefTypes_" data-uid="AssetRipper.IO.Files.SerializedFiles.SerializedFile.RefTypes*"></a>
+  <h4 id="AssetRipper_IO_Files_SerializedFiles_SerializedFile_RefTypes" data-uid="AssetRipper.IO.Files.SerializedFiles.SerializedFile.RefTypes">RefTypes</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ReadOnlySpan&lt;SerializedTypeReference&gt; RefTypes { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">ReadOnlySpan</span>&lt;<a class="xref" href="AssetRipper.IO.Files.SerializedFiles.Parser.SerializedTypeReference.html">SerializedTypeReference</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_SerializedFiles_SerializedFile_ScriptTypes.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.SerializedFiles.SerializedFile.ScriptTypes%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/SerializedFiles/SerializedFile.cs/#L64">View Source</a>
+  </span>
+  <a id="AssetRipper_IO_Files_SerializedFiles_SerializedFile_ScriptTypes_" data-uid="AssetRipper.IO.Files.SerializedFiles.SerializedFile.ScriptTypes*"></a>
+  <h4 id="AssetRipper_IO_Files_SerializedFiles_SerializedFile_ScriptTypes" data-uid="AssetRipper.IO.Files.SerializedFiles.SerializedFile.ScriptTypes">ScriptTypes</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ReadOnlySpan&lt;LocalSerializedObjectIdentifier&gt; ScriptTypes { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">ReadOnlySpan</span>&lt;<a class="xref" href="AssetRipper.IO.Files.SerializedFiles.Parser.LocalSerializedObjectIdentifier.html">LocalSerializedObjectIdentifier</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_SerializedFiles_SerializedFile_Types.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.SerializedFiles.SerializedFile.Types%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/SerializedFiles/SerializedFile.cs/#L63">View Source</a>
+  </span>
+  <a id="AssetRipper_IO_Files_SerializedFiles_SerializedFile_Types_" data-uid="AssetRipper.IO.Files.SerializedFiles.SerializedFile.Types*"></a>
+  <h4 id="AssetRipper_IO_Files_SerializedFiles_SerializedFile_Types" data-uid="AssetRipper.IO.Files.SerializedFiles.SerializedFile.Types">Types</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ReadOnlySpan&lt;SerializedType&gt; Types { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">ReadOnlySpan</span>&lt;<a class="xref" href="AssetRipper.IO.Files.SerializedFiles.Parser.SerializedType.html">SerializedType</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_SerializedFiles_SerializedFile_Version.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.SerializedFiles.SerializedFile.Version%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/SerializedFiles/SerializedFile.cs/#L26">View Source</a>
+  </span>
+  <a id="AssetRipper_IO_Files_SerializedFiles_SerializedFile_Version_" data-uid="AssetRipper.IO.Files.SerializedFiles.SerializedFile.Version*"></a>
+  <h4 id="AssetRipper_IO_Files_SerializedFiles_SerializedFile_Version" data-uid="AssetRipper.IO.Files.SerializedFiles.SerializedFile.Version">Version</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public UnityVersion Version { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">UnityVersion</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_SerializedFiles_SerializedFile_FromBuilder_AssetRipper_IO_Files_SerializedFiles_SerializedFileBuilder_.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.SerializedFiles.SerializedFile.FromBuilder(AssetRipper.IO.Files.SerializedFiles.SerializedFileBuilder)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/SerializedFiles/SerializedFile.cs/#L240">View Source</a>
+  </span>
+  <a id="AssetRipper_IO_Files_SerializedFiles_SerializedFile_FromBuilder_" data-uid="AssetRipper.IO.Files.SerializedFiles.SerializedFile.FromBuilder*"></a>
+  <h4 id="AssetRipper_IO_Files_SerializedFiles_SerializedFile_FromBuilder_AssetRipper_IO_Files_SerializedFiles_SerializedFileBuilder_" data-uid="AssetRipper.IO.Files.SerializedFiles.SerializedFile.FromBuilder(AssetRipper.IO.Files.SerializedFiles.SerializedFileBuilder)">FromBuilder(SerializedFileBuilder)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static SerializedFile FromBuilder(SerializedFileBuilder builder)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.IO.Files.SerializedFiles.SerializedFileBuilder.html">SerializedFileBuilder</a></td>
+        <td><span class="parametername">builder</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.IO.Files.SerializedFiles.SerializedFile.html">SerializedFile</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_SerializedFiles_SerializedFile_FromFile_System_String_.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.SerializedFiles.SerializedFile.FromFile(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/SerializedFiles/SerializedFile.cs/#L233">View Source</a>
+  </span>
+  <a id="AssetRipper_IO_Files_SerializedFiles_SerializedFile_FromFile_" data-uid="AssetRipper.IO.Files.SerializedFiles.SerializedFile.FromFile*"></a>
+  <h4 id="AssetRipper_IO_Files_SerializedFiles_SerializedFile_FromFile_System_String_" data-uid="AssetRipper.IO.Files.SerializedFiles.SerializedFile.FromFile(System.String)">FromFile(String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static SerializedFile FromFile(string filePath)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">filePath</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.IO.Files.SerializedFiles.SerializedFile.html">SerializedFile</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_SerializedFiles_SerializedFile_IsSerializedFile_Stream_.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.SerializedFiles.SerializedFile.IsSerializedFile(Stream)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/SerializedFiles/SerializedFile.cs/#L74">View Source</a>
+  </span>
+  <a id="AssetRipper_IO_Files_SerializedFiles_SerializedFile_IsSerializedFile_" data-uid="AssetRipper.IO.Files.SerializedFiles.SerializedFile.IsSerializedFile*"></a>
+  <h4 id="AssetRipper_IO_Files_SerializedFiles_SerializedFile_IsSerializedFile_Stream_" data-uid="AssetRipper.IO.Files.SerializedFiles.SerializedFile.IsSerializedFile(Stream)">IsSerializedFile(Stream)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool IsSerializedFile(Stream stream)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Stream</span></td>
+        <td><span class="parametername">stream</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_SerializedFiles_SerializedFile_Read_AssetRipper_IO_Files_Streams_Smart_SmartStream_.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.SerializedFiles.SerializedFile.Read(AssetRipper.IO.Files.Streams.Smart.SmartStream)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/SerializedFiles/SerializedFile.cs/#L85">View Source</a>
+  </span>
+  <a id="AssetRipper_IO_Files_SerializedFiles_SerializedFile_Read_" data-uid="AssetRipper.IO.Files.SerializedFiles.SerializedFile.Read*"></a>
+  <h4 id="AssetRipper_IO_Files_SerializedFiles_SerializedFile_Read_AssetRipper_IO_Files_Streams_Smart_SmartStream_" data-uid="AssetRipper.IO.Files.SerializedFiles.SerializedFile.Read(AssetRipper.IO.Files.Streams.Smart.SmartStream)">Read(SmartStream)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Read(SmartStream stream)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.IO.Files.Streams.Smart.SmartStream.html">SmartStream</a></td>
+        <td><span class="parametername">stream</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="AssetRipper.IO.Files.FileBase.html#AssetRipper_IO_Files_FileBase_Read_AssetRipper_IO_Files_Streams_Smart_SmartStream_">FileBase.Read(SmartStream)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_SerializedFiles_SerializedFile_ToString.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.SerializedFiles.SerializedFile.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/SerializedFiles/SerializedFile.cs/#L80">View Source</a>
+  </span>
+  <a id="AssetRipper_IO_Files_SerializedFiles_SerializedFile_ToString_" data-uid="AssetRipper.IO.Files.SerializedFiles.SerializedFile.ToString*"></a>
+  <h4 id="AssetRipper_IO_Files_SerializedFiles_SerializedFile_ToString" data-uid="AssetRipper.IO.Files.SerializedFiles.SerializedFile.ToString">ToString()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="AssetRipper.IO.Files.FileBase.html#AssetRipper_IO_Files_FileBase_ToString">FileBase.ToString()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_SerializedFiles_SerializedFile_Write_Stream_.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.SerializedFiles.SerializedFile.Write(Stream)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/SerializedFiles/SerializedFile.cs/#L127">View Source</a>
+  </span>
+  <a id="AssetRipper_IO_Files_SerializedFiles_SerializedFile_Write_" data-uid="AssetRipper.IO.Files.SerializedFiles.SerializedFile.Write*"></a>
+  <h4 id="AssetRipper_IO_Files_SerializedFiles_SerializedFile_Write_Stream_" data-uid="AssetRipper.IO.Files.SerializedFiles.SerializedFile.Write(Stream)">Write(Stream)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Write(Stream stream)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Stream</span></td>
+        <td><span class="parametername">stream</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="AssetRipper.IO.Files.FileBase.html#AssetRipper_IO_Files_FileBase_Write_Stream_">FileBase.Write(Stream)</a></div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_SerializedFiles_SerializedFile.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.SerializedFiles.SerializedFile%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/SerializedFiles/SerializedFile.cs/#L17" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="toggle-mode">
+                <div class="icon">
+                  <i aria-hidden="true">☀</i>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="switch-style">
+                  <span class="slider round"></span>
+                </label>
+                <div class="icon">
+                  <i aria-hidden="true">☾</i>
+                </div>
+              </div>
+          
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <h5>In This Article</h5>
+              <div></div>
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <div class="pull-left">
+              
+              <span>Generated by <strong>DocFX</strong></span>
+            </div>
+            <div class="toggle-mode pull-right visible-sm visible-xs">
+              <div class="icon">
+                <i aria-hidden="true">☀</i>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="switch-style-m">
+                <span class="slider round"></span>
+              </label>
+              <div class="icon">
+                <i aria-hidden="true">☾</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript" src="../styles/toggle-theme.js"></script>
+      </footer>    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,1286 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class AssetWalker
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class AssetWalker
+   ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="AssetRipper.Assets.Traversal.AssetWalker">
+  
+  
+  <h1 id="AssetRipper_Assets_Traversal_AssetWalker" data-uid="AssetRipper.Assets.Traversal.AssetWalker" class="text-break">Class AssetWalker
+  </h1>
+  <div class="markdown level0 summary"><p>Abstract base class for traversing objects that implement <a class="xref" href="AssetRipper.Assets.IUnityAssetBase.html">IUnityAssetBase</a>.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">AssetWalker</span></div>
+      <div class="level2"><a class="xref" href="AssetRipper.Export.PrimaryContent.DefaultJsonWalker.html">DefaultJsonWalker</a></div>
+      <div class="level2"><a class="xref" href="AssetRipper.Export.UnityProjects.YamlWalker.html">YamlWalker</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="AssetRipper.Assets.Traversal.html">AssetRipper.Assets.Traversal</a></h6>
+  <h6><strong>Assembly</strong>: AssetRipper.Assets.dll</h6>
+  <h5 id="AssetRipper_Assets_Traversal_AssetWalker_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract class AssetWalker</code></pre>
+  </div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Traversal_AssetWalker_DivideAsset_AssetRipper_Assets_IUnityAssetBase_.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Traversal.AssetWalker.DivideAsset(AssetRipper.Assets.IUnityAssetBase)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Traversal/AssetWalker.cs/#L28">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Traversal_AssetWalker_DivideAsset_" data-uid="AssetRipper.Assets.Traversal.AssetWalker.DivideAsset*"></a>
+  <h4 id="AssetRipper_Assets_Traversal_AssetWalker_DivideAsset_AssetRipper_Assets_IUnityAssetBase_" data-uid="AssetRipper.Assets.Traversal.AssetWalker.DivideAsset(AssetRipper.Assets.IUnityAssetBase)">DivideAsset(IUnityAssetBase)</h4>
+  <div class="markdown level1 summary"><p>Called between two fields of an asset node during traversal.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void DivideAsset(IUnityAssetBase asset)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Assets.IUnityAssetBase.html">IUnityAssetBase</a></td>
+        <td><span class="parametername">asset</span></td>
+        <td><p>The asset having its fields divided.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Traversal_AssetWalker_DivideDictionary__2_IReadOnlyCollection_KeyValuePair___0___1___.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Traversal.AssetWalker.DivideDictionary%60%602(IReadOnlyCollection%7BKeyValuePair%7B%60%600%2C%60%601%7D%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Traversal/AssetWalker.cs/#L114">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Traversal_AssetWalker_DivideDictionary_" data-uid="AssetRipper.Assets.Traversal.AssetWalker.DivideDictionary*"></a>
+  <h4 id="AssetRipper_Assets_Traversal_AssetWalker_DivideDictionary__2_IReadOnlyCollection_KeyValuePair___0___1___" data-uid="AssetRipper.Assets.Traversal.AssetWalker.DivideDictionary``2(IReadOnlyCollection{KeyValuePair{``0,``1}})">DivideDictionary&lt;TKey, TValue&gt;(IReadOnlyCollection&lt;KeyValuePair&lt;TKey, TValue&gt;&gt;)</h4>
+  <div class="markdown level1 summary"><p>Called between two pairs of a dictionary node during traversal.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void DivideDictionary&lt;TKey, TValue&gt;(IReadOnlyCollection&lt;KeyValuePair&lt;TKey, TValue&gt;&gt; dictionary)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IReadOnlyCollection</span>&lt;<span class="xref">KeyValuePair</span>&lt;TKey, TValue&gt;&gt;</td>
+        <td><span class="parametername">dictionary</span></td>
+        <td><p>The dictionary having its pairs divided.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TKey</span></td>
+        <td><p>The type of dictionary keys.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="parametername">TValue</span></td>
+        <td><p>The type of dictionary values.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Traversal_AssetWalker_DivideDictionaryPair__2_KeyValuePair___0___1__.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Traversal.AssetWalker.DivideDictionaryPair%60%602(KeyValuePair%7B%60%600%2C%60%601%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Traversal/AssetWalker.cs/#L155">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Traversal_AssetWalker_DivideDictionaryPair_" data-uid="AssetRipper.Assets.Traversal.AssetWalker.DivideDictionaryPair*"></a>
+  <h4 id="AssetRipper_Assets_Traversal_AssetWalker_DivideDictionaryPair__2_KeyValuePair___0___1__" data-uid="AssetRipper.Assets.Traversal.AssetWalker.DivideDictionaryPair``2(KeyValuePair{``0,``1})">DivideDictionaryPair&lt;TKey, TValue&gt;(KeyValuePair&lt;TKey, TValue&gt;)</h4>
+  <div class="markdown level1 summary"><p>Called between the key and value of a dictionary pair during traversal.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void DivideDictionaryPair&lt;TKey, TValue&gt;(KeyValuePair&lt;TKey, TValue&gt; pair)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">KeyValuePair</span>&lt;TKey, TValue&gt;</td>
+        <td><span class="parametername">pair</span></td>
+        <td><p>The dictionary pair having its key and value divided.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TKey</span></td>
+        <td><p>The type of the key in the pair.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="parametername">TValue</span></td>
+        <td><p>The type of the value in the pair.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="AssetRipper_Assets_Traversal_AssetWalker_DivideDictionaryPair__2_KeyValuePair___0___1___remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>This calls <a class="xref" href="AssetRipper.Assets.Traversal.AssetWalker.html#AssetRipper_Assets_Traversal_AssetWalker_DividePair__2_KeyValuePair___0___1__">DividePair&lt;TKey, TValue&gt;(KeyValuePair&lt;TKey, TValue&gt;)</a> by default.</p>
+</div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Traversal_AssetWalker_DivideList__1_IReadOnlyList___0__.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Traversal.AssetWalker.DivideList%60%601(IReadOnlyList%7B%60%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Traversal/AssetWalker.cs/#L80">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Traversal_AssetWalker_DivideList_" data-uid="AssetRipper.Assets.Traversal.AssetWalker.DivideList*"></a>
+  <h4 id="AssetRipper_Assets_Traversal_AssetWalker_DivideList__1_IReadOnlyList___0__" data-uid="AssetRipper.Assets.Traversal.AssetWalker.DivideList``1(IReadOnlyList{``0})">DivideList&lt;T&gt;(IReadOnlyList&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"><p>Called between two elements of a list node during traversal.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void DivideList&lt;T&gt;(IReadOnlyList&lt;T&gt; list)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IReadOnlyList</span>&lt;T&gt;</td>
+        <td><span class="parametername">list</span></td>
+        <td><p>The list having its elements divided.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td><p>The type of the list elements being divided.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Traversal_AssetWalker_DividePair__2_KeyValuePair___0___1__.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Traversal.AssetWalker.DividePair%60%602(KeyValuePair%7B%60%600%2C%60%601%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Traversal/AssetWalker.cs/#L195">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Traversal_AssetWalker_DividePair_" data-uid="AssetRipper.Assets.Traversal.AssetWalker.DividePair*"></a>
+  <h4 id="AssetRipper_Assets_Traversal_AssetWalker_DividePair__2_KeyValuePair___0___1__" data-uid="AssetRipper.Assets.Traversal.AssetWalker.DividePair``2(KeyValuePair{``0,``1})">DividePair&lt;TKey, TValue&gt;(KeyValuePair&lt;TKey, TValue&gt;)</h4>
+  <div class="markdown level1 summary"><p>Called between the key and value of a key-value pair node during traversal.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void DividePair&lt;TKey, TValue&gt;(KeyValuePair&lt;TKey, TValue&gt; pair)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">KeyValuePair</span>&lt;TKey, TValue&gt;</td>
+        <td><span class="parametername">pair</span></td>
+        <td><p>The key-value pair having its key and value divided.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TKey</span></td>
+        <td><p>The type of the key in the pair.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="parametername">TValue</span></td>
+        <td><p>The type of the value in the pair.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Traversal_AssetWalker_EnterAsset_AssetRipper_Assets_IUnityAssetBase_.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Traversal.AssetWalker.EnterAsset(AssetRipper.Assets.IUnityAssetBase)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Traversal/AssetWalker.cs/#L19">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Traversal_AssetWalker_EnterAsset_" data-uid="AssetRipper.Assets.Traversal.AssetWalker.EnterAsset*"></a>
+  <h4 id="AssetRipper_Assets_Traversal_AssetWalker_EnterAsset_AssetRipper_Assets_IUnityAssetBase_" data-uid="AssetRipper.Assets.Traversal.AssetWalker.EnterAsset(AssetRipper.Assets.IUnityAssetBase)">EnterAsset(IUnityAssetBase)</h4>
+  <div class="markdown level1 summary"><p>Called when entering an asset node during traversal.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool EnterAsset(IUnityAssetBase asset)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Assets.IUnityAssetBase.html">IUnityAssetBase</a></td>
+        <td><span class="parametername">asset</span></td>
+        <td><p>The asset being entered.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> to continue visiting the children of the asset node,
+<code>false</code> to skip visiting the children and not call the exit method.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Traversal_AssetWalker_EnterDictionary__2_IReadOnlyCollection_KeyValuePair___0___1___.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Traversal.AssetWalker.EnterDictionary%60%602(IReadOnlyCollection%7BKeyValuePair%7B%60%600%2C%60%601%7D%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Traversal/AssetWalker.cs/#L103">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Traversal_AssetWalker_EnterDictionary_" data-uid="AssetRipper.Assets.Traversal.AssetWalker.EnterDictionary*"></a>
+  <h4 id="AssetRipper_Assets_Traversal_AssetWalker_EnterDictionary__2_IReadOnlyCollection_KeyValuePair___0___1___" data-uid="AssetRipper.Assets.Traversal.AssetWalker.EnterDictionary``2(IReadOnlyCollection{KeyValuePair{``0,``1}})">EnterDictionary&lt;TKey, TValue&gt;(IReadOnlyCollection&lt;KeyValuePair&lt;TKey, TValue&gt;&gt;)</h4>
+  <div class="markdown level1 summary"><p>Called when entering a dictionary node during traversal.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool EnterDictionary&lt;TKey, TValue&gt;(IReadOnlyCollection&lt;KeyValuePair&lt;TKey, TValue&gt;&gt; dictionary)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IReadOnlyCollection</span>&lt;<span class="xref">KeyValuePair</span>&lt;TKey, TValue&gt;&gt;</td>
+        <td><span class="parametername">dictionary</span></td>
+        <td><p>The dictionary being entered.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> to continue visiting the children of the dictionary node,
+<code>false</code> to skip visiting the children and not call the exit method.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TKey</span></td>
+        <td><p>The type of dictionary keys.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="parametername">TValue</span></td>
+        <td><p>The type of dictionary values.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Traversal_AssetWalker_EnterDictionaryPair__2_KeyValuePair___0___1__.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Traversal.AssetWalker.EnterDictionaryPair%60%602(KeyValuePair%7B%60%600%2C%60%601%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Traversal/AssetWalker.cs/#L141">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Traversal_AssetWalker_EnterDictionaryPair_" data-uid="AssetRipper.Assets.Traversal.AssetWalker.EnterDictionaryPair*"></a>
+  <h4 id="AssetRipper_Assets_Traversal_AssetWalker_EnterDictionaryPair__2_KeyValuePair___0___1__" data-uid="AssetRipper.Assets.Traversal.AssetWalker.EnterDictionaryPair``2(KeyValuePair{``0,``1})">EnterDictionaryPair&lt;TKey, TValue&gt;(KeyValuePair&lt;TKey, TValue&gt;)</h4>
+  <div class="markdown level1 summary"><p>Called when entering a dictionary pair during traversal.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool EnterDictionaryPair&lt;TKey, TValue&gt;(KeyValuePair&lt;TKey, TValue&gt; pair)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">KeyValuePair</span>&lt;TKey, TValue&gt;</td>
+        <td><span class="parametername">pair</span></td>
+        <td><p>The dictionary pair being entered.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> to continue visiting the key and value of the dictionary pair,
+<code>false</code> to skip visiting the children and not call the exit method.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TKey</span></td>
+        <td><p>The type of the key in the pair.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="parametername">TValue</span></td>
+        <td><p>The type of the value in the pair.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="AssetRipper_Assets_Traversal_AssetWalker_EnterDictionaryPair__2_KeyValuePair___0___1___remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>This calls <a class="xref" href="AssetRipper.Assets.Traversal.AssetWalker.html#AssetRipper_Assets_Traversal_AssetWalker_EnterPair__2_KeyValuePair___0___1__">EnterPair&lt;TKey, TValue&gt;(KeyValuePair&lt;TKey, TValue&gt;)</a> by default.</p>
+</div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Traversal_AssetWalker_EnterField_AssetRipper_Assets_IUnityAssetBase_System_String_.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Traversal.AssetWalker.EnterField(AssetRipper.Assets.IUnityAssetBase%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Traversal/AssetWalker.cs/#L48">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Traversal_AssetWalker_EnterField_" data-uid="AssetRipper.Assets.Traversal.AssetWalker.EnterField*"></a>
+  <h4 id="AssetRipper_Assets_Traversal_AssetWalker_EnterField_AssetRipper_Assets_IUnityAssetBase_System_String_" data-uid="AssetRipper.Assets.Traversal.AssetWalker.EnterField(AssetRipper.Assets.IUnityAssetBase,System.String)">EnterField(IUnityAssetBase, String)</h4>
+  <div class="markdown level1 summary"><p>Called when entering a field node during traversal.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool EnterField(IUnityAssetBase asset, string name)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Assets.IUnityAssetBase.html">IUnityAssetBase</a></td>
+        <td><span class="parametername">asset</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name of the field being entered.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> to continue visiting the children of the field node,
+<code>false</code> to skip visiting the children and not call the exit method.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Traversal_AssetWalker_EnterList__1_IReadOnlyList___0__.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Traversal.AssetWalker.EnterList%60%601(IReadOnlyList%7B%60%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Traversal/AssetWalker.cs/#L70">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Traversal_AssetWalker_EnterList_" data-uid="AssetRipper.Assets.Traversal.AssetWalker.EnterList*"></a>
+  <h4 id="AssetRipper_Assets_Traversal_AssetWalker_EnterList__1_IReadOnlyList___0__" data-uid="AssetRipper.Assets.Traversal.AssetWalker.EnterList``1(IReadOnlyList{``0})">EnterList&lt;T&gt;(IReadOnlyList&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"><p>Called when entering a list node during traversal.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool EnterList&lt;T&gt;(IReadOnlyList&lt;T&gt; list)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IReadOnlyList</span>&lt;T&gt;</td>
+        <td><span class="parametername">list</span></td>
+        <td><p>The list being entered.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> to continue visiting the children of the list node,
+<code>false</code> to skip visiting the children and not call the exit method.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td><p>The type of the list elements.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Traversal_AssetWalker_EnterPair__2_KeyValuePair___0___1__.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Traversal.AssetWalker.EnterPair%60%602(KeyValuePair%7B%60%600%2C%60%601%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Traversal/AssetWalker.cs/#L184">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Traversal_AssetWalker_EnterPair_" data-uid="AssetRipper.Assets.Traversal.AssetWalker.EnterPair*"></a>
+  <h4 id="AssetRipper_Assets_Traversal_AssetWalker_EnterPair__2_KeyValuePair___0___1__" data-uid="AssetRipper.Assets.Traversal.AssetWalker.EnterPair``2(KeyValuePair{``0,``1})">EnterPair&lt;TKey, TValue&gt;(KeyValuePair&lt;TKey, TValue&gt;)</h4>
+  <div class="markdown level1 summary"><p>Called when entering a key-value pair node during traversal.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool EnterPair&lt;TKey, TValue&gt;(KeyValuePair&lt;TKey, TValue&gt; pair)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">KeyValuePair</span>&lt;TKey, TValue&gt;</td>
+        <td><span class="parametername">pair</span></td>
+        <td><p>The key-value pair being entered.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> to continue visiting the children of the key-value pair node,
+<code>false</code> to skip visiting the children and not call the exit method.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TKey</span></td>
+        <td><p>The type of the key in the pair.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="parametername">TValue</span></td>
+        <td><p>The type of the value in the pair.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Traversal_AssetWalker_ExitAsset_AssetRipper_Assets_IUnityAssetBase_.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Traversal.AssetWalker.ExitAsset(AssetRipper.Assets.IUnityAssetBase)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Traversal/AssetWalker.cs/#L36">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Traversal_AssetWalker_ExitAsset_" data-uid="AssetRipper.Assets.Traversal.AssetWalker.ExitAsset*"></a>
+  <h4 id="AssetRipper_Assets_Traversal_AssetWalker_ExitAsset_AssetRipper_Assets_IUnityAssetBase_" data-uid="AssetRipper.Assets.Traversal.AssetWalker.ExitAsset(AssetRipper.Assets.IUnityAssetBase)">ExitAsset(IUnityAssetBase)</h4>
+  <div class="markdown level1 summary"><p>Called when exiting an asset node during traversal.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void ExitAsset(IUnityAssetBase asset)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Assets.IUnityAssetBase.html">IUnityAssetBase</a></td>
+        <td><span class="parametername">asset</span></td>
+        <td><p>The asset being exited.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Traversal_AssetWalker_ExitDictionary__2_IReadOnlyCollection_KeyValuePair___0___1___.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Traversal.AssetWalker.ExitDictionary%60%602(IReadOnlyCollection%7BKeyValuePair%7B%60%600%2C%60%601%7D%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Traversal/AssetWalker.cs/#L124">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Traversal_AssetWalker_ExitDictionary_" data-uid="AssetRipper.Assets.Traversal.AssetWalker.ExitDictionary*"></a>
+  <h4 id="AssetRipper_Assets_Traversal_AssetWalker_ExitDictionary__2_IReadOnlyCollection_KeyValuePair___0___1___" data-uid="AssetRipper.Assets.Traversal.AssetWalker.ExitDictionary``2(IReadOnlyCollection{KeyValuePair{``0,``1}})">ExitDictionary&lt;TKey, TValue&gt;(IReadOnlyCollection&lt;KeyValuePair&lt;TKey, TValue&gt;&gt;)</h4>
+  <div class="markdown level1 summary"><p>Called when exiting a dictionary node during traversal.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void ExitDictionary&lt;TKey, TValue&gt;(IReadOnlyCollection&lt;KeyValuePair&lt;TKey, TValue&gt;&gt; dictionary)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IReadOnlyCollection</span>&lt;<span class="xref">KeyValuePair</span>&lt;TKey, TValue&gt;&gt;</td>
+        <td><span class="parametername">dictionary</span></td>
+        <td><p>The dictionary being exited.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TKey</span></td>
+        <td><p>The type of dictionary keys.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="parametername">TValue</span></td>
+        <td><p>The type of dictionary values.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Traversal_AssetWalker_ExitDictionaryPair__2_KeyValuePair___0___1__.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Traversal.AssetWalker.ExitDictionaryPair%60%602(KeyValuePair%7B%60%600%2C%60%601%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Traversal/AssetWalker.cs/#L169">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Traversal_AssetWalker_ExitDictionaryPair_" data-uid="AssetRipper.Assets.Traversal.AssetWalker.ExitDictionaryPair*"></a>
+  <h4 id="AssetRipper_Assets_Traversal_AssetWalker_ExitDictionaryPair__2_KeyValuePair___0___1__" data-uid="AssetRipper.Assets.Traversal.AssetWalker.ExitDictionaryPair``2(KeyValuePair{``0,``1})">ExitDictionaryPair&lt;TKey, TValue&gt;(KeyValuePair&lt;TKey, TValue&gt;)</h4>
+  <div class="markdown level1 summary"><p>Called when exiting a dictionary pair during traversal.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void ExitDictionaryPair&lt;TKey, TValue&gt;(KeyValuePair&lt;TKey, TValue&gt; pair)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">KeyValuePair</span>&lt;TKey, TValue&gt;</td>
+        <td><span class="parametername">pair</span></td>
+        <td><p>The dictionary pair being exited.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TKey</span></td>
+        <td><p>The type of the key in the pair.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="parametername">TValue</span></td>
+        <td><p>The type of the value in the pair.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="AssetRipper_Assets_Traversal_AssetWalker_ExitDictionaryPair__2_KeyValuePair___0___1___remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>This calls <a class="xref" href="AssetRipper.Assets.Traversal.AssetWalker.html#AssetRipper_Assets_Traversal_AssetWalker_ExitPair__2_KeyValuePair___0___1__">ExitPair&lt;TKey, TValue&gt;(KeyValuePair&lt;TKey, TValue&gt;)</a> by default.</p>
+</div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Traversal_AssetWalker_ExitField_AssetRipper_Assets_IUnityAssetBase_System_String_.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Traversal.AssetWalker.ExitField(AssetRipper.Assets.IUnityAssetBase%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Traversal/AssetWalker.cs/#L57">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Traversal_AssetWalker_ExitField_" data-uid="AssetRipper.Assets.Traversal.AssetWalker.ExitField*"></a>
+  <h4 id="AssetRipper_Assets_Traversal_AssetWalker_ExitField_AssetRipper_Assets_IUnityAssetBase_System_String_" data-uid="AssetRipper.Assets.Traversal.AssetWalker.ExitField(AssetRipper.Assets.IUnityAssetBase,System.String)">ExitField(IUnityAssetBase, String)</h4>
+  <div class="markdown level1 summary"><p>Called when exiting a field node during traversal.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void ExitField(IUnityAssetBase asset, string name)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Assets.IUnityAssetBase.html">IUnityAssetBase</a></td>
+        <td><span class="parametername">asset</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name of the field being exited.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Traversal_AssetWalker_ExitList__1_IReadOnlyList___0__.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Traversal.AssetWalker.ExitList%60%601(IReadOnlyList%7B%60%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Traversal/AssetWalker.cs/#L89">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Traversal_AssetWalker_ExitList_" data-uid="AssetRipper.Assets.Traversal.AssetWalker.ExitList*"></a>
+  <h4 id="AssetRipper_Assets_Traversal_AssetWalker_ExitList__1_IReadOnlyList___0__" data-uid="AssetRipper.Assets.Traversal.AssetWalker.ExitList``1(IReadOnlyList{``0})">ExitList&lt;T&gt;(IReadOnlyList&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"><p>Called when exiting a list node during traversal.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void ExitList&lt;T&gt;(IReadOnlyList&lt;T&gt; list)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IReadOnlyList</span>&lt;T&gt;</td>
+        <td><span class="parametername">list</span></td>
+        <td><p>The list being exited.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td><p>The type of the list elements.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Traversal_AssetWalker_ExitPair__2_KeyValuePair___0___1__.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Traversal.AssetWalker.ExitPair%60%602(KeyValuePair%7B%60%600%2C%60%601%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Traversal/AssetWalker.cs/#L205">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Traversal_AssetWalker_ExitPair_" data-uid="AssetRipper.Assets.Traversal.AssetWalker.ExitPair*"></a>
+  <h4 id="AssetRipper_Assets_Traversal_AssetWalker_ExitPair__2_KeyValuePair___0___1__" data-uid="AssetRipper.Assets.Traversal.AssetWalker.ExitPair``2(KeyValuePair{``0,``1})">ExitPair&lt;TKey, TValue&gt;(KeyValuePair&lt;TKey, TValue&gt;)</h4>
+  <div class="markdown level1 summary"><p>Called when exiting a key-value pair node during traversal.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void ExitPair&lt;TKey, TValue&gt;(KeyValuePair&lt;TKey, TValue&gt; pair)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">KeyValuePair</span>&lt;TKey, TValue&gt;</td>
+        <td><span class="parametername">pair</span></td>
+        <td><p>The key-value pair being exited.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TKey</span></td>
+        <td><p>The type of the key in the pair.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="parametername">TValue</span></td>
+        <td><p>The type of the value in the pair.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Traversal_AssetWalker_VisitPPtr__1_AssetRipper_Assets_Metadata_IPPtr___0__.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Traversal.AssetWalker.VisitPPtr%60%601(AssetRipper.Assets.Metadata.IPPtr%7B%60%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Traversal/AssetWalker.cs/#L230">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Traversal_AssetWalker_VisitPPtr_" data-uid="AssetRipper.Assets.Traversal.AssetWalker.VisitPPtr*"></a>
+  <h4 id="AssetRipper_Assets_Traversal_AssetWalker_VisitPPtr__1_AssetRipper_Assets_Metadata_IPPtr___0__" data-uid="AssetRipper.Assets.Traversal.AssetWalker.VisitPPtr``1(AssetRipper.Assets.Metadata.IPPtr{``0})">VisitPPtr&lt;TAsset&gt;(IPPtr&lt;TAsset&gt;)</h4>
+  <div class="markdown level1 summary"><p>Visits a generic PPtr (Serialized Pointer) node with a specified PPtr type and target Unity object type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void VisitPPtr&lt;TAsset&gt;(IPPtr&lt;TAsset&gt; pptr)
+    where TAsset : IUnityObjectBase</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Assets.Metadata.IPPtr-1.html">IPPtr</a>&lt;TAsset&gt;</td>
+        <td><span class="parametername">pptr</span></td>
+        <td><p>The generic PPtr instance representing the serialized pointer.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TAsset</span></td>
+        <td><p>The type of the Unity object pointed to by the PPtr.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="AssetRipper_Assets_Traversal_AssetWalker_VisitPPtr__1_AssetRipper_Assets_Metadata_IPPtr___0___remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>This method is called when encountering a generic PPtr node during asset traversal.
+A generic PPtr is a serialized pointer to a Unity object within the asset file.</p>
+</div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Traversal_AssetWalker_VisitPPtr__1_PPtr___0__.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Traversal.AssetWalker.VisitPPtr%60%601(PPtr%7B%60%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Traversal/AssetWalker.cs/#L245">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Traversal_AssetWalker_VisitPPtr_" data-uid="AssetRipper.Assets.Traversal.AssetWalker.VisitPPtr*"></a>
+  <h4 id="AssetRipper_Assets_Traversal_AssetWalker_VisitPPtr__1_PPtr___0__" data-uid="AssetRipper.Assets.Traversal.AssetWalker.VisitPPtr``1(PPtr{``0})">VisitPPtr&lt;TAsset&gt;(PPtr&lt;TAsset&gt;)</h4>
+  <div class="markdown level1 summary"><p>Visits a Unity PPtr (Serialized Pointer) node.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void VisitPPtr&lt;TAsset&gt;(PPtr&lt;TAsset&gt; pptr)
+    where TAsset : IUnityObjectBase</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">PPtr</span>&lt;TAsset&gt;</td>
+        <td><span class="parametername">pptr</span></td>
+        <td><p>The PPtr instance representing the serialized pointer.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TAsset</span></td>
+        <td><p>The type of the Unity object pointed to by the PPtr.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="AssetRipper_Assets_Traversal_AssetWalker_VisitPPtr__1_PPtr___0___remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>This method is called when encountering a Unity PPtr node during asset traversal.
+A PPtr is a serialized pointer to a Unity object within the asset file.</p>
+</div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Traversal_AssetWalker_VisitPrimitive__1___0_.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Traversal.AssetWalker.VisitPrimitive%60%601(%60%600)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Traversal/AssetWalker.cs/#L217">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Traversal_AssetWalker_VisitPrimitive_" data-uid="AssetRipper.Assets.Traversal.AssetWalker.VisitPrimitive*"></a>
+  <h4 id="AssetRipper_Assets_Traversal_AssetWalker_VisitPrimitive__1___0_" data-uid="AssetRipper.Assets.Traversal.AssetWalker.VisitPrimitive``1(``0)">VisitPrimitive&lt;T&gt;(T)</h4>
+  <div class="markdown level1 summary"><p>Visit a primitive leaf node.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void VisitPrimitive&lt;T&gt;(T value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">T</span></td>
+        <td><span class="parametername">value</span></td>
+        <td><p>The primitive value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td><p>The type of the primitive.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="AssetRipper_Assets_Traversal_AssetWalker_VisitPrimitive__1___0__remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>byte[] is treated as a primitive.</p>
+</div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Traversal_AssetWalker.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Traversal.AssetWalker%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Traversal/AssetWalker.cs/#L9" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="toggle-mode">
+                <div class="icon">
+                  <i aria-hidden="true">☀</i>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="switch-style">
+                  <span class="slider round"></span>
+                </label>
+                <div class="icon">
+                  <i aria-hidden="true">☾</i>
+                </div>
+              </div>
+          
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <h5>In This Article</h5>
+              <div></div>
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <div class="pull-left">
+              
+              <span>Generated by <strong>DocFX</strong></span>
+            </div>
+            <div class="toggle-mode pull-right visible-sm visible-xs">
+              <div class="icon">
+                <i aria-hidden="true">☀</i>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="switch-style-m">
+                <span class="slider round"></span>
+              </label>
+              <div class="icon">
+                <i aria-hidden="true">☾</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript" src="../styles/toggle-theme.js"></script>
+      </footer>    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,671 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class SerializedWriter
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class SerializedWriter
+   ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="AssetRipper.IO.Files.SerializedFiles.IO.SerializedWriter">
+  
+  
+  <h1 id="AssetRipper_IO_Files_SerializedFiles_IO_SerializedWriter" data-uid="AssetRipper.IO.Files.SerializedFiles.IO.SerializedWriter" class="text-break">Class SerializedWriter
+  </h1>
+  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">System.IO.BinaryWriter</span></div>
+    <div class="level2"><span class="xref">AssetRipper.IO.Endian.EndianWriter</span></div>
+    <div class="level3"><span class="xref">SerializedWriter</span></div>
+  </div>
+  <div class="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">System.IAsyncDisposable</span></div>
+    <div><span class="xref">System.IDisposable</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.BufferSize</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.m_buffer</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.Write(System.Byte)</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.Write(System.Byte[])</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.Write(System.Byte[], System.Int32, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.Write(System.ReadOnlySpan&lt;System.Byte&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.Write(System.Boolean)</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.Write(System.Int16)</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.Write(System.UInt16)</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.Write(System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.Write(System.UInt32)</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.Write(System.Int64)</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.Write(System.UInt64)</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.Write(System.Single)</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.Write(System.Double)</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.Write(System.String)</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.Write(AssetRipper.Primitives.Utf8String)</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.WriteStringZeroTerm(System.String)</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.WriteArray(System.Boolean[])</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.WriteArray(System.Boolean[], System.Int32, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.WriteArray(System.Char[])</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.WriteArray(System.Char[], System.Int32, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.WriteArray(System.SByte[])</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.WriteArray(System.SByte[], System.Int32, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.WriteArray(System.Byte[])</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.WriteArray(System.Byte[], System.Int32, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.WriteArray(System.Int16[])</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.WriteArray(System.Int16[], System.Int32, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.WriteArray(System.UInt16[])</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.WriteArray(System.UInt16[], System.Int32, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.WriteArray(System.Int32[])</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.WriteArray(System.Int32[], System.Int32, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.WriteArray(System.UInt32[])</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.WriteArray(System.UInt32[], System.Int32, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.WriteArray(System.Int64[])</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.WriteArray(System.Int64[], System.Int32, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.WriteArray(System.UInt64[])</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.WriteArray(System.UInt64[], System.Int32, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.WriteArray(System.Single[])</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.WriteArray(System.Single[], System.Int32, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.WriteArray(System.Double[])</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.WriteArray(System.Double[], System.Int32, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.WriteArray(System.String[])</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.WriteEndian&lt;T&gt;(T)</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.WriteEndianArray&lt;T&gt;(T[])</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.WriteEndianArray&lt;T&gt;(T[][])</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.AlignStream()</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.FillInnerBuffer(System.UInt16, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.FillInnerBuffer(System.Int32, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.FillInnerBuffer(System.UInt32, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.FillInnerBuffer(System.UInt64, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.EndianType</span>
+    </div>
+    <div>
+      <span class="xref">AssetRipper.IO.Endian.EndianWriter.IsAlignArray</span>
+    </div>
+    <div>
+      <span class="xref">System.IO.BinaryWriter.Null</span>
+    </div>
+    <div>
+      <span class="xref">System.IO.BinaryWriter.OutStream</span>
+    </div>
+    <div>
+      <span class="xref">System.IO.BinaryWriter.Close()</span>
+    </div>
+    <div>
+      <span class="xref">System.IO.BinaryWriter.Dispose()</span>
+    </div>
+    <div>
+      <span class="xref">System.IO.BinaryWriter.Dispose(System.Boolean)</span>
+    </div>
+    <div>
+      <span class="xref">System.IO.BinaryWriter.DisposeAsync()</span>
+    </div>
+    <div>
+      <span class="xref">System.IO.BinaryWriter.Flush()</span>
+    </div>
+    <div>
+      <span class="xref">System.IO.BinaryWriter.Seek(System.Int32, System.IO.SeekOrigin)</span>
+    </div>
+    <div>
+      <span class="xref">System.IO.BinaryWriter.Write(System.Char)</span>
+    </div>
+    <div>
+      <span class="xref">System.IO.BinaryWriter.Write(System.Char[])</span>
+    </div>
+    <div>
+      <span class="xref">System.IO.BinaryWriter.Write(System.Char[], System.Int32, System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">System.IO.BinaryWriter.Write(System.Decimal)</span>
+    </div>
+    <div>
+      <span class="xref">System.IO.BinaryWriter.Write(System.Half)</span>
+    </div>
+    <div>
+      <span class="xref">System.IO.BinaryWriter.Write(System.ReadOnlySpan&lt;System.Char&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.IO.BinaryWriter.Write(System.SByte)</span>
+    </div>
+    <div>
+      <span class="xref">System.IO.BinaryWriter.Write7BitEncodedInt(System.Int32)</span>
+    </div>
+    <div>
+      <span class="xref">System.IO.BinaryWriter.Write7BitEncodedInt64(System.Int64)</span>
+    </div>
+    <div>
+      <span class="xref">System.IO.BinaryWriter.BaseStream</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="AssetRipper.IO.Files.SerializedFiles.IO.html">AssetRipper.IO.Files.SerializedFiles.IO</a></h6>
+  <h6><strong>Assembly</strong>: AssetRipper.IO.Files.dll</h6>
+  <h5 id="AssetRipper_IO_Files_SerializedFiles_IO_SerializedWriter_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class SerializedWriter : EndianWriter, IAsyncDisposable, IDisposable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_SerializedFiles_IO_SerializedWriter__ctor_Stream_AssetRipper_IO_Endian_EndianType_AssetRipper_IO_Files_SerializedFiles_FormatVersion_UnityVersion_.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.SerializedFiles.IO.SerializedWriter.%23ctor(Stream%2CAssetRipper.IO.Endian.EndianType%2CAssetRipper.IO.Files.SerializedFiles.FormatVersion%2CUnityVersion)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/SerializedFiles/IO/SerializedWriter.cs/#L8">View Source</a>
+  </span>
+  <a id="AssetRipper_IO_Files_SerializedFiles_IO_SerializedWriter__ctor_" data-uid="AssetRipper.IO.Files.SerializedFiles.IO.SerializedWriter.#ctor*"></a>
+  <h4 id="AssetRipper_IO_Files_SerializedFiles_IO_SerializedWriter__ctor_Stream_AssetRipper_IO_Endian_EndianType_AssetRipper_IO_Files_SerializedFiles_FormatVersion_UnityVersion_" data-uid="AssetRipper.IO.Files.SerializedFiles.IO.SerializedWriter.#ctor(Stream,AssetRipper.IO.Endian.EndianType,AssetRipper.IO.Files.SerializedFiles.FormatVersion,UnityVersion)">SerializedWriter(Stream, EndianType, FormatVersion, UnityVersion)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SerializedWriter(Stream stream, EndianType endianess, FormatVersion generation, UnityVersion version)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Stream</span></td>
+        <td><span class="parametername">stream</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">AssetRipper.IO.Endian.EndianType</span></td>
+        <td><span class="parametername">endianess</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="AssetRipper.IO.Files.SerializedFiles.FormatVersion.html">FormatVersion</a></td>
+        <td><span class="parametername">generation</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">UnityVersion</span></td>
+        <td><span class="parametername">version</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_SerializedFiles_IO_SerializedWriter_Generation.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.SerializedFiles.IO.SerializedWriter.Generation%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/SerializedFiles/IO/SerializedWriter.cs/#L41">View Source</a>
+  </span>
+  <a id="AssetRipper_IO_Files_SerializedFiles_IO_SerializedWriter_Generation_" data-uid="AssetRipper.IO.Files.SerializedFiles.IO.SerializedWriter.Generation*"></a>
+  <h4 id="AssetRipper_IO_Files_SerializedFiles_IO_SerializedWriter_Generation" data-uid="AssetRipper.IO.Files.SerializedFiles.IO.SerializedWriter.Generation">Generation</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public FormatVersion Generation { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.IO.Files.SerializedFiles.FormatVersion.html">FormatVersion</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_SerializedFiles_IO_SerializedWriter_Version.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.SerializedFiles.IO.SerializedWriter.Version%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/SerializedFiles/IO/SerializedWriter.cs/#L43">View Source</a>
+  </span>
+  <a id="AssetRipper_IO_Files_SerializedFiles_IO_SerializedWriter_Version_" data-uid="AssetRipper.IO.Files.SerializedFiles.IO.SerializedWriter.Version*"></a>
+  <h4 id="AssetRipper_IO_Files_SerializedFiles_IO_SerializedWriter_Version" data-uid="AssetRipper.IO.Files.SerializedFiles.IO.SerializedWriter.Version">Version</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public UnityVersion Version { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">UnityVersion</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_SerializedFiles_IO_SerializedWriter_WriteSerialized__1___0_.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.SerializedFiles.IO.SerializedWriter.WriteSerialized%60%601(%60%600)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/SerializedFiles/IO/SerializedWriter.cs/#L14">View Source</a>
+  </span>
+  <a id="AssetRipper_IO_Files_SerializedFiles_IO_SerializedWriter_WriteSerialized_" data-uid="AssetRipper.IO.Files.SerializedFiles.IO.SerializedWriter.WriteSerialized*"></a>
+  <h4 id="AssetRipper_IO_Files_SerializedFiles_IO_SerializedWriter_WriteSerialized__1___0_" data-uid="AssetRipper.IO.Files.SerializedFiles.IO.SerializedWriter.WriteSerialized``1(``0)">WriteSerialized&lt;T&gt;(T)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void WriteSerialized&lt;T&gt;(T value)
+    where T : ISerializedWritable</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">T</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_SerializedFiles_IO_SerializedWriter_WriteSerializedArray__1___0___.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.SerializedFiles.IO.SerializedWriter.WriteSerializedArray%60%601(%60%600%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/SerializedFiles/IO/SerializedWriter.cs/#L19">View Source</a>
+  </span>
+  <a id="AssetRipper_IO_Files_SerializedFiles_IO_SerializedWriter_WriteSerializedArray_" data-uid="AssetRipper.IO.Files.SerializedFiles.IO.SerializedWriter.WriteSerializedArray*"></a>
+  <h4 id="AssetRipper_IO_Files_SerializedFiles_IO_SerializedWriter_WriteSerializedArray__1___0___" data-uid="AssetRipper.IO.Files.SerializedFiles.IO.SerializedWriter.WriteSerializedArray``1(``0[])">WriteSerializedArray&lt;T&gt;(T[])</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void WriteSerializedArray&lt;T&gt;(T[] buffer)
+    where T : ISerializedWritable</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>T[]</td>
+        <td><span class="parametername">buffer</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_SerializedFiles_IO_SerializedWriter_WriteSerializedTypeArray__1___0___System_Boolean_.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.SerializedFiles.IO.SerializedWriter.WriteSerializedTypeArray%60%601(%60%600%5B%5D%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/SerializedFiles/IO/SerializedWriter.cs/#L30">View Source</a>
+  </span>
+  <a id="AssetRipper_IO_Files_SerializedFiles_IO_SerializedWriter_WriteSerializedTypeArray_" data-uid="AssetRipper.IO.Files.SerializedFiles.IO.SerializedWriter.WriteSerializedTypeArray*"></a>
+  <h4 id="AssetRipper_IO_Files_SerializedFiles_IO_SerializedWriter_WriteSerializedTypeArray__1___0___System_Boolean_" data-uid="AssetRipper.IO.Files.SerializedFiles.IO.SerializedWriter.WriteSerializedTypeArray``1(``0[],System.Boolean)">WriteSerializedTypeArray&lt;T&gt;(T[], Boolean)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void WriteSerializedTypeArray&lt;T&gt;(T[] buffer, bool hasTypeTree)
+    where T : SerializedTypeBase</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>T[]</td>
+        <td><span class="parametername">buffer</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">hasTypeTree</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">System.IAsyncDisposable</span>
+  </div>
+  <div>
+      <span class="xref">System.IDisposable</span>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_SerializedFiles_IO_SerializedWriter.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.SerializedFiles.IO.SerializedWriter%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/SerializedFiles/IO/SerializedWriter.cs/#L6" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="toggle-mode">
+                <div class="icon">
+                  <i aria-hidden="true">☀</i>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="switch-style">
+                  <span class="slider round"></span>
+                </label>
+                <div class="icon">
+                  <i aria-hidden="true">☾</i>
+                </div>
+              </div>
+          
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <h5>In This Article</h5>
+              <div></div>
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <div class="pull-left">
+              
+              <span>Generated by <strong>DocFX</strong></span>
+            </div>
+            <div class="toggle-mode pull-right visible-sm visible-xs">
+              <div class="icon">
+                <i aria-hidden="true">☀</i>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="switch-style-m">
+                <span class="slider round"></span>
+              </label>
+              <div class="icon">
+                <i aria-hidden="true">☾</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript" src="../styles/toggle-theme.js"></script>
+      </footer>    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

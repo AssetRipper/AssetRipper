@@ -1,0 +1,922 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class ExportCollection
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class ExportCollection
+   ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="AssetRipper.Export.UnityProjects.ExportCollection">
+  
+  
+  <h1 id="AssetRipper_Export_UnityProjects_ExportCollection" data-uid="AssetRipper.Export.UnityProjects.ExportCollection" class="text-break">Class ExportCollection
+  </h1>
+  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">ExportCollection</span></div>
+      <div class="level2"><a class="xref" href="AssetRipper.Export.UnityProjects.AssetExportCollection-1.html">AssetExportCollection&lt;T&gt;</a></div>
+      <div class="level2"><a class="xref" href="AssetRipper.Export.UnityProjects.Project.SceneExportCollection.html">SceneExportCollection</a></div>
+      <div class="level2"><a class="xref" href="AssetRipper.Export.UnityProjects.RawAssets.UnknownExportCollection.html">UnknownExportCollection</a></div>
+      <div class="level2"><a class="xref" href="AssetRipper.Export.UnityProjects.RawAssets.UnreadableExportCollection.html">UnreadableExportCollection</a></div>
+      <div class="level2"><a class="xref" href="AssetRipper.Export.UnityProjects.Scripts.ScriptExportCollectionBase.html">ScriptExportCollectionBase</a></div>
+  </div>
+  <div class="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="AssetRipper.Export.UnityProjects.IExportCollection.html">IExportCollection</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="AssetRipper.Export.UnityProjects.html">AssetRipper.Export.UnityProjects</a></h6>
+  <h6><strong>Assembly</strong>: AssetRipper.Export.UnityProjects.dll</h6>
+  <h5 id="AssetRipper_Export_UnityProjects_ExportCollection_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract class ExportCollection : IExportCollection</code></pre>
+  </div>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Export_UnityProjects_ExportCollection_AssetExtension.md&amp;value=---%0Auid%3A%20AssetRipper.Export.UnityProjects.ExportCollection.AssetExtension%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Export.UnityProjects/ExportCollection.cs/#L142">View Source</a>
+  </span>
+  <h4 id="AssetRipper_Export_UnityProjects_ExportCollection_AssetExtension" data-uid="AssetRipper.Export.UnityProjects.ExportCollection.AssetExtension">AssetExtension</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected const string AssetExtension = &quot;asset&quot;</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Export_UnityProjects_ExportCollection_AssetsKeyword.md&amp;value=---%0Auid%3A%20AssetRipper.Export.UnityProjects.ExportCollection.AssetsKeyword%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Export.UnityProjects/ExportCollection.cs/#L143">View Source</a>
+  </span>
+  <h4 id="AssetRipper_Export_UnityProjects_ExportCollection_AssetsKeyword" data-uid="AssetRipper.Export.UnityProjects.ExportCollection.AssetsKeyword">AssetsKeyword</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const string AssetsKeyword = &quot;Assets&quot;</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Export_UnityProjects_ExportCollection_AssetExporter.md&amp;value=---%0Auid%3A%20AssetRipper.Export.UnityProjects.ExportCollection.AssetExporter%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Export.UnityProjects/ExportCollection.cs/#L134">View Source</a>
+  </span>
+  <a id="AssetRipper_Export_UnityProjects_ExportCollection_AssetExporter_" data-uid="AssetRipper.Export.UnityProjects.ExportCollection.AssetExporter*"></a>
+  <h4 id="AssetRipper_Export_UnityProjects_ExportCollection_AssetExporter" data-uid="AssetRipper.Export.UnityProjects.ExportCollection.AssetExporter">AssetExporter</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract IAssetExporter AssetExporter { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Export.UnityProjects.IAssetExporter.html">IAssetExporter</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Export_UnityProjects_ExportCollection_Assets.md&amp;value=---%0Auid%3A%20AssetRipper.Export.UnityProjects.ExportCollection.Assets%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Export.UnityProjects/ExportCollection.cs/#L137">View Source</a>
+  </span>
+  <a id="AssetRipper_Export_UnityProjects_ExportCollection_Assets_" data-uid="AssetRipper.Export.UnityProjects.ExportCollection.Assets*"></a>
+  <h4 id="AssetRipper_Export_UnityProjects_ExportCollection_Assets" data-uid="AssetRipper.Export.UnityProjects.ExportCollection.Assets">Assets</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract IEnumerable&lt;IUnityObjectBase&gt; Assets { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="AssetRipper.Assets.IUnityObjectBase.html">IUnityObjectBase</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Export_UnityProjects_ExportCollection_ExportableAssets.md&amp;value=---%0Auid%3A%20AssetRipper.Export.UnityProjects.ExportCollection.ExportableAssets%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Export.UnityProjects/ExportCollection.cs/#L138">View Source</a>
+  </span>
+  <a id="AssetRipper_Export_UnityProjects_ExportCollection_ExportableAssets_" data-uid="AssetRipper.Export.UnityProjects.ExportCollection.ExportableAssets*"></a>
+  <h4 id="AssetRipper_Export_UnityProjects_ExportCollection_ExportableAssets" data-uid="AssetRipper.Export.UnityProjects.ExportCollection.ExportableAssets">ExportableAssets</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual IEnumerable&lt;IUnityObjectBase&gt; ExportableAssets { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="AssetRipper.Assets.IUnityObjectBase.html">IUnityObjectBase</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Export_UnityProjects_ExportCollection_File.md&amp;value=---%0Auid%3A%20AssetRipper.Export.UnityProjects.ExportCollection.File%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Export.UnityProjects/ExportCollection.cs/#L135">View Source</a>
+  </span>
+  <a id="AssetRipper_Export_UnityProjects_ExportCollection_File_" data-uid="AssetRipper.Export.UnityProjects.ExportCollection.File*"></a>
+  <h4 id="AssetRipper_Export_UnityProjects_ExportCollection_File" data-uid="AssetRipper.Export.UnityProjects.ExportCollection.File">File</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract AssetCollection File { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Assets.Collections.AssetCollection.html">AssetCollection</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Export_UnityProjects_ExportCollection_Flags.md&amp;value=---%0Auid%3A%20AssetRipper.Export.UnityProjects.ExportCollection.Flags%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Export.UnityProjects/ExportCollection.cs/#L136">View Source</a>
+  </span>
+  <a id="AssetRipper_Export_UnityProjects_ExportCollection_Flags_" data-uid="AssetRipper.Export.UnityProjects.ExportCollection.Flags*"></a>
+  <h4 id="AssetRipper_Export_UnityProjects_ExportCollection_Flags" data-uid="AssetRipper.Export.UnityProjects.ExportCollection.Flags">Flags</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual TransferInstructionFlags Flags { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.IO.Files.SerializedFiles.TransferInstructionFlags.html">TransferInstructionFlags</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Export_UnityProjects_ExportCollection_GUID.md&amp;value=---%0Auid%3A%20AssetRipper.Export.UnityProjects.ExportCollection.GUID%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Export.UnityProjects/ExportCollection.cs/#L37">View Source</a>
+  </span>
+  <a id="AssetRipper_Export_UnityProjects_ExportCollection_GUID_" data-uid="AssetRipper.Export.UnityProjects.ExportCollection.GUID*"></a>
+  <h4 id="AssetRipper_Export_UnityProjects_ExportCollection_GUID" data-uid="AssetRipper.Export.UnityProjects.ExportCollection.GUID">GUID</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual UnityGuid GUID { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">UnityGuid</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Export_UnityProjects_ExportCollection_Name.md&amp;value=---%0Auid%3A%20AssetRipper.Export.UnityProjects.ExportCollection.Name%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Export.UnityProjects/ExportCollection.cs/#L139">View Source</a>
+  </span>
+  <a id="AssetRipper_Export_UnityProjects_ExportCollection_Name_" data-uid="AssetRipper.Export.UnityProjects.ExportCollection.Name*"></a>
+  <h4 id="AssetRipper_Export_UnityProjects_ExportCollection_Name" data-uid="AssetRipper.Export.UnityProjects.ExportCollection.Name">Name</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract string Name { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Export_UnityProjects_ExportCollection_Contains_AssetRipper_Assets_IUnityObjectBase_.md&amp;value=---%0Auid%3A%20AssetRipper.Export.UnityProjects.ExportCollection.Contains(AssetRipper.Assets.IUnityObjectBase)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Export.UnityProjects/ExportCollection.cs/#L55">View Source</a>
+  </span>
+  <a id="AssetRipper_Export_UnityProjects_ExportCollection_Contains_" data-uid="AssetRipper.Export.UnityProjects.ExportCollection.Contains*"></a>
+  <h4 id="AssetRipper_Export_UnityProjects_ExportCollection_Contains_AssetRipper_Assets_IUnityObjectBase_" data-uid="AssetRipper.Export.UnityProjects.ExportCollection.Contains(AssetRipper.Assets.IUnityObjectBase)">Contains(IUnityObjectBase)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract bool Contains(IUnityObjectBase asset)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Assets.IUnityObjectBase.html">IUnityObjectBase</a></td>
+        <td><span class="parametername">asset</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Export_UnityProjects_ExportCollection_CreateExportPointer_AssetRipper_Export_UnityProjects_IExportContainer_AssetRipper_Assets_IUnityObjectBase_System_Boolean_.md&amp;value=---%0Auid%3A%20AssetRipper.Export.UnityProjects.ExportCollection.CreateExportPointer(AssetRipper.Export.UnityProjects.IExportContainer%2CAssetRipper.Assets.IUnityObjectBase%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Export.UnityProjects/ExportCollection.cs/#L57">View Source</a>
+  </span>
+  <a id="AssetRipper_Export_UnityProjects_ExportCollection_CreateExportPointer_" data-uid="AssetRipper.Export.UnityProjects.ExportCollection.CreateExportPointer*"></a>
+  <h4 id="AssetRipper_Export_UnityProjects_ExportCollection_CreateExportPointer_AssetRipper_Export_UnityProjects_IExportContainer_AssetRipper_Assets_IUnityObjectBase_System_Boolean_" data-uid="AssetRipper.Export.UnityProjects.ExportCollection.CreateExportPointer(AssetRipper.Export.UnityProjects.IExportContainer,AssetRipper.Assets.IUnityObjectBase,System.Boolean)">CreateExportPointer(IExportContainer, IUnityObjectBase, Boolean)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract MetaPtr CreateExportPointer(IExportContainer container, IUnityObjectBase asset, bool isLocal)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Export.UnityProjects.IExportContainer.html">IExportContainer</a></td>
+        <td><span class="parametername">container</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Assets.IUnityObjectBase.html">IUnityObjectBase</a></td>
+        <td><span class="parametername">asset</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">isLocal</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">AssetRipper.Export.UnityProjects.MetaPtr</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Export_UnityProjects_ExportCollection_Export_AssetRipper_Export_UnityProjects_IExportContainer_System_String_.md&amp;value=---%0Auid%3A%20AssetRipper.Export.UnityProjects.ExportCollection.Export(AssetRipper.Export.UnityProjects.IExportContainer%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Export.UnityProjects/ExportCollection.cs/#L54">View Source</a>
+  </span>
+  <a id="AssetRipper_Export_UnityProjects_ExportCollection_Export_" data-uid="AssetRipper.Export.UnityProjects.ExportCollection.Export*"></a>
+  <h4 id="AssetRipper_Export_UnityProjects_ExportCollection_Export_AssetRipper_Export_UnityProjects_IExportContainer_System_String_" data-uid="AssetRipper.Export.UnityProjects.ExportCollection.Export(AssetRipper.Export.UnityProjects.IExportContainer,System.String)">Export(IExportContainer, String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract bool Export(IExportContainer container, string projectDirectory)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Export.UnityProjects.IExportContainer.html">IExportContainer</a></td>
+        <td><span class="parametername">container</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">projectDirectory</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Export_UnityProjects_ExportCollection_ExportAsset_AssetRipper_Export_UnityProjects_IExportContainer_AssetRipper_Assets_IUnityObjectBase_AssetRipper_Assets_IUnityObjectBase_System_String_System_String_.md&amp;value=---%0Auid%3A%20AssetRipper.Export.UnityProjects.ExportCollection.ExportAsset(AssetRipper.Export.UnityProjects.IExportContainer%2CAssetRipper.Assets.IUnityObjectBase%2CAssetRipper.Assets.IUnityObjectBase%2CSystem.String%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Export.UnityProjects/ExportCollection.cs/#L59">View Source</a>
+  </span>
+  <a id="AssetRipper_Export_UnityProjects_ExportCollection_ExportAsset_" data-uid="AssetRipper.Export.UnityProjects.ExportCollection.ExportAsset*"></a>
+  <h4 id="AssetRipper_Export_UnityProjects_ExportCollection_ExportAsset_AssetRipper_Export_UnityProjects_IExportContainer_AssetRipper_Assets_IUnityObjectBase_AssetRipper_Assets_IUnityObjectBase_System_String_System_String_" data-uid="AssetRipper.Export.UnityProjects.ExportCollection.ExportAsset(AssetRipper.Export.UnityProjects.IExportContainer,AssetRipper.Assets.IUnityObjectBase,AssetRipper.Assets.IUnityObjectBase,System.String,System.String)">ExportAsset(IExportContainer, IUnityObjectBase, IUnityObjectBase, String, String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected void ExportAsset(IExportContainer container, IUnityObjectBase importer, IUnityObjectBase asset, string path, string name)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Export.UnityProjects.IExportContainer.html">IExportContainer</a></td>
+        <td><span class="parametername">container</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Assets.IUnityObjectBase.html">IUnityObjectBase</a></td>
+        <td><span class="parametername">importer</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Assets.IUnityObjectBase.html">IUnityObjectBase</a></td>
+        <td><span class="parametername">asset</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">path</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Export_UnityProjects_ExportCollection_ExportMeta_AssetRipper_Export_UnityProjects_IExportContainer_AssetRipper_Export_UnityProjects_Meta_System_String_.md&amp;value=---%0Auid%3A%20AssetRipper.Export.UnityProjects.ExportCollection.ExportMeta(AssetRipper.Export.UnityProjects.IExportContainer%2CAssetRipper.Export.UnityProjects.Meta%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Export.UnityProjects/ExportCollection.cs/#L39">View Source</a>
+  </span>
+  <a id="AssetRipper_Export_UnityProjects_ExportCollection_ExportMeta_" data-uid="AssetRipper.Export.UnityProjects.ExportCollection.ExportMeta*"></a>
+  <h4 id="AssetRipper_Export_UnityProjects_ExportCollection_ExportMeta_AssetRipper_Export_UnityProjects_IExportContainer_AssetRipper_Export_UnityProjects_Meta_System_String_" data-uid="AssetRipper.Export.UnityProjects.ExportCollection.ExportMeta(AssetRipper.Export.UnityProjects.IExportContainer,AssetRipper.Export.UnityProjects.Meta,System.String)">ExportMeta(IExportContainer, Meta, String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected static void ExportMeta(IExportContainer container, Meta meta, string filePath)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Export.UnityProjects.IExportContainer.html">IExportContainer</a></td>
+        <td><span class="parametername">container</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Export.UnityProjects.Meta.html">Meta</a></td>
+        <td><span class="parametername">meta</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">filePath</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Export_UnityProjects_ExportCollection_GetExportExtension_AssetRipper_Assets_IUnityObjectBase_.md&amp;value=---%0Auid%3A%20AssetRipper.Export.UnityProjects.ExportCollection.GetExportExtension(AssetRipper.Assets.IUnityObjectBase)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Export.UnityProjects/ExportCollection.cs/#L103">View Source</a>
+  </span>
+  <a id="AssetRipper_Export_UnityProjects_ExportCollection_GetExportExtension_" data-uid="AssetRipper.Export.UnityProjects.ExportCollection.GetExportExtension*"></a>
+  <h4 id="AssetRipper_Export_UnityProjects_ExportCollection_GetExportExtension_AssetRipper_Assets_IUnityObjectBase_" data-uid="AssetRipper.Export.UnityProjects.ExportCollection.GetExportExtension(AssetRipper.Assets.IUnityObjectBase)">GetExportExtension(IUnityObjectBase)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual string GetExportExtension(IUnityObjectBase asset)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Assets.IUnityObjectBase.html">IUnityObjectBase</a></td>
+        <td><span class="parametername">asset</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Export_UnityProjects_ExportCollection_GetExportID_AssetRipper_Export_UnityProjects_IExportContainer_AssetRipper_Assets_IUnityObjectBase_.md&amp;value=---%0Auid%3A%20AssetRipper.Export.UnityProjects.ExportCollection.GetExportID(AssetRipper.Export.UnityProjects.IExportContainer%2CAssetRipper.Assets.IUnityObjectBase)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Export.UnityProjects/ExportCollection.cs/#L56">View Source</a>
+  </span>
+  <a id="AssetRipper_Export_UnityProjects_ExportCollection_GetExportID_" data-uid="AssetRipper.Export.UnityProjects.ExportCollection.GetExportID*"></a>
+  <h4 id="AssetRipper_Export_UnityProjects_ExportCollection_GetExportID_AssetRipper_Export_UnityProjects_IExportContainer_AssetRipper_Assets_IUnityObjectBase_" data-uid="AssetRipper.Export.UnityProjects.ExportCollection.GetExportID(AssetRipper.Export.UnityProjects.IExportContainer,AssetRipper.Assets.IUnityObjectBase)">GetExportID(IExportContainer, IUnityObjectBase)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract long GetExportID(IExportContainer container, IUnityObjectBase asset)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Export.UnityProjects.IExportContainer.html">IExportContainer</a></td>
+        <td><span class="parametername">container</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Assets.IUnityObjectBase.html">IUnityObjectBase</a></td>
+        <td><span class="parametername">asset</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Export_UnityProjects_ExportCollection_GetUniqueFileName_AssetRipper_Assets_IUnityObjectBase_System_String_.md&amp;value=---%0Auid%3A%20AssetRipper.Export.UnityProjects.ExportCollection.GetUniqueFileName(AssetRipper.Assets.IUnityObjectBase%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Export.UnityProjects/ExportCollection.cs/#L74">View Source</a>
+  </span>
+  <a id="AssetRipper_Export_UnityProjects_ExportCollection_GetUniqueFileName_" data-uid="AssetRipper.Export.UnityProjects.ExportCollection.GetUniqueFileName*"></a>
+  <h4 id="AssetRipper_Export_UnityProjects_ExportCollection_GetUniqueFileName_AssetRipper_Assets_IUnityObjectBase_System_String_" data-uid="AssetRipper.Export.UnityProjects.ExportCollection.GetUniqueFileName(AssetRipper.Assets.IUnityObjectBase,System.String)">GetUniqueFileName(IUnityObjectBase, String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected string GetUniqueFileName(IUnityObjectBase asset, string dirPath)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Assets.IUnityObjectBase.html">IUnityObjectBase</a></td>
+        <td><span class="parametername">asset</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">dirPath</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Export_UnityProjects_ExportCollection_GetUniqueFileName_System_String_System_String_.md&amp;value=---%0Auid%3A%20AssetRipper.Export.UnityProjects.ExportCollection.GetUniqueFileName(System.String%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Export.UnityProjects/ExportCollection.cs/#L98">View Source</a>
+  </span>
+  <a id="AssetRipper_Export_UnityProjects_ExportCollection_GetUniqueFileName_" data-uid="AssetRipper.Export.UnityProjects.ExportCollection.GetUniqueFileName*"></a>
+  <h4 id="AssetRipper_Export_UnityProjects_ExportCollection_GetUniqueFileName_System_String_System_String_" data-uid="AssetRipper.Export.UnityProjects.ExportCollection.GetUniqueFileName(System.String,System.String)">GetUniqueFileName(String, String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected static string GetUniqueFileName(string directoryPath, string fileName)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">directoryPath</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fileName</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="AssetRipper.Export.UnityProjects.IExportCollection.html">IExportCollection</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Export_UnityProjects_ExportCollection.md&amp;value=---%0Auid%3A%20AssetRipper.Export.UnityProjects.ExportCollection%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Export.UnityProjects/ExportCollection.cs/#L35" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="toggle-mode">
+                <div class="icon">
+                  <i aria-hidden="true">☀</i>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="switch-style">
+                  <span class="slider round"></span>
+                </label>
+                <div class="icon">
+                  <i aria-hidden="true">☾</i>
+                </div>
+              </div>
+          
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <h5>In This Article</h5>
+              <div></div>
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <div class="pull-left">
+              
+              <span>Generated by <strong>DocFX</strong></span>
+            </div>
+            <div class="toggle-mode pull-right visible-sm visible-xs">
+              <div class="icon">
+                <i aria-hidden="true">☀</i>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="switch-style-m">
+                <span class="slider round"></span>
+              </label>
+              <div class="icon">
+                <i aria-hidden="true">☾</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript" src="../styles/toggle-theme.js"></script>
+      </footer>    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

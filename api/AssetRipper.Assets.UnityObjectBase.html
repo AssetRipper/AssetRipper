@@ -1,0 +1,671 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class UnityObjectBase
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class UnityObjectBase
+   ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="AssetRipper.Assets.UnityObjectBase">
+  
+  
+  <h1 id="AssetRipper_Assets_UnityObjectBase" data-uid="AssetRipper.Assets.UnityObjectBase" class="text-break">Class UnityObjectBase
+  </h1>
+  <div class="markdown level0 summary"><p>The artificial base class for all generated Unity classes which inherit from Object.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="AssetRipper.Assets.UnityAssetBase.html">UnityAssetBase</a></div>
+    <div class="level2"><span class="xref">UnityObjectBase</span></div>
+      <div class="level3"><a class="xref" href="AssetRipper.Assets.NullObject.html">NullObject</a></div>
+      <div class="level3"><a class="xref" href="AssetRipper.Processing.DeletedAssetsInformation.html">DeletedAssetsInformation</a></div>
+      <div class="level3"><a class="xref" href="AssetRipper.Processing.GameObjectHierarchyObject.html">GameObjectHierarchyObject</a></div>
+      <div class="level3"><a class="xref" href="AssetRipper.Processing.Textures.SpriteInformationObject.html">SpriteInformationObject</a></div>
+      <div class="level3"><a class="xref" href="AssetRipper.Tools.JsonSerializer.JsonAsset.html">JsonAsset</a></div>
+  </div>
+  <div class="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="AssetRipper.Assets.IUnityObjectBase.html">IUnityObjectBase</a></div>
+    <div><a class="xref" href="AssetRipper.Assets.IUnityAssetBase.html">IUnityAssetBase</a></div>
+    <div><span class="xref">AssetRipper.IO.Endian.IEndianSpanReadable</span></div>
+    <div><a class="xref" href="AssetRipper.Assets.IO.Writing.IAssetWritable.html">IAssetWritable</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.UnityAssetBase.html#AssetRipper_Assets_UnityAssetBase_SerializedVersion">UnityAssetBase.SerializedVersion</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.UnityAssetBase.html#AssetRipper_Assets_UnityAssetBase_FlowMappedInYaml">UnityAssetBase.FlowMappedInYaml</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.UnityAssetBase.html#AssetRipper_Assets_UnityAssetBase_IgnoreFieldInMetaFiles_System_String_">UnityAssetBase.IgnoreFieldInMetaFiles(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.UnityAssetBase.html#AssetRipper_Assets_UnityAssetBase_ReadEditor_AssetRipper_IO_Endian_EndianSpanReader__">UnityAssetBase.ReadEditor(EndianSpanReader)</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.UnityAssetBase.html#AssetRipper_Assets_UnityAssetBase_ReadRelease_AssetRipper_IO_Endian_EndianSpanReader__">UnityAssetBase.ReadRelease(EndianSpanReader)</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.UnityAssetBase.html#AssetRipper_Assets_UnityAssetBase_WriteEditor_AssetRipper_Assets_IO_Writing_AssetWriter_">UnityAssetBase.WriteEditor(AssetWriter)</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.UnityAssetBase.html#AssetRipper_Assets_UnityAssetBase_WriteRelease_AssetRipper_Assets_IO_Writing_AssetWriter_">UnityAssetBase.WriteRelease(AssetWriter)</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.UnityAssetBase.html#AssetRipper_Assets_UnityAssetBase_FetchDependencies">UnityAssetBase.FetchDependencies()</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.UnityAssetBase.html#AssetRipper_Assets_UnityAssetBase_ToString">UnityAssetBase.ToString()</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.UnityAssetBase.html#AssetRipper_Assets_UnityAssetBase_Reset">UnityAssetBase.Reset()</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.UnityAssetBase.html#AssetRipper_Assets_UnityAssetBase_CopyValues_AssetRipper_Assets_IUnityAssetBase_AssetRipper_Assets_Cloning_PPtrConverter_">UnityAssetBase.CopyValues(IUnityAssetBase, PPtrConverter)</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.UnityAssetBase.html#AssetRipper_Assets_UnityAssetBase_WalkEditor_AssetRipper_Assets_Traversal_AssetWalker_">UnityAssetBase.WalkEditor(AssetWalker)</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.UnityAssetBase.html#AssetRipper_Assets_UnityAssetBase_WalkRelease_AssetRipper_Assets_Traversal_AssetWalker_">UnityAssetBase.WalkRelease(AssetWalker)</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.UnityAssetBase.html#AssetRipper_Assets_UnityAssetBase_WalkStandard_AssetRipper_Assets_Traversal_AssetWalker_">UnityAssetBase.WalkStandard(AssetWalker)</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.UnityAssetBase.html#AssetRipper_Assets_UnityAssetBase_AddToEqualityComparer_AssetRipper_Assets_IUnityAssetBase_AssetRipper_Assets_Cloning_AssetEqualityComparer_">UnityAssetBase.AddToEqualityComparer(IUnityAssetBase, AssetEqualityComparer)</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="AssetRipper.Assets.html">AssetRipper.Assets</a></h6>
+  <h6><strong>Assembly</strong>: AssetRipper.Assets.dll</h6>
+  <h5 id="AssetRipper_Assets_UnityObjectBase_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract class UnityObjectBase : UnityAssetBase, IUnityObjectBase, IUnityAssetBase, IEndianSpanReadable, IAssetWritable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_UnityObjectBase__ctor_AssetRipper_Assets_Metadata_AssetInfo_.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.UnityObjectBase.%23ctor(AssetRipper.Assets.Metadata.AssetInfo)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/UnityObjectBase.cs/#L12">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_UnityObjectBase__ctor_" data-uid="AssetRipper.Assets.UnityObjectBase.#ctor*"></a>
+  <h4 id="AssetRipper_Assets_UnityObjectBase__ctor_AssetRipper_Assets_Metadata_AssetInfo_" data-uid="AssetRipper.Assets.UnityObjectBase.#ctor(AssetRipper.Assets.Metadata.AssetInfo)">UnityObjectBase(AssetInfo)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected UnityObjectBase(AssetInfo assetInfo)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">AssetRipper.Assets.Metadata.AssetInfo</span></td>
+        <td><span class="parametername">assetInfo</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_UnityObjectBase_AssetBundleName.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.UnityObjectBase.AssetBundleName%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/UnityObjectBase.cs/#L109">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_UnityObjectBase_AssetBundleName_" data-uid="AssetRipper.Assets.UnityObjectBase.AssetBundleName*"></a>
+  <h4 id="AssetRipper_Assets_UnityObjectBase_AssetBundleName" data-uid="AssetRipper.Assets.UnityObjectBase.AssetBundleName">AssetBundleName</h4>
+  <div class="markdown level1 summary"><p>The name of the asset bundle containing this asset.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string AssetBundleName { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_UnityObjectBase_AssetInfo.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.UnityObjectBase.AssetInfo%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/UnityObjectBase.cs/#L19">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_UnityObjectBase_AssetInfo_" data-uid="AssetRipper.Assets.UnityObjectBase.AssetInfo*"></a>
+  <h4 id="AssetRipper_Assets_UnityObjectBase_AssetInfo" data-uid="AssetRipper.Assets.UnityObjectBase.AssetInfo">AssetInfo</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public AssetInfo AssetInfo { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">AssetRipper.Assets.Metadata.AssetInfo</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_UnityObjectBase_ClassID.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.UnityObjectBase.ClassID%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/UnityObjectBase.cs/#L21">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_UnityObjectBase_ClassID_" data-uid="AssetRipper.Assets.UnityObjectBase.ClassID*"></a>
+  <h4 id="AssetRipper_Assets_UnityObjectBase_ClassID" data-uid="AssetRipper.Assets.UnityObjectBase.ClassID">ClassID</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int ClassID { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_UnityObjectBase_ClassName.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.UnityObjectBase.ClassName%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/UnityObjectBase.cs/#L23">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_UnityObjectBase_ClassName_" data-uid="AssetRipper.Assets.UnityObjectBase.ClassName*"></a>
+  <h4 id="AssetRipper_Assets_UnityObjectBase_ClassName" data-uid="AssetRipper.Assets.UnityObjectBase.ClassName">ClassName</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual string ClassName { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_UnityObjectBase_Collection.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.UnityObjectBase.Collection%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/UnityObjectBase.cs/#L20">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_UnityObjectBase_Collection_" data-uid="AssetRipper.Assets.UnityObjectBase.Collection*"></a>
+  <h4 id="AssetRipper_Assets_UnityObjectBase_Collection" data-uid="AssetRipper.Assets.UnityObjectBase.Collection">Collection</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public AssetCollection Collection { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Assets.Collections.AssetCollection.html">AssetCollection</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_UnityObjectBase_MainAsset.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.UnityObjectBase.MainAsset%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/UnityObjectBase.cs/#L24">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_UnityObjectBase_MainAsset_" data-uid="AssetRipper.Assets.UnityObjectBase.MainAsset*"></a>
+  <h4 id="AssetRipper_Assets_UnityObjectBase_MainAsset" data-uid="AssetRipper.Assets.UnityObjectBase.MainAsset">MainAsset</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IUnityObjectBase MainAsset { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Assets.IUnityObjectBase.html">IUnityObjectBase</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_UnityObjectBase_OriginalDirectory.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.UnityObjectBase.OriginalDirectory%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/UnityObjectBase.cs/#L49">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_UnityObjectBase_OriginalDirectory_" data-uid="AssetRipper.Assets.UnityObjectBase.OriginalDirectory*"></a>
+  <h4 id="AssetRipper_Assets_UnityObjectBase_OriginalDirectory" data-uid="AssetRipper.Assets.UnityObjectBase.OriginalDirectory">OriginalDirectory</h4>
+  <div class="markdown level1 summary"><p>The original directory containing the asset's file, relative to the project root.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string OriginalDirectory { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_UnityObjectBase_OriginalExtension.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.UnityObjectBase.OriginalExtension%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/UnityObjectBase.cs/#L89">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_UnityObjectBase_OriginalExtension_" data-uid="AssetRipper.Assets.UnityObjectBase.OriginalExtension*"></a>
+  <h4 id="AssetRipper_Assets_UnityObjectBase_OriginalExtension" data-uid="AssetRipper.Assets.UnityObjectBase.OriginalExtension">OriginalExtension</h4>
+  <div class="markdown level1 summary"><p>The original extension of the asset's file, not including the period.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string OriginalExtension { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_UnityObjectBase_OriginalName.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.UnityObjectBase.OriginalName%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/UnityObjectBase.cs/#L69">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_UnityObjectBase_OriginalName_" data-uid="AssetRipper.Assets.UnityObjectBase.OriginalName*"></a>
+  <h4 id="AssetRipper_Assets_UnityObjectBase_OriginalName" data-uid="AssetRipper.Assets.UnityObjectBase.OriginalName">OriginalName</h4>
+  <div class="markdown level1 summary"><p>The original name of the asset's file.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string OriginalName { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_UnityObjectBase_OriginalPath.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.UnityObjectBase.OriginalPath%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/UnityObjectBase.cs/#L29">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_UnityObjectBase_OriginalPath_" data-uid="AssetRipper.Assets.UnityObjectBase.OriginalPath*"></a>
+  <h4 id="AssetRipper_Assets_UnityObjectBase_OriginalPath" data-uid="AssetRipper.Assets.UnityObjectBase.OriginalPath">OriginalPath</h4>
+  <div class="markdown level1 summary"><p>The original path of the asset's file, relative to the project root.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string OriginalPath { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_UnityObjectBase_PathID.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.UnityObjectBase.PathID%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/UnityObjectBase.cs/#L22">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_UnityObjectBase_PathID_" data-uid="AssetRipper.Assets.UnityObjectBase.PathID*"></a>
+  <h4 id="AssetRipper_Assets_UnityObjectBase_PathID" data-uid="AssetRipper.Assets.UnityObjectBase.PathID">PathID</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public long PathID { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="AssetRipper.Assets.IUnityObjectBase.html">IUnityObjectBase</a>
+  </div>
+  <div>
+      <a class="xref" href="AssetRipper.Assets.IUnityAssetBase.html">IUnityAssetBase</a>
+  </div>
+  <div>
+      <span class="xref">AssetRipper.IO.Endian.IEndianSpanReadable</span>
+  </div>
+  <div>
+      <a class="xref" href="AssetRipper.Assets.IO.Writing.IAssetWritable.html">IAssetWritable</a>
+  </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="AssetRipper.Assets.UnityAssetBaseExtensions.html#AssetRipper_Assets_UnityAssetBaseExtensions_Read_AssetRipper_Assets_IUnityAssetBase_AssetRipper_IO_Endian_EndianSpanReader__AssetRipper_IO_Files_SerializedFiles_TransferInstructionFlags_">UnityAssetBaseExtensions.Read(IUnityAssetBase, ref EndianSpanReader, TransferInstructionFlags)</a>
+  </div>
+  <div>
+      <a class="xref" href="AssetRipper.Assets.UnityObjectBaseExtensions.html#AssetRipper_Assets_UnityObjectBaseExtensions_Read_AssetRipper_Assets_IUnityObjectBase_AssetRipper_IO_Endian_EndianSpanReader__">UnityObjectBaseExtensions.Read(IUnityObjectBase, ref EndianSpanReader)</a>
+  </div>
+  <div>
+      <a class="xref" href="AssetRipper.Assets.IO.Writing.AssetWritableExtensions.html#AssetRipper_Assets_IO_Writing_AssetWritableExtensions_Write_AssetRipper_Assets_IO_Writing_IAssetWritable_AssetRipper_Assets_IO_Writing_AssetWriter_">AssetWritableExtensions.Write(IAssetWritable, AssetWriter)</a>
+  </div>
+  <div>
+      <a class="xref" href="AssetRipper.Assets.IO.Writing.AssetWritableExtensions.html#AssetRipper_Assets_IO_Writing_AssetWritableExtensions_Write_AssetRipper_Assets_IO_Writing_IAssetWritable_AssetRipper_Assets_IO_Writing_AssetWriter_AssetRipper_IO_Files_SerializedFiles_TransferInstructionFlags_">AssetWritableExtensions.Write(IAssetWritable, AssetWriter, TransferInstructionFlags)</a>
+  </div>
+  <div>
+      <a class="xref" href="AssetRipper.GUI.Web.Paths.PathExtensions.html#AssetRipper_GUI_Web_Paths_PathExtensions_GetPath_AssetRipper_Assets_IUnityObjectBase_">PathExtensions.GetPath(IUnityObjectBase)</a>
+  </div>
+  <div>
+      <a class="xref" href="AssetRipper.SourceGenerated.Extensions.UnityObjectBaseExtensions.html#AssetRipper_SourceGenerated_Extensions_UnityObjectBaseExtensions_GetOriginalName_AssetRipper_Assets_IUnityObjectBase_">UnityObjectBaseExtensions.GetOriginalName(IUnityObjectBase)</a>
+  </div>
+  <div>
+      <a class="xref" href="AssetRipper.SourceGenerated.Extensions.UnityObjectBaseExtensions.html#AssetRipper_SourceGenerated_Extensions_UnityObjectBaseExtensions_TryGetName_AssetRipper_Assets_IUnityObjectBase_">UnityObjectBaseExtensions.TryGetName(IUnityObjectBase)</a>
+  </div>
+  <div>
+      <a class="xref" href="AssetRipper.SourceGenerated.Extensions.UnityObjectBaseExtensions.html#AssetRipper_SourceGenerated_Extensions_UnityObjectBaseExtensions_GetLogString_AssetRipper_Assets_IUnityObjectBase_">UnityObjectBaseExtensions.GetLogString(IUnityObjectBase)</a>
+  </div>
+  <div>
+      <a class="xref" href="AssetRipper.Processing.TraversalHelperMethods.html#AssetRipper_Processing_TraversalHelperMethods_WalkPrimitiveField__1_AssetRipper_Assets_IUnityAssetBase_AssetRipper_Assets_Traversal_AssetWalker___0_System_String_">TraversalHelperMethods.WalkPrimitiveField&lt;TPrimitive&gt;(IUnityAssetBase, AssetWalker, TPrimitive, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="AssetRipper.Processing.TraversalHelperMethods.html#AssetRipper_Processing_TraversalHelperMethods_WalkPrimitiveListField__1_AssetRipper_Assets_IUnityAssetBase_AssetRipper_Assets_Traversal_AssetWalker_AssetRipper_Assets_Generics_AssetList___0__System_String_">TraversalHelperMethods.WalkPrimitiveListField&lt;TPrimitive&gt;(IUnityAssetBase, AssetWalker, AssetList&lt;TPrimitive&gt;, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="AssetRipper.Processing.TraversalHelperMethods.html#AssetRipper_Processing_TraversalHelperMethods_WalkPPtrField__1_AssetRipper_Assets_IUnityAssetBase_AssetRipper_Assets_Traversal_AssetWalker_AssetRipper_Assets_Metadata_IPPtr___0__System_String_">TraversalHelperMethods.WalkPPtrField&lt;TAsset&gt;(IUnityAssetBase, AssetWalker, IPPtr&lt;TAsset&gt;, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="AssetRipper.Processing.TraversalHelperMethods.html#AssetRipper_Processing_TraversalHelperMethods_WalkPPtrField__1_AssetRipper_Assets_IUnityAssetBase_AssetRipper_Assets_Traversal_AssetWalker_PPtr___0__System_String_">TraversalHelperMethods.WalkPPtrField&lt;TAsset&gt;(IUnityAssetBase, AssetWalker, PPtr&lt;TAsset&gt;, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="AssetRipper.Processing.TraversalHelperMethods.html#AssetRipper_Processing_TraversalHelperMethods_WalkPPtrField__1_AssetRipper_Assets_IUnityObjectBase_AssetRipper_Assets_Traversal_AssetWalker___0_System_String_">TraversalHelperMethods.WalkPPtrField&lt;TAsset&gt;(IUnityObjectBase, AssetWalker, TAsset, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="AssetRipper.Processing.TraversalHelperMethods.html#AssetRipper_Processing_TraversalHelperMethods_VisitPPtr__1_AssetRipper_Assets_IUnityObjectBase_AssetRipper_Assets_Traversal_AssetWalker___0_">TraversalHelperMethods.VisitPPtr&lt;TAsset&gt;(IUnityObjectBase, AssetWalker, TAsset)</a>
+  </div>
+  <div>
+      <a class="xref" href="AssetRipper.Processing.TraversalHelperMethods.html#AssetRipper_Processing_TraversalHelperMethods_WalkStandardAssetField__1_AssetRipper_Assets_IUnityAssetBase_AssetRipper_Assets_Traversal_AssetWalker___0_System_String_">TraversalHelperMethods.WalkStandardAssetField&lt;TAsset&gt;(IUnityAssetBase, AssetWalker, TAsset, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="AssetRipper.Processing.TraversalHelperMethods.html#AssetRipper_Processing_TraversalHelperMethods_WalkStandardAssetListField__1_AssetRipper_Assets_IUnityAssetBase_AssetRipper_Assets_Traversal_AssetWalker_AssetRipper_Assets_Generics_AssetList___0__System_String_">TraversalHelperMethods.WalkStandardAssetListField&lt;TAsset&gt;(IUnityAssetBase, AssetWalker, AssetList&lt;TAsset&gt;, String)</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_UnityObjectBase.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.UnityObjectBase%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/UnityObjectBase.OriginalPathDetails.cs/#L3" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="toggle-mode">
+                <div class="icon">
+                  <i aria-hidden="true">☀</i>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="switch-style">
+                  <span class="slider round"></span>
+                </label>
+                <div class="icon">
+                  <i aria-hidden="true">☾</i>
+                </div>
+              </div>
+          
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <h5>In This Article</h5>
+              <div></div>
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <div class="pull-left">
+              
+              <span>Generated by <strong>DocFX</strong></span>
+            </div>
+            <div class="toggle-mode pull-right visible-sm visible-xs">
+              <div class="icon">
+                <i aria-hidden="true">☀</i>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="switch-style-m">
+                <span class="slider round"></span>
+              </label>
+              <div class="icon">
+                <i aria-hidden="true">☾</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript" src="../styles/toggle-theme.js"></script>
+      </footer>    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
