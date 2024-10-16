@@ -76,7 +76,7 @@
     "enable_prefab_outlining": "Habilitar Prefab Outlining",
     "error": "Error",
     "error_exporting_with_reason": "Error al exportar el contenido del juego: {0}",
-    "error_importing_with_reason": " Error al cargar el contenido del juego: {0}",
+    "error_importing_with_reason": "Error al cargar el contenido del juego: {0}",
     "experimental": "Experimental",
     "export_complete": "¡Exportación terminada!",
     "export_deleting_old_files": "Borrando archivos existentes...",
@@ -215,5 +215,13 @@
     "warning_this_directory_is_not_empty_all_content_will_be_deleted": "Advertencia: este directorio no está vacío. Se eliminará todo el contenido",
     "welcome": "Bienvenido",
     "width": "Ancho",
-    "yaml": "Yaml"
+    "yaml": "Yaml",
+    "size": "Tamaño",
+    "asset_tab_model": "Modelo",
+    "enable_asset_deduplication": "Activar deduplicación de Assets",
+    "lightmap_texture_export_title": "Formato de exportación para texturas Lightmap",
+    "lightmap_texture_format_description": "Esto afectará a todas las texturas lightmap exportadas.",
+    "save_settings_to_disk": "Guardar configuración en el disco",
+    "export_primary_content": "Exportar contenido principal",
+    "export_unity_project": "Exportar proyecto de Unity"
 }
