@@ -1,23 +1,14 @@
 ﻿using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Generics;
-using AssetRipper.Assets.IO.Writing;
-using K4os.Compression.LZ4;
 
 namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 {
 	public sealed class ShaderSubProgramBlob
 	{
-		public void Read(AssetCollection shaderCollection, byte[] compressedBlob, uint[] offsets, uint[] compressedLengths, uint[] decompressedLengths)
+		public void Read(AssetCollection shaderCollection, byte[] compressedBlob, uint offset, uint compressedLength, uint decompressedLength)
 		{
 			m_shaderCollection = shaderCollection;
-			for (int i = 0; i < offsets.Length; i++)
-			{
-				uint offset = offsets[i];
-				uint compressedLength = compressedLengths[i];
-				uint decompressedLength = decompressedLengths[i];
-
-				ReadBlob(compressedBlob, offset, compressedLength, decompressedLength, i);
-			}
+			ReadBlob(compressedBlob, offset, compressedLength, decompressedLength, 0);
 		}
 
 		public void Read(AssetCollection shaderCollection, byte[] compressedBlob, AssetList<uint> offsets, AssetList<uint> compressedLengths, AssetList<uint> decompressedLengths)
@@ -25,18 +16,13 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 			m_shaderCollection = shaderCollection;
 			for (int i = 0; i < offsets.Count; i++)
 			{
-				uint offset = offsets[i];
-				uint compressedLength = compressedLengths[i];
-				uint decompressedLength = decompressedLengths[i];
-
-				ReadBlob(compressedBlob, offset, compressedLength, decompressedLength, i);
+				ReadBlob(compressedBlob, offsets[i], compressedLengths[i], decompressedLengths[i], i);
 			}
 		}
 
 		private void ReadBlob(byte[] compressedBlob, uint offset, uint compressedLength, uint decompressedLength, int segment)
 		{
-			m_decompressedBlob = new byte[decompressedLength];
-			LZ4Codec.Decode(compressedBlob, (int)offset, (int)compressedLength, m_decompressedBlob, 0, (int)decompressedLength);
+			m_decompressedBlob = DecompressedBlob.DecompressBlob(compressedBlob, offset, compressedLength, decompressedLength);
 
 			using MemoryStream blobMem = new MemoryStream(m_decompressedBlob);
 			using AssetReader blobReader = new AssetReader(blobMem, m_shaderCollection);
@@ -135,11 +121,11 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 			}
 		}
 
-		public ShaderSubProgramEntry[] Entries { get; set; } = Array.Empty<ShaderSubProgramEntry>();
+		public ShaderSubProgramEntry[] Entries { get; set; } = [];
 
 		private AssetCollection m_shaderCollection;
 		private byte[] m_decompressedBlob = [];
-		private readonly Dictionary<(uint, uint), ShaderSubProgram> m_cachedSubPrograms = new Dictionary<(uint, uint), ShaderSubProgram>();
+		private readonly Dictionary<(uint, uint), ShaderSubProgram> m_cachedSubPrograms = new();
 
 		public const string GpuProgramIndexName = "GpuProgramIndex";
 	}
