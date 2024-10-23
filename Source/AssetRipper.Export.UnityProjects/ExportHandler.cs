@@ -120,6 +120,10 @@ public class ExportHandler
 		yield return new StreamingAssetsPostExporter();
 		yield return new DllPostExporter();
 		yield return new PathIdMapExporter();
+
+		// 7 Days To Die specific project output exporters
+		yield return new CsprojModifierExporter();
+
 	}
 
 	public GameData LoadAndProcess(IReadOnlyList<string> paths)

@@ -115,7 +115,7 @@ namespace AssetRipper.Import.Structure.Platforms
 			var addressablesDir = new DirectoryInfo(Path.Combine(RootPath, ConfigDataName, AddressablesDir, "Standalone"));
 			CollectAddressablesBundles(addressablesDir, Files);
 
-			var bundlesDir = new DirectoryInfo(Path.Combine(RootPath, ConfigDataName, BundlesDir, "Entities"));
+			var bundlesDir = new DirectoryInfo(Path.Combine(RootPath, ConfigDataName, BundlesDir, "Standalone", "Entities"));
 			CollectMiscBundles(bundlesDir, Files);
 
 			var pluginsDir = new DirectoryInfo(PluginsPath);
@@ -203,7 +203,7 @@ namespace AssetRipper.Import.Structure.Platforms
 		public static bool IsDLL(string path)
 		{
 			//Logger.Info($"IsDLL: {path}");
-			if (path.ToLower().Contains("dll"))
+			if (path.ToLower().EndsWith(".dll"))
 				return true;
 
 			return false;
