@@ -31,7 +31,7 @@ public sealed class BinaryAssetContentExtractor : IContentExtractor
 
 		protected override bool ExportInner(string filePath, string dirPath)
 		{
-			byte[] data = Data;
+			ReadOnlySpan<byte> data = Data;
 			if (data.Length > 0)
 			{
 				File.WriteAllBytes(filePath, data);
@@ -43,9 +43,7 @@ public sealed class BinaryAssetContentExtractor : IContentExtractor
 			}
 		}
 
-		// This should be ReadOnlySpan<byte>
-		// Switch after we bump to .NET 9
-		protected abstract byte[] Data { get; }
+		protected abstract ReadOnlySpan<byte> Data { get; }
 	}
 
 	private sealed class TextAssetExportCollection : BinaryAssetExportCollection<ITextAsset>
@@ -54,7 +52,7 @@ public sealed class BinaryAssetContentExtractor : IContentExtractor
 		{
 		}
 
-		protected override byte[] Data => Asset.Script_C49.Data.ToArray();
+		protected override ReadOnlySpan<byte> Data => Asset.Script_C49.Data;
 
 		protected override string ExportExtension => "bytes";
 	}
@@ -65,7 +63,7 @@ public sealed class BinaryAssetContentExtractor : IContentExtractor
 		{
 		}
 
-		protected override byte[] Data => Asset.FontData;
+		protected override ReadOnlySpan<byte> Data => Asset.FontData;
 
 		protected override string ExportExtension => Asset.GetFontExtension();
 	}
@@ -76,7 +74,7 @@ public sealed class BinaryAssetContentExtractor : IContentExtractor
 		{
 		}
 
-		protected override byte[] Data => Asset.MovieData ?? [];
+		protected override ReadOnlySpan<byte> Data => Asset.MovieData ?? [];
 
 		protected override string ExportExtension => "ogv";
 	}
@@ -87,7 +85,7 @@ public sealed class BinaryAssetContentExtractor : IContentExtractor
 		{
 		}
 
-		protected override byte[] Data => Asset.GetContent();
+		protected override ReadOnlySpan<byte> Data => Asset.GetContent();
 
 		protected override string ExportExtension => Asset.GetExtensionFromPath();
 	}
