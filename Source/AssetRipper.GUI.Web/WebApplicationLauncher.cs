@@ -209,6 +209,9 @@ public static class WebApplicationLauncher
 		app.MapGet(AssetAPI.Urls.Font, AssetAPI.GetFontData)
 			.Produces<byte[]>(contentType: "application/octet-stream")
 			.WithAssetPathParameter();
+		app.MapGet(AssetAPI.Urls.Video, AssetAPI.GetVideoData)
+			.Produces<byte[]>(contentType: "application/octet-stream")
+			.WithAssetPathParameter();
 		app.MapGet(AssetAPI.Urls.Json, AssetAPI.GetJson)
 			.Produces<string>(contentType: "application/json")
 			.WithAssetPathParameter();
