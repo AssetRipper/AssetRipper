@@ -22,6 +22,7 @@ public sealed class ViewPage : DefaultPage
 				new ModelTab(Asset, Path),
 				new TextTab(Asset, Path),
 				new FontTab(Asset, Path),
+				new VideoTab(Asset, Path),
 				new YamlTab(Asset, Path),
 				new JsonTab(Asset, Path),
 				new HexTab(Asset, Path),

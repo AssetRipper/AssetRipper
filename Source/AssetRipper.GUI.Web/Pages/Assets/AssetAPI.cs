@@ -21,6 +21,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_128;
 using AssetRipper.SourceGenerated.Classes.ClassID_156;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
+using AssetRipper.SourceGenerated.Classes.ClassID_329;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Classes.ClassID_49;
@@ -47,6 +48,7 @@ internal static class AssetAPI
 		public const string Audio = Base + "/Audio";
 		public const string Model = Base + "/Model.glb";
 		public const string Font = Base + "/Font";
+		public const string Video = Base + "/Video";
 		public const string Json = Base + "/Json";
 		public const string Yaml = Base + "/Yaml";
 		public const string Text = Base + "/Text";
@@ -286,6 +288,41 @@ internal static class AssetAPI
 
 			return false;
 		}
+	}
+	#endregion
+
+	#region Video
+	public static string GetVideoUrl(AssetPath path)
+	{
+		return $"{Urls.Video}?{GetPathQuery(path)}";
+	}
+
+	public static Task GetVideoData(HttpContext context)
+	{
+		//Only accept Path in the query.
+		context.Response.DisableCaching();
+		if (!TryGetAssetFromQuery(context, out IUnityObjectBase? asset, out Task? failureTask))
+		{
+			return failureTask;
+		}
+
+		if (asset is not IVideoClip videoClip)
+		{
+			return context.Response.NotFound("Asset was not a video clip.");
+		}
+		else if (videoClip.TryGetExtensionFromPath(out string? extension) && videoClip.TryGetContent(out byte[]? content))
+		{
+			return Results.Bytes(content, $"video/{extension}", $"{videoClip.GetBestName()}.{extension}").ExecuteAsync(context);
+		}
+		else
+		{
+			return context.Response.NotFound("Video data could not be decoded.");
+		}
+	}
+
+	public static bool HasVideoData(IUnityObjectBase asset)
+	{
+		return asset is IVideoClip clip && clip.CheckIntegrity();
 	}
 	#endregion
 
