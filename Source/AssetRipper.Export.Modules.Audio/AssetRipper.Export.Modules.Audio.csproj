@@ -10,6 +10,7 @@
 		<PackageReference Include="Fmod5Sharp" Version="3.0.1" />
 		<PackageReference Include="NAudio.Core" Version="2.2.1" />
 		<PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
+		<PackageReference Include="System.Text.Json" Version="8.0.3" />
 	</ItemGroup>
 
 	<ItemGroup>

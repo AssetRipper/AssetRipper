@@ -4,6 +4,12 @@
 		<IsPackable>false</IsPackable>
 		<OutputPath>..\0Bins\Other\UnityEngine\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\0Bins\obj\UnityEngine\$(Configuration)\</IntermediateOutputPath>
+		<TargetFramework>net9.0</TargetFramework>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="AssetRipper.SourceGenerated" Version="1.1.5" />
+	  <PackageReference Include="System.Text.Json" Version="8.0.3" />
+	</ItemGroup>
 
 </Project>

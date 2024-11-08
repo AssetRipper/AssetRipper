@@ -12,6 +12,7 @@
 		<PackageReference Include="AssetRipper.Mining.PredefinedAssets" Version="1.3.2" />
 		<PackageReference Include="AssetRipper.Tpk" Version="1.0.0" />
 		<PackageReference Include="ICSharpCode.Decompiler" Version="8.2.0.7535" />
+		<PackageReference Include="System.Text.Json" Version="8.0.3" />
 	</ItemGroup>
 
 	<ItemGroup>

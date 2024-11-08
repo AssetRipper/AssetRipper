@@ -5,7 +5,8 @@
 		<OutputPath>..\0Bins\Other\AssetRipper.SerializationLogic.Tests\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.SerializationLogic.Tests\$(Configuration)\</IntermediateOutputPath>
 		<NoWarn>CS0169</NoWarn><!--Unused field-->
-		<NoWarn>CS0649</NoWarn><!--Field is never assigned to-->
+		<NoWarn>CS0649</NoWarn>
+		<TargetFramework>net9.0</TargetFramework><!--Field is never assigned to-->
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -20,6 +21,7 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+		<PackageReference Include="System.Text.Json" Version="8.0.3" />
 	</ItemGroup>
 
 	<ItemGroup>

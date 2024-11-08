@@ -11,6 +11,7 @@
 		<PackageReference Include="AssetRipper.Text.SourceGeneration" Version="1.1.0" />
 		<PackageReference Include="Echo.Ast" Version="0.9.0.1" />
 		<PackageReference Include="Echo.Platforms.AsmResolver" Version="0.9.0.1" />
+		<PackageReference Include="System.Text.Json" Version="8.0.3" />
 	</ItemGroup>
 
 </Project>

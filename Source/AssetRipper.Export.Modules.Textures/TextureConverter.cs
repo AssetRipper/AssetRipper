@@ -167,7 +167,7 @@ namespace AssetRipper.Export.Modules.Textures
 			return true;
 		}
 
-		private static bool TryConvertToBitmap(
+		public static bool TryConvertToBitmap(
 			TextureFormat textureFormat,
 			int width,
 			int height,
@@ -391,7 +391,7 @@ namespace AssetRipper.Export.Modules.Textures
 			}
 		}
 
-		private static bool TryDecodeTexture<TColor, TChannelValue>(TextureFormat textureFormat, int width, int height, ReadOnlySpan<byte> inputSpan, Span<byte> outputSpan)
+		public static bool TryDecodeTexture<TColor, TChannelValue>(TextureFormat textureFormat, int width, int height, ReadOnlySpan<byte> inputSpan, Span<byte> outputSpan)
 			where TColor : unmanaged, IColor<TChannelValue>
 			where TChannelValue : unmanaged
 		{
@@ -556,7 +556,7 @@ namespace AssetRipper.Export.Modules.Textures
 			}
 		}
 
-		private static void UnpackNormal(Span<byte> data)
+		public static void UnpackNormal(Span<byte> data)
 		{
 			for (int i = 0; i < data.Length; i += 4)
 			{
@@ -573,6 +573,41 @@ namespace AssetRipper.Export.Modules.Textures
 				double hypotenuseSqr = Math.Min(vr * vr + vg * vg, MagnitudeSqr);
 				double b = (Math.Sqrt(MagnitudeSqr - hypotenuseSqr) + 255.0) / 2.0;
 				pixelSpan[0] = (byte)b;
+			}
+		}
+		public static void UnpackNormal_7(Span<byte> data)
+		{
+			for (int i = 0; i < data.Length; i += 4)
+			{
+				Span<byte> pixelSpan = data.Slice(i, 4); // take pixels 0 to 3
+
+				/* packed normal
+				pixel 0 = b
+				pixel 1 = g
+				pixel 2 = a
+				pixel 3 = r
+				*/
+
+				byte r = pixelSpan[3]; 
+				byte g = pixelSpan[1];
+				byte a = pixelSpan[2];
+				// switch the r and a channels
+				pixelSpan[2] = r;
+				pixelSpan[3] = a; // alpha should be either 0 or 255
+
+				const double MagnitudeSqr = 255 * 255;
+				double vr = r * 2.0 - 255.0;
+				double vg = g * 2.0 - 255.0;
+				double hypotenuseSqr = Math.Min(vr * vr + vg * vg, MagnitudeSqr);
+				double b = (Math.Sqrt(MagnitudeSqr - hypotenuseSqr) + 255.0) / 2.0;
+				pixelSpan[0] = (byte)b; // calculate the b channel
+
+				/* we want this to be the end result
+				pixel 0 = b
+				pixel 1 = g
+				pixel 2 = r
+				pixel 3 = a
+				*/
 			}
 		}
 	}

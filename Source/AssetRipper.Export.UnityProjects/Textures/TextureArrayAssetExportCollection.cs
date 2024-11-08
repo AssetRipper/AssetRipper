@@ -11,7 +11,7 @@ public sealed class TextureArrayAssetExportCollection : AssetExportCollection<IU
 
 	protected override string GetExportExtension(IUnityObjectBase asset)
 	{
-		return ((TextureArrayAssetExporter)AssetExporter).ImageExportFormat.GetFileExtension();
+		return "bytes";// ((TextureArrayAssetExporter)AssetExporter).ImageExportFormat.GetFileExtension();
 	}
 
 	protected override IUnityObjectBase CreateImporter(IExportContainer container)

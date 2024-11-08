@@ -10,6 +10,7 @@
 	<ItemGroup>
 		<PackageReference Include="AssetRipper.Text.SourceGeneration" Version="1.1.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="System.Text.Json" Version="8.0.3" />
 	</ItemGroup>
 
 	<ItemGroup>

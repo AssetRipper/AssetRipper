@@ -6,4 +6,8 @@
 		<IntermediateOutputPath>..\0Bins\obj\Smolv\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 
+	<ItemGroup>
+	  <PackageReference Include="System.Text.Json" Version="8.0.3" />
+	</ItemGroup>
+
 </Project>
