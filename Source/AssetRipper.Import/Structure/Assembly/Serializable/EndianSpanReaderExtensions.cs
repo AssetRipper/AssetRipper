@@ -1,5 +1,6 @@
 ﻿using AssetRipper.IO.Endian;
 using AssetRipper.Primitives;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace AssetRipper.Import.Structure.Assembly.Serializable;
@@ -10,8 +11,9 @@ internal static class EndianSpanReaderExtensions
 	{
 		int count = reader.ReadInt32();
 		int index = 0;
+		ThrowIfNegativeCount(count);
 		ThrowIfNotEnoughSpaceForArray(ref reader, count, Unsafe.SizeOf<T>());
-		T[] array = count == 0 ? Array.Empty<T>() : new T[count];
+		T[] array = count == 0 ? [] : new T[count];
 		while (index < count)
 		{
 			try
@@ -35,8 +37,9 @@ internal static class EndianSpanReaderExtensions
 	{
 		int count = reader.ReadInt32();
 		int index = 0;
+		ThrowIfNegativeCount(count);
 		ThrowIfNotEnoughSpaceForArray(ref reader, count, sizeof(int));
-		T[][] array = count == 0 ? Array.Empty<T[]>() : new T[count][];
+		T[][] array = count == 0 ? [] : new T[count][];
 		while (index < count)
 		{
 			try
@@ -67,8 +70,9 @@ internal static class EndianSpanReaderExtensions
 	{
 		int count = reader.ReadInt32();
 		int index = 0;
+		ThrowIfNegativeCount(count);
 		ThrowIfNotEnoughSpaceForArray(ref reader, count, sizeof(int));
-		string[] array = count == 0 ? Array.Empty<string>() : new string[count];
+		string[] array = count == 0 ? [] : new string[count];
 		while (index < count)
 		{
 			try
@@ -92,8 +96,9 @@ internal static class EndianSpanReaderExtensions
 	{
 		int count = reader.ReadInt32();
 		int index = 0;
+		ThrowIfNegativeCount(count);
 		ThrowIfNotEnoughSpaceForArray(ref reader, count, sizeof(int));
-		string[][] array = count == 0 ? Array.Empty<string[]>() : new string[count][];
+		string[][] array = count == 0 ? [] : new string[count][];
 		while (index < count)
 		{
 			try
@@ -115,10 +120,20 @@ internal static class EndianSpanReaderExtensions
 
 	private static bool IsAlignArrays(UnityVersion version) => version.GreaterThanOrEquals(2017);
 
+	[DebuggerHidden]
+	private static void ThrowIfNegativeCount(int count)
+	{
+		if (count < 0)
+		{
+			throw new InvalidDataException($"Count cannot be negative: {count}");
+		}
+	}
+
+	[DebuggerHidden]
 	private static void ThrowIfNotEnoughSpaceForArray(ref EndianSpanReader reader, int elementNumberToRead, int elementSize)
 	{
 		int remainingBytes = reader.Length - reader.Position;
-		if (remainingBytes < elementNumberToRead * elementSize)
+		if (remainingBytes < (long)elementNumberToRead * elementSize)
 		{
 			throw new EndOfStreamException($"Stream only has {remainingBytes} bytes in the stream, so {elementNumberToRead} elements of size {elementSize} cannot be read.");
 		}
