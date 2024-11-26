@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<ServerGarbageCollection>true</ServerGarbageCollection>
+		<InvariantGlobalization>true</InvariantGlobalization>
+		<EnableUnsafeUTF7Encoding>false</EnableUnsafeUTF7Encoding>
+		<OptimizationPreference>Size</OptimizationPreference>
+		<OutputType>Exe</OutputType>
+		<PublishAot>true</PublishAot>
+		<TrimmerSingleWarn>false</TrimmerSingleWarn>
+		<OutputPath>..\0Bins\AssetRipper.CLI\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.CLI\$(Configuration)\</IntermediateOutputPath>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
+		<DebuggerSupport>false</DebuggerSupport>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\AssetRipper.GUI.Web\AssetRipper.GUI.Web.csproj" />
+	</ItemGroup>
+
+</Project>

@@ -2,7 +2,7 @@
 
 public static class WelcomeMessage
 {
-	private const string AsciiArt = """
+	public const string AsciiArt = """
 		                       _   _____  _                       
 		    /\                | | |  __ \(_)                      
 		   /  \   ___ ___  ___| |_| |__) |_ _ __  _ __   ___ _ __ 
