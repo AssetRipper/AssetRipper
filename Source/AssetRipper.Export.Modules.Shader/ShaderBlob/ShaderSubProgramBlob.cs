@@ -22,12 +22,13 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 
 		private void ReadBlob(byte[] compressedBlob, uint offset, uint compressedLength, uint decompressedLength, int segment)
 		{
-			m_decompressedBlob = DecompressedBlob.DecompressBlob(compressedBlob, offset, compressedLength, decompressedLength);
-
-			using MemoryStream blobMem = new MemoryStream(m_decompressedBlob);
-			using AssetReader blobReader = new AssetReader(blobMem, m_shaderCollection);
+			while (m_decompressedBlobSegments.Count < segment + 1) { m_decompressedBlobSegments.Add([]); }
+			m_decompressedBlobSegments[segment] = DecompressedBlob.DecompressBlob(compressedBlob, offset, compressedLength, decompressedLength);
+			
 			if (segment == 0)
 			{
+				using MemoryStream blobMem = new MemoryStream(m_decompressedBlobSegments[segment]);
+				using AssetReader blobReader = new AssetReader(blobMem, m_shaderCollection);
 				Entries = ReadAssetArray(blobReader);
 				m_cachedSubPrograms.Clear();
 			}
@@ -81,7 +82,7 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 				return subProgram;
 			}
 
-			using MemoryStream blobMem = new MemoryStream(m_decompressedBlob);
+			using MemoryStream blobMem = new MemoryStream(m_decompressedBlobSegments[Entries[blobIndex].Segment]);
 			using AssetReader blobReader = new AssetReader(blobMem, m_shaderCollection);
 
 			subProgram = new ShaderSubProgram();
@@ -98,7 +99,7 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 				return subProgram;
 			}
 
-			using MemoryStream blobMem = new MemoryStream(m_decompressedBlob);
+			using MemoryStream blobMem = new MemoryStream(m_decompressedBlobSegments[Entries[blobIndex].Segment]);
 			using AssetReader blobReader = new AssetReader(blobMem, m_shaderCollection);
 
 			subProgram = new ShaderSubProgram();
@@ -124,7 +125,7 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 		public ShaderSubProgramEntry[] Entries { get; set; } = [];
 
 		private AssetCollection m_shaderCollection;
-		private byte[] m_decompressedBlob = [];
+		private List<byte[]> m_decompressedBlobSegments = [];
 		private readonly Dictionary<(uint, uint), ShaderSubProgram> m_cachedSubPrograms = new();
 
 		public const string GpuProgramIndexName = "GpuProgramIndex";
