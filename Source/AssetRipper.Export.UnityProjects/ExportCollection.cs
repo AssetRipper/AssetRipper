@@ -65,7 +65,7 @@ namespace AssetRipper.Export.UnityProjects
 
 			string fullName = $"{name}.{GetExportExtension(asset)}";
 			string uniqueName = FileUtils.GetUniqueName(path, fullName, FileUtils.MaxFileNameLength - MetaExtension.Length);
-			string filePath = Path.Combine(path, uniqueName);
+			string filePath = Path.Join(path, uniqueName);
 			AssetExporter.Export(container, asset, filePath);
 			Meta meta = new Meta(GUID, importer);
 			ExportMeta(container, meta, filePath);

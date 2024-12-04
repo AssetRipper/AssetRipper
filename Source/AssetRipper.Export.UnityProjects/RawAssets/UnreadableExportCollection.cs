@@ -36,12 +36,12 @@ namespace AssetRipper.Export.UnityProjects.RawAssets
 		public override bool Export(IExportContainer container, string projectDirectory)
 		{
 			string name = DirectoryUtils.FixInvalidPathCharacters(Asset.Name);
-			string resourcePath = Path.Combine(projectDirectory, "AssetRipper", "UnreadableAssets", Asset.ClassName, $"{name}.unreadable");
+			string resourcePath = Path.Join(projectDirectory, "AssetRipper", "UnreadableAssets", Asset.ClassName, $"{name}.unreadable");
 			string subPath = Path.GetDirectoryName(resourcePath)!;
 			Directory.CreateDirectory(subPath);
 			string resFileName = Path.GetFileName(resourcePath);
 			string fileName = GetUniqueFileName(subPath, resFileName);
-			string filePath = Path.Combine(subPath, fileName);
+			string filePath = Path.Join(subPath, fileName);
 			return AssetExporter.Export(container, Asset, filePath);
 		}
 

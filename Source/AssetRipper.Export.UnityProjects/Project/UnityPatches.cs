@@ -16,8 +16,8 @@ public static class UnityPatches
 	public static void ApplyPatchFromText(string text, string name, string exportDirectoryPath)
 	{
 		string patchFileName = $"{name}.cs";
-		string patchDirectoryPath = Path.Combine(exportDirectoryPath, RelativePathToPatchesDirectory);
-		string patchFilePath = Path.Combine(patchDirectoryPath, patchFileName);
+		string patchDirectoryPath = Path.Join(exportDirectoryPath, RelativePathToPatchesDirectory);
+		string patchFilePath = Path.Join(patchDirectoryPath, patchFileName);
 		if (File.Exists(patchFilePath))
 		{
 			return;

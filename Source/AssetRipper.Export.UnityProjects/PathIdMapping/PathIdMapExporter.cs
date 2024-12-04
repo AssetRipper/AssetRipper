@@ -38,7 +38,7 @@ public sealed class PathIdMapExporter : IPostExporter
 
 		string outputDirectory = settings.AuxiliaryFilesPath;
 		Directory.CreateDirectory(outputDirectory);
-		using FileStream stream = File.Create(Path.Combine(outputDirectory, "path_id_map.json"));
+		using FileStream stream = File.Create(Path.Join(outputDirectory, "path_id_map.json"));
 		JsonSerializer.Serialize(stream, gameInfo, SerializedGameInfoSerializerContext.Default.SerializedGameInfo);
 		stream.Flush();
 	}

@@ -7,7 +7,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts.AssemblyDefinitions
 	{
 		public static void Export(AssemblyDefinitionDetails details)
 		{
-			string assetPath = Path.Combine(details.OutputFolder, $"{details.AssemblyName}.asmdef");
+			string assetPath = Path.Join(details.OutputFolder, $"{details.AssemblyName}.asmdef");
 
 			AssemblyDefinitionAsset asset = new AssemblyDefinitionAsset(details.AssemblyName);
 			ModuleDefinition? module = details.Assembly?.ManifestModule;

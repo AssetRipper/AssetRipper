@@ -30,7 +30,7 @@ namespace AssetRipper.Export.UnityProjects.Project
 
 		public override bool Export(IExportContainer container, string projectDirectory)
 		{
-			string filePath = Path.Combine(projectDirectory, $"{Scene.Path}.{ExportExtension}");
+			string filePath = Path.Join(projectDirectory, $"{Scene.Path}.{ExportExtension}");
 			string folderPath = Path.GetDirectoryName(filePath)!;
 
 			if (IsSceneDuplicate(container))

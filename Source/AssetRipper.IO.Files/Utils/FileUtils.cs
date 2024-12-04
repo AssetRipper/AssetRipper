@@ -54,7 +54,7 @@ namespace AssetRipper.IO.Files.Utils
 			name ??= Path.GetFileNameWithoutExtension(validFileName);
 			if (!IsReservedName(name))
 			{
-				if (!File.Exists(Path.Combine(dirPath, validFileName)))
+				if (!File.Exists(Path.Join(dirPath, validFileName)))
 				{
 					return validFileName;
 				}
@@ -62,13 +62,13 @@ namespace AssetRipper.IO.Files.Utils
 
 			ext ??= Path.GetExtension(validFileName);
 
-			string key = Path.Combine(dirPath, $"{name}{ext}");
+			string key = Path.Join(dirPath, $"{name}{ext}");
 			UniqueNamesByInitialPath.TryGetValue(key, out int initial);
 
 			for (int counter = initial; counter < int.MaxValue; counter++)
 			{
 				string proposedName = $"{name}_{counter}{ext}";
-				if (!File.Exists(Path.Combine(dirPath, proposedName)))
+				if (!File.Exists(Path.Join(dirPath, proposedName)))
 				{
 					UniqueNamesByInitialPath[key] = counter;
 					return proposedName;

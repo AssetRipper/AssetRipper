@@ -14,18 +14,18 @@ namespace AssetRipper.Export.UnityProjects.Project
 			{
 				Logger.Info(LogCategory.Export, "Copying streaming assets...");
 				string inputDirectory = platform.StreamingAssetsPath;
-				string outputDirectory = Path.Combine(settings.AssetsPath, "StreamingAssets");
+				string outputDirectory = Path.Join(settings.AssetsPath, "StreamingAssets");
 
 				Directory.CreateDirectory(outputDirectory);
 
 				foreach (string directory in Directory.EnumerateDirectories(inputDirectory, "*", SearchOption.AllDirectories))
 				{
-					Directory.CreateDirectory(Path.Combine(outputDirectory, Path.GetRelativePath(inputDirectory, directory)));
+					Directory.CreateDirectory(Path.Join(outputDirectory, Path.GetRelativePath(inputDirectory, directory)));
 				}
 
 				foreach (string file in Directory.EnumerateFiles(inputDirectory, "*", SearchOption.AllDirectories))
 				{
-					string newFile = Path.Combine(outputDirectory, Path.GetRelativePath(inputDirectory, file));
+					string newFile = Path.Join(outputDirectory, Path.GetRelativePath(inputDirectory, file));
 					File.Copy(file, newFile, true);
 				}
 			}

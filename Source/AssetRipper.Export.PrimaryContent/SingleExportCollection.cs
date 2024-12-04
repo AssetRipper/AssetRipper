@@ -14,13 +14,13 @@ public class SingleExportCollection<T> : ExportCollectionBase where T : IUnityOb
 	public override bool Export(string projectDirectory)
 	{
 		string subPath = Asset.OriginalName is not null || Asset.OriginalDirectory is not null
-			? Path.Combine(projectDirectory, DirectoryUtils.FixInvalidPathCharacters(Asset.OriginalDirectory ?? ""))
-			: Path.Combine(projectDirectory, Asset.ClassName);
+			? Path.Join(projectDirectory, DirectoryUtils.FixInvalidPathCharacters(Asset.OriginalDirectory ?? ""))
+			: Path.Join(projectDirectory, Asset.ClassName);
 		string fileName = GetUniqueFileName(Asset, subPath);
 
 		Directory.CreateDirectory(subPath);
 
-		string filePath = Path.Combine(subPath, fileName);
+		string filePath = Path.Join(subPath, fileName);
 		return ExportInner(filePath, projectDirectory);
 	}
 

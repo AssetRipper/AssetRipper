@@ -19,7 +19,7 @@ public abstract class ExportCollectionBase
 
 		string fullName = $"{name}.{ExportExtension}";
 		string uniqueName = FileUtils.GetUniqueName(path, fullName, FileUtils.MaxFileNameLength);
-		string filePath = Path.Combine(path, uniqueName);
+		string filePath = Path.Join(path, uniqueName);
 		ContentExtractor.Export(asset, filePath);
 	}
 

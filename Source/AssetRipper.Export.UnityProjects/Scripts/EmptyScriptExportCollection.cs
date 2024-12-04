@@ -26,21 +26,21 @@ public sealed class EmptyScriptExportCollection : ScriptExportCollectionBase
 	{
 		Logger.Info(LogCategory.Export, "Exporting scripts...");
 
-		string assetsDirectoryPath = Path.Combine(projectDirectory, AssetsKeyword);
+		string assetsDirectoryPath = Path.Join(projectDirectory, AssetsKeyword);
 
 		Dictionary<string, AssemblyDefinitionDetails> assemblyDefinitionDetailsDictionary = new();
 
 		foreach ((MonoScriptInfo info, IMonoScript script) in UniqueScripts)
 		{
 			GetExportSubPath(info, out string subFolderPath, out string fileName);
-			string folderPath = Path.Combine(assetsDirectoryPath, subFolderPath);
-			string filePath = Path.Combine(folderPath, fileName);
+			string folderPath = Path.Join(assetsDirectoryPath, subFolderPath);
+			string filePath = Path.Join(folderPath, fileName);
 			Directory.CreateDirectory(folderPath);
 			System.IO.File.WriteAllText(filePath, EmptyScript.GetContent(info));
 			string assemblyName = info.Assembly;
 			if (!assemblyDefinitionDetailsDictionary.ContainsKey(assemblyName))
 			{
-				string assemblyDirectoryPath = Path.Combine(assetsDirectoryPath, GetScriptsFolderName(assemblyName), assemblyName);
+				string assemblyDirectoryPath = Path.Join(assetsDirectoryPath, GetScriptsFolderName(assemblyName), assemblyName);
 				AssemblyDefinitionDetails details = new AssemblyDefinitionDetails(assemblyName, assemblyDirectoryPath);
 				assemblyDefinitionDetailsDictionary.Add(assemblyName, details);
 			}

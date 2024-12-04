@@ -28,7 +28,7 @@ internal static class OriginalPathHelper
 				continue;
 			}
 
-			string resourcePath = Path.Combine(ResourceFullPath, kvp.Key.String);
+			string resourcePath = Path.Join(ResourceFullPath, kvp.Key.String);
 			if (asset.OriginalPath is null)
 			{
 				asset.OriginalPath = resourcePath;
@@ -58,7 +58,7 @@ internal static class OriginalPathHelper
 	{
 		string bundleName = bundle.GetAssetBundleName();
 		string bundleDirectory = bundleName + DirectorySeparator;
-		string directory = Path.Combine(AssetBundleFullPath, bundleName);
+		string directory = Path.Join(AssetBundleFullPath, bundleName);
 		foreach (AccessPairBase<Utf8String, IAssetInfo> kvp in bundle.Container)
 		{
 			// skip shared bundle assets, because we need to export them in their bundle directory
@@ -95,7 +95,7 @@ internal static class OriginalPathHelper
 					{
 						assetPath = assetPath.Substring(bundleDirectory.Length);
 					}
-					asset.OriginalPath = Path.Combine(directory, assetPath);
+					asset.OriginalPath = Path.Join(directory, assetPath);
 					break;
 				case BundledAssetsExportMode.GroupByAssetType:
 					break;

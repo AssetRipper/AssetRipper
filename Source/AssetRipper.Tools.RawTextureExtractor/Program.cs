@@ -19,7 +19,7 @@ namespace AssetRipper.Tools.RawTextureExtractor
 {
 	internal static class Program
 	{
-		private static readonly string outputDirectory = Path.Combine(AppContext.BaseDirectory, "Output");
+		private static readonly string outputDirectory = Path.Join(AppContext.BaseDirectory, "Output");
 
 		static void Main(string[] args)
 		{
@@ -90,7 +90,7 @@ namespace AssetRipper.Tools.RawTextureExtractor
 		{
 			const string jsonExtension = ".json";
 
-			string collectionOutputPath = Path.Combine(GetReversedName(collection).Reverse().ToArray());
+			string collectionOutputPath = Path.Join(GetReversedName(collection).Reverse().ToArray());
 			Directory.CreateDirectory(collectionOutputPath);
 			foreach (ITexture2D texture in collection.OfType<ITexture2D>())
 			{
@@ -103,7 +103,7 @@ namespace AssetRipper.Tools.RawTextureExtractor
 						: $"{texture.ClassName}_{ToValidString(texture.PathID)}";
 					Debug.Assert(name.Length > 0);
 					string uniqueName = FileUtils.GetUniqueName(collectionOutputPath, name, FileUtils.MaxFileNameLength - jsonExtension.Length);
-					string dataFilePath = Path.Combine(collectionOutputPath, uniqueName);
+					string dataFilePath = Path.Join(collectionOutputPath, uniqueName);
 					string infoFilePath = dataFilePath + jsonExtension;
 					File.WriteAllBytes(dataFilePath, data);
 					string text = $$"""

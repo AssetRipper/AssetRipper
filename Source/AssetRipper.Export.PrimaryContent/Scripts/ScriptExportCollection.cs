@@ -26,7 +26,7 @@ public sealed class ScriptExportCollection : ExportCollectionBase
 	{
 		IAssemblyManager assemblyManager = ((ScriptContentExtractor)ContentExtractor).AssemblyManager;
 
-		string assemblyDirectory = Path.Combine(projectDirectory, "Assemblies");
+		string assemblyDirectory = Path.Join(projectDirectory, "Assemblies");
 		Directory.CreateDirectory(assemblyDirectory);
 
 		//Export assemblies
@@ -38,7 +38,7 @@ public sealed class ScriptExportCollection : ExportCollectionBase
 
 			//Write assembly
 			{
-				string assemblyPath = Path.Combine(assemblyDirectory, assembly.Name + ".dll");
+				string assemblyPath = Path.Join(assemblyDirectory, assembly.Name + ".dll");
 				assemblyPaths.Add(assemblyPath);
 				using FileStream fileStream = File.Create(assemblyPath);
 				stream.CopyTo(fileStream);
@@ -47,11 +47,11 @@ public sealed class ScriptExportCollection : ExportCollectionBase
 		}
 
 		//Decompile scripts
-		string scriptDirectory = Path.Combine(projectDirectory, "Scripts");
+		string scriptDirectory = Path.Join(projectDirectory, "Scripts");
 		foreach (string assemblyPath in assemblyPaths)
 		{
 			string assemblyName = Path.GetFileNameWithoutExtension(assemblyPath);
-			string outputDirectory = Path.Combine(scriptDirectory, assemblyName);
+			string outputDirectory = Path.Join(scriptDirectory, assemblyName);
 			Directory.CreateDirectory(outputDirectory);
 			WholeProjectDecompiler decompiler = new(new UniversalAssemblyResolver(assemblyPath, false, null));
 			PEFile file = new(assemblyPath);

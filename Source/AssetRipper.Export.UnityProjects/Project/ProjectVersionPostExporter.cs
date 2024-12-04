@@ -16,7 +16,7 @@ namespace AssetRipper.Export.UnityProjects.Project
 		private static void SaveProjectVersion(string projectSettingsDirectory, UnityVersion version)
 		{
 			Directory.CreateDirectory(projectSettingsDirectory);
-			using Stream fileStream = File.Create(Path.Combine(projectSettingsDirectory, "ProjectVersion.txt"));
+			using Stream fileStream = File.Create(Path.Join(projectSettingsDirectory, "ProjectVersion.txt"));
 			using StreamWriter writer = new InvariantStreamWriter(fileStream, new UTF8Encoding(false));
 			writer.Write($"m_EditorVersion: {version}\n");
 			if (version.Equals(5))

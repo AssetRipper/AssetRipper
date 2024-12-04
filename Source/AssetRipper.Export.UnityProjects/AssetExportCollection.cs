@@ -16,13 +16,13 @@ namespace AssetRipper.Export.UnityProjects
 		public override bool Export(IExportContainer container, string projectDirectory)
 		{
 			string subPath = Asset.OriginalName is not null || Asset.OriginalDirectory is not null
-				? Path.Combine(projectDirectory, DirectoryUtils.FixInvalidPathCharacters(Asset.OriginalDirectory ?? ""))
-				: Path.Combine(projectDirectory, AssetsKeyword, Asset.ClassName);
+				? Path.Join(projectDirectory, DirectoryUtils.FixInvalidPathCharacters(Asset.OriginalDirectory ?? ""))
+				: Path.Join(projectDirectory, AssetsKeyword, Asset.ClassName);
 			string fileName = GetUniqueFileName(Asset, subPath);
 
 			Directory.CreateDirectory(subPath);
 
-			string filePath = Path.Combine(subPath, fileName);
+			string filePath = Path.Join(subPath, fileName);
 			bool result = ExportInner(container, filePath, projectDirectory);
 			if (result)
 			{

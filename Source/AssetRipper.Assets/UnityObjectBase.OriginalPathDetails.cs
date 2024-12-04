@@ -65,7 +65,7 @@ public abstract partial class UnityObjectBase
 		{
 			return Directory is null
 				? NameWithExtension
-				: Path.Combine(Directory, NameWithExtension);
+				: Path.Join(Directory, NameWithExtension);
 		}
 
 		[return: NotNullIfNotNull(nameof(str))]

@@ -38,13 +38,13 @@ namespace AssetRipper.Import.Structure.Platforms
 			Name = name;
 			RootPath = m_root.FullName;
 			GameDataPath = dataPath;
-			StreamingAssetsPath = Path.Combine(GameDataPath, StreamingName);
-			ResourcesPath = Path.Combine(GameDataPath, ResourcesName);
-			ManagedPath = Path.Combine(GameDataPath, ManagedName);
-			UnityPlayerPath = Path.Combine(RootPath, DefaultUnityPlayerName);
+			StreamingAssetsPath = Path.Join(GameDataPath, StreamingName);
+			ResourcesPath = Path.Join(GameDataPath, ResourcesName);
+			ManagedPath = Path.Join(GameDataPath, ManagedName);
+			UnityPlayerPath = Path.Join(RootPath, DefaultUnityPlayerName);
 			Version = null;
-			Il2CppGameAssemblyPath = Path.Combine(RootPath, DefaultGameAssemblyName);
-			Il2CppMetaDataPath = Path.Combine(GameDataPath, "il2cpp_data", MetadataName, DefaultGlobalMetadataName);
+			Il2CppGameAssemblyPath = Path.Join(RootPath, DefaultGameAssemblyName);
+			Il2CppMetaDataPath = Path.Join(GameDataPath, "il2cpp_data", MetadataName, DefaultGlobalMetadataName);
 
 			if (HasIl2CppFiles())
 			{
@@ -104,9 +104,9 @@ namespace AssetRipper.Import.Structure.Platforms
 			string folderName = directoryInfo.Name;
 			string gameName = folderName.Substring(0, folderName.IndexOf($"_{DataFolderName}"));
 			string rootPath = directoryInfo.Parent.FullName;
-			string x86Path = Path.Combine(rootPath, gameName + x86Extension);
-			string x64Path = Path.Combine(rootPath, gameName + x64Extension);
-			string x86_64Path = Path.Combine(rootPath, gameName + x86_64Extension);
+			string x86Path = Path.Join(rootPath, gameName + x86Extension);
+			string x64Path = Path.Join(rootPath, gameName + x64Extension);
+			string x86_64Path = Path.Join(rootPath, gameName + x86_64Extension);
 			if (File.Exists(x86Path) || File.Exists(x64Path) || File.Exists(x86_64Path))
 			{
 				return true;
@@ -137,7 +137,7 @@ namespace AssetRipper.Import.Structure.Platforms
 				{
 					name = Path.GetFileNameWithoutExtension(finfo.Name);
 					string dataFolder = $"{name}_{DataFolderName}";
-					dataPath = Path.Combine(rootDiectory.FullName, dataFolder);
+					dataPath = Path.Join(rootDiectory.FullName, dataFolder);
 					if (Directory.Exists(dataPath))
 					{
 						return true;

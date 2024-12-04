@@ -8,10 +8,10 @@ namespace AssetRipper.Export.UnityProjects.Project
 
 		public override bool Export(IExportContainer container, string projectDirectory)
 		{
-			string subPath = Path.Combine(projectDirectory, ProjectSettingsName);
+			string subPath = Path.Join(projectDirectory, ProjectSettingsName);
 			string name = GetCorrectName(Asset.ClassName);
 			string fileName = $"{name}.asset";
-			string filePath = Path.Combine(subPath, fileName);
+			string filePath = Path.Join(subPath, fileName);
 
 			Directory.CreateDirectory(subPath);
 

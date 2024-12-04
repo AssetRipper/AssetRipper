@@ -85,7 +85,7 @@ namespace AssetRipper.Import.Structure.Platforms
 
 			foreach (string dataPath in DataPaths)
 			{
-				string filePath = Path.Combine(dataPath, dependency);
+				string filePath = Path.Join(dataPath, dependency);
 				if (MultiFileStream.Exists(filePath))
 				{
 					return filePath;
@@ -119,7 +119,7 @@ namespace AssetRipper.Import.Structure.Platforms
 		{
 			foreach (string dataPath in DataPaths)
 			{
-				string path = Path.Combine(dataPath, resource);
+				string path = Path.Join(dataPath, resource);
 				if (MultiFileStream.Exists(path))
 				{
 					return path;
@@ -164,13 +164,13 @@ namespace AssetRipper.Import.Structure.Platforms
 		/// </summary>
 		protected static void CollectCompressedGameFiles(DirectoryInfo root, List<KeyValuePair<string, string>> files)
 		{
-			string dataBundlePath = Path.Combine(root.FullName, DataBundleName);
+			string dataBundlePath = Path.Join(root.FullName, DataBundleName);
 			if (MultiFileStream.Exists(dataBundlePath))
 			{
 				AddAssetBundle(files, DataBundleName, dataBundlePath);
 			}
 			
-			string dataPackBundlePath = Path.Combine(root.FullName, DataPackBundleName);
+			string dataPackBundlePath = Path.Join(root.FullName, DataPackBundleName);
 			if (MultiFileStream.Exists(dataPackBundlePath))
 			{
 				AddAssetBundle(files, DataPackBundleName, dataPackBundlePath);
@@ -182,14 +182,14 @@ namespace AssetRipper.Import.Structure.Platforms
 		/// </summary>
 		protected static void CollectSerializedGameFiles(DirectoryInfo root, List<KeyValuePair<string, string>> files)
 		{
-			string filePath = Path.Combine(root.FullName, GlobalGameManagersName);
+			string filePath = Path.Join(root.FullName, GlobalGameManagersName);
 			if (MultiFileStream.Exists(filePath))
 			{
 				AddFile(files, GlobalGameManagersName, filePath);
 			}
 			else
 			{
-				filePath = Path.Combine(root.FullName, MainDataName);
+				filePath = Path.Join(root.FullName, MainDataName);
 				if (MultiFileStream.Exists(filePath))
 				{
 					AddFile(files, MainDataName, filePath);
@@ -276,7 +276,7 @@ namespace AssetRipper.Import.Structure.Platforms
 			}
 			else if (!string.IsNullOrEmpty(GameDataPath))
 			{
-				string libPath = Path.Combine(Path.GetFullPath(GameDataPath), LibName);
+				string libPath = Path.Join(Path.GetFullPath(GameDataPath), LibName);
 				if (Directory.Exists(libPath))
 				{
 					CollectAssemblies(new DirectoryInfo(GameDataPath), Assemblies);
@@ -288,22 +288,22 @@ namespace AssetRipper.Import.Structure.Platforms
 
 		private static string? FindEngineDependency(string path, string dependency)
 		{
-			string filePath = Path.Combine(path, dependency);
+			string filePath = Path.Join(path, dependency);
 			if (File.Exists(filePath))
 			{
 				return filePath;
 			}
 
-			string resourcePath = Path.Combine(path, ResourcesName);
-			filePath = Path.Combine(resourcePath, dependency);
+			string resourcePath = Path.Join(path, ResourcesName);
+			filePath = Path.Join(resourcePath, dependency);
 			if (File.Exists(filePath))
 			{
 				return filePath;
 			}
 
 			// really old versions contains file in this directory
-			string unityPath = Path.Combine(path, UnityName);
-			filePath = Path.Combine(unityPath, dependency);
+			string unityPath = Path.Join(path, UnityName);
+			filePath = Path.Join(unityPath, dependency);
 			if (File.Exists(filePath))
 			{
 				return filePath;
@@ -339,12 +339,12 @@ namespace AssetRipper.Import.Structure.Platforms
 
 		protected static UnityVersion? GetUnityVersionFromDataDirectory(string dataDirectoryPath)
 		{
-			string globalGameManagersPath = Path.Combine(dataDirectoryPath, GlobalGameManagersName);
+			string globalGameManagersPath = Path.Join(dataDirectoryPath, GlobalGameManagersName);
 			if (File.Exists(globalGameManagersPath))
 			{
 				return GetUnityVersionFromSerializedFile(globalGameManagersPath);
 			}
-			string dataBundlePath = Path.Combine(dataDirectoryPath, DataBundleName);
+			string dataBundlePath = Path.Join(dataDirectoryPath, DataBundleName);
 			if (File.Exists(dataBundlePath))
 			{
 				return GetUnityVersionFromBundleFile(dataBundlePath);

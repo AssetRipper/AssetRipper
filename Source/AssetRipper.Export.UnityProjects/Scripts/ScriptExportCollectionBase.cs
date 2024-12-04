@@ -76,7 +76,7 @@ public abstract class ScriptExportCollectionBase : ExportCollection
 		string assemblyFolder = FilenameUtils.RemoveAssemblyFileExtension(assembly);
 		string scriptsFolder = GetScriptsFolderName(assemblyFolder);
 		string namespaceFolder = @namespace.Replace('.', Path.DirectorySeparatorChar);
-		folderPath = DirectoryUtils.FixInvalidPathCharacters(Path.Combine(scriptsFolder, assemblyFolder, namespaceFolder));
+		folderPath = DirectoryUtils.FixInvalidPathCharacters(Path.Join(scriptsFolder, assemblyFolder, namespaceFolder));
 		fileName = $"{DirectoryUtils.FixInvalidPathCharacters(@class)}.cs";
 	}
 

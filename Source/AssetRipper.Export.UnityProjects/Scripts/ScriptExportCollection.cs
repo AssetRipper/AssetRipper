@@ -55,11 +55,11 @@ public sealed class ScriptExportCollection : ScriptExportCollectionBase
 	{
 		Logger.Info(LogCategory.Export, "Exporting scripts...");
 
-		string assetsDirectoryPath = Path.Combine(projectDirectory, AssetsKeyword);
+		string assetsDirectoryPath = Path.Join(projectDirectory, AssetsKeyword);
 
 		Dictionary<string, AssemblyDefinitionDetails> assemblyDefinitionDetailsDictionary = new();
 
-		string pluginsFolder = Path.Combine(assetsDirectoryPath, "Plugins");
+		string pluginsFolder = Path.Join(assetsDirectoryPath, "Plugins");
 
 		foreach (AssemblyDefinition assembly in AssetExporter.AssemblyManager.GetAssemblies())
 		{
@@ -69,7 +69,7 @@ public sealed class ScriptExportCollection : ScriptExportCollectionBase
 			if (exportType is AssemblyExportType.Decompile)
 			{
 				Logger.Info(LogCategory.Export, $"Decompiling {assemblyName}");
-				string outputDirectory = Path.Combine(assetsDirectoryPath, GetScriptsFolderName(assemblyName), assemblyName);
+				string outputDirectory = Path.Join(assetsDirectoryPath, GetScriptsFolderName(assemblyName), assemblyName);
 				Directory.CreateDirectory(outputDirectory);
 				AssetExporter.Decompiler.DecompileWholeProject(assembly, outputDirectory);
 
@@ -79,7 +79,7 @@ public sealed class ScriptExportCollection : ScriptExportCollectionBase
 			{
 				Logger.Info(LogCategory.Export, $"Saving {assemblyName}");
 				Directory.CreateDirectory(pluginsFolder);
-				string outputPath = Path.Combine(pluginsFolder, FilenameUtils.AddAssemblyFileExtension(assemblyName));
+				string outputPath = Path.Join(pluginsFolder, FilenameUtils.AddAssemblyFileExtension(assemblyName));
 				AssetExporter.AssemblyManager.SaveAssembly(assembly, outputPath);
 				OnAssemblyExported(container, outputPath);
 			}
@@ -88,8 +88,8 @@ public sealed class ScriptExportCollection : ScriptExportCollectionBase
 		foreach (IMonoScript asset in m_export)
 		{
 			GetExportSubPath(asset, out string subFolderPath, out string fileName);
-			string folderPath = Path.Combine(assetsDirectoryPath, subFolderPath);
-			string filePath = Path.Combine(folderPath, fileName);
+			string folderPath = Path.Join(assetsDirectoryPath, subFolderPath);
+			string filePath = Path.Join(folderPath, fileName);
 			if (!System.IO.File.Exists(filePath))
 			{
 				Directory.CreateDirectory(folderPath);
@@ -97,7 +97,7 @@ public sealed class ScriptExportCollection : ScriptExportCollectionBase
 				string assemblyName = asset.GetAssemblyNameFixed();
 				if (!assemblyDefinitionDetailsDictionary.ContainsKey(assemblyName))
 				{
-					string assemblyDirectoryPath = Path.Combine(assetsDirectoryPath, GetScriptsFolderName(assemblyName), assemblyName);
+					string assemblyDirectoryPath = Path.Join(assetsDirectoryPath, GetScriptsFolderName(assemblyName), assemblyName);
 					AssemblyDefinitionDetails details = new AssemblyDefinitionDetails(assemblyName, assemblyDirectoryPath);
 					assemblyDefinitionDetailsDictionary.Add(assemblyName, details);
 				}

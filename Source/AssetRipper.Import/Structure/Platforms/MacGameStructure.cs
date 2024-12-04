@@ -14,12 +14,12 @@
 				throw new Exception($"Directory '{rootPath}' doesn't exist");
 			}
 
-			string resourcePath = Path.Combine(m_root.FullName, ContentsName, ResourcesName);
+			string resourcePath = Path.Join(m_root.FullName, ContentsName, ResourcesName);
 			if (!Directory.Exists(resourcePath))
 			{
 				throw new Exception("Resources directory wasn't found");
 			}
-			string dataPath = Path.Combine(resourcePath, DataFolderName);
+			string dataPath = Path.Join(resourcePath, DataFolderName);
 			if (!Directory.Exists(dataPath))
 			{
 				throw new Exception("Data directory wasn't found");
@@ -30,14 +30,14 @@
 			Name = m_root.Name.Substring(0, m_root.Name.Length - AppExtension.Length);
 			RootPath = rootPath;
 			GameDataPath = dataPath;
-			StreamingAssetsPath = Path.Combine(GameDataPath, StreamingName);
-			ResourcesPath = Path.Combine(GameDataPath, ResourcesName);
-			ManagedPath = Path.Combine(GameDataPath, ManagedName);
-			UnityPlayerPath = Path.Combine(RootPath, ContentsName, FrameworksName, MacUnityPlayerName);
+			StreamingAssetsPath = Path.Join(GameDataPath, StreamingName);
+			ResourcesPath = Path.Join(GameDataPath, ResourcesName);
+			ManagedPath = Path.Join(GameDataPath, ManagedName);
+			UnityPlayerPath = Path.Join(RootPath, ContentsName, FrameworksName, MacUnityPlayerName);
 			Version = null;
 
-			Il2CppGameAssemblyPath = Path.Combine(RootPath, ContentsName, FrameworksName, "GameAssembly.dylib");
-			Il2CppMetaDataPath = Path.Combine(GameDataPath, "il2cpp_data", MetadataName, DefaultGlobalMetadataName);
+			Il2CppGameAssemblyPath = Path.Join(RootPath, ContentsName, FrameworksName, "GameAssembly.dylib");
+			Il2CppMetaDataPath = Path.Join(GameDataPath, "il2cpp_data", MetadataName, DefaultGlobalMetadataName);
 
 			if (HasIl2CppFiles())
 			{
@@ -65,12 +65,12 @@
 				return false;
 			}
 
-			string dataPath = Path.Combine(dinfo.FullName, ContentsName, ResourcesName, DataFolderName);
+			string dataPath = Path.Join(dinfo.FullName, ContentsName, ResourcesName, DataFolderName);
 			if (!Directory.Exists(dataPath))
 			{
 				return false;
 			}
-			string resourcePath = Path.Combine(dinfo.FullName, ContentsName, ResourcesName);
+			string resourcePath = Path.Join(dinfo.FullName, ContentsName, ResourcesName);
 			if (!Directory.Exists(resourcePath))
 			{
 				return false;
