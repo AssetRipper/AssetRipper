@@ -1,7 +1,6 @@
 ﻿using AssetRipper.IO.Endian;
-using AssetRipper.Primitives;
 
-namespace AssetRipper.IO.Files
+namespace AssetRipper.IO.Files.BundleFiles
 {
 	public sealed record class Hash128 : IEndianReadable<Hash128>, IEndianWritable
 	{
