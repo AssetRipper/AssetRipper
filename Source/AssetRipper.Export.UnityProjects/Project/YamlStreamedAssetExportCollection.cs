@@ -11,17 +11,17 @@ namespace AssetRipper.Export.UnityProjects.Project
 		{
 		}
 
-		protected override bool ExportInner(IExportContainer container, string filePath, string dirPath)
+		protected override bool ExportInner(IExportContainer container, string filePath, string dirPath, FileSystem fileSystem)
 		{
 			return Asset switch
 			{
-				IMesh mesh => ExportMesh(container, filePath, dirPath, mesh),
-				IImageTexture texture => ExportTexture(container, filePath, dirPath, texture),
+				IMesh mesh => ExportMesh(container, filePath, dirPath, mesh, fileSystem),
+				IImageTexture texture => ExportTexture(container, filePath, dirPath, texture, fileSystem),
 				_ => false,
 			};
 		}
 
-		private bool ExportMesh(IExportContainer container, string filePath, string dirPath, IMesh mesh)
+		private bool ExportMesh(IExportContainer container, string filePath, string dirPath, IMesh mesh, FileSystem fileSystem)
 		{
 			bool result;
 			if (mesh.Has_StreamData())
@@ -33,13 +33,13 @@ namespace AssetRipper.Export.UnityProjects.Project
 				{
 					mesh.VertexData.Data = mesh.StreamData.GetContent(mesh.Collection);
 					mesh.StreamData.ClearValues();
-					result = base.ExportInner(container, filePath, dirPath);
+					result = base.ExportInner(container, filePath, dirPath, fileSystem);
 					mesh.VertexData.Data = Array.Empty<byte>();
 				}
 				else
 				{
 					mesh.StreamData.ClearValues();
-					result = base.ExportInner(container, filePath, dirPath);
+					result = base.ExportInner(container, filePath, dirPath, fileSystem);
 				}
 				mesh.StreamData.SetOffset(offset);
 				mesh.StreamData.Path = path;
@@ -47,13 +47,13 @@ namespace AssetRipper.Export.UnityProjects.Project
 			}
 			else
 			{
-				result = base.ExportInner(container, filePath, dirPath);
+				result = base.ExportInner(container, filePath, dirPath, fileSystem);
 			}
 
 			return result;
 		}
 
-		private bool ExportTexture(IExportContainer container, string filePath, string dirPath, IImageTexture texture)
+		private bool ExportTexture(IExportContainer container, string filePath, string dirPath, IImageTexture texture, FileSystem fileSystem)
 		{
 			bool result;
 			if (texture.Has_StreamData_C189())
@@ -65,13 +65,13 @@ namespace AssetRipper.Export.UnityProjects.Project
 				{
 					texture.ImageData_C189 = texture.StreamData_C189.GetContent(texture.Collection);
 					texture.StreamData_C189.ClearValues();
-					result = base.ExportInner(container, filePath, dirPath);
+					result = base.ExportInner(container, filePath, dirPath, fileSystem);
 					texture.ImageData_C189 = Array.Empty<byte>();
 				}
 				else
 				{
 					texture.StreamData_C189.ClearValues();
-					result = base.ExportInner(container, filePath, dirPath);
+					result = base.ExportInner(container, filePath, dirPath, fileSystem);
 				}
 				texture.StreamData_C189.SetOffset(offset);
 				texture.StreamData_C189.Path = path;
@@ -79,7 +79,7 @@ namespace AssetRipper.Export.UnityProjects.Project
 			}
 			else
 			{
-				result = base.ExportInner(container, filePath, dirPath);
+				result = base.ExportInner(container, filePath, dirPath, fileSystem);
 			}
 
 			return result;

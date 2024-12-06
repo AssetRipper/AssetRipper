@@ -18,7 +18,7 @@ public sealed class DeletedAssetsExportCollection(DeletedAssetsInformation Asset
 		return ReferenceEquals(Asset, asset) || Asset.DeletedAssets.Contains(asset);
 	}
 
-	public override bool Export(string projectDirectory)
+	public override bool Export(string projectDirectory, FileSystem fileSystem)
 	{
 		throw new NotSupportedException();
 	}

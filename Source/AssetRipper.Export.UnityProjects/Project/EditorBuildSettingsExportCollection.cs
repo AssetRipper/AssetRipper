@@ -10,10 +10,10 @@ public sealed class EditorBuildSettingsExportCollection : ManagerExportCollectio
 	{
 	}
 
-	public override bool Export(IExportContainer container, string projectDirectory)
+	public override bool Export(IExportContainer container, string projectDirectory, FileSystem fileSystem)
 	{
 		SetSceneGuidValues((IEditorBuildSettings)Asset, container);
-		return base.Export(container, projectDirectory);
+		return base.Export(container, projectDirectory, fileSystem);
 	}
 
 	private static void SetSceneGuidValues(IEditorBuildSettings editorBuildSettings, IExportContainer container)

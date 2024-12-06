@@ -8,9 +8,9 @@ public class MultipleExportCollection<T> : SingleExportCollection<T> where T : I
 	{
 	}
 
-	protected override bool ExportInner(string filePath, string dirPath)
+	protected override bool ExportInner(string filePath, string dirPath, FileSystem fileSystem)
 	{
-		return ContentExtractor.Export(Assets, filePath);
+		return ContentExtractor.Export(Assets, filePath, fileSystem);
 	}
 
 	public void AddAsset(IUnityObjectBase asset)

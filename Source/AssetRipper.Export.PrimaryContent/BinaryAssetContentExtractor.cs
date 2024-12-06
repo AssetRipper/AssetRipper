@@ -29,12 +29,12 @@ public sealed class BinaryAssetContentExtractor : IContentExtractor
 		{
 		}
 
-		protected override bool ExportInner(string filePath, string dirPath)
+		protected override bool ExportInner(string filePath, string dirPath, FileSystem fileSystem)
 		{
 			ReadOnlySpan<byte> data = Data;
 			if (data.Length > 0)
 			{
-				File.WriteAllBytes(filePath, data);
+				fileSystem.File.WriteAllBytes(filePath, data);
 				return true;
 			}
 			else

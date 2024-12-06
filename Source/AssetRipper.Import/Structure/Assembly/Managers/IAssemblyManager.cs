@@ -36,5 +36,11 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 			readStream.Position = 0;
 			readStream.CopyTo(writeStream);
 		}
+		public static void SaveAssembly(this IAssemblyManager manager, AssemblyDefinition assembly, Stream writeStream)
+		{
+			Stream readStream = manager.GetStreamForAssembly(assembly);
+			readStream.Position = 0;
+			readStream.CopyTo(writeStream);
+		}
 	}
 }

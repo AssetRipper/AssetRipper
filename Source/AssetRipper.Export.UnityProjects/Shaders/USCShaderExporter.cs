@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Assets.Generics;
 using AssetRipper.Export.Modules.Shaders.Exporters;
 using AssetRipper.Export.Modules.Shaders.Exporters.DirectX;
 using AssetRipper.Export.Modules.Shaders.Exporters.USCDirectX;
@@ -13,7 +12,6 @@ using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.DirectX;
 using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL;
 using AssetRipper.Export.UnityProjects.Configuration;
 using AssetRipper.Import.Logging;
-using AssetRipper.IO.Files;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Extensions.Enums.Shader;
@@ -33,9 +31,9 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 	{
 		public static bool IsDX11ExportMode(ShaderExportMode mode) => mode == ShaderExportMode.Disassembly;
 
-		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
+		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path, FileSystem fileSystem)
 		{
-			using Stream fileStream = File.Create(path);
+			using Stream fileStream = fileSystem.File.Create(path);
 			try
 			{
 				ExportBinary((IShader)asset, fileStream, ShaderExporterInstantiator);

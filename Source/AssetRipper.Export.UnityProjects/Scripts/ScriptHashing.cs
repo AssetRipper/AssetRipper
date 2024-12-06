@@ -1,6 +1,5 @@
 ﻿using AssetRipper.HashAlgorithms;
 using AssetRipper.Import.Structure.Assembly;
-using AssetRipper.IO.Files.Utils;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using System.Buffers.Binary;
 using System.Text;
@@ -113,7 +112,7 @@ public static class ScriptHashing
 	/// </remarks>
 	public static UnityGuid CalculateAssemblyGuid(string assemblyName)
 	{
-		return CalculateAssemblyGuidInternal(FilenameUtils.RemoveAssemblyFileExtension(assemblyName));
+		return CalculateAssemblyGuidInternal(SpecialFileNames.RemoveAssemblyFileExtension(assemblyName));
 	}
 
 	/// <summary>

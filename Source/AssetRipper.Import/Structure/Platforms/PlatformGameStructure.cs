@@ -1,17 +1,18 @@
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly;
 using AssetRipper.Import.Structure.Assembly.Managers;
+using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.BundleFiles;
 using AssetRipper.IO.Files.BundleFiles.FileStream;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.IO.Files.Streams.MultiFile;
-using AssetRipper.IO.Files.Utils;
 using System.Text.RegularExpressions;
 
 namespace AssetRipper.Import.Structure.Platforms
 {
 	public abstract partial class PlatformGameStructure
 	{
+		public FileSystem FileSystem { get; protected set; } = LocalFileSystem.Instance;
 		public string? Name { get; protected set; }
 		public string? RootPath { get; protected set; }
 		public string? GameDataPath { get; protected set; }
@@ -91,15 +92,15 @@ namespace AssetRipper.Import.Structure.Platforms
 					return filePath;
 				}
 
-				if (FilenameUtils.IsDefaultResource(dependency))
+				if (SpecialFileNames.IsDefaultResource(dependency))
 				{
-					return FindEngineDependency(dataPath, FilenameUtils.DefaultResourceName1) ??
-						FindEngineDependency(dataPath, FilenameUtils.DefaultResourceName2);
+					return FindEngineDependency(dataPath, SpecialFileNames.DefaultResourceName1) ??
+						FindEngineDependency(dataPath, SpecialFileNames.DefaultResourceName2);
 				}
-				else if (FilenameUtils.IsBuiltinExtra(dependency))
+				else if (SpecialFileNames.IsBuiltinExtra(dependency))
 				{
-					return FindEngineDependency(dataPath, FilenameUtils.BuiltinExtraName1) ??
-						FindEngineDependency(dataPath, FilenameUtils.BuiltinExtraName2);
+					return FindEngineDependency(dataPath, SpecialFileNames.BuiltinExtraName1) ??
+						FindEngineDependency(dataPath, SpecialFileNames.BuiltinExtraName2);
 				}
 			}
 			return null;

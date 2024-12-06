@@ -30,7 +30,7 @@ public sealed class TextureArrayAssetExporter : BinaryAssetExporter
 		return exportCollection is not null;
 	}
 
-	public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
+	public override bool Export(IExportContainer container, IUnityObjectBase asset, string path, FileSystem fileSystem)
 	{
 		bool success;
 		DirectBitmap bitmap;
@@ -75,7 +75,7 @@ public sealed class TextureArrayAssetExporter : BinaryAssetExporter
 
 		if (success)
 		{
-			using FileStream stream = File.Create(path);
+			using Stream stream = fileSystem.File.Create(path);
 			bitmap.Save(stream, ImageExportFormat);
 			return true;
 		}

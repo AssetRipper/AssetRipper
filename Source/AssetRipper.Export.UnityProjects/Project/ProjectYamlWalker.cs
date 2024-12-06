@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.IO.Files;
 using AssetRipper.SourceGenerated.Subclasses.SceneObjectIdentifier;
 using AssetRipper.Yaml;
 

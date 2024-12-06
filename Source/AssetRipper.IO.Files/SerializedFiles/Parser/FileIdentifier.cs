@@ -1,6 +1,5 @@
 ﻿using AssetRipper.IO.Files.SerializedFiles.FileIdentifiers;
 using AssetRipper.IO.Files.SerializedFiles.IO;
-using AssetRipper.IO.Files.Utils;
 using AssetRipper.Primitives;
 
 namespace AssetRipper.IO.Files.SerializedFiles.Parser
@@ -36,7 +35,7 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 				Type = (AssetType)reader.ReadInt32();
 			}
 			PathNameOrigin = reader.ReadStringZeroTerm();
-			PathName = FilenameUtils.FixFileIdentifier(PathNameOrigin);
+			PathName = SpecialFileNames.FixFileIdentifier(PathNameOrigin);
 		}
 
 		public readonly void Write(SerializedWriter writer)

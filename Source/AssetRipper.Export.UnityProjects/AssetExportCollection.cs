@@ -1,6 +1,5 @@
 using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
-using AssetRipper.IO.Files.Utils;
 using AssetRipper.SourceGenerated.Classes.ClassID_1034;
 
 namespace AssetRipper.Export.UnityProjects
@@ -13,21 +12,21 @@ namespace AssetRipper.Export.UnityProjects
 			Asset = asset ?? throw new ArgumentNullException(nameof(asset));
 		}
 
-		public override bool Export(IExportContainer container, string projectDirectory)
+		public override bool Export(IExportContainer container, string projectDirectory, FileSystem fileSystem)
 		{
 			string subPath = Asset.OriginalName is not null || Asset.OriginalDirectory is not null
-				? Path.Join(projectDirectory, DirectoryUtils.FixInvalidPathCharacters(Asset.OriginalDirectory ?? ""))
-				: Path.Join(projectDirectory, AssetsKeyword, Asset.ClassName);
-			string fileName = GetUniqueFileName(Asset, subPath);
+				? fileSystem.Path.Join(projectDirectory, FileSystem.FixInvalidPathCharacters(Asset.OriginalDirectory ?? ""))
+				: fileSystem.Path.Join(projectDirectory, AssetsKeyword, Asset.ClassName);
+			string fileName = GetUniqueFileName(Asset, subPath, fileSystem);
 
-			Directory.CreateDirectory(subPath);
+			fileSystem.Directory.Create(subPath);
 
-			string filePath = Path.Join(subPath, fileName);
-			bool result = ExportInner(container, filePath, projectDirectory);
+			string filePath = fileSystem.Path.Join(subPath, fileName);
+			bool result = ExportInner(container, filePath, projectDirectory, fileSystem);
 			if (result)
 			{
 				Meta meta = new Meta(GUID, CreateImporter(container));
-				ExportMeta(container, meta, filePath);
+				ExportMeta(container, meta, filePath, fileSystem);
 				return true;
 			}
 			return false;
@@ -62,9 +61,9 @@ namespace AssetRipper.Export.UnityProjects
 		/// <param name="filePath">The full path to the exported asset destination</param>
 		/// <param name="dirPath">The full path to the project export directory</param>
 		/// <returns>True if export was successful, false otherwise</returns>
-		protected virtual bool ExportInner(IExportContainer container, string filePath, string dirPath)
+		protected virtual bool ExportInner(IExportContainer container, string filePath, string dirPath, FileSystem fileSystem)
 		{
-			return AssetExporter.Export(container, Asset, filePath);
+			return AssetExporter.Export(container, Asset, filePath, fileSystem);
 		}
 
 		protected virtual IUnityObjectBase CreateImporter(IExportContainer container)

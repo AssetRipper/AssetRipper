@@ -8,7 +8,6 @@ using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
-using AssetRipper.IO.Files.Utils;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_89;
@@ -99,10 +98,10 @@ namespace AssetRipper.Tools.RawTextureExtractor
 				{
 					string originalName = texture.Name;
 					string name = originalName.Length > 0
-						? FileUtils.FixInvalidNameCharacters(originalName)
+						? FileSystem.FixInvalidFileNameCharacters(originalName)
 						: $"{texture.ClassName}_{ToValidString(texture.PathID)}";
 					Debug.Assert(name.Length > 0);
-					string uniqueName = FileUtils.GetUniqueName(collectionOutputPath, name, FileUtils.MaxFileNameLength - jsonExtension.Length);
+					string uniqueName = FileSystem.GetUniqueName(collectionOutputPath, name, FileSystem.MaxFileNameLength - jsonExtension.Length);
 					string dataFilePath = Path.Join(collectionOutputPath, uniqueName);
 					string infoFilePath = dataFilePath + jsonExtension;
 					File.WriteAllBytes(dataFilePath, data);

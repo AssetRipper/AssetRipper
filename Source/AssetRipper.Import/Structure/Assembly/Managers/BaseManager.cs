@@ -3,7 +3,7 @@ using AsmResolver.DotNet.Signatures;
 using AssetRipper.Import.Structure.Assembly.Mono;
 using AssetRipper.Import.Structure.Assembly.Serializable;
 using AssetRipper.Import.Structure.Platforms;
-using AssetRipper.IO.Files.Utils;
+using AssetRipper.IO.Files;
 using AssetRipper.SerializationLogic;
 
 namespace AssetRipper.Import.Structure.Assembly.Managers
@@ -33,7 +33,7 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 
 		protected static string GetUniqueName(ITypeDefOrRef type)
 		{
-			string assembly = FilenameUtils.RemoveAssemblyFileExtension(type.Scope?.Name ?? "");
+			string assembly = SpecialFileNames.RemoveAssemblyFileExtension(type.Scope?.Name ?? "");
 			return ScriptIdentifier.ToUniqueName(assembly, type.FullName);
 		}
 
@@ -79,7 +79,7 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 
 		private static string ToAssemblyName(AssemblyDefinition assembly)
 		{
-			return FilenameUtils.RemoveAssemblyFileExtension(assembly.Name?.ToString() ?? "");
+			return SpecialFileNames.RemoveAssemblyFileExtension(assembly.Name?.ToString() ?? "");
 		}
 
 		public virtual void Read(Stream stream, string fileName)

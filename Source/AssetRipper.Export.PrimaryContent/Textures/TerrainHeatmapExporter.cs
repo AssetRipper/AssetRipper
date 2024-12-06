@@ -26,11 +26,11 @@ public sealed class TerrainHeatmapExporter : IContentExtractor
 		}
 	}
 
-	public bool Export(IUnityObjectBase asset, string path)
+	public bool Export(IUnityObjectBase asset, string path, FileSystem fileSystem)
 	{
 		ITerrainData terrain = (ITerrainData)asset;
 		DirectBitmap bitmap = TerrainHeatmap.GetBitmap(terrain);
-		using FileStream stream = File.Create(path);
+		using Stream stream = fileSystem.File.Create(path);
 		bitmap.Save(stream, ImageFormat);
 		return true;
 	}

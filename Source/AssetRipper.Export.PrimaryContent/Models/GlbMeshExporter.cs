@@ -23,10 +23,10 @@ public sealed class GlbMeshExporter : IContentExtractor
 		}
 	}
 
-	public bool Export(IUnityObjectBase asset, string path)
+	public bool Export(IUnityObjectBase asset, string path, FileSystem fileSystem)
 	{
 		SceneBuilder sceneBuilder = GlbMeshBuilder.Build((IMesh)asset);
-		using FileStream fileStream = File.Create(path);
+		using Stream fileStream = fileSystem.File.Create(path);
 		sceneBuilder.ToGltf2().WriteGLB(fileStream, new WriteSettings() { MergeBuffers = false });
 		return true;
 	}

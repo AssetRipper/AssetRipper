@@ -12,7 +12,7 @@ namespace AssetRipper.Export.UnityProjects
 		{
 		}
 
-		bool IExportCollection.Export(IExportContainer container, string projectDirectory)
+		bool IExportCollection.Export(IExportContainer container, string projectDirectory, FileSystem fileSystem)
 		{
 			throw new NotSupportedException();
 		}

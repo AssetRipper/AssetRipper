@@ -1,27 +1,26 @@
 using AssetRipper.Assets;
-using AssetRipper.IO.Files;
 
 namespace AssetRipper.Export.UnityProjects
 {
 	public class BinaryAssetExporter : IAssetExporter
 	{
-		public virtual bool Export(IExportContainer container, IUnityObjectBase asset, string path)
+		public virtual bool Export(IExportContainer container, IUnityObjectBase asset, string path, FileSystem fileSystem)
 		{
 			throw new NotSupportedException();
 		}
 
-		public virtual void Export(IExportContainer container, IUnityObjectBase asset, string path, Action<IExportContainer, IUnityObjectBase, string>? callback)
+		public virtual void Export(IExportContainer container, IUnityObjectBase asset, string path, FileSystem fileSystem, Action<IExportContainer, IUnityObjectBase, string, FileSystem>? callback)
 		{
-			Export(container, asset, path);
-			callback?.Invoke(container, asset, path);
+			Export(container, asset, path, fileSystem);
+			callback?.Invoke(container, asset, path, fileSystem);
 		}
 
-		public virtual bool Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path)
+		public virtual bool Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path, FileSystem fileSystem)
 		{
 			throw new NotSupportedException();
 		}
 
-		public virtual void Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path, Action<IExportContainer, IUnityObjectBase, string>? callback)
+		public virtual void Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path, FileSystem fileSystem, Action<IExportContainer, IUnityObjectBase, string, FileSystem>? callback)
 		{
 			throw new NotSupportedException();
 		}

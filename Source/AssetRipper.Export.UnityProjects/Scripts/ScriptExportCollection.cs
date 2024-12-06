@@ -4,7 +4,6 @@ using AssetRipper.Export.UnityProjects.Scripts.AssemblyDefinitions;
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly;
 using AssetRipper.Import.Structure.Assembly.Managers;
-using AssetRipper.IO.Files.Utils;
 using AssetRipper.SourceGenerated.Classes.ClassID_1050;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using AssetRipper.SourceGenerated.Extensions;
@@ -51,15 +50,15 @@ public sealed class ScriptExportCollection : ScriptExportCollectionBase
 		}
 	}
 
-	public override bool Export(IExportContainer container, string projectDirectory)
+	public override bool Export(IExportContainer container, string projectDirectory, FileSystem fileSystem)
 	{
 		Logger.Info(LogCategory.Export, "Exporting scripts...");
 
-		string assetsDirectoryPath = Path.Join(projectDirectory, AssetsKeyword);
+		string assetsDirectoryPath = fileSystem.Path.Join(projectDirectory, AssetsKeyword);
 
 		Dictionary<string, AssemblyDefinitionDetails> assemblyDefinitionDetailsDictionary = new();
 
-		string pluginsFolder = Path.Join(assetsDirectoryPath, "Plugins");
+		string pluginsFolder = fileSystem.Path.Join(assetsDirectoryPath, "Plugins");
 
 		foreach (AssemblyDefinition assembly in AssetExporter.AssemblyManager.GetAssemblies())
 		{
@@ -69,48 +68,48 @@ public sealed class ScriptExportCollection : ScriptExportCollectionBase
 			if (exportType is AssemblyExportType.Decompile)
 			{
 				Logger.Info(LogCategory.Export, $"Decompiling {assemblyName}");
-				string outputDirectory = Path.Join(assetsDirectoryPath, GetScriptsFolderName(assemblyName), assemblyName);
-				Directory.CreateDirectory(outputDirectory);
-				AssetExporter.Decompiler.DecompileWholeProject(assembly, outputDirectory);
+				string outputDirectory = fileSystem.Path.Join(assetsDirectoryPath, GetScriptsFolderName(assemblyName), assemblyName);
+				fileSystem.Directory.Create(outputDirectory);
+				AssetExporter.Decompiler.DecompileWholeProject(assembly, outputDirectory, fileSystem);
 
 				assemblyDefinitionDetailsDictionary.TryAdd(assemblyName, new AssemblyDefinitionDetails(assembly, outputDirectory));
 			}
 			else if (exportType is AssemblyExportType.Save)
 			{
 				Logger.Info(LogCategory.Export, $"Saving {assemblyName}");
-				Directory.CreateDirectory(pluginsFolder);
-				string outputPath = Path.Join(pluginsFolder, FilenameUtils.AddAssemblyFileExtension(assemblyName));
+				fileSystem.Directory.Create(pluginsFolder);
+				string outputPath = fileSystem.Path.Join(pluginsFolder, SpecialFileNames.AddAssemblyFileExtension(assemblyName));
 				AssetExporter.AssemblyManager.SaveAssembly(assembly, outputPath);
-				OnAssemblyExported(container, outputPath);
+				OnAssemblyExported(container, outputPath, fileSystem);
 			}
 		}
 
 		foreach (IMonoScript asset in m_export)
 		{
 			GetExportSubPath(asset, out string subFolderPath, out string fileName);
-			string folderPath = Path.Join(assetsDirectoryPath, subFolderPath);
-			string filePath = Path.Join(folderPath, fileName);
-			if (!System.IO.File.Exists(filePath))
+			string folderPath = fileSystem.Path.Join(assetsDirectoryPath, subFolderPath);
+			string filePath = fileSystem.Path.Join(folderPath, fileName);
+			if (!fileSystem.File.Exists(filePath))
 			{
-				Directory.CreateDirectory(folderPath);
-				System.IO.File.WriteAllText(filePath, EmptyScript.GetContent(asset));
+				fileSystem.Directory.Create(folderPath);
+				fileSystem.File.WriteAllText(filePath, EmptyScript.GetContent(asset));
 				string assemblyName = asset.GetAssemblyNameFixed();
 				if (!assemblyDefinitionDetailsDictionary.ContainsKey(assemblyName))
 				{
-					string assemblyDirectoryPath = Path.Join(assetsDirectoryPath, GetScriptsFolderName(assemblyName), assemblyName);
+					string assemblyDirectoryPath = fileSystem.Path.Join(assetsDirectoryPath, GetScriptsFolderName(assemblyName), assemblyName);
 					AssemblyDefinitionDetails details = new AssemblyDefinitionDetails(assemblyName, assemblyDirectoryPath);
 					assemblyDefinitionDetailsDictionary.Add(assemblyName, details);
 				}
 			}
 
-			if (System.IO.File.Exists($"{filePath}.meta"))
+			if (fileSystem.File.Exists($"{filePath}.meta"))
 			{
 				Logger.Error(LogCategory.Export, $"Metafile already exists at {filePath}.meta");
 				//throw new Exception($"Metafile already exists at {filePath}.meta");
 			}
 			else
 			{
-				OnScriptExported(container, asset, filePath);
+				OnScriptExported(container, asset, filePath, fileSystem);
 			}
 		}
 
@@ -124,7 +123,7 @@ public sealed class ScriptExportCollection : ScriptExportCollectionBase
 				//    see: https://docs.unity3d.com/2017.3/Documentation/Manual/ScriptCompilationAssemblyDefinitionFiles.html
 				if (!ReferenceAssemblies.IsPredefinedAssembly(details.AssemblyName))
 				{
-					AssemblyDefinitionExporter.Export(details);
+					AssemblyDefinitionExporter.Export(details, fileSystem);
 				}
 			}
 		}
@@ -132,7 +131,7 @@ public sealed class ScriptExportCollection : ScriptExportCollectionBase
 		return true;
 	}
 
-	private void OnAssemblyExported(IExportContainer container, string path)
+	private void OnAssemblyExported(IExportContainer container, string path, FileSystem fileSystem)
 	{
 		UnityGuid guid = ScriptHashing.CalculateAssemblyGuid(Path.GetFileName(path));
 		IPluginImporter importer = PluginImporter.Create(Assets.First().Collection, container.ExportVersion);
@@ -147,7 +146,7 @@ public sealed class ScriptExportCollection : ScriptExportCollectionBase
 		}
 		
 		Meta meta = new Meta(guid, importer);
-		ExportMeta(container, meta, path);
+		ExportMeta(container, meta, path, fileSystem);
 
 	}
 

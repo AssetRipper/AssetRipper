@@ -8,8 +8,8 @@ using AssetRipper.Import.Structure.Assembly.Mono;
 using AssetRipper.Import.Structure.Assembly.Serializable;
 using AssetRipper.Import.Structure.Assembly.TypeTrees;
 using AssetRipper.IO.Endian;
+using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
-using AssetRipper.IO.Files.Utils;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
@@ -101,7 +101,7 @@ namespace AssetRipper.Import.AssetCreation
 			{
 				return asset;
 			}
-			else if (FilenameUtils.IsDefaultResourceOrBuiltinExtra(assetInfo.Collection.Name))
+			else if (SpecialFileNames.IsDefaultResourceOrBuiltinExtra(assetInfo.Collection.Name))
 			{
 				Logger.Warning(LogCategory.Import, error);
 				return asset;

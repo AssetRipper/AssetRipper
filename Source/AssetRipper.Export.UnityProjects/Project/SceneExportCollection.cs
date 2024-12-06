@@ -1,7 +1,6 @@
 using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Import.Logging;
-using AssetRipper.IO.Files;
 using AssetRipper.Processing;
 using AssetRipper.Processing.Scenes;
 using AssetRipper.SourceGenerated.Classes.ClassID_1030;
@@ -28,30 +27,30 @@ namespace AssetRipper.Export.UnityProjects.Project
 			componentArray = hierarchy.Assets.Order(this).ToArray();
 		}
 
-		public override bool Export(IExportContainer container, string projectDirectory)
+		public override bool Export(IExportContainer container, string projectDirectory, FileSystem fileSystem)
 		{
-			string filePath = Path.Join(projectDirectory, $"{Scene.Path}.{ExportExtension}");
-			string folderPath = Path.GetDirectoryName(filePath)!;
+			string filePath = fileSystem.Path.Join(projectDirectory, $"{Scene.Path}.{ExportExtension}");
+			string folderPath = fileSystem.Path.GetDirectoryName(filePath)!;
 
 			if (IsSceneDuplicate(container))
 			{
-				if (System.IO.File.Exists(filePath))
+				if (fileSystem.File.Exists(filePath))
 				{
 					Logger.Log(LogType.Warning, LogCategory.Export, $"Duplicate scene '{Scene.Path}' has been found. Skipping");
 					return false;
 				}
 			}
 
-			Directory.CreateDirectory(folderPath);
-			return ExportScene(container, folderPath, filePath, Scene.Name);
+			fileSystem.Directory.Create(folderPath);
+			return ExportScene(container, folderPath, filePath, Scene.Name, fileSystem);
 		}
 
-		protected virtual bool ExportScene(IExportContainer container, string folderPath, string filePath, string sceneName)
+		protected virtual bool ExportScene(IExportContainer container, string folderPath, string filePath, string sceneName, FileSystem fileSystem)
 		{
-			AssetExporter.Export(container, ExportableAssets, filePath);
+			AssetExporter.Export(container, ExportableAssets, filePath, fileSystem);
 			IDefaultImporter sceneImporter = DefaultImporter.Create(container.File, container.ExportVersion);
 			Meta meta = new Meta(GUID, sceneImporter);
-			ExportMeta(container, meta, filePath);
+			ExportMeta(container, meta, filePath, fileSystem);
 			return true;
 		}
 

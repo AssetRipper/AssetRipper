@@ -22,12 +22,12 @@ public sealed class ScriptExportCollection : ExportCollectionBase
 
 	public override bool Contains(IUnityObjectBase asset) => asset is IMonoScript;
 
-	public override bool Export(string projectDirectory)
+	public override bool Export(string projectDirectory, FileSystem fileSystem)
 	{
 		IAssemblyManager assemblyManager = ((ScriptContentExtractor)ContentExtractor).AssemblyManager;
 
-		string assemblyDirectory = Path.Join(projectDirectory, "Assemblies");
-		Directory.CreateDirectory(assemblyDirectory);
+		string assemblyDirectory = fileSystem.Path.Join(projectDirectory, "Assemblies");
+		fileSystem.Directory.Create(assemblyDirectory);
 
 		//Export assemblies
 		List<string> assemblyPaths = new();
@@ -38,21 +38,21 @@ public sealed class ScriptExportCollection : ExportCollectionBase
 
 			//Write assembly
 			{
-				string assemblyPath = Path.Join(assemblyDirectory, assembly.Name + ".dll");
+				string assemblyPath = fileSystem.Path.Join(assemblyDirectory, assembly.Name + ".dll");
 				assemblyPaths.Add(assemblyPath);
-				using FileStream fileStream = File.Create(assemblyPath);
+				using Stream fileStream = fileSystem.File.Create(assemblyPath);
 				stream.CopyTo(fileStream);
 				stream.Position = 0;
 			}
 		}
 
 		//Decompile scripts
-		string scriptDirectory = Path.Join(projectDirectory, "Scripts");
+		string scriptDirectory = fileSystem.Path.Join(projectDirectory, "Scripts");
 		foreach (string assemblyPath in assemblyPaths)
 		{
-			string assemblyName = Path.GetFileNameWithoutExtension(assemblyPath);
-			string outputDirectory = Path.Join(scriptDirectory, assemblyName);
-			Directory.CreateDirectory(outputDirectory);
+			string assemblyName = fileSystem.Path.GetFileNameWithoutExtension(assemblyPath);
+			string outputDirectory = fileSystem.Path.Join(scriptDirectory, assemblyName);
+			fileSystem.Directory.Create(outputDirectory);
 			WholeProjectDecompiler decompiler = new(new UniversalAssemblyResolver(assemblyPath, false, null));
 			PEFile file = new(assemblyPath);
 			decompiler.DecompileProject(file, outputDirectory);

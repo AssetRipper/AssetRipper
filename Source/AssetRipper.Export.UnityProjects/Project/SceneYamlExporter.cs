@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Processing;
-using AssetRipper.Processing.Scenes;
 
 namespace AssetRipper.Export.UnityProjects.Project
 {

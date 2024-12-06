@@ -1,6 +1,4 @@
-﻿using AssetRipper.IO.Files.Utils;
-
-namespace AssetRipper.IO.Files.SerializedFiles.FileIdentifiers;
+﻿namespace AssetRipper.IO.Files.SerializedFiles.FileIdentifiers;
 
 public partial record class FileIdentifier_5
 {
@@ -8,7 +6,7 @@ public partial record class FileIdentifier_5
 
 	partial void OnPathNameAssignment(string value)
 	{
-		PathNameFixed = FilenameUtils.FixFileIdentifier(value);
+		PathNameFixed = SpecialFileNames.FixFileIdentifier(value);
 	}
 
 	public string GetFilePath()

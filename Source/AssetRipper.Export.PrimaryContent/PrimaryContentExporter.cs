@@ -83,7 +83,7 @@ public sealed class PrimaryContentExporter
 		RegisterHandler<IUnityObjectBase>(DeletedAssetsExporter.Instance);
 	}
 
-	public void Export(GameBundle fileCollection, CoreConfiguration options)
+	public void Export(GameBundle fileCollection, CoreConfiguration options, FileSystem fileSystem)
 	{
 		List<ExportCollectionBase> collections = CreateCollections(fileCollection);
 
@@ -92,7 +92,7 @@ public sealed class PrimaryContentExporter
 			if (collection.Exportable)
 			{
 				Logger.Info(LogCategory.ExportProgress, $"Exporting '{collection.Name}'");
-				bool exportedSuccessfully = collection.Export(options.ExportRootPath);
+				bool exportedSuccessfully = collection.Export(options.ExportRootPath, fileSystem);
 				if (!exportedSuccessfully)
 				{
 					Logger.Warning(LogCategory.ExportProgress, $"Failed to export '{collection.Name}'");

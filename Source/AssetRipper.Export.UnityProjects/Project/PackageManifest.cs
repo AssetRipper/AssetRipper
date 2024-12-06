@@ -9,10 +9,9 @@ public record class PackageManifest([property: JsonPropertyName("dependencies")]
 	{
 	}
 
-	public void Save(string path)
+	public void Save(Stream stream)
 	{
-		using Stream fileStream = File.Create(path);
-		JsonSerializer.Serialize(fileStream, this, PackageManifestSerializerContext.Default.PackageManifest);
+		JsonSerializer.Serialize(stream, this, PackageManifestSerializerContext.Default.PackageManifest);
 	}
 
 	public static PackageManifest CreateDefault(UnityVersion version)

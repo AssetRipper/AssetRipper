@@ -24,15 +24,15 @@ public class GlbModelExporter : IContentExtractor
 		}
 	}
 
-	public bool Export(IEnumerable<IUnityObjectBase> assets, string path)
+	public bool Export(IEnumerable<IUnityObjectBase> assets, string path, FileSystem fileSystem)
 	{
-		return ExportModel(assets, path, false); //Called by the prefab exporter
+		return ExportModel(assets, path, false, fileSystem); //Called by the prefab exporter
 	}
 
-	public static bool ExportModel(IEnumerable<IUnityObjectBase> assets, string path, bool isScene)
+	public static bool ExportModel(IEnumerable<IUnityObjectBase> assets, string path, bool isScene, FileSystem fileSystem)
 	{
 		SceneBuilder sceneBuilder = GlbLevelBuilder.Build(assets, isScene);
-		using FileStream fileStream = File.Create(path);
+		using Stream fileStream = fileSystem.File.Create(path);
 		sceneBuilder.ToGltf2().WriteGLB(fileStream, new WriteSettings() { MergeBuffers = false });
 		return true;
 	}

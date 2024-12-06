@@ -28,11 +28,11 @@ public sealed class GlbNavMeshExporter : IContentExtractor
 		}
 	}
 
-	public bool Export(IUnityObjectBase asset, string path)
+	public bool Export(IUnityObjectBase asset, string path, FileSystem fileSystem)
 	{
 		SceneBuilder sceneBuilder = new SceneBuilder();
 		AddAssetToSceneBuilder(sceneBuilder, (INavMeshData)asset);
-		using FileStream fileStream = File.Create(path);
+		using Stream fileStream = fileSystem.File.Create(path);
 		sceneBuilder.ToGltf2().WriteGLB(fileStream, new WriteSettings() { MergeBuffers = false });
 		return true;
 	}

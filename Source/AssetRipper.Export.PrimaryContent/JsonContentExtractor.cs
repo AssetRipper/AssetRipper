@@ -13,11 +13,11 @@ public class JsonContentExtractor : IContentExtractor
 		return true;
 	}
 
-	public bool Export(IUnityObjectBase asset, string filePath)
+	public bool Export(IUnityObjectBase asset, string filePath, FileSystem fileSystem)
 	{
 		// Todo: make this use a stream instead of a string for better performance.
 		string json = new JsonWalker(asset.Collection).SerializeStandard(asset);
-		File.WriteAllText(filePath, json);
+		fileSystem.File.WriteAllText(filePath, json);
 		return true;
 	}
 

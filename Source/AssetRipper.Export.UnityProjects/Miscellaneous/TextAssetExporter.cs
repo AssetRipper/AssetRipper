@@ -26,11 +26,9 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 			}
 		}
 
-		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
+		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path, FileSystem fileSystem)
 		{
-			using FileStream stream = File.OpenWrite(path);
-			stream.Write(((ITextAsset)asset).Script_C49.Data);
-			stream.Flush();
+			fileSystem.File.WriteAllBytes(path, ((ITextAsset)asset).Script_C49.Data);
 			return true;
 		}
 	}

@@ -2,7 +2,6 @@
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Logging;
-using AssetRipper.IO.Files;
 using AssetRipper.SourceGenerated;
 
 namespace AssetRipper.Export.UnityProjects
@@ -78,7 +77,7 @@ namespace AssetRipper.Export.UnityProjects
 			throw new Exception($"There is no exporter that can handle '{asset}'");
 		}
 
-		public void Export(GameBundle fileCollection, CoreConfiguration options)
+		public void Export(GameBundle fileCollection, CoreConfiguration options, FileSystem fileSystem)
 		{
 			EventExportPreparationStarted?.Invoke();
 			List<IExportCollection> collections = CreateCollections(fileCollection);
@@ -93,7 +92,7 @@ namespace AssetRipper.Export.UnityProjects
 				if (collection.Exportable)
 				{
 					Logger.Info(LogCategory.ExportProgress, $"Exporting '{collection.Name}'");
-					bool exportedSuccessfully = collection.Export(container, options.ProjectRootPath);
+					bool exportedSuccessfully = collection.Export(container, options.ProjectRootPath, fileSystem);
 					if (!exportedSuccessfully)
 					{
 						Logger.Warning(LogCategory.ExportProgress, $"Failed to export '{collection.Name}'");

@@ -30,11 +30,11 @@ public sealed class AudioExportCollection : SingleExportCollection<IAudioClip>
 		}
 	}
 
-	protected override bool ExportInner(string filePath, string dirPath)
+	protected override bool ExportInner(string filePath, string dirPath, FileSystem fileSystem)
 	{
 		if (data.Length > 0)
 		{
-			File.WriteAllBytes(filePath, data);
+			fileSystem.File.WriteAllBytes(filePath, data);
 			data = []; // Export is only called once, so we can clear the data.
 			return true;
 		}

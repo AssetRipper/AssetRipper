@@ -30,7 +30,7 @@ public class LightmapTextureAssetExporter : BinaryAssetExporter
 		}
 	}
 
-	public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
+	public override bool Export(IExportContainer container, IUnityObjectBase asset, string path, FileSystem fileSystem)
 	{
 		ITexture2D texture = (ITexture2D)asset;
 		if (!texture.CheckAssetIntegrity())
@@ -41,7 +41,7 @@ public class LightmapTextureAssetExporter : BinaryAssetExporter
 
 		if (TextureConverter.TryConvertToBitmap(texture, out DirectBitmap bitmap))
 		{
-			using FileStream stream = File.Create(path);
+			using Stream stream = fileSystem.File.Create(path);
 			bitmap.Save(stream, ImageExportFormat);
 			return true;
 		}
