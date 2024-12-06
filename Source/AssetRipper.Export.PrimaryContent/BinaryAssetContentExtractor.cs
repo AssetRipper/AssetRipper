@@ -14,10 +14,10 @@ public sealed class BinaryAssetContentExtractor : IContentExtractor
 	{
 		exportCollection = asset switch
 		{
-			ITextAsset textAsset => new TextAssetExportCollection(textAsset),
-			IFont font => new FontExportCollection(font),
-			IMovieTexture movieTexture when movieTexture.Has_MovieData() => new MovieTextureExportCollection(movieTexture),
-			IVideoClip videoClip => new VideoClipExportCollection(videoClip),
+			ITextAsset textAsset => TextAssetExportCollection.Create(textAsset),
+			IFont font => FontExportCollection.Create(font),
+			IMovieTexture movieTexture => MovieTextureExportCollection.Create(movieTexture),
+			IVideoClip videoClip => VideoClipExportCollection.Create(videoClip),
 			_ => null,
 		};
 		return exportCollection is not null;
@@ -55,6 +55,15 @@ public sealed class BinaryAssetContentExtractor : IContentExtractor
 		protected override ReadOnlySpan<byte> Data => Asset.Script_C49.Data;
 
 		protected override string ExportExtension => "bytes";
+
+		public static TextAssetExportCollection? Create(ITextAsset asset)
+		{
+			if (asset.Script_C49.Data.Length > 0)
+			{
+				return new TextAssetExportCollection(asset);
+			}
+			return null;
+		}
 	}
 
 	private sealed class FontExportCollection : BinaryAssetExportCollection<IFont>
@@ -66,6 +75,15 @@ public sealed class BinaryAssetContentExtractor : IContentExtractor
 		protected override ReadOnlySpan<byte> Data => Asset.FontData;
 
 		protected override string ExportExtension => Asset.GetFontExtension();
+
+		public static FontExportCollection? Create(IFont asset)
+		{
+			if (asset.FontData.Length > 0)
+			{
+				return new FontExportCollection(asset);
+			}
+			return null;
+		}
 	}
 
 	private sealed class MovieTextureExportCollection : BinaryAssetExportCollection<IMovieTexture>
@@ -77,6 +95,15 @@ public sealed class BinaryAssetContentExtractor : IContentExtractor
 		protected override ReadOnlySpan<byte> Data => Asset.MovieData ?? [];
 
 		protected override string ExportExtension => "ogv";
+
+		public static MovieTextureExportCollection? Create(IMovieTexture asset)
+		{
+			if (asset.Has_MovieData() && asset.MovieData.Length > 0)
+			{
+				return new MovieTextureExportCollection(asset);
+			}
+			return null;
+		}
 	}
 
 	private sealed class VideoClipExportCollection : BinaryAssetExportCollection<IVideoClip>
@@ -88,5 +115,14 @@ public sealed class BinaryAssetContentExtractor : IContentExtractor
 		protected override ReadOnlySpan<byte> Data => Asset.GetContent();
 
 		protected override string ExportExtension => Asset.GetExtensionFromPath();
+
+		public static VideoClipExportCollection? Create(IVideoClip asset)
+		{
+			if (asset.CheckIntegrity())
+			{
+				return new VideoClipExportCollection(asset);
+			}
+			return null;
+		}
 	}
 }
