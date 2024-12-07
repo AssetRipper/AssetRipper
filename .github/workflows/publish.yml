@@ -28,6 +28,10 @@ jobs:
         with:
           dotnet-version: 9.0.x
 
+      - name: Install Arm64 Dependencies
+        if: matrix.config.runtime == 'linux-arm64'
+        run: sudo apt-get install -y libc6-dev-arm64-cross
+
       - name: Publish
         run: dotnet publish -c Release -r ${{ matrix.config.runtime }}
         working-directory: ./Source/AssetRipper.GUI.Free/
