@@ -28,12 +28,20 @@ jobs:
         with:
           dotnet-version: 9.0.x
 
+      # https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/cross-compile#linux
       - name: Install Arm64 Dependencies
         if: matrix.config.runtime == 'linux-arm64'
         run: |
+          sudo dpkg --add-architecture arm64
+          sudo bash -c 'cat > /etc/apt/sources.list.d/arm64.list <<EOF
+          deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ jammy main restricted
+          deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ jammy-updates main restricted
+          deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ jammy-backports main restricted universe multiverse
+          EOF'
+          sudo sed -i -e 's/deb http/deb [arch=amd64] http/g' /etc/apt/sources.list
+          sudo sed -i -e 's/deb mirror/deb [arch=amd64] mirror/g' /etc/apt/sources.list
           sudo apt update
-          sudo apt install -y gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu
-          sudo apt install -y libc6-dev-arm64-cross
+          sudo apt install -y clang llvm binutils-aarch64-linux-gnu gcc-aarch64-linux-gnu zlib1g-dev:arm64
 
       - name: Publish
         run: dotnet publish -c Release -r ${{ matrix.config.runtime }}
