@@ -85,12 +85,12 @@ public static class GlbLevelBuilder
 				if (ReferencesDynamicMesh(meshRenderer))
 				{
 
-					AddDynamicMeshToScene(sceneBuilder, parameters, node, meshData, new MaterialList(meshRenderer));
+					AddDynamicMeshToScene(sceneBuilder, parameters, node, mesh, meshData, new MaterialList(meshRenderer));
 				}
 				else
 				{
 					int[] subsetIndices = GetSubsetIndices(meshRenderer);
-					AddStaticMeshToScene(sceneBuilder, parameters, node, meshData, subsetIndices, new MaterialList(meshRenderer), globalTransform, globalInverseTransform);
+					AddStaticMeshToScene(sceneBuilder, parameters, node, mesh, meshData, subsetIndices, new MaterialList(meshRenderer), globalTransform, globalInverseTransform);
 				}
 			}
 		}
@@ -101,9 +101,9 @@ public static class GlbLevelBuilder
 		}
 	}
 
-	private static void AddDynamicMeshToScene(SceneBuilder sceneBuilder, BuildParameters parameters, NodeBuilder node, MeshData meshData, MaterialList materialList)
+	private static void AddDynamicMeshToScene(SceneBuilder sceneBuilder, BuildParameters parameters, NodeBuilder node, IMesh mesh, MeshData meshData, MaterialList materialList)
 	{
-		AccessListBase<ISubMesh> subMeshes = meshData.Mesh.SubMeshes;
+		AccessListBase<ISubMesh> subMeshes = mesh.SubMeshes;
 		(ISubMesh, MaterialBuilder)[] subMeshArray = ArrayPool<(ISubMesh, MaterialBuilder)>.Shared.Rent(subMeshes.Count);
 		for (int i = 0; i < subMeshes.Count; i++)
 		{
@@ -111,15 +111,15 @@ public static class GlbLevelBuilder
 			subMeshArray[i] = (subMeshes[i], materialBuilder);
 		}
 		ArraySegment<(ISubMesh, MaterialBuilder)> arraySegment = new ArraySegment<(ISubMesh, MaterialBuilder)>(subMeshArray, 0, subMeshes.Count);
-		IMeshBuilder<MaterialBuilder> subMeshBuilder = GlbSubMeshBuilder.BuildSubMeshes(arraySegment, meshData, Transformation.Identity, Transformation.Identity);
+		IMeshBuilder<MaterialBuilder> subMeshBuilder = GlbSubMeshBuilder.BuildSubMeshes(arraySegment, mesh.Is16BitIndices(), meshData, Transformation.Identity, Transformation.Identity);
 		sceneBuilder.AddRigidMesh(subMeshBuilder, node);
 		ArrayPool<(ISubMesh, MaterialBuilder)>.Shared.Return(subMeshArray);
 	}
 
-	private static void AddStaticMeshToScene(SceneBuilder sceneBuilder, BuildParameters parameters, NodeBuilder node, MeshData meshData, int[] subsetIndices, MaterialList materialList, Transformation globalTransform, Transformation globalInverseTransform)
+	private static void AddStaticMeshToScene(SceneBuilder sceneBuilder, BuildParameters parameters, NodeBuilder node, IMesh mesh, MeshData meshData, int[] subsetIndices, MaterialList materialList, Transformation globalTransform, Transformation globalInverseTransform)
 	{
 		(ISubMesh, MaterialBuilder)[] subMeshArray = ArrayPool<(ISubMesh, MaterialBuilder)>.Shared.Rent(subsetIndices.Length);
-		AccessListBase<ISubMesh> subMeshes = meshData.Mesh.SubMeshes;
+		AccessListBase<ISubMesh> subMeshes = mesh.SubMeshes;
 		for (int i = 0; i < subsetIndices.Length; i++)
 		{
 			ISubMesh subMesh = subMeshes[subsetIndices[i]];
@@ -127,7 +127,7 @@ public static class GlbLevelBuilder
 			subMeshArray[i] = (subMesh, materialBuilder);
 		}
 		ArraySegment<(ISubMesh, MaterialBuilder)> arraySegment = new ArraySegment<(ISubMesh, MaterialBuilder)>(subMeshArray, 0, subsetIndices.Length);
-		IMeshBuilder<MaterialBuilder> subMeshBuilder = GlbSubMeshBuilder.BuildSubMeshes(arraySegment, meshData, globalInverseTransform, globalTransform);
+		IMeshBuilder<MaterialBuilder> subMeshBuilder = GlbSubMeshBuilder.BuildSubMeshes(arraySegment, mesh.Is16BitIndices(), meshData, globalInverseTransform, globalTransform);
 		sceneBuilder.AddRigidMesh(subMeshBuilder, node);
 		ArrayPool<(ISubMesh, MaterialBuilder)>.Shared.Return(subMeshArray);
 	}

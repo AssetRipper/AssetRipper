@@ -64,7 +64,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			uv6 = default;
 			uv7 = default;
 
-			mesh.VertexData.ReadData(mesh.Collection.Version, mesh.Collection.EndianType, mesh,
+			VertexDataBlob.Create(mesh).ReadData(
 				out vertices,
 				out normals,
 				out tangents,
@@ -215,6 +215,15 @@ namespace AssetRipper.SourceGenerated.Extensions
 		public static void SetMeshCompression(this IMesh mesh, ModelImporterMeshCompression meshCompression)
 		{
 			mesh.MeshCompression = (byte)meshCompression;
+		}
+
+		public static byte[] GetVertexDataBytes(this IMesh mesh)
+		{
+			return mesh.VertexData.Data.Length switch
+			{
+				0 => mesh.StreamData?.GetContent(mesh.Collection) ?? [],
+				_ => mesh.VertexData.Data,
+			};
 		}
 
 		public static uint[] GetProcessedIndexBuffer(this IMesh mesh)

@@ -91,6 +91,60 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 		}
 
+		public static int ToChannelFormat(VertexFormat format, UnityVersion version)
+		{
+			if (version.LessThan(2017))
+			{
+				return format switch
+				{
+					VertexFormat.kVertexFormatFloat => (int)VertexChannelFormat.kChannelFormatFloat,
+					VertexFormat.kVertexFormatFloat16 => (int)VertexChannelFormat.kChannelFormatFloat16,
+					VertexFormat.kVertexFormatUNorm8 => (int)VertexChannelFormat.kChannelFormatColor,
+					VertexFormat.kVertexFormatUInt8 => (int)VertexChannelFormat.kChannelFormatByte,
+					VertexFormat.kVertexFormatUInt32 => (int)VertexChannelFormat.kChannelFormatUInt32,
+					_ => throw new ArgumentOutOfRangeException(nameof(format), format, null),
+				};
+			}
+			else if (version.LessThan(2019))
+			{
+				return format switch
+				{
+					VertexFormat.kVertexFormatFloat => (int)VertexFormat2017.kVertexFormatFloat,
+					VertexFormat.kVertexFormatFloat16 => (int)VertexFormat2017.kVertexFormatFloat16,
+					VertexFormat.kVertexFormatUNorm8 => (int)VertexFormat2017.kVertexFormatUNorm8,
+					VertexFormat.kVertexFormatSNorm8 => (int)VertexFormat2017.kVertexFormatSNorm8,
+					VertexFormat.kVertexFormatUNorm16 => (int)VertexFormat2017.kVertexFormatUNorm16,
+					VertexFormat.kVertexFormatSNorm16 => (int)VertexFormat2017.kVertexFormatSNorm16,
+					VertexFormat.kVertexFormatUInt8 => (int)VertexFormat2017.kVertexFormatUInt8,
+					VertexFormat.kVertexFormatSInt8 => (int)VertexFormat2017.kVertexFormatSInt8,
+					VertexFormat.kVertexFormatUInt16 => (int)VertexFormat2017.kVertexFormatUInt16,
+					VertexFormat.kVertexFormatSInt16 => (int)VertexFormat2017.kVertexFormatSInt16,
+					VertexFormat.kVertexFormatUInt32 => (int)VertexFormat2017.kVertexFormatUInt32,
+					VertexFormat.kVertexFormatSInt32 => (int)VertexFormat2017.kVertexFormatSInt32,
+					_ => throw new ArgumentOutOfRangeException(nameof(format), format, null),
+				};
+			}
+			else
+			{
+				return (int)format;
+			}
+		}
+
+		public static int GetChannelFormat_Color(UnityVersion version)
+		{
+			if (version.LessThan(2017))
+			{
+				return (int)VertexChannelFormat.kChannelFormatColor;
+			}
+			else if (version.LessThan(2019))
+			{
+				return (int)VertexFormat2017.kVertexFormatColor;
+			}
+			else
+			{
+				return (int)VertexFormat.kVertexFormatUNorm8;
+			}
+		}
 
 		public static int GetFormatSize(VertexFormat format)
 		{

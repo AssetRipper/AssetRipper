@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
+using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.SubMesh;
 using SharpGLTF.Geometry;
 using SharpGLTF.Materials;
@@ -28,12 +29,12 @@ public static class GlbMeshBuilder
 
 			(ISubMesh, MaterialBuilder)[] subMeshes = new (ISubMesh, MaterialBuilder)[1];
 
-			for (int submeshIndex = 0; submeshIndex < meshData.Mesh.SubMeshes.Count; submeshIndex++)
+			for (int submeshIndex = 0; submeshIndex < mesh.SubMeshes.Count; submeshIndex++)
 			{
-				ISubMesh subMesh = meshData.Mesh.SubMeshes[submeshIndex];
+				ISubMesh subMesh = mesh.SubMeshes[submeshIndex];
 				subMeshes[0] = (subMesh, material);
 
-				IMeshBuilder<MaterialBuilder> subMeshBuilder = GlbSubMeshBuilder.BuildSubMeshes(subMeshes, meshData, Transformation.Identity, Transformation.Identity);
+				IMeshBuilder<MaterialBuilder> subMeshBuilder = GlbSubMeshBuilder.BuildSubMeshes(subMeshes, mesh.Is16BitIndices(), meshData, Transformation.Identity, Transformation.Identity);
 				NodeBuilder subMeshNode = rootNodeForMesh.CreateNode($"SubMesh_{submeshIndex}");
 				sceneBuilder.AddRigidMesh(subMeshBuilder, subMeshNode);
 			}

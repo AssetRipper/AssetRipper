@@ -13,10 +13,10 @@ namespace AssetRipper.Export.Modules.Models
 {
 	internal static class GlbSubMeshBuilder
 	{
-		public static IMeshBuilder<MaterialBuilder> BuildSubMeshes(ArraySegment<ValueTuple<ISubMesh, MaterialBuilder>> subMeshes, MeshData meshData, Transformation transform, Transformation inverseTransform)
+		public static IMeshBuilder<MaterialBuilder> BuildSubMeshes(ArraySegment<ValueTuple<ISubMesh, MaterialBuilder>> subMeshes, bool is16BitIndices, MeshData meshData, Transformation transform, Transformation inverseTransform)
 		{
-			BuildSubMeshParameters parameters = new BuildSubMeshParameters(subMeshes, meshData, transform, inverseTransform);
-			switch (meshData.MeshType)
+			BuildSubMeshParameters parameters = new BuildSubMeshParameters(subMeshes, is16BitIndices, meshData, transform, inverseTransform);
+			switch (meshData.GetMeshType())
 			{
 				case GlbMeshType.Position | GlbMeshType.Empty | GlbMeshType.Empty:
 					return BuildSubMeshes<VertexPosition, VertexEmpty, VertexEmpty>(parameters);
@@ -123,7 +123,7 @@ namespace AssetRipper.Export.Modules.Models
 					return BuildSubMeshes<VertexPositionNormalTangent, VertexColor1Texture8, VertexJoints4>(parameters);
 
 				default:
-					throw new ArgumentOutOfRangeException(nameof(meshData), meshData.MeshType, "Mesh type not supported.");
+					throw new ArgumentOutOfRangeException(nameof(meshData), meshData.GetMeshType(), "Mesh type not supported.");
 			}
 		}
 
@@ -140,7 +140,7 @@ namespace AssetRipper.Export.Modules.Models
 			for (int i = 0; i < parameters.SubMeshes.Count; i++)
 			{
 				(ISubMesh subMesh, MaterialBuilder material) = parameters.SubMeshes[i];
-				BuildSubMesh(meshBuilder, subMesh, material, parameters.MeshData, positionTransform, tangentTransform, normalTransform);
+				BuildSubMesh(meshBuilder, subMesh, material, parameters.Is16BitIndices, parameters.MeshData, positionTransform, tangentTransform, normalTransform);
 			}
 
 			return meshBuilder;
@@ -150,6 +150,7 @@ namespace AssetRipper.Export.Modules.Models
 			MeshBuilder<TvG, TvM, TvS> meshBuilder,
 			ISubMesh subMesh,
 			MaterialBuilder material,
+			bool is16BitIndices,
 			MeshData meshData,
 			Transformation positionTransform,
 			Transformation tangentTransform,
@@ -158,7 +159,7 @@ namespace AssetRipper.Export.Modules.Models
 			where TvM : unmanaged, IVertexMaterial
 			where TvS : unmanaged, IVertexSkinning
 		{
-			uint firstIndex = meshData.Mesh.Is16BitIndices() ? subMesh.FirstByte / sizeof(ushort) : subMesh.FirstByte / sizeof(uint);
+			uint firstIndex = subMesh.GetFirstIndex(is16BitIndices);
 
 			uint indexCount = subMesh.IndexCount;
 			MeshTopology topology = subMesh.GetTopology();
@@ -396,6 +397,7 @@ namespace AssetRipper.Export.Modules.Models
 
 		private readonly record struct BuildSubMeshParameters(
 			ArraySegment<ValueTuple<ISubMesh, MaterialBuilder>> SubMeshes,
+			bool Is16BitIndices,
 			MeshData MeshData,
 			Transformation Transform,
 			Transformation InverseTransform)
