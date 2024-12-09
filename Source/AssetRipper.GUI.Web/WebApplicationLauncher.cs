@@ -32,6 +32,8 @@ public static class WebApplicationLauncher
 	{
 		public const int Port = 0;
 		public const bool LaunchBrowser = true;
+		public const bool Log = true;
+		public const string? LogPath = null;
 	}
 
 	public static void Launch(string[] args)
@@ -50,6 +52,18 @@ public static class WebApplicationLauncher
 			getDefaultValue: () => Defaults.LaunchBrowser);
 		rootCommand.AddOption(launchBrowserOption);
 
+		Option<bool> logOption = new Option<bool>(
+			name: "--log",
+			description: "If true, the application will log to a file.",
+			getDefaultValue: () => Defaults.Log);
+		rootCommand.AddOption(logOption);
+
+		Option<string?> logPathOption = new Option<string?>(
+			name: "--log-path",
+			description: "The file location at which to save the log, or a sensible default if not provided.",
+			getDefaultValue: () => Defaults.LogPath);
+		rootCommand.AddOption(logPathOption);
+
 		Option<string[]> localWebFilesOption = new Option<string[]>(
 			name: "--local-web-file",
 			description: "Files provided with this option will replace online sources.",
@@ -59,12 +73,16 @@ public static class WebApplicationLauncher
 		bool shouldRun = false;
 		int port = Defaults.Port;
 		bool launchBrowser = Defaults.LaunchBrowser;
+		bool log = Defaults.Log;
+		string? logFile = Defaults.LogPath;
 
-		rootCommand.SetHandler((int portParsed, bool launchBrowserParsed, string[] localWebFilesParsed) =>
+		rootCommand.SetHandler((int portParsed, bool launchBrowserParsed, bool logParsed, string? logFileParsed, string[] localWebFilesParsed) =>
 		{
 			shouldRun = true;
 			port = portParsed;
 			launchBrowser = launchBrowserParsed;
+			log = logParsed;
+			logFile = logFileParsed;
 			foreach (string localWebFile in localWebFilesParsed)
 			{
 				if (File.Exists(localWebFile))
@@ -83,21 +101,24 @@ public static class WebApplicationLauncher
 					Console.WriteLine($"File '{localWebFile}' does not exist.");
 				}
 			}
-		}, portOption, launchBrowserOption, localWebFilesOption);
+		}, portOption, launchBrowserOption, logOption, logPathOption, localWebFilesOption);
 
 		rootCommand.Invoke(args);
 
 		if (shouldRun)
 		{
-			Launch(port, launchBrowser);
+			Launch(port, launchBrowser, log, logFile);
 		}
 	}
 
-	public static void Launch(int port = Defaults.Port, bool launchBrowser = Defaults.LaunchBrowser)
+	public static void Launch(int port = Defaults.Port, bool launchBrowser = Defaults.LaunchBrowser, bool log = Defaults.Log, string? logPath = Defaults.LogPath)
 	{
 		WelcomeMessage.Print();
 
-		Logger.Add(new FileLogger());
+		if (log)
+		{
+			Logger.Add(string.IsNullOrEmpty(logPath) ? new FileLogger() : new FileLogger(logPath));
+		}
 		Logger.LogSystemInformation("AssetRipper");
 		Logger.Add(new ConsoleLogger());
 
