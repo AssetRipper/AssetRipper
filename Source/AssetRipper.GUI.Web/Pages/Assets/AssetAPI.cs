@@ -1,6 +1,5 @@
 ﻿using AsmResolver.DotNet;
 using AssetRipper.Assets;
-using AssetRipper.Decompilation.CSharp;
 using AssetRipper.Export.Modules.Audio;
 using AssetRipper.Export.Modules.Models;
 using AssetRipper.Export.Modules.Shaders.IO;
@@ -453,8 +452,8 @@ internal static class AssetAPI
 		{
 			try
 			{
-				TypeDefinition type = monoScript.GetTypeDefinition(assemblyManager);
-				return CSharpDecompiler.Decompile(type);
+				_ = monoScript.GetTypeDefinition(assemblyManager);
+				return EmptyScript.GetContent(monoScript); // Todo: replace with ILSpy
 			}
 			catch (Exception ex)
 			{

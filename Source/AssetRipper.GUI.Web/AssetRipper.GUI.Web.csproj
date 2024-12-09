@@ -7,7 +7,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\AssetRipper.Decompilation.CSharp\AssetRipper.Decompilation.CSharp.csproj" />
 		<ProjectReference Include="..\AssetRipper.Export.PrimaryContent\AssetRipper.Export.PrimaryContent.csproj" />
 		<ProjectReference Include="..\AssetRipper.Export.UnityProjects\AssetRipper.Export.UnityProjects.csproj" />
 		<ProjectReference Include="..\AssetRipper.GUI.Licensing\AssetRipper.GUI.Licensing.csproj" />
