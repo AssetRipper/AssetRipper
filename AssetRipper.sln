@@ -116,10 +116,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Assets.Tests", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Tools.MonoBehaviourTester", "Source\AssetRipper.Tools.MonoBehaviourTester\AssetRipper.Tools.MonoBehaviourTester.csproj", "{85DC8AB1-4B53-41EA-AD5B-1D0C178D3A21}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Addressables", "Source\AssetRipper.Addressables\AssetRipper.Addressables.csproj", "{3FDC7CE4-5787-4F8A-9E20-22C468F17B4D}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Addressables.Tests", "Source\AssetRipper.Addressables.Tests\AssetRipper.Addressables.Tests.csproj", "{CFDF9A4A-5808-46DB-BE24-1CB6D6831192}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.SourceGenerated.Extensions", "Source\AssetRipper.SourceGenerated.Extensions\AssetRipper.SourceGenerated.Extensions.csproj", "{AE122333-DB76-4EF5-BDD8-E94986B05F69}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Processing", "Source\AssetRipper.Processing\AssetRipper.Processing.csproj", "{5563B4F0-1E2C-46A2-A80F-5488C780C5C7}"
@@ -261,14 +257,6 @@ Global
 		{85DC8AB1-4B53-41EA-AD5B-1D0C178D3A21}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{85DC8AB1-4B53-41EA-AD5B-1D0C178D3A21}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{85DC8AB1-4B53-41EA-AD5B-1D0C178D3A21}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3FDC7CE4-5787-4F8A-9E20-22C468F17B4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3FDC7CE4-5787-4F8A-9E20-22C468F17B4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3FDC7CE4-5787-4F8A-9E20-22C468F17B4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3FDC7CE4-5787-4F8A-9E20-22C468F17B4D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CFDF9A4A-5808-46DB-BE24-1CB6D6831192}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CFDF9A4A-5808-46DB-BE24-1CB6D6831192}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CFDF9A4A-5808-46DB-BE24-1CB6D6831192}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CFDF9A4A-5808-46DB-BE24-1CB6D6831192}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AE122333-DB76-4EF5-BDD8-E94986B05F69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AE122333-DB76-4EF5-BDD8-E94986B05F69}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE122333-DB76-4EF5-BDD8-E94986B05F69}.Release|Any CPU.ActiveCfg = Release|Any CPU
