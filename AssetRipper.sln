@@ -10,6 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.github\CONTRIBUTING.md = .github\CONTRIBUTING.md
 		Source\Directory.Build.props = Source\Directory.Build.props
 		LICENSE.md = LICENSE.md
+		nuget.config = nuget.config
 		README.md = README.md
 	EndProjectSection
 EndProject
