@@ -54,7 +54,7 @@ Your support helps maintain and improve AssetRipper. If you find this tool usefu
 - [Patreon](https://www.patreon.com/ds5678)
 - [PayPal](https://paypal.me/ds5678)
 
-Donors receive a special role on our [Discord server](https://discord.gg/XqXa53W2Yh).
+Patreon donors receive special roles on our [Discord server](https://discord.gg/XqXa53W2Yh).
 
 # Legal Disclaimers
 

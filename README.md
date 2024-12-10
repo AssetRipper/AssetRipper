@@ -9,13 +9,13 @@ AssetRipper is a tool for extracting assets from Unity serialized files (*CAB-*\
 
 # Donations
 
-Thank you for considering to support me. I have normal expenses like food, electric, internet, and rent. Your donations help to ensure that I can continue to afford developing this project. Anyone currently donating is entitled to the Donator role on the [Discord server](https://discord.gg/XqXa53W2Yh).
+Your support helps maintain and improve AssetRipper. If you find this tool useful, please consider donating:
 
-[GitHub Sponsors](https://github.com/sponsors/ds5678)
+- [GitHub Sponsors](https://github.com/sponsors/ds5678)
+- [Patreon](https://www.patreon.com/ds5678)
+- [PayPal](https://paypal.me/ds5678)
 
-[Patreon](https://www.patreon.com/ds5678)
-
-[Paypal](https://paypal.me/ds5678)
+Patreon donors receive special roles on our [Discord server](https://discord.gg/XqXa53W2Yh).
 
 # Supported Versions
 

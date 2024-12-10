@@ -16,9 +16,8 @@
 
 ### 1.3 UI
 - **Improved Asset Previews**
-  - Add a Mesh preview
   - Scene preview
-  - Add a Material preview
+  - Material preview
 
 ### 1.4 Remove Native Dependencies
 - Replace crunch with managed code

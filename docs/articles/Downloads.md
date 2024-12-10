@@ -11,6 +11,7 @@ Get the latest stable version of AssetRipper for your platform:
 | Mac x64       | [Download](https://github.com/AssetRipper/AssetRipper/releases/latest/download/AssetRipper_mac_x64.zip)   |
 | Mac Arm64     | [Download](https://github.com/AssetRipper/AssetRipper/releases/latest/download/AssetRipper_mac_arm64.zip) |
 | Linux x64     | [Download](https://github.com/AssetRipper/AssetRipper/releases/latest/download/AssetRipper_linux_x64.zip) |
+| Linux Arm64     | [Download](https://github.com/AssetRipper/AssetRipper/releases/latest/download/AssetRipper_linux_arm64.zip) |
 
 📝 [Release Notes](https://github.com/AssetRipper/AssetRipper/releases/latest)
 
@@ -31,6 +32,7 @@ For advanced users, every commit triggers an automatic alpha build via Github Ac
 | Mac x64       | [Download](https://nightly.link/AssetRipper/AssetRipper/workflows/publish/master/AssetRipper_mac_x64.zip)   |
 | Mac Arm64     | [Download](https://nightly.link/AssetRipper/AssetRipper/workflows/publish/master/AssetRipper_mac_arm64.zip) |
 | Linux x64     | [Download](https://nightly.link/AssetRipper/AssetRipper/workflows/publish/master/AssetRipper_linux_x64.zip) |
+| Linux Arm64     | [Download](https://nightly.link/AssetRipper/AssetRipper/workflows/publish/master/AssetRipper_linux_arm64.zip) |
 
 ⚠️ Alpha builds are highly experimental and may contain bugs or unfinished features.
 
