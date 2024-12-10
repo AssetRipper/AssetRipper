@@ -1,0 +1,225 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Running AssetRipper on macOS </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Running AssetRipper on macOS ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="running-assetripper-on-macos">Running AssetRipper on macOS</h1>
+
+<blockquote>
+<p>⚠️ Disclaimer: The project developer does not have access to a Mac. This guide is community-contributed.</p>
+</blockquote>
+<p>This guide will help you run AssetRipper on macOS. Before proceeding, ensure you have all the necessary <a href="https://assetripper.github.io/AssetRipper/articles/Requirements.html">requirements</a>.</p>
+<h2 id="running-the-gui-version">Running the GUI Version</h2>
+<h3 id="step-1-download-assetripper">Step 1: Download AssetRipper</h3>
+<ol>
+<li><p>Download the GUI release from the <a href="https://github.com/AssetRipper/AssetRipper/releases">AssetRipper releases page</a>.</p>
+</li>
+<li><p>Choose the <code>AssetRipperGUI_mac64.zip</code> file.</p>
+<p><img src="images/RunningOnMac/001.png" alt="Download AssetRipper"></p>
+</li>
+</ol>
+<h3 id="step-2-extract-the-archive">Step 2: Extract the Archive</h3>
+<ol>
+<li><p>Right-click the downloaded file and select &quot;Open&quot; to extract its contents.</p>
+<p><img src="images/RunningOnMac/002.png" alt="Extract AssetRipper"></p>
+</li>
+<li><p>You should now see a folder named <code>AssetRipperGUI_mac64</code>.</p>
+<p><img src="images/RunningOnMac/003.png" alt="AssetRipper folder"></p>
+</li>
+<li><p>Inside this folder, you'll find various files, including the <code>AssetRipper</code> executable.</p>
+<p><img src="images/RunningOnMac/004.png" alt="AssetRipper contents">
+<img src="images/RunningOnMac/005.png" alt="AssetRipper executable"></p>
+</li>
+</ol>
+<h3 id="step-3-open-terminal-in-the-assetripper-folder">Step 3: Open Terminal in the AssetRipper Folder</h3>
+<ol>
+<li><p>Select the <code>AssetRipperGUI_mac64</code> folder.</p>
+</li>
+<li><p>Go to <code>Finder</code> &gt; <code>Services</code> &gt; <code>New Terminal at Folder</code>.</p>
+<p><img src="images/RunningOnMac/006.png" alt="Open Terminal"></p>
+</li>
+</ol>
+<h3 id="step-4-run-assetripper">Step 4: Run AssetRipper</h3>
+<ol>
+<li>In the Terminal, enter the following command:</li>
+</ol>
+<pre><code>./AssetRipper
+</code></pre>
+<ol start="2">
+<li>You may encounter a &quot;Permission denied&quot; error.</li>
+</ol>
+<p><img src="images/RunningOnMac/008.png" alt="Permission denied"></p>
+<ol start="3">
+<li>To fix this, enter the following command:</li>
+</ol>
+<pre><code>chmod +x AssetRipper
+</code></pre>
+<ol start="4">
+<li>Now, try running AssetRipper again:</li>
+</ol>
+<pre><code>./AssetRipper
+</code></pre>
+<h3 id="step-5-handle-security-prompts">Step 5: Handle Security Prompts</h3>
+<ol>
+<li>You may see a security prompt. Click &quot;Cancel&quot; for now.</li>
+</ol>
+<p><img src="images/RunningOnMac/010.png" alt="Security prompt"></p>
+<ol start="2">
+<li>Open System Preferences (⌘ + Space, search for &quot;System Preferences&quot;).</li>
+<li>Go to &quot;Security &amp; Privacy&quot; &gt; &quot;General&quot; tab.</li>
+<li>At the bottom, click &quot;Allow Anyway&quot; for AssetRipper.</li>
+</ol>
+<p><img src="images/RunningOnMac/013.png" alt="Allow AssetRipper"></p>
+<ol start="5">
+<li>Run the <code>./AssetRipper</code> command again in Terminal.</li>
+<li>Click &quot;Open&quot; when prompted.</li>
+</ol>
+<p><img src="images/RunningOnMac/014.png" alt="Open AssetRipper"></p>
+<ol start="7">
+<li>You may see additional security prompts. Click &quot;OK&quot; and allow them as needed.</li>
+</ol>
+<p><img src="images/RunningOnMac/015.png" alt="Additional prompts">
+<img src="images/RunningOnMac/016.png" alt="More prompts"></p>
+<h3 id="step-6-assetripper-gui">Step 6: AssetRipper GUI</h3>
+<p>After completing these steps, the AssetRipper GUI should open:</p>
+<p><img src="images/RunningOnMac/017.png" alt="AssetRipper GUI"></p>
+<h2 id="reopening-assetripper">Reopening AssetRipper</h2>
+<p>Once you've gone through the initial setup, you can easily reopen AssetRipper:</p>
+<ol>
+<li>Navigate to the <code>AssetRipperGUI_mac64</code> folder.</li>
+<li>Double-click the <code>AssetRipper</code> file to launch the application.</li>
+</ol>
+<p><img src="images/RunningOnMac/018.png" alt="Reopen AssetRipper"></p>
+<p>Congratulations! You've successfully set up and run AssetRipper on macOS.</p>
+<p><img src="images/RunningOnMac/019.png" alt="AssetRipper running"></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/docs/articles/RunningOnMac.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="toggle-mode">
+                <div class="icon">
+                  <i aria-hidden="true">☀</i>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="switch-style">
+                  <span class="slider round"></span>
+                </label>
+                <div class="icon">
+                  <i aria-hidden="true">☾</i>
+                </div>
+              </div>
+          
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <h5>In This Article</h5>
+              <div></div>
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <div class="pull-left">
+              
+              <span>Generated by <strong>DocFX</strong></span>
+            </div>
+            <div class="toggle-mode pull-right visible-sm visible-xs">
+              <div class="icon">
+                <i aria-hidden="true">☀</i>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="switch-style-m">
+                <span class="slider round"></span>
+              </label>
+              <div class="icon">
+                <i aria-hidden="true">☾</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript" src="../styles/toggle-theme.js"></script>
+      </footer>    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

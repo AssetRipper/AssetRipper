@@ -1,0 +1,1609 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Struct DiscontinuousRange&lt;T&gt;
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Struct DiscontinuousRange&lt;T&gt;
+   ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="AssetRipper.Numerics.DiscontinuousRange`1">
+  
+  
+  <h1 id="AssetRipper_Numerics_DiscontinuousRange_1" data-uid="AssetRipper.Numerics.DiscontinuousRange`1" class="text-break">Struct DiscontinuousRange&lt;T&gt;
+  </h1>
+  <div class="markdown level0 summary"><p>An immutable structure representing a discontinuous, possibly empty, range of objects.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">IEquatable</span>&lt;<a class="xref" href="AssetRipper.Numerics.DiscontinuousRange-1.html">DiscontinuousRange</a>&lt;T&gt;&gt;</div>
+    <div><span class="xref">IEquatable</span>&lt;<a class="xref" href="AssetRipper.Numerics.Range-1.html">Range</a>&lt;T&gt;&gt;</div>
+    <div><span class="xref">IReadOnlyList</span>&lt;<a class="xref" href="AssetRipper.Numerics.Range-1.html">Range</a>&lt;T&gt;&gt;</div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="AssetRipper.Numerics.html">AssetRipper.Numerics</a></h6>
+  <h6><strong>Assembly</strong>: AssetRipper.Numerics.dll</h6>
+  <h5 id="AssetRipper_Numerics_DiscontinuousRange_1_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public readonly struct DiscontinuousRange&lt;T&gt;
+    where T : IComparable&lt;T&gt;, IEquatable&lt;T&gt;</code></pre>
+  </div>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_DiscontinuousRange_1__ctor.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.DiscontinuousRange%601.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/DiscontinuousRange.cs/#L18">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_DiscontinuousRange_1__ctor_" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.#ctor*"></a>
+  <h4 id="AssetRipper_Numerics_DiscontinuousRange_1__ctor" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.#ctor">DiscontinuousRange()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DiscontinuousRange()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_DiscontinuousRange_1__ctor_AssetRipper_Numerics_DiscontinuousRange__0__AssetRipper_Numerics_DiscontinuousRange__0__.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.DiscontinuousRange%601.%23ctor(AssetRipper.Numerics.DiscontinuousRange%7B%600%7D%2CAssetRipper.Numerics.DiscontinuousRange%7B%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/DiscontinuousRange.cs/#L71">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_DiscontinuousRange_1__ctor_" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.#ctor*"></a>
+  <h4 id="AssetRipper_Numerics_DiscontinuousRange_1__ctor_AssetRipper_Numerics_DiscontinuousRange__0__AssetRipper_Numerics_DiscontinuousRange__0__" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.#ctor(AssetRipper.Numerics.DiscontinuousRange{`0},AssetRipper.Numerics.DiscontinuousRange{`0})">DiscontinuousRange(DiscontinuousRange&lt;T&gt;, DiscontinuousRange&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"><p>Constructor for the union of two ranges.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DiscontinuousRange(DiscontinuousRange&lt;T&gt; range1, DiscontinuousRange&lt;T&gt; range2)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Numerics.DiscontinuousRange-1.html">DiscontinuousRange</a>&lt;T&gt;</td>
+        <td><span class="parametername">range1</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Numerics.DiscontinuousRange-1.html">DiscontinuousRange</a>&lt;T&gt;</td>
+        <td><span class="parametername">range2</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_DiscontinuousRange_1__ctor_AssetRipper_Numerics_Range__0__.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.DiscontinuousRange%601.%23ctor(AssetRipper.Numerics.Range%7B%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/DiscontinuousRange.cs/#L23">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_DiscontinuousRange_1__ctor_" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.#ctor*"></a>
+  <h4 id="AssetRipper_Numerics_DiscontinuousRange_1__ctor_AssetRipper_Numerics_Range__0__" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.#ctor(AssetRipper.Numerics.Range{`0})">DiscontinuousRange(Range&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DiscontinuousRange(Range&lt;T&gt; range)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Numerics.Range-1.html">Range</a>&lt;T&gt;</td>
+        <td><span class="parametername">range</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_DiscontinuousRange_1__ctor_AssetRipper_Numerics_Range__0____.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.DiscontinuousRange%601.%23ctor(AssetRipper.Numerics.Range%7B%600%7D%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/DiscontinuousRange.cs/#L51">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_DiscontinuousRange_1__ctor_" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.#ctor*"></a>
+  <h4 id="AssetRipper_Numerics_DiscontinuousRange_1__ctor_AssetRipper_Numerics_Range__0____" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.#ctor(AssetRipper.Numerics.Range{`0}[])">DiscontinuousRange(Range&lt;T&gt;[])</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DiscontinuousRange(params Range&lt;T&gt;[] ranges)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Numerics.Range-1.html">Range</a>&lt;T&gt;[]</td>
+        <td><span class="parametername">ranges</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_DiscontinuousRange_1__ctor_IReadOnlyList_AssetRipper_Numerics_Range__0___.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.DiscontinuousRange%601.%23ctor(IReadOnlyList%7BAssetRipper.Numerics.Range%7B%600%7D%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/DiscontinuousRange.cs/#L38">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_DiscontinuousRange_1__ctor_" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.#ctor*"></a>
+  <h4 id="AssetRipper_Numerics_DiscontinuousRange_1__ctor_IReadOnlyList_AssetRipper_Numerics_Range__0___" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.#ctor(IReadOnlyList{AssetRipper.Numerics.Range{`0}})">DiscontinuousRange(IReadOnlyList&lt;Range&lt;T&gt;&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DiscontinuousRange(IReadOnlyList&lt;Range&lt;T&gt;&gt; ranges)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IReadOnlyList</span>&lt;<a class="xref" href="AssetRipper.Numerics.Range-1.html">Range</a>&lt;T&gt;&gt;</td>
+        <td><span class="parametername">ranges</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_DiscontinuousRange_1__ctor_System_Collections_IEnumerable_AssetRipper_Numerics_Range__0___.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.DiscontinuousRange%601.%23ctor(System.Collections.IEnumerable%7BAssetRipper.Numerics.Range%7B%600%7D%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/DiscontinuousRange.cs/#L28">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_DiscontinuousRange_1__ctor_" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.#ctor*"></a>
+  <h4 id="AssetRipper_Numerics_DiscontinuousRange_1__ctor_System_Collections_IEnumerable_AssetRipper_Numerics_Range__0___" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.#ctor(System.Collections.IEnumerable{AssetRipper.Numerics.Range{`0}})">DiscontinuousRange(IEnumerable&lt;Range&lt;T&gt;&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DiscontinuousRange(IEnumerable&lt;Range&lt;T&gt;&gt; ranges)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.IEnumerable</span>&lt;<a class="xref" href="AssetRipper.Numerics.Range-1.html">Range</a>&lt;T&gt;&gt;</td>
+        <td><span class="parametername">ranges</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_DiscontinuousRange_1_Count.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.DiscontinuousRange%601.Count%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/DiscontinuousRange.cs/#L89">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_DiscontinuousRange_1_Count_" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.Count*"></a>
+  <h4 id="AssetRipper_Numerics_DiscontinuousRange_1_Count" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.Count">Count</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public readonly int Count { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_DiscontinuousRange_1_Empty.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.DiscontinuousRange%601.Empty%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/DiscontinuousRange.cs/#L16">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_DiscontinuousRange_1_Empty_" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.Empty*"></a>
+  <h4 id="AssetRipper_Numerics_DiscontinuousRange_1_Empty" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.Empty">Empty</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly DiscontinuousRange&lt;T&gt; Empty { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Numerics.DiscontinuousRange-1.html">DiscontinuousRange</a>&lt;T&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_DiscontinuousRange_1_Item_System_Int32_.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.DiscontinuousRange%601.Item(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/DiscontinuousRange.cs/#L91">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_DiscontinuousRange_1_Item_" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.Item*"></a>
+  <h4 id="AssetRipper_Numerics_DiscontinuousRange_1_Item_System_Int32_" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.Item(System.Int32)">Item[Int32]</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public readonly Range&lt;T&gt; this[int index] { get; }</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">index</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Numerics.Range-1.html">Range</a>&lt;T&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_DiscontinuousRange_1_Contains__0_.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.DiscontinuousRange%601.Contains(%600)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/DiscontinuousRange.cs/#L122">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_DiscontinuousRange_1_Contains_" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.Contains*"></a>
+  <h4 id="AssetRipper_Numerics_DiscontinuousRange_1_Contains__0_" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.Contains(`0)">Contains(T)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public readonly bool Contains(T point)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">T</span></td>
+        <td><span class="parametername">point</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_DiscontinuousRange_1_Contains_AssetRipper_Numerics_DiscontinuousRange__0__.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.DiscontinuousRange%601.Contains(AssetRipper.Numerics.DiscontinuousRange%7B%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/DiscontinuousRange.cs/#L132">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_DiscontinuousRange_1_Contains_" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.Contains*"></a>
+  <h4 id="AssetRipper_Numerics_DiscontinuousRange_1_Contains_AssetRipper_Numerics_DiscontinuousRange__0__" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.Contains(AssetRipper.Numerics.DiscontinuousRange{`0})">Contains(DiscontinuousRange&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public readonly bool Contains(DiscontinuousRange&lt;T&gt; other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Numerics.DiscontinuousRange-1.html">DiscontinuousRange</a>&lt;T&gt;</td>
+        <td><span class="parametername">other</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_DiscontinuousRange_1_Contains_AssetRipper_Numerics_Range__0__.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.DiscontinuousRange%601.Contains(AssetRipper.Numerics.Range%7B%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/DiscontinuousRange.cs/#L127">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_DiscontinuousRange_1_Contains_" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.Contains*"></a>
+  <h4 id="AssetRipper_Numerics_DiscontinuousRange_1_Contains_AssetRipper_Numerics_Range__0__" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.Contains(AssetRipper.Numerics.Range{`0})">Contains(Range&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public readonly bool Contains(Range&lt;T&gt; range)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Numerics.Range-1.html">Range</a>&lt;T&gt;</td>
+        <td><span class="parametername">range</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_DiscontinuousRange_1_Equals_AssetRipper_Numerics_DiscontinuousRange__0__.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.DiscontinuousRange%601.Equals(AssetRipper.Numerics.DiscontinuousRange%7B%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/DiscontinuousRange.cs/#L104">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_DiscontinuousRange_1_Equals_" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.Equals*"></a>
+  <h4 id="AssetRipper_Numerics_DiscontinuousRange_1_Equals_AssetRipper_Numerics_DiscontinuousRange__0__" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.Equals(AssetRipper.Numerics.DiscontinuousRange{`0})">Equals(DiscontinuousRange&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public readonly bool Equals(DiscontinuousRange&lt;T&gt; other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Numerics.DiscontinuousRange-1.html">DiscontinuousRange</a>&lt;T&gt;</td>
+        <td><span class="parametername">other</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_DiscontinuousRange_1_Equals_AssetRipper_Numerics_Range__0__.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.DiscontinuousRange%601.Equals(AssetRipper.Numerics.Range%7B%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/DiscontinuousRange.cs/#L99">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_DiscontinuousRange_1_Equals_" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.Equals*"></a>
+  <h4 id="AssetRipper_Numerics_DiscontinuousRange_1_Equals_AssetRipper_Numerics_Range__0__" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.Equals(AssetRipper.Numerics.Range{`0})">Equals(Range&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public readonly bool Equals(Range&lt;T&gt; other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Numerics.Range-1.html">Range</a>&lt;T&gt;</td>
+        <td><span class="parametername">other</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_DiscontinuousRange_1_Equals_System_Object_.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.DiscontinuousRange%601.Equals(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/DiscontinuousRange.cs/#L93">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_DiscontinuousRange_1_Equals_" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.Equals*"></a>
+  <h4 id="AssetRipper_Numerics_DiscontinuousRange_1_Equals_System_Object_" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.Equals(System.Object)">Equals(Object)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override readonly bool Equals(object obj)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">obj</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.ValueType.Equals(System.Object)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_DiscontinuousRange_1_GetEnumerator.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.DiscontinuousRange%601.GetEnumerator%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/DiscontinuousRange.cs/#L318">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_DiscontinuousRange_1_GetEnumerator_" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.GetEnumerator*"></a>
+  <h4 id="AssetRipper_Numerics_DiscontinuousRange_1_GetEnumerator" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.GetEnumerator">GetEnumerator()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public readonly IEnumerator&lt;Range&lt;T&gt;&gt; GetEnumerator()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.IEnumerator</span>&lt;<a class="xref" href="AssetRipper.Numerics.Range-1.html">Range</a>&lt;T&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_DiscontinuousRange_1_GetHashCode.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.DiscontinuousRange%601.GetHashCode%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/DiscontinuousRange.cs/#L173">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_DiscontinuousRange_1_GetHashCode_" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.GetHashCode*"></a>
+  <h4 id="AssetRipper_Numerics_DiscontinuousRange_1_GetHashCode" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.GetHashCode">GetHashCode()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override readonly int GetHashCode()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.ValueType.GetHashCode()</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_DiscontinuousRange_1_Intersect_AssetRipper_Numerics_DiscontinuousRange__0__.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.DiscontinuousRange%601.Intersect(AssetRipper.Numerics.DiscontinuousRange%7B%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/DiscontinuousRange.cs/#L356">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_DiscontinuousRange_1_Intersect_" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.Intersect*"></a>
+  <h4 id="AssetRipper_Numerics_DiscontinuousRange_1_Intersect_AssetRipper_Numerics_DiscontinuousRange__0__" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.Intersect(AssetRipper.Numerics.DiscontinuousRange{`0})">Intersect(DiscontinuousRange&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public readonly DiscontinuousRange&lt;T&gt; Intersect(DiscontinuousRange&lt;T&gt; other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Numerics.DiscontinuousRange-1.html">DiscontinuousRange</a>&lt;T&gt;</td>
+        <td><span class="parametername">other</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Numerics.DiscontinuousRange-1.html">DiscontinuousRange</a>&lt;T&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_DiscontinuousRange_1_Intersect_AssetRipper_Numerics_DiscontinuousRange__0__AssetRipper_Numerics_DiscontinuousRange__0__.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.DiscontinuousRange%601.Intersect(AssetRipper.Numerics.DiscontinuousRange%7B%600%7D%2CAssetRipper.Numerics.DiscontinuousRange%7B%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/DiscontinuousRange.cs/#L351">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_DiscontinuousRange_1_Intersect_" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.Intersect*"></a>
+  <h4 id="AssetRipper_Numerics_DiscontinuousRange_1_Intersect_AssetRipper_Numerics_DiscontinuousRange__0__AssetRipper_Numerics_DiscontinuousRange__0__" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.Intersect(AssetRipper.Numerics.DiscontinuousRange{`0},AssetRipper.Numerics.DiscontinuousRange{`0})">Intersect(DiscontinuousRange&lt;T&gt;, DiscontinuousRange&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static DiscontinuousRange&lt;T&gt; Intersect(DiscontinuousRange&lt;T&gt; range1, DiscontinuousRange&lt;T&gt; range2)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Numerics.DiscontinuousRange-1.html">DiscontinuousRange</a>&lt;T&gt;</td>
+        <td><span class="parametername">range1</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Numerics.DiscontinuousRange-1.html">DiscontinuousRange</a>&lt;T&gt;</td>
+        <td><span class="parametername">range2</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Numerics.DiscontinuousRange-1.html">DiscontinuousRange</a>&lt;T&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_DiscontinuousRange_1_Intersects_AssetRipper_Numerics_DiscontinuousRange__0__.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.DiscontinuousRange%601.Intersects(AssetRipper.Numerics.DiscontinuousRange%7B%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/DiscontinuousRange.cs/#L149">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_DiscontinuousRange_1_Intersects_" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.Intersects*"></a>
+  <h4 id="AssetRipper_Numerics_DiscontinuousRange_1_Intersects_AssetRipper_Numerics_DiscontinuousRange__0__" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.Intersects(AssetRipper.Numerics.DiscontinuousRange{`0})">Intersects(DiscontinuousRange&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public readonly bool Intersects(DiscontinuousRange&lt;T&gt; other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Numerics.DiscontinuousRange-1.html">DiscontinuousRange</a>&lt;T&gt;</td>
+        <td><span class="parametername">other</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_DiscontinuousRange_1_Intersects_AssetRipper_Numerics_Range__0__.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.DiscontinuousRange%601.Intersects(AssetRipper.Numerics.Range%7B%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/DiscontinuousRange.cs/#L144">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_DiscontinuousRange_1_Intersects_" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.Intersects*"></a>
+  <h4 id="AssetRipper_Numerics_DiscontinuousRange_1_Intersects_AssetRipper_Numerics_Range__0__" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.Intersects(AssetRipper.Numerics.Range{`0})">Intersects(Range&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public readonly bool Intersects(Range&lt;T&gt; range)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Numerics.Range-1.html">Range</a>&lt;T&gt;</td>
+        <td><span class="parametername">range</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_DiscontinuousRange_1_IsContinuous.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.DiscontinuousRange%601.IsContinuous%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/DiscontinuousRange.cs/#L263">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_DiscontinuousRange_1_IsContinuous_" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.IsContinuous*"></a>
+  <h4 id="AssetRipper_Numerics_DiscontinuousRange_1_IsContinuous" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.IsContinuous">IsContinuous()</h4>
+  <div class="markdown level1 summary"><p>This range is continuous.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public readonly bool IsContinuous()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="AssetRipper_Numerics_DiscontinuousRange_1_IsContinuous_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>The <a class="xref" href="AssetRipper.Numerics.DiscontinuousRange-1.html#AssetRipper_Numerics_DiscontinuousRange_1_Empty">Empty</a> range is treated as not continuous.</p>
+</div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_DiscontinuousRange_1_IsContinuous_AssetRipper_Numerics_Range__0___.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.DiscontinuousRange%601.IsContinuous(AssetRipper.Numerics.Range%7B%600%7D%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/DiscontinuousRange.cs/#L273">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_DiscontinuousRange_1_IsContinuous_" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.IsContinuous*"></a>
+  <h4 id="AssetRipper_Numerics_DiscontinuousRange_1_IsContinuous_AssetRipper_Numerics_Range__0___" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.IsContinuous(AssetRipper.Numerics.Range{`0}@)">IsContinuous(out Range&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"><p>This range is continuous.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public readonly bool IsContinuous(out Range&lt;T&gt; range)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Numerics.Range-1.html">Range</a>&lt;T&gt;</td>
+        <td><span class="parametername">range</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="AssetRipper_Numerics_DiscontinuousRange_1_IsContinuous_AssetRipper_Numerics_Range__0____remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>The <a class="xref" href="AssetRipper.Numerics.DiscontinuousRange-1.html#AssetRipper_Numerics_DiscontinuousRange_1_Empty">Empty</a> range is treated as not continuous.</p>
+</div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_DiscontinuousRange_1_IsEmpty.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.DiscontinuousRange%601.IsEmpty%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/DiscontinuousRange.cs/#L254">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_DiscontinuousRange_1_IsEmpty_" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.IsEmpty*"></a>
+  <h4 id="AssetRipper_Numerics_DiscontinuousRange_1_IsEmpty" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.IsEmpty">IsEmpty()</h4>
+  <div class="markdown level1 summary"><p>This range contains no points and is equal to the <a class="xref" href="AssetRipper.Numerics.DiscontinuousRange-1.html#AssetRipper_Numerics_DiscontinuousRange_1_Empty">Empty</a> range.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public readonly bool IsEmpty()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_DiscontinuousRange_1_Negate__0__0_.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.DiscontinuousRange%601.Negate(%600%2C%600)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/DiscontinuousRange.cs/#L287">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_DiscontinuousRange_1_Negate_" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.Negate*"></a>
+  <h4 id="AssetRipper_Numerics_DiscontinuousRange_1_Negate__0__0_" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.Negate(`0,`0)">Negate(T, T)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public readonly DiscontinuousRange&lt;T&gt; Negate(T minimum, T maximum)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">T</span></td>
+        <td><span class="parametername">minimum</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">T</span></td>
+        <td><span class="parametername">maximum</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Numerics.DiscontinuousRange-1.html">DiscontinuousRange</a>&lt;T&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_DiscontinuousRange_1_Subtract_AssetRipper_Numerics_DiscontinuousRange__0__.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.DiscontinuousRange%601.Subtract(AssetRipper.Numerics.DiscontinuousRange%7B%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/DiscontinuousRange.cs/#L389">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_DiscontinuousRange_1_Subtract_" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.Subtract*"></a>
+  <h4 id="AssetRipper_Numerics_DiscontinuousRange_1_Subtract_AssetRipper_Numerics_DiscontinuousRange__0__" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.Subtract(AssetRipper.Numerics.DiscontinuousRange{`0})">Subtract(DiscontinuousRange&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public readonly DiscontinuousRange&lt;T&gt; Subtract(DiscontinuousRange&lt;T&gt; other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Numerics.DiscontinuousRange-1.html">DiscontinuousRange</a>&lt;T&gt;</td>
+        <td><span class="parametername">other</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Numerics.DiscontinuousRange-1.html">DiscontinuousRange</a>&lt;T&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_DiscontinuousRange_1_ToString.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.DiscontinuousRange%601.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/DiscontinuousRange.cs/#L451">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_DiscontinuousRange_1_ToString_" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.ToString*"></a>
+  <h4 id="AssetRipper_Numerics_DiscontinuousRange_1_ToString" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.ToString">ToString()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override readonly string ToString()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.ValueType.ToString()</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_DiscontinuousRange_1_Union_AssetRipper_Numerics_DiscontinuousRange__0__.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.DiscontinuousRange%601.Union(AssetRipper.Numerics.DiscontinuousRange%7B%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/DiscontinuousRange.cs/#L346">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_DiscontinuousRange_1_Union_" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.Union*"></a>
+  <h4 id="AssetRipper_Numerics_DiscontinuousRange_1_Union_AssetRipper_Numerics_DiscontinuousRange__0__" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.Union(AssetRipper.Numerics.DiscontinuousRange{`0})">Union(DiscontinuousRange&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public readonly DiscontinuousRange&lt;T&gt; Union(DiscontinuousRange&lt;T&gt; other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Numerics.DiscontinuousRange-1.html">DiscontinuousRange</a>&lt;T&gt;</td>
+        <td><span class="parametername">other</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Numerics.DiscontinuousRange-1.html">DiscontinuousRange</a>&lt;T&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_DiscontinuousRange_1_Union_AssetRipper_Numerics_DiscontinuousRange__0__AssetRipper_Numerics_DiscontinuousRange__0__.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.DiscontinuousRange%601.Union(AssetRipper.Numerics.DiscontinuousRange%7B%600%7D%2CAssetRipper.Numerics.DiscontinuousRange%7B%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/DiscontinuousRange.cs/#L341">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_DiscontinuousRange_1_Union_" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.Union*"></a>
+  <h4 id="AssetRipper_Numerics_DiscontinuousRange_1_Union_AssetRipper_Numerics_DiscontinuousRange__0__AssetRipper_Numerics_DiscontinuousRange__0__" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.Union(AssetRipper.Numerics.DiscontinuousRange{`0},AssetRipper.Numerics.DiscontinuousRange{`0})">Union(DiscontinuousRange&lt;T&gt;, DiscontinuousRange&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static DiscontinuousRange&lt;T&gt; Union(DiscontinuousRange&lt;T&gt; range1, DiscontinuousRange&lt;T&gt; range2)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Numerics.DiscontinuousRange-1.html">DiscontinuousRange</a>&lt;T&gt;</td>
+        <td><span class="parametername">range1</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Numerics.DiscontinuousRange-1.html">DiscontinuousRange</a>&lt;T&gt;</td>
+        <td><span class="parametername">range2</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Numerics.DiscontinuousRange-1.html">DiscontinuousRange</a>&lt;T&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="operators">Operators
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_DiscontinuousRange_1_op_Equality_AssetRipper_Numerics_DiscontinuousRange__0__AssetRipper_Numerics_DiscontinuousRange__0__.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.DiscontinuousRange%601.op_Equality(AssetRipper.Numerics.DiscontinuousRange%7B%600%7D%2CAssetRipper.Numerics.DiscontinuousRange%7B%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/DiscontinuousRange.cs/#L322">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_DiscontinuousRange_1_op_Equality_" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.op_Equality*"></a>
+  <h4 id="AssetRipper_Numerics_DiscontinuousRange_1_op_Equality_AssetRipper_Numerics_DiscontinuousRange__0__AssetRipper_Numerics_DiscontinuousRange__0__" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.op_Equality(AssetRipper.Numerics.DiscontinuousRange{`0},AssetRipper.Numerics.DiscontinuousRange{`0})">Equality(DiscontinuousRange&lt;T&gt;, DiscontinuousRange&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool operator ==(DiscontinuousRange&lt;T&gt; left, DiscontinuousRange&lt;T&gt; right)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Numerics.DiscontinuousRange-1.html">DiscontinuousRange</a>&lt;T&gt;</td>
+        <td><span class="parametername">left</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Numerics.DiscontinuousRange-1.html">DiscontinuousRange</a>&lt;T&gt;</td>
+        <td><span class="parametername">right</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_DiscontinuousRange_1_op_Explicit_AssetRipper_Numerics_DiscontinuousRange__0___AssetRipper_Numerics_Range__0_.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.DiscontinuousRange%601.op_Explicit(AssetRipper.Numerics.DiscontinuousRange%7B%600%7D)~AssetRipper.Numerics.Range%7B%600%7D%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/DiscontinuousRange.cs/#L334">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_DiscontinuousRange_1_op_Explicit_" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.op_Explicit*"></a>
+  <h4 id="AssetRipper_Numerics_DiscontinuousRange_1_op_Explicit_AssetRipper_Numerics_DiscontinuousRange__0___AssetRipper_Numerics_Range__0_" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.op_Explicit(AssetRipper.Numerics.DiscontinuousRange{`0})~AssetRipper.Numerics.Range{`0}">Explicit(DiscontinuousRange&lt;T&gt; to Range&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static explicit operator Range&lt;T&gt;(DiscontinuousRange&lt;T&gt; range)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Numerics.DiscontinuousRange-1.html">DiscontinuousRange</a>&lt;T&gt;</td>
+        <td><span class="parametername">range</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Numerics.Range-1.html">Range</a>&lt;T&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_DiscontinuousRange_1_op_Implicit_AssetRipper_Numerics_Range__0___AssetRipper_Numerics_DiscontinuousRange__0_.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.DiscontinuousRange%601.op_Implicit(AssetRipper.Numerics.Range%7B%600%7D)~AssetRipper.Numerics.DiscontinuousRange%7B%600%7D%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/DiscontinuousRange.cs/#L332">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_DiscontinuousRange_1_op_Implicit_" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.op_Implicit*"></a>
+  <h4 id="AssetRipper_Numerics_DiscontinuousRange_1_op_Implicit_AssetRipper_Numerics_Range__0___AssetRipper_Numerics_DiscontinuousRange__0_" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.op_Implicit(AssetRipper.Numerics.Range{`0})~AssetRipper.Numerics.DiscontinuousRange{`0}">Implicit(Range&lt;T&gt; to DiscontinuousRange&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static implicit operator DiscontinuousRange&lt;T&gt;(Range&lt;T&gt; range)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Numerics.Range-1.html">Range</a>&lt;T&gt;</td>
+        <td><span class="parametername">range</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Numerics.DiscontinuousRange-1.html">DiscontinuousRange</a>&lt;T&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_DiscontinuousRange_1_op_Inequality_AssetRipper_Numerics_DiscontinuousRange__0__AssetRipper_Numerics_DiscontinuousRange__0__.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.DiscontinuousRange%601.op_Inequality(AssetRipper.Numerics.DiscontinuousRange%7B%600%7D%2CAssetRipper.Numerics.DiscontinuousRange%7B%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/DiscontinuousRange.cs/#L327">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_DiscontinuousRange_1_op_Inequality_" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.op_Inequality*"></a>
+  <h4 id="AssetRipper_Numerics_DiscontinuousRange_1_op_Inequality_AssetRipper_Numerics_DiscontinuousRange__0__AssetRipper_Numerics_DiscontinuousRange__0__" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.op_Inequality(AssetRipper.Numerics.DiscontinuousRange{`0},AssetRipper.Numerics.DiscontinuousRange{`0})">Inequality(DiscontinuousRange&lt;T&gt;, DiscontinuousRange&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool operator !=(DiscontinuousRange&lt;T&gt; left, DiscontinuousRange&lt;T&gt; right)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Numerics.DiscontinuousRange-1.html">DiscontinuousRange</a>&lt;T&gt;</td>
+        <td><span class="parametername">left</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Numerics.DiscontinuousRange-1.html">DiscontinuousRange</a>&lt;T&gt;</td>
+        <td><span class="parametername">right</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="eii">Explicit Interface Implementations
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_DiscontinuousRange_1_System_Collections_IEnumerable_GetEnumerator.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.DiscontinuousRange%601.System%23Collections%23IEnumerable%23GetEnumerator%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/DiscontinuousRange.cs/#L320">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_DiscontinuousRange_1_System_Collections_IEnumerable_GetEnumerator_" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.System#Collections#IEnumerable#GetEnumerator*"></a>
+  <h4 id="AssetRipper_Numerics_DiscontinuousRange_1_System_Collections_IEnumerable_GetEnumerator" data-uid="AssetRipper.Numerics.DiscontinuousRange`1.System#Collections#IEnumerable#GetEnumerator">IEnumerable.GetEnumerator()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">readonly IEnumerator IEnumerable.GetEnumerator()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.IEnumerator</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">IEquatable&lt;&gt;</span>
+  </div>
+  <div>
+      <span class="xref">IEquatable&lt;&gt;</span>
+  </div>
+  <div>
+      <span class="xref">IReadOnlyList&lt;&gt;</span>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_DiscontinuousRange_1.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.DiscontinuousRange%601%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/DiscontinuousRange.cs/#L10" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="toggle-mode">
+                <div class="icon">
+                  <i aria-hidden="true">☀</i>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="switch-style">
+                  <span class="slider round"></span>
+                </label>
+                <div class="icon">
+                  <i aria-hidden="true">☾</i>
+                </div>
+              </div>
+          
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <h5>In This Article</h5>
+              <div></div>
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <div class="pull-left">
+              
+              <span>Generated by <strong>DocFX</strong></span>
+            </div>
+            <div class="toggle-mode pull-right visible-sm visible-xs">
+              <div class="icon">
+                <i aria-hidden="true">☀</i>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="switch-style-m">
+                <span class="slider round"></span>
+              </label>
+              <div class="icon">
+                <i aria-hidden="true">☾</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript" src="../styles/toggle-theme.js"></script>
+      </footer>    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
