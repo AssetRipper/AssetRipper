@@ -3,6 +3,7 @@ using AssetRipper.GUI.Web.Pages;
 using AssetRipper.GUI.Web.Pages.Assets;
 using AssetRipper.GUI.Web.Pages.Bundles;
 using AssetRipper.GUI.Web.Pages.Collections;
+using AssetRipper.GUI.Web.Pages.FailedFiles;
 using AssetRipper.GUI.Web.Pages.Resources;
 using AssetRipper.GUI.Web.Pages.Scenes;
 using AssetRipper.GUI.Web.Pages.Settings;
@@ -254,6 +255,11 @@ public static class WebApplicationLauncher
 		app.MapGet(CollectionAPI.Urls.Count, CollectionAPI.GetCount)
 			.WithSummary("Get the number of elements in the collection.")
 			.Produces<int>();
+
+		//Failed Files
+		app.MapGet(FailedFileAPI.Urls.View, FailedFileAPI.GetView).ProducesHtmlPage();
+		app.MapGet(FailedFileAPI.Urls.StackTrace, FailedFileAPI.GetStackTrace)
+			.Produces<string>();
 
 		//Resources
 		app.MapGet(ResourceAPI.Urls.View, ResourceAPI.GetView).ProducesHtmlPage();

@@ -62,6 +62,11 @@ public readonly record struct BundlePath : IPath<BundlePath>
 		return new CollectionPath(this, index);
 	}
 
+	public FailedFilePath GetFailedFile(int index)
+	{
+		return new FailedFilePath(this, index);
+	}
+
 	public ResourcePath GetResource(int index)
 	{
 		return new ResourcePath(this, index);

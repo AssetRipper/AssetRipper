@@ -204,6 +204,7 @@
     "sprite_format_texture_description": "Export as an image of the sprite sheet. Can be viewed outside of Unity, but slower to export.",
     "sprite_format_yaml": "Yaml",
     "sprite_format_yaml_description": "Export as yaml assets which can be viewed in the editor. This is the only mode that ensures a precise recovery of all metadata of sprites.",
+    "stack_trace": "Stack Trace",
     "submesh_count": "Submesh Count",
     "success": "Success!",
     "swagger_documentation": "Swagger Documentation",

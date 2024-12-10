@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
+using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.ResourceFiles;
 
 namespace AssetRipper.GUI.Web.Paths;
@@ -115,6 +116,22 @@ public static class PathExtensions
 	{
 		resource = gameBundle.TryGetResource(path);
 		return resource is not null;
+	}
+
+	public static FailedFile? TryGetFailedFile(this GameBundle gameBundle, FailedFilePath path)
+	{
+		Bundle? bundle = gameBundle.TryGetBundle(path.BundlePath);
+		if (bundle is null || path.Index < 0 || path.Index >= bundle.FailedFiles.Count)
+		{
+			return null;
+		}
+		return bundle.FailedFiles[path.Index];
+	}
+
+	public static bool TryGetFailedFile(this GameBundle gameBundle, FailedFilePath path, [NotNullWhen(true)] out FailedFile? failedFile)
+	{
+		failedFile = gameBundle.TryGetFailedFile(path);
+		return failedFile is not null;
 	}
 
 	public static IUnityObjectBase? TryGetAsset(this GameBundle gameBundle, AssetPath path)

@@ -1036,6 +1036,11 @@ partial class Localization
 	public static string SpriteFormatYamlDescription => Get("sprite_format_yaml_description");
 	
 	/// <summary>
+	/// Stack Trace
+	/// </summary>
+	public static string StackTrace => Get("stack_trace");
+	
+	/// <summary>
 	/// Submesh Count
 	/// </summary>
 	public static string SubmeshCount => Get("submesh_count");
