@@ -225,7 +225,7 @@
     "menu_import": "导入",
     "menu_load": "载入",
     "menu_view": "查看",
-    "open_api_json": "OpenAPI JSON",
+    "open_api_json": "OpenAPI JSON 文档",
     "remove": "移除",
     "replace": "替换",
     "select_file": "选择文件",
@@ -235,5 +235,6 @@
     "there_are_no_keys_for_this_data_type": "该数据类型并无任何键。",
     "warning_this_directory_is_not_empty_all_content_will_be_deleted": "警告：该目录非空，目录内的所有内容将会被删除。",
     "export_primary_content": "导出主要内容",
-    "export_unity_project": "导出为 Unity 项目"
+    "export_unity_project": "导出为 Unity 项目",
+    "asset_tab_video": "视频（Video）"
 }
