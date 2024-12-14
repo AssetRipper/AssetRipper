@@ -22,6 +22,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Microsoft.OpenApi.Models;
+using SwaggerThemes;
 using System.CommandLine;
 using System.Diagnostics;
 
@@ -173,7 +174,7 @@ public static class WebApplicationLauncher
 		}
 
 		app.MapOpenApi(DocumentationPaths.OpenApi);
-		app.UseSwaggerUI(c =>
+		app.UseSwaggerUI(Theme.Gruvbox, null, c =>
 		{
 			// Point to the static OpenAPI file
 			c.SwaggerEndpoint(DocumentationPaths.OpenApi, "AssetRipper API");
