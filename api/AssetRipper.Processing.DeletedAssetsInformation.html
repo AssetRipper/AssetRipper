@@ -1,0 +1,459 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class DeletedAssetsInformation
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class DeletedAssetsInformation
+   ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="AssetRipper.Processing.DeletedAssetsInformation">
+  
+  
+  <h1 id="AssetRipper_Processing_DeletedAssetsInformation" data-uid="AssetRipper.Processing.DeletedAssetsInformation" class="text-break">Class DeletedAssetsInformation
+  </h1>
+  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="AssetRipper.Assets.UnityAssetBase.html">UnityAssetBase</a></div>
+    <div class="level2"><a class="xref" href="AssetRipper.Assets.UnityObjectBase.html">UnityObjectBase</a></div>
+    <div class="level3"><span class="xref">DeletedAssetsInformation</span></div>
+  </div>
+  <div class="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="AssetRipper.Assets.IUnityObjectBase.html">IUnityObjectBase</a></div>
+    <div><a class="xref" href="AssetRipper.Assets.IUnityAssetBase.html">IUnityAssetBase</a></div>
+    <div><span class="xref">AssetRipper.IO.Endian.IEndianSpanReadable</span></div>
+    <div><a class="xref" href="AssetRipper.Assets.IO.Writing.IAssetWritable.html">IAssetWritable</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.UnityObjectBase.html#AssetRipper_Assets_UnityObjectBase_AssetInfo">UnityObjectBase.AssetInfo</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.UnityObjectBase.html#AssetRipper_Assets_UnityObjectBase_Collection">UnityObjectBase.Collection</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.UnityObjectBase.html#AssetRipper_Assets_UnityObjectBase_ClassID">UnityObjectBase.ClassID</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.UnityObjectBase.html#AssetRipper_Assets_UnityObjectBase_PathID">UnityObjectBase.PathID</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.UnityObjectBase.html#AssetRipper_Assets_UnityObjectBase_ClassName">UnityObjectBase.ClassName</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.UnityObjectBase.html#AssetRipper_Assets_UnityObjectBase_MainAsset">UnityObjectBase.MainAsset</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.UnityObjectBase.html#AssetRipper_Assets_UnityObjectBase_OriginalPath">UnityObjectBase.OriginalPath</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.UnityObjectBase.html#AssetRipper_Assets_UnityObjectBase_OriginalDirectory">UnityObjectBase.OriginalDirectory</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.UnityObjectBase.html#AssetRipper_Assets_UnityObjectBase_OriginalName">UnityObjectBase.OriginalName</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.UnityObjectBase.html#AssetRipper_Assets_UnityObjectBase_OriginalExtension">UnityObjectBase.OriginalExtension</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.UnityObjectBase.html#AssetRipper_Assets_UnityObjectBase_AssetBundleName">UnityObjectBase.AssetBundleName</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.UnityAssetBase.html#AssetRipper_Assets_UnityAssetBase_SerializedVersion">UnityAssetBase.SerializedVersion</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.UnityAssetBase.html#AssetRipper_Assets_UnityAssetBase_FlowMappedInYaml">UnityAssetBase.FlowMappedInYaml</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.UnityAssetBase.html#AssetRipper_Assets_UnityAssetBase_IgnoreFieldInMetaFiles_System_String_">UnityAssetBase.IgnoreFieldInMetaFiles(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.UnityAssetBase.html#AssetRipper_Assets_UnityAssetBase_ReadEditor_AssetRipper_IO_Endian_EndianSpanReader__">UnityAssetBase.ReadEditor(EndianSpanReader)</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.UnityAssetBase.html#AssetRipper_Assets_UnityAssetBase_ReadRelease_AssetRipper_IO_Endian_EndianSpanReader__">UnityAssetBase.ReadRelease(EndianSpanReader)</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.UnityAssetBase.html#AssetRipper_Assets_UnityAssetBase_WriteEditor_AssetRipper_Assets_IO_Writing_AssetWriter_">UnityAssetBase.WriteEditor(AssetWriter)</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.UnityAssetBase.html#AssetRipper_Assets_UnityAssetBase_WriteRelease_AssetRipper_Assets_IO_Writing_AssetWriter_">UnityAssetBase.WriteRelease(AssetWriter)</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.UnityAssetBase.html#AssetRipper_Assets_UnityAssetBase_ToString">UnityAssetBase.ToString()</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.UnityAssetBase.html#AssetRipper_Assets_UnityAssetBase_Reset">UnityAssetBase.Reset()</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.UnityAssetBase.html#AssetRipper_Assets_UnityAssetBase_CopyValues_AssetRipper_Assets_IUnityAssetBase_AssetRipper_Assets_Cloning_PPtrConverter_">UnityAssetBase.CopyValues(IUnityAssetBase, PPtrConverter)</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.UnityAssetBase.html#AssetRipper_Assets_UnityAssetBase_WalkEditor_AssetRipper_Assets_Traversal_AssetWalker_">UnityAssetBase.WalkEditor(AssetWalker)</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.UnityAssetBase.html#AssetRipper_Assets_UnityAssetBase_WalkRelease_AssetRipper_Assets_Traversal_AssetWalker_">UnityAssetBase.WalkRelease(AssetWalker)</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.UnityAssetBase.html#AssetRipper_Assets_UnityAssetBase_AddToEqualityComparer_AssetRipper_Assets_IUnityAssetBase_AssetRipper_Assets_Cloning_AssetEqualityComparer_">UnityAssetBase.AddToEqualityComparer(IUnityAssetBase, AssetEqualityComparer)</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="AssetRipper.Processing.html">AssetRipper.Processing</a></h6>
+  <h6><strong>Assembly</strong>: AssetRipper.Processing.dll</h6>
+  <h5 id="AssetRipper_Processing_DeletedAssetsInformation_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class DeletedAssetsInformation : UnityObjectBase, IUnityObjectBase, IUnityAssetBase, IEndianSpanReadable, IAssetWritable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Processing_DeletedAssetsInformation__ctor_AssetRipper_Assets_Metadata_AssetInfo_.md&amp;value=---%0Auid%3A%20AssetRipper.Processing.DeletedAssetsInformation.%23ctor(AssetRipper.Assets.Metadata.AssetInfo)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Processing/DeletedAssetsInformation.cs/#L9">View Source</a>
+  </span>
+  <a id="AssetRipper_Processing_DeletedAssetsInformation__ctor_" data-uid="AssetRipper.Processing.DeletedAssetsInformation.#ctor*"></a>
+  <h4 id="AssetRipper_Processing_DeletedAssetsInformation__ctor_AssetRipper_Assets_Metadata_AssetInfo_" data-uid="AssetRipper.Processing.DeletedAssetsInformation.#ctor(AssetRipper.Assets.Metadata.AssetInfo)">DeletedAssetsInformation(AssetInfo)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DeletedAssetsInformation(AssetInfo assetInfo)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">AssetRipper.Assets.Metadata.AssetInfo</span></td>
+        <td><span class="parametername">assetInfo</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Processing_DeletedAssetsInformation_DeletedAssets.md&amp;value=---%0Auid%3A%20AssetRipper.Processing.DeletedAssetsInformation.DeletedAssets%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Processing/DeletedAssetsInformation.cs/#L13">View Source</a>
+  </span>
+  <a id="AssetRipper_Processing_DeletedAssetsInformation_DeletedAssets_" data-uid="AssetRipper.Processing.DeletedAssetsInformation.DeletedAssets*"></a>
+  <h4 id="AssetRipper_Processing_DeletedAssetsInformation_DeletedAssets" data-uid="AssetRipper.Processing.DeletedAssetsInformation.DeletedAssets">DeletedAssets</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public List&lt;IUnityObjectBase&gt; DeletedAssets { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">List</span>&lt;<a class="xref" href="AssetRipper.Assets.IUnityObjectBase.html">IUnityObjectBase</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Processing_DeletedAssetsInformation_FetchDependencies.md&amp;value=---%0Auid%3A%20AssetRipper.Processing.DeletedAssetsInformation.FetchDependencies%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Processing/DeletedAssetsInformation.cs/#L28">View Source</a>
+  </span>
+  <a id="AssetRipper_Processing_DeletedAssetsInformation_FetchDependencies_" data-uid="AssetRipper.Processing.DeletedAssetsInformation.FetchDependencies*"></a>
+  <h4 id="AssetRipper_Processing_DeletedAssetsInformation_FetchDependencies" data-uid="AssetRipper.Processing.DeletedAssetsInformation.FetchDependencies">FetchDependencies()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override IEnumerable&lt;(string, PPtr)&gt; FetchDependencies()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;<span class="xref">System.ValueTuple</span>&lt;<span class="xref">System.String</span>, <span class="xref">AssetRipper.Assets.Metadata.PPtr</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="AssetRipper.Assets.UnityAssetBase.html#AssetRipper_Assets_UnityAssetBase_FetchDependencies">UnityAssetBase.FetchDependencies()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Processing_DeletedAssetsInformation_SetMainAsset.md&amp;value=---%0Auid%3A%20AssetRipper.Processing.DeletedAssetsInformation.SetMainAsset%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Processing/DeletedAssetsInformation.cs/#L36">View Source</a>
+  </span>
+  <a id="AssetRipper_Processing_DeletedAssetsInformation_SetMainAsset_" data-uid="AssetRipper.Processing.DeletedAssetsInformation.SetMainAsset*"></a>
+  <h4 id="AssetRipper_Processing_DeletedAssetsInformation_SetMainAsset" data-uid="AssetRipper.Processing.DeletedAssetsInformation.SetMainAsset">SetMainAsset()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SetMainAsset()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Processing_DeletedAssetsInformation_WalkStandard_AssetRipper_Assets_Traversal_AssetWalker_.md&amp;value=---%0Auid%3A%20AssetRipper.Processing.DeletedAssetsInformation.WalkStandard(AssetRipper.Assets.Traversal.AssetWalker)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Processing/DeletedAssetsInformation.cs/#L15">View Source</a>
+  </span>
+  <a id="AssetRipper_Processing_DeletedAssetsInformation_WalkStandard_" data-uid="AssetRipper.Processing.DeletedAssetsInformation.WalkStandard*"></a>
+  <h4 id="AssetRipper_Processing_DeletedAssetsInformation_WalkStandard_AssetRipper_Assets_Traversal_AssetWalker_" data-uid="AssetRipper.Processing.DeletedAssetsInformation.WalkStandard(AssetRipper.Assets.Traversal.AssetWalker)">WalkStandard(AssetWalker)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void WalkStandard(AssetWalker walker)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Assets.Traversal.AssetWalker.html">AssetWalker</a></td>
+        <td><span class="parametername">walker</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="AssetRipper.Assets.UnityAssetBase.html#AssetRipper_Assets_UnityAssetBase_WalkStandard_AssetRipper_Assets_Traversal_AssetWalker_">UnityAssetBase.WalkStandard(AssetWalker)</a></div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="AssetRipper.Assets.IUnityObjectBase.html">IUnityObjectBase</a>
+  </div>
+  <div>
+      <a class="xref" href="AssetRipper.Assets.IUnityAssetBase.html">IUnityAssetBase</a>
+  </div>
+  <div>
+      <span class="xref">AssetRipper.IO.Endian.IEndianSpanReadable</span>
+  </div>
+  <div>
+      <a class="xref" href="AssetRipper.Assets.IO.Writing.IAssetWritable.html">IAssetWritable</a>
+  </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="AssetRipper.GUI.Web.Paths.PathExtensions.html#AssetRipper_GUI_Web_Paths_PathExtensions_GetPath_AssetRipper_Assets_IUnityObjectBase_">PathExtensions.GetPath(IUnityObjectBase)</a>
+  </div>
+  <div>
+      <a class="xref" href="AssetRipper.SourceGenerated.Extensions.UnityObjectBaseExtensions.html#AssetRipper_SourceGenerated_Extensions_UnityObjectBaseExtensions_GetOriginalName_AssetRipper_Assets_IUnityObjectBase_">UnityObjectBaseExtensions.GetOriginalName(IUnityObjectBase)</a>
+  </div>
+  <div>
+      <a class="xref" href="AssetRipper.SourceGenerated.Extensions.UnityObjectBaseExtensions.html#AssetRipper_SourceGenerated_Extensions_UnityObjectBaseExtensions_TryGetName_AssetRipper_Assets_IUnityObjectBase_">UnityObjectBaseExtensions.TryGetName(IUnityObjectBase)</a>
+  </div>
+  <div>
+      <a class="xref" href="AssetRipper.SourceGenerated.Extensions.UnityObjectBaseExtensions.html#AssetRipper_SourceGenerated_Extensions_UnityObjectBaseExtensions_GetLogString_AssetRipper_Assets_IUnityObjectBase_">UnityObjectBaseExtensions.GetLogString(IUnityObjectBase)</a>
+  </div>
+  <div>
+      <a class="xref" href="AssetRipper.Processing.TraversalHelperMethods.html#AssetRipper_Processing_TraversalHelperMethods_WalkPrimitiveField__1_AssetRipper_Assets_IUnityAssetBase_AssetRipper_Assets_Traversal_AssetWalker___0_System_String_">TraversalHelperMethods.WalkPrimitiveField&lt;TPrimitive&gt;(IUnityAssetBase, AssetWalker, TPrimitive, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="AssetRipper.Processing.TraversalHelperMethods.html#AssetRipper_Processing_TraversalHelperMethods_WalkPrimitiveListField__1_AssetRipper_Assets_IUnityAssetBase_AssetRipper_Assets_Traversal_AssetWalker_AssetRipper_Assets_Generics_AssetList___0__System_String_">TraversalHelperMethods.WalkPrimitiveListField&lt;TPrimitive&gt;(IUnityAssetBase, AssetWalker, AssetList&lt;TPrimitive&gt;, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="AssetRipper.Processing.TraversalHelperMethods.html#AssetRipper_Processing_TraversalHelperMethods_WalkPPtrField__1_AssetRipper_Assets_IUnityAssetBase_AssetRipper_Assets_Traversal_AssetWalker_AssetRipper_Assets_Metadata_IPPtr___0__System_String_">TraversalHelperMethods.WalkPPtrField&lt;TAsset&gt;(IUnityAssetBase, AssetWalker, IPPtr&lt;TAsset&gt;, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="AssetRipper.Processing.TraversalHelperMethods.html#AssetRipper_Processing_TraversalHelperMethods_WalkPPtrField__1_AssetRipper_Assets_IUnityAssetBase_AssetRipper_Assets_Traversal_AssetWalker_PPtr___0__System_String_">TraversalHelperMethods.WalkPPtrField&lt;TAsset&gt;(IUnityAssetBase, AssetWalker, PPtr&lt;TAsset&gt;, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="AssetRipper.Processing.TraversalHelperMethods.html#AssetRipper_Processing_TraversalHelperMethods_WalkPPtrField__1_AssetRipper_Assets_IUnityObjectBase_AssetRipper_Assets_Traversal_AssetWalker___0_System_String_">TraversalHelperMethods.WalkPPtrField&lt;TAsset&gt;(IUnityObjectBase, AssetWalker, TAsset, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="AssetRipper.Processing.TraversalHelperMethods.html#AssetRipper_Processing_TraversalHelperMethods_VisitPPtr__1_AssetRipper_Assets_IUnityObjectBase_AssetRipper_Assets_Traversal_AssetWalker___0_">TraversalHelperMethods.VisitPPtr&lt;TAsset&gt;(IUnityObjectBase, AssetWalker, TAsset)</a>
+  </div>
+  <div>
+      <a class="xref" href="AssetRipper.Processing.TraversalHelperMethods.html#AssetRipper_Processing_TraversalHelperMethods_WalkStandardAssetField__1_AssetRipper_Assets_IUnityAssetBase_AssetRipper_Assets_Traversal_AssetWalker___0_System_String_">TraversalHelperMethods.WalkStandardAssetField&lt;TAsset&gt;(IUnityAssetBase, AssetWalker, TAsset, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="AssetRipper.Processing.TraversalHelperMethods.html#AssetRipper_Processing_TraversalHelperMethods_WalkStandardAssetListField__1_AssetRipper_Assets_IUnityAssetBase_AssetRipper_Assets_Traversal_AssetWalker_AssetRipper_Assets_Generics_AssetList___0__System_String_">TraversalHelperMethods.WalkStandardAssetListField&lt;TAsset&gt;(IUnityAssetBase, AssetWalker, AssetList&lt;TAsset&gt;, String)</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Processing_DeletedAssetsInformation.md&amp;value=---%0Auid%3A%20AssetRipper.Processing.DeletedAssetsInformation%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Processing/DeletedAssetsInformation.cs/#L7" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="toggle-mode">
+                <div class="icon">
+                  <i aria-hidden="true">☀</i>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="switch-style">
+                  <span class="slider round"></span>
+                </label>
+                <div class="icon">
+                  <i aria-hidden="true">☾</i>
+                </div>
+              </div>
+          
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <h5>In This Article</h5>
+              <div></div>
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <div class="pull-left">
+              
+              <span>Generated by <strong>DocFX</strong></span>
+            </div>
+            <div class="toggle-mode pull-right visible-sm visible-xs">
+              <div class="icon">
+                <i aria-hidden="true">☀</i>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="switch-style-m">
+                <span class="slider round"></span>
+              </label>
+              <div class="icon">
+                <i aria-hidden="true">☾</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript" src="../styles/toggle-theme.js"></script>
+      </footer>    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
