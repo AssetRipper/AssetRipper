@@ -141,7 +141,8 @@ public static class PathExtensions
 		{
 			return null;
 		}
-		return collection.TryGetAsset(path.PathID);
+		// Can't use TryGetAsset because that returns null for NullObject objects.
+		return collection.Assets.TryGetValue(path.PathID, out IUnityObjectBase? asset) ? asset : null;
 	}
 
 	public static bool TryGetAsset(this GameBundle gameBundle, AssetPath path, [NotNullWhen(true)] out IUnityObjectBase? asset)
