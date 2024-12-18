@@ -129,7 +129,13 @@ namespace AssetRipper.Processing.AnimatorControllers
 			IBlendTreeConstant treeConstant = state.GetBlendTree();
 			IBlendTreeNodeConstant node = treeConstant.NodeArray[nodeIndex].Data;
 			int childNodeIndex = (int)node.ChildIndices[childIndex];
-			IMotion? motion = state.CreateMotion(file, controller, childNodeIndex);
+
+			// https://github.com/AssetRipper/AssetRipper/issues/1566
+			// Strangely, some BlendTree nodes have the same index as the child node index.
+			// In the case of the above issue, both indices were 0.
+			IMotion? motion = nodeIndex != childNodeIndex
+				? state.CreateMotion(file, controller, childNodeIndex)
+				: null; // tree might be more accurate here since the indices are the same, but it doesn't make sense for a BlendTree to be a child of itself.
 			childMotion.Motion.SetAsset(tree.Collection, motion);
 
 			IBlendTreeNodeConstant childNode = treeConstant.NodeArray[childNodeIndex].Data;
