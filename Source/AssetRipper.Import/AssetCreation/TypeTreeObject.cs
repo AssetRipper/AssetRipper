@@ -98,6 +98,25 @@ public abstract class TypeTreeObject : NullObject
 			ConvertFields(EditorFields, ReleaseFields);
 		}
 
+		public override void WalkStandard(AssetWalker walker)
+		{
+			if (walker.EnterAsset(this))
+			{
+				if (walker.EnterField(this, "Release"))
+				{
+					ReleaseFields.WalkStandard(walker);
+					walker.ExitField(this, "Release");
+				}
+				walker.DivideAsset(this);
+				if (walker.EnterField(this, "Editor"))
+				{
+					EditorFields.WalkStandard(walker);
+					walker.ExitField(this, "Editor");
+				}
+				walker.ExitAsset(this);
+			}
+		}
+
 		public override void Reset()
 		{
 			ReleaseFields.Reset();
