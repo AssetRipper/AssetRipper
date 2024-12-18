@@ -167,7 +167,7 @@ public abstract class DefaultPage : HtmlPage
 			WriteDropdownButton(writer, Localization.MenuLanguage);
 			using (new Ul(writer).WithClass("dropdown-menu").End())
 			{
-				foreach ((string code, string name) in Localizations.LocalizationLoader.LanguageNameDictionary)
+				foreach ((string code, string name) in LanguageCodes.LanguageNameDictionary)
 				{
 					using (new Li(writer).End())
 					{

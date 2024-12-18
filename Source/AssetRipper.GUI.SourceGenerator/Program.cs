@@ -7,8 +7,6 @@ public static class Program
 	public static void Main()
 	{
 		CleanJsonLocalizationFiles();
-		LocalizationSourceGenerator.MakeLocalizationClass();
-		LocalizationSourceGenerator.MakeLocalizationLoaderClass();
 		SettingsPageGenerator.Run();
 	}
 

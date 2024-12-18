@@ -276,7 +276,7 @@ public static class WebApplicationLauncher
 			if (context.Request.Query.TryGetValue("code", out StringValues code))
 			{
 				string? language = code;
-				if (language is not null && LocalizationLoader.LanguageNameDictionary.ContainsKey(language))
+				if (language is not null && LanguageCodes.LanguageNameDictionary.ContainsKey(language))
 				{
 					Localization.LoadLanguage(language);
 				}

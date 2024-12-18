@@ -155,6 +155,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Export.Modules.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.GUI.Web.Tests", "Source\AssetRipper.GUI.Web.Tests\AssetRipper.GUI.Web.Tests.csproj", "{9EDD3621-6E2B-41AD-8F6A-F8C4CD113566}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.GUI.Localizations.SourceGenerator", "Source\AssetRipper.GUI.Localizations.SourceGenerator\AssetRipper.GUI.Localizations.SourceGenerator.csproj", "{ADE822A6-9D1E-98B1-696F-25D37BFCF7CA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -321,6 +323,10 @@ Global
 		{9EDD3621-6E2B-41AD-8F6A-F8C4CD113566}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9EDD3621-6E2B-41AD-8F6A-F8C4CD113566}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9EDD3621-6E2B-41AD-8F6A-F8C4CD113566}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADE822A6-9D1E-98B1-696F-25D37BFCF7CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADE822A6-9D1E-98B1-696F-25D37BFCF7CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADE822A6-9D1E-98B1-696F-25D37BFCF7CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADE822A6-9D1E-98B1-696F-25D37BFCF7CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
