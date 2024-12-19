@@ -18,11 +18,11 @@ namespace AssetRipper.SourceGenerated.Extensions
 			throw new ArgumentOutOfRangeException(nameof(index));
 		}
 
-		public static int GetLayerIndexByStateMachineIndex(this IControllerConstant controllerConstant, int index)
+		public static int GetLayerIndexByStateMachineIndex(this IControllerConstant controllerConstant, int index, out ILayerConstant layer)
 		{
 			for (int i = 0; i < controllerConstant.LayerArray.Count; i++)
 			{
-				ILayerConstant layer = controllerConstant.LayerArray[i].Data;
+				layer = controllerConstant.LayerArray[i].Data;
 				if (layer.StateMachineIndex == index && layer.StateMachineSynchronizedLayerIndex == 0)
 				{
 					return i;
