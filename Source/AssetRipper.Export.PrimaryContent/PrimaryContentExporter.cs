@@ -9,19 +9,38 @@ using AssetRipper.Export.PrimaryContent.Textures;
 using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Logging;
 using AssetRipper.Processing;
+using AssetRipper.Processing.Textures;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
+using AssetRipper.SourceGenerated.Classes.ClassID_1032;
+using AssetRipper.SourceGenerated.Classes.ClassID_1101;
+using AssetRipper.SourceGenerated.Classes.ClassID_1102;
+using AssetRipper.SourceGenerated.Classes.ClassID_1107;
+using AssetRipper.SourceGenerated.Classes.ClassID_1109;
+using AssetRipper.SourceGenerated.Classes.ClassID_111;
+using AssetRipper.SourceGenerated.Classes.ClassID_1111;
+using AssetRipper.SourceGenerated.Classes.ClassID_1120;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using AssetRipper.SourceGenerated.Classes.ClassID_128;
+using AssetRipper.SourceGenerated.Classes.ClassID_150;
 using AssetRipper.SourceGenerated.Classes.ClassID_152;
 using AssetRipper.SourceGenerated.Classes.ClassID_156;
 using AssetRipper.SourceGenerated.Classes.ClassID_189;
 using AssetRipper.SourceGenerated.Classes.ClassID_2;
+using AssetRipper.SourceGenerated.Classes.ClassID_206;
+using AssetRipper.SourceGenerated.Classes.ClassID_21;
+using AssetRipper.SourceGenerated.Classes.ClassID_221;
 using AssetRipper.SourceGenerated.Classes.ClassID_238;
 using AssetRipper.SourceGenerated.Classes.ClassID_3;
 using AssetRipper.SourceGenerated.Classes.ClassID_329;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Classes.ClassID_49;
+using AssetRipper.SourceGenerated.Classes.ClassID_72;
+using AssetRipper.SourceGenerated.Classes.ClassID_74;
 using AssetRipper.SourceGenerated.Classes.ClassID_83;
+using AssetRipper.SourceGenerated.Classes.ClassID_90;
+using AssetRipper.SourceGenerated.Classes.ClassID_91;
+using AssetRipper.SourceGenerated.Classes.ClassID_93;
+using AssetRipper.SourceGenerated.Classes.ClassID_95;
 
 namespace AssetRipper.Export.PrimaryContent;
 
@@ -55,6 +74,27 @@ public sealed class PrimaryContentExporter
 	private void RegisterDefaultHandlers()
 	{
 		RegisterHandler<IUnityObjectBase>(new JsonContentExtractor());
+
+		RegisterEmptyHandler<IAnimation>();
+		RegisterEmptyHandler<IAnimationClip>();
+		RegisterEmptyHandler<IAnimator>();
+		RegisterEmptyHandler<IAnimatorController>();
+		RegisterEmptyHandler<IAnimatorOverrideController>();
+		RegisterEmptyHandler<IAnimatorState>();
+		RegisterEmptyHandler<IAnimatorStateMachine>();
+		RegisterEmptyHandler<IAnimatorStateTransition>();
+		RegisterEmptyHandler<IAnimatorTransition>();
+		RegisterEmptyHandler<IAnimatorTransitionBase>();
+		RegisterEmptyHandler<IAvatar>();
+		RegisterEmptyHandler<IBlendTree>();
+		RegisterEmptyHandler<IComponent>();
+		RegisterEmptyHandler<IComputeShader>();
+		RegisterEmptyHandler<ILightingDataAsset>();
+		RegisterEmptyHandler<IMaterial>();
+		RegisterEmptyHandler<IPreloadData>();
+		RegisterEmptyHandler<IRuntimeAnimatorController>();
+		RegisterEmptyHandler<ISceneAsset>();
+		RegisterEmptyHandler<SpriteInformationObject>();
 
 		GlbModelExporter modelExporter = new();
 		RegisterHandler<GameObjectHierarchyObject>(modelExporter);
@@ -108,15 +148,24 @@ public sealed class PrimaryContentExporter
 
 		foreach (IUnityObjectBase asset in fileCollection.FetchAssets())
 		{
-			if (queued.Add(asset))
+			if (!queued.Add(asset))
 			{
-				ExportCollectionBase collection = CreateCollection(asset);
-				foreach (IUnityObjectBase element in collection.Assets)
-				{
-					queued.Add(element);
-				}
-				collections.Add(collection);
+				// Skip duplicates
+				continue;
 			}
+
+			ExportCollectionBase collection = CreateCollection(asset);
+			if (collection is EmptyExportCollection)
+			{
+				// Skip empty collections. The asset has already been added to the hash set.
+				continue;
+			}
+
+			foreach (IUnityObjectBase element in collection.Assets)
+			{
+				queued.Add(element);
+			}
+			collections.Add(collection);
 		}
 
 		return collections;
@@ -132,5 +181,10 @@ public sealed class PrimaryContentExporter
 			}
 		}
 		throw new Exception($"There is no exporter that can handle '{asset}'");
+	}
+
+	private void RegisterEmptyHandler<T>() where T : IUnityObjectBase
+	{
+		RegisterHandler<T>(EmptyContentExtractor.Instance);
 	}
 }
