@@ -15,13 +15,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
-using Microsoft.OpenApi.Models;
 using SwaggerThemes;
 using System.CommandLine;
 using System.Diagnostics;
@@ -96,7 +94,7 @@ public static class WebApplicationLauncher
 						".js" => "/js/",
 						_ => "/"
 					};
-					StaticContentLoader.Cache.TryAdd(webPrefix + fileName, File.ReadAllBytes(localWebFile));
+					StaticContentLoader.Add(webPrefix + fileName, File.ReadAllBytes(localWebFile));
 				}
 				else
 				{
@@ -186,6 +184,12 @@ public static class WebApplicationLauncher
 		app.MapStaticFile("/js/site.js", "text/javascript");
 		app.MapStaticFile("/js/commands_page.js", "text/javascript");
 		app.MapStaticFile("/js/mesh_preview.js", "text/javascript");
+
+		//Remote files
+		OnlineDependencies.Babylon.Map(app);
+		OnlineDependencies.Bootstrap.Map(app);
+		OnlineDependencies.Popper.Map(app);
+		OnlineDependencies.Vue.Map(app);
 
 		//Normal Pages
 		app.MapGet("/", (context) =>
@@ -406,48 +410,5 @@ public static class WebApplicationLauncher
 		{
 			Logger.Error($"Failed to launch web browser for: {url}", ex);
 		}
-	}
-
-	private static RouteHandlerBuilder MapGet(this IEndpointRouteBuilder endpoints, [StringSyntax("Route")] string pattern, RequestDelegate requestDelegate)
-	{
-		// RouteHandlerBuilder is always returned from this method.
-		// We cast it, so we can access Produces<T> and similar methods.
-		RouteHandlerBuilder mapped = (RouteHandlerBuilder)EndpointRouteBuilderExtensions.MapGet(endpoints, pattern, requestDelegate);
-
-		// We need to add MethodInfo to the metadata, so that it will be used in the api explorer.
-		// https://github.com/dotnet/aspnetcore/issues/44005#issuecomment-1248717069
-		// https://github.com/dotnet/aspnetcore/issues/44970
-		return mapped.WithMetadata(requestDelegate.Method);
-	}
-
-	private static RouteHandlerBuilder MapPost(this IEndpointRouteBuilder endpoints, [StringSyntax("Route")] string pattern, RequestDelegate requestDelegate)
-	{
-		// RouteHandlerBuilder is always returned from this method.
-		// We cast it, so we can access Produces<T> and similar methods.
-		RouteHandlerBuilder mapped = (RouteHandlerBuilder)EndpointRouteBuilderExtensions.MapPost(endpoints, pattern, requestDelegate);
-
-		// We need to add MethodInfo to the metadata, so that it will be used in the api explorer.
-		// https://github.com/dotnet/aspnetcore/issues/44005#issuecomment-1248717069
-		// https://github.com/dotnet/aspnetcore/issues/44970
-		return mapped.WithMetadata(requestDelegate.Method);
-	}
-
-	private static RouteHandlerBuilder MapGet(this IEndpointRouteBuilder endpoints, [StringSyntax("Route")] string pattern, Func<IResult> handler)
-	{
-		return endpoints.MapGet(pattern, (context) =>
-		{
-			IResult result = handler.Invoke();
-			return result.ExecuteAsync(context);
-		});
-	}
-
-	private static RouteHandlerBuilder MapStaticFile(this IEndpointRouteBuilder endpoints, [StringSyntax("Route")] string path, string contentType)
-	{
-		return endpoints.MapGet(path, async (context) =>
-		{
-			string fileName = Path.GetFileName(path);
-			byte[] data = await StaticContentLoader.Load(path);
-			await Results.Bytes(data, contentType, fileName).ExecuteAsync(context);
-		}).Produces<byte[]>(StatusCodes.Status200OK, contentType);
 	}
 }

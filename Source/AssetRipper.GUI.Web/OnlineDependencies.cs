@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Import;
+using Microsoft.AspNetCore.Routing;
 
 namespace AssetRipper.GUI.Web;
 
@@ -14,22 +15,21 @@ internal static class OnlineDependencies
 	/// </summary>
 	internal static class Babylon
 	{
+		public const string SourceMain = "https://cdn.babylonjs.com/babylon.js";
+		public const string SourceLoader = "https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js";
+		public const string PathMain = "/js/babylon.js";
+		public const string PathLoader = "/js/babylonjs.loaders.min.js";
+
 		internal static void WriteScriptReference(TextWriter writer)
 		{
-			if (!TryWriteCachedScriptReference(writer, "/js/babylon.js"))
-			{
-				new Script(writer)
-				{
-					Src = "https://cdn.babylonjs.com/babylon.js"
-				}.Close();
-			}
-			if (!TryWriteCachedScriptReference(writer, "/js/babylonjs.loaders.min.js"))
-			{
-				new Script(writer)
-				{
-					Src = "https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"
-				}.Close();
-			}
+			new Script(writer).WithSrc(PathMain).Close();
+			new Script(writer).WithSrc(PathLoader).Close();
+		}
+
+		internal static void Map(IEndpointRouteBuilder endpoints)
+		{
+			endpoints.MapRemoteFile(PathMain, "application/javascript", SourceMain);
+			endpoints.MapRemoteFile(PathLoader, "application/javascript", SourceLoader);
 		}
 	}
 
@@ -38,31 +38,39 @@ internal static class OnlineDependencies
 	/// </summary>
 	internal static class Bootstrap
 	{
+		public const string SourceMain = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css";
+		public const string IntegrityMain = "sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN";
+		public const string PathMain = "/css/bootstrap.min.css";
+
 		internal static void WriteStyleSheetReference(TextWriter writer)
 		{
-			if (!TryWriteCachedStyleSheetReference(writer, "/css/bootstrap.min.css"))
+			new Link(writer)
 			{
-				new Link(writer)
-				{
-					Rel = "stylesheet",
-					Href = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css",
-					Integrity = "sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN",
-					CrossOrigin = "anonymous"
-				}.Close();
-			}
+				Rel = "stylesheet",
+				Href = PathMain,
+				Integrity = IntegrityMain,
+				CrossOrigin = "anonymous"
+			}.Close();
 		}
+
+		public const string SourceBundle = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js";
+		public const string IntegrityBundle = "sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL";
+		public const string PathBundle = "/js/bootstrap.bundle.min.js";
 
 		internal static void WriteScriptReference(TextWriter writer)
 		{
-			if (!TryWriteCachedScriptReference(writer, "/js/bootstrap.bundle.min.js"))
+			new Script(writer)
 			{
-				new Script(writer)
-				{
-					Src = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js",
-					Integrity = "sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL",
-					CrossOrigin = "anonymous"
-				}.Close();
-			}
+				Src = PathBundle,
+				Integrity = IntegrityBundle,
+				CrossOrigin = "anonymous"
+			}.Close();
+		}
+
+		internal static void Map(IEndpointRouteBuilder endpoints)
+		{
+			endpoints.MapRemoteFile(PathMain, "text/css", SourceMain, IntegrityMain);
+			endpoints.MapRemoteFile(PathBundle, "application/javascript", SourceBundle, IntegrityBundle);
 		}
 	}
 
@@ -71,17 +79,23 @@ internal static class OnlineDependencies
 	/// </summary>
 	internal static class Popper
 	{
+		public const string Source = "https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js";
+		public const string Integrity = "sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r";
+		public const string Path = "/js/popper.min.js";
+
 		internal static void WriteScriptReference(TextWriter writer)
 		{
-			if (!TryWriteCachedScriptReference(writer, "/js/popper.min.js"))
+			new Script(writer)
 			{
-				new Script(writer)
-				{
-					Src = "https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js",
-					Integrity = "sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r",
-					CrossOrigin = "anonymous"
-				}.Close();
-			}
+				Src = Path,
+				Integrity = Integrity,
+				CrossOrigin = "anonymous"
+			}.Close();
+		}
+
+		internal static void Map(IEndpointRouteBuilder endpoints)
+		{
+			endpoints.MapRemoteFile(Path, "application/javascript", Source, Integrity);
 		}
 	}
 
@@ -90,52 +104,25 @@ internal static class OnlineDependencies
 	/// </summary>
 	internal static class Vue
 	{
+		public const string Development = "https://unpkg.com/vue@3/dist/vue.global.js";
+		public const string Production = "https://unpkg.com/vue@3/dist/vue.global.prod.js";
+		public const string Path = "/js/vue.js";
+
 		internal static void WriteScriptReference(TextWriter writer)
 		{
-			if (!TryWriteCachedScriptReference(writer, "/js/vue.global.prod.js") && !TryWriteCachedScriptReference(writer, "/js/vue.global.js"))
+			new Script(writer).WithSrc(Path).Close();
+		}
+
+		internal static void Map(IEndpointRouteBuilder endpoints)
+		{
+			if (AssetRipperRuntimeInformation.Build.Debug)
 			{
-				if (AssetRipperRuntimeInformation.Build.Debug)
-				{
-					new Script(writer)
-					{
-						Src = "https://unpkg.com/vue@3/dist/vue.global.js"
-					}.Close();
-				}
-				else
-				{
-					new Script(writer)
-					{
-						Src = "https://unpkg.com/vue@3/dist/vue.global.prod.js"
-					}.Close();
-				}
+				endpoints.MapRemoteFile(Path, "application/javascript", Development);
+			}
+			else
+			{
+				endpoints.MapRemoteFile(Path, "application/javascript", Production);
 			}
 		}
-	}
-
-	private static bool TryWriteCachedStyleSheetReference(TextWriter writer, string path)
-	{
-		if (StaticContentLoader.Cache.ContainsKey(path))
-		{
-			new Link(writer)
-			{
-				Rel = "stylesheet",
-				Href = path
-			}.Close();
-			return true;
-		}
-		return false;
-	}
-
-	private static bool TryWriteCachedScriptReference(TextWriter writer, string path)
-	{
-		if (StaticContentLoader.Cache.ContainsKey(path))
-		{
-			new Script(writer)
-			{
-				Src = path
-			}.Close();
-			return true;
-		}
-		return false;
 	}
 }
