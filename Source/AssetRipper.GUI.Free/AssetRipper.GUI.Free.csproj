@@ -5,7 +5,6 @@
 		<OptimizationPreference>Size</OptimizationPreference>
 		<PublishAot>true</PublishAot>
 		<TrimmerSingleWarn>false</TrimmerSingleWarn>
-		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
 		<OutputPath>..\0Bins\AssetRipper.GUI.Free\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.GUI.Free\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
