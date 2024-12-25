@@ -39,16 +39,16 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 			}
 		}
 
-		public PEFile? Resolve(IAssemblyReference reference)
+		public MetadataFile? Resolve(IAssemblyReference reference)
 		{
-			if (peAssemblies.TryGetValue(reference.Name, out PEFile? result))
+			if (peAssemblies.TryGetValue(reference.Name, out PEFile? peResult))
 			{
-				return result;
+				return peResult;
 			}
-			else if (backupResolver.TryResolve(reference, out result))
+			else if (backupResolver.TryResolve(reference, out MetadataFile? backupResult))
 			{
 				Logger.Info(LogCategory.Export, $"Assembly resolved from local .NET installation: {reference.Name}");
-				return result;
+				return backupResult;
 			}
 			else
 			{
@@ -59,7 +59,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 
 		public PEFile Resolve(AssemblyDefinition assembly) => peAssemblies[assembly.Name!];
 
-		public Task<PEFile?> ResolveAsync(IAssemblyReference reference)
+		public Task<MetadataFile?> ResolveAsync(IAssemblyReference reference)
 		{
 			return Task.Run(() => Resolve(reference));
 		}
@@ -70,9 +70,9 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 		/// <param name="mainModule"></param>
 		/// <param name="moduleName"></param>
 		/// <returns></returns>
-		public PEFile? ResolveModule(PEFile mainModule, string moduleName)
+		public MetadataFile? ResolveModule(MetadataFile mainModule, string moduleName)
 		{
-			PEFile? result = peAssemblies.Values.Where(x => x.Name == moduleName).SingleOrDefault();
+			MetadataFile? result = peAssemblies.Values.Where(x => x.Name == moduleName).SingleOrDefault();
 			if (result is not null)
 			{
 			}
@@ -87,7 +87,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 			return result;
 		}
 
-		public Task<PEFile?> ResolveModuleAsync(PEFile mainModule, string moduleName)
+		public Task<MetadataFile?> ResolveModuleAsync(MetadataFile mainModule, string moduleName)
 		{
 			return Task.Run(() => ResolveModule(mainModule, moduleName));
 		}

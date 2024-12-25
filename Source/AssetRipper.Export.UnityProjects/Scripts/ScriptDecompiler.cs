@@ -35,7 +35,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 			settings.UseSdkStyleProjectFormat = false;//sdk style can throw and we don't use the csproj file at all
 			settings.UseNestedDirectoriesForNamespaces = true;
 
-			WholeProjectDecompiler decompiler = new(settings, assemblyResolver, null, null);
+			WholeProjectDecompiler decompiler = new(settings, assemblyResolver, null, null, null);
 
 			DecompileWholeProject(decompiler, assembly, outputFolder, fileSystem);
 		}
