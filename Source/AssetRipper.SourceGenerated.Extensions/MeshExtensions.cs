@@ -32,6 +32,11 @@ namespace AssetRipper.SourceGenerated.Extensions
 			return true;
 		}
 
+		public static bool HasAnyVertices(this IMesh mesh)
+		{
+			return mesh.CompressedMesh.Vertices.NumItems > 0 || mesh.VertexData.VertexCount > 0;
+		}
+
 		public static void ReadData(
 			this IMesh mesh,
 			out Vector3[]? vertices,
