@@ -223,5 +223,15 @@
     "enable_static_mesh_separation": "Activeaza Separare Static Mesh",
     "script_export_format_dll_without_renaming_description": "Asamblările sunt exportate în forma lor compilat DLL. Unity va suprascrie probabil asamblările speciale cum ar fi Assembly-CSharp.",
     "export_primary_content": "Exportați conținutul principal",
-    "export_unity_project": "Exporteaza Proiectul Unity"
+    "export_unity_project": "Exporteaza Proiectul Unity",
+    "stack_trace": "Urmărirea stivei",
+    "swagger_documentation": "Documentația Swagger",
+    "loading_step_begin_scheme_processing": "Pornirea procesării schemei",
+    "failed_files": "Fișiere eșuate",
+    "c_sharp_langage_version_config_12_0": "C# 12",
+    "configuration_files_singletons": "Singletons",
+    "not_available_in_the_free_edition": "Nu este disponibil în ediția gratuită.",
+    "open_api_json": "OpenAPI JSON",
+    "asset_tab_video": "Video",
+    "asset_tab_model": "Model"
 }
