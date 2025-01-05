@@ -9,7 +9,7 @@ using System.Text.Json;
 
 namespace AssetRipper.GUI.Localizations.SourceGenerator;
 
-[SgfGenerator]
+[IncrementalGenerator]
 public sealed class LocalizationGenerator : IncrementalGenerator
 {
 	public LocalizationGenerator() : base(typeof(LocalizationGenerator).FullName)
@@ -18,12 +18,12 @@ public sealed class LocalizationGenerator : IncrementalGenerator
 
 	public override void OnInitialize(SgfInitializationContext context)
 	{
-		var pipeline = context.AdditionalTextsProvider
+		IncrementalValueProvider<ImmutableArray<(string name, string? json)>> pipeline = context.AdditionalTextsProvider
 			.Where(static (text) => text.Path.EndsWith(".json"))
-			.Select<AdditionalText, (string name, string? json)>(static (text, cancellationToken) =>
+			.Select(static (text, cancellationToken) =>
 			{
-				var name = Path.GetFileName(text.Path);
-				var json = text.GetText(cancellationToken)?.ToString();
+				string name = Path.GetFileName(text.Path);
+				string? json = text.GetText(cancellationToken)?.ToString();
 				return (name, json);
 			})
 			.Where(static (pair) => pair.json != null)

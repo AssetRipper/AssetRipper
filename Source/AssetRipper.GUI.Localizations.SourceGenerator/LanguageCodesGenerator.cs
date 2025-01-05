@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 
 namespace AssetRipper.GUI.Localizations.SourceGenerator;
 
-[SgfGenerator]
+[IncrementalGenerator]
 public sealed partial class LanguageCodesGenerator : IncrementalGenerator
 {
 	public LanguageCodesGenerator() : base(typeof(LanguageCodesGenerator).FullName)
