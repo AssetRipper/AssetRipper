@@ -35,5 +35,10 @@ namespace AssetRipper.SourceGenerated.Extensions
 				return false;
 			}
 		}
+
+		public static int GetCompleteImageSize(this ITexture2DArray texture)
+		{
+			return (int)texture.DataSize / (texture.Depth > 1 ? texture.Depth : 1);
+		}
 	}
 }

@@ -82,12 +82,18 @@ namespace AssetRipper.Export.Modules.Textures
 				return false;
 			}
 
+			if (!TryGetTextureFormat(texture, out TextureFormat format))
+			{
+				bitmap = DirectBitmap.Empty;
+				return false;
+			}
+
 			if (!TryConvertToBitmap(
-				texture.FormatE,
+				format,
 				texture.Width,
 				texture.Height,
 				texture.Depth,
-				(int)texture.DataSize,
+				texture.GetCompleteImageSize(),
 				texture.Collection.Version,
 				buffer,
 				out bitmap))
@@ -98,6 +104,20 @@ namespace AssetRipper.Export.Modules.Textures
 			bitmap.FlipY();
 
 			return true;
+
+			static bool TryGetTextureFormat(ITexture2DArray texture, out TextureFormat format)
+			{
+				try
+				{
+					format = ((GraphicsFormat)texture.Format).ToTextureFormat();
+					return true;
+				}
+				catch (NotSupportedException)
+				{
+					format = default;
+					return false;
+				}
+			}
 		}
 
 		public static bool TryConvertToBitmap(ICubemapArray texture, out DirectBitmap bitmap)
@@ -112,9 +132,9 @@ namespace AssetRipper.Export.Modules.Textures
 			if (!TryConvertToBitmap(
 				texture.FormatE,
 				texture.Width,
-				texture.Width,//Not sure if this is correct
-				texture.CubemapCount * 6,//Not sure if this is correct
-				(int)texture.DataSize,
+				texture.GetHeight(),
+				texture.GetDepth(),
+				texture.GetCompleteImageSize(),
 				texture.Collection.Version,
 				buffer,
 				out bitmap))
@@ -122,7 +142,7 @@ namespace AssetRipper.Export.Modules.Textures
 				return false;
 			}
 
-			bitmap.FlipY();
+			bitmap.FlipY();// Maybe not needed?
 
 			return true;
 		}

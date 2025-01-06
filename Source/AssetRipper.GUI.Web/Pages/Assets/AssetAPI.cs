@@ -1,5 +1,4 @@
-﻿using AsmResolver.DotNet;
-using AssetRipper.Assets;
+﻿using AssetRipper.Assets;
 using AssetRipper.Export.Modules.Audio;
 using AssetRipper.Export.Modules.Models;
 using AssetRipper.Export.Modules.Shaders.IO;
@@ -18,6 +17,7 @@ using AssetRipper.Processing.Textures;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using AssetRipper.SourceGenerated.Classes.ClassID_128;
 using AssetRipper.SourceGenerated.Classes.ClassID_156;
+using AssetRipper.SourceGenerated.Classes.ClassID_189;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_329;
@@ -88,8 +88,14 @@ internal static class AssetAPI
 
 		if (TryGetImageExtensionFromQuery(context, out string? extension, out ImageExportFormat format))
 		{
+			DirectBitmap bitmap = GetImageBitmap(asset);
+			if (bitmap.IsEmpty)
+			{
+				return context.Response.NotFound("Image data could not be decoded.");
+			}
+
 			MemoryStream stream = new();
-			GetImageBitmap(asset).Save(stream, format);
+			bitmap.Save(stream, format);
 			return Results.Bytes(stream.ToArray(), $"image/{extension}").ExecuteAsync(context);
 		}
 		else
@@ -100,7 +106,7 @@ internal static class AssetAPI
 
 	public static bool HasImageData(IUnityObjectBase asset) => asset switch
 	{
-		ITexture2D texture => texture.CheckAssetIntegrity(),
+		IImageTexture texture => texture.CheckAssetIntegrity(),
 		SpriteInformationObject spriteInformationObject => spriteInformationObject.Texture.CheckAssetIntegrity(),
 		ISprite sprite => sprite.TryGetTexture()?.CheckAssetIntegrity() ?? false,
 		ITerrainData terrainData => terrainData.Heightmap.Heights.Count > 0,
@@ -111,14 +117,14 @@ internal static class AssetAPI
 	{
 		return asset switch
 		{
-			ITexture2D texture => TextureToBitmap(texture),
+			IImageTexture texture => TextureToBitmap(texture),
 			SpriteInformationObject spriteInformationObject => TextureToBitmap(spriteInformationObject.Texture),
 			ISprite sprite => SpriteToBitmap(sprite),
 			ITerrainData terrainData => TerrainHeatmap.GetBitmap(terrainData),
 			_ => DirectBitmap.Empty,
 		};
 
-		static DirectBitmap TextureToBitmap(ITexture2D texture)
+		static DirectBitmap TextureToBitmap(IImageTexture texture)
 		{
 			return TextureConverter.TryConvertToBitmap(texture, out DirectBitmap bitmap) ? bitmap : DirectBitmap.Empty;
 		}

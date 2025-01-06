@@ -11,6 +11,7 @@ public abstract class DirectBitmap
 	public Span<byte> Bits => new Span<byte>(Data, 0, ByteSize);
 	public abstract int PixelSize { get; }
 	protected byte[] Data { get; }
+	public bool IsEmpty => Width == 0 || Height == 0 || Depth == 0;
 
 	protected DirectBitmap(int width, int height, int depth)
 	{
