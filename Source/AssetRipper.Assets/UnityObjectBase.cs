@@ -16,8 +16,10 @@ public abstract partial class UnityObjectBase : UnityAssetBase, IUnityObjectBase
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	private OriginalPathDetails? originalPathDetails;
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public AssetInfo AssetInfo { get; }
 	public AssetCollection Collection => AssetInfo.Collection;
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public int ClassID => AssetInfo.ClassID;
 	public long PathID => AssetInfo.PathID;
 	public virtual string ClassName => GetType().Name;
