@@ -17,6 +17,7 @@ using AssetRipper.TextureDecoder.Pvrtc;
 using AssetRipper.TextureDecoder.Rgb;
 using AssetRipper.TextureDecoder.Rgb.Formats;
 using AssetRipper.TextureDecoder.Yuy2;
+using System.Runtime.CompilerServices;
 
 namespace AssetRipper.Export.Modules.Textures
 {
@@ -243,6 +244,14 @@ namespace AssetRipper.Export.Modules.Textures
 		{
 			if (width <= 0 || height <= 0 || depth <= 0)
 			{
+				Logger.Log(LogType.Error, LogCategory.Export, $"Invalid texture dimensions. Width: {width}, Height: {height}, Depth: {depth}.");
+				bitmap = DirectBitmap.Empty;
+				return false;
+			}
+
+			if (1L * width * height * depth * Unsafe.SizeOf<TColor>() > int.MaxValue)
+			{
+				Logger.Log(LogType.Error, LogCategory.Export, $"Texture size is too large. Width: {width}, Height: {height}, Depth: {depth}.");
 				bitmap = DirectBitmap.Empty;
 				return false;
 			}

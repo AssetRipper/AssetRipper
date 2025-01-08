@@ -7,7 +7,7 @@ public abstract class DirectBitmap
 	public int Height { get; }
 	public int Width { get; }
 	public int Depth { get; }
-	public int ByteSize => CalculateByteSize(Width, Height, Depth, PixelSize);
+	public int ByteSize => (int)CalculateByteSize(Width, Height, Depth, PixelSize);
 	public Span<byte> Bits => new Span<byte>(Data, 0, ByteSize);
 	public abstract int PixelSize { get; }
 	protected byte[] Data { get; }
@@ -15,14 +15,22 @@ public abstract class DirectBitmap
 
 	protected DirectBitmap(int width, int height, int depth)
 	{
+		ArgumentOutOfRangeException.ThrowIfNegative(width);
+		ArgumentOutOfRangeException.ThrowIfNegative(height);
+		ArgumentOutOfRangeException.ThrowIfNegative(depth);
+		long byteSize = CalculateByteSize(width, height, depth, PixelSize);
+		ArgumentOutOfRangeException.ThrowIfGreaterThan(byteSize, int.MaxValue);
 		Width = width;
 		Height = height;
 		Depth = depth;
-		Data = new byte[CalculateByteSize(width, height, depth, PixelSize)];
+		Data = new byte[byteSize];
 	}
 
 	protected DirectBitmap(int width, int height, int depth, byte[] data)
 	{
+		ArgumentOutOfRangeException.ThrowIfNegative(width);
+		ArgumentOutOfRangeException.ThrowIfNegative(height);
+		ArgumentOutOfRangeException.ThrowIfNegative(depth);
 		ValidateLength(width, height, depth, data);
 
 		Width = width;
@@ -104,8 +112,8 @@ public abstract class DirectBitmap
 
 	public abstract void SaveAsTga(Stream stream);
 
-	private static int CalculateByteSize(int width, int height, int depth, int pixelSize)
+	private static long CalculateByteSize(int width, int height, int depth, int pixelSize)
 	{
-		return width * height * depth * pixelSize;
+		return 1L * width * height * depth * pixelSize;
 	}
 }
