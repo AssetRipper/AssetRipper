@@ -7,7 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="AssetRipper.CIL" Version="1.1.3" />
+	  <PackageReference Include="AssetRipper.CIL" Version="1.1.4" />
 	</ItemGroup>
 
 	<ItemGroup>
