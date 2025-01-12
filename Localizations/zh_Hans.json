@@ -236,5 +236,8 @@
     "warning_this_directory_is_not_empty_all_content_will_be_deleted": "警告：该目录非空，目录内的所有内容将会被删除。",
     "export_primary_content": "导出主要内容",
     "export_unity_project": "导出为 Unity 项目",
-    "asset_tab_video": "视频（Video）"
+    "asset_tab_video": "视频（Video）",
+    "stack_trace": "堆栈跟踪",
+    "c_sharp_langage_version_config_12_0": "C# 12",
+    "not_available_in_the_free_edition": "在自由分发版中不可用。"
 }
