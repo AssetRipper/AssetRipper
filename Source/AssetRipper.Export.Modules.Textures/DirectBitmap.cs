@@ -19,7 +19,7 @@ public abstract class DirectBitmap
 		ArgumentOutOfRangeException.ThrowIfNegative(height);
 		ArgumentOutOfRangeException.ThrowIfNegative(depth);
 		long byteSize = CalculateByteSize(width, height, depth, PixelSize);
-		ArgumentOutOfRangeException.ThrowIfGreaterThan(byteSize, int.MaxValue);
+		ArgumentOutOfRangeException.ThrowIfGreaterThan(byteSize, Array.MaxLength);
 		Width = width;
 		Height = height;
 		Depth = depth;
@@ -46,6 +46,8 @@ public abstract class DirectBitmap
 			}
 		}
 	}
+
+	public abstract DirectBitmap GetLayer(int layer);
 
 	public abstract void FlipX();
 

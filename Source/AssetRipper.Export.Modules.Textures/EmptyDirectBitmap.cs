@@ -10,6 +10,8 @@ internal sealed class EmptyDirectBitmap : DirectBitmap
 
 	public override int PixelSize => 0;
 
+	public override EmptyDirectBitmap GetLayer(int layer) => this;
+
 	public override void FlipX()
 	{
 	}

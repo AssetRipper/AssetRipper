@@ -2,11 +2,8 @@ using AssetRipper.TextureDecoder.Exr;
 using AssetRipper.TextureDecoder.Rgb;
 using AssetRipper.TextureDecoder.Rgb.Formats;
 using StbImageWriteSharp;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Runtime.Versioning;
 
 namespace AssetRipper.Export.Modules.Textures;
 
@@ -26,6 +23,18 @@ public sealed class DirectBitmap<TColor, TChannel> : DirectBitmap
 
 	public DirectBitmap(int width, int height, int depth, byte[] data) : base(width, height, depth, data)
 	{
+	}
+
+	public override DirectBitmap<TColor, TChannel> GetLayer(int layer)
+	{
+		ArgumentOutOfRangeException.ThrowIfNegative(layer);
+		ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(layer, Depth);
+
+		int layerSize = Width * Height;
+		byte[] layerData = new byte[layerSize * PixelSize];
+		Buffer.BlockCopy(Data, layer * layerSize * PixelSize, layerData, 0, layerSize * PixelSize);
+
+		return new DirectBitmap<TColor, TChannel>(Width, Height, 1, layerData);
 	}
 
 	public override void FlipX()
@@ -89,10 +98,6 @@ public sealed class DirectBitmap<TColor, TChannel> : DirectBitmap
 		{
 			BmpWriter.WriteBmp(Data, Width, Height * Depth, stream);
 		}
-		else if (OperatingSystem.IsWindows())
-		{
-			SaveUsingSystemDrawing(stream, ImageFormat.Bmp);
-		}
 		else
 		{
 			GetDataAndComponentsForSaving(out byte[] data, out ColorComponents components);
@@ -119,33 +124,19 @@ public sealed class DirectBitmap<TColor, TChannel> : DirectBitmap
 
 	public override void SaveAsJpeg(Stream stream)
 	{
-		if (OperatingSystem.IsWindows())
+		GetDataAndComponentsForSaving(out byte[] data, out ColorComponents components);
+		lock (imageWriter)
 		{
-			SaveUsingSystemDrawing(stream, ImageFormat.Jpeg);
-		}
-		else
-		{
-			GetDataAndComponentsForSaving(out byte[] data, out ColorComponents components);
-			lock (imageWriter)
-			{
-				imageWriter.WriteJpg(data, Width, Height * Depth, components, stream, default);
-			}
+			imageWriter.WriteJpg(data, Width, Height * Depth, components, stream, default);
 		}
 	}
 
 	public override void SaveAsPng(Stream stream)
 	{
-		if (OperatingSystem.IsWindows())
+		GetDataAndComponentsForSaving(out byte[] data, out ColorComponents components);
+		lock (imageWriter)
 		{
-			SaveUsingSystemDrawing(stream, ImageFormat.Png);
-		}
-		else
-		{
-			GetDataAndComponentsForSaving(out byte[] data, out ColorComponents components);
-			lock (imageWriter)
-			{
-				imageWriter.WritePng(data, Width, Height * Depth, components, stream);
-			}
+			imageWriter.WritePng(data, Width, Height * Depth, components, stream);
 		}
 	}
 
@@ -179,38 +170,6 @@ public sealed class DirectBitmap<TColor, TChannel> : DirectBitmap
 		{
 			RgbConverter.Convert<TColor, TChannel, ColorRGB<byte>, byte>(Bits, Width, Height * Depth, out data);
 			components = ColorComponents.RedGreenBlue;
-		}
-	}
-
-	[SupportedOSPlatform("windows")]
-	private void SaveUsingSystemDrawing(Stream stream, ImageFormat format)
-	{
-		GetData(this, out byte[] data, out int pixelSize, out PixelFormat pixelFormat);
-		GCHandle bitsHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-		try
-		{
-			using Bitmap bitmap = new Bitmap(Width, Height * Depth, Width * pixelSize, pixelFormat, bitsHandle.AddrOfPinnedObject());
-			bitmap.Save(stream, format);
-		}
-		finally
-		{
-			bitsHandle.Free();
-		}
-
-		static void GetData(DirectBitmap<TColor, TChannel> @this, out byte[] data, out int pixelSize, out PixelFormat pixelFormat)
-		{
-			if (typeof(TColor) == typeof(ColorBGRA32))
-			{
-				data = @this.Data;
-				pixelSize = 4;
-				pixelFormat = PixelFormat.Format32bppArgb;
-			}
-			else
-			{
-				RgbConverter.Convert<TColor, TChannel, ColorBGRA32, byte>(@this.Bits, @this.Width, @this.Height * @this.Depth, out data);
-				pixelSize = 4;
-				pixelFormat = PixelFormat.Format32bppArgb;
-			}
 		}
 	}
 }
