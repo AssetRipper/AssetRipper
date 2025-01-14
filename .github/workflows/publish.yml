@@ -17,7 +17,7 @@ jobs:
           - { name: win_x64, os: windows-latest, runtime: win-x64, executable: AssetRipper.GUI.Free.exe }
           - { name: win_arm64, os: windows-latest, runtime: win-arm64, executable: AssetRipper.GUI.Free.exe }
           - { name: linux_x64, os: ubuntu-latest, runtime: linux-x64, executable: AssetRipper.GUI.Free }
-          - { name: linux_arm64, os: ubuntu-latest, runtime: linux-arm64, executable: AssetRipper.GUI.Free }
+          - { name: linux_arm64, os: ubuntu-22.04, runtime: linux-arm64, executable: AssetRipper.GUI.Free }
           - { name: mac_x64, os: macos-latest, runtime: osx-x64, executable: AssetRipper.GUI.Free }
           - { name: mac_arm64, os: macos-latest, runtime: osx-arm64, executable: AssetRipper.GUI.Free }
 
@@ -34,9 +34,9 @@ jobs:
         run: |
           sudo dpkg --add-architecture arm64
           sudo bash -c 'cat > /etc/apt/sources.list.d/arm64.list <<EOF
-          deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ noble main restricted
-          deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ noble-updates main restricted
-          deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ noble-backports main restricted universe multiverse
+          deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ jammy main restricted
+          deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ jammy-updates main restricted
+          deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ jammy-backports main restricted universe multiverse
           EOF'
           sudo sed -i -e 's/deb http/deb [arch=amd64] http/g' /etc/apt/sources.list
           sudo sed -i -e 's/deb mirror/deb [arch=amd64] mirror/g' /etc/apt/sources.list
