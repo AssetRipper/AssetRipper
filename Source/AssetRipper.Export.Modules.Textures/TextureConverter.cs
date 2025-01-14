@@ -118,6 +118,12 @@ namespace AssetRipper.Export.Modules.Textures
 					format = default;
 					return false;
 				}
+				catch (ArgumentOutOfRangeException)
+				{
+					Logger.Log(LogType.Error, LogCategory.Export, $"Unknown GraphicsFormat '{texture.Format}'");
+					format = default;
+					return false;
+				}
 			}
 		}
 
