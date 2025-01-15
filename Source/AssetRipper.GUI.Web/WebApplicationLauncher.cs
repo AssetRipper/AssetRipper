@@ -292,20 +292,18 @@ public static class WebApplicationLauncher
 
 		//Commands
 		app.MapPost("/Export/UnityProject", Commands.HandleCommand<Commands.ExportUnityProject>)
-			.WithQueryStringParameter("Path")
+			.AcceptsFormDataContainingPath()
 			.Produces(StatusCodes.Status302Found);
 		app.MapPost("/Export/PrimaryContent", Commands.HandleCommand<Commands.ExportPrimaryContent>)
-			.WithQueryStringParameter("Path")
+			.AcceptsFormDataContainingPath()
 			.Produces(StatusCodes.Status302Found);
 		app.MapPost("/LoadFile", Commands.HandleCommand<Commands.LoadFile>)
-			.WithQueryStringParameter("Path")
+			.AcceptsFormDataContainingPath()
 			.Produces(StatusCodes.Status302Found);
 		app.MapPost("/LoadFolder", Commands.HandleCommand<Commands.LoadFolder>)
-			.WithQueryStringParameter("Path")
+			.AcceptsFormDataContainingPath()
 			.Produces(StatusCodes.Status302Found);
-		app.MapPost("/Reset", Commands.HandleCommand<Commands.Reset>)
-			.WithQueryStringParameter("Path")
-			.Produces(StatusCodes.Status302Found);
+		app.MapPost("/Reset", Commands.HandleCommand<Commands.Reset>);
 
 		//Dialogs
 		app.MapGet("/Dialogs/SaveFile", Dialogs.SaveFile.HandleGetRequest).Produces<string>();

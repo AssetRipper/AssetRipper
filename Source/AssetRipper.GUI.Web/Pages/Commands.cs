@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
 
 namespace AssetRipper.GUI.Web.Pages;
@@ -7,6 +8,17 @@ public static class Commands
 {
 	private const string RootPath = "/";
 	private const string CommandsPath = "/Commands";
+
+	/// <summary>
+	/// For documentation purposes
+	/// </summary>
+	/// <param name="Path">The file system path.</param>
+	internal record PathFormData(string Path);
+
+	internal static RouteHandlerBuilder AcceptsFormDataContainingPath(this RouteHandlerBuilder builder)
+	{
+		return builder.Accepts<PathFormData>("application/x-www-form-urlencoded");
+	}
 
 	public readonly struct LoadFile : ICommand
 	{

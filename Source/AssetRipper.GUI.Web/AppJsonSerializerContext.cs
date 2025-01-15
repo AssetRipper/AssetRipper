@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using AssetRipper.GUI.Web.Pages;
+using System.Text.Json.Serialization;
 
 namespace AssetRipper.GUI.Web;
 
@@ -7,6 +8,7 @@ namespace AssetRipper.GUI.Web;
 [JsonSerializable(typeof(bool))]
 [JsonSerializable(typeof(int))]
 [JsonSerializable(typeof(byte[]))]
+[JsonSerializable(typeof(Commands.PathFormData))]
 internal partial class AppJsonSerializerContext : JsonSerializerContext
 {
 }
