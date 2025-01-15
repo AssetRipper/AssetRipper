@@ -151,6 +151,7 @@
     "not_implemented_yet": "Not Implemented Yet",
     "open_api_json": "OpenAPI JSON",
     "original_path": "Original Path",
+    "override_path": "Override Path",
     "parent": "Parent",
     "path": "Path",
     "path_id": "Path ID",

@@ -436,7 +436,7 @@ internal static class AssetAPI
 
 		static string GetTextAssetExtension(ITextAsset textAsset)
 		{
-			return string.IsNullOrEmpty(textAsset.OriginalExtension) ? "txt" : textAsset.OriginalExtension;
+			return textAsset.GetBestExtension() ?? "txt";
 		}
 	}
 

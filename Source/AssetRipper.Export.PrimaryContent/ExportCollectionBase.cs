@@ -1,8 +1,4 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.IO.Files.Utils;
-using AssetRipper.SourceGenerated.Classes.ClassID_1001;
-using AssetRipper.SourceGenerated.Classes.ClassID_48;
-using AssetRipper.SourceGenerated.Extensions;
 
 namespace AssetRipper.Export.PrimaryContent;
 
@@ -25,12 +21,7 @@ public abstract class ExportCollectionBase
 
 	protected string GetUniqueFileName(IUnityObjectBase asset, string dirPath, FileSystem fileSystem)
 	{
-		string fileName = asset switch
-		{
-			IPrefabInstance prefab => prefab.GetName(),
-			IShader shader when !string.IsNullOrEmpty(shader.OriginalName) => shader.OriginalName,
-			_ => asset.GetBestName(),
-		};
+		string fileName = asset.GetBestName();
 		fileName = FileSystem.RemoveCloneSuffixes(fileName);
 		fileName = FileSystem.RemoveInstanceSuffixes(fileName);
 		fileName = fileName.Trim();

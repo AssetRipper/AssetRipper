@@ -125,9 +125,14 @@ public sealed class PrefabProcessor : IAssetProcessor
 		prefab.RootGameObjectP = root;
 		prefab.IsPrefabAsset = true;
 		prefab.AssetBundleName = root.AssetBundleName;
+
 		prefab.OriginalDirectory = root.OriginalDirectory;
 		prefab.OriginalName = root.OriginalName;
 		prefab.OriginalExtension = root.OriginalExtension;
+
+		prefab.OverrideDirectory = root.GetBestDirectory();
+		prefab.OverrideName = root.GetBestName();
+		prefab.OverrideExtension = root.GetBestExtension();
 
 		return prefab;
 	}

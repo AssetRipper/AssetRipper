@@ -3,6 +3,7 @@ using AssetRipper.Assets.Generics;
 using AssetRipper.Processing.Configuration;
 using AssetRipper.SourceGenerated.Classes.ClassID_142;
 using AssetRipper.SourceGenerated.Classes.ClassID_147;
+using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.AssetInfo;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Object;
@@ -33,6 +34,7 @@ internal static class OriginalPathHelper
 			{
 				asset.OriginalPath = resourcePath;
 				UndoPathLowercasing(asset);
+				SetOverridePathIfShader(asset);
 			}
 			else if (asset.OriginalPath.Length < resourcePath.Length)
 			{
@@ -40,6 +42,7 @@ internal static class OriginalPathHelper
 				// "inner/resources/extra/file" and "extra/file"
 				asset.OriginalPath = resourcePath;
 				UndoPathLowercasing(asset);
+				SetOverridePathIfShader(asset);
 			}
 		}
 	}
@@ -103,6 +106,7 @@ internal static class OriginalPathHelper
 					throw new ArgumentOutOfRangeException(nameof(bundledAssetsExportMode), $"Invalid {nameof(BundledAssetsExportMode)} : {bundledAssetsExportMode}");
 			}
 			UndoPathLowercasing(asset);
+			SetOverridePathIfShader(asset);
 		}
 	}
 
@@ -157,6 +161,16 @@ internal static class OriginalPathHelper
 			&& originalName == assetName.ToLowerInvariant())
 		{
 			asset.OriginalName = assetName;
+		}
+	}
+
+	private static void SetOverridePathIfShader(IUnityObjectBase asset)
+	{
+		if (asset is IShader shader)
+		{
+			shader.OverrideDirectory ??= shader.OriginalDirectory;
+			shader.OverrideName ??= shader.OriginalName;
+			shader.OverrideExtension ??= shader.OriginalExtension;
 		}
 	}
 }
