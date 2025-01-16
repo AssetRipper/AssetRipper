@@ -47,6 +47,8 @@ public sealed record class ExportSettings
 
 	public bool SaveSettingsToDisk { get; set; }
 
+	public string? LanguageCode { get; set; }
+
 	public void Log()
 	{
 		Logger.Info(LogCategory.General, $"{nameof(AudioExportFormat)}: {AudioExportFormat}");

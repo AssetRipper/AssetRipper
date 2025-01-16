@@ -5,19 +5,17 @@ public static partial class Localization
 	/// <summary>
 	/// <see href="https://www.iana.org/assignments/language-subtag-registry/language-subtag-registry" >IANA</see> language code
 	/// </summary>
-	public static string CurrentLanguageCode { get; private set; }
+	public static string CurrentLanguageCode { get; private set; } = LanguageCodes.English;
 
 	public static event Action? OnLanguageChanged;
 
-	static Localization()
+	public static void LoadLanguage(string? code)
 	{
-		LoadLanguage("en-US");
-	}
-
-	[MemberNotNull(nameof(CurrentLanguageCode))]
-	public static void LoadLanguage(string code)
-	{
-		CurrentLanguageCode = LanguageCodes.AsHyphenatedLanguageCode(code);
-		OnLanguageChanged?.Invoke();
+		string? value = LanguageCodes.AsHyphenatedLanguageCode(code);
+		if (CurrentLanguageCode != value && LanguageCodes.Exists(value))
+		{
+			CurrentLanguageCode = value;
+			OnLanguageChanged?.Invoke();
+		}
 	}
 }

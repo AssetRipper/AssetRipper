@@ -36,6 +36,8 @@ public sealed partial class LanguageCodesGenerator : IncrementalGenerator
 		writer.WriteGeneratedCodeWarning();
 		writer.WriteLineNoTabs();
 
+		writer.WriteLineNoTabs("#nullable enable");
+
 		writer.WriteFileScopedNamespace("AssetRipper.GUI.Localizations");
 		writer.WriteLine("public static partial class LanguageCodes");
 		using (new CurlyBrackets(writer))
@@ -70,7 +72,8 @@ public sealed partial class LanguageCodesGenerator : IncrementalGenerator
 	{
 		writer.WriteSummaryDocumentation("Convert a language code to its underscored variant.");
 		writer.WriteRemarksDocumentation("This is used by the json file names.");
-		writer.WriteLine("internal static string AsUnderscoredLanguageCode(string value) => value switch");
+		writer.WriteLine("[return: global::System.Diagnostics.CodeAnalysis.NotNullIfNotNull(nameof(value))]");
+		writer.WriteLine("internal static string? AsUnderscoredLanguageCode(string? value) => value switch");
 		using (new CurlyBracketsWithSemicolon(writer))
 		{
 			foreach (string file in files)
@@ -89,7 +92,8 @@ public sealed partial class LanguageCodesGenerator : IncrementalGenerator
 
 		writer.WriteSummaryDocumentation("Convert a language code to its hyphenated variant.");
 		writer.WriteRemarksDocumentation("This is used by HTML and the IANA Language Subtag Registry.");
-		writer.WriteLine("internal static string AsHyphenatedLanguageCode(string value) => value switch");
+		writer.WriteLine("[return: global::System.Diagnostics.CodeAnalysis.NotNullIfNotNull(nameof(value))]");
+		writer.WriteLine("internal static string? AsHyphenatedLanguageCode(string? value) => value switch");
 		using (new CurlyBracketsWithSemicolon(writer))
 		{
 			foreach (string file in files)

@@ -122,6 +122,8 @@ public static class WebApplicationLauncher
 		Logger.LogSystemInformation("AssetRipper");
 		Logger.Add(new ConsoleLogger());
 
+		Localization.LoadLanguage(GameFileLoader.Settings.LanguageCode);
+
 		WebApplicationBuilder builder = WebApplication.CreateSlimBuilder(new WebApplicationOptions()
 		{
 #if DEBUG
@@ -280,10 +282,9 @@ public static class WebApplicationLauncher
 			if (context.Request.Query.TryGetValue("code", out StringValues code))
 			{
 				string? language = code;
-				if (language is not null && LanguageCodes.LanguageNameDictionary.ContainsKey(language))
-				{
-					Localization.LoadLanguage(language);
-				}
+				Localization.LoadLanguage(language);
+				GameFileLoader.Settings.LanguageCode = Localization.CurrentLanguageCode;
+				GameFileLoader.Settings.MaybeSaveToDefaultPath();
 			}
 			return Results.Redirect("/").ExecuteAsync(context);
 		})
