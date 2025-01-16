@@ -19,6 +19,13 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 			{
 				try
 				{
+					if (assemblyName.Contains("Naninovel"))
+					{
+						Logger.Info(LogCategory.Import, $"Loading Naninovel assembly: {assemblyName}");
+						Load(assemblyPath);
+						continue;
+					}
+
 					if (!PEFile.FromFile(assemblyPath).OptionalHeader.GetDataDirectory(DataDirectoryIndex.ClrDirectory).IsPresentInPE)
 					{
 						Logger.Info(LogCategory.Import, $"Skipping native assembly: {assemblyName}");

@@ -315,241 +315,269 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 
 		public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, int depth, in SerializableType.Field etalon)
 		{
-			switch (etalon.ArrayDepth)
+			try
 			{
-				case 0:
-					switch (etalon.Type.Type)
+				// 检查是否为Naninovel类型
+				if (etalon.Type.Namespace?.Contains("Naninovel") == true)
+				{
+					// 对于Naninovel类型，总是尝试作为字符串读取
+					try
 					{
-						case PrimitiveType.Bool:
-							AsBoolean = reader.ReadBoolean();
-							break;
-						case PrimitiveType.Char:
-							AsChar = reader.ReadChar();
-							break;
-						case PrimitiveType.SByte:
-							AsSByte = reader.ReadSByte();
-							break;
-						case PrimitiveType.Byte:
-							AsByte = reader.ReadByte();
-							break;
-						case PrimitiveType.Short:
-							AsInt16 = reader.ReadInt16();
-							break;
-						case PrimitiveType.UShort:
-							AsUInt16 = reader.ReadUInt16();
-							break;
-						case PrimitiveType.Int:
-							AsInt32 = reader.ReadInt32();
-							break;
-						case PrimitiveType.UInt:
-							AsUInt32 = reader.ReadUInt32();
-							break;
-						case PrimitiveType.Long:
-							AsInt64 = reader.ReadInt64();
-							break;
-						case PrimitiveType.ULong:
-							AsUInt64 = reader.ReadUInt64();
-							break;
-						case PrimitiveType.Single:
-							AsSingle = reader.ReadSingle();
-							break;
-						case PrimitiveType.Double:
-							AsDouble = reader.ReadDouble();
-							break;
-						case PrimitiveType.String:
-							AsString = reader.ReadUtf8StringAligned().String;
-							break;
-						case PrimitiveType.Complex:
-							AsAsset = CreateAndReadComplexStructure(ref reader, version, flags, depth, etalon);
-							break;
-						case PrimitiveType.Pair:
-						case PrimitiveType.MapPair:
-							{
-								SerializablePair pair = new(etalon.Type, depth + 1);
-								pair.Read(ref reader, version, flags);
-								AsPair = pair;
-							}
-							break;
-						default:
-							throw new NotSupportedException(etalon.Type.Type.ToString());
+						AsString = reader.ReadUtf8StringAligned().String;
+						return;
 					}
-					break;
-				case 1:
-					switch (etalon.Type.Type)
+					catch
 					{
-						case PrimitiveType.Bool:
-							AsBooleanArray = reader.ReadPrimitiveArray<bool>(version);
-							break;
-						case PrimitiveType.Char:
-							AsCharArray = reader.ReadPrimitiveArray<char>(version);
-							break;
-						case PrimitiveType.SByte:
-							AsSByteArray = reader.ReadPrimitiveArray<sbyte>(version);
-							break;
-						case PrimitiveType.Byte:
-							AsByteArray = reader.ReadPrimitiveArray<byte>(version);
-							break;
-						case PrimitiveType.Short:
-							AsInt16Array = reader.ReadPrimitiveArray<short>(version);
-							break;
-						case PrimitiveType.UShort:
-							AsUInt16Array = reader.ReadPrimitiveArray<ushort>(version);
-							break;
-						case PrimitiveType.Int:
-							AsInt32Array = reader.ReadPrimitiveArray<int>(version);
-							break;
-						case PrimitiveType.UInt:
-							AsUInt32Array = reader.ReadPrimitiveArray<uint>(version);
-							break;
-						case PrimitiveType.Long:
-							AsInt64Array = reader.ReadPrimitiveArray<long>(version);
-							break;
-						case PrimitiveType.ULong:
-							AsUInt64Array = reader.ReadPrimitiveArray<ulong>(version);
-							break;
-						case PrimitiveType.Single:
-							AsSingleArray = reader.ReadPrimitiveArray<float>(version);
-							break;
-						case PrimitiveType.Double:
-							AsDoubleArray = reader.ReadPrimitiveArray<double>(version);
-							break;
-						case PrimitiveType.String:
-							AsStringArray = reader.ReadStringArray(version);
-							break;
-						case PrimitiveType.Pair:
-						case PrimitiveType.MapPair:
-							{
-								int count = reader.ReadInt32();
+						// 如果作为字符串读取失败，继续尝试标准读取
+					}
+				}
 
-								long remainingBytes = reader.Length - reader.Position;
-								if (remainingBytes < count)
-								{
-									throw new EndOfStreamException($"When reading field {etalon.Name}, Stream only has {remainingBytes} bytes remaining, so {count} pair elements of type {etalon.Type.Name} cannot be read.");
-								}
-								SerializablePair[] pairs = CreateArray<SerializablePair>(count);
-
-								for (int i = 0; i < count; i++)
+				switch (etalon.ArrayDepth)
+				{
+					case 0:
+						switch (etalon.Type.Type)
+						{
+							case PrimitiveType.Bool:
+								AsBoolean = reader.ReadBoolean();
+								break;
+							case PrimitiveType.Char:
+								AsChar = reader.ReadChar();
+								break;
+							case PrimitiveType.SByte:
+								AsSByte = reader.ReadSByte();
+								break;
+							case PrimitiveType.Byte:
+								AsByte = reader.ReadByte();
+								break;
+							case PrimitiveType.Short:
+								AsInt16 = reader.ReadInt16();
+								break;
+							case PrimitiveType.UShort:
+								AsUInt16 = reader.ReadUInt16();
+								break;
+							case PrimitiveType.Int:
+								AsInt32 = reader.ReadInt32();
+								break;
+							case PrimitiveType.UInt:
+								AsUInt32 = reader.ReadUInt32();
+								break;
+							case PrimitiveType.Long:
+								AsInt64 = reader.ReadInt64();
+								break;
+							case PrimitiveType.ULong:
+								AsUInt64 = reader.ReadUInt64();
+								break;
+							case PrimitiveType.Single:
+								AsSingle = reader.ReadSingle();
+								break;
+							case PrimitiveType.Double:
+								AsDouble = reader.ReadDouble();
+								break;
+							case PrimitiveType.String:
+								AsString = reader.ReadUtf8StringAligned().String;
+								break;
+							case PrimitiveType.Complex:
+								AsAsset = CreateAndReadComplexStructure(ref reader, version, flags, depth, etalon);
+								break;
+							case PrimitiveType.Pair:
+							case PrimitiveType.MapPair:
 								{
 									SerializablePair pair = new(etalon.Type, depth + 1);
 									pair.Read(ref reader, version, flags);
-									pairs[i] = pair;
+									AsPair = pair;
 								}
-
-								AsPairArray = pairs;
-							}
-							break;
-						case PrimitiveType.Complex:
-							{
-								int count = reader.ReadInt32();
-								ThrowIfNotEnoughSpaceToReadArray(reader, etalon, count);
-
-								IUnityAssetBase[] structures = CreateArray<IUnityAssetBase>(count);
-								for (int i = 0; i < count; i++)
+								break;
+							default:
+								throw new NotSupportedException(etalon.Type.Type.ToString());
+						}
+						break;
+					case 1:
+						switch (etalon.Type.Type)
+						{
+							case PrimitiveType.Bool:
+								AsBooleanArray = reader.ReadPrimitiveArray<bool>(version);
+								break;
+							case PrimitiveType.Char:
+								AsCharArray = reader.ReadPrimitiveArray<char>(version);
+								break;
+							case PrimitiveType.SByte:
+								AsSByteArray = reader.ReadPrimitiveArray<sbyte>(version);
+								break;
+							case PrimitiveType.Byte:
+								AsByteArray = reader.ReadPrimitiveArray<byte>(version);
+								break;
+							case PrimitiveType.Short:
+								AsInt16Array = reader.ReadPrimitiveArray<short>(version);
+								break;
+							case PrimitiveType.UShort:
+								AsUInt16Array = reader.ReadPrimitiveArray<ushort>(version);
+								break;
+							case PrimitiveType.Int:
+								AsInt32Array = reader.ReadPrimitiveArray<int>(version);
+								break;
+							case PrimitiveType.UInt:
+								AsUInt32Array = reader.ReadPrimitiveArray<uint>(version);
+								break;
+							case PrimitiveType.Long:
+								AsInt64Array = reader.ReadPrimitiveArray<long>(version);
+								break;
+							case PrimitiveType.ULong:
+								AsUInt64Array = reader.ReadPrimitiveArray<ulong>(version);
+								break;
+							case PrimitiveType.Single:
+								AsSingleArray = reader.ReadPrimitiveArray<float>(version);
+								break;
+							case PrimitiveType.Double:
+								AsDoubleArray = reader.ReadPrimitiveArray<double>(version);
+								break;
+							case PrimitiveType.String:
+								AsStringArray = reader.ReadStringArray(version);
+								break;
+							case PrimitiveType.Pair:
+							case PrimitiveType.MapPair:
 								{
-									structures[i] = CreateAndReadComplexStructure(ref reader, version, flags, depth, etalon);
+									int count = reader.ReadInt32();
+
+									long remainingBytes = reader.Length - reader.Position;
+									if (remainingBytes < count)
+									{
+										throw new EndOfStreamException($"When reading field {etalon.Name}, Stream only has {remainingBytes} bytes remaining, so {count} pair elements of type {etalon.Type.Name} cannot be read.");
+									}
+									SerializablePair[] pairs = CreateArray<SerializablePair>(count);
+
+									for (int i = 0; i < count; i++)
+									{
+										SerializablePair pair = new(etalon.Type, depth + 1);
+										pair.Read(ref reader, version, flags);
+										pairs[i] = pair;
+									}
+
+									AsPairArray = pairs;
 								}
-								AsAssetArray = structures;
-							}
-							break;
-						default:
-							throw new NotSupportedException(etalon.Type.Type.ToString());
-					}
-					break;
-				case 2:
-					switch (etalon.Type.Type)
+								break;
+							case PrimitiveType.Complex:
+								{
+									int count = reader.ReadInt32();
+									ThrowIfNotEnoughSpaceToReadArray(reader, etalon, count);
+
+									IUnityAssetBase[] structures = CreateArray<IUnityAssetBase>(count);
+									for (int i = 0; i < count; i++)
+									{
+										structures[i] = CreateAndReadComplexStructure(ref reader, version, flags, depth, etalon);
+									}
+									AsAssetArray = structures;
+								}
+								break;
+							default:
+								throw new NotSupportedException(etalon.Type.Type.ToString());
+						}
+						break;
+					case 2:
+						switch (etalon.Type.Type)
+						{
+							case PrimitiveType.Bool:
+								AsBooleanArrayArray = reader.ReadPrimitiveArrayArray<bool>(version);
+								break;
+							case PrimitiveType.Char:
+								AsCharArrayArray = reader.ReadPrimitiveArrayArray<char>(version);
+								break;
+							case PrimitiveType.SByte:
+								AsSByteArrayArray = reader.ReadPrimitiveArrayArray<sbyte>(version);
+								break;
+							case PrimitiveType.Byte:
+								AsByteArrayArray = reader.ReadPrimitiveArrayArray<byte>(version);
+								break;
+							case PrimitiveType.Short:
+								AsInt16ArrayArray = reader.ReadPrimitiveArrayArray<short>(version);
+								break;
+							case PrimitiveType.UShort:
+								AsUInt16ArrayArray = reader.ReadPrimitiveArrayArray<ushort>(version);
+								break;
+							case PrimitiveType.Int:
+								AsInt32ArrayArray = reader.ReadPrimitiveArrayArray<int>(version);
+								break;
+							case PrimitiveType.UInt:
+								AsUInt32ArrayArray = reader.ReadPrimitiveArrayArray<uint>(version);
+								break;
+							case PrimitiveType.Long:
+								AsInt64ArrayArray = reader.ReadPrimitiveArrayArray<long>(version);
+								break;
+							case PrimitiveType.ULong:
+								AsUInt64ArrayArray = reader.ReadPrimitiveArrayArray<ulong>(version);
+								break;
+							case PrimitiveType.Single:
+								AsSingleArrayArray = reader.ReadPrimitiveArrayArray<float>(version);
+								break;
+							case PrimitiveType.Double:
+								AsDoubleArrayArray = reader.ReadPrimitiveArrayArray<double>(version);
+								break;
+							case PrimitiveType.String:
+								AsStringArrayArray = reader.ReadStringArrayArray(version);
+								break;
+							case PrimitiveType.Complex:
+								{
+									int outerCount = reader.ReadInt32();
+									ThrowIfNotEnoughSpaceToReadArray(reader, etalon, outerCount);
+									IUnityAssetBase[][] result = CreateArray<IUnityAssetBase[]>(outerCount);
+
+									for (int i = 0; i < outerCount; i++)
+									{
+										int innerCount = reader.ReadInt32();
+										ThrowIfNotEnoughSpaceToReadArray(reader, etalon, innerCount);
+
+										IUnityAssetBase[] structures = CreateArray<IUnityAssetBase>(innerCount);
+										for (int j = 0; j < innerCount; j++)
+										{
+											structures[j] = CreateAndReadComplexStructure(ref reader, version, flags, depth, etalon);
+										}
+										result[i] = structures;
+
+										if (etalon.Align)
+										{
+											reader.Align();
+										}
+									}
+
+									AsAssetArrayArray = result;
+								}
+								break;
+							default:
+								throw new NotSupportedException(etalon.Type.Type.ToString());
+						}
+						break;
+					default:
+						throw new NotSupportedException(etalon.ArrayDepth.ToString());
+				}
+
+				if (etalon.Align)
+				{
+					reader.Align();
+				}
+
+				static IUnityAssetBase CreateAndReadComplexStructure(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, int depth, SerializableType.Field etalon)
+				{
+					IUnityAssetBase asset = etalon.Type.CreateInstance(depth + 1, version);
+					if (asset is SerializableStructure structure)
 					{
-						case PrimitiveType.Bool:
-							AsBooleanArrayArray = reader.ReadPrimitiveArrayArray<bool>(version);
-							break;
-						case PrimitiveType.Char:
-							AsCharArrayArray = reader.ReadPrimitiveArrayArray<char>(version);
-							break;
-						case PrimitiveType.SByte:
-							AsSByteArrayArray = reader.ReadPrimitiveArrayArray<sbyte>(version);
-							break;
-						case PrimitiveType.Byte:
-							AsByteArrayArray = reader.ReadPrimitiveArrayArray<byte>(version);
-							break;
-						case PrimitiveType.Short:
-							AsInt16ArrayArray = reader.ReadPrimitiveArrayArray<short>(version);
-							break;
-						case PrimitiveType.UShort:
-							AsUInt16ArrayArray = reader.ReadPrimitiveArrayArray<ushort>(version);
-							break;
-						case PrimitiveType.Int:
-							AsInt32ArrayArray = reader.ReadPrimitiveArrayArray<int>(version);
-							break;
-						case PrimitiveType.UInt:
-							AsUInt32ArrayArray = reader.ReadPrimitiveArrayArray<uint>(version);
-							break;
-						case PrimitiveType.Long:
-							AsInt64ArrayArray = reader.ReadPrimitiveArrayArray<long>(version);
-							break;
-						case PrimitiveType.ULong:
-							AsUInt64ArrayArray = reader.ReadPrimitiveArrayArray<ulong>(version);
-							break;
-						case PrimitiveType.Single:
-							AsSingleArrayArray = reader.ReadPrimitiveArrayArray<float>(version);
-							break;
-						case PrimitiveType.Double:
-							AsDoubleArrayArray = reader.ReadPrimitiveArrayArray<double>(version);
-							break;
-						case PrimitiveType.String:
-							AsStringArrayArray = reader.ReadStringArrayArray(version);
-							break;
-						case PrimitiveType.Complex:
-							{
-								int outerCount = reader.ReadInt32();
-								ThrowIfNotEnoughSpaceToReadArray(reader, etalon, outerCount);
-								IUnityAssetBase[][] result = CreateArray<IUnityAssetBase[]>(outerCount);
-
-								for (int i = 0; i < outerCount; i++)
-								{
-									int innerCount = reader.ReadInt32();
-									ThrowIfNotEnoughSpaceToReadArray(reader, etalon, innerCount);
-
-									IUnityAssetBase[] structures = CreateArray<IUnityAssetBase>(innerCount);
-									for (int j = 0; j < innerCount; j++)
-									{
-										structures[j] = CreateAndReadComplexStructure(ref reader, version, flags, depth, etalon);
-									}
-									result[i] = structures;
-
-									if (etalon.Align)
-									{
-										reader.Align();
-									}
-								}
-
-								AsAssetArrayArray = result;
-							}
-							break;
-						default:
-							throw new NotSupportedException(etalon.Type.Type.ToString());
+						structure.Read(ref reader, version, flags);
 					}
-					break;
-				default:
-					throw new NotSupportedException(etalon.ArrayDepth.ToString());
-			}
+					else
+					{
+						asset.Read(ref reader, flags);
+					}
 
-			if (etalon.Align)
-			{
-				reader.Align();
-			}
-
-			static IUnityAssetBase CreateAndReadComplexStructure(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, int depth, SerializableType.Field etalon)
-			{
-				IUnityAssetBase asset = etalon.Type.CreateInstance(depth + 1, version);
-				if (asset is SerializableStructure structure)
-				{
-					structure.Read(ref reader, version, flags);
+					return asset;
 				}
-				else
+			}
+			catch (Exception)
+			{
+				if (etalon.Type.Namespace?.Contains("Naninovel") == true)
 				{
-					asset.Read(ref reader, flags);
+					// 对于Naninovel类型的错误，设置为空字符串并继续
+					AsString = string.Empty;
+					return;
 				}
-
-				return asset;
+				throw;
 			}
 		}
 
@@ -692,6 +720,13 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 
 		public readonly void WalkEditor(AssetWalker walker, in SerializableType.Field etalon)
 		{
+			// 特殊处理Naninovel类型
+			if (etalon.Type.Namespace?.Contains("Naninovel") == true)
+			{
+				walker.VisitPrimitive(AsString ?? string.Empty);
+				return;
+			}
+
 			switch (etalon.ArrayDepth)
 			{
 				case 0:
