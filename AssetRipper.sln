@@ -62,6 +62,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{E3A52FDC-1
 		docs\docfx.json = docs\docfx.json
 		docs\articles\Downloads.md = docs\articles\Downloads.md
 		docs\index.md = docs\index.md
+		docs\articles\PremiumFeatures.md = docs\articles\PremiumFeatures.md
 		docs\articles\Requirements.md = docs\articles\Requirements.md
 		docs\articles\RoadMap.md = docs\articles\RoadMap.md
 		docs\articles\RunningOnMac.md = docs\articles\RunningOnMac.md

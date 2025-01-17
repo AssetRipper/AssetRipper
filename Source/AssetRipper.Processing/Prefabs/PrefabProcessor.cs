@@ -43,7 +43,7 @@ public sealed class PrefabProcessor : IAssetProcessor
 				}
 				else
 				{
-					collection = processedBundle.AddNewProcessedCollection(scene.Name, gameData.ProjectVersion);
+					collection = processedBundle.AddNewProcessedCollection(scene.Name + " (Generated Assets)", gameData.ProjectVersion);
 					scene.AddCollection(collection);
 					sceneCollectionDictionary.Add(scene, collection);
 				}
