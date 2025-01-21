@@ -269,33 +269,37 @@ namespace AssetRipper.Export.Modules.Textures
 				return false;
 			}
 
+			ReadOnlySpan<byte> uncompressedSpan;
+			int bytesPerLayer;
+			if (textureFormat.IsCrunched())
+			{
+				if (CrunchHandler.DecompressCrunch(textureFormat, version, data, out byte[]? decompressedData))
+				{
+					uncompressedSpan = decompressedData;
+					bytesPerLayer = decompressedData.Length / depth;
+				}
+				else
+				{
+					bitmap = DirectBitmap.Empty;
+					return false;
+				}
+			}
+			else
+			{
+				uncompressedSpan = data;
+				bytesPerLayer = imageSize;
+			}
+
 			bitmap = new DirectBitmap<TColor, TChannelValue>(width, height, depth);
 			int outputSize = width * height * bitmap.PixelSize;
 			for (int i = 0; i < depth; i++)
 			{
-				ReadOnlySpan<byte> inputSpan = new ReadOnlySpan<byte>(data, i * imageSize, imageSize);
-				ReadOnlySpan<byte> uncompressedSpan;
-				if (textureFormat.IsCrunched())
-				{
-					if (CrunchHandler.DecompressCrunch(textureFormat, version, inputSpan, out byte[]? decompressedData))
-					{
-						uncompressedSpan = decompressedData;
-					}
-					else
-					{
-						bitmap = DirectBitmap.Empty;
-						return false;
-					}
-				}
-				else
-				{
-					uncompressedSpan = inputSpan;
-				}
+				ReadOnlySpan<byte> inputSpan = uncompressedSpan.Slice(i * bytesPerLayer, bytesPerLayer);
 				Span<byte> outputSpan = bitmap.Bits.Slice(i * outputSize, outputSize);
 
 				if (typeof(TColor) == typeof(ColorBGRA32))
 				{
-					if (!TryDecodeTexture(textureFormat, width, height, uncompressedSpan, outputSpan))
+					if (!TryDecodeTexture(textureFormat, width, height, inputSpan, outputSpan))
 					{
 						bitmap = DirectBitmap.Empty;
 						return false;
@@ -303,7 +307,7 @@ namespace AssetRipper.Export.Modules.Textures
 				}
 				else
 				{
-					if (!TryDecodeTexture<TColor, TChannelValue>(textureFormat, width, height, uncompressedSpan, outputSpan))
+					if (!TryDecodeTexture<TColor, TChannelValue>(textureFormat, width, height, inputSpan, outputSpan))
 					{
 						bitmap = DirectBitmap.Empty;
 						return false;
