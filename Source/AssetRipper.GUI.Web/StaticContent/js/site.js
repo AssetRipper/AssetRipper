@@ -49,3 +49,24 @@ document.addEventListener("DOMContentLoaded", async () => {
 		}
 	});
 });
+
+// For updating progress bar dynamically
+document.addEventListener("DOMContentLoaded", function () {
+	const progressBar = document.getElementById("progress-bar");
+
+	if (progressBar) {
+		const connection = new signalR.HubConnectionBuilder()
+			.withUrl("/progressHub")
+			.build();
+
+		connection.on("UpdateProgress", function (progress) {
+			progressBar.style.width = progress + "%";
+			progressBar.setAttribute("aria-valuenow", progress);
+			progressBar.textContent = progress + "%";
+		});
+
+		connection.start().catch(function (err) {
+			return console.error(err.toString());
+		});
+	}
+});

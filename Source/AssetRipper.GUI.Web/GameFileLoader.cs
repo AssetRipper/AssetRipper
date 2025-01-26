@@ -6,6 +6,7 @@ using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.IO.Files;
 using AssetRipper.Processing;
+using Microsoft.AspNetCore.SignalR;
 
 namespace AssetRipper.GUI.Web;
 
@@ -42,24 +43,26 @@ public static class GameFileLoader
 		}
 	}
 
-	public static void LoadAndProcess(IReadOnlyList<string> paths)
+	public static void LoadAndProcess(IReadOnlyList<string> paths, IHubContext<ProgressHub> hubContext)
 	{
 		Reset();
 		Settings.LogConfigurationValues();
 		GameData = ExportHandler.LoadAndProcess(paths);
+		hubContext.Clients.All.SendAsync("UpdateProgress", 100);
 	}
 
-	public static void ExportUnityProject(string path)
+	public static void ExportUnityProject(string path, IHubContext<ProgressHub> hubContext)
 	{
 		if (IsLoaded)
 		{
 			Directory.Delete(path, true);
 			Directory.CreateDirectory(path);
 			ExportHandler.Export(GameData, path);
+			hubContext.Clients.All.SendAsync("UpdateProgress", 100);
 		}
 	}
 
-	public static void ExportPrimaryContent(string path)
+	public static void ExportPrimaryContent(string path, IHubContext<ProgressHub> hubContext)
 	{
 		if (IsLoaded)
 		{
@@ -68,8 +71,9 @@ public static class GameFileLoader
 			Logger.Info(LogCategory.Export, "Starting export");
 			Logger.Info(LogCategory.Export, $"Attempting to export assets to {path}...");
 			Settings.ExportRootPath = path;
-			PrimaryContentExporter.CreateDefault(GameData).Export(GameBundle, Settings, LocalFileSystem.Instance);
+			PrimaryContentExporter.CreateDefault(GameData).Export(GameBundle, Settings, LocalFileSystem.Instance, new SignalRProgressReporter(hubContext));
 			Logger.Info(LogCategory.Export, "Finished exporting assets");
+			hubContext.Clients.All.SendAsync("UpdateProgress", 100);
 		}
 	}
 

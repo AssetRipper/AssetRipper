@@ -16,6 +16,12 @@ public sealed class ViewPage : DefaultPage
 	{
 		new H1(writer).Close(GetTitle());
 
+		// Add progress bar element
+		using (new Div(writer).WithClass("progress").End())
+		{
+			new Div(writer).WithClass("progress-bar").WithRole("progressbar").WithStyle("width: 0%").WithId("progress-bar").WithAriaValuenow("0").WithAriaValuemin("0").WithAriaValuemax("100").Close();
+		}
+
 		if (Bundle.Parent is not null)
 		{
 			new H2(writer).Close(Localization.Parent);

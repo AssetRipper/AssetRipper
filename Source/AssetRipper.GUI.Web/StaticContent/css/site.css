@@ -38,3 +38,20 @@ footer {
 .dropdown-description.disabled {
 	display: none; /* Hide disabled elements */
 }
+
+/* Styles for progress bar */
+.progress {
+	height: 20px;
+	background-color: #f3f3f3;
+	border-radius: 5px;
+	overflow: hidden;
+}
+
+.progress-bar {
+	height: 100%;
+	background-color: #4caf50;
+	text-align: center;
+	color: white;
+	line-height: 20px; /* Match the height of the progress bar */
+	transition: width 0.4s ease;
+}

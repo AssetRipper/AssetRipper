@@ -123,9 +123,12 @@ public sealed class PrimaryContentExporter
 		RegisterHandler<IUnityObjectBase>(DeletedAssetsExporter.Instance);
 	}
 
-	public void Export(GameBundle fileCollection, CoreConfiguration options, FileSystem fileSystem)
+	public void Export(GameBundle fileCollection, CoreConfiguration options, FileSystem fileSystem, IProgressReporter? progressReporter = null)
 	{
 		List<ExportCollectionBase> collections = CreateCollections(fileCollection);
+
+		int totalCollections = collections.Count;
+		int processedCollections = 0;
 
 		foreach (ExportCollectionBase collection in collections)
 		{
@@ -138,6 +141,9 @@ public sealed class PrimaryContentExporter
 					Logger.Warning(LogCategory.ExportProgress, $"Failed to export '{collection.Name}'");
 				}
 			}
+
+			processedCollections++;
+			progressReporter?.ReportProgress(processedCollections, totalCollections);
 		}
 	}
 

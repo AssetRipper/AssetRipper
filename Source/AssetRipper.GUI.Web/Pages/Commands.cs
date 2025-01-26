@@ -42,7 +42,8 @@ public static class Commands
 
 			if (paths is { Length: > 0 })
 			{
-				GameFileLoader.LoadAndProcess(paths);
+				var hubContext = request.HttpContext.RequestServices.GetRequiredService<IHubContext<ProgressHub>>();
+				GameFileLoader.LoadAndProcess(paths, hubContext);
 			}
 			return null;
 		}
@@ -70,7 +71,8 @@ public static class Commands
 
 			if (paths is { Length: > 0 })
 			{
-				GameFileLoader.LoadAndProcess(paths);
+				var hubContext = request.HttpContext.RequestServices.GetRequiredService<IHubContext<ProgressHub>>();
+				GameFileLoader.LoadAndProcess(paths, hubContext);
 			}
 			return null;
 		}
@@ -94,7 +96,8 @@ public static class Commands
 
 			if (!string.IsNullOrEmpty(path))
 			{
-				GameFileLoader.ExportUnityProject(path);
+				var hubContext = request.HttpContext.RequestServices.GetRequiredService<IHubContext<ProgressHub>>();
+				GameFileLoader.ExportUnityProject(path, hubContext);
 			}
 			return null;
 		}
@@ -118,7 +121,8 @@ public static class Commands
 
 			if (!string.IsNullOrEmpty(path))
 			{
-				GameFileLoader.ExportPrimaryContent(path);
+				var hubContext = request.HttpContext.RequestServices.GetRequiredService<IHubContext<ProgressHub>>();
+				GameFileLoader.ExportPrimaryContent(path, hubContext);
 			}
 			return null;
 		}
