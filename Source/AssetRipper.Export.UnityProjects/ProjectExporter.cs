@@ -85,13 +85,17 @@ namespace AssetRipper.Export.UnityProjects
 
 			EventExportStarted?.Invoke();
 			ProjectAssetContainer container = new ProjectAssetContainer(this, options, fileCollection.FetchAssets(), collections);
+			int exportableCount = collections.Count(c => c.Exportable);
+			int currentExportable = 0;
+			
 			for (int i = 0; i < collections.Count; i++)
 			{
 				IExportCollection collection = collections[i];
 				container.CurrentCollection = collection;
 				if (collection.Exportable)
 				{
-					Logger.Info(LogCategory.ExportProgress, $"Exporting '{collection.Name}'");
+					currentExportable++;
+					Logger.Info(LogCategory.ExportProgress, $"({currentExportable}/{exportableCount}) Exporting '{collection.Name}'");
 					bool exportedSuccessfully = collection.Export(container, options.ProjectRootPath, fileSystem);
 					if (!exportedSuccessfully)
 					{

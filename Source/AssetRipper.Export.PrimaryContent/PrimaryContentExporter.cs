@@ -1,4 +1,4 @@
-﻿using AssetRipper.Assets;
+using AssetRipper.Assets;
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Export.Modules.Textures;
 using AssetRipper.Export.PrimaryContent.Audio;
@@ -127,11 +127,12 @@ public sealed class PrimaryContentExporter
 	{
 		List<ExportCollectionBase> collections = CreateCollections(fileCollection);
 
-		foreach (ExportCollectionBase collection in collections)
+		for (int i = 0; i < collections.Count; i++)
 		{
+			ExportCollectionBase collection = collections[i];
 			if (collection.Exportable)
 			{
-				Logger.Info(LogCategory.ExportProgress, $"Exporting '{collection.Name}'");
+				Logger.Info(LogCategory.ExportProgress, $"({i + 1}/{collections.Count}) Exporting '{collection.Name}'");
 				bool exportedSuccessfully = collection.Export(options.ExportRootPath, fileSystem);
 				if (!exportedSuccessfully)
 				{
