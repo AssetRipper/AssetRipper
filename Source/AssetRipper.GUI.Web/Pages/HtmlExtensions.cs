@@ -14,6 +14,11 @@ internal static class HtmlExtensions
 		return @checked ? element.WithChecked() : element;
 	}
 
+	public static Input MaybeWithDisabled(this Input element, bool disabled)
+	{
+		return disabled ? element.WithDisabled() : element;
+	}
+
 	public static Option MaybeSelected(this Option element, bool selected)
 	{
 		return selected ? element.WithSelected() : element;
