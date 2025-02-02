@@ -55,6 +55,9 @@ partial class SettingsPage
 			case nameof(ExportSettings.TextExportMode):
 				Configuration.ExportSettings.TextExportMode = TryParseEnum<TextExportMode>(value);
 				break;
+			case nameof(ExportSettings.LanguageCode):
+				Configuration.ExportSettings.LanguageCode = value;
+				break;
 		}
 	}
 
@@ -72,9 +75,9 @@ partial class SettingsPage
 		WriteDropDown(writer, ScriptContentLevelDropDownSetting.Instance, Configuration.ImportSettings.ScriptContentLevel, nameof(ImportSettings.ScriptContentLevel));
 	}
 
-	private static void WriteCheckBoxForIgnoreStreamingAssets(TextWriter writer, string label)
+	private static void WriteCheckBoxForIgnoreStreamingAssets(TextWriter writer, string label, bool disabled = false)
 	{
-		WriteCheckBox(writer, label, Configuration.ImportSettings.IgnoreStreamingAssets, nameof(ImportSettings.IgnoreStreamingAssets));
+		WriteCheckBox(writer, label, Configuration.ImportSettings.IgnoreStreamingAssets, nameof(ImportSettings.IgnoreStreamingAssets), disabled);
 	}
 
 	private static void WriteDropDownForStreamingAssetsMode(TextWriter writer)
@@ -82,19 +85,19 @@ partial class SettingsPage
 		WriteDropDown(writer, StreamingAssetsModeDropDownSetting.Instance, Configuration.ImportSettings.StreamingAssetsMode, nameof(ImportSettings.StreamingAssetsMode));
 	}
 
-	private static void WriteCheckBoxForEnablePrefabOutlining(TextWriter writer, string label)
+	private static void WriteCheckBoxForEnablePrefabOutlining(TextWriter writer, string label, bool disabled = false)
 	{
-		WriteCheckBox(writer, label, Configuration.ProcessingSettings.EnablePrefabOutlining, nameof(ProcessingSettings.EnablePrefabOutlining));
+		WriteCheckBox(writer, label, Configuration.ProcessingSettings.EnablePrefabOutlining, nameof(ProcessingSettings.EnablePrefabOutlining), disabled);
 	}
 
-	private static void WriteCheckBoxForEnableStaticMeshSeparation(TextWriter writer, string label)
+	private static void WriteCheckBoxForEnableStaticMeshSeparation(TextWriter writer, string label, bool disabled = false)
 	{
-		WriteCheckBox(writer, label, Configuration.ProcessingSettings.EnableStaticMeshSeparation, nameof(ProcessingSettings.EnableStaticMeshSeparation));
+		WriteCheckBox(writer, label, Configuration.ProcessingSettings.EnableStaticMeshSeparation, nameof(ProcessingSettings.EnableStaticMeshSeparation), disabled);
 	}
 
-	private static void WriteCheckBoxForEnableAssetDeduplication(TextWriter writer, string label)
+	private static void WriteCheckBoxForEnableAssetDeduplication(TextWriter writer, string label, bool disabled = false)
 	{
-		WriteCheckBox(writer, label, Configuration.ProcessingSettings.EnableAssetDeduplication, nameof(ProcessingSettings.EnableAssetDeduplication));
+		WriteCheckBox(writer, label, Configuration.ProcessingSettings.EnableAssetDeduplication, nameof(ProcessingSettings.EnableAssetDeduplication), disabled);
 	}
 
 	private static void WriteDropDownForBundledAssetsExportMode(TextWriter writer)
@@ -142,8 +145,8 @@ partial class SettingsPage
 		WriteDropDown(writer, TextExportModeDropDownSetting.Instance, Configuration.ExportSettings.TextExportMode, nameof(ExportSettings.TextExportMode));
 	}
 
-	private static void WriteCheckBoxForSaveSettingsToDisk(TextWriter writer, string label)
+	private static void WriteCheckBoxForSaveSettingsToDisk(TextWriter writer, string label, bool disabled = false)
 	{
-		WriteCheckBox(writer, label, Configuration.ExportSettings.SaveSettingsToDisk, nameof(ExportSettings.SaveSettingsToDisk));
+		WriteCheckBox(writer, label, Configuration.ExportSettings.SaveSettingsToDisk, nameof(ExportSettings.SaveSettingsToDisk), disabled);
 	}
 }

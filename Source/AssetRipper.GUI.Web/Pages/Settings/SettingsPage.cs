@@ -52,7 +52,10 @@ public sealed partial class SettingsPage : DefaultPage
 								}
 								else
 								{
-									//Todo: add disabled checkbox
+									using (new Div(writer).WithClass("col").End())
+									{
+										WriteCheckBoxForEnableStaticMeshSeparation(writer, Localization.EnableStaticMeshSeparation, !GameFileLoader.Premium);
+									}
 								}
 							}
 
@@ -101,7 +104,10 @@ public sealed partial class SettingsPage : DefaultPage
 								}
 								else
 								{
-									//Todo: add disabled checkbox
+									using (new Div(writer).WithClass("col").End())
+									{
+										WriteCheckBoxForEnableAssetDeduplication(writer, Localization.EnableAssetDeduplication, !GameFileLoader.Premium);
+									}
 								}
 							}
 
@@ -219,12 +225,23 @@ public sealed partial class SettingsPage : DefaultPage
 			.Close();
 	}
 
-	private static void WriteCheckBox(TextWriter writer, string label, bool @checked, string id)
+	private static void WriteCheckBox(TextWriter writer, string label, bool @checked, string id, bool disabled = false)
 	{
 		using (new Div(writer).WithClass("form-check").End())
 		{
-			new Input(writer).WithClass("form-check-input").WithType("checkbox").WithValue().WithId(id).WithName(id).MaybeWithChecked(@checked).Close();
-			new Label(writer).WithClass("form-check-label").WithFor(id).Close(label);
+			new Input(writer)
+				.WithClass("form-check-input")
+				.WithType("checkbox")
+				.WithValue()
+				.WithId(id)
+				.WithName(id)
+				.MaybeWithChecked(disabled ? false : @checked)
+				.MaybeWithDisabled(disabled)
+				.Close();
+			new Label(writer)
+				.WithClass("form-check-label" + (disabled ? " text-muted" : ""))
+				.WithFor(id)
+				.Close(label + (disabled ? $" ({Localization.PremiumFeatureNotice})" : ""));
 		}
 	}
 
