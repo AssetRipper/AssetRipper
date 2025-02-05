@@ -12,6 +12,7 @@ using AssetRipper.Processing.AnimatorControllers;
 using AssetRipper.Processing.Assemblies;
 using AssetRipper.Processing.AudioMixers;
 using AssetRipper.Processing.Editor;
+using AssetRipper.Processing.Playable;
 using AssetRipper.Processing.PrefabOutlining;
 using AssetRipper.Processing.Scenes;
 using AssetRipper.Processing.Textures;
@@ -74,6 +75,7 @@ public class ExportHandler
 		yield return new LightingDataProcessor();//Needs to be after static mesh separation
 		yield return new PrefabProcessor();
 		yield return new SpriteProcessor();
+		yield return new PlayableProcessor();
 	}
 
 	public void Export(GameData gameData, string outputPath)

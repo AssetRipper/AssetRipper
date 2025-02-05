@@ -10,4 +10,9 @@ public static class MonoScriptExtensions
 			&& _this.Namespace == other.Namespace
 			&& _this.ClassName_R == other.ClassName_R;
 	}
+
+	public static bool IsType(this IMonoScript _this, string @namespace, string name)
+	{
+		return _this.Namespace == @namespace && _this.ClassName_R == name;
+	}
 }
