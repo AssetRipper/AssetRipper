@@ -21,6 +21,30 @@ public static class MonoBehaviourExtensions
 		return script is not null;
 	}
 
+	public static bool IsGuiSkin(this IMonoBehaviour monoBehaviour)
+	{
+		if (TryGetScript(monoBehaviour, out IMonoScript? script))
+		{
+			if (script.PathID is 12001 && script.Collection.Name == "unity default resources")
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static bool IsBrush(this IMonoBehaviour monoBehaviour)
+	{
+		if (TryGetScript(monoBehaviour, out IMonoScript? script))
+		{
+			if (script.PathID is 12146 && script.Collection.Name == "unity default resources")
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public static bool IsTimelineAsset(this IMonoBehaviour monoBehaviour)
 	{
 		return monoBehaviour.IsType("UnityEngine.Timeline", "TimelineAsset");

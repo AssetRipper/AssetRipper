@@ -10,7 +10,7 @@ namespace AssetRipper.Export.UnityProjects.Project
 		{
 			if (monoBehaviour.IsScriptableObject())
 			{
-				return new AssetExportCollection<IMonoBehaviour>(this, monoBehaviour);
+				return new ScriptableObjectExportCollection(this, monoBehaviour);
 			}
 			else
 			{
@@ -27,6 +27,27 @@ namespace AssetRipper.Export.UnityProjects.Project
 				_ => null,
 			};
 			return exportCollection is not null;
+		}
+
+		private sealed class ScriptableObjectExportCollection : AssetExportCollection<IMonoBehaviour>
+		{
+			public ScriptableObjectExportCollection(ScriptableObjectExporter exporter, IMonoBehaviour asset) : base(exporter, asset)
+			{
+			}
+
+			protected override string GetExportExtension(IUnityObjectBase asset)
+			{
+				IMonoBehaviour monoBehaviour = (IMonoBehaviour)asset;
+				if (monoBehaviour.IsGuiSkin())
+				{
+					return "guiskin";
+				}
+				else if (monoBehaviour.IsBrush())
+				{
+					return "brush";
+				}
+				return base.GetExportExtension(asset);
+			}
 		}
 	}
 }
