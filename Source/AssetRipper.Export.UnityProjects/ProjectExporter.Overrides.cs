@@ -16,7 +16,7 @@ using AssetRipper.Export.UnityProjects.Textures;
 using AssetRipper.Import.AssetCreation;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.Mining.PredefinedAssets;
-using AssetRipper.Processing.Playable;
+using AssetRipper.Processing.ScriptableObject;
 using AssetRipper.Processing.Textures;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
@@ -171,9 +171,9 @@ partial class ProjectExporter
 		OverrideExporter<IUnityObjectBase>(new AnimatorControllerExporter());
 
 		//Playable assets
-		PlayableAssetYamlExporter playableAssetExporter = new();
-		OverrideExporter<IMonoBehaviour>(playableAssetExporter);
-		OverrideExporter<PlayableAssetGroup>(playableAssetExporter);
+		ScriptableObjectGroupExporter scriptableObjectGroupExporter = new();
+		OverrideExporter<IMonoBehaviour>(scriptableObjectGroupExporter);
+		OverrideExporter<ScriptableObjectGroup>(scriptableObjectGroupExporter);
 	}
 
 	//These need to be absolutely last

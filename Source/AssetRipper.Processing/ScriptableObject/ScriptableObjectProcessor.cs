@@ -5,26 +5,38 @@ using AssetRipper.Import.Structure.Assembly.Serializable;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Extensions;
 
-namespace AssetRipper.Processing.Playable;
+namespace AssetRipper.Processing.ScriptableObject;
 
-public class PlayableProcessor : IAssetProcessor
+public class ScriptableObjectProcessor : IAssetProcessor
 {
 	public void Process(GameData gameData)
 	{
-		Logger.Info(LogCategory.Processing, "Processing Playable Assets");
-		ProcessedAssetCollection collection = gameData.AddNewProcessedCollection("Generated Playable Asset Groups");
+		Logger.Info(LogCategory.Processing, "Processing Scriptable Object Groups");
+		ProcessedAssetCollection collection = gameData.AddNewProcessedCollection("Generated Scriptable Object Groups");
 		foreach (IMonoBehaviour monoBehaviour in gameData.GameBundle.FetchAssets().OfType<IMonoBehaviour>())
 		{
 			if (monoBehaviour.IsTimelineAsset())
 			{
-				PlayableAssetGroup group = collection.CreateAsset(-1, monoBehaviour, static (assetInfo, root) => new PlayableAssetGroup(assetInfo, root));
-				group.Children.AddRange(FindChildren(monoBehaviour));
+				ScriptableObjectGroup group = CreateGroup(collection, monoBehaviour);
+				group.FileExtension = "playable";
+				group.Children.AddRange(FindTimelineAssetChildren(monoBehaviour));
+				group.SetMainAssets();
+			}
+			else if (monoBehaviour.IsPostProcessProfile())
+			{
+				ScriptableObjectGroup group = CreateGroup(collection, monoBehaviour);
+				group.Children.AddRange(FindPostProcessProfileChildren(monoBehaviour));
 				group.SetMainAssets();
 			}
 		}
 	}
 
-	private static IEnumerable<IMonoBehaviour> FindChildren(IMonoBehaviour root)
+	private static ScriptableObjectGroup CreateGroup(ProcessedAssetCollection collection, IMonoBehaviour root)
+	{
+		return collection.CreateAsset(-1, root, static (assetInfo, root) => new ScriptableObjectGroup(assetInfo, root));
+	}
+
+	private static IEnumerable<IMonoBehaviour> FindTimelineAssetChildren(IMonoBehaviour root)
 	{
 		SerializableStructure? structure = LoadStructure(root);
 		if (structure is null)
@@ -77,6 +89,31 @@ public class PlayableProcessor : IAssetProcessor
 		{
 			if (root.Collection.TryGetAsset(markerTrack.AsPPtr.FileID, markerTrack.AsPPtr.PathID, out IMonoBehaviour? child))
 			{
+				children.Add(child);
+			}
+		}
+
+		return children;
+	}
+
+	private static IEnumerable<IMonoBehaviour> FindPostProcessProfileChildren(IMonoBehaviour root)
+	{
+		SerializableStructure? structure = LoadStructure(root);
+		if (structure is null)
+		{
+			return [];
+		}
+
+		HashSet<IMonoBehaviour> children = [];
+		if (structure.TryGetField("settings", out SerializableValue settings))
+		{
+			foreach (IPPtr pptr in settings.AsAssetArray.Cast<IPPtr>())
+			{
+				if (!root.Collection.TryGetAsset(pptr.FileID, pptr.PathID, out IMonoBehaviour? child))
+				{
+					continue;
+				}
+
 				children.Add(child);
 			}
 		}

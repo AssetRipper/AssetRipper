@@ -1,17 +1,17 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Processing.Playable;
+using AssetRipper.Processing.ScriptableObject;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 
 namespace AssetRipper.Export.UnityProjects.Project;
 
-public class PlayableAssetYamlExporter : YamlExporterBase
+public class ScriptableObjectGroupExporter : YamlExporterBase
 {
 	public override bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection)
 	{
 		switch (asset.MainAsset)
 		{
-			case PlayableAssetGroup playableAssetGroup:
-				exportCollection = new PlayableAssetExportCollection(this, playableAssetGroup);
+			case ScriptableObjectGroup playableAssetGroup:
+				exportCollection = new ScriptableObjectGroupExportCollection(this, playableAssetGroup);
 				return true;
 			default:
 				exportCollection = null;
@@ -19,10 +19,10 @@ public class PlayableAssetYamlExporter : YamlExporterBase
 		}
 	}
 
-	private sealed class PlayableAssetExportCollection : AssetsExportCollection<IMonoBehaviour>
+	private sealed class ScriptableObjectGroupExportCollection : AssetsExportCollection<IMonoBehaviour>
 	{
-		public PlayableAssetGroup Group { get; }
-		public PlayableAssetExportCollection(PlayableAssetYamlExporter exporter, PlayableAssetGroup group) : base(exporter, group.Root)
+		public ScriptableObjectGroup Group { get; }
+		public ScriptableObjectGroupExportCollection(ScriptableObjectGroupExporter exporter, ScriptableObjectGroup group) : base(exporter, group.Root)
 		{
 			Group = group;
 			AddAssets(group.Children);
@@ -30,7 +30,7 @@ public class PlayableAssetYamlExporter : YamlExporterBase
 
 		protected override string GetExportExtension(IUnityObjectBase asset)
 		{
-			return "playable";
+			return Group.FileExtension ?? base.GetExportExtension(asset);
 		}
 
 		public override IEnumerable<IUnityObjectBase> Assets => base.Assets.Prepend(Group);

@@ -2,11 +2,11 @@
 using AssetRipper.Assets.Metadata;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 
-namespace AssetRipper.Processing.Playable;
+namespace AssetRipper.Processing.ScriptableObject;
 
-public sealed class PlayableAssetGroup : UnityObjectBase, INamed
+public sealed class ScriptableObjectGroup : UnityObjectBase, INamed
 {
-	public PlayableAssetGroup(AssetInfo assetInfo, IMonoBehaviour root) : base(assetInfo)
+	public ScriptableObjectGroup(AssetInfo assetInfo, IMonoBehaviour root) : base(assetInfo)
 	{
 		Root = root;
 	}
@@ -17,6 +17,8 @@ public sealed class PlayableAssetGroup : UnityObjectBase, INamed
 	public IEnumerable<IUnityObjectBase> Assets => Children.Prepend(Root);
 
 	public Utf8String Name { get => Root.Name; set => throw new NotSupportedException(); }
+
+	public string? FileExtension { get; set; }
 
 	public void SetMainAssets()
 	{

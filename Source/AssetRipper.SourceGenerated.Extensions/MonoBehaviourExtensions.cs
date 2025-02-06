@@ -50,6 +50,11 @@ public static class MonoBehaviourExtensions
 		return monoBehaviour.IsType("UnityEngine.Timeline", "TimelineAsset");
 	}
 
+	public static bool IsPostProcessProfile(this IMonoBehaviour monoBehaviour)
+	{
+		return monoBehaviour.IsType("Unity​Engine.​Rendering.​Post​Processing", "PostProcessProfile");
+	}
+
 	private static bool IsType(this IMonoBehaviour monoBehaviour, string @namespace, string name)
 	{
 		return TryGetScript(monoBehaviour, out IMonoScript? script) && script.IsType(@namespace, name);
