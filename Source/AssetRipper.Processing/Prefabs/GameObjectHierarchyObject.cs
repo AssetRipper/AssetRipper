@@ -7,13 +7,13 @@ using AssetRipper.SourceGenerated.Classes.ClassID_2;
 
 namespace AssetRipper.Processing;
 
-public abstract class GameObjectHierarchyObject : UnityObjectBase
+public abstract class GameObjectHierarchyObject : AssetGroup
 {
 	public List<IGameObject> GameObjects { get; } = new();
 	public List<IComponent> Components { get; } = new();
 	public List<IPrefabInstance> PrefabInstances { get; } = new();
 
-	public virtual IEnumerable<IUnityObjectBase> Assets
+	public override IEnumerable<IUnityObjectBase> Assets
 	{
 		get
 		{
@@ -25,15 +25,6 @@ public abstract class GameObjectHierarchyObject : UnityObjectBase
 
 	protected GameObjectHierarchyObject(AssetInfo assetInfo) : base(assetInfo)
 	{
-	}
-
-	public void SetMainAssets()
-	{
-		MainAsset = this;
-		foreach (IUnityObjectBase asset in Assets)
-		{
-			asset.MainAsset = this;
-		}
 	}
 
 	public override IEnumerable<(string, PPtr)> FetchDependencies()
@@ -63,9 +54,16 @@ public abstract class GameObjectHierarchyObject : UnityObjectBase
 
 	protected virtual void WalkFields(AssetWalker walker)
 	{
-	}
+		this.WalkPPtrListField(walker, GameObjects);
 
-	protected PPtr AssetToPPtr(IUnityObjectBase? asset) => Collection.ForceCreatePPtr(asset);
+		walker.DivideAsset(this);
+
+		this.WalkPPtrListField(walker, Components);
+
+		walker.DivideAsset(this);
+
+		this.WalkPPtrListField(walker, PrefabInstances);
+	}
 }
 /*
 Potential issue:

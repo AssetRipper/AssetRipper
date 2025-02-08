@@ -169,7 +169,7 @@ public sealed class PrefabProcessor : IAssetProcessor
 			}
 		}
 
-		sceneHierarchy.SetMainAssets();
+		sceneHierarchy.SetMainAsset();
 
 		return sceneHierarchy;
 	}
@@ -191,7 +191,7 @@ public sealed class PrefabProcessor : IAssetProcessor
 			}
 		}
 
-		prefabHierarchy.SetMainAssets();
+		prefabHierarchy.SetMainAsset();
 
 		return prefabHierarchy;
 	}

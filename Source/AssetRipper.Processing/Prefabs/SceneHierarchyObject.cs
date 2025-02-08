@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Metadata;
+using AssetRipper.Assets.Traversal;
 using AssetRipper.SourceGenerated.Classes.ClassID_1660057539;
 using AssetRipper.SourceGenerated.Classes.ClassID_3;
 using AssetRipper.SourceGenerated.Extensions;
@@ -45,6 +46,23 @@ public sealed class SceneHierarchyObject : GameObjectHierarchyObject, INamed
 			yield return ($"{nameof(Managers)}[]", AssetToPPtr(asset));
 		}
 		yield return (nameof(SceneRoots), AssetToPPtr(SceneRoots));
+	}
+
+	protected override void WalkFields(AssetWalker walker)
+	{
+		this.WalkPrimitiveField(walker, Name);
+
+		walker.DivideAsset(this);
+
+		base.WalkFields(walker);
+
+		walker.DivideAsset(this);
+
+		this.WalkPPtrListField(walker, Managers);
+
+		walker.DivideAsset(this);
+
+		this.WalkPPtrField(walker, SceneRoots);
 	}
 }
 /*

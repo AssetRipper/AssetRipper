@@ -20,13 +20,13 @@ public class ScriptableObjectProcessor : IAssetProcessor
 				ScriptableObjectGroup group = CreateGroup(collection, monoBehaviour);
 				group.FileExtension = "playable";
 				group.Children.AddRange(FindTimelineAssetChildren(monoBehaviour));
-				group.SetMainAssets();
+				group.SetMainAsset();
 			}
 			else if (monoBehaviour.IsPostProcessProfile())
 			{
 				ScriptableObjectGroup group = CreateGroup(collection, monoBehaviour);
 				group.Children.AddRange(FindPostProcessProfileChildren(monoBehaviour));
-				group.SetMainAssets();
+				group.SetMainAsset();
 			}
 		}
 	}

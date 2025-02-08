@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Metadata;
+using AssetRipper.Assets.Traversal;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_1001;
 
@@ -36,6 +37,23 @@ public sealed class PrefabHierarchyObject : GameObjectHierarchyObject, INamed
 	public override IEnumerable<(string, PPtr)> FetchDependencies()
 	{
 		return base.FetchDependencies().Append((nameof(Prefab), AssetToPPtr(Prefab)));
+	}
+
+	protected override void WalkFields(AssetWalker walker)
+	{
+		this.WalkPrimitiveField(walker, Name);
+
+		walker.DivideAsset(this);
+
+		base.WalkFields(walker);
+
+		walker.DivideAsset(this);
+
+		this.WalkPPtrField(walker, Root);
+
+		walker.DivideAsset(this);
+
+		this.WalkPPtrField(walker, Prefab);
 	}
 }
 /*
