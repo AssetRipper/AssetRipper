@@ -52,7 +52,7 @@ public static class MonoBehaviourExtensions
 
 	public static bool IsPostProcessProfile(this IMonoBehaviour monoBehaviour)
 	{
-		return monoBehaviour.IsType("Unity​Engine.​Rendering.​Post​Processing", "PostProcessProfile");
+		return monoBehaviour.IsType("UnityEngine.Rendering.PostProcessing", "PostProcessProfile");
 	}
 
 	private static bool IsType(this IMonoBehaviour monoBehaviour, string @namespace, string name)
