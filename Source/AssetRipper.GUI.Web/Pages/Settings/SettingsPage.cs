@@ -256,7 +256,7 @@ public sealed partial class SettingsPage : DefaultPage
 				DropDownItem<T> item = items[i];
 				new Option(writer)
 					.WithValue(item.Value.ToString().ToHtml())
-					.MaybeSelected(EqualityComparer<T>.Default.Equals(item.Value, value))
+					.MaybeWithSelected(EqualityComparer<T>.Default.Equals(item.Value, value))
 					.WithCustomAttribute("option-description", CreateUniqueID(id, i))
 					.Close(item.DisplayName);
 			}
