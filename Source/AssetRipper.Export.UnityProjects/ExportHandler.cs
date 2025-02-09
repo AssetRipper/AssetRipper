@@ -16,6 +16,7 @@ using AssetRipper.Processing.ScriptableObject;
 using AssetRipper.Processing.PrefabOutlining;
 using AssetRipper.Processing.Scenes;
 using AssetRipper.Processing.Textures;
+using AssetRipper.Processing.Prefabs;
 
 namespace AssetRipper.Export.UnityProjects;
 

@@ -1,6 +1,6 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.GUI.Web.Paths;
-using AssetRipper.Processing;
+using AssetRipper.Processing.Prefabs;
 using AssetRipper.Processing.Textures;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;

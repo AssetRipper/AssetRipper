@@ -6,13 +6,13 @@ using AssetRipper.SourceGenerated.Classes.ClassID_1660057539;
 using AssetRipper.SourceGenerated.Classes.ClassID_3;
 using AssetRipper.SourceGenerated.Extensions;
 
-namespace AssetRipper.Processing;
+namespace AssetRipper.Processing.Prefabs;
 
 public sealed class SceneHierarchyObject : GameObjectHierarchyObject, INamed
 {
 	private Utf8String? _name;
 	public SceneDefinition Scene { get; }
-	public List<ILevelGameManager> Managers { get; } = new();
+	public List<ILevelGameManager> Managers { get; } = [];
 	public ISceneRoots? SceneRoots { get; set; }
 
 	public override IEnumerable<IUnityObjectBase> Assets => base.Assets.Concat(Managers).MaybeAppend(SceneRoots);

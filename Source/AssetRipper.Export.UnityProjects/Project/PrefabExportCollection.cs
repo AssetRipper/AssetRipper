@@ -1,6 +1,6 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.IO.Files.SerializedFiles;
-using AssetRipper.Processing;
+using AssetRipper.Processing.Prefabs;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_1001;

@@ -15,7 +15,7 @@ using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.MarkerInterfaces;
 
-namespace AssetRipper.Processing;
+namespace AssetRipper.Processing.Prefabs;
 
 public sealed class PrefabProcessor : IAssetProcessor
 {
@@ -29,7 +29,7 @@ public sealed class PrefabProcessor : IAssetProcessor
 		Dictionary<SceneDefinition, ProcessedAssetCollection> sceneCollectionDictionary = new();
 
 		//Add missing Transforms
-		foreach (IGameObject gameObject in gameData.GameBundle.FetchAssets().OfType<IGameObject>().Where<IGameObject>(HasNoTransform))
+		foreach (IGameObject gameObject in gameData.GameBundle.FetchAssets().OfType<IGameObject>().Where(HasNoTransform))
 		{
 			Logger.Warning(LogCategory.Processing, $"GameObject {gameObject.Name} has no Transform. Adding one.");
 

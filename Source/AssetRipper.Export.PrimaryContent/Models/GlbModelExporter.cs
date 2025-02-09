@@ -1,6 +1,6 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Export.Modules.Models;
-using AssetRipper.Processing;
+using AssetRipper.Processing.Prefabs;
 using SharpGLTF.Scenes;
 using SharpGLTF.Schema2;
 

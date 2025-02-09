@@ -4,7 +4,7 @@ using AssetRipper.Assets.Traversal;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_1001;
 
-namespace AssetRipper.Processing;
+namespace AssetRipper.Processing.Prefabs;
 
 public sealed class PrefabHierarchyObject : GameObjectHierarchyObject, INamed
 {

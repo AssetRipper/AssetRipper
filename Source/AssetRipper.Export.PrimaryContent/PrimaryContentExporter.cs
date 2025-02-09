@@ -9,6 +9,7 @@ using AssetRipper.Export.PrimaryContent.Textures;
 using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Logging;
 using AssetRipper.Processing;
+using AssetRipper.Processing.Prefabs;
 using AssetRipper.Processing.Textures;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_1032;

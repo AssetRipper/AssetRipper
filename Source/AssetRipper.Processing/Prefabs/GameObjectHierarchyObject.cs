@@ -5,13 +5,13 @@ using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_1001;
 using AssetRipper.SourceGenerated.Classes.ClassID_2;
 
-namespace AssetRipper.Processing;
+namespace AssetRipper.Processing.Prefabs;
 
 public abstract class GameObjectHierarchyObject : AssetGroup
 {
-	public List<IGameObject> GameObjects { get; } = new();
-	public List<IComponent> Components { get; } = new();
-	public List<IPrefabInstance> PrefabInstances { get; } = new();
+	public List<IGameObject> GameObjects { get; } = [];
+	public List<IComponent> Components { get; } = [];
+	public List<IPrefabInstance> PrefabInstances { get; } = [];
 
 	public override IEnumerable<IUnityObjectBase> Assets
 	{
