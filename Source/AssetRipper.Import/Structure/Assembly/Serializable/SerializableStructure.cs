@@ -11,7 +11,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_114;
 
 namespace AssetRipper.Import.Structure.Assembly.Serializable
 {
-	public sealed class SerializableStructure : UnityAssetBase
+	public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 	{
 		public override int SerializedVersion => Type.Version;
 		public override bool FlowMappedInYaml => Type.FlowMappedInYaml;
@@ -254,6 +254,8 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 			clone.CopyValues(this, converter);
 			return clone;
 		}
+
+		IUnityAssetBase IDeepCloneable.DeepClone(PPtrConverter converter) => DeepClone(converter);
 
 		public override void Reset()
 		{
