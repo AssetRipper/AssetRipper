@@ -56,10 +56,3 @@ public sealed class PrefabHierarchyObject : GameObjectHierarchyObject, INamed
 		this.WalkPPtrField(walker, Prefab);
 	}
 }
-/*
-Potential issue:
-
-Any object referenced must be emitted and it is nontrivial to find all the references.
-Scene objects can only be referenced within the scene,
-but prefab objects can be referenced from anywhere.
-*/

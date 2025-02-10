@@ -162,7 +162,7 @@ namespace AssetRipper.Import.AssetCreation
 
 		private static IUnityObjectBase? CreateAsset(AssetInfo assetInfo, UnityVersion version)
 		{
-			IUnityObjectBase? asset = AssetFactory.Create(assetInfo, version);
+			IUnityObjectBase? asset = AssetFactory.CreateSerialized(assetInfo, version);
 			if (asset is null && TypeTreeNodeStruct.TryMakeFromTpk((ClassIDType)assetInfo.ClassID, version, out TypeTreeNodeStruct releaseRoot, out TypeTreeNodeStruct editorRoot))
 			{
 				return TypeTreeObject.Create(assetInfo, releaseRoot, editorRoot);
