@@ -28,7 +28,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="AssetRipper.Text.Html" Version="2.1.0" />
-		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.1" />
+		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.2" />
 		<PackageReference Include="Microsoft.OpenApi" Version="1.6.22" />
 		<PackageReference Include="NativeFileDialogs.Net" Version="1.2.1" />
 		<PackageReference Include="oqo0.SwaggerThemes" Version="1.4.3" />
