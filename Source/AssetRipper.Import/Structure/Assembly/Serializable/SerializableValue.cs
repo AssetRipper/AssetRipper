@@ -331,6 +331,76 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 
 		public readonly ref SerializableValue this[string name] => ref AsStructure[name];
 
+		public static SerializableValue FromPrimitive<T>(T value) where T : notnull
+		{
+			SerializableValue result = default;
+			if (typeof(T) == typeof(bool))
+			{
+				result.AsBoolean = (bool)(object)value;
+			}
+			else if (typeof(T) == typeof(char))
+			{
+				result.AsChar = (char)(object)value;
+			}
+			else if (typeof(T) == typeof(sbyte))
+			{
+				result.AsSByte = (sbyte)(object)value;
+			}
+			else if (typeof(T) == typeof(byte))
+			{
+				result.AsByte = (byte)(object)value;
+			}
+			else if (typeof(T) == typeof(short))
+			{
+				result.AsInt16 = (short)(object)value;
+			}
+			else if (typeof(T) == typeof(ushort))
+			{
+				result.AsUInt16 = (ushort)(object)value;
+			}
+			else if (typeof(T) == typeof(int))
+			{
+				result.AsInt32 = (int)(object)value;
+			}
+			else if (typeof(T) == typeof(uint))
+			{
+				result.AsUInt32 = (uint)(object)value;
+			}
+			else if (typeof(T) == typeof(long))
+			{
+				result.AsInt64 = (long)(object)value;
+			}
+			else if (typeof(T) == typeof(ulong))
+			{
+				result.AsUInt64 = (ulong)(object)value;
+			}
+			else if (typeof(T) == typeof(Half))
+			{
+				result.AsHalf = (Half)(object)value;
+			}
+			else if (typeof(T) == typeof(float))
+			{
+				result.AsSingle = (float)(object)value;
+			}
+			else if (typeof(T) == typeof(double))
+			{
+				result.AsDouble = (double)(object)value;
+			}
+			else if (typeof(T) == typeof(string))
+			{
+				result.AsString = (string)(object)value;
+			}
+			else if (typeof(T) == typeof(Utf8String))
+			{
+				result.AsString = ((Utf8String)(object)value).String;
+			}
+			else
+			{
+				throw new NotSupportedException($"Type {typeof(T)} is not supported.");
+			}
+			return result;
+		}
+
 		public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, int depth, in SerializableType.Field etalon)
 		{
 			switch (etalon.ArrayDepth)

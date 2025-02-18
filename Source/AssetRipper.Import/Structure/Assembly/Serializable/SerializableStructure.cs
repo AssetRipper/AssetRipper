@@ -182,7 +182,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 			return null;
 		}
 
-		private bool TryGetIndex(string name, out int index)
+		public bool TryGetIndex(string name, out int index)
 		{
 			for (int i = 0; i < Fields.Length; i++)
 			{
