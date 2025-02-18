@@ -1144,6 +1144,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 				}
 				else
 				{
+					Debug.Assert(etalon.ArrayDepth == 0);
 					IUnityAssetBase structure = (IUnityAssetBase)CValue;
 					foreach ((string path, PPtr pptr) in structure.FetchDependencies())
 					{
