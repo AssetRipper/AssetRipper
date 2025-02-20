@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
+		<OutputType>Library</OutputType>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<IsTrimmable>true</IsTrimmable>
 		<OutputPath>..\0Bins\Other\AssetRipper.Export.UnityProjects\$(Configuration)\</OutputPath>
@@ -12,6 +13,7 @@
 		<PackageReference Include="AssetRipper.Mining.PredefinedAssets" Version="1.4.0" />
 		<PackageReference Include="AssetRipper.Tpk" Version="1.0.1" />
 		<PackageReference Include="ICSharpCode.Decompiler" Version="9.0.0.7889" />
+		<PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
 	</ItemGroup>
 
 	<ItemGroup>
