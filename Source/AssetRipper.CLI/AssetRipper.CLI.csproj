@@ -2,15 +2,17 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
+    <SelfContained>true</SelfContained>
 		<TargetFramework>net9.0</TargetFramework>
 		<LangVersion>13.0</LangVersion>
 		<PublishSingleFile>true</PublishSingleFile>
 		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
-		<SelfContained>true</SelfContained>
+    <OutputPath>..\0Bins\AssetRipper.CLI\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.CLI\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\AssetRipper.GUI.Web\AssetRipper.GUI.Web.csproj" />
+		<ProjectReference Include="..\AssetRipper.GUI.Web\AssetRipper.GUI.Web.csproj" />
 	</ItemGroup>
 
 </Project>
