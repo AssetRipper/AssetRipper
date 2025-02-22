@@ -67,6 +67,13 @@ public class YamlWalker : AssetWalker
 		ContextStack.Push(new(root, null, asset.ClassName));
 		asset.WalkEditor(this);
 
+		if (asset.IsStripped())
+		{
+			Debug.Assert(root.Children.Count == 1);
+			asset.RemoveStrippedFields((YamlMappingNode)root.Children[0].Value);
+			root.Stripped = true;
+		}
+
 		return document;
 	}
 

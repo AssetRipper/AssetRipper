@@ -1,8 +1,14 @@
 ﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Assets.Traversal;
+using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_1001;
+using AssetRipper.SourceGenerated.Classes.ClassID_18;
+using AssetRipper.SourceGenerated.Classes.ClassID_2;
+using AssetRipper.SourceGenerated.Extensions;
+using AssetRipper.SourceGenerated.MarkerInterfaces;
 
 namespace AssetRipper.Processing.Prefabs;
 
@@ -32,6 +38,11 @@ public sealed class PrefabHierarchyObject : GameObjectHierarchyObject, INamed
 	{
 		Root = root;
 		Prefab = prefab;
+
+		if (Prefab is IPrefabInstanceMarker)
+		{
+			HiddenAssets.Add(Prefab);
+		}
 	}
 
 	public override IEnumerable<(string, PPtr)> FetchDependencies()
@@ -54,5 +65,27 @@ public sealed class PrefabHierarchyObject : GameObjectHierarchyObject, INamed
 		walker.DivideAsset(this);
 
 		this.WalkPPtrField(walker, Prefab);
+	}
+
+	public static PrefabHierarchyObject Create(ProcessedAssetCollection collection, IGameObject root, IPrefabInstance prefab)
+	{
+		PrefabHierarchyObject prefabHierarchy = collection.CreateAsset((int)ClassIDType.PrefabInstance, (assetInfo) => new PrefabHierarchyObject(assetInfo, root, prefab));
+
+		foreach (IEditorExtension asset in root.FetchHierarchy())
+		{
+			switch (asset)
+			{
+				case IGameObject gameObject:
+					prefabHierarchy.GameObjects.Add(gameObject);
+					break;
+				case IComponent component:
+					prefabHierarchy.Components.Add(component);
+					break;
+			}
+		}
+
+		prefabHierarchy.SetMainAsset();
+
+		return prefabHierarchy;
 	}
 }

@@ -6,7 +6,6 @@ using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_1001;
 using AssetRipper.SourceGenerated.Classes.ClassID_468431735;
 using AssetRipper.SourceGenerated.MarkerInterfaces;
-using System.Diagnostics;
 
 namespace AssetRipper.Export.UnityProjects.Project
 {
@@ -56,22 +55,10 @@ namespace AssetRipper.Export.UnityProjects.Project
 		{
 			get
 			{
-				if (EmitPrefabAsset)
+				foreach (IUnityObjectBase asset in Hierarchy.ExportableAssets)
 				{
-					foreach (IUnityObjectBase asset in Hierarchy.Assets)
-					{
-						m_file = asset.Collection;
-						yield return asset;
-					}
-				}
-				else
-				{
-					Debug.Assert(Hierarchy.Assets.Last() is IPrefabInstanceMarker);
-					foreach (IUnityObjectBase asset in Hierarchy.Assets.SkipLast(1))//Skip the PrefabInstance asset
-					{
-						m_file = asset.Collection;
-						yield return asset;
-					}
+					m_file = asset.Collection;
+					yield return asset;
 				}
 			}
 		}

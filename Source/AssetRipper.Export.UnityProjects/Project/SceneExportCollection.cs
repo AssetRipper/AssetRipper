@@ -24,7 +24,7 @@ namespace AssetRipper.Export.UnityProjects.Project
 				m_exportIDs.Add(asset, asset.Collection is SerializedAssetCollection ? asset.PathID : ExportIdHandler.GetInternalId());
 			}
 
-			componentArray = hierarchy.Assets.Order(this).ToArray();
+			componentArray = hierarchy.ExportableAssets.Order(this).ToArray();
 		}
 
 		public override bool Export(IExportContainer container, string projectDirectory, FileSystem fileSystem)

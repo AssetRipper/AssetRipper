@@ -2,7 +2,12 @@
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Assets.Traversal;
+using AssetRipper.SourceGenerated;
+using AssetRipper.SourceGenerated.Classes.ClassID_1;
+using AssetRipper.SourceGenerated.Classes.ClassID_1001;
+using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Classes.ClassID_1660057539;
+using AssetRipper.SourceGenerated.Classes.ClassID_2;
 using AssetRipper.SourceGenerated.Classes.ClassID_3;
 using AssetRipper.SourceGenerated.Extensions;
 
@@ -63,5 +68,47 @@ public sealed class SceneHierarchyObject : GameObjectHierarchyObject, INamed
 		walker.DivideAsset(this);
 
 		this.WalkPPtrField(walker, SceneRoots);
+	}
+
+	public IEnumerable<IGameObject> GetRoots()
+	{
+		return GameObjects.Where(GameObjectExtensions.IsRoot);
+	}
+
+	public static SceneHierarchyObject Create(ProcessedAssetCollection collection, SceneDefinition scene)
+	{
+		SceneHierarchyObject sceneHierarchy = collection.CreateAsset((int)ClassIDType.SceneAsset, (assetInfo) => new SceneHierarchyObject(assetInfo, scene));
+
+		foreach (IUnityObjectBase asset in scene.Assets)
+		{
+			switch (asset)
+			{
+				case IGameObject gameObject:
+					sceneHierarchy.GameObjects.Add(gameObject);
+					break;
+				case IMonoBehaviour monoBehaviour:
+					if (monoBehaviour.IsSceneObject())
+					{
+						sceneHierarchy.Components.Add(monoBehaviour);
+					}
+					break;
+				case IComponent component:
+					sceneHierarchy.Components.Add(component);
+					break;
+				case ILevelGameManager manager:
+					sceneHierarchy.Managers.Add(manager);
+					break;
+				case IPrefabInstance prefabInstance:
+					sceneHierarchy.PrefabInstances.Add(prefabInstance);
+					break;
+				case ISceneRoots sceneRoots:
+					sceneHierarchy.SceneRoots = sceneRoots;
+					break;
+			}
+		}
+
+		sceneHierarchy.SetMainAsset();
+
+		return sceneHierarchy;
 	}
 }

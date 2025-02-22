@@ -12,6 +12,14 @@ public abstract class GameObjectHierarchyObject : AssetGroup
 	public List<IGameObject> GameObjects { get; } = [];
 	public List<IComponent> Components { get; } = [];
 	public List<IPrefabInstance> PrefabInstances { get; } = [];
+	/// <summary>
+	/// <see cref="Assets"/> that should be marked as stripped.
+	/// </summary>
+	public HashSet<IUnityObjectBase> StrippedAssets { get; } = new();
+	/// <summary>
+	/// <see cref="Assets"/> that should not be part of YAML export.
+	/// </summary>
+	public HashSet<IUnityObjectBase> HiddenAssets { get; } = new();
 
 	public override IEnumerable<IUnityObjectBase> Assets
 	{
@@ -20,6 +28,14 @@ public abstract class GameObjectHierarchyObject : AssetGroup
 			return ((IEnumerable<IUnityObjectBase>)GameObjects)
 				.Concat(Components)
 				.Concat(PrefabInstances);
+		}
+	}
+
+	public IEnumerable<IUnityObjectBase> ExportableAssets
+	{
+		get
+		{
+			return Assets.Where(asset => !HiddenAssets.Contains(asset));
 		}
 	}
 
