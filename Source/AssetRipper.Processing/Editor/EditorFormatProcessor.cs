@@ -24,6 +24,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_47;
 using AssetRipper.SourceGenerated.Classes.ClassID_687078895;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
 using AssetRipper.SourceGenerated.Classes.ClassID_78;
+using AssetRipper.SourceGenerated.Classes.ClassID_850595691;
 using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Extensions;
 
@@ -188,6 +189,9 @@ namespace AssetRipper.Processing.Editor
 					break;
 				case ILightmapSettings lightmapSettings:
 					lightmapSettings.ConvertToEditorFormat();
+					break;
+				case ILightingSettings lightingSettings:
+					lightingSettings.ConvertToEditorFormat();
 					break;
 			}
 		}
