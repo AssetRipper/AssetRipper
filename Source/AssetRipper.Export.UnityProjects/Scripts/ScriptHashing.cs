@@ -83,12 +83,7 @@ public static class ScriptHashing
 	/// <param name="className">The name of the script encoded as UTF8.</param>
 	public static UnityGuid CalculateScriptGuid(ReadOnlySpan<byte> assemblyName, ReadOnlySpan<byte> @namespace, ReadOnlySpan<byte> className)
 	{
-		int length = assemblyName.Length + @namespace.Length + className.Length;
-		Span<byte> input = length < 1024 ? stackalloc byte[length] : GC.AllocateUninitializedArray<byte>(length);
-		assemblyName.CopyTo(input);
-		@namespace.CopyTo(input.Slice(assemblyName.Length));
-		className.CopyTo(input.Slice(assemblyName.Length + @namespace.Length));
-		return UnityGuid.Md5Hash(input);
+		return UnityGuid.Md5Hash(assemblyName, @namespace, className);
 	}
 
 	/// <summary>
