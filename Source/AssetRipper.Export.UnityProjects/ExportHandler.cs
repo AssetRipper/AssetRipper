@@ -58,7 +58,6 @@ public class ExportHandler
 
 	protected virtual IEnumerable<IAssetProcessor> GetProcessors()
 	{
-		yield return new IEnumeratorRepairProcessor();
 		if (Settings.ImportSettings.ScriptContentLevel == ScriptContentLevel.Level1)
 		{
 			yield return new MethodStubbingProcessor();
