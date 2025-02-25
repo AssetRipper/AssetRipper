@@ -695,6 +695,11 @@ public readonly record struct VertexDataBlob(
 
 	private static IStreamInfo[] ConvertChannelsToStreams(IReadOnlyList<ChannelInfo> channels, uint vertexCount, UnityVersion version)
 	{
+		if (channels.Count == 0)
+		{
+			return [];
+		}
+
 		int streamCount = channels.Max(x => x.Stream) + 1;
 		IStreamInfo[] streams = new IStreamInfo[streamCount];
 		long offset = 0;
