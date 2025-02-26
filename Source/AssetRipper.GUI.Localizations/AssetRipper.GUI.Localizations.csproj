@@ -13,7 +13,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AssetRipper.Text.SourceGeneration" Version="1.2.2" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
 		<ProjectReference Include="..\AssetRipper.GUI.Localizations.SourceGenerator\AssetRipper.GUI.Localizations.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
 	</ItemGroup>
 
