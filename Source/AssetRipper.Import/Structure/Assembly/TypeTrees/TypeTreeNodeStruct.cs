@@ -11,6 +11,16 @@ namespace AssetRipper.Import.Structure.Assembly.TypeTrees;
 
 public readonly struct TypeTreeNodeStruct : IReadOnlyList<TypeTreeNodeStruct>
 {
+	private static TpkTypeTreeBlob? _typeTreeBlob;
+	private static TpkTypeTreeBlob TypeTreeBlob
+	{
+		get
+		{
+			_typeTreeBlob ??= (TpkTypeTreeBlob)TpkFile.FromStream(SourceTpk.GetStream()).GetDataBlob();
+			return _typeTreeBlob;
+		}
+	}
+
 	public string TypeName { get; }
 	public string Name { get; }
 	public int Version { get; }
@@ -193,7 +203,7 @@ public readonly struct TypeTreeNodeStruct : IReadOnlyList<TypeTreeNodeStruct>
 
 	public static bool TryMakeFromTpk(ClassIDType classID, UnityVersion version, out TypeTreeNodeStruct releaseTree, out TypeTreeNodeStruct editorTree)
 	{
-		TpkTypeTreeBlob blob = (TpkTypeTreeBlob)TpkFile.FromStream(SourceTpk.GetStream()).GetDataBlob();
+		TpkTypeTreeBlob blob = TypeTreeBlob;
 		TpkClassInformation? classInformation = blob.ClassInformation.FirstOrDefault(c => c.ID == (int)classID);
 		if (classInformation is not null)
 		{
