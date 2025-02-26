@@ -12,11 +12,10 @@ using AssetRipper.Processing.AnimatorControllers;
 using AssetRipper.Processing.Assemblies;
 using AssetRipper.Processing.AudioMixers;
 using AssetRipper.Processing.Editor;
-using AssetRipper.Processing.ScriptableObject;
-using AssetRipper.Processing.PrefabOutlining;
-using AssetRipper.Processing.Scenes;
-using AssetRipper.Processing.Textures;
 using AssetRipper.Processing.Prefabs;
+using AssetRipper.Processing.Scenes;
+using AssetRipper.Processing.ScriptableObject;
+using AssetRipper.Processing.Textures;
 
 namespace AssetRipper.Export.UnityProjects;
 
@@ -68,10 +67,6 @@ public class ExportHandler
 		yield return new AudioMixerProcessor();
 		yield return new EditorFormatProcessor(Settings.ProcessingSettings.BundledAssetsExportMode);
 		//Static mesh separation goes here
-		if (Settings.ProcessingSettings.EnablePrefabOutlining)
-		{
-			yield return new PrefabOutliningProcessor();
-		}
 		yield return new LightingDataProcessor();//Needs to be after static mesh separation
 		yield return new PrefabProcessor();
 		yield return new SpriteProcessor();
