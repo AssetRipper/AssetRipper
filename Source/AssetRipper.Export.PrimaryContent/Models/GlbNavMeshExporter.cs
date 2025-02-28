@@ -8,6 +8,7 @@ using SharpGLTF.Geometry.VertexTypes;
 using SharpGLTF.Materials;
 using SharpGLTF.Scenes;
 using SharpGLTF.Schema2;
+using System.Diagnostics;
 using System.Numerics;
 
 namespace AssetRipper.Export.PrimaryContent.Models;
@@ -16,7 +17,7 @@ public sealed class GlbNavMeshExporter : IContentExtractor
 {
 	public bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out ExportCollectionBase? exportCollection)
 	{
-		if (asset is INavMeshData)
+		if (asset is INavMeshData { HeightMeshes: not null })
 		{
 			exportCollection = new GlbExportCollection(this, asset);
 			return true;
@@ -42,7 +43,8 @@ public sealed class GlbNavMeshExporter : IContentExtractor
 		MaterialBuilder material = new MaterialBuilder("DefaultMaterial");
 		MeshBuilder<VertexPosition, VertexEmpty, VertexEmpty> meshBuilder = new();
 		PrimitiveBuilder<MaterialBuilder, VertexPosition, VertexEmpty, VertexEmpty> primitiveBuilder = meshBuilder.UsePrimitive(material);
-		
+
+		Debug.Assert(asset.HeightMeshes != null);
 		foreach (IHeightMeshData heightMeshData in asset.HeightMeshes)
 		{
 			AssetList<int> indices = heightMeshData.Indices;
