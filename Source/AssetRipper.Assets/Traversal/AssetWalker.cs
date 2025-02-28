@@ -68,6 +68,7 @@ public abstract class AssetWalker
 	///   <c>false</c> to skip visiting the children and not call the exit method.
 	/// </returns>
 	public virtual bool EnterList<T>(IReadOnlyList<T> list)
+		where T : notnull
 	{
 		return true;
 	}
@@ -78,6 +79,7 @@ public abstract class AssetWalker
 	/// <typeparam name="T">The type of the list elements being divided.</typeparam>
 	/// <param name="list">The list having its elements divided.</param>
 	public virtual void DivideList<T>(IReadOnlyList<T> list)
+		where T : notnull
 	{
 	}
 
@@ -87,6 +89,7 @@ public abstract class AssetWalker
 	/// <typeparam name="T">The type of the list elements.</typeparam>
 	/// <param name="list">The list being exited.</param>
 	public virtual void ExitList<T>(IReadOnlyList<T> list)
+		where T : notnull
 	{
 	}
 
@@ -101,6 +104,8 @@ public abstract class AssetWalker
 	///   <c>false</c> to skip visiting the children and not call the exit method.
 	/// </returns>
 	public virtual bool EnterDictionary<TKey, TValue>(IReadOnlyCollection<KeyValuePair<TKey, TValue>> dictionary)
+		where TKey : notnull
+		where TValue : notnull
 	{
 		return true;
 	}
@@ -112,6 +117,8 @@ public abstract class AssetWalker
 	/// <typeparam name="TValue">The type of dictionary values.</typeparam>
 	/// <param name="dictionary">The dictionary having its pairs divided.</param>
 	public virtual void DivideDictionary<TKey, TValue>(IReadOnlyCollection<KeyValuePair<TKey, TValue>> dictionary)
+		where TKey : notnull
+		where TValue : notnull
 	{
 	}
 
@@ -122,6 +129,8 @@ public abstract class AssetWalker
 	/// <typeparam name="TValue">The type of dictionary values.</typeparam>
 	/// <param name="dictionary">The dictionary being exited.</param>
 	public virtual void ExitDictionary<TKey, TValue>(IReadOnlyCollection<KeyValuePair<TKey, TValue>> dictionary)
+		where TKey : notnull
+		where TValue : notnull
 	{
 	}
 
@@ -139,6 +148,8 @@ public abstract class AssetWalker
 	///   <c>false</c> to skip visiting the children and not call the exit method.
 	/// </returns>
 	public virtual bool EnterDictionaryPair<TKey, TValue>(KeyValuePair<TKey, TValue> pair)
+		where TKey : notnull
+		where TValue : notnull
 	{
 		return EnterPair(pair);
 	}
@@ -153,6 +164,8 @@ public abstract class AssetWalker
 	/// <typeparam name="TValue">The type of the value in the pair.</typeparam>
 	/// <param name="pair">The dictionary pair having its key and value divided.</param>
 	public virtual void DivideDictionaryPair<TKey, TValue>(KeyValuePair<TKey, TValue> pair)
+		where TKey : notnull
+		where TValue : notnull
 	{
 		DividePair(pair);
 	}
@@ -167,6 +180,8 @@ public abstract class AssetWalker
 	/// <typeparam name="TValue">The type of the value in the pair.</typeparam>
 	/// <param name="pair">The dictionary pair being exited.</param>
 	public virtual void ExitDictionaryPair<TKey, TValue>(KeyValuePair<TKey, TValue> pair)
+		where TKey : notnull
+		where TValue : notnull
 	{
 		ExitPair(pair);
 	}
@@ -182,6 +197,8 @@ public abstract class AssetWalker
 	///   <c>false</c> to skip visiting the children and not call the exit method.
 	/// </returns>
 	public virtual bool EnterPair<TKey, TValue>(KeyValuePair<TKey, TValue> pair)
+		where TKey : notnull
+		where TValue : notnull
 	{
 		return true;
 	}
@@ -193,6 +210,8 @@ public abstract class AssetWalker
 	/// <typeparam name="TValue">The type of the value in the pair.</typeparam>
 	/// <param name="pair">The key-value pair having its key and value divided.</param>
 	public virtual void DividePair<TKey, TValue>(KeyValuePair<TKey, TValue> pair)
+		where TKey : notnull
+		where TValue : notnull
 	{
 	}
 
@@ -203,6 +222,8 @@ public abstract class AssetWalker
 	/// <typeparam name="TValue">The type of the value in the pair.</typeparam>
 	/// <param name="pair">The key-value pair being exited.</param>
 	public virtual void ExitPair<TKey, TValue>(KeyValuePair<TKey, TValue> pair)
+		where TKey : notnull
+		where TValue : notnull
 	{
 	}
 
@@ -215,6 +236,7 @@ public abstract class AssetWalker
 	/// <typeparam name="T">The type of the primitive.</typeparam>
 	/// <param name="value">The primitive value.</param>
 	public virtual void VisitPrimitive<T>(T value)
+		where T : notnull
 	{
 	}
 

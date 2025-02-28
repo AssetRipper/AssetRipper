@@ -14,6 +14,8 @@ public static class TraversalHelperMethods
 	}
 
 	private readonly struct DictionaryWalkHandler<TKey, TValue, TKeyHandler, TValueHandler> : IWalkHandler<IReadOnlyCollection<KeyValuePair<TKey, TValue>>>
+		where TKey : notnull
+		where TValue : notnull
 		where TKeyHandler : IWalkHandler<TKey>
 		where TValueHandler : IWalkHandler<TValue>
 	{
@@ -48,6 +50,7 @@ public static class TraversalHelperMethods
 	}
 
 	private readonly struct ListWalkHandler<TElement, TElementHandler> : IWalkHandler<IReadOnlyList<TElement>>
+		where TElement : notnull
 		where TElementHandler : IWalkHandler<TElement>
 	{
 		public static void Walk(AssetWalker walker, IReadOnlyList<TElement> list)
@@ -75,6 +78,7 @@ public static class TraversalHelperMethods
 	}
 
 	private readonly struct PrimitiveWalkHandler<TPrimitive> : IWalkHandler<TPrimitive>
+		where TPrimitive : notnull
 	{
 		public static void Walk(AssetWalker walker, TPrimitive value)
 		{
@@ -110,6 +114,7 @@ public static class TraversalHelperMethods
 	}
 
 	public static void WalkPrimitiveField<TPrimitive>(this IUnityAssetBase @this, AssetWalker walker, TPrimitive value, [CallerArgumentExpression(nameof(value))] string name = "")
+		where TPrimitive : notnull
 	{
 		if (walker.EnterField(@this, name))
 		{

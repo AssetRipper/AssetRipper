@@ -943,7 +943,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 			}
 		}
 
-		private static void VisitPrimitiveArray<T>(AssetWalker walker, T[] array)
+		private static void VisitPrimitiveArray<T>(AssetWalker walker, T[] array) where T : notnull
 		{
 			if (walker.EnterList(array))
 			{
@@ -1344,6 +1344,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 		private static T[] CreateArray<T>(int length) => length is 0 ? [] : new T[length];
 
 		private sealed class PairCollection<TKey>(SerializablePair[] array) : IReadOnlyCollection<KeyValuePair<TKey, SerializableValue>>
+			where TKey : notnull
 		{
 			public int Count => array.Length;
 

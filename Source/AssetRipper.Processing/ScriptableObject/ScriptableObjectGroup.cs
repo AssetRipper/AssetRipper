@@ -36,7 +36,7 @@ public sealed class ScriptableObjectGroup : AssetGroup, INamed
 		{
 			this.WalkPrimitiveField(walker, Name);
 			walker.DivideAsset(this);
-			this.WalkPrimitiveField(walker, FileExtension);
+			this.WalkPrimitiveField(walker, FileExtension ?? "");
 			walker.DivideAsset(this);
 			this.WalkPPtrField(walker, Root);
 			walker.DivideAsset(this);
