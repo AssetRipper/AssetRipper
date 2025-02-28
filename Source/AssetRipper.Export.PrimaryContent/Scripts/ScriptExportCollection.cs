@@ -2,6 +2,7 @@
 using AssetRipper.Assets;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
+using ICSharpCode.Decompiler;
 using ICSharpCode.Decompiler.CSharp.ProjectDecompiler;
 using ICSharpCode.Decompiler.Metadata;
 
@@ -53,7 +54,16 @@ public sealed class ScriptExportCollection : ExportCollectionBase
 			string assemblyName = fileSystem.Path.GetFileNameWithoutExtension(assemblyPath);
 			string outputDirectory = fileSystem.Path.Join(scriptDirectory, assemblyName);
 			fileSystem.Directory.Create(outputDirectory);
-			WholeProjectDecompiler decompiler = new(new UniversalAssemblyResolver(assemblyPath, false, null));
+
+			DecompilerSettings settings = new();
+
+			settings.AlwaysShowEnumMemberValues = true;
+			settings.ShowXmlDocumentation = true;
+
+			settings.UseSdkStyleProjectFormat = false;//sdk style can throw
+			settings.UseNestedDirectoriesForNamespaces = true;
+
+			WholeProjectDecompiler decompiler = new(settings, new UniversalAssemblyResolver(assemblyPath, false, null), null, null, null);
 			PEFile file = new(assemblyPath);
 			decompiler.DecompileProject(file, outputDirectory);
 		}
