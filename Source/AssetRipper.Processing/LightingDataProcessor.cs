@@ -3,6 +3,8 @@ using AssetRipper.Assets.Cloning;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Import.Logging;
+using AssetRipper.IO.Files.BundleFiles;
+using AssetRipper.IO.Files.BundleFiles.FileStream;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_0;
 using AssetRipper.SourceGenerated.Classes.ClassID_1032;
@@ -69,7 +71,7 @@ namespace AssetRipper.Processing
 					lightingSettingsDictionary[lightingSettings] = null;
 				}
 
-				if (!lightmapSettings.Has_LightingDataAsset() || !HasLightingData(lightmapSettings))
+				if (!lightmapSettings.Has_LightingDataAsset())
 				{
 					continue;
 				}
@@ -81,6 +83,7 @@ namespace AssetRipper.Processing
 				PPtrConverter converter = new PPtrConverter(lightmapSettings, lightingDataAsset);
 
 				lightingDataAsset.LightmapsMode = lightmapSettings.LightmapsMode;
+				lightingDataAsset.EnlightenData = CreateEnlightenData(lightingDataAsset.Collection.Version);
 
 				SetEnlightenSceneMapping(lightingDataAsset, lightmapSettings, converter);
 				SetBakedAmbientProbes(lightingDataAsset, renderSettings);
@@ -123,13 +126,6 @@ namespace AssetRipper.Processing
 
 				SetPathsAndMainAsset(lightmapSettings, lightProbes, lightingSettings, scene);
 			}
-		}
-
-		private static bool HasLightingData(ILightmapSettings lightmapSettings)
-		{
-			//Supposedly, a LightingDataAsset without any lightmaps causes Unity to crash.
-			//See: https://github.com/AssetRipper/AssetRipper/issues/811
-			return lightmapSettings.Lightmaps.Count > 0;
 		}
 
 		private static void AddRenderer(ILightingDataAsset lightingDataAsset, IRenderer renderer)
@@ -397,6 +393,29 @@ namespace AssetRipper.Processing
 			ISceneAsset asset = collection.CreateAsset((int)ClassIDType.SceneAsset, SceneAsset.Create);
 			asset.TargetScene = targetScene;
 			return asset;
+		}
+
+		private static byte[] CreateEnlightenData(UnityVersion version)
+		{
+			// For many of the lighting data assets I've encountered, they just contained the bytes of an empty asset bundle.
+			BundleVersion bundleVersion = false switch
+			{
+				_ when version.GreaterThanOrEquals(2022, 2) => BundleVersion.BF_2022_2,
+				_ when version.GreaterThanOrEquals(2020) => BundleVersion.BF_LargeFilesSupport, // This started sometime during 2019.4.X, so we use 2020 just to be safe.
+				_ when version.GreaterThanOrEquals(5, 2, 0, UnityVersionType.Final) => BundleVersion.BF_520_x,
+				_ => BundleVersion.BF_350_4x,
+			};
+
+			FileStreamBundleFile bundle = new();
+			FileStreamBundleHeader header = bundle.Header;
+			header.Version = bundleVersion;
+			header.UnityWebBundleVersion = "5.x.x";
+			header.UnityWebMinimumRevision = version.ToString();
+
+			using MemoryStream stream = new();
+			bundle.Write(stream);
+
+			return stream.ToArray();
 		}
 	}
 }

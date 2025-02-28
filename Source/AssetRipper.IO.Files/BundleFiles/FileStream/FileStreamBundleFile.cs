@@ -242,6 +242,11 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 				stream.Align(16);
 			}
 
+			if (DirectoryInfo.Nodes.Length == 0)
+			{
+				return;
+			}
+
 			throw new NotImplementedException();
 		}
 	}
