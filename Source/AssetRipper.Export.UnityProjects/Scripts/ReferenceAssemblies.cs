@@ -18,7 +18,8 @@ public static partial class ReferenceAssemblies
 
 	private static HashSet<string> WhitelistAssemblies { get; } =
 	[
-		"UnityEngine.UI.dll"
+		"UnityEngine.UI.dll",
+		"UnityEngine.UI",
 	];
 
 	private static HashSet<string> BlacklistAssemblies { get; } =
