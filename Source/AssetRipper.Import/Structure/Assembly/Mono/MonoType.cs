@@ -155,7 +155,11 @@ namespace AssetRipper.Import.Structure.Assembly.Mono
 						//In the managed editor code, PropertyName is only backed by an int ID field.
 						//However, in yaml and release binaries, it appears identical to Utf8String.
 						//Presumably, editor binaries are the same, but this was not verified.
-						fieldType = SerializablePrimitiveType.GetOrCreate(PrimitiveType.String);
+						//
+						//https://github.com/Unity-Technologies/UnityCsReference/blob/b42ec0031fc505c35aff00b6a36c25e67d81e59e/Runtime/Export/PropertyName/PropertyName.cs						
+						//shows only the id int is serialized.
+						//This works with how AssetRipper.Processing\Editor\EditorFormatConverterAsync.cs dealt with these IDs
+						fieldType = SerializablePrimitiveType.GetOrCreate(PrimitiveType.Int);						
 					}
 					else if (typeCache.TryGetValue(typeDefinition, out MonoType? cachedMonoType))
 					{
