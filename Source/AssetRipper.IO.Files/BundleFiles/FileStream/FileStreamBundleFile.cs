@@ -122,7 +122,7 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 				{
 					// Note: metadataSize might not be a multiple of 4
 				}
-				else if ((metadataPosition % 4 == 0) && (metadataSize % 4 == 0) && (metadataBytesRead + 3 >= metadataSize))
+				else if ((metadataPosition % 4 == 0) && (metadataSize % 4 == 0) && (((metadataBytesRead + 3) & ~3) == metadataSize))
 				{
 					// The stream needed to be aligned to 4 bytes.
 					// https://github.com/AssetRipper/AssetRipper/issues/1470
