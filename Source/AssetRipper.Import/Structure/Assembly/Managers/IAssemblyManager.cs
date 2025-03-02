@@ -26,6 +26,7 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 
 		bool IsSet { get; }
 		ScriptingBackend ScriptingBackend { get; }
+		UnityVersion UnityVersion { get; set; }
 	}
 	public static class AssemblyManagerExtensions
 	{

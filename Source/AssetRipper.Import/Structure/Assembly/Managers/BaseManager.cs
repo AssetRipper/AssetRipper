@@ -12,7 +12,7 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 	{
 		public bool IsSet => ScriptingBackend != ScriptingBackend.Unknown;
 		public virtual ScriptingBackend ScriptingBackend => ScriptingBackend.Unknown;
-
+		public virtual UnityVersion UnityVersion { get; set; }
 		protected readonly Dictionary<string, AssemblyDefinition?> m_assemblies = new();
 		protected readonly Dictionary<AssemblyDefinition, Stream> m_assemblyStreams = new();
 		protected readonly Dictionary<string, bool> m_validTypes = new();
@@ -195,7 +195,7 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 				return false;
 			}
 			else if (monoTypeCache.TryGetValue(type, out MonoType? monoType)
-				|| MonoType.TryCreate(type, monoTypeCache, out monoType, out failureReason))
+				|| MonoType.TryCreate(type, monoTypeCache, out monoType, out failureReason, UnityVersion))
 			{
 				scriptType = monoType;
 				failureReason = null;

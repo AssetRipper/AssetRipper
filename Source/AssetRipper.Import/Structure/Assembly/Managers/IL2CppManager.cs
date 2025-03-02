@@ -49,8 +49,7 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 		public string? GameAssemblyPath { get; private set; }
 		public string? UnityPlayerPath { get; private set; }
 		public string? GameDataPath { get; private set; }
-		public string? MetaDataPath { get; private set; }
-		public UnityVersion UnityVersion { get; private set; }
+		public string? MetaDataPath { get; private set; }		
 		/// <summary>
 		/// For when analysis is reimplimented in Cpp2IL.
 		/// </summary>
@@ -91,7 +90,7 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 
 			ClearStaticState?.Invoke();
 
-			Cpp2IlApi.InitializeLibCpp2Il(GameAssemblyPath!, MetaDataPath!, UnityVersion, false);
+			Cpp2IlApi.InitializeLibCpp2Il(GameAssemblyPath!, MetaDataPath!, (UnityVersion)UnityVersion, false);
 
 			Logger.SendStatusChange("loading_step_generate_dummy_dll");
 

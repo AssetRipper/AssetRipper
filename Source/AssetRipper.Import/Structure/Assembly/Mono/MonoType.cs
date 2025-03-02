@@ -22,9 +22,10 @@ namespace AssetRipper.Import.Structure.Assembly.Mono
 
 		public static bool TryCreate(
 			TypeDefinition typeDefinition,
-			Dictionary<ITypeDefOrRef, MonoType> typeCache,
+			Dictionary<ITypeDefOrRef, MonoType> typeCache,			
 			[NotNullWhen(true)] out MonoType? result,
-			[NotNullWhen(false)] out string? failureReason)
+			[NotNullWhen(false)] out string? failureReason,
+			UnityVersion? version)
 		{
 			//Ensure we allocate some initial space so that we have less chance of needing to resize the list.
 			List<Field> fields = new(RoundUpToPowerOf2(typeDefinition.Fields.Count));
@@ -42,7 +43,7 @@ namespace AssetRipper.Import.Structure.Assembly.Mono
 						typeCache.Remove(typeDefinition);
 						return FailBecauseOfSerializeReference(fieldDefinition, out result, out failureReason);
 					}
-					else if (TryCreateSerializableField(fieldDefinition, fieldType, typeCache, out Field field, out failureReason))
+					else if (TryCreateSerializableField(fieldDefinition, fieldType, typeCache, out Field field, out failureReason, version))
 					{
 						fields.Add(field);
 					}
@@ -63,7 +64,8 @@ namespace AssetRipper.Import.Structure.Assembly.Mono
 			GenericInstanceTypeSignature genericInst,
 			Dictionary<ITypeDefOrRef, MonoType> typeCache,
 			[NotNullWhen(true)] out MonoType? result,
-			[NotNullWhen(false)] out string? failureReason)
+			[NotNullWhen(false)] out string? failureReason,
+			UnityVersion? version)
 		{
 			List<Field> fields = new();
 
@@ -78,7 +80,7 @@ namespace AssetRipper.Import.Structure.Assembly.Mono
 					{
 						return FailBecauseOfSerializeReference(fieldDefinition, out result, out failureReason);
 					}
-					else if (TryCreateSerializableField(fieldDefinition, fieldType, typeCache, out Field field, out failureReason))
+					else if (TryCreateSerializableField(fieldDefinition, fieldType, typeCache, out Field field, out failureReason,version))
 					{
 						fields.Add(field);
 					}
@@ -115,15 +117,17 @@ namespace AssetRipper.Import.Structure.Assembly.Mono
 			TypeSignature fieldType,
 			Dictionary<ITypeDefOrRef, MonoType> typeCache,
 			out Field result,
-			[NotNullWhen(false)] out string? failureReason)
-		{
+			[NotNullWhen(false)] out string? failureReason,
+			UnityVersion? version)
+		{ 
 			return TryCreateSerializableField(
 				fieldDefinition.Name ?? throw new NullReferenceException(),
 				fieldType,
 				0,
 				typeCache,
 				out result,
-				out failureReason);
+				out failureReason,
+				version);
 		}
 
 		private static bool TryCreateSerializableField(
@@ -132,7 +136,8 @@ namespace AssetRipper.Import.Structure.Assembly.Mono
 			int arrayDepth,
 			Dictionary<ITypeDefOrRef, MonoType> typeCache,
 			out Field result,
-			[NotNullWhen(false)] out string? failureReason)
+			[NotNullWhen(false)] out string? failureReason,
+			UnityVersion? version)
 		{
 			switch (typeSignature)
 			{
@@ -155,18 +160,25 @@ namespace AssetRipper.Import.Structure.Assembly.Mono
 						//In the managed editor code, PropertyName is only backed by an int ID field.
 						//However, in yaml and release binaries, it appears identical to Utf8String.
 						//Presumably, editor binaries are the same, but this was not verified.
-						//
-						//https://github.com/Unity-Technologies/UnityCsReference/blob/b42ec0031fc505c35aff00b6a36c25e67d81e59e/Runtime/Export/PropertyName/PropertyName.cs						
-						//shows only the id int is serialized.
-						//This works with how AssetRipper.Processing\Editor\EditorFormatConverterAsync.cs dealt with these IDs
-						fieldType = SerializablePrimitiveType.GetOrCreate(PrimitiveType.Int);						
+						//						
+						if (version?.LessThan(2019) == true)
+						{
+							//Verified in 2017.4.40c1, 2018.4.7f1
+							//For the lack of a better heuristic, we'll assume this is the case for all versions before 2019.														
+							fieldType = SerializablePrimitiveType.GetOrCreate(PrimitiveType.Int);
+						}
+						else
+						{
+							//Verified in 2022.3.59f1, 2019.4.40f1c1
+							fieldType = SerializablePrimitiveType.GetOrCreate(PrimitiveType.String);
+						}
 					}
 					else if (typeCache.TryGetValue(typeDefinition, out MonoType? cachedMonoType))
 					{
 						//This needs to come after the InheritsFromObject check so that those fields get properly converted into PPtr assets.
 						fieldType = cachedMonoType;
 					}
-					else if (TryCreate(typeDefinition, typeCache, out MonoType? monoType, out failureReason))
+					else if (TryCreate(typeDefinition, typeCache, out MonoType? monoType, out failureReason, version))
 					{
 						fieldType = monoType;
 					}
@@ -186,7 +198,7 @@ namespace AssetRipper.Import.Structure.Assembly.Mono
 					return true;
 
 				case SzArrayTypeSignature szArrayTypeSignature:
-					return TryCreateSerializableField(name, szArrayTypeSignature.BaseType, arrayDepth + 1, typeCache, out result, out failureReason);
+					return TryCreateSerializableField(name, szArrayTypeSignature.BaseType, arrayDepth + 1, typeCache, out result, out failureReason, version);
 
 				case GenericInstanceTypeSignature genericInstanceTypeSignature:
 					if (typeCache.TryGetValue(genericInstanceTypeSignature.ToTypeDefOrRef(), out MonoType? cachedGenericMonoType))
@@ -195,7 +207,7 @@ namespace AssetRipper.Import.Structure.Assembly.Mono
 						failureReason = null;
 						return true;
 					}
-					return TryCreateSerializableField(name, genericInstanceTypeSignature, arrayDepth, typeCache, out result, out failureReason);
+					return TryCreateSerializableField(name, genericInstanceTypeSignature, arrayDepth, typeCache, out result, out failureReason, version);
 
 				default:
 					result = default;
@@ -210,13 +222,14 @@ namespace AssetRipper.Import.Structure.Assembly.Mono
 			int arrayDepth,
 			Dictionary<ITypeDefOrRef, MonoType> typeCache,
 			out Field result,
-			[NotNullWhen(false)] out string? failureReason)
+			[NotNullWhen(false)] out string? failureReason,
+			UnityVersion? version)
 		{
 			if (typeSignature.GenericType.FullName is "System.Collections.Generic.List`1")
 			{
-				return TryCreateSerializableField(name, typeSignature.TypeArguments[0], arrayDepth + 1, typeCache, out result, out failureReason);
+				return TryCreateSerializableField(name, typeSignature.TypeArguments[0], arrayDepth + 1, typeCache, out result, out failureReason, version);
 			}
-			else if (TryCreate(typeSignature, typeCache, out MonoType? monoType, out failureReason))
+			else if (TryCreate(typeSignature, typeCache, out MonoType? monoType, out failureReason, version))
 			{
 				result = new(monoType, arrayDepth, name, true);
 				return true;
