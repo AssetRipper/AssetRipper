@@ -3,8 +3,10 @@ using AssetRipper.Assets.Metadata;
 using AssetRipper.Assets.Traversal;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
+using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.GUID;
 using AssetRipper.SourceGenerated.Subclasses.Hash128;
+using AssetRipper.SourceGenerated.Subclasses.PropertyName;
 using AssetRipper.Yaml;
 using AssetRipper.Yaml.Extensions;
 using System.Diagnostics;
@@ -97,6 +99,11 @@ public class YamlWalker : AssetWalker
 		else if (asset is IHash128 hash)
 		{
 			AddNode(HashHelper.ExportYaml(hash));
+			return false;
+		}
+		else if (asset is IPropertyName propertyName)
+		{
+			VisitPrimitive(propertyName.GetIdString());
 			return false;
 		}
 		else

@@ -24,6 +24,7 @@ using AssetRipper.SourceGenerated.Subclasses.GUIStyle;
 using AssetRipper.SourceGenerated.Subclasses.Hash128;
 using AssetRipper.SourceGenerated.Subclasses.LayerMask;
 using AssetRipper.SourceGenerated.Subclasses.Matrix4x4f;
+using AssetRipper.SourceGenerated.Subclasses.PropertyName;
 using AssetRipper.SourceGenerated.Subclasses.Quaternionf;
 using AssetRipper.SourceGenerated.Subclasses.Rectf;
 using AssetRipper.SourceGenerated.Subclasses.RectOffset;
@@ -231,7 +232,7 @@ namespace AssetRipper.Import.AssetCreation
 				MonoUtils.GradientName => Gradient.Create(version),
 				MonoUtils.RectOffsetName => RectOffset.Create(),
 				MonoUtils.GUIStyleName => GUIStyle.Create(version),
-				MonoUtils.PropertyNameName => throw new NotSupportedException("PropertyName should be treated as a normal string elsewhere in the codebase, currently MonoType."),
+				MonoUtils.PropertyNameName => PropertyName.Create(version),
 				_ => throw new NotSupportedException(name),
 			};
 		}
