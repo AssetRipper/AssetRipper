@@ -2,7 +2,7 @@
 
 namespace AssetRipper.Import.Structure.Assembly.Mono;
 
-internal sealed class SerializablePrimitiveType : SerializableType
+public sealed class SerializablePrimitiveType : SerializableType
 {
 	private static readonly Dictionary<PrimitiveType, SerializablePrimitiveType> cache = new();
 

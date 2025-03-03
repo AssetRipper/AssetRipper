@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Import.Logging;
+using AssetRipper.Import.Structure.Assembly;
 using AssetRipper.Import.Structure.Assembly.Serializable;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Extensions;
@@ -38,7 +39,7 @@ public class ScriptableObjectProcessor : IAssetProcessor
 
 	private static IEnumerable<IMonoBehaviour> FindTimelineAssetChildren(IMonoBehaviour root)
 	{
-		SerializableStructure? structure = LoadStructure(root);
+		SerializableStructure? structure = root.LoadStructure();
 		if (structure is null)
 		{
 			return [];
@@ -56,7 +57,7 @@ public class ScriptableObjectProcessor : IAssetProcessor
 
 				children.Add(child);
 
-				SerializableStructure? childStructure = LoadStructure(child);
+				SerializableStructure? childStructure = child.LoadStructure();
 				if (childStructure is null)
 				{
 					continue;
@@ -98,7 +99,7 @@ public class ScriptableObjectProcessor : IAssetProcessor
 
 	private static IEnumerable<IMonoBehaviour> FindPostProcessProfileChildren(IMonoBehaviour root)
 	{
-		SerializableStructure? structure = LoadStructure(root);
+		SerializableStructure? structure = root.LoadStructure();
 		if (structure is null)
 		{
 			return [];
@@ -119,14 +120,5 @@ public class ScriptableObjectProcessor : IAssetProcessor
 		}
 
 		return children;
-	}
-
-	private static SerializableStructure? LoadStructure(IMonoBehaviour monoBehaviour)
-	{
-		if (monoBehaviour.Structure is SerializableStructure structure)
-		{
-			return structure;
-		}
-		return (monoBehaviour.Structure as UnloadedStructure)?.LoadStructure();
 	}
 }
