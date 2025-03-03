@@ -4,6 +4,7 @@ using AssetRipper.Assets.Traversal;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Extensions;
+using AssetRipper.SourceGenerated.Subclasses.ExposedReferenceTable;
 using AssetRipper.SourceGenerated.Subclasses.GUID;
 using AssetRipper.SourceGenerated.Subclasses.Hash128;
 using AssetRipper.SourceGenerated.Subclasses.PropertyName;
@@ -147,14 +148,25 @@ public class YamlWalker : AssetWalker
 		Debug.Assert(CurrentFieldName is null);
 		if (name is "m_Structure" && asset is IMonoBehaviour)
 		{
-			YamlMappingNode structureNode = PopStructureNode(CurrentMappingNode.Children);
+			YamlMappingNode structureNode = PopNode(CurrentMappingNode.Children, "m_Structure");
 			CurrentMappingNode.Append(structureNode);
 		}
-
-		static YamlMappingNode PopStructureNode(List<KeyValuePair<YamlNode, YamlNode>> children)
+		if (name is "m_References" && asset is IExposedReferenceTable)
+		{		
+			YamlMappingNode referencesNode = PopNode(CurrentMappingNode.Children, "m_References");
+			YamlSequenceNode sequenceNode = new();			
+			foreach (KeyValuePair<YamlNode, YamlNode> child in referencesNode.Children)
+			{
+				YamlMappingNode childNode = new YamlMappingNode();
+				childNode.Add(child.Key, child.Value);
+				sequenceNode.Add(childNode);
+			}
+			CurrentMappingNode.Add("m_References", sequenceNode);			
+		}
+		static YamlMappingNode PopNode(List<KeyValuePair<YamlNode, YamlNode>> children, string key)
 		{
 			KeyValuePair<YamlNode, YamlNode> pair = children[^1];
-			Debug.Assert(pair.Key.ToString() == "m_Structure");
+			Debug.Assert(pair.Key.ToString() == key);
 			children.RemoveAt(children.Count - 1);
 			return (YamlMappingNode)pair.Value;
 		}
