@@ -76,15 +76,11 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 		}
 
-		public static void SetDefaultCurveLoopType(this IAnimationCurve_Vector3f animationCurve)
+		public static void SetDefaultRotationOrderAndCurveLoopType(this IAnimationCurve_Vector3f animationCurve)
 		{
 			animationCurve.PreInfinityE = CurveLoopTypes.CycleWithOffset;
 			animationCurve.PostInfinityE = CurveLoopTypes.CycleWithOffset;
-		}
-
-		public static void SetRotationOrder(this IAnimationCurve_Vector3f animationCurve, RotationOrder rotationOrder = RotationOrder.OrderZXY)
-		{
-			animationCurve.RotationOrderE = rotationOrder;
+			animationCurve.RotationOrderE = RotationOrder.OrderZXY;
 		}
 
 		public static void SetDefaultRotationOrderAndCurveLoopType(this IAnimationCurve_Quaternionf animationCurve)
