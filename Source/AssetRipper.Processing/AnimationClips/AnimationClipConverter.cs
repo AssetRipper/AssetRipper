@@ -120,7 +120,7 @@ namespace AssetRipper.Processing.AnimationClips
 							outSlopeValues[offset] = curve.OutSlope;
 							curveIdx++;
 						}
-						AddTransformCurve(frame.Time, binding.TransformType(), curveValues, inSlopeValues, outSlopeValues, 0, path);
+						AddTransformCurve(frame.Time, binding, curveValues, inSlopeValues, outSlopeValues, 0, path);
 						continue;
 					}
 					curve = frame.Curves[curveIdx];
@@ -173,7 +173,7 @@ namespace AssetRipper.Processing.AnimationClips
 					int framePosition = frameOffset + curveIndex;
 					if (binding.IsTransform())
 					{
-						AddTransformCurve(time, binding.TransformType(), curveValues, slopeValues, slopeValues, framePosition, path);
+						AddTransformCurve(time, binding, curveValues, slopeValues, slopeValues, framePosition, path);
 						curveIndex += binding.TransformType().GetDimension();
 					}
 					else if (binding.CustomType == (byte)BindingCustomType.None)
@@ -210,7 +210,7 @@ namespace AssetRipper.Processing.AnimationClips
 					string path = GetCurvePath(binding.Path);
 					if (binding.IsTransform())
 					{
-						AddTransformCurve(time, binding.TransformType(), curveValues, slopeValues, slopeValues, curveIndex, path);
+						AddTransformCurve(time, binding, curveValues, slopeValues, slopeValues, curveIndex, path);
 						curveIndex += binding.TransformType().GetDimension();
 					}
 					else if (binding.CustomType == (byte)BindingCustomType.None)
@@ -251,10 +251,10 @@ namespace AssetRipper.Processing.AnimationClips
 			}
 		}
 
-		private void AddTransformCurve(float time, TransformType transType, ReadOnlySpan<float> curveValues,
+		private void AddTransformCurve(float time, IGenericBinding binding, ReadOnlySpan<float> curveValues,
 			ReadOnlySpan<float> inSlopeValues, ReadOnlySpan<float> outSlopeValues, int offset, string path)
 		{
-			switch (transType)
+			switch (binding.TransformType())
 			{
 				case TransformType.Translation:
 					{
@@ -373,7 +373,7 @@ namespace AssetRipper.Processing.AnimationClips
 								break;
 							}
 							curve = m_clip.EulerCurves_C74.AddNew();
-							curve.SetValues(path);
+							curve.SetValues(path, (RotationOrder)binding.CustomType);
 							m_eulers.Add(path, curve);
 						}
 
@@ -404,7 +404,7 @@ namespace AssetRipper.Processing.AnimationClips
 					break;
 
 				default:
-					throw new NotImplementedException(transType.ToString());
+					throw new NotImplementedException(binding.TransformType().ToString());
 			}
 		}
 
