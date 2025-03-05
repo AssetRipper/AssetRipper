@@ -373,7 +373,7 @@ namespace AssetRipper.Processing.AnimationClips
 								break;
 							}
 							curve = m_clip.EulerCurves_C74.AddNew();
-							curve.SetValues(path, binding.CustomType);
+							curve.SetValues(path, (RotationOrder)binding.CustomType);
 							m_eulers.Add(path, curve);
 						}
 
