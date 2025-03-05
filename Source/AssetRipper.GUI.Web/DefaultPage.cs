@@ -201,7 +201,7 @@ public abstract class DefaultPage : HtmlPage
 		{
 			using (new Div(writer).WithClass("container text-center").End())
 			{
-				writer.Write("&copy; 2024 - AssetRipper - ");
+				writer.Write("&copy; 2025 - AssetRipper - ");
 				new A(writer).WithHref("/Privacy").Close(Localization.Privacy);
 				writer.Write(" - ");
 				new A(writer).WithHref("/Licenses").Close(Localization.Licenses);

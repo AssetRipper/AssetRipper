@@ -18,6 +18,12 @@ Objects marked as static in a scene get merged when the game is compiled. This i
 
 This feature has a setting for enabling it, which defaults to true.
 
+## Prefab Outlining
+
+When a game is compiled, all prefabs in a scene are inlined (instantiated), so any information about the original prefab is lost. This feature attempts to reverse that process by analyzing all GameObject hierarchies in the game and identifying repetitions that can be replaced with new (or existing) prefabs.
+
+This feature has a setting for enabling it, which defaults to false.
+
 ## Asset Deduplication
 
 When building multiple asset bundles, it's very common for Unity to duplicate assets shared between bundles. This allows each bundle to stay self-contained. Asset deduplication is an experimental feature for reversing that process.
