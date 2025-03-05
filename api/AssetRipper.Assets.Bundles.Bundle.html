@@ -1,0 +1,1110 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class Bundle
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class Bundle
+   ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="AssetRipper.Assets.Bundles.Bundle">
+  
+  
+  <h1 id="AssetRipper_Assets_Bundles_Bundle" data-uid="AssetRipper.Assets.Bundles.Bundle" class="text-break">Class Bundle
+  </h1>
+  <div class="markdown level0 summary"><p>A container for <a class="xref" href="AssetRipper.Assets.Collections.AssetCollection.html">AssetCollection</a>s, <a class="xref" href="AssetRipper.IO.Files.ResourceFiles.ResourceFile.html">ResourceFile</a>s, and other <a class="xref" href="AssetRipper.Assets.Bundles.Bundle.html">Bundle</a>s.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">Bundle</span></div>
+      <div class="level2"><a class="xref" href="AssetRipper.Assets.Bundles.GameBundle.html">GameBundle</a></div>
+      <div class="level2"><a class="xref" href="AssetRipper.Assets.Bundles.SerializedBundle.html">SerializedBundle</a></div>
+      <div class="level2"><a class="xref" href="AssetRipper.Assets.Bundles.VirtualBundle-1.html">VirtualBundle&lt;T&gt;</a></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="AssetRipper.Assets.Bundles.html">AssetRipper.Assets.Bundles</a></h6>
+  <h6><strong>Assembly</strong>: AssetRipper.Assets.dll</h6>
+  <h5 id="AssetRipper_Assets_Bundles_Bundle_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract class Bundle : IDisposable</code></pre>
+  </div>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Bundles_Bundle_Bundles.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Bundles.Bundle.Bundles%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Bundles/Bundle.cs/#L35">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Bundles_Bundle_Bundles_" data-uid="AssetRipper.Assets.Bundles.Bundle.Bundles*"></a>
+  <h4 id="AssetRipper_Assets_Bundles_Bundle_Bundles" data-uid="AssetRipper.Assets.Bundles.Bundle.Bundles">Bundles</h4>
+  <div class="markdown level1 summary"><p>The list of child <a class="xref" href="AssetRipper.Assets.Bundles.Bundle.html">Bundle</a>s in this Bundle.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IReadOnlyList&lt;Bundle&gt; Bundles { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IReadOnlyList</span>&lt;<a class="xref" href="AssetRipper.Assets.Bundles.Bundle.html">Bundle</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Bundles_Bundle_Collections.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Bundles.Bundle.Collections%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Bundles/Bundle.cs/#L29">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Bundles_Bundle_Collections_" data-uid="AssetRipper.Assets.Bundles.Bundle.Collections*"></a>
+  <h4 id="AssetRipper_Assets_Bundles_Bundle_Collections" data-uid="AssetRipper.Assets.Bundles.Bundle.Collections">Collections</h4>
+  <div class="markdown level1 summary"><p>The list of <a class="xref" href="AssetRipper.Assets.Collections.AssetCollection.html">AssetCollection</a>s in this Bundle.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IReadOnlyList&lt;AssetCollection&gt; Collections { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IReadOnlyList</span>&lt;<a class="xref" href="AssetRipper.Assets.Collections.AssetCollection.html">AssetCollection</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Bundles_Bundle_FailedFiles.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Bundles.Bundle.FailedFiles%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Bundles/Bundle.cs/#L41">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Bundles_Bundle_FailedFiles_" data-uid="AssetRipper.Assets.Bundles.Bundle.FailedFiles*"></a>
+  <h4 id="AssetRipper_Assets_Bundles_Bundle_FailedFiles" data-uid="AssetRipper.Assets.Bundles.Bundle.FailedFiles">FailedFiles</h4>
+  <div class="markdown level1 summary"><p>The list of <a class="xref" href="AssetRipper.IO.Files.FailedFile.html">FailedFile</a>s in this Bundle.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IReadOnlyList&lt;FailedFile&gt; FailedFiles { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IReadOnlyList</span>&lt;<a class="xref" href="AssetRipper.IO.Files.FailedFile.html">FailedFile</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Bundles_Bundle_Name.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Bundles.Bundle.Name%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Bundles/Bundle.cs/#L49">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Bundles_Bundle_Name_" data-uid="AssetRipper.Assets.Bundles.Bundle.Name*"></a>
+  <h4 id="AssetRipper_Assets_Bundles_Bundle_Name" data-uid="AssetRipper.Assets.Bundles.Bundle.Name">Name</h4>
+  <div class="markdown level1 summary"><p>The name of this Bundle.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract string Name { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Bundles_Bundle_Parent.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Bundles.Bundle.Parent%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Bundles/Bundle.cs/#L18">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Bundles_Bundle_Parent_" data-uid="AssetRipper.Assets.Bundles.Bundle.Parent*"></a>
+  <h4 id="AssetRipper_Assets_Bundles_Bundle_Parent" data-uid="AssetRipper.Assets.Bundles.Bundle.Parent">Parent</h4>
+  <div class="markdown level1 summary"><p>The parent <a class="xref" href="AssetRipper.Assets.Bundles.Bundle.html">Bundle</a> of this Bundle.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Bundle Parent { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Assets.Bundles.Bundle.html">Bundle</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Bundles_Bundle_Resources.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Bundles.Bundle.Resources%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Bundles/Bundle.cs/#L23">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Bundles_Bundle_Resources_" data-uid="AssetRipper.Assets.Bundles.Bundle.Resources*"></a>
+  <h4 id="AssetRipper_Assets_Bundles_Bundle_Resources" data-uid="AssetRipper.Assets.Bundles.Bundle.Resources">Resources</h4>
+  <div class="markdown level1 summary"><p>The list of <a class="xref" href="AssetRipper.IO.Files.ResourceFiles.ResourceFile.html">ResourceFile</a>s in this Bundle.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IReadOnlyList&lt;ResourceFile&gt; Resources { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IReadOnlyList</span>&lt;<a class="xref" href="AssetRipper.IO.Files.ResourceFiles.ResourceFile.html">ResourceFile</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Bundles_Bundle_Scenes.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Bundles.Bundle.Scenes%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Bundles/Bundle.cs/#L54">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Bundles_Bundle_Scenes_" data-uid="AssetRipper.Assets.Bundles.Bundle.Scenes*"></a>
+  <h4 id="AssetRipper_Assets_Bundles_Bundle_Scenes" data-uid="AssetRipper.Assets.Bundles.Bundle.Scenes">Scenes</h4>
+  <div class="markdown level1 summary"><p>All the <a class="xref" href="AssetRipper.Assets.Collections.SceneDefinition.html">SceneDefinition</a>s in this bundle.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;SceneDefinition&gt; Scenes { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="AssetRipper.Assets.Collections.SceneDefinition.html">SceneDefinition</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Bundles_Bundle_AddBundle_AssetRipper_Assets_Bundles_Bundle_.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Bundles.Bundle.AddBundle(AssetRipper.Assets.Bundles.Bundle)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Bundles/Bundle.cs/#L271">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Bundles_Bundle_AddBundle_" data-uid="AssetRipper.Assets.Bundles.Bundle.AddBundle*"></a>
+  <h4 id="AssetRipper_Assets_Bundles_Bundle_AddBundle_AssetRipper_Assets_Bundles_Bundle_" data-uid="AssetRipper.Assets.Bundles.Bundle.AddBundle(AssetRipper.Assets.Bundles.Bundle)">AddBundle(Bundle)</h4>
+  <div class="markdown level1 summary"><p>Adds a child Bundle to this Bundle.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void AddBundle(Bundle bundle)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Assets.Bundles.Bundle.html">Bundle</a></td>
+        <td><span class="parametername">bundle</span></td>
+        <td><p>The Bundle to add.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Bundles_Bundle_AddCollection_AssetRipper_Assets_Collections_AssetCollection_.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Bundles.Bundle.AddCollection(AssetRipper.Assets.Collections.AssetCollection)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Bundles/Bundle.cs/#L251">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Bundles_Bundle_AddCollection_" data-uid="AssetRipper.Assets.Bundles.Bundle.AddCollection*"></a>
+  <h4 id="AssetRipper_Assets_Bundles_Bundle_AddCollection_AssetRipper_Assets_Collections_AssetCollection_" data-uid="AssetRipper.Assets.Bundles.Bundle.AddCollection(AssetRipper.Assets.Collections.AssetCollection)">AddCollection(AssetCollection)</h4>
+  <div class="markdown level1 summary"><p>Adds an <a class="xref" href="AssetRipper.Assets.Collections.AssetCollection.html">AssetCollection</a> to this Bundle.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void AddCollection(AssetCollection collection)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Assets.Collections.AssetCollection.html">AssetCollection</a></td>
+        <td><span class="parametername">collection</span></td>
+        <td><p>The <a class="xref" href="AssetRipper.Assets.Collections.AssetCollection.html">AssetCollection</a> to add.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Bundles_Bundle_AddCollectionFromSerializedFile_AssetRipper_IO_Files_SerializedFiles_SerializedFile_AssetRipper_Assets_IO_AssetFactoryBase_UnityVersion_.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Bundles.Bundle.AddCollectionFromSerializedFile(AssetRipper.IO.Files.SerializedFiles.SerializedFile%2CAssetRipper.Assets.IO.AssetFactoryBase%2CUnityVersion)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Bundles/Bundle.cs/#L397">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Bundles_Bundle_AddCollectionFromSerializedFile_" data-uid="AssetRipper.Assets.Bundles.Bundle.AddCollectionFromSerializedFile*"></a>
+  <h4 id="AssetRipper_Assets_Bundles_Bundle_AddCollectionFromSerializedFile_AssetRipper_IO_Files_SerializedFiles_SerializedFile_AssetRipper_Assets_IO_AssetFactoryBase_UnityVersion_" data-uid="AssetRipper.Assets.Bundles.Bundle.AddCollectionFromSerializedFile(AssetRipper.IO.Files.SerializedFiles.SerializedFile,AssetRipper.Assets.IO.AssetFactoryBase,UnityVersion)">AddCollectionFromSerializedFile(SerializedFile, AssetFactoryBase, UnityVersion)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SerializedAssetCollection AddCollectionFromSerializedFile(SerializedFile file, AssetFactoryBase factory, UnityVersion defaultVersion = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.IO.Files.SerializedFiles.SerializedFile.html">SerializedFile</a></td>
+        <td><span class="parametername">file</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Assets.IO.AssetFactoryBase.html">AssetFactoryBase</a></td>
+        <td><span class="parametername">factory</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">UnityVersion</span></td>
+        <td><span class="parametername">defaultVersion</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Assets.Collections.SerializedAssetCollection.html">SerializedAssetCollection</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Bundles_Bundle_AddFailed_AssetRipper_IO_Files_FailedFile_.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Bundles.Bundle.AddFailed(AssetRipper.IO.Files.FailedFile)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Bundles/Bundle.cs/#L294">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Bundles_Bundle_AddFailed_" data-uid="AssetRipper.Assets.Bundles.Bundle.AddFailed*"></a>
+  <h4 id="AssetRipper_Assets_Bundles_Bundle_AddFailed_AssetRipper_IO_Files_FailedFile_" data-uid="AssetRipper.Assets.Bundles.Bundle.AddFailed(AssetRipper.IO.Files.FailedFile)">AddFailed(FailedFile)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void AddFailed(FailedFile file)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.IO.Files.FailedFile.html">FailedFile</a></td>
+        <td><span class="parametername">file</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Bundles_Bundle_AddResource_AssetRipper_IO_Files_ResourceFiles_ResourceFile_.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Bundles.Bundle.AddResource(AssetRipper.IO.Files.ResourceFiles.ResourceFile)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Bundles/Bundle.cs/#L242">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Bundles_Bundle_AddResource_" data-uid="AssetRipper.Assets.Bundles.Bundle.AddResource*"></a>
+  <h4 id="AssetRipper_Assets_Bundles_Bundle_AddResource_AssetRipper_IO_Files_ResourceFiles_ResourceFile_" data-uid="AssetRipper.Assets.Bundles.Bundle.AddResource(AssetRipper.IO.Files.ResourceFiles.ResourceFile)">AddResource(ResourceFile)</h4>
+  <div class="markdown level1 summary"><p>Adds a ResourceFile to this Bundle.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void AddResource(ResourceFile resource)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.IO.Files.ResourceFiles.ResourceFile.html">ResourceFile</a></td>
+        <td><span class="parametername">resource</span></td>
+        <td><p>The ResourceFile to add.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Bundles_Bundle_Dispose.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Bundles.Bundle.Dispose%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Bundles/Bundle.cs/#L424">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Bundles_Bundle_Dispose_" data-uid="AssetRipper.Assets.Bundles.Bundle.Dispose*"></a>
+  <h4 id="AssetRipper_Assets_Bundles_Bundle_Dispose" data-uid="AssetRipper.Assets.Bundles.Bundle.Dispose">Dispose()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Dispose()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Bundles_Bundle_Dispose_System_Boolean_.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Bundles.Bundle.Dispose(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Bundles/Bundle.cs/#L403">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Bundles_Bundle_Dispose_" data-uid="AssetRipper.Assets.Bundles.Bundle.Dispose*"></a>
+  <h4 id="AssetRipper_Assets_Bundles_Bundle_Dispose_System_Boolean_" data-uid="AssetRipper.Assets.Bundles.Bundle.Dispose(System.Boolean)">Dispose(Boolean)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void Dispose(bool disposing)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">disposing</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Bundles_Bundle_FetchAssetCollections.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Bundles.Bundle.FetchAssetCollections%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Bundles/Bundle.cs/#L362">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Bundles_Bundle_FetchAssetCollections_" data-uid="AssetRipper.Assets.Bundles.Bundle.FetchAssetCollections*"></a>
+  <h4 id="AssetRipper_Assets_Bundles_Bundle_FetchAssetCollections" data-uid="AssetRipper.Assets.Bundles.Bundle.FetchAssetCollections">FetchAssetCollections()</h4>
+  <div class="markdown level1 summary"><p>Fetches all AssetCollections in the hierarchy of this Bundle.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;AssetCollection&gt; FetchAssetCollections()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="AssetRipper.Assets.Collections.AssetCollection.html">AssetCollection</a>&gt;</td>
+        <td><p>An IEnumerable of all AssetCollections in the hierarchy.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Bundles_Bundle_FetchAssets.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Bundles.Bundle.FetchAssets%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Bundles/Bundle.cs/#L340">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Bundles_Bundle_FetchAssets_" data-uid="AssetRipper.Assets.Bundles.Bundle.FetchAssets*"></a>
+  <h4 id="AssetRipper_Assets_Bundles_Bundle_FetchAssets" data-uid="AssetRipper.Assets.Bundles.Bundle.FetchAssets">FetchAssets()</h4>
+  <div class="markdown level1 summary"><p>Fetches all <a class="xref" href="AssetRipper.Assets.IUnityObjectBase.html">IUnityObjectBase</a>s in this Bundle.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;IUnityObjectBase&gt; FetchAssets()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="AssetRipper.Assets.IUnityObjectBase.html">IUnityObjectBase</a>&gt;</td>
+        <td><p>An IEnumerable of all <a class="xref" href="AssetRipper.Assets.IUnityObjectBase.html">IUnityObjectBase</a>s in this Bundle.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Bundles_Bundle_FetchAssetsInHierarchy.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Bundles.Bundle.FetchAssetsInHierarchy%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Bundles/Bundle.cs/#L331">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Bundles_Bundle_FetchAssetsInHierarchy_" data-uid="AssetRipper.Assets.Bundles.Bundle.FetchAssetsInHierarchy*"></a>
+  <h4 id="AssetRipper_Assets_Bundles_Bundle_FetchAssetsInHierarchy" data-uid="AssetRipper.Assets.Bundles.Bundle.FetchAssetsInHierarchy">FetchAssetsInHierarchy()</h4>
+  <div class="markdown level1 summary"><p>Fetches all <a class="xref" href="AssetRipper.Assets.IUnityObjectBase.html">IUnityObjectBase</a>s in the hierarchy of this Bundle.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;IUnityObjectBase&gt; FetchAssetsInHierarchy()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="AssetRipper.Assets.IUnityObjectBase.html">IUnityObjectBase</a>&gt;</td>
+        <td><p>An IEnumerable of all <a class="xref" href="AssetRipper.Assets.IUnityObjectBase.html">IUnityObjectBase</a>s in the hierarchy.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Bundles_Bundle_FetchResourceFiles.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Bundles.Bundle.FetchResourceFiles%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Bundles/Bundle.cs/#L377">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Bundles_Bundle_FetchResourceFiles_" data-uid="AssetRipper.Assets.Bundles.Bundle.FetchResourceFiles*"></a>
+  <h4 id="AssetRipper_Assets_Bundles_Bundle_FetchResourceFiles" data-uid="AssetRipper.Assets.Bundles.Bundle.FetchResourceFiles">FetchResourceFiles()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;ResourceFile&gt; FetchResourceFiles()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="AssetRipper.IO.Files.ResourceFiles.ResourceFile.html">ResourceFile</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Bundles_Bundle_GetRoot.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Bundles.Bundle.GetRoot%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Bundles/Bundle.cs/#L317">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Bundles_Bundle_GetRoot_" data-uid="AssetRipper.Assets.Bundles.Bundle.GetRoot*"></a>
+  <h4 id="AssetRipper_Assets_Bundles_Bundle_GetRoot" data-uid="AssetRipper.Assets.Bundles.Bundle.GetRoot">GetRoot()</h4>
+  <div class="markdown level1 summary"><p>Gets the root Bundle of this Bundle.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Bundle GetRoot()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Assets.Bundles.Bundle.html">Bundle</a></td>
+        <td><p>The root Bundle of this Bundle.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Bundles_Bundle_IsCompatibleBundle_AssetRipper_Assets_Bundles_Bundle_.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Bundles.Bundle.IsCompatibleBundle(AssetRipper.Assets.Bundles.Bundle)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Bundles/Bundle.cs/#L311">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Bundles_Bundle_IsCompatibleBundle_" data-uid="AssetRipper.Assets.Bundles.Bundle.IsCompatibleBundle*"></a>
+  <h4 id="AssetRipper_Assets_Bundles_Bundle_IsCompatibleBundle_AssetRipper_Assets_Bundles_Bundle_" data-uid="AssetRipper.Assets.Bundles.Bundle.IsCompatibleBundle(AssetRipper.Assets.Bundles.Bundle)">IsCompatibleBundle(Bundle)</h4>
+  <div class="markdown level1 summary"><p>Indicates if the specified Bundle is compatible with this Bundle.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual bool IsCompatibleBundle(Bundle bundle)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Assets.Bundles.Bundle.html">Bundle</a></td>
+        <td><span class="parametername">bundle</span></td>
+        <td><p>The Bundle to check.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>True if the Bundle is compatible, else false.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Bundles_Bundle_IsCompatibleCollection_AssetRipper_Assets_Collections_AssetCollection_.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Bundles.Bundle.IsCompatibleCollection(AssetRipper.Assets.Collections.AssetCollection)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Bundles/Bundle.cs/#L304">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Bundles_Bundle_IsCompatibleCollection_" data-uid="AssetRipper.Assets.Bundles.Bundle.IsCompatibleCollection*"></a>
+  <h4 id="AssetRipper_Assets_Bundles_Bundle_IsCompatibleCollection_AssetRipper_Assets_Collections_AssetCollection_" data-uid="AssetRipper.Assets.Bundles.Bundle.IsCompatibleCollection(AssetRipper.Assets.Collections.AssetCollection)">IsCompatibleCollection(AssetCollection)</h4>
+  <div class="markdown level1 summary"><p>Indicates if the specified <a class="xref" href="AssetRipper.Assets.Collections.AssetCollection.html">AssetCollection</a> is compatible with this Bundle.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual bool IsCompatibleCollection(AssetCollection collection)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Assets.Collections.AssetCollection.html">AssetCollection</a></td>
+        <td><span class="parametername">collection</span></td>
+        <td><p>The <a class="xref" href="AssetRipper.Assets.Collections.AssetCollection.html">AssetCollection</a> to check.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>True if the <a class="xref" href="AssetRipper.Assets.Collections.AssetCollection.html">AssetCollection</a> is compatible, else false.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Bundles_Bundle_ResolveCollection_AssetRipper_IO_Files_SerializedFiles_Parser_FileIdentifier_.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Bundles.Bundle.ResolveCollection(AssetRipper.IO.Files.SerializedFiles.Parser.FileIdentifier)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Bundles/Bundle.cs/#L93">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Bundles_Bundle_ResolveCollection_" data-uid="AssetRipper.Assets.Bundles.Bundle.ResolveCollection*"></a>
+  <h4 id="AssetRipper_Assets_Bundles_Bundle_ResolveCollection_AssetRipper_IO_Files_SerializedFiles_Parser_FileIdentifier_" data-uid="AssetRipper.Assets.Bundles.Bundle.ResolveCollection(AssetRipper.IO.Files.SerializedFiles.Parser.FileIdentifier)">ResolveCollection(FileIdentifier)</h4>
+  <div class="markdown level1 summary"><p>Resolves an <a class="xref" href="AssetRipper.Assets.Collections.AssetCollection.html">AssetCollection</a> with the specified name in this Bundle and its ascendants.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public AssetCollection ResolveCollection(FileIdentifier identifier)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.IO.Files.SerializedFiles.Parser.FileIdentifier.html">FileIdentifier</a></td>
+        <td><span class="parametername">identifier</span></td>
+        <td><p>The identifier of the file of the <a class="xref" href="AssetRipper.Assets.Collections.AssetCollection.html">AssetCollection</a>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Assets.Collections.AssetCollection.html">AssetCollection</a></td>
+        <td><p>The resolved <a class="xref" href="AssetRipper.Assets.Collections.AssetCollection.html">AssetCollection</a> if it exists, else null.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Bundles_Bundle_ResolveCollection_System_String_.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Bundles.Bundle.ResolveCollection(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Bundles/Bundle.cs/#L103">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Bundles_Bundle_ResolveCollection_" data-uid="AssetRipper.Assets.Bundles.Bundle.ResolveCollection*"></a>
+  <h4 id="AssetRipper_Assets_Bundles_Bundle_ResolveCollection_System_String_" data-uid="AssetRipper.Assets.Bundles.Bundle.ResolveCollection(System.String)">ResolveCollection(String)</h4>
+  <div class="markdown level1 summary"><p>Resolves an <a class="xref" href="AssetRipper.Assets.Collections.AssetCollection.html">AssetCollection</a> with the specified name in this Bundle and its ascendants.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public AssetCollection ResolveCollection(string name)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name of the <a class="xref" href="AssetRipper.Assets.Collections.AssetCollection.html">AssetCollection</a>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Assets.Collections.AssetCollection.html">AssetCollection</a></td>
+        <td><p>The resolved <a class="xref" href="AssetRipper.Assets.Collections.AssetCollection.html">AssetCollection</a> if it exists, else null.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Bundles_Bundle_ResolveExternalResource_System_String_.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Bundles.Bundle.ResolveExternalResource(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Bundles/Bundle.cs/#L236">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Bundles_Bundle_ResolveExternalResource_" data-uid="AssetRipper.Assets.Bundles.Bundle.ResolveExternalResource*"></a>
+  <h4 id="AssetRipper_Assets_Bundles_Bundle_ResolveExternalResource_System_String_" data-uid="AssetRipper.Assets.Bundles.Bundle.ResolveExternalResource(System.String)">ResolveExternalResource(String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual ResourceFile ResolveExternalResource(string originalName)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">originalName</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.IO.Files.ResourceFiles.ResourceFile.html">ResourceFile</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Bundles_Bundle_ResolveResource_System_String_.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Bundles.Bundle.ResolveResource(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Bundles/Bundle.cs/#L179">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Bundles_Bundle_ResolveResource_" data-uid="AssetRipper.Assets.Bundles.Bundle.ResolveResource*"></a>
+  <h4 id="AssetRipper_Assets_Bundles_Bundle_ResolveResource_System_String_" data-uid="AssetRipper.Assets.Bundles.Bundle.ResolveResource(System.String)">ResolveResource(String)</h4>
+  <div class="markdown level1 summary"><p>Resolves a ResourceFile with the specified name in this Bundle and its ascendants.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ResourceFile ResolveResource(string name)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name of the ResourceFile.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.IO.Files.ResourceFiles.ResourceFile.html">ResourceFile</a></td>
+        <td><p>The resolved ResourceFile if it exists, else null.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Bundles_Bundle_ToString.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Bundles.Bundle.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Bundles/Bundle.cs/#L392">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Bundles_Bundle_ToString_" data-uid="AssetRipper.Assets.Bundles.Bundle.ToString*"></a>
+  <h4 id="AssetRipper_Assets_Bundles_Bundle_ToString" data-uid="AssetRipper.Assets.Bundles.Bundle.ToString">ToString()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="AssetRipper.GUI.Web.Paths.PathExtensions.html#AssetRipper_GUI_Web_Paths_PathExtensions_GetPath_AssetRipper_Assets_Bundles_Bundle_">PathExtensions.GetPath(Bundle)</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Bundles_Bundle.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Bundles.Bundle%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Bundles/Bundle.cs/#L13" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="toggle-mode">
+                <div class="icon">
+                  <i aria-hidden="true">☀</i>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="switch-style">
+                  <span class="slider round"></span>
+                </label>
+                <div class="icon">
+                  <i aria-hidden="true">☾</i>
+                </div>
+              </div>
+          
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <h5>In This Article</h5>
+              <div></div>
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <div class="pull-left">
+              
+              <span>Generated by <strong>DocFX</strong></span>
+            </div>
+            <div class="toggle-mode pull-right visible-sm visible-xs">
+              <div class="icon">
+                <i aria-hidden="true">☀</i>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="switch-style-m">
+                <span class="slider round"></span>
+              </label>
+              <div class="icon">
+                <i aria-hidden="true">☾</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript" src="../styles/toggle-theme.js"></script>
+      </footer>    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
