@@ -46,9 +46,7 @@ public static partial class StaticContentLoader
 		}
 		else
 		{
-			using HttpClient client = new();
-			client.DefaultRequestHeaders.UserAgent.Add(new("AssetRipper", AssetRipperRuntimeInformation.Build.Version));
-			client.DefaultRequestHeaders.UserAgent.Add(new($"({AssetRipperRuntimeInformation.OS.Name}; {AssetRipperRuntimeInformation.ProcessArchitecture})"));
+			using HttpClient client = HttpClientBuilder.CreateHttpClient();
 
 			byte[] data;
 			HttpResponseMessage response = await client.GetAsync(source);
