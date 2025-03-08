@@ -240,5 +240,6 @@
     "transform": "Перетворення (Transform)",
     "vertex_count": "Кількість вершин",
     "export_primary_content": "Експорт основного контенту",
-    "export_unity_project": "Експортувати проєкт Unity"
+    "export_unity_project": "Експортувати проєкт Unity",
+    "premium_feature_notice": "Преміум-функція"
 }
