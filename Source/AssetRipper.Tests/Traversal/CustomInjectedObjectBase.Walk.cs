@@ -180,16 +180,19 @@ partial class CustomInjectedObjectBase
 
 						MethodInfo indexer = type.GetMethod("GetPair", BindingFlags.Public | BindingFlags.Instance)!;
 
+						MethodInfo implicitConversion = typeof(AssetPair<,>).MakeGenericType(keyType, valueType).GetMethod("op_Implicit")!;
+
 						int i = 0;
 						while (true)
 						{
 							object pair = indexer.Invoke(value, [i])!;
-							if (EnterDictionaryPair(walker, keyType, valueType, pair))
+							object keyValuePair = implicitConversion.Invoke(null, [pair])!;
+							if (EnterDictionaryPair(walker, keyType, valueType, keyValuePair))
 							{
 								VisitValue(walker, walkType, keyType, pair.GetType().GetProperty(nameof(AssetPair<int, int>.Key))?.GetValue(pair)!);
-								DivideDictionaryPair(walker, keyType, valueType, pair);
+								DivideDictionaryPair(walker, keyType, valueType, keyValuePair);
 								VisitValue(walker, walkType, valueType, pair.GetType().GetProperty(nameof(AssetPair<int, int>.Value))?.GetValue(pair)!);
-								ExitDictionaryPair(walker, keyType, valueType, pair);
+								ExitDictionaryPair(walker, keyType, valueType, keyValuePair);
 							}
 							i++;
 							if (i >= count)
@@ -207,12 +210,13 @@ partial class CustomInjectedObjectBase
 				Type keyType = type.GetGenericArguments()[0];
 				Type valueType = type.GetGenericArguments()[1];
 
-				if (EnterPair(walker, keyType, valueType, value))
+				object? keyValuePair = type.GetMethod("op_Implicit")?.Invoke(null, [value])!;
+				if (EnterPair(walker, keyType, valueType, keyValuePair))
 				{
 					VisitValue(walker, walkType, keyType, type.GetProperty(nameof(AssetPair<int, int>.Key))?.GetValue(value)!);
-					DividePair(walker, keyType, valueType, value);
+					DividePair(walker, keyType, valueType, keyValuePair);
 					VisitValue(walker, walkType, valueType, type.GetProperty(nameof(AssetPair<int, int>.Value))?.GetValue(value)!);
-					ExitPair(walker, keyType, valueType, value);
+					ExitPair(walker, keyType, valueType, keyValuePair);
 				}
 			}
 			else

@@ -32,15 +32,15 @@ namespace AssetRipper.Export.UnityProjects.RawAssets
 			return MetaPtr.NullPtr;
 		}
 
-		public override bool Export(IExportContainer container, string projectDirectory)
+		public override bool Export(IExportContainer container, string projectDirectory, FileSystem fileSystem)
 		{
-			string resourcePath = Path.Combine(projectDirectory, "AssetRipper", "UnknownAssets", Asset.ClassName, $"{Asset.Name}.unknown");
-			string subPath = Path.GetDirectoryName(resourcePath)!;
-			Directory.CreateDirectory(subPath);
-			string resFileName = Path.GetFileName(resourcePath);
-			string fileName = GetUniqueFileName(subPath, resFileName);
-			string filePath = Path.Combine(subPath, fileName);
-			return AssetExporter.Export(container, Asset, filePath);
+			string resourcePath = fileSystem.Path.Join(projectDirectory, "AssetRipper", "UnknownAssets", Asset.ClassName, $"{Asset.Name}.unknown");
+			string subPath = fileSystem.Path.GetDirectoryName(resourcePath)!;
+			fileSystem.Directory.Create(subPath);
+			string resFileName = fileSystem.Path.GetFileName(resourcePath);
+			string fileName = GetUniqueFileName(subPath, resFileName, fileSystem);
+			string filePath = fileSystem.Path.Join(subPath, fileName);
+			return AssetExporter.Export(container, Asset, filePath, fileSystem);
 		}
 
 		public override long GetExportID(IExportContainer container, IUnityObjectBase asset)

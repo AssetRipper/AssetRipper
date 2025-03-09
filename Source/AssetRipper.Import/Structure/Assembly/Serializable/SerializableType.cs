@@ -51,15 +51,6 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 			return structure;
 		}
 
-		public Field GetField(int index)
-		{
-			if (index < BaseFieldCount && Base != null)
-			{
-				return Base.GetField(index);
-			}
-			return Fields[index - BaseFieldCount];
-		}
-
 		public bool IsPrimitive()
 		{
 			return MonoUtils.IsPrimitive(Namespace, Name);
@@ -77,19 +68,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 
 		public bool IsEnginePointer()
 		{
-			if (MonoUtils.IsObject(Namespace, Name))
-			{
-				return false;
-			}
-			if (MonoUtils.IsMonoPrime(Namespace, Name))
-			{
-				return true;
-			}
-			if (Base == null)
-			{
-				return false;
-			}
-			return Base.IsEnginePointer();
+			return MonoUtils.IsObject(Namespace, Name) || MonoUtils.IsMonoPrime(Namespace, Name);
 		}
 
 		public override string ToString() => FullName;
@@ -99,24 +78,8 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 		public string? Namespace { get; }
 		public PrimitiveType Type { get; }
 		public string Name { get; }
-		public SerializableType? Base { get; protected set; }
 		public IReadOnlyList<Field> Fields { get; protected set; }
-		public int FieldCount => BaseFieldCount + Fields.Count;
 		public virtual int Version => 1;
 		public virtual bool FlowMappedInYaml => false;
-
-		internal int BaseFieldCount
-		{
-			get
-			{
-				if (m_baseFieldCount < 0)
-				{
-					m_baseFieldCount = Base == null ? 0 : Base.FieldCount;
-				}
-				return m_baseFieldCount;
-			}
-		}
-
-		private int m_baseFieldCount = -1;
 	}
 }

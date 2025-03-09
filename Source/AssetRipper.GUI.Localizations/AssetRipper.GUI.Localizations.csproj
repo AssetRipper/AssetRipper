@@ -4,11 +4,16 @@
 		<IsTrimmable>true</IsTrimmable>
 		<OutputPath>..\0Bins\Other\AssetRipper.GUI.Localizations\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.GUI.Localizations\$(Configuration)\</IntermediateOutputPath>
+		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<None Remove="..\..\Localizations\*.json" />
-		<EmbeddedResource Include="..\..\Localizations\*.json" />
+		<AdditionalFiles Include="..\..\Localizations\*.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\AssetRipper.GUI.Localizations.SourceGenerator\AssetRipper.GUI.Localizations.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
 	</ItemGroup>
 
 </Project>

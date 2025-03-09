@@ -4,6 +4,16 @@ namespace AssetRipper.SourceGenerated.Extensions;
 
 public static class CubemapArrayExtensions
 {
+	public static int GetHeight(this ICubemapArray texture)
+	{
+		return texture.Width;
+	}
+
+	public static int GetDepth(this ICubemapArray texture)
+	{
+		return texture.CubemapCount * 6;// Not sure about this
+	}
+
 	public static byte[] GetImageData(this ICubemapArray texture)
 	{
 		if (texture.ImageData.Length > 0)
@@ -34,5 +44,11 @@ public static class CubemapArrayExtensions
 		{
 			return false;
 		}
+	}
+
+	public static int GetCompleteImageSize(this ICubemapArray texture)
+	{
+		int depth = texture.GetDepth();
+		return depth > 0 ? (int)texture.DataSize / depth : 0;
 	}
 }

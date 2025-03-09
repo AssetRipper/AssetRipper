@@ -18,9 +18,10 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 
 		protected override string GetExportExtension(IUnityObjectBase asset)
 		{
-			if (!string.IsNullOrEmpty(asset.OriginalExtension))
+			string? extension = asset.GetBestExtension();
+			if (extension is not null)
 			{
-				return asset.OriginalExtension;
+				return extension;
 			}
 			return ((TextAssetExporter)AssetExporter).ExportMode switch
 			{

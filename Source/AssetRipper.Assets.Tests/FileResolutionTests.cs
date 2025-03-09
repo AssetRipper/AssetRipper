@@ -1,8 +1,8 @@
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
+using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.ResourceFiles;
 using AssetRipper.IO.Files.Streams.Smart;
-using AssetRipper.IO.Files.Utils;
 
 namespace AssetRipper.Assets.Tests;
 
@@ -226,7 +226,7 @@ public class FileResolutionTests
 	{
 		public ResourceFile? FindResource(string identifier)
 		{
-			string fixedName = FilenameUtils.FixResourcePath(identifier);
+			string fixedName = SpecialFileNames.FixResourcePath(identifier);
 			return fixedName == Resource.NameFixed ? Resource : null;
 		}
 	}

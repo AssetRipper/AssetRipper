@@ -31,14 +31,14 @@ public sealed record class ImportSettings
 	/// <summary>
 	/// The default version used when no version is specified, ie when the version has been stripped.
 	/// </summary>
+	[JsonConverter(typeof(UnityVersionJsonConverter))]
 	public UnityVersion DefaultVersion { get; set; }
 
 	/// <summary>
 	/// The target version to convert all assets to. Experimental
 	/// </summary>
+	[JsonConverter(typeof(UnityVersionJsonConverter))]
 	public UnityVersion TargetVersion { get; set; }
-
-	public BundledAssetsExportMode BundledAssetsExportMode { get; set; }
 
 	public void Log()
 	{
@@ -46,6 +46,5 @@ public sealed record class ImportSettings
 		Logger.Info(LogCategory.General, $"{nameof(StreamingAssetsMode)}: {StreamingAssetsMode}");
 		Logger.Info(LogCategory.General, $"{nameof(DefaultVersion)}: {DefaultVersion}");
 		Logger.Info(LogCategory.General, $"{nameof(TargetVersion)}: {TargetVersion}");
-		Logger.Info(LogCategory.General, $"{nameof(BundledAssetsExportMode)}: {BundledAssetsExportMode}");
 	}
 }

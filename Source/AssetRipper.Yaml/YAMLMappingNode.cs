@@ -13,175 +13,175 @@ namespace AssetRipper.Yaml
 
 		public void Add(int key, long value)
 		{
-			YamlScalarNode valueNode = new(value);
+			YamlScalarNode valueNode = YamlScalarNode.Create(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(int key, string value)
 		{
-			YamlScalarNode valueNode = new(value);
+			YamlScalarNode valueNode = YamlScalarNode.Create(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(int key, YamlNode value)
 		{
-			YamlScalarNode keyNode = new(key);
+			YamlScalarNode keyNode = YamlScalarNode.Create(key);
 			InsertEnd(keyNode, value);
 		}
 
 		public void Add(uint key, string value)
 		{
-			YamlScalarNode valueNode = new(value);
+			YamlScalarNode valueNode = YamlScalarNode.Create(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(uint key, YamlNode value)
 		{
-			YamlScalarNode keyNode = new(key);
+			YamlScalarNode keyNode = YamlScalarNode.Create(key);
 			InsertEnd(keyNode, value);
 		}
 
 		public void Add(long key, string value)
 		{
-			YamlScalarNode valueNode = new(value);
+			YamlScalarNode valueNode = YamlScalarNode.Create(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(long key, YamlNode value)
 		{
-			YamlScalarNode keyNode = new(key);
+			YamlScalarNode keyNode = YamlScalarNode.Create(key);
 			InsertEnd(keyNode, value);
 		}
 
 		public void Add(string key, bool value)
 		{
-			YamlScalarNode valueNode = new(value);
+			YamlScalarNode valueNode = YamlScalarNode.Create(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(string key, byte value)
 		{
-			YamlScalarNode valueNode = new(value);
+			YamlScalarNode valueNode = YamlScalarNode.Create(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(string key, short value)
 		{
-			YamlScalarNode valueNode = new(value);
+			YamlScalarNode valueNode = YamlScalarNode.Create(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(string key, ushort value)
 		{
-			YamlScalarNode valueNode = new(value);
+			YamlScalarNode valueNode = YamlScalarNode.Create(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(string key, int value)
 		{
-			YamlScalarNode valueNode = new(value);
+			YamlScalarNode valueNode = YamlScalarNode.Create(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(string key, uint value)
 		{
-			YamlScalarNode valueNode = new(value);
+			YamlScalarNode valueNode = YamlScalarNode.Create(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(string key, long value)
 		{
-			YamlScalarNode valueNode = new(value);
+			YamlScalarNode valueNode = YamlScalarNode.Create(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(string key, ulong value)
 		{
-			YamlScalarNode valueNode = new(value);
+			YamlScalarNode valueNode = YamlScalarNode.Create(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(string key, float value)
 		{
-			YamlScalarNode valueNode = new(value);
+			YamlScalarNode valueNode = YamlScalarNode.Create(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(string key, double value)
 		{
-			YamlScalarNode valueNode = new(value);
+			YamlScalarNode valueNode = YamlScalarNode.Create(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(string key, string value)
 		{
-			YamlScalarNode valueNode = new(value);
+			YamlScalarNode valueNode = YamlScalarNode.Create(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(string key, YamlNode value)
 		{
-			YamlScalarNode keyNode = new(key, true);
+			YamlScalarNode keyNode = YamlScalarNode.CreatePlain(key);
 			InsertEnd(keyNode, value);
 		}
 
 		public void Add(YamlNode key, bool value)
 		{
-			YamlScalarNode valueNode = new(value);
+			YamlScalarNode valueNode = YamlScalarNode.Create(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(YamlNode key, byte value)
 		{
-			YamlScalarNode valueNode = new(value);
+			YamlScalarNode valueNode = YamlScalarNode.Create(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(YamlNode key, short value)
 		{
-			YamlScalarNode valueNode = new(value);
+			YamlScalarNode valueNode = YamlScalarNode.Create(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(YamlNode key, ushort value)
 		{
-			YamlScalarNode valueNode = new(value);
+			YamlScalarNode valueNode = YamlScalarNode.Create(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(YamlNode key, int value)
 		{
-			YamlScalarNode valueNode = new(value);
+			YamlScalarNode valueNode = YamlScalarNode.Create(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(YamlNode key, uint value)
 		{
-			YamlScalarNode valueNode = new(value);
+			YamlScalarNode valueNode = YamlScalarNode.Create(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(YamlNode key, long value)
 		{
-			YamlScalarNode valueNode = new(value);
+			YamlScalarNode valueNode = YamlScalarNode.Create(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(YamlNode key, ulong value)
 		{
-			YamlScalarNode valueNode = new(value);
+			YamlScalarNode valueNode = YamlScalarNode.Create(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(YamlNode key, float value)
 		{
-			YamlScalarNode valueNode = new(value);
+			YamlScalarNode valueNode = YamlScalarNode.Create(value);
 			Add(key, valueNode);
 		}
 
 		public void Add(YamlNode key, string value)
 		{
-			YamlScalarNode valueNode = new(value);
+			YamlScalarNode valueNode = YamlScalarNode.Create(value);
 			Add(key, valueNode);
 		}
 
@@ -205,13 +205,13 @@ namespace AssetRipper.Yaml
 
 		public void InsertBegin(string key, int value)
 		{
-			YamlScalarNode valueNode = new(value);
+			YamlScalarNode valueNode = YamlScalarNode.Create(value);
 			InsertBegin(key, valueNode);
 		}
 
 		public void InsertBegin(string key, YamlNode value)
 		{
-			YamlScalarNode keyNode = new(key, true);
+			YamlScalarNode keyNode = YamlScalarNode.CreatePlain(key);
 			InsertBegin(keyNode, value);
 		}
 

@@ -7,8 +7,15 @@ namespace AssetRipper.SourceGenerated.Extensions
 	{
 		public static void ConvertToEditorFormat(this ILightmapSettings settings)
 		{
-			settings.GIWorkflowMode = (int)GIWorkflowMode.OnDemand;
 			settings.LightmapEditorSettings.SetToDefault();
+			if (settings.LightingSettingsP is { } lightingSettings)
+			{
+				settings.GIWorkflowMode = lightingSettings.GIWorkflowMode;
+			}
+			else
+			{
+				settings.GIWorkflowMode = (int)GIWorkflowMode.OnDemand;
+			}
 		}
 
 		public static GIWorkflowMode GetGIWorkflowMode(this ILightmapSettings settings)

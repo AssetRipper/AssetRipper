@@ -11,12 +11,19 @@ namespace AssetRipper.IO.Files.Tests
 		{
 		}
 
-		[Test]
-		[Ignore("Write not yet implemented")]
-		public void ReadIsSymmetricToWrite()
+		[TestCase(BundleVersion.BF_260_340, "3.4.0")]
+		[TestCase(BundleVersion.BF_350_4x, "4.2.0")]
+		[TestCase(BundleVersion.BF_520a1, "5.2.0a1")]
+		[TestCase(BundleVersion.BF_520aunk, "5.2.0a10")]
+		[TestCase(BundleVersion.BF_520_x, "5.3.0f1")]
+		[TestCase(BundleVersion.BF_520_x, "2018.4.40f1")]
+		[TestCase(BundleVersion.BF_LargeFilesSupport, "2022.1.0f1")]
+		[TestCase(BundleVersion.BF_LargeFilesSupport, "2022.1.10f1")]
+		[TestCase(BundleVersion.BF_2022_2, "2022.2.0f1")]
+		public void ReadIsSymmetricToWriteForEmptyBundle(BundleVersion bundleVersion, string unityVersion)
 		{
 			FileStreamBundleScheme scheme = new();
-			FileStreamBundleFile bundle = MakeBundle();
+			FileStreamBundleFile bundle = MakeEmptyBundle(bundleVersion, unityVersion);
 			using SmartStream stream = SmartStream.CreateMemory();
 
 			bundle.Write(stream);
@@ -57,13 +64,13 @@ namespace AssetRipper.IO.Files.Tests
 			});
 		}
 
-		private static FileStreamBundleFile MakeBundle() 
+		private static FileStreamBundleFile MakeEmptyBundle(BundleVersion bundleVersion, string unityVersion)
 		{
 			FileStreamBundleFile bundle = new();
 			FileStreamBundleHeader header = bundle.Header;
-			header.Version = BundleVersion.BF_LargeFilesSupport;
+			header.Version = bundleVersion;
 			header.UnityWebBundleVersion = "5.x.x";
-			header.UnityWebMinimumRevision = "2022.1.0f1";
+			header.UnityWebMinimumRevision = unityVersion;
 			return bundle;
 		}
 	}

@@ -23,7 +23,7 @@ namespace AssetRipper.Tools.SystemTester
 			}
 			else
 			{
-				Rip(args, Path.Combine(AppContext.BaseDirectory, "Ripped"));
+				Rip(args, Path.Join(AppContext.BaseDirectory, "Ripped"));
 			}
 		}
 
@@ -52,7 +52,7 @@ namespace AssetRipper.Tools.SystemTester
 					string testName = Path.GetRelativePath(versionPath, testPath);
 					Logger.Info(LogCategory.General, $"Found test: '{testName}' for Unity version: '{versionName}'");
 					numTests++;
-					string inputPath = Path.Combine(testPath, "Input");
+					string inputPath = Path.Join(testPath, "Input");
 					if (!Directory.Exists(inputPath))
 					{
 						Logger.Log(LogType.Error, LogCategory.General, $"No input folder for '{testName}' on Unity version '{versionName}'");
@@ -65,7 +65,7 @@ namespace AssetRipper.Tools.SystemTester
 							string[] inputFiles = Directory.GetFiles(inputPath);
 							string[] inputDirectories = Directory.GetDirectories(inputPath);
 							string[] inputPaths = Combine(inputFiles, inputDirectories);
-							string outputPath = Path.Combine(testPath, "Output");
+							string outputPath = Path.Join(testPath, "Output");
 							Rip(inputPaths, outputPath);
 							Logger.Info(LogCategory.General, $"Completed test: '{testName}' for Unity version: '{versionName}'");
 							Logger.BlankLine(2);

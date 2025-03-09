@@ -13,7 +13,7 @@ namespace AssetRipper.Export.UnityProjects.Audio
 			this.fileExtension = fileExtension;
 		}
 
-		protected override bool ExportInner(IExportContainer container, string filePath, string dirPath)
+		protected override bool ExportInner(IExportContainer container, string filePath, string dirPath, FileSystem fileSystem)
 		{
 			if (data is null or { Length: 0 })
 			{
@@ -21,7 +21,7 @@ namespace AssetRipper.Export.UnityProjects.Audio
 			}
 			else
 			{
-				System.IO.File.WriteAllBytes(filePath, data);
+				fileSystem.File.WriteAllBytes(filePath, data);
 				data = null;
 				return true;
 			}

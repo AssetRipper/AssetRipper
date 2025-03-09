@@ -37,6 +37,16 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 		}
 
+		public static uint GetFirstIndex(this ISubMesh subMesh, bool is16BitIndices)
+		{
+			return is16BitIndices ? subMesh.FirstByte / sizeof(ushort) : subMesh.FirstByte / sizeof(uint);
+		}
+
+		public static void SetFirstIndex(this ISubMesh subMesh, bool is16BitIndices, uint firstIndex)
+		{
+			subMesh.FirstByte = is16BitIndices ? firstIndex * sizeof(ushort) : firstIndex * sizeof(uint);
+		}
+
 		private static void UpdateSubMeshVertexRange(UnityVersion version, IMesh mesh, ISubMesh submesh)
 		{
 			if (submesh.IndexCount == 0)

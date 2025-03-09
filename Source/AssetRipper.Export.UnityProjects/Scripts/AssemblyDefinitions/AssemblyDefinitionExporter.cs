@@ -5,9 +5,9 @@ namespace AssetRipper.Export.UnityProjects.Scripts.AssemblyDefinitions
 {
 	public static class AssemblyDefinitionExporter
 	{
-		public static void Export(AssemblyDefinitionDetails details)
+		public static void Export(AssemblyDefinitionDetails details, FileSystem fileSystem)
 		{
-			string assetPath = Path.Combine(details.OutputFolder, $"{details.AssemblyName}.asmdef");
+			string assetPath = fileSystem.Path.Join(details.OutputFolder, $"{details.AssemblyName}.asmdef");
 
 			AssemblyDefinitionAsset asset = new AssemblyDefinitionAsset(details.AssemblyName);
 			ModuleDefinition? module = details.Assembly?.ManifestModule;
@@ -25,7 +25,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts.AssemblyDefinitions
 			}
 
 			string assetData = JsonSerializer.Serialize(asset, AssemblyDefinitionSerializerContext.Default.AssemblyDefinitionAsset);
-			File.WriteAllText(assetPath, assetData);
+			fileSystem.File.WriteAllText(assetPath, assetData);
 		}
 	}
 }

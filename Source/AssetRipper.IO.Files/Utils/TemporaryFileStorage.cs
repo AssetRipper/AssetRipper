@@ -4,7 +4,7 @@ public static class TemporaryFileStorage
 {
 	private static string ExecutingDirectory => AppContext.BaseDirectory;
 
-	public static string LocalTemporaryDirectory { get; } = Path.Combine(ExecutingDirectory, "temp", GetRandomString()[0..4]);
+	public static string LocalTemporaryDirectory { get; } = Path.Join(ExecutingDirectory, "temp", GetRandomString()[0..4]);
 
 	private static string temporaryDirectory = LocalTemporaryDirectory;
 
@@ -32,7 +32,7 @@ public static class TemporaryFileStorage
 
 	public static string CreateTemporaryFolder()
 	{
-		string path = Path.Combine(TemporaryDirectory, GetRandomString()[0..8]);
+		string path = Path.Join(TemporaryDirectory, GetRandomString()[0..8]);
 		Directory.CreateDirectory(path);
 		return path;
 	}
@@ -40,7 +40,7 @@ public static class TemporaryFileStorage
 	public static string CreateTemporaryFile()
 	{
 		Directory.CreateDirectory(TemporaryDirectory);
-		string path = Path.Combine(TemporaryDirectory, GetRandomString());
+		string path = Path.Join(TemporaryDirectory, GetRandomString());
 		File.Create(path).Dispose();
 		return path;
 	}

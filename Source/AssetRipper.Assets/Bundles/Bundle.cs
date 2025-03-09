@@ -1,9 +1,9 @@
 ﻿using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.IO;
+using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.ResourceFiles;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
-using AssetRipper.IO.Files.Utils;
 
 namespace AssetRipper.Assets.Bundles;
 
@@ -16,21 +16,31 @@ public abstract class Bundle : IDisposable
 	/// The parent <see cref="Bundle"/> of this Bundle.
 	/// </summary>
 	public Bundle? Parent { get; private set; }
+
 	/// <summary>
 	/// The list of <see cref="ResourceFile"/>s in this Bundle.
 	/// </summary>
 	public IReadOnlyList<ResourceFile> Resources => resources;
-	private readonly List<ResourceFile> resources = new();
+	private readonly List<ResourceFile> resources = [];
+
 	/// <summary>
 	/// The list of <see cref="AssetCollection"/>s in this Bundle.
 	/// </summary>
 	public IReadOnlyList<AssetCollection> Collections => collections;
-	private readonly List<AssetCollection> collections = new();
+	private readonly List<AssetCollection> collections = [];
+
 	/// <summary>
 	/// The list of child <see cref="Bundle"/>s in this Bundle.
 	/// </summary>
 	public IReadOnlyList<Bundle> Bundles => bundles;
-	private readonly List<Bundle> bundles = new();
+	private readonly List<Bundle> bundles = [];
+
+	/// <summary>
+	/// The list of <see cref="FailedFile"/>s in this Bundle.
+	/// </summary>
+	public IReadOnlyList<FailedFile> FailedFiles => failedFiles;
+	private readonly List<FailedFile> failedFiles = [];
+
 	private bool disposedValue;
 
 	/// <summary>
@@ -98,7 +108,7 @@ public abstract class Bundle : IDisposable
 			return result;
 		}
 
-		string fixedName = FilenameUtils.FixFileIdentifier(name);
+		string fixedName = SpecialFileNames.FixFileIdentifier(name);
 		result = ResolveInternal(fixedName);
 		if (result is not null)
 		{
@@ -107,10 +117,10 @@ public abstract class Bundle : IDisposable
 
 		return fixedName switch
 		{
-			FilenameUtils.DefaultResourceName1 => ResolveInternal(FilenameUtils.DefaultResourceName2),
-			FilenameUtils.DefaultResourceName2 => ResolveInternal(FilenameUtils.DefaultResourceName1),
-			FilenameUtils.BuiltinExtraName1 => ResolveInternal(FilenameUtils.BuiltinExtraName2),
-			FilenameUtils.BuiltinExtraName2 => ResolveInternal(FilenameUtils.BuiltinExtraName1),
+			SpecialFileNames.DefaultResourceName1 => ResolveInternal(SpecialFileNames.DefaultResourceName2),
+			SpecialFileNames.DefaultResourceName2 => ResolveInternal(SpecialFileNames.DefaultResourceName1),
+			SpecialFileNames.BuiltinExtraName1 => ResolveInternal(SpecialFileNames.BuiltinExtraName2),
+			SpecialFileNames.BuiltinExtraName2 => ResolveInternal(SpecialFileNames.BuiltinExtraName1),
 			_ => null,
 		};
 
@@ -174,7 +184,7 @@ public abstract class Bundle : IDisposable
 		}
 
 		string originalName = name;
-		string fixedName = FilenameUtils.FixFileIdentifier(name);
+		string fixedName = SpecialFileNames.FixFileIdentifier(name);
 
 		Bundle? bundleToExclude = null;
 		Bundle? currentBundle = this;
@@ -279,6 +289,11 @@ public abstract class Bundle : IDisposable
 		{
 			throw new ArgumentException($"{nameof(bundle)} already has a parent.", nameof(bundle));
 		}
+	}
+
+	public void AddFailed(FailedFile file)
+	{
+		failedFiles.Add(file);
 	}
 
 	/// <summary>

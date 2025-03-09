@@ -117,7 +117,19 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 			}
 			if (metadataSize > 0)
 			{
-				if (stream.Position - metadataPosition != metadataSize)
+				long metadataBytesRead = stream.Position - metadataPosition;
+				if (metadataBytesRead == metadataSize)
+				{
+					// Note: metadataSize might not be a multiple of 4
+				}
+				else if ((metadataPosition % 4 == 0) && (metadataSize % 4 == 0) && (((metadataBytesRead + 3) & ~3) == metadataSize))
+				{
+					// The stream needed to be aligned to 4 bytes.
+					// https://github.com/AssetRipper/AssetRipper/issues/1470
+					// In my testing, there didn't seem to be any indicator (eg in Header.Flags) that the stream needed to be aligned to 4 bytes.
+					// We just need to check if aligning the stream to 4 bytes would make the bytes read equal to the metadata size.
+				}
+				else
 				{
 					throw new Exception($"Read {stream.Position - metadataPosition} but expected {metadataSize} while reading bundle metadata");
 				}
@@ -142,8 +154,20 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 			using BundleFileBlockReader blockReader = new BundleFileBlockReader(stream, BlocksInfo);
 			foreach (FileStreamNode entry in DirectoryInfo.Nodes)
 			{
-				SmartStream entryStream = blockReader.ReadEntry(entry);
-				AddResourceFile(new ResourceFile(entryStream, FilePath, entry.Path));
+				try
+				{
+					SmartStream entryStream = blockReader.ReadEntry(entry);
+					AddResourceFile(new ResourceFile(entryStream, FilePath, entry.Path));
+				}
+				catch (Exception ex)
+				{
+					AddFailedFile(new FailedFile()
+					{
+						Name = entry.Path,
+						FilePath = FilePath,
+						StackTrace = ex.ToString(),
+					});
+				}
 			}
 		}
 
@@ -228,6 +252,11 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 			if (Header.Flags.GetBlockInfoNeedPaddingAtStart())
 			{
 				stream.Align(16);
+			}
+
+			if (DirectoryInfo.Nodes.Length == 0)
+			{
+				return;
 			}
 
 			throw new NotImplementedException();

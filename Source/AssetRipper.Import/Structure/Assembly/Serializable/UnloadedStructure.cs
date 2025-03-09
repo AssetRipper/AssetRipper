@@ -15,14 +15,25 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable;
 /// This is a placeholder asset that lazily reads the actual structure sometime after all the assets have been loaded.
 /// This allows MonoBehaviours to be loaded before their referenced MonoScript.
 /// </summary>
-public sealed class UnloadedStructure : UnityAssetBase
+public sealed class UnloadedStructure : UnityAssetBase, IDeepCloneable
 {
-	private sealed class StatelessAsset : UnityAssetBase
+	private sealed class StatelessAsset : UnityAssetBase, IDeepCloneable
 	{
 		public static StatelessAsset Instance { get; } = new();
 		private StatelessAsset()
 		{
 		}
+
+		public override void Reset()
+		{
+		}
+
+		public override bool? AddToEqualityComparer(IUnityAssetBase other, AssetEqualityComparer comparer)
+		{
+			return other is StatelessAsset;
+		}
+
+		IUnityAssetBase IDeepCloneable.DeepClone(PPtrConverter converter) => this;
 	}
 
 	/// <summary>
@@ -75,6 +86,16 @@ public sealed class UnloadedStructure : UnityAssetBase
 		return null;
 	}
 
+	private UnityAssetBase LoadStructureOrStatelessAsset()
+	{
+		return (UnityAssetBase?)LoadStructure() ?? StatelessAsset.Instance;
+	}
+
+	public IUnityAssetBase DeepClone(PPtrConverter converter)
+	{
+		return LoadStructure()?.DeepClone(converter) ?? (IUnityAssetBase)StatelessAsset.Instance;
+	}
+
 	#region UnityAssetBase Overrides
 	public override bool FlowMappedInYaml => LoadStructure()?.FlowMappedInYaml ?? base.FlowMappedInYaml;
 
@@ -82,22 +103,22 @@ public sealed class UnloadedStructure : UnityAssetBase
 
 	public override void WalkEditor(AssetWalker walker)
 	{
-		((UnityAssetBase?)LoadStructure() ?? StatelessAsset.Instance).WalkEditor(walker);
+		LoadStructureOrStatelessAsset().WalkEditor(walker);
 	}
 
 	public override void WalkRelease(AssetWalker walker)
 	{
-		((UnityAssetBase?)LoadStructure() ?? StatelessAsset.Instance).WalkRelease(walker);
+		LoadStructureOrStatelessAsset().WalkRelease(walker);
 	}
 
 	public override void WalkStandard(AssetWalker walker)
 	{
-		((UnityAssetBase?)LoadStructure() ?? StatelessAsset.Instance).WalkStandard(walker);
+		LoadStructureOrStatelessAsset().WalkStandard(walker);
 	}
 
 	public override IEnumerable<(string, PPtr)> FetchDependencies()
 	{
-		return LoadStructure()?.FetchDependencies() ?? Enumerable.Empty<(string, PPtr)>();
+		return LoadStructure()?.FetchDependencies() ?? [];
 	}
 
 	public override void WriteEditor(AssetWriter writer) => LoadStructure()?.WriteEditor(writer);
@@ -107,5 +128,10 @@ public sealed class UnloadedStructure : UnityAssetBase
 	public override void CopyValues(IUnityAssetBase? source, PPtrConverter converter) => LoadStructure()?.CopyValues(source, converter);
 
 	public override void Reset() => LoadStructure()?.Reset();
+
+	public override bool? AddToEqualityComparer(IUnityAssetBase other, AssetEqualityComparer comparer)
+	{
+		return LoadStructureOrStatelessAsset().AddToEqualityComparer(other, comparer);
+	}
 	#endregion
 }

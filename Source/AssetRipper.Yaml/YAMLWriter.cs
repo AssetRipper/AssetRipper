@@ -5,10 +5,11 @@
 		public void AddDocument(YamlDocument document)
 		{
 #if DEBUG
-			if (document == null)
-				throw new ArgumentNullException(nameof(document));
+			ArgumentNullException.ThrowIfNull(document);
 			if (m_documents.Contains(document))
+			{
 				throw new ArgumentException($"Document {document} is added already", nameof(document));
+			}
 #endif
 			m_documents.Add(document);
 		}
@@ -70,7 +71,7 @@
 			output.Write('\n');
 		}
 
-		[System.Diagnostics.CodeAnalysis.MemberNotNull(nameof(m_emitter))]
+		[MemberNotNull(nameof(m_emitter))]
 		private void ThrowIfNullEmitter()
 		{
 			if (m_emitter is null)
@@ -90,8 +91,8 @@
 		public bool IsWriteDefaultTag { get; set; } = true;
 		public bool IsFormatKeys { get; set; }
 
-		private readonly HashSet<YamlDocument> m_documents = new HashSet<YamlDocument>();
-		private readonly List<YamlTag> m_tags = new List<YamlTag>();
+		private readonly HashSet<YamlDocument> m_documents = [];
+		private readonly List<YamlTag> m_tags = [];
 
 		private Emitter? m_emitter;
 		private bool m_isWriteSeparator;

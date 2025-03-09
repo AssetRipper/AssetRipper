@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace AssetRipper.GUI.Web.Paths;
 
-public readonly record struct BundlePath : IPath<BundlePath>
+public readonly struct BundlePath : IPath<BundlePath>, IEquatable<BundlePath>
 {
 	private readonly int[]? _path;
 
@@ -27,6 +27,9 @@ public readonly record struct BundlePath : IPath<BundlePath>
 	public ReadOnlyMemory<int> Path => _path;
 
 	[JsonIgnore]
+	public ReadOnlySpan<int> Span => _path;
+
+	[JsonIgnore]
 	public int Depth => Path.Length;
 
 	[JsonIgnore]
@@ -39,14 +42,14 @@ public readonly record struct BundlePath : IPath<BundlePath>
 	/// If <see cref="IsRoot"/>, then this will return <see langword="default"/>.
 	/// </remarks>
 	[JsonIgnore]
-	public BundlePath Parent => Depth > 1 ? new BundlePath(Path.Span[..^-1]) : default;
+	public BundlePath Parent => Depth > 1 ? new BundlePath(Path.Span[..^1]) : default;
 
 	public BundlePath GetChild(int index)
 	{
 		int[] path;
 		if (_path is null)
 		{
-			path = new int[1] { index };
+			path = [index];
 		}
 		else
 		{
@@ -62,12 +65,27 @@ public readonly record struct BundlePath : IPath<BundlePath>
 		return new CollectionPath(this, index);
 	}
 
+	public FailedFilePath GetFailedFile(int index)
+	{
+		return new FailedFilePath(this, index);
+	}
+
 	public ResourcePath GetResource(int index)
 	{
 		return new ResourcePath(this, index);
 	}
 
-	public static implicit operator ReadOnlySpan<int>(BundlePath path) => path._path;
+	public static implicit operator ReadOnlySpan<int>(BundlePath path) => path.Span;
+
+	public static bool operator ==(BundlePath left, BundlePath right)
+	{
+		return left.Equals(right);
+	}
+
+	public static bool operator !=(BundlePath left, BundlePath right)
+	{
+		return !(left == right);
+	}
 
 	public string ToJson()
 	{
@@ -77,5 +95,27 @@ public readonly record struct BundlePath : IPath<BundlePath>
 	public static BundlePath FromJson(string json)
 	{
 		return JsonSerializer.Deserialize(json, PathSerializerContext.Default.BundlePath);
+	}
+
+	public override string ToString() => ToJson();
+
+	public override bool Equals(object? obj)
+	{
+		return obj is BundlePath path && Equals(path);
+	}
+
+	public bool Equals(BundlePath other)
+	{
+		return Span.SequenceEqual(other.Span);
+	}
+
+	public override int GetHashCode()
+	{
+		HashCode code = new();
+		foreach (int item in Span)
+		{
+			code.Add(item);
+		}
+		return code.ToHashCode();
 	}
 }

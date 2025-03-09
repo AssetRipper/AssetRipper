@@ -1,9 +1,12 @@
-﻿using AssetRipper.Assets.Generics;
+﻿using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Generics;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
+using AssetRipper.SourceGenerated.Classes.ClassID_1001;
 using AssetRipper.SourceGenerated.Classes.ClassID_18;
 using AssetRipper.SourceGenerated.Classes.ClassID_2;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
 using AssetRipper.SourceGenerated.Classes.ClassID_78;
+using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.ComponentPair;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Component;
 
@@ -196,6 +199,34 @@ namespace AssetRipper.SourceGenerated.Extensions
 					yield return childElement;
 				}
 			}
+		}
+
+		public static IEnumerable<IGameObject> GetChildren(this IGameObject gameObject)
+		{
+			ITransform transform = gameObject.GetTransform();
+			return transform.Children_C4P.WhereNotNull().Select(t => t.GameObject_C4P).WhereNotNull();
+		}
+
+		public static IPrefabInstance CreatePrefabForRoot(this IGameObject root, ProcessedAssetCollection collection)
+		{
+			IPrefabInstance prefab = collection.CreateAsset((int)ClassIDType.PrefabInstance, PrefabInstance.Create);
+
+			prefab.HideFlagsE = HideFlags.HideInHierarchy;
+			prefab.RootGameObjectP = root;
+			prefab.IsPrefabAsset = true;
+			prefab.AssetBundleName = root.AssetBundleName;
+
+			prefab.OriginalDirectory = root.OriginalDirectory;
+			prefab.OriginalName = root.OriginalName;
+			prefab.OriginalExtension = root.OriginalExtension;
+
+			prefab.OverrideDirectory = root.GetBestDirectory();
+			prefab.OverrideName = root.GetBestName();
+			prefab.OverrideExtension = root.GetBestExtension();
+
+			prefab.SetPrefabInternal();
+
+			return prefab;
 		}
 
 		private sealed class ComponentPairAccessList : AccessListBase<IPPtr_Component>

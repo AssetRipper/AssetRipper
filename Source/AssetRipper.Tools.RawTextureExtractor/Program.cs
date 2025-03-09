@@ -8,7 +8,6 @@ using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
-using AssetRipper.IO.Files.Utils;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_89;
@@ -19,7 +18,7 @@ namespace AssetRipper.Tools.RawTextureExtractor
 {
 	internal static class Program
 	{
-		private static readonly string outputDirectory = Path.Combine(AppContext.BaseDirectory, "Output");
+		private static readonly string outputDirectory = Path.Join(AppContext.BaseDirectory, "Output");
 
 		static void Main(string[] args)
 		{
@@ -90,7 +89,7 @@ namespace AssetRipper.Tools.RawTextureExtractor
 		{
 			const string jsonExtension = ".json";
 
-			string collectionOutputPath = Path.Combine(GetReversedName(collection).Reverse().ToArray());
+			string collectionOutputPath = Path.Join(GetReversedName(collection).Reverse().ToArray());
 			Directory.CreateDirectory(collectionOutputPath);
 			foreach (ITexture2D texture in collection.OfType<ITexture2D>())
 			{
@@ -99,11 +98,11 @@ namespace AssetRipper.Tools.RawTextureExtractor
 				{
 					string originalName = texture.Name;
 					string name = originalName.Length > 0
-						? FileUtils.FixInvalidNameCharacters(originalName)
+						? FileSystem.FixInvalidFileNameCharacters(originalName)
 						: $"{texture.ClassName}_{ToValidString(texture.PathID)}";
 					Debug.Assert(name.Length > 0);
-					string uniqueName = FileUtils.GetUniqueName(collectionOutputPath, name, FileUtils.MaxFilePathLength - jsonExtension.Length);
-					string dataFilePath = Path.Combine(collectionOutputPath, uniqueName);
+					string uniqueName = FileSystem.GetUniqueName(collectionOutputPath, name, FileSystem.MaxFileNameLength - jsonExtension.Length);
+					string dataFilePath = Path.Join(collectionOutputPath, uniqueName);
 					string infoFilePath = dataFilePath + jsonExtension;
 					File.WriteAllBytes(dataFilePath, data);
 					string text = $$"""

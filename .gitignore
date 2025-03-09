@@ -11,3 +11,4 @@ bin
 .vscode
 *.blend1
 launchSettings.json
+.DS_Store

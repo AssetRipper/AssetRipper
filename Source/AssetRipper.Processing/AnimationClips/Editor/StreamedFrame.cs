@@ -1,7 +1,9 @@
 using AssetRipper.IO.Endian;
+using System.Diagnostics;
 
 namespace AssetRipper.Processing.AnimationClips.Editor
 {
+	[DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
 	public sealed class StreamedFrame
 	{
 		public void Read(ref EndianSpanReader reader, UnityVersion version)
@@ -60,6 +62,11 @@ namespace AssetRipper.Processing.AnimationClips.Editor
 					throw new ArgumentOutOfRangeException(nameof(count), $"Cannot be negative: {count}");
 				}
 			}
+		}
+
+		private string GetDebuggerDisplay()
+		{
+			return $$"""{ {{nameof(Time)}} : {{Time}}, {{nameof(Curves)}}.Length : {{Curves?.Length}} }""";
 		}
 	}
 }

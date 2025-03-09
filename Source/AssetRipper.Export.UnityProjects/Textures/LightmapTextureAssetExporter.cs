@@ -1,10 +1,9 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Export.UnityProjects.Configuration;
+using AssetRipper.Export.Modules.Textures;
 using AssetRipper.Import.Logging;
 using AssetRipper.SourceGenerated.Classes.ClassID_1120;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Extensions;
-using DirectBitmap = AssetRipper.Export.UnityProjects.Utils.DirectBitmap<AssetRipper.TextureDecoder.Rgb.Formats.ColorBGRA32, byte>;
 
 namespace AssetRipper.Export.UnityProjects.Textures;
 
@@ -31,7 +30,7 @@ public class LightmapTextureAssetExporter : BinaryAssetExporter
 		}
 	}
 
-	public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
+	public override bool Export(IExportContainer container, IUnityObjectBase asset, string path, FileSystem fileSystem)
 	{
 		ITexture2D texture = (ITexture2D)asset;
 		if (!texture.CheckAssetIntegrity())
@@ -42,7 +41,7 @@ public class LightmapTextureAssetExporter : BinaryAssetExporter
 
 		if (TextureConverter.TryConvertToBitmap(texture, out DirectBitmap bitmap))
 		{
-			using FileStream stream = File.Create(path);
+			using Stream stream = fileSystem.File.Create(path);
 			bitmap.Save(stream, ImageExportFormat);
 			return true;
 		}

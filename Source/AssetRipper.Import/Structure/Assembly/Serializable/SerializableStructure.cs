@@ -11,7 +11,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_114;
 
 namespace AssetRipper.Import.Structure.Assembly.Serializable
 {
-	public sealed class SerializableStructure : UnityAssetBase
+	public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 	{
 		public override int SerializedVersion => Type.Version;
 		public override bool FlowMappedInYaml => Type.FlowMappedInYaml;
@@ -20,14 +20,14 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 		{
 			Depth = depth;
 			Type = type ?? throw new ArgumentNullException(nameof(type));
-			Fields = new SerializableValue[type.FieldCount];
+			Fields = new SerializableValue[type.Fields.Count];
 		}
 
 		public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags)
 		{
 			for (int i = 0; i < Fields.Length; i++)
 			{
-				SerializableType.Field etalon = Type.GetField(i);
+				SerializableType.Field etalon = Type.Fields[i];
 				if (IsAvailable(etalon))
 				{
 					Fields[i].Read(ref reader, version, flags, Depth, etalon);
@@ -39,7 +39,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 		{
 			for (int i = 0; i < Fields.Length; i++)
 			{
-				SerializableType.Field etalon = Type.GetField(i);
+				SerializableType.Field etalon = Type.Fields[i];
 				if (IsAvailable(etalon))
 				{
 					Fields[i].Write(writer, etalon);
@@ -56,7 +56,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 				bool hasEmittedFirstField = false;
 				for (int i = 0; i < Fields.Length; i++)
 				{
-					SerializableType.Field etalon = Type.GetField(i);
+					SerializableType.Field etalon = Type.Fields[i];
 					if (IsAvailable(etalon))
 					{
 						if (hasEmittedFirstField)
@@ -85,7 +85,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 		{
 			for (int i = 0; i < Fields.Length; i++)
 			{
-				SerializableType.Field etalon = Type.GetField(i);
+				SerializableType.Field etalon = Type.Fields[i];
 				if (IsAvailable(etalon))
 				{
 					foreach ((string, PPtr) pair in Fields[i].FetchDependencies(etalon))
@@ -182,7 +182,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 			return null;
 		}
 
-		private bool TryGetIndex(string name, out int index)
+		public bool TryGetIndex(string name, out int index)
 		{
 			for (int i = 0; i < Fields.Length; i++)
 			{
@@ -254,6 +254,8 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 			clone.CopyValues(this, converter);
 			return clone;
 		}
+
+		IUnityAssetBase IDeepCloneable.DeepClone(PPtrConverter converter) => DeepClone(converter);
 
 		public override void Reset()
 		{

@@ -66,11 +66,11 @@ namespace AssetRipper.Import.Structure
 			IEnumerable<string> filePaths;
 			if (PlatformStructure is null || MixedStructure is null)
 			{
-				filePaths = (PlatformStructure ?? MixedStructure)?.Files.Values ?? Enumerable.Empty<string>();
+				filePaths = (PlatformStructure ?? MixedStructure)?.Files.Values() ?? [];
 			}
 			else
 			{
-				filePaths = PlatformStructure.Files.Values.Union(MixedStructure.Files.Values);
+				filePaths = PlatformStructure.Files.Union(MixedStructure.Files).Select(pair => pair.Value);
 			}
 
 			FileCollection = GameBundle.FromPaths(

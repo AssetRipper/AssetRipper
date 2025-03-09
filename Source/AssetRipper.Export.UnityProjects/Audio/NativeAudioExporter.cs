@@ -21,7 +21,7 @@ namespace AssetRipper.Export.UnityProjects.Audio
 			}
 		}
 
-		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
+		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path, FileSystem fileSystem)
 		{
 			IAudioClip audioClip = (IAudioClip)asset;
 
@@ -33,7 +33,7 @@ namespace AssetRipper.Export.UnityProjects.Audio
 			}
 			else
 			{
-				File.WriteAllBytes(path, data);
+				fileSystem.File.WriteAllBytes(path, data);
 				return true;
 			}
 		}

@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
+using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.ResourceFiles;
 
 namespace AssetRipper.GUI.Web.Paths;
@@ -117,6 +118,22 @@ public static class PathExtensions
 		return resource is not null;
 	}
 
+	public static FailedFile? TryGetFailedFile(this GameBundle gameBundle, FailedFilePath path)
+	{
+		Bundle? bundle = gameBundle.TryGetBundle(path.BundlePath);
+		if (bundle is null || path.Index < 0 || path.Index >= bundle.FailedFiles.Count)
+		{
+			return null;
+		}
+		return bundle.FailedFiles[path.Index];
+	}
+
+	public static bool TryGetFailedFile(this GameBundle gameBundle, FailedFilePath path, [NotNullWhen(true)] out FailedFile? failedFile)
+	{
+		failedFile = gameBundle.TryGetFailedFile(path);
+		return failedFile is not null;
+	}
+
 	public static IUnityObjectBase? TryGetAsset(this GameBundle gameBundle, AssetPath path)
 	{
 		AssetCollection? collection = gameBundle.TryGetCollection(path.CollectionPath);
@@ -124,7 +141,8 @@ public static class PathExtensions
 		{
 			return null;
 		}
-		return collection.TryGetAsset(path.PathID);
+		// Can't use TryGetAsset because that returns null for NullObject objects.
+		return collection.Assets.TryGetValue(path.PathID, out IUnityObjectBase? asset) ? asset : null;
 	}
 
 	public static bool TryGetAsset(this GameBundle gameBundle, AssetPath path, [NotNullWhen(true)] out IUnityObjectBase? asset)

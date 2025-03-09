@@ -1,5 +1,5 @@
 ﻿using AsmResolver.DotNet;
-using AsmResolver.DotNet.Signatures.Types;
+using AsmResolver.DotNet.Signatures;
 using AssetRipper.Import.Structure.Assembly.Serializable;
 using AssetRipper.SerializationLogic;
 using AssetRipper.SerializationLogic.Extensions;
@@ -22,7 +22,7 @@ namespace AssetRipper.Import.Structure.Assembly.Mono
 
 		public static bool TryCreate(
 			TypeDefinition typeDefinition,
-			Dictionary<TypeDefinition, MonoType> typeCache,
+			Dictionary<ITypeDefOrRef, MonoType> typeCache,
 			[NotNullWhen(true)] out MonoType? result,
 			[NotNullWhen(false)] out string? failureReason)
 		{
@@ -61,11 +61,15 @@ namespace AssetRipper.Import.Structure.Assembly.Mono
 
 		public static bool TryCreate(
 			GenericInstanceTypeSignature genericInst,
-			Dictionary<TypeDefinition, MonoType> typeCache,
+			Dictionary<ITypeDefOrRef, MonoType> typeCache,
 			[NotNullWhen(true)] out MonoType? result,
 			[NotNullWhen(false)] out string? failureReason)
 		{
 			List<Field> fields = new();
+
+			result = new(genericInst.GenericType, fields);
+			typeCache.Add(genericInst.ToTypeDefOrRef(), result);
+
 			foreach ((FieldDefinition fieldDefinition, TypeSignature fieldType) in FieldQuery.GetFieldsInTypeAndBase(genericInst))
 			{
 				if (FieldSerializationLogic.WillUnitySerialize(fieldDefinition, fieldType))
@@ -80,13 +84,13 @@ namespace AssetRipper.Import.Structure.Assembly.Mono
 					}
 					else
 					{
+						typeCache.Remove(genericInst.ToTypeDefOrRef());
 						result = null;
 						return false;
 					}
 				}
 			}
 
-			result = new(genericInst.GenericType, fields);
 			failureReason = null;
 			return true;
 		}
@@ -109,7 +113,7 @@ namespace AssetRipper.Import.Structure.Assembly.Mono
 		private static bool TryCreateSerializableField(
 			FieldDefinition fieldDefinition,
 			TypeSignature fieldType,
-			Dictionary<TypeDefinition, MonoType> typeCache,
+			Dictionary<ITypeDefOrRef, MonoType> typeCache,
 			out Field result,
 			[NotNullWhen(false)] out string? failureReason)
 		{
@@ -126,7 +130,7 @@ namespace AssetRipper.Import.Structure.Assembly.Mono
 			string name,
 			TypeSignature typeSignature,
 			int arrayDepth,
-			Dictionary<TypeDefinition, MonoType> typeCache,
+			Dictionary<ITypeDefOrRef, MonoType> typeCache,
 			out Field result,
 			[NotNullWhen(false)] out string? failureReason)
 		{
@@ -145,13 +149,6 @@ namespace AssetRipper.Import.Structure.Assembly.Mono
 					else if (typeDefinition.InheritsFromObject())
 					{
 						fieldType = SerializablePointerType.Shared;
-					}
-					else if (MonoUtils.IsPropertyName(typeDefinition))
-					{
-						//In the managed editor code, PropertyName is only backed by an int ID field.
-						//However, in yaml and release binaries, it appears identical to Utf8String.
-						//Presumably, editor binaries are the same, but this was not verified.
-						fieldType = SerializablePrimitiveType.GetOrCreate(PrimitiveType.String);
 					}
 					else if (typeCache.TryGetValue(typeDefinition, out MonoType? cachedMonoType))
 					{
@@ -181,6 +178,12 @@ namespace AssetRipper.Import.Structure.Assembly.Mono
 					return TryCreateSerializableField(name, szArrayTypeSignature.BaseType, arrayDepth + 1, typeCache, out result, out failureReason);
 
 				case GenericInstanceTypeSignature genericInstanceTypeSignature:
+					if (typeCache.TryGetValue(genericInstanceTypeSignature.ToTypeDefOrRef(), out MonoType? cachedGenericMonoType))
+					{
+						result = new Field(cachedGenericMonoType, arrayDepth, name, true);
+						failureReason = null;
+						return true;
+					}
 					return TryCreateSerializableField(name, genericInstanceTypeSignature, arrayDepth, typeCache, out result, out failureReason);
 
 				default:
@@ -194,7 +197,7 @@ namespace AssetRipper.Import.Structure.Assembly.Mono
 			string name,
 			GenericInstanceTypeSignature typeSignature,
 			int arrayDepth,
-			Dictionary<TypeDefinition, MonoType> typeCache,
+			Dictionary<ITypeDefOrRef, MonoType> typeCache,
 			out Field result,
 			[NotNullWhen(false)] out string? failureReason)
 		{

@@ -9,6 +9,8 @@ public readonly record struct PPtr(int FileID, long PathID)
 {
 	public PPtr(long PathID) : this(0, PathID) { }
 
+	public PPtr(IPPtr pptr) : this(pptr.FileID, pptr.PathID) { }
+
 	/// <summary>
 	/// PathID == 0
 	/// </summary>

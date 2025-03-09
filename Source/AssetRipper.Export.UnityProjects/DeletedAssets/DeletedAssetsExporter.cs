@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.IO.Files;
 using AssetRipper.Processing;
 
 namespace AssetRipper.Export.UnityProjects.DeletedAssets;

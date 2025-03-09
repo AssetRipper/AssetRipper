@@ -3,8 +3,10 @@ using AssetRipper.Assets.Metadata;
 using AssetRipper.Assets.Traversal;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
+using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.GUID;
 using AssetRipper.SourceGenerated.Subclasses.Hash128;
+using AssetRipper.SourceGenerated.Subclasses.PropertyName;
 using AssetRipper.Yaml;
 using AssetRipper.Yaml.Extensions;
 using System.Diagnostics;
@@ -67,6 +69,13 @@ public class YamlWalker : AssetWalker
 		ContextStack.Push(new(root, null, asset.ClassName));
 		asset.WalkEditor(this);
 
+		if (asset.IsStripped())
+		{
+			Debug.Assert(root.Children.Count == 1);
+			asset.RemoveStrippedFields((YamlMappingNode)root.Children[0].Value);
+			root.Stripped = true;
+		}
+
 		return document;
 	}
 
@@ -82,14 +91,19 @@ public class YamlWalker : AssetWalker
 
 	public override bool EnterAsset(IUnityAssetBase asset)
 	{
-		if (asset is GUID)
+		if (asset is GUID guid)
 		{
-			VisitPrimitive(asset?.ToString());
+			VisitPrimitive(guid.ToString());
 			return false;
 		}
 		else if (asset is IHash128 hash)
 		{
 			AddNode(HashHelper.ExportYaml(hash));
+			return false;
+		}
+		else if (asset is IPropertyName propertyName)
+		{
+			VisitPrimitive(propertyName.GetIdString());
 			return false;
 		}
 		else
@@ -148,7 +162,27 @@ public class YamlWalker : AssetWalker
 
 	public override bool EnterList<T>(IReadOnlyList<T> list)
 	{
-		return EnterSequence(SequenceStyle.Block);
+		// Integer arrays and lists are emitted as hex strings by Unity, both in custom MonoBehaviour fields and internal engine classes.
+		// In this particular case, integer means the traditional C# integer types, bool, and char.
+		// float and double are not emitted as hex strings. They are emitted as regular sequences.
+		if (typeof(T) == typeof(sbyte) ||
+			typeof(T) == typeof(byte) ||
+			typeof(T) == typeof(short) ||
+			typeof(T) == typeof(ushort) ||
+			typeof(T) == typeof(int) ||
+			typeof(T) == typeof(uint) ||
+			typeof(T) == typeof(long) ||
+			typeof(T) == typeof(ulong) ||
+			typeof(T) == typeof(bool) ||
+			typeof(T) == typeof(char))
+		{
+			VisitPrimitive(list);
+			return false;
+		}
+		else
+		{
+			return EnterSequence(SequenceStyle.Block);
+		}
 	}
 
 	public override void ExitList<T>(IReadOnlyList<T> list)
@@ -290,61 +324,110 @@ public class YamlWalker : AssetWalker
 
 		static YamlNode ToNode(T value)
 		{
-			if (typeof(T) == typeof(byte[]))
+			// IReadOnlyList<T> branches are from EnterList
+			if (typeof(T) == typeof(IReadOnlyList<sbyte>))
 			{
-				return Unsafe.As<T, byte[]>(ref value).ExportYaml();
+				return YamlScalarNode.CreateHex((IReadOnlyList<sbyte>)value);
+			}
+			else if (typeof(T) == typeof(IReadOnlyList<byte>))
+			{
+				return YamlScalarNode.CreateHex((IReadOnlyList<byte>)value);
+			}
+			else if (typeof(T) == typeof(IReadOnlyList<short>))
+			{
+				return YamlScalarNode.CreateHex((IReadOnlyList<short>)value);
+			}
+			else if (typeof(T) == typeof(IReadOnlyList<ushort>))
+			{
+				return YamlScalarNode.CreateHex((IReadOnlyList<ushort>)value);
+			}
+			else if (typeof(T) == typeof(IReadOnlyList<int>))
+			{
+				return YamlScalarNode.CreateHex((IReadOnlyList<int>)value);
+			}
+			else if (typeof(T) == typeof(IReadOnlyList<uint>))
+			{
+				return YamlScalarNode.CreateHex((IReadOnlyList<uint>)value);
+			}
+			else if (typeof(T) == typeof(IReadOnlyList<long>))
+			{
+				return YamlScalarNode.CreateHex((IReadOnlyList<long>)value);
+			}
+			else if (typeof(T) == typeof(IReadOnlyList<ulong>))
+			{
+				return YamlScalarNode.CreateHex((IReadOnlyList<ulong>)value);
+			}
+			else if (typeof(T) == typeof(IReadOnlyList<bool>))
+			{
+				return YamlScalarNode.CreateHex((IReadOnlyList<bool>)value);
+			}
+			else if (typeof(T) == typeof(IReadOnlyList<char>))
+			{
+				return YamlScalarNode.CreateHex((IReadOnlyList<char>)value);
+			}
+			else if (typeof(T) == typeof(byte[]))
+			{
+				return YamlScalarNode.CreateHex(Unsafe.As<T, byte[]>(ref value));
 			}
 			else if (typeof(T) == typeof(bool))
 			{
-				return new YamlScalarNode(Unsafe.As<T, bool>(ref value));
+				return YamlScalarNode.Create(Unsafe.As<T, bool>(ref value));
 			}
 			else if (typeof(T) == typeof(char))
 			{
-				return new YamlScalarNode(Unsafe.As<T, char>(ref value));
+				return YamlScalarNode.Create(Unsafe.As<T, char>(ref value));
 			}
 			else if (typeof(T) == typeof(sbyte))
 			{
-				return new YamlScalarNode(Unsafe.As<T, sbyte>(ref value));
+				return YamlScalarNode.Create(Unsafe.As<T, sbyte>(ref value));
 			}
 			else if (typeof(T) == typeof(byte))
 			{
-				return new YamlScalarNode(Unsafe.As<T, byte>(ref value));
+				return YamlScalarNode.Create(Unsafe.As<T, byte>(ref value));
 			}
 			else if (typeof(T) == typeof(short))
 			{
-				return new YamlScalarNode(Unsafe.As<T, short>(ref value));
+				return YamlScalarNode.Create(Unsafe.As<T, short>(ref value));
 			}
 			else if (typeof(T) == typeof(ushort))
 			{
-				return new YamlScalarNode(Unsafe.As<T, ushort>(ref value));
+				return YamlScalarNode.Create(Unsafe.As<T, ushort>(ref value));
 			}
 			else if (typeof(T) == typeof(int))
 			{
-				return new YamlScalarNode(Unsafe.As<T, int>(ref value));
+				return YamlScalarNode.Create(Unsafe.As<T, int>(ref value));
 			}
 			else if (typeof(T) == typeof(uint))
 			{
-				return new YamlScalarNode(Unsafe.As<T, uint>(ref value));
+				return YamlScalarNode.Create(Unsafe.As<T, uint>(ref value));
 			}
 			else if (typeof(T) == typeof(long))
 			{
-				return new YamlScalarNode(Unsafe.As<T, long>(ref value));
+				return YamlScalarNode.Create(Unsafe.As<T, long>(ref value));
 			}
 			else if (typeof(T) == typeof(ulong))
 			{
-				return new YamlScalarNode(Unsafe.As<T, ulong>(ref value));
+				return YamlScalarNode.Create(Unsafe.As<T, ulong>(ref value));
 			}
 			else if (typeof(T) == typeof(float))
 			{
-				return new YamlScalarNode(Unsafe.As<T, float>(ref value));
+				return YamlScalarNode.Create(Unsafe.As<T, float>(ref value));
 			}
 			else if (typeof(T) == typeof(double))
 			{
-				return new YamlScalarNode(Unsafe.As<T, double>(ref value));
+				return YamlScalarNode.Create(Unsafe.As<T, double>(ref value));
+			}
+			else if (typeof(T) == typeof(string))
+			{
+				return YamlScalarNode.Create(Unsafe.As<T, string>(ref value));
+			}
+			else if (typeof(T) == typeof(Utf8String))
+			{
+				return YamlScalarNode.Create(Unsafe.As<T, Utf8String>(ref value));
 			}
 			else
 			{
-				return new YamlScalarNode(value?.ToString() ?? "");//temp
+				return YamlScalarNode.Create(value?.ToString() ?? "");// Fallback
 			}
 		}
 	}

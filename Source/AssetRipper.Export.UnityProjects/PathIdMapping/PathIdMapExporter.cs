@@ -12,7 +12,7 @@ namespace AssetRipper.Export.UnityProjects.PathIdMapping;
 
 public sealed class PathIdMapExporter : IPostExporter
 {
-	public void DoPostExport(GameData gameData, LibraryConfiguration settings)
+	public void DoPostExport(GameData gameData, LibraryConfiguration settings, FileSystem fileSystem)
 	{
 		SerializedGameInfo gameInfo = new();
 		foreach (SerializedAssetCollection collection in gameData.GameBundle.FetchAssetCollections().OfType<SerializedAssetCollection>())
@@ -37,8 +37,8 @@ public sealed class PathIdMapExporter : IPostExporter
 		}
 
 		string outputDirectory = settings.AuxiliaryFilesPath;
-		Directory.CreateDirectory(outputDirectory);
-		using FileStream stream = File.Create(Path.Combine(outputDirectory, "path_id_map.json"));
+		fileSystem.Directory.Create(outputDirectory);
+		using Stream stream = fileSystem.File.Create(fileSystem.Path.Join(outputDirectory, "path_id_map.json"));
 		JsonSerializer.Serialize(stream, gameInfo, SerializedGameInfoSerializerContext.Default.SerializedGameInfo);
 		stream.Flush();
 	}

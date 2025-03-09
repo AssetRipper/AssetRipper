@@ -4,7 +4,7 @@ using AssetRipper.Assets.Traversal;
 
 namespace AssetRipper.Processing;
 
-public sealed class DeletedAssetsInformation : UnityObjectBase
+public sealed class DeletedAssetsInformation : AssetGroup
 {
 	public DeletedAssetsInformation(AssetInfo assetInfo) : base(assetInfo)
 	{
@@ -12,15 +12,13 @@ public sealed class DeletedAssetsInformation : UnityObjectBase
 
 	public List<IUnityObjectBase> DeletedAssets { get; } = new();
 
+	public override List<IUnityObjectBase> Assets => DeletedAssets;
+
 	public override void WalkStandard(AssetWalker walker)
 	{
 		if (walker.EnterAsset(this))
 		{
-			//todo: implement
-			//This was not implemented because AssetWalker.EnterList(AssetList<T>)
-			//should be merged with AssetWalker.EnterArray(T[])
-			//to form AssetWalker.EnterList(IReadOnlyList<T>)
-			//which would handle both of those and other types of lists.
+			this.WalkPPtrListField(walker, DeletedAssets);
 			walker.ExitAsset(this);
 		}
 	}
@@ -29,16 +27,7 @@ public sealed class DeletedAssetsInformation : UnityObjectBase
 	{
 		foreach (IUnityObjectBase asset in DeletedAssets)
 		{
-			yield return ($"{nameof(DeletedAssets)}[]", Collection.ForceCreatePPtr(asset));
-		}
-	}
-
-	public void SetMainAsset()
-	{
-		MainAsset = this;
-		foreach (IUnityObjectBase asset in DeletedAssets)
-		{
-			asset.MainAsset = this;
+			yield return ($"{nameof(DeletedAssets)}[]", AssetToPPtr(asset));
 		}
 	}
 }

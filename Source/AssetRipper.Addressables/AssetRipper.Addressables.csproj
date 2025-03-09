@@ -1,9 +1,0 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
-	<PropertyGroup>
-		<IsTrimmable>true</IsTrimmable>
-		<OutputPath>..\0Bins\Other\AssetRipper.Addressables\$(Configuration)\</OutputPath>
-		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.Addressables\$(Configuration)\</IntermediateOutputPath>
-	</PropertyGroup>
-
-</Project>

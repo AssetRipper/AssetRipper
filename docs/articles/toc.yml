@@ -1,14 +1,25 @@
-- name: Introduction
-  href: intro.md
-- name: Downloads
-  href: Downloads.md
-- name: Common Issues
-  href: CommonIssues.md
-- name: Requirements
-  href: Requirements.md
-- name: Road Map
-  href: RoadMap.md
-- name: Running on Mac
-  href: RunningOnMac.md
-- name: Credits
-  href: Credits.md
+- name: Getting Started
+  items:
+    - name: Introduction
+      href: intro.md
+    - name: Requirements
+      href: Requirements.md
+    - name: Downloads
+      href: Downloads.md
+
+- name: Usage Guide
+  items:
+    - name: Common Issues
+      href: CommonIssues.md
+    - name: Running on Mac
+      href: RunningOnMac.md
+    - name: Premium Features
+      href: PremiumFeatures.md
+
+
+- name: Project Information
+  items:
+    - name: Road Map
+      href: RoadMap.md
+    - name: Credits
+      href: Credits.md

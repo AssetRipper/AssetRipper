@@ -1,5 +1,4 @@
 ﻿using AssetRipper.IO.Endian;
-using AssetRipper.IO.Files.Utils;
 
 namespace AssetRipper.IO.Files.WebFiles
 {
@@ -22,7 +21,7 @@ namespace AssetRipper.IO.Files.WebFiles
 			writer.Write(Name);
 		}
 
-		public override string ToString() => FilenameUtils.FixFileIdentifier(Name);
+		public override string ToString() => SpecialFileNames.FixFileIdentifier(Name);
 
 		public int Offset { get; private set; }
 		public int Size { get; private set; }

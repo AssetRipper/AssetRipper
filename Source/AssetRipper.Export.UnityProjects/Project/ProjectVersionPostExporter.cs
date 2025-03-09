@@ -7,16 +7,16 @@ namespace AssetRipper.Export.UnityProjects.Project
 {
 	public sealed class ProjectVersionPostExporter : IPostExporter
 	{
-		public void DoPostExport(GameData gameData, LibraryConfiguration settings)
+		public void DoPostExport(GameData gameData, LibraryConfiguration settings, FileSystem fileSystem)
 		{
 			// Although Unity 4 and lower don't have this file, we leave it in anyway for user readibility.
-			SaveProjectVersion(settings.ProjectSettingsPath, settings.Version);
+			SaveProjectVersion(settings.ProjectSettingsPath, settings.Version, fileSystem);
 		}
 
-		private static void SaveProjectVersion(string projectSettingsDirectory, UnityVersion version)
+		private static void SaveProjectVersion(string projectSettingsDirectory, UnityVersion version, FileSystem fileSystem)
 		{
-			Directory.CreateDirectory(projectSettingsDirectory);
-			using Stream fileStream = File.Create(Path.Combine(projectSettingsDirectory, "ProjectVersion.txt"));
+			fileSystem.Directory.Create(projectSettingsDirectory);
+			using Stream fileStream = fileSystem.File.Create(fileSystem.Path.Join(projectSettingsDirectory, "ProjectVersion.txt"));
 			using StreamWriter writer = new InvariantStreamWriter(fileStream, new UTF8Encoding(false));
 			writer.Write($"m_EditorVersion: {version}\n");
 			if (version.Equals(5))

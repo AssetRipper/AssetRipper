@@ -1,17 +1,13 @@
-using System.Text;
+using System.Buffers;
 
 namespace AssetRipper.Yaml
 {
-	internal class Emitter
+	internal sealed class Emitter
 	{
 		public Emitter(TextWriter writer, bool formatKeys)
 		{
 			m_stream = writer ?? throw new ArgumentNullException(nameof(writer));
 			IsFormatKeys = formatKeys;
-			if (formatKeys)
-			{
-				m_sb = new StringBuilder();
-			}
 		}
 
 		public Emitter IncreaseIndent()
@@ -121,9 +117,9 @@ namespace AssetRipper.Yaml
 			return this;
 		}
 
-		public Emitter Write(string value)
+		public Emitter Write(ReadOnlySpan<char> value)
 		{
-			if (!string.IsNullOrEmpty(value))
+			if (!value.IsEmpty)
 			{
 				WriteDelayed();
 				m_stream.Write(value);
@@ -131,29 +127,34 @@ namespace AssetRipper.Yaml
 			return this;
 		}
 
-		public Emitter WriteFormat(string value)
+		public Emitter WriteFormat(ReadOnlySpan<char> value)
 		{
 			if (value.Length > 0)
 			{
 				WriteDelayed();
 				if (value.Length > 2 && value.StartsWith("m_", StringComparison.Ordinal))
 				{
-					ThrowIfNullStringBuilder();
-					m_sb.Append(value, 2, value.Length - 2);
-					if (char.IsUpper(m_sb[0]))
-					{
-						m_sb[0] = char.ToLower(m_sb[0]);
-					}
+					int length = value.Length - 2;
+					char[] buffer = ArrayPool<char>.Shared.Rent(length);
 
-					value = m_sb.ToString();
-					m_sb.Clear();
+					value[2..].CopyTo(buffer);
+					if (char.IsUpper(buffer[0]))
+					{
+						buffer[0] = char.ToLowerInvariant(buffer[0]);
+					}
+					m_stream.Write(buffer, 0, length);
+
+					ArrayPool<char>.Shared.Return(buffer);
 				}
-				m_stream.Write(value);
+				else
+				{
+					m_stream.Write(value);
+				}
 			}
 			return this;
 		}
 
-		public Emitter WriteRaw(string value)
+		public Emitter WriteRaw(ReadOnlySpan<char> value)
 		{
 			m_stream.Write(value);
 			return this;
@@ -167,7 +168,7 @@ namespace AssetRipper.Yaml
 			return Write(@char);
 		}
 
-		public Emitter WriteClose(string @string)
+		public Emitter WriteClose(ReadOnlySpan<char> @string)
 		{
 			m_isNeedSeparator = false;
 			m_isNeedWhitespace = false;
@@ -222,18 +223,12 @@ namespace AssetRipper.Yaml
 
 		private void WriteIndent()
 		{
-			for (int i = 0; i < m_indent * 2; i++)
+			if (m_indent > 0)
 			{
-				m_stream.Write(' ');
-			}
-		}
-
-		[MemberNotNull(nameof(m_sb))]
-		private void ThrowIfNullStringBuilder()
-		{
-			if (m_sb is null)
-			{
-				throw new NullReferenceException($"{nameof(m_sb)} cannot be null here");
+				ArgumentOutOfRangeException.ThrowIfGreaterThan(m_indent, 1000);
+				Span<char> buffer = stackalloc char[m_indent * 2];
+				buffer.Fill(' ');
+				m_stream.Write(buffer);
 			}
 		}
 
@@ -241,7 +236,6 @@ namespace AssetRipper.Yaml
 		public bool IsKey { get; set; }
 
 		private readonly TextWriter m_stream;
-		private readonly StringBuilder? m_sb;
 
 		private int m_indent = 0;
 		private bool m_isNeedWhitespace = false;

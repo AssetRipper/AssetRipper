@@ -4,6 +4,7 @@ using AssetRipper.Assets.Collections;
 using AssetRipper.GUI.Web.Pages.Assets;
 using AssetRipper.GUI.Web.Pages.Bundles;
 using AssetRipper.GUI.Web.Pages.Collections;
+using AssetRipper.GUI.Web.Pages.FailedFiles;
 using AssetRipper.GUI.Web.Pages.Resources;
 using AssetRipper.GUI.Web.Pages.Scenes;
 using System.Runtime.CompilerServices;
@@ -55,6 +56,10 @@ internal static class PathLinking
 		else if (typeof(T) == typeof(ResourcePath))
 		{
 			return ResourceAPI.GetViewUrl(Unsafe.As<T, ResourcePath>(ref path));
+		}
+		else if (typeof(T) == typeof(FailedFilePath))
+		{
+			return FailedFileAPI.GetViewUrl(Unsafe.As<T, FailedFilePath>(ref path));
 		}
 		else
 		{

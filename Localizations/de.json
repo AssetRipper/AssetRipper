@@ -145,5 +145,13 @@
     "text_asset_format_parse_description": "Export als einfache Textdatei, jedoch soll versucht werden, die richtige Dateierweiterung zu erraten (z. B. erhalten JSON-Dateien die Erweiterung .json)",
     "text_asset_format_text": "Einfacher Text",
     "text_asset_format_text_description": "Export als eine einfache Textdatei (.txt)",
-    "welcome_title": "Willkommen beim AssetRipper"
+    "welcome_title": "Willkommen beim AssetRipper",
+    "an_error_occured_during_decompilation": "Bei der Dekompilierung ist ein Fehler aufgetreten.",
+    "appreciation_message": "Danke, dass Sie AssetRipper unterstützen!",
+    "asset_tab_dependencies": "Abhängigkeiten",
+    "asset_tab_font": "Schriftart",
+    "assembly_name": "Assembly Name",
+    "asset_bundle_name": "Asset Bundle Name",
+    "asset_tab_development": "Entwicklung",
+    "asset_tab_information": "Informationen"
 }

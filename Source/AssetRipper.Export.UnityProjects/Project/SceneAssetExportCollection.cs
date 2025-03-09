@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
-using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1032;
@@ -39,7 +38,7 @@ namespace AssetRipper.Export.UnityProjects.Project
 			return ExportIdHandler.GetMainExportID((int)ClassIDType.DefaultAsset);
 		}
 
-		public bool Export(IExportContainer container, string projectDirectory)
+		public bool Export(IExportContainer container, string projectDirectory, FileSystem fileSystem)
 		{
 			return true;
 		}

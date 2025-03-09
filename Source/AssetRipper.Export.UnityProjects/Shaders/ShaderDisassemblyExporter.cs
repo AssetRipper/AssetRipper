@@ -9,9 +9,9 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 {
 	public sealed class ShaderDisassemblyExporter : ShaderExporterBase
 	{
-		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
+		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path, FileSystem fileSystem)
 		{
-			using Stream fileStream = File.Create(path);
+			using Stream fileStream = fileSystem.File.Create(path);
 			ExportBinary((IShader)asset, fileStream, ShaderExporterInstantiator);
 			return true;
 		}

@@ -3,7 +3,7 @@ using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Import.Logging;
-using AssetRipper.IO.Files.Utils;
+using AssetRipper.IO.Files;
 using AssetRipper.Processing.Editor;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1045;
@@ -79,7 +79,7 @@ namespace AssetRipper.Processing.Scenes
 						path = OriginalPathHelper.EnsurePathNotRooted(path);
 						path = OriginalPathHelper.EnsureStartsWithAssets(path);
 
-						string name = FilenameUtils.FixFileIdentifier(collectionName);
+						string name = SpecialFileNames.FixFileIdentifier(collectionName);
 
 						AssetCollection sceneCollection = bundle.Collections.First(collection => collection.Name == name);
 						sceneCollections.Add(sceneCollection);//Just to be safe

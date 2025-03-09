@@ -2,7 +2,7 @@
 
 namespace AssetRipper.Import.Structure.Assembly.Mono;
 
-internal sealed class SerializablePointerType : SerializableType
+public sealed class SerializablePointerType : SerializableType
 {
 	public static SerializablePointerType Shared { get; } = new();
 

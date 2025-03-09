@@ -7,7 +7,7 @@ namespace AssetRipper.Tools.FileExtractor
 {
 	internal class Program
 	{
-		private static readonly string outputDirectory = Path.Combine(AppContext.BaseDirectory, "Output");
+		private static readonly string outputDirectory = Path.Join(AppContext.BaseDirectory, "Output");
 
 		static void Main(string[] args)
 		{
@@ -53,7 +53,7 @@ namespace AssetRipper.Tools.FileExtractor
 			{
 				foreach (ResourceFile resourceFile in container.ResourceFiles)
 				{
-					string path = Path.Combine(outputDirectory, resourceFile.NameFixed);
+					string path = Path.Join(outputDirectory, resourceFile.NameFixed);
 					using FileStream fileStream = File.OpenWrite(path);
 					resourceFile.Write(fileStream);
 					Console.WriteLine($"\t{path}");
@@ -61,7 +61,7 @@ namespace AssetRipper.Tools.FileExtractor
 			}
 			else if (file is CompressedFile compressedFile && compressedFile.UncompressedFile is ResourceFile uncompressedFile)
 			{
-				string path = Path.Combine(outputDirectory, uncompressedFile.NameFixed);
+				string path = Path.Join(outputDirectory, uncompressedFile.NameFixed);
 				using FileStream fileStream = File.OpenWrite(path);
 				uncompressedFile.Write(fileStream);
 				Console.WriteLine($"\t{path}");

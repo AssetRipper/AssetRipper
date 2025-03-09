@@ -1,5 +1,4 @@
 using AssetRipper.Assets;
-using AssetRipper.IO.Files.Utils;
 using AssetRipper.Mining.PredefinedAssets;
 using AssetRipper.Processing.Textures;
 using AssetRipper.SourceGenerated;
@@ -133,12 +132,12 @@ public class EngineAssetsExporter : IAssetExporter
 
 	private static bool IsEngineFile(string? fileName, out UnityGuid guid)
 	{
-		if (FilenameUtils.IsDefaultResource(fileName))
+		if (SpecialFileNames.IsDefaultResource(fileName))
 		{
 			guid = PredefinedAssetCache.EGUID;
 			return true;
 		}
-		else if (FilenameUtils.IsBuiltinExtra(fileName))
+		else if (SpecialFileNames.IsBuiltinExtra(fileName))
 		{
 			guid = PredefinedAssetCache.FGUID;
 			return true;

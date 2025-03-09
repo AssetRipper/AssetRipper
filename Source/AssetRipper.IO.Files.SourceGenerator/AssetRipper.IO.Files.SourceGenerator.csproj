@@ -7,8 +7,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AssetRipper.IO.Endian" Version="1.1.0" />
-		<PackageReference Include="AssetRipper.Text.SourceGeneration" Version="1.1.0" />
+		<PackageReference Include="AssetRipper.IO.Endian" Version="2.0.2" />
+		<PackageReference Include="AssetRipper.Text.SourceGeneration" Version="1.2.2" />
 	</ItemGroup>
 
 </Project>

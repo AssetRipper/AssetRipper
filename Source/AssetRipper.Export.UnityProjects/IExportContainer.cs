@@ -1,6 +1,5 @@
 using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
-using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
 
 namespace AssetRipper.Export.UnityProjects

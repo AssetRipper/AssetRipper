@@ -22,11 +22,9 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 			}
 		}
 
-		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
+		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path, FileSystem fileSystem)
 		{
-			using FileStream stream = File.OpenWrite(path);
-			stream.Write(((IShader)asset).Script!.Data);
-			stream.Flush();
+			fileSystem.File.WriteAllBytes(path, ((IShader)asset).Script!.Data);
 			return true;
 		}
 

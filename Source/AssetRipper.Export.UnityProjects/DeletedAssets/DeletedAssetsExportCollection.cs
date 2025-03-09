@@ -29,7 +29,7 @@ public sealed record DeletedAssetsExportCollection(DeletedAssetsInformation Asse
 		return MetaPtr.CreateMissingReference(asset.ClassID, container.ToExportType(asset.GetType()));
 	}
 
-	bool IExportCollection.Export(IExportContainer container, string projectDirectory)
+	bool IExportCollection.Export(IExportContainer container, string projectDirectory, FileSystem fileSystem)
 	{
 		throw new NotSupportedException();
 	}

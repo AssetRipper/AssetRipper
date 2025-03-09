@@ -1,13 +1,13 @@
 ﻿using AssetRipper.Assets;
+using AssetRipper.Export.Modules.Textures;
 using AssetRipper.Export.UnityProjects.Configuration;
 using AssetRipper.Import.Logging;
 using AssetRipper.SourceGenerated.Classes.ClassID_117;
 using AssetRipper.SourceGenerated.Classes.ClassID_187;
 using AssetRipper.SourceGenerated.Classes.ClassID_188;
-using AssetRipper.SourceGenerated.Classes.ClassID_28;
+using AssetRipper.SourceGenerated.Classes.ClassID_189;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.StreamingInfo;
-using DirectBitmap = AssetRipper.Export.UnityProjects.Utils.DirectBitmap<AssetRipper.TextureDecoder.Rgb.Formats.ColorBGRA32, byte>;
 
 namespace AssetRipper.Export.UnityProjects.Textures;
 
@@ -24,13 +24,13 @@ public sealed class TextureArrayAssetExporter : BinaryAssetExporter
 	{
 		exportCollection = asset switch
 		{
-			ITexture2D texture when texture.CheckAssetIntegrity() => new TextureArrayAssetExportCollection(this, texture),
+			IImageTexture texture when texture.CheckAssetIntegrity() && texture.MainAsset is null => new TextureArrayAssetExportCollection(this, texture),
 			_ => null,
 		};
 		return exportCollection is not null;
 	}
 
-	public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
+	public override bool Export(IExportContainer container, IUnityObjectBase asset, string path, FileSystem fileSystem)
 	{
 		bool success;
 		DirectBitmap bitmap;
@@ -75,7 +75,7 @@ public sealed class TextureArrayAssetExporter : BinaryAssetExporter
 
 		if (success)
 		{
-			using FileStream stream = File.Create(path);
+			using Stream stream = fileSystem.File.Create(path);
 			bitmap.Save(stream, ImageExportFormat);
 			return true;
 		}

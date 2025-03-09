@@ -16,7 +16,7 @@
 				throw new Exception($"Root directory '{rootPath}' doesn't exist");
 			}
 
-			string apkDataPath = Path.Combine(rootPath, AssetName, BinName, DataFolderName);
+			string apkDataPath = Path.Join(rootPath, AssetName, BinName, DataFolderName);
 			DirectoryInfo apkDataDirectory = new DirectoryInfo(apkDataPath);
 			if (!apkDataDirectory.Exists)
 			{
@@ -27,11 +27,11 @@
 			RootPath = rootPath;
 			GameDataPath = apkDataPath;
 			StreamingAssetsPath = null;
-			ResourcesPath = Path.Combine(GameDataPath, ResourcesName);
-			ManagedPath = Path.Combine(GameDataPath, ManagedName);
-			LibPath = Path.Combine(RootPath, LibName);
+			ResourcesPath = Path.Join(GameDataPath, ResourcesName);
+			ManagedPath = Path.Join(GameDataPath, ManagedName);
+			LibPath = Path.Join(RootPath, LibName);
 			Il2CppGameAssemblyPath = GetIl2CppGameAssemblyPath(LibPath);
-			Il2CppMetaDataPath = Path.Combine(ManagedPath, MetadataName, DefaultGlobalMetadataName);
+			Il2CppMetaDataPath = Path.Join(ManagedPath, MetadataName, DefaultGlobalMetadataName);
 			UnityPlayerPath = null;
 			Version = GetUnityVersionFromDataDirectory(GameDataPath);
 
@@ -56,7 +56,7 @@
 					throw new Exception($"Obb directory '{obbPath}' doesn't exist");
 				}
 
-				string obbDataPath = Path.Combine(obbPath, AssetName, BinName, DataFolderName);
+				string obbDataPath = Path.Join(obbPath, AssetName, BinName, DataFolderName);
 				if (!Directory.Exists(obbDataPath))
 				{
 					throw new Exception($"Obb data directory '{obbDataPath}' wasn't found");
@@ -86,7 +86,7 @@
 				return false;
 			}
 
-			string dataPath = Path.Combine(path, AssetName, BinName, DataFolderName);
+			string dataPath = Path.Join(path, AssetName, BinName, DataFolderName);
 
 			return Directory.Exists(dataPath);
 		}
@@ -105,7 +105,7 @@
 				return false;
 			}
 
-			string dataPath = Path.Combine(path, AssetName, BinName, DataFolderName);
+			string dataPath = Path.Join(path, AssetName, BinName, DataFolderName);
 
 			return Directory.Exists(dataPath);
 		}
@@ -133,9 +133,9 @@
 			return matches;
 		}
 
-		private void CollectApkAssetBundles(IDictionary<string, string> files)
+		private void CollectApkAssetBundles(List<KeyValuePair<string, string>> files)
 		{
-			string assetPath = Path.Combine(m_root.FullName, AssetName);
+			string assetPath = Path.Join(m_root.FullName, AssetName);
 			DirectoryInfo root = new DirectoryInfo(assetPath);
 
 			CollectAssetBundles(root, files);

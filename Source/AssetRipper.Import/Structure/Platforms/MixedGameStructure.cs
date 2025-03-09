@@ -9,7 +9,7 @@ namespace AssetRipper.Import.Structure.Platforms
 	{
 		public MixedGameStructure(IEnumerable<string> paths)
 		{
-			HashSet<string> dataPaths = new HashSet<string>();
+			HashSet<string> dataPaths = [];
 			foreach (string path in SelectUniquePaths(paths))
 			{
 				if (MultiFileStream.Exists(path))
@@ -47,7 +47,7 @@ namespace AssetRipper.Import.Structure.Platforms
 			return paths.Select(t => MultiFileStream.GetFilePath(t)).Distinct();
 		}
 
-		private void CollectFromDirectory(DirectoryInfo root, IDictionary<string, string> files, IDictionary<string, string> assemblies, ISet<string> dataPaths)
+		private static void CollectFromDirectory(DirectoryInfo root, List<KeyValuePair<string, string>> files, Dictionary<string, string> assemblies, ISet<string> dataPaths)
 		{
 			int count = files.Count;
 			CollectSerializedGameFiles(root, files);
@@ -65,7 +65,7 @@ namespace AssetRipper.Import.Structure.Platforms
 			}
 		}
 
-		private void CollectWebFiles(DirectoryInfo root, IDictionary<string, string> files)
+		private static void CollectWebFiles(DirectoryInfo root, List<KeyValuePair<string, string>> files)
 		{
 			foreach (FileInfo levelFile in root.EnumerateFiles())
 			{
@@ -93,15 +93,15 @@ namespace AssetRipper.Import.Structure.Platforms
 			}
 		}
 
-		private void CollectAssembliesSafe(DirectoryInfo root, IDictionary<string, string> assemblies)
+		private static void CollectAssembliesSafe(DirectoryInfo root, Dictionary<string, string> assemblies)
 		{
 			foreach (FileInfo file in root.EnumerateFiles())
 			{
 				if (MonoManager.IsMonoAssembly(file.Name))
 				{
-					if (assemblies.ContainsKey(file.Name))
+					if (assemblies.TryGetValue(file.Name, out string? value))
 					{
-						Logger.Log(LogType.Warning, LogCategory.Import, $"Duplicate assemblies found: '{assemblies[file.Name]}' & '{file.FullName}'");
+						Logger.Log(LogType.Warning, LogCategory.Import, $"Duplicate assemblies found: '{value}' & '{file.FullName}'");
 					}
 					else
 					{

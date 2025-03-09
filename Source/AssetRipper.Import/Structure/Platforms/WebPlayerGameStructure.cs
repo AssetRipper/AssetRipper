@@ -35,7 +35,7 @@ namespace AssetRipper.Import.Structure.Platforms
 
 			DataPaths = new string[] { rootPath };
 
-			string abPath = Path.Combine(m_root.FullName, Name + AssetBundleExtension);
+			string abPath = Path.Join(m_root.FullName, Name + AssetBundleExtension);
 			Files.Add(Name, abPath);
 		}
 
@@ -57,7 +57,7 @@ namespace AssetRipper.Import.Structure.Platforms
 				if (fi.Extension == HtmlExtension)
 				{
 					name = fi.Name[..^HtmlExtension.Length];
-					string abPath = Path.Combine(root.FullName, name + AssetBundleExtension);
+					string abPath = Path.Join(root.FullName, name + AssetBundleExtension);
 					if (File.Exists(abPath))
 					{
 						return true;

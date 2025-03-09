@@ -1,8 +1,8 @@
 ﻿using AssetRipper.Assets.Bundles;
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Platforms;
+using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.ResourceFiles;
-using AssetRipper.IO.Files.Utils;
 
 namespace AssetRipper.Import.Structure;
 
@@ -15,7 +15,7 @@ internal sealed partial record class GameInitializer
 	{
 		public ResourceFile? FindResource(string resName)
 		{
-			string fixedName = FilenameUtils.FixResourcePath(resName);
+			string fixedName = SpecialFileNames.FixResourcePath(resName);
 			string? resPath = RequestResource(fixedName);
 			if (resPath is null)
 			{

@@ -1,5 +1,4 @@
 using AssetRipper.IO.Endian;
-using AssetRipper.IO.Files.Utils;
 
 namespace AssetRipper.IO.Files.BundleFiles
 {
@@ -18,7 +17,7 @@ namespace AssetRipper.IO.Files.BundleFiles
 			set
 			{
 				path = value;
-				PathFixed = FilenameUtils.FixFileIdentifier(value);
+				PathFixed = SpecialFileNames.FixFileIdentifier(value);
 			}
 		}
 		public long Offset { get; set; }

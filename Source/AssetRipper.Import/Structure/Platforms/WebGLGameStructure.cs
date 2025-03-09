@@ -16,7 +16,7 @@ namespace AssetRipper.Import.Structure.Platforms
 				throw new Exception($"Directory '{rootPath}' doesn't exist");
 			}
 
-			string buildPath = Path.Combine(m_root.FullName, BuildName);
+			string buildPath = Path.Join(m_root.FullName, BuildName);
 			if (Directory.Exists(buildPath))
 			{
 				DirectoryInfo buildDirectory = new DirectoryInfo(buildPath);
@@ -33,7 +33,7 @@ namespace AssetRipper.Import.Structure.Platforms
 			}
 			else
 			{
-				string developmentPath = Path.Combine(m_root.FullName, DevelopmentName);
+				string developmentPath = Path.Join(m_root.FullName, DevelopmentName);
 				if (Directory.Exists(developmentPath))
 				{
 					DirectoryInfo buildDirectory = new DirectoryInfo(developmentPath);
@@ -50,7 +50,7 @@ namespace AssetRipper.Import.Structure.Platforms
 				}
 				else
 				{
-					string releasePath = Path.Combine(m_root.FullName, ReleaseName);
+					string releasePath = Path.Join(m_root.FullName, ReleaseName);
 					if (Directory.Exists(releasePath))
 					{
 						DirectoryInfo buildDirectory = new DirectoryInfo(releasePath);

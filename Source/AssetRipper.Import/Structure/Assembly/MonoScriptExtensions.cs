@@ -2,8 +2,8 @@
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.Import.Structure.Assembly.Serializable;
 using AssetRipper.IO.Endian;
+using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
-using AssetRipper.IO.Files.Utils;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using AssetRipper.SourceGenerated.Subclasses.Hash128;
 using System.Buffers.Binary;
@@ -22,18 +22,18 @@ namespace AssetRipper.Import.Structure.Assembly
 
 		public static string GetValidAssemblyName(this IMonoScript monoScript)
 		{
-			string name = FilenameUtils.FixAssemblyName(monoScript.AssemblyName);
+			string name = SpecialFileNames.FixAssemblyName(monoScript.AssemblyName);
 			return string.IsNullOrEmpty(name) ? "Assembly-CSharp" : name;
 		}
 
 		/// <summary>
-		/// Apply <see cref="FilenameUtils.FixAssemblyName(string)"/> to <see cref="IMonoScript.AssemblyName"/>.
+		/// Apply <see cref="SpecialFileNames.FixAssemblyName(string)"/> to <see cref="IMonoScript.AssemblyName"/>.
 		/// </summary>
 		/// <param name="monoScript">The relevant MonoScript.</param>
 		/// <returns></returns>
 		public static string GetAssemblyNameFixed(this IMonoScript monoScript)
 		{
-			return FilenameUtils.FixAssemblyName(monoScript.AssemblyName);
+			return SpecialFileNames.FixAssemblyName(monoScript.AssemblyName);
 		}
 
 		public static SerializableType? GetBehaviourType(this IMonoScript monoScript, IAssemblyManager assemblyManager)

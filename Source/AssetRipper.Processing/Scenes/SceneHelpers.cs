@@ -110,7 +110,7 @@ namespace AssetRipper.Processing.Scenes
 				}
 				else
 				{
-					result = Path.Combine("Assets", "Scenes", scenePath);
+					result = Path.Join("Assets", "Scenes", scenePath);
 					return true;
 				}
 			}

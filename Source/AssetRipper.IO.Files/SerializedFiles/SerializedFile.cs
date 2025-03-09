@@ -3,7 +3,6 @@ using AssetRipper.IO.Files.Converters;
 using AssetRipper.IO.Files.SerializedFiles.IO;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
 using AssetRipper.IO.Files.Streams.Smart;
-using AssetRipper.IO.Files.Utils;
 using System.Diagnostics;
 using System.Numerics;
 using System.Runtime.CompilerServices;
@@ -46,7 +45,7 @@ namespace AssetRipper.IO.Files.SerializedFiles
 					flags = TransferInstructionFlags.SerializeGameRelease;
 				}
 
-				if (FilenameUtils.IsEngineResource(Name) || (Generation < FormatVersion.Unknown_10 && FilenameUtils.IsBuiltinExtra(Name)))
+				if (SpecialFileNames.IsEngineResource(Name) || (Generation < FormatVersion.Unknown_10 && SpecialFileNames.IsBuiltinExtra(Name)))
 				{
 					flags |= TransferInstructionFlags.IsBuiltinResourcesFile;
 				}

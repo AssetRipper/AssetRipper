@@ -1,111 +1,96 @@
-# Running on Mac
+# Running AssetRipper on macOS
 
-> Disclaimer: The project developer does not have access to a Mac. This guide is community contributed.
+> ⚠️ Disclaimer: The project developer does not have access to a Mac. This guide is community-contributed and might be outdated.
 
-In order to run AssetRipper on mac, you'll first need to have everything listed in the [requirements](https://assetripper.github.io/AssetRipper/articles/Requirements.html) tab.
+This guide will help you run AssetRipper on macOS. Before proceeding, ensure you have all the necessary [requirements](https://assetripper.github.io/AssetRipper/articles/Requirements.html).
 
-## Running the GUI version
-If you're done with the requirements, lets see how to run the GUI version.
+## Running the GUI Version
 
-First, you'll need to download the GUI release from [here](https://github.com/AssetRipper/AssetRipper/releases).
+### Step 1: Download AssetRipper
 
-Make sure you download the `AssetRipperGUI_mac64.zip` file as shown below.
+1. Download the GUI release from the [AssetRipper downloads page](https://assetripper.github.io/AssetRipper/articles/Downloads.html).
+2. Choose `AssetRipper_mac_x64.zip` or `AssetRipper_mac_arm64.zip`, depending on your computer architecture. M2 processors are arm64.
 
-![001](images/RunningOnMac/001.png)
+   ![Download AssetRipper](images/RunningOnMac/001.png)
 
-After downloading, right click and open the file to extract as shown below.
+### Step 2: Extract the Archive
 
-![002](images/RunningOnMac/002.png)
+1. Right-click the downloaded file and select "Open" to extract its contents.
 
-After extracting, you should see this folder named `AssetRipperGUI_mac64`.
+   ![Extract AssetRipper](images/RunningOnMac/002.png)
 
-![003](images/RunningOnMac/003.png)
+2. You should now see a folder named `AssetRipper_mac_x64`.
 
-And inside that folder, there should be many other files:
+   ![AssetRipper folder](images/RunningOnMac/003.png)
 
-![004](images/RunningOnMac/004.png)
+3. Inside this folder, you'll find various files, including the AssetRipper executable.
 
-You should also see this file called `AssetRipper`.
+   ![AssetRipper contents](images/RunningOnMac/004.png)
+   ![AssetRipper executable](images/RunningOnMac/005.png)
 
-![005](images/RunningOnMac/005.png)
+### Step 3: Open Terminal in the AssetRipper Folder
 
-Now go back to the `AssetRipperGUI_mac64` folder and select it. Then go to `Finder`, `Services`, `New Terminal at Folder` as shown.
+1. Select the `AssetRipper_mac_x64` folder.
+2. Go to `Finder` > `Services` > `New Terminal at Folder`.
 
-![006](images/RunningOnMac/006.png)
+   ![Open Terminal](images/RunningOnMac/006.png)
 
-Now you should see the terminal open:
+### Step 4: Run AssetRipper
 
-![007](images/RunningOnMac/007.png)
-
-Now you'll need to type in the following command and press `enter`:
-
+1. In the Terminal, enter the following command:
 ```
-./AssetRipper
+./AssetRipper.GUI.Free
 ```
+2. You may encounter a "Permission denied" error.
 
-Then you should see an error saying `-bash: ./AssetRipper: Permission denied`.
+![Permission denied](images/RunningOnMac/008.png)
 
-![008](images/RunningOnMac/008.png)
-
-To fix that, you'll need to type in this command:
-
+3. To fix this, enter the following command:
 ```
-chmod +x AssetRipper
+chmod +x AssetRipper.GUI.Free
 ```
-After entering that, you should see an empty line
-
-![009](images/RunningOnMac/009.png)
-
-Now again try the following command and it should work.
-
+4. Now, try running AssetRipper again:
 ```
-./AssetRipper
+./AssetRipper.GUI.Free
 ```
 
-Now something like this should pop up:
+### Step 5: Handle Security Prompts
 
-![010](images/RunningOnMac/010.png)
+1. You may see a security prompt. Click "Cancel" for now.
 
-Click cancel. To verify that, you'll need to open system preferences using `⌘ + space` and search for `System preferences` and press `enter`. Then inside, find for `Security & Privacy` as shown below:
+![Security prompt](images/RunningOnMac/010.png)
 
-![011](images/RunningOnMac/011.png)
+2. Open System Preferences (⌘ + Space, search for "System Preferences").
+3. Go to "Security & Privacy" > "General" tab.
+4. At the bottom, click "Allow Anyway" for AssetRipper.
 
-Now go to the `General` tab:
+![Allow AssetRipper](images/RunningOnMac/013.png)
 
-![012](images/RunningOnMac/012.png)
+5. Run the `./AssetRipper.GUI.Free` command again in Terminal.
+6. Click "Open" when prompted.
 
-And at the bottom, something like this should popup. Click Allow Anyway:
+![Open AssetRipper](images/RunningOnMac/014.png)
 
-![013](images/RunningOnMac/013.png)
+7. You may see additional security prompts. Click "OK" and allow them as needed.
 
-Now again try this command:
+![Additional prompts](images/RunningOnMac/015.png)
+![More prompts](images/RunningOnMac/016.png)
 
-```
-./AssetRipper
-```
+### Step 6: AssetRipper GUI
 
-Then it will show something like this, click Open:
+After completing these steps, the AssetRipper GUI should open:
 
-![014](images/RunningOnMac/014.png)
+![AssetRipper GUI](images/RunningOnMac/017.png)
 
-Then things like this will popup, click OK and do the same steps shown above to open them:
+## Reopening AssetRipper
 
-![015](images/RunningOnMac/015.png)
+Once you've gone through the initial setup, you can easily reopen AssetRipper:
 
-![016](images/RunningOnMac/016.png)
+1. Navigate to the `AssetRipper_mac_x64` folder.
+2. Double-click the `AssetRipper.GUI.Free` file to launch the application.
 
-Like that you should see multiple popups, click OK and allow them.
+![Reopen AssetRipper](images/RunningOnMac/018.png)
 
-After a while, you should see Asset Ripper GUI open:
+Congratulations! You've successfully set up and run AssetRipper on macOS.
 
-![017](images/RunningOnMac/017.png)
-
-Now lets say you got it opened, but you closed it and want to open it again. But luckily, you won't need to follow all the steps above to open again!
-
-Just go to the `AssetRipperGUI_mac64` folder and double click this file and it should open again!
-
-![018](images/RunningOnMac/018.png)
-
-And there you have it :)
-
-![019](images/RunningOnMac/019.png)
+![AssetRipper running](images/RunningOnMac/019.png)

@@ -61,6 +61,42 @@ internal static class Dialogs
 		}
 	}
 
+	public static class OpenFolders
+	{
+		public static async Task HandleGetRequest(HttpContext context)
+		{
+			context.Response.DisableCaching();
+			string[]? paths = await Task.Run(static () =>
+			{
+				if (Supported)
+				{
+					GetUserInput(out string[]? paths);
+					return paths;
+				}
+				else
+				{
+					return null;
+				}
+			});
+			await Results.Json(paths ?? [], AppJsonSerializerContext.Default.StringArray).ExecuteAsync(context);
+		}
+
+		public static NfdStatus GetUserInput(out string[]? paths, string? defaultPath = null)
+		{
+			ThrowIfNotSupported();
+			lock (lockObject)
+			{
+				return Nfd.PickFolderMultiple(out paths, defaultPath);
+			}
+		}
+
+		public static bool TryGetUserInput([NotNullWhen(true)] out string[]? paths, string? defaultPath = null)
+		{
+			NfdStatus status = GetUserInput(out paths, defaultPath);
+			return status == NfdStatus.Ok && paths is not null;
+		}
+	}
+
 	public static class OpenFile
 	{
 		public static async Task HandleGetRequest(HttpContext context)

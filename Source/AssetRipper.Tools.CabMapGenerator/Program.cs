@@ -30,7 +30,7 @@ namespace AssetRipper.Tools.CabMapGenerator
 
 				if (string.IsNullOrEmpty(outputFile))
 				{
-					outputFile = Path.Combine(AppContext.BaseDirectory, "cabmap.json");
+					outputFile = Path.Join(AppContext.BaseDirectory, "cabmap.json");
 				}
 				using FileStream stream = File.Create(outputFile);
 				Dictionary<string, string> map = new();

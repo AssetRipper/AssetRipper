@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Utils;
+using AssetRipper.Processing.Configuration;
 using System.Text.Json;
 
 namespace AssetRipper.Export.UnityProjects.Configuration;

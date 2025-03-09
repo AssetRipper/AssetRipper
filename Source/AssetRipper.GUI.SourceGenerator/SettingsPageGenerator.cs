@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Export.UnityProjects.Configuration;
 using AssetRipper.Import.Configuration;
+using AssetRipper.Processing.Configuration;
 using AssetRipper.Text.SourceGeneration;
 using System.CodeDom.Compiler;
 using System.Diagnostics;
@@ -19,9 +20,11 @@ internal static class SettingsPageGenerator
 	{
 		writer.WriteGeneratedCodeWarning();
 		writer.WriteLineNoTabs();
+		writer.WriteUsing("AssetRipper.Export.Modules.Textures");
 		writer.WriteUsing("AssetRipper.Export.UnityProjects.Configuration");
 		writer.WriteUsing("AssetRipper.GUI.Web.Pages.Settings.DropDown");
 		writer.WriteUsing("AssetRipper.Import.Configuration");
+		writer.WriteUsing("AssetRipper.Processing.Configuration");
 		writer.WriteLineNoTabs();
 		writer.WriteFileScopedNamespace("AssetRipper.GUI.Web.Pages.Settings");
 		writer.WriteLineNoTabs();
@@ -84,10 +87,10 @@ internal static class SettingsPageGenerator
 				if (property.IsBoolean)
 				{
 					writer.WriteLineNoTabs();
-					writer.WriteLine($"private static void WriteCheckBoxFor{property.Name}(TextWriter writer, string label)");
+					writer.WriteLine($"private static void WriteCheckBoxFor{property.Name}(TextWriter writer, string label, bool disabled = false)");
 					using (new CurlyBrackets(writer))
 					{
-						writer.WriteLine($"WriteCheckBox(writer, label, Configuration.{property.DeclaringType?.Name}.{property.Name}, {property.NameOfString});");
+						writer.WriteLine($"WriteCheckBox(writer, label, Configuration.{property.DeclaringType?.Name}.{property.Name}, {property.NameOfString}, disabled);");
 					}
 				}
 				else if (property.IsEnum)

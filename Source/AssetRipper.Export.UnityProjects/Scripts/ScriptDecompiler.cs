@@ -23,7 +23,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 			ScriptingBackend = scriptingBackend;
 		}
 
-		public void DecompileWholeProject(AssemblyDefinition assembly, string outputFolder)
+		public void DecompileWholeProject(AssemblyDefinition assembly, string outputFolder, FileSystem fileSystem)
 		{
 			DecompilerSettings settings = new();
 
@@ -35,12 +35,12 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 			settings.UseSdkStyleProjectFormat = false;//sdk style can throw and we don't use the csproj file at all
 			settings.UseNestedDirectoriesForNamespaces = true;
 
-			WholeProjectDecompiler decompiler = new(settings, assemblyResolver, null, null);
+			WholeProjectDecompiler decompiler = new(settings, assemblyResolver, null, null, null);
 
-			DecompileWholeProject(decompiler, assembly, outputFolder);
+			DecompileWholeProject(decompiler, assembly, outputFolder, fileSystem);
 		}
 
-		private void DecompileWholeProject(WholeProjectDecompiler decompiler, AssemblyDefinition assembly, string outputFolder)
+		private void DecompileWholeProject(WholeProjectDecompiler decompiler, AssemblyDefinition assembly, string outputFolder, FileSystem fileSystem)
 		{
 			try
 			{

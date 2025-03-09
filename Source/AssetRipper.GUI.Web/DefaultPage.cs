@@ -1,4 +1,5 @@
-﻿using AssetRipper.GUI.Web.Pages;
+﻿using AssetRipper.GUI.Web.Documentation;
+using AssetRipper.GUI.Web.Pages;
 using AssetRipper.GUI.Web.Paths;
 using AssetRipper.Web.Content;
 
@@ -15,7 +16,7 @@ public abstract class DefaultPage : HtmlPage
 				new Meta(writer).WithCharset("utf-8").Close();
 				new Meta(writer).WithName("viewport").WithContent("width=device-width, initial-scale=1.0").Close();
 				new Title(writer).Close(GetTitle());
-				Bootstrap.WriteStyleSheetReference(writer);
+				OnlineDependencies.Bootstrap.WriteStyleSheetReference(writer);
 				new Link(writer).WithRel("stylesheet").WithHref("/css/site.css").Close();
 			}
 			using (new Body(writer).WithCustomAttribute("data-bs-theme", "dark").End())
@@ -117,6 +118,14 @@ public abstract class DefaultPage : HtmlPage
 				{
 					new A(writer).WithClass("dropdown-item").WithHref("/Licenses").Close(Localization.Licenses);
 				}
+				using (new Li(writer).End())
+				{
+					new A(writer).WithClass("dropdown-item").WithHref(DocumentationPaths.OpenApi).Close(Localization.OpenApiJson);
+				}
+				using (new Li(writer).End())
+				{
+					new A(writer).WithClass("dropdown-item").WithHref(DocumentationPaths.Swagger).Close(Localization.SwaggerDocumentation);
+				}
 			}
 		}
 	}
@@ -158,7 +167,7 @@ public abstract class DefaultPage : HtmlPage
 			WriteDropdownButton(writer, Localization.MenuLanguage);
 			using (new Ul(writer).WithClass("dropdown-menu").End())
 			{
-				foreach ((string code, string name) in Localizations.LocalizationLoader.LanguageNameDictionary)
+				foreach ((string code, string name) in LanguageCodes.LanguageNameDictionary)
 				{
 					using (new Li(writer).End())
 					{
@@ -192,7 +201,7 @@ public abstract class DefaultPage : HtmlPage
 		{
 			using (new Div(writer).WithClass("container text-center").End())
 			{
-				writer.Write("&copy; 2024 - AssetRipper - ");
+				writer.Write("&copy; 2025 - AssetRipper - ");
 				new A(writer).WithHref("/Privacy").Close(Localization.Privacy);
 				writer.Write(" - ");
 				new A(writer).WithHref("/Licenses").Close(Localization.Licenses);
@@ -202,8 +211,8 @@ public abstract class DefaultPage : HtmlPage
 
 	protected virtual void WriteScriptReferences(TextWriter writer)
 	{
-		writer.Write("""<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>""");
-		Bootstrap.WriteScriptReference(writer);
+		OnlineDependencies.Popper.WriteScriptReference(writer);
+		OnlineDependencies.Bootstrap.WriteScriptReference(writer);
 		new Script(writer).WithSrc("/js/site.js").Close();
 	}
 }

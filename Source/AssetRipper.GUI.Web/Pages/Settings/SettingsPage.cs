@@ -43,9 +43,19 @@ public sealed partial class SettingsPage : DefaultPage
 									WriteCheckBoxForIgnoreStreamingAssets(writer, Localization.SkipStreamingAssets);
 								}
 
-								using (new Div(writer).WithClass("col").End())
+								if (GameFileLoader.Premium)
 								{
-									WriteCheckBoxForEnableStaticMeshSeparation(writer, Localization.EnableStaticMeshSeparation);
+									using (new Div(writer).WithClass("col").End())
+									{
+										WriteCheckBoxForEnableStaticMeshSeparation(writer, Localization.EnableStaticMeshSeparation);
+									}
+								}
+								else
+								{
+									using (new Div(writer).WithClass("col").End())
+									{
+										WriteCheckBoxForEnableStaticMeshSeparation(writer, Localization.EnableStaticMeshSeparation, !GameFileLoader.Premium);
+									}
 								}
 							}
 
@@ -85,9 +95,19 @@ public sealed partial class SettingsPage : DefaultPage
 									WriteCheckBoxForEnablePrefabOutlining(writer, Localization.EnablePrefabOutlining);
 								}
 
-								using (new Div(writer).WithClass("col").End())
+								if (GameFileLoader.Premium)
 								{
-									WriteCheckBoxForEnableAssetDeduplication(writer, Localization.EnableAssetDeduplication);
+									using (new Div(writer).WithClass("col").End())
+									{
+										WriteCheckBoxForEnableAssetDeduplication(writer, Localization.EnableAssetDeduplication);
+									}
+								}
+								else
+								{
+									using (new Div(writer).WithClass("col").End())
+									{
+										WriteCheckBoxForEnableAssetDeduplication(writer, Localization.EnableAssetDeduplication, !GameFileLoader.Premium);
+									}
 								}
 							}
 
@@ -133,7 +153,7 @@ public sealed partial class SettingsPage : DefaultPage
 								}
 								using (new Div(writer).WithClass("col").End())
 								{
-									WriteDropDownForTerrainExportMode(writer);
+									WriteDropDownForShaderExportMode(writer);
 								}
 								using (new Div(writer).WithClass("col").End())
 								{
@@ -145,15 +165,14 @@ public sealed partial class SettingsPage : DefaultPage
 							{
 								using (new Div(writer).WithClass("col").End())
 								{
-									WriteDropDownForShaderExportMode(writer);
-								}
-								using (new Div(writer).WithClass("col").End())
-								{
 									WriteDropDownForScriptLanguageVersion(writer);
 								}
 								using (new Div(writer).WithClass("col").End())
 								{
 									WriteDropDownForScriptExportMode(writer);
+								}
+								using (new Div(writer).WithClass("col").End())
+								{
 								}
 							}
 
@@ -161,7 +180,6 @@ public sealed partial class SettingsPage : DefaultPage
 							{
 								using (new Div(writer).WithClass("col").End())
 								{
-									WriteDropDownForMeshExportFormat(writer);
 								}
 								using (new Div(writer).WithClass("col").End())
 								{
@@ -207,12 +225,23 @@ public sealed partial class SettingsPage : DefaultPage
 			.Close();
 	}
 
-	private static void WriteCheckBox(TextWriter writer, string label, bool @checked, string id)
+	private static void WriteCheckBox(TextWriter writer, string label, bool @checked, string id, bool disabled = false)
 	{
 		using (new Div(writer).WithClass("form-check").End())
 		{
-			new Input(writer).WithClass("form-check-input").WithType("checkbox").WithValue().WithId(id).WithName(id).MaybeWithChecked(@checked).Close();
-			new Label(writer).WithClass("form-check-label").WithFor(id).Close(label);
+			new Input(writer)
+				.WithClass("form-check-input")
+				.WithType("checkbox")
+				.WithValue()
+				.WithId(id)
+				.WithName(id)
+				.MaybeWithChecked(disabled ? false : @checked)
+				.MaybeWithDisabled(disabled)
+				.Close();
+			new Label(writer)
+				.WithClass("form-check-label" + (disabled ? " text-muted" : ""))
+				.WithFor(id)
+				.Close(label + (disabled ? $" ({Localization.PremiumFeatureNotice})" : ""));
 		}
 	}
 
@@ -227,7 +256,7 @@ public sealed partial class SettingsPage : DefaultPage
 				DropDownItem<T> item = items[i];
 				new Option(writer)
 					.WithValue(item.Value.ToString().ToHtml())
-					.MaybeSelected(EqualityComparer<T>.Default.Equals(item.Value, value))
+					.MaybeWithSelected(EqualityComparer<T>.Default.Equals(item.Value, value))
 					.WithCustomAttribute("option-description", CreateUniqueID(id, i))
 					.Close(item.DisplayName);
 			}

@@ -2,7 +2,7 @@
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Cloning;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.IO.Files.Utils;
+using AssetRipper.IO.Files;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_687078895;
@@ -22,7 +22,7 @@ namespace AssetRipper.Processing.Textures
 			ObjectFactory factory = new ObjectFactory(gameData);
 			foreach (IUnityObjectBase asset in gameData.GameBundle
 				.FetchAssetCollections()
-				.Where(c => !FilenameUtils.IsDefaultResourceOrBuiltinExtra(c.Name))
+				.Where(c => !SpecialFileNames.IsDefaultResourceOrBuiltinExtra(c.Name))
 				.SelectMany(c => c))
 			{
 				if (asset is ITexture2D texture)

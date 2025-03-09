@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
 using AssetRipper.GUI.Web.Paths;
+using AssetRipper.IO.Files;
 
 namespace AssetRipper.GUI.Web.Pages.Bundles;
 
@@ -65,6 +66,21 @@ public sealed class ViewPage : DefaultPage
 					using (new Li(writer).End())
 					{
 						PathLinking.WriteLink(writer, Path.GetResource(i), Bundle.Resources[i].Name);
+					}
+				}
+			}
+		}
+
+		if (Bundle.FailedFiles.Count > 0)
+		{
+			new H2(writer).Close(Localization.FailedFiles);
+			using (new Ul(writer).End())
+			{
+				for (int i = 0; i < Bundle.FailedFiles.Count; i++)
+				{
+					using (new Li(writer).End())
+					{
+						PathLinking.WriteLink(writer, Path.GetFailedFile(i), Bundle.FailedFiles[i].NameFixed);
 					}
 				}
 			}

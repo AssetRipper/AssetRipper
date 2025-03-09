@@ -1,6 +1,6 @@
 using AssetRipper.Assets;
 using AssetRipper.Assets.Generics;
-using AssetRipper.Export.UnityProjects.Configuration;
+using AssetRipper.Export.Modules.Textures;
 using AssetRipper.Export.UnityProjects.Project;
 using AssetRipper.Processing.Textures;
 using AssetRipper.SourceGenerated;
@@ -48,9 +48,9 @@ namespace AssetRipper.Export.UnityProjects.Textures
 			}
 		}
 
-		protected override bool ExportInner(IExportContainer container, string filePath, string dirPath)
+		protected override bool ExportInner(IExportContainer container, string filePath, string dirPath, FileSystem fileSystem)
 		{
-			return AssetExporter.Export(container, Asset, filePath);
+			return AssetExporter.Export(container, Asset, filePath, fileSystem);
 		}
 
 		protected override string GetExportExtension(IUnityObjectBase asset)

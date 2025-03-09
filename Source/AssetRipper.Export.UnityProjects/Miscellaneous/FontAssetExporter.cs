@@ -19,10 +19,10 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 			}
 		}
 
-		public override bool Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path)
+		public override bool Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path, FileSystem fileSystem)
 		{
 			IFont font = assets.OfType<IFont>().Single();
-			File.WriteAllBytes(path, font.FontData);
+			fileSystem.File.WriteAllBytes(path, font.FontData);
 			return true;
 		}
 	}
