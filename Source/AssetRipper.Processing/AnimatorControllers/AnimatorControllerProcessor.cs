@@ -35,7 +35,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 			IAnimatorStateMachine[] StateMachines = new IAnimatorStateMachine[controllerConstant.StateMachineArray.Count];
 			for (int i = 0; i < controllerConstant.StateMachineArray.Count; i++)
 			{
-				IAnimatorStateMachine stateMachine = VirtualAnimationFactory.CreateAnimatorStateMachine(processedCollection, controller, i);
+				IAnimatorStateMachine stateMachine = VirtualAnimationFactory.CreateRootAnimatorStateMachine(processedCollection, controller, i);
 				StateMachines[i] = stateMachine;
 			}
 

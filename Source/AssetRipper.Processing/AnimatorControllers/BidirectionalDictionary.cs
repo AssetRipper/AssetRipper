@@ -1,11 +1,13 @@
+using System.Collections;
+
 namespace AssetRipper.Processing.AnimatorControllers
 {
 	/// <summary>
 	/// Bidirectional Dictionary, valid for 2 different Types T1 and T2
 	/// </summary>
-	public sealed class BidirectionalDictionary<T1, T2>
-		where T1:notnull
-		where T2:notnull 
+	public sealed class BidirectionalDictionary<T1, T2> : IDictionary<T1, T2>
+		where T1 : notnull
+		where T2 : notnull
 	{
 		private readonly Dictionary<T1, T2> forward = new();
 		private readonly Dictionary<T2, T1> backward = new();
@@ -46,14 +48,8 @@ namespace AssetRipper.Processing.AnimatorControllers
 
 		public void Add(T1 item1, T2 item2)
 		{
-			if (item1 == null)
-			{
-				throw new ArgumentNullException(nameof(item1));
-			}
-			if (item2 == null)
-			{
-				throw new ArgumentNullException(nameof(item2));
-			}
+			ArgumentNullException.ThrowIfNull(item1);
+			ArgumentNullException.ThrowIfNull(item2);
 			if (forward.ContainsKey(item1))
 			{
 				throw new ArgumentException("An element with the same key already exists.", nameof(item1));
@@ -71,6 +67,11 @@ namespace AssetRipper.Processing.AnimatorControllers
 			Add(item1_item2.Key, item1_item2.Value);
 		}
 
+		public void Add(KeyValuePair<T2, T1> item2_item1)
+		{
+			Add(item2_item1.Value, item2_item1.Key);
+		}
+
 		public void Clear()
 		{
 			forward.Clear();
@@ -82,6 +83,11 @@ namespace AssetRipper.Processing.AnimatorControllers
 			return forward.Contains(item1_item2);
 		}
 
+		public bool Contains(KeyValuePair<T2, T1> item2_item1)
+		{
+			return backward.Contains(item2_item1);
+		}
+
 		public bool ContainsKey(T1 item1)
 		{
 			return forward.ContainsKey(item1);
@@ -90,6 +96,42 @@ namespace AssetRipper.Processing.AnimatorControllers
 		public bool ContainsKey(T2 item2)
 		{
 			return backward.ContainsKey(item2);
+		}
+
+		public void CopyTo(KeyValuePair<T1, T2>[] array, int arrayIndex)
+		{
+			ArgumentNullException.ThrowIfNull(array);
+			ArgumentOutOfRangeException.ThrowIfNegative(arrayIndex);
+			ArgumentOutOfRangeException.ThrowIfGreaterThan(forward.Count, array.Length - arrayIndex);
+
+			foreach (KeyValuePair<T1, T2> kvp in forward)
+			{
+				array[arrayIndex] = kvp;
+				arrayIndex++;
+			}
+		}
+
+		public void CopyTo(KeyValuePair<T2, T1>[] array, int arrayIndex)
+		{
+			ArgumentNullException.ThrowIfNull(array);
+			ArgumentOutOfRangeException.ThrowIfNegative(arrayIndex);
+			ArgumentOutOfRangeException.ThrowIfGreaterThan(backward.Count, array.Length - arrayIndex);
+
+			foreach (KeyValuePair<T2, T1> kvp in backward)
+			{
+				array[arrayIndex] = kvp;
+				arrayIndex++;
+			}
+		}
+
+		public IEnumerator GetEnumerator()
+		{
+			return forward.GetEnumerator();
+		}
+
+		IEnumerator<KeyValuePair<T1, T2>> IEnumerable<KeyValuePair<T1, T2>>.GetEnumerator()
+		{
+			return forward.GetEnumerator();
 		}
 
 		public bool Remove(T1 item1)
@@ -120,6 +162,17 @@ namespace AssetRipper.Processing.AnimatorControllers
 			{
 				forward.Remove(item1_item2.Key);
 				backward.Remove(item1_item2.Value);
+				return true;
+			}
+			return false;
+		}
+
+		public bool Remove(KeyValuePair<T2, T1> item2_item1)
+		{
+			if (backward.Contains(item2_item1))
+			{
+				forward.Remove(item2_item1.Value);
+				backward.Remove(item2_item1.Key);
 				return true;
 			}
 			return false;
