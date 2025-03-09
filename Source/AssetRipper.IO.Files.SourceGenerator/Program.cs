@@ -46,7 +46,7 @@ internal static class Program
 					{
 						string virtualKeyword = api.Type is FileSystemApiType.Sealed ? "" : "virtual ";
 						string parametersWithTypes = string.Join(", ", api.Parameters.Select(parameter => $"{parameter.Item1} {parameter.Item2}"));
-						writer.WriteLine($"public {virtualKeyword}{api.ReturnType} {api.Name}({parametersWithTypes})");
+						writer.WriteLine($"public {virtualKeyword}{api.BaseReturnType} {api.Name}({parametersWithTypes})");
 						using (new CurlyBrackets(writer))
 						{
 							if (api.Type is FileSystemApiType.Throw)
@@ -97,7 +97,7 @@ internal static class Program
 						}
 
 						string parametersWithTypes = string.Join(", ", api.Parameters.Select(parameter => $"{parameter.Item1} {parameter.Item2}"));
-						writer.WriteLine($"public override {api.ReturnType} {api.Name}({parametersWithTypes})");
+						writer.WriteLine($"public override {api.DerivedReturnType} {api.Name}({parametersWithTypes})");
 						using (new CurlyBrackets(writer))
 						{
 							string returnKeyword = api.VoidReturn ? "" : "return ";
@@ -157,6 +157,7 @@ internal static class Program
 	{
 		[nameof(File)] = new()
 		{
+			new((Func<string, FileStream>)File.Create),
 			new(File.Delete),
 			new(File.Exists),
 			new(File.OpenRead),
@@ -206,7 +207,15 @@ internal static class Program
 		public MethodInfo MethodInfo => Delegate.Method;
 		public FileSystemApiType Type { get; init; } = FileSystemApiType.Throw;
 		public string DeclaringType => MethodInfo.DeclaringType!.GetGlobalQualifiedName();
-		public string ReturnType => MethodInfo.ReturnType.GetGlobalQualifiedName();
+		public string BaseReturnType
+		{
+			get
+			{
+				Type returnType = MethodInfo.ReturnType == typeof(FileStream) ? typeof(Stream) : MethodInfo.ReturnType;
+				return returnType.GetGlobalQualifiedName();
+			}
+		}
+		public string DerivedReturnType => MethodInfo.ReturnType.GetGlobalQualifiedName();
 		public bool VoidReturn => MethodInfo.ReturnType == typeof(void);
 		public string Name => MethodInfo.Name;
 		public string FullName => $"{DeclaringType}.{Name}";

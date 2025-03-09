@@ -13,7 +13,6 @@ public partial class FileSystem
 
 	public partial class FileImplementation
 	{
-		public virtual Stream Create(string path) => throw new NotSupportedException();
 	}
 
 	public partial class DirectoryImplementation

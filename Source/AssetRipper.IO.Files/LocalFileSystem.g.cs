@@ -8,6 +8,11 @@ public sealed partial class LocalFileSystem : FileSystem
 
 	public sealed partial class LocalFileImplementation(LocalFileSystem fileSystem) : FileImplementation(fileSystem)
 	{
+		public override global::System.IO.FileStream Create(global::System.String path)
+		{
+			return global::System.IO.File.Create(path);
+		}
+
 		public override void Delete(global::System.String path)
 		{
 			global::System.IO.File.Delete(path);

@@ -142,9 +142,9 @@ public class VirtualFileSystemTests
 	}
 
 	[Test]
-	public void CreatingFileTwiceThrows()
+	public void CreatingFileTwiceSucceeds()
 	{
-		Assert.Throws<IOException>(() =>
+		Assert.DoesNotThrow(() =>
 		{
 			VirtualFileSystem fs = new();
 			fs.Directory.Create("/test");
@@ -169,5 +169,27 @@ public class VirtualFileSystemTests
 		VirtualFileSystem fs = new();
 		Stream stream = fs.File.Create("/test");
 		Assert.That(stream.Length, Is.Zero);
+	}
+
+	[Test]
+	public void ReadWriteTextParity()
+	{
+		VirtualFileSystem fs = new();
+		string path = "/test";
+		string contents = "Hello, world!";
+		fs.File.WriteAllText(path, contents);
+		string readContents = fs.File.ReadAllText(path);
+		Assert.That(readContents, Is.EqualTo(contents));
+	}
+
+	[Test]
+	public void ReadWriteBytesParity()
+	{
+		VirtualFileSystem fs = new();
+		string path = "/test";
+		byte[] bytes = [0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x2C, 0x20, 0x77, 0x6F, 0x72, 0x6C, 0x64, 0x21];
+		fs.File.WriteAllBytes(path, bytes);
+		byte[] readBytes = fs.File.ReadAllBytes(path);
+		Assert.That(readBytes, Is.EqualTo(bytes));
 	}
 }

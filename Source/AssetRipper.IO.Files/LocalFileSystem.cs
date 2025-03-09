@@ -6,7 +6,6 @@ public partial class LocalFileSystem : FileSystem
 
 	public partial class LocalFileImplementation
 	{
-		public override Stream Create(string path) => System.IO.File.Create(path);
 	}
 
 	public partial class LocalDirectoryImplementation

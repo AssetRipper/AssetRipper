@@ -10,6 +10,11 @@ public abstract partial class FileSystem
 	{
 		protected DirectoryImplementation Directory => fileSystem.Directory;
 		protected PathImplementation Path => fileSystem.Path;
+		public virtual global::System.IO.Stream Create(global::System.String path)
+		{
+			throw new global::System.NotSupportedException();
+		}
+
 		public virtual void Delete(global::System.String path)
 		{
 			throw new global::System.NotSupportedException();
@@ -20,12 +25,12 @@ public abstract partial class FileSystem
 			throw new global::System.NotSupportedException();
 		}
 
-		public virtual global::System.IO.FileStream OpenRead(global::System.String path)
+		public virtual global::System.IO.Stream OpenRead(global::System.String path)
 		{
 			throw new global::System.NotSupportedException();
 		}
 
-		public virtual global::System.IO.FileStream OpenWrite(global::System.String path)
+		public virtual global::System.IO.Stream OpenWrite(global::System.String path)
 		{
 			throw new global::System.NotSupportedException();
 		}
