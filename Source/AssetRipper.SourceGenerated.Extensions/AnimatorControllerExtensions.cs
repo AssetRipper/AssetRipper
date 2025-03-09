@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Generics;
-using AssetRipper.Assets.Metadata;
 using AssetRipper.SourceGenerated.Classes.ClassID_1101;
 using AssetRipper.SourceGenerated.Classes.ClassID_1102;
 using AssetRipper.SourceGenerated.Classes.ClassID_1107;
@@ -10,6 +9,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_206;
 using AssetRipper.SourceGenerated.Classes.ClassID_207;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
 using AssetRipper.SourceGenerated.Classes.ClassID_91;
+using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.AnimatorControllerLayer;
 using AssetRipper.SourceGenerated.Subclasses.ChildAnimatorState;
 using AssetRipper.SourceGenerated.Subclasses.ChildAnimatorStateMachine;
@@ -20,10 +20,8 @@ using AssetRipper.SourceGenerated.Subclasses.PPtr_AnimatorStateTransition;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_AnimatorTransition;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_MonoBehaviour;
 using AssetRipper.SourceGenerated.Subclasses.StateBehavioursPair;
-using AssetRipper.SourceGenerated.Subclasses.StateConstant;
 using AssetRipper.SourceGenerated.Subclasses.StateKey;
 using AssetRipper.SourceGenerated.Subclasses.StateMachineBehaviourVectorDescription;
-using AssetRipper.SourceGenerated.Subclasses.StateMachineConstant;
 using AssetRipper.SourceGenerated.Subclasses.StateMotionPair;
 using AssetRipper.SourceGenerated.Subclasses.StateRange;
 
@@ -66,7 +64,12 @@ namespace AssetRipper.SourceGenerated.Extensions
 			for (int i = 0; i < range.Count; i++)
 			{
 				int index = (int)controllerStateMachineBehaviourVectorDescription.StateMachineBehaviourIndices[(int)range.StartIndex + i];
-				stateMachineBehaviours[i] = controllerStateMachineBehaviours[index];
+				IMonoBehaviour? stateMachineBehaviour = controllerStateMachineBehaviours[index];
+				if (stateMachineBehaviour != null)
+				{
+					stateMachineBehaviour.HideFlagsE = HideFlags.HideInHierarchy;
+				}
+				stateMachineBehaviours[i] = stateMachineBehaviour;
 			}
 			return stateMachineBehaviours;
 		}
