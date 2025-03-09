@@ -1,4 +1,5 @@
-﻿using AssetRipper.SourceGenerated.Subclasses.BlendTreeConstant;
+﻿using AssetRipper.Assets.Generics;
+using AssetRipper.SourceGenerated.Subclasses.BlendTreeConstant;
 using AssetRipper.SourceGenerated.Subclasses.StateConstant;
 
 namespace AssetRipper.SourceGenerated.Extensions
@@ -38,6 +39,23 @@ namespace AssetRipper.SourceGenerated.Extensions
 			{
 				return stateConstant.ID;
 			}
+		}
+
+		public static string GetName(this IStateConstant stateConstant, AssetDictionary<uint, Utf8String> tos)
+		{
+			if (stateConstant.Has_NameID())
+			{
+				return tos[stateConstant.NameID];
+			}
+
+			string statePath = tos[stateConstant.ID].String; // ParentStateMachineName.StateName
+			int pathDelimiterPos = statePath.IndexOf('.');
+			if (pathDelimiterPos != -1 && pathDelimiterPos + 1 < statePath.Length)
+			{
+				return statePath[(pathDelimiterPos + 1)..];
+			}
+
+			return statePath;
 		}
 	}
 }
