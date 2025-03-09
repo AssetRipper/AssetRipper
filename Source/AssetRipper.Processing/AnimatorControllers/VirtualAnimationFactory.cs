@@ -6,20 +6,14 @@ using AssetRipper.SourceGenerated.Classes.ClassID_1102;
 using AssetRipper.SourceGenerated.Classes.ClassID_1107;
 using AssetRipper.SourceGenerated.Classes.ClassID_1109;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
-using AssetRipper.SourceGenerated.Classes.ClassID_206;
-using AssetRipper.SourceGenerated.Classes.ClassID_207;
 using AssetRipper.SourceGenerated.Classes.ClassID_91;
 using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.AnimatorCondition;
-using AssetRipper.SourceGenerated.Subclasses.BlendTreeConstant;
-using AssetRipper.SourceGenerated.Subclasses.BlendTreeNodeConstant;
 using AssetRipper.SourceGenerated.Subclasses.ChildAnimatorState;
 using AssetRipper.SourceGenerated.Subclasses.ChildAnimatorStateMachine;
-using AssetRipper.SourceGenerated.Subclasses.ChildMotion;
 using AssetRipper.SourceGenerated.Subclasses.ConditionConstant;
 using AssetRipper.SourceGenerated.Subclasses.LayerConstant;
-using AssetRipper.SourceGenerated.Subclasses.LeafInfoConstant;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_AnimatorState;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_AnimatorStateTransition;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_AnimatorStateMachine;
@@ -233,196 +227,6 @@ namespace AssetRipper.Processing.AnimatorControllers
 			return stateMachineContext.RootStateMachine;
 		}
 
-		private class StateContext
-		{
-			public readonly int StateCount;
-			[MemberNotNullWhen(true, nameof(states), nameof(stateConstants), nameof(stateMachinePathIdxs),
-				nameof(uniqueStateMachinePaths), nameof(uniqueStateMachinePathIDs))]
-			public bool HasStates() => StateCount > 0;
-
-			public readonly int DefaultStateIdx;
-
-			readonly IAnimatorState[]? states;
-			readonly IStateConstant[]? stateConstants;
-			readonly int[]? stateMachinePathIdxs;
-
-			readonly string[]? uniqueStateMachinePaths; // Bidirectional Dictionary and grouping States for StateMachines
-			readonly uint[]? uniqueStateMachinePathIDs;   // Bidirectional Dictionary and grouping States for StateMachines
-
-			public IStateConstant GetStateConstant(int index)
-			{
-				return stateConstants![index];
-			}
-
-			public IAnimatorState GetState(int index)
-			{
-				return states![index];
-			}
-
-			public int GetStateIdx(IAnimatorState? state)
-			{
-				if (state == null)
-				{
-					return -1;
-				}
-				int stateIdx = states!.IndexOf(state);
-				return stateIdx;
-			}
-
-			public string GetStateMachinePath(int stateIndex)
-			{
-				int pathIdx = stateMachinePathIdxs![stateIndex];
-				return uniqueStateMachinePaths![pathIdx];
-			}
-
-			public bool TryGetStateMachinePath(uint pathID, out string path) // for Bidirectional Dictionary
-			{
-				if (pathID == 0)
-				{
-					path = string.Empty;
-					return false;
-				}
-				int pathIdx = uniqueStateMachinePathIDs!.IndexOf(pathID);
-				if (pathIdx == -1)
-				{
-					path = string.Empty;
-					return false;
-				}
-				path = uniqueStateMachinePaths![pathIdx];
-				return true;
-			}
-
-			public bool TryGetStateMachinePathID(string path, out uint pathID) // for Bidirectional Dictionary
-			{
-				if (string.IsNullOrEmpty(path))
-				{
-					pathID = 0;
-					return false;
-				}
-				int pathIdx = uniqueStateMachinePaths!.IndexOf(path);
-				if (pathIdx == -1)
-				{
-					pathID = 0;
-					return false;
-				}
-				pathID = uniqueStateMachinePathIDs![pathIdx];
-				return true;
-			}
-
-			public IReadOnlyList<string> GetUniqueSMPaths()
-			{
-				return uniqueStateMachinePaths!;
-			}
-
-			public IEnumerable<int> StateIdxsForStateMachine(uint pathID) // for grouping States
-			{
-				int pathIdx = uniqueStateMachinePathIDs!.IndexOf(pathID);
-				if (pathIdx != -1)
-				{
-					for (int i = 0; i < stateMachinePathIdxs!.Length; i++)
-					{
-						if (stateMachinePathIdxs[i] == pathIdx)
-						{
-							yield return i;
-						}
-					}
-				}
-			}
-
-			public IEnumerable<int> StateIdxsForStateMachine(string path) // for grouping States
-			{
-				int pathIdx = uniqueStateMachinePaths!.IndexOf(path);
-				if (pathIdx != -1)
-				{
-					for (int i = 0; i < stateMachinePathIdxs!.Length; i++)
-					{
-						if (stateMachinePathIdxs[i] == pathIdx)
-						{
-							yield return i;
-						}
-					}
-				}
-			}
-
-			public StateContext(ProcessedAssetCollection virtualFile, IAnimatorController controller, IStateMachineConstant stateMachineConstant, int layerIndex)
-			{
-				if (!controller.TOS.ContainsKey(0))
-				{
-					controller.TOS[0] = Utf8String.Empty;
-				}
-				DefaultStateIdx = stateMachineConstant.DefaultState != uint.MaxValue ? (int)stateMachineConstant.DefaultState : 0;
-
-				StateCount = stateMachineConstant.StateConstantArray.Count;
-				if (!HasStates())
-				{
-					return;
-				}
-
-				stateConstants = new IStateConstant[StateCount];
-				states = new IAnimatorState[StateCount];
-				stateMachinePathIdxs = new int[StateCount];
-				List<string> uniqueSMPaths = new();
-				for (int i = 0; i < StateCount; i++)
-				{
-					IStateConstant stateConstant = stateMachineConstant.StateConstantArray[i].Data;
-					IAnimatorState state = CreateAnimatorState(virtualFile, controller, controller.TOS, layerIndex, stateConstant);
-
-					string stateMachinePath = MakeStateMachinePath(controller.TOS, stateConstant.GetId(), state.Name.String);
-					int SMPathIdx = uniqueSMPaths.FindIndex(x => x == stateMachinePath);
-					if (SMPathIdx == -1)
-					{
-						SMPathIdx = uniqueSMPaths.Count;
-						uniqueSMPaths.Add(stateMachinePath);
-					}
-					stateConstants[i] = stateConstant;
-					states[i] = state;
-					stateMachinePathIdxs[i] = SMPathIdx;
-				}
-
-				int uniqueSMPathsCount = uniqueSMPaths.Count;
-				if (stateMachineConstant.StateMachineCount() > uniqueSMPathsCount) // can only happen on Unity 5+
-				{
-					// there are StateMachines with no States
-					// try generate more possible StateMachine paths to locate them
-					// *not useful when these StateMachines come last in hierachy (don't have child StateMachines with States)
-					for (int i = 0; i < uniqueSMPathsCount; i++)
-					{
-						string stateMachinePath = uniqueSMPaths[i];
-						int pathDelimiterPos = stateMachinePath.LastIndexOf('.');
-						while (pathDelimiterPos != -1)
-						{
-							stateMachinePath = stateMachinePath[..pathDelimiterPos];
-							if (uniqueSMPaths.Contains(stateMachinePath))
-							{
-								break;
-							}
-							else
-							{
-								uniqueSMPaths.Add(stateMachinePath);
-							}
-							pathDelimiterPos = stateMachinePath.LastIndexOf('.');
-						}
-					}
-				}
-
-				uniqueStateMachinePaths = uniqueSMPaths.ToArray();
-				uniqueStateMachinePathIDs = new uint[uniqueStateMachinePaths.Length];
-				for (int i = 0; i < uniqueStateMachinePaths.Length; i++)
-				{
-					string uniqueSMPath = uniqueStateMachinePaths[i];
-					uint PathID = Checksum.Crc32Algorithm.HashUTF8(uniqueSMPath);
-					uniqueStateMachinePathIDs[i] = PathID;
-				}
-			}
-
-			private static string MakeStateMachinePath(AssetDictionary<uint, Utf8String> TOS, uint statePathID, string stateName)
-			{
-				string path = TOS[statePathID];
-				string stateMachinePath = path[..(path.Length - stateName.Length - 1)];
-				return stateMachinePath;
-			}
-		}
-
 		private class StateMachineContext
 		{
 			const uint StateMachineTransitionFlag = 30000;
@@ -433,7 +237,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 			readonly IStateMachineConstant StateMachineConstant;
 			readonly int LayerIndex;
 			readonly ILayerConstant Layer;
-			readonly StateContext StateContext;
+			readonly AnimatorStateContext StateContext;
 
 			IAnimatorStateMachine[] StateMachines;
 			uint[]? StateMachineFullPathIDs;
@@ -455,7 +259,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 				Controller = controller;
 				StateMachineConstant = controller.Controller.StateMachineArray[stateMachineIndex].Data;
 				LayerIndex = controller.Controller.GetLayerIndexByStateMachineIndex(stateMachineIndex, out Layer);
-				StateContext = new(virtualFile, controller, StateMachineConstant, LayerIndex); // setting State Transitions later
+				StateContext = new(virtualFile, controller, StateMachineConstant, LayerIndex);
 				InitializeStateMachines();
 			}
 
