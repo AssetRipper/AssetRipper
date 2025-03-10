@@ -165,7 +165,6 @@ namespace AssetRipper.Processing.AnimatorControllers
 			IBlendTreeConstant treeConstant = stateConstant.GetBlendTree();
 			IBlendTreeNodeConstant node = treeConstant.NodeArray[nodeIndex].Data;
 			int childNodeIndex = (int)node.ChildIndices[childIndex];
-      
 			// https://github.com/AssetRipper/AssetRipper/issues/1566
 			// Strangely, some BlendTree nodes have the same index as the child node index.
 			// In the case of the above issue, both indices were 0.

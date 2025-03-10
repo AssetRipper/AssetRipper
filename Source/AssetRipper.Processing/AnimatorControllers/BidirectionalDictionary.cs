@@ -136,7 +136,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 
 		public bool Remove(T1 item1)
 		{
-			if (forward.TryGetValue(item1, out T2 item2))
+			if (forward.TryGetValue(item1, out T2? item2))
 			{
 				backward.Remove(item2);
 				forward.Remove(item1);
@@ -147,7 +147,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 
 		public bool Remove(T2 item2)
 		{
-			if (backward.TryGetValue(item2, out T1 item1))
+			if (backward.TryGetValue(item2, out T1? item1))
 			{
 				forward.Remove(item1);
 				backward.Remove(item2);
@@ -178,12 +178,12 @@ namespace AssetRipper.Processing.AnimatorControllers
 			return false;
 		}
 
-		public bool TryGetValue(T1 item1, out T2 item2)
+		public bool TryGetValue(T1 item1, [MaybeNullWhen(false)] out T2 item2)
 		{
 			return forward.TryGetValue(item1, out item2);
 		}
 
-		public bool TryGetValue(T2 item2, out T1 item1)
+		public bool TryGetValue(T2 item2, [MaybeNullWhen(false)] out T1 item1)
 		{
 			return backward.TryGetValue(item2, out item1);
 		}
