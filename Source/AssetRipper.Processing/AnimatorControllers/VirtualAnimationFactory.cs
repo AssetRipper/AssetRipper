@@ -305,18 +305,19 @@ namespace AssetRipper.Processing.AnimatorControllers
 			return controller.AnimationClipsP[clipIndex] as IMotion; // AnimationClip Motion
 		}
 
-		private static IBlendTree CreateBlendTree(ProcessedAssetCollection virtualFile, IAnimatorController controller, IStateConstant stateConstant, int nodeIndex)
+		private static IBlendTree CreateBlendTree(ProcessedAssetCollection virtualFile, IAnimatorController controller, IStateConstant state, int nodeIndex)
 		{
 			IBlendTree blendTree = virtualFile.CreateAsset((int)ClassIDType.BlendTree, BlendTree.Create);
 			blendTree.HideFlagsE = HideFlags.HideInHierarchy;
-			blendTree.Name = BlendTreeName;
 
-			IBlendTreeNodeConstant node = stateConstant.GetBlendTree().NodeArray[nodeIndex].Data;
+			IBlendTreeNodeConstant node = state.GetBlendTree().NodeArray[nodeIndex].Data;
+
+			blendTree.Name = BlendTreeName;
 
 			blendTree.Childs.Capacity = node.ChildIndices.Count;
 			for (int i = 0; i < node.ChildIndices.Count; i++)
 			{
-				AddAndInitializeNewChild(virtualFile, controller, stateConstant, blendTree, nodeIndex, i);
+				AddAndInitializeNewChild(virtualFile, controller, state, blendTree, nodeIndex, i);
 			}
 
 			if (node.BlendEventID != uint.MaxValue)
@@ -343,19 +344,19 @@ namespace AssetRipper.Processing.AnimatorControllers
 			return blendTree;
 		}
 
-		private static IChildMotion AddAndInitializeNewChild(ProcessedAssetCollection virtualFile, IAnimatorController controller, IStateConstant stateConstant, IBlendTree tree, int nodeIndex, int childIndex)
+		private static IChildMotion AddAndInitializeNewChild(ProcessedAssetCollection virtualFile, IAnimatorController controller, IStateConstant state, IBlendTree tree, int nodeIndex, int childIndex)
 		{
 			IChildMotion childMotion = tree.Childs.AddNew();
-			IBlendTreeConstant treeConstant = stateConstant.GetBlendTree();
+			IBlendTreeConstant treeConstant = state.GetBlendTree();
 			IBlendTreeNodeConstant node = treeConstant.NodeArray[nodeIndex].Data;
 			int childNodeIndex = (int)node.ChildIndices[childIndex];
 			// https://github.com/AssetRipper/AssetRipper/issues/1566
 			// Strangely, some BlendTree nodes have the same index as the child node index.
 			// In the case of the above issue, both indices were 0.
 			IMotion? motion = nodeIndex != childNodeIndex
-				? CreateMotion(virtualFile, controller, stateConstant, childNodeIndex)
+				? CreateMotion(virtualFile, controller, state, childNodeIndex)
 				: null; // tree might be more accurate here since the indices are the same, but it doesn't make sense for a BlendTree to be a child of itself.
-      
+
 			childMotion.Motion.SetAsset(tree.Collection, motion);
 
 			IBlendTreeNodeConstant childNode = treeConstant.NodeArray[childNodeIndex].Data;

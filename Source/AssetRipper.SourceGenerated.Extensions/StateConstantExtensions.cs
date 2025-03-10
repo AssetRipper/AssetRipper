@@ -41,7 +41,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 		}
 
-		public static string GetName(this IStateConstant stateConstant, AssetDictionary<uint, Utf8String> tos)
+		public static Utf8String GetName(this IStateConstant stateConstant, AssetDictionary<uint, Utf8String> tos)
 		{
 			if (stateConstant.Has_NameID())
 			{
@@ -52,10 +52,10 @@ namespace AssetRipper.SourceGenerated.Extensions
 			int pathDelimiterPos = statePath.IndexOf('.');
 			if (pathDelimiterPos != -1 && pathDelimiterPos + 1 < statePath.Length)
 			{
-				return statePath[(pathDelimiterPos + 1)..];
+				return new Utf8String(statePath[(pathDelimiterPos + 1)..]);
 			}
 
-			return statePath;
+			return new Utf8String(statePath);
 		}
 	}
 }
