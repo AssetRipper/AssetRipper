@@ -58,6 +58,7 @@ public class ExportHandler
 	protected virtual IEnumerable<IAssetProcessor> GetProcessors()
 	{
 		yield return new MonoExplicitPropertyRepairProcessor();
+		yield return new ObfuscationRepairProcessor();
 		if (Settings.ImportSettings.ScriptContentLevel == ScriptContentLevel.Level1)
 		{
 			yield return new MethodStubbingProcessor();
