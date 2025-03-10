@@ -134,7 +134,7 @@ public sealed class AnimatorStateContext
 
 	public bool TryGetStateMachinePath(uint pathID, out string path)
 	{
-		if (pathID != 0 && stateMachinePathNamesAndIDs.TryGetValue(pathID, out string pathName))
+		if (pathID != 0 && stateMachinePathNamesAndIDs.TryGetValue(pathID, out string? pathName))
 		{
 			path = pathName;
 			return true;
