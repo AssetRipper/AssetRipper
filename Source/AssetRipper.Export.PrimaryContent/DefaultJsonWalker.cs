@@ -74,6 +74,12 @@ public class DefaultJsonWalker : AssetWalker
 
 	public override bool EnterList<T>(IReadOnlyList<T> list)
 	{
+		if (list.Count == 0)
+		{
+			Writer.Write("[]");
+			return false;
+		}
+
 		Writer.WriteLine('[');
 		Writer.Indent++;
 		return true;
@@ -95,11 +101,23 @@ public class DefaultJsonWalker : AssetWalker
 	{
 		if (IsString<TKey>())
 		{
+			if (dictionary.Count == 0)
+			{
+				Writer.Write("{}");
+				return false;
+			}
+
 			Writer.WriteLine('{');
 			Writer.Indent++;
 		}
 		else
 		{
+			if (dictionary.Count == 0)
+			{
+				Writer.Write("[]");
+				return false;
+			}
+
 			Writer.WriteLine('[');
 			Writer.Indent++;
 		}
