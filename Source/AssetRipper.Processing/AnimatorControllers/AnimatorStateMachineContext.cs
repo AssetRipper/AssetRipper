@@ -22,7 +22,7 @@ using AssetRipper.SourceGenerated.Subclasses.Vector3f;
 
 namespace AssetRipper.Processing.AnimatorControllers;
 
-public sealed class AnimatorStateMachineContext
+internal sealed class AnimatorStateMachineContext
 {
 	public IAnimatorStateMachine RootStateMachine => StateMachines[0];
 
@@ -36,7 +36,13 @@ public sealed class AnimatorStateMachineContext
 	private readonly AnimatorStateContext StateContext;
 
 	private IAnimatorStateMachine[] StateMachines = [];
+	/// <summary>
+	/// Hashed paths of StateMachines, including their Names
+	/// </summary>
 	private uint[]? StateMachineFullPathIDs;
+	/// <summary>
+	/// Hashed paths of StateMachines, excluding their Names
+	/// </summary>
 	private uint[]? StateMachinePathIDs;
 	private SelectorTransitionConstant[]?[]? EntryTransitions;
 	private SelectorTransitionConstant[]?[]? ExitTransitions;
@@ -106,7 +112,7 @@ public sealed class AnimatorStateMachineContext
 
 			// assuming SelectorStateConstantArray follows the sequence: [Entry1, Exit1, Entry2, Exit2, ...]
 			// just in case, next code can handle StateMachines missing Entry or Exit SelectorStateConstant
-			int stateMachineIdx = 0;
+			int stateMachineIndex = 0;
 			uint lastFullPathID = 0;
 			foreach (SelectorStateConstant ssc in StateMachineConstant.SelectorStateConstantArray)
 			{
@@ -115,29 +121,29 @@ public sealed class AnimatorStateMachineContext
 				uint sscFullPathID = ssc.FullPathID;
 				if (lastFullPathID != sscFullPathID)
 				{
-					StateMachines[stateMachineIdx] = VirtualAnimationFactory.CreateStateMachine(VirtualFile, Controller, LayerIndex, sscFullPathID);
-					StateMachineFullPathIDs[stateMachineIdx] = ssc.FullPathID;
+					StateMachines[stateMachineIndex] = VirtualAnimationFactory.CreateStateMachine(VirtualFile, Controller, LayerIndex, sscFullPathID);
+					StateMachineFullPathIDs[stateMachineIndex] = ssc.FullPathID;
 					if (ssc.IsEntry)
 					{
-						EntryTransitions[stateMachineIdx] = transitions;
+						EntryTransitions[stateMachineIndex] = transitions;
 					}
 					else
 					{
-						ExitTransitions[stateMachineIdx] = transitions;
+						ExitTransitions[stateMachineIndex] = transitions;
 					}
 
 					lastFullPathID = ssc.FullPathID;
-					stateMachineIdx++;
+					stateMachineIndex++;
 				}
 				else
 				{
 					if (ssc.IsEntry)
 					{
-						EntryTransitions[stateMachineIdx - 1] = transitions;
+						EntryTransitions[stateMachineIndex - 1] = transitions;
 					}
 					else
 					{
-						ExitTransitions[stateMachineIdx - 1] = transitions;
+						ExitTransitions[stateMachineIndex - 1] = transitions;
 					}
 				}
 			}
@@ -165,55 +171,53 @@ public sealed class AnimatorStateMachineContext
 			}
 			else
 			{
-				IReadOnlyList<string> stateMachinePaths = StateContext.GetUniqueSMPaths();
-				StateMachines = new IAnimatorStateMachine[stateMachinePaths.Count];
+				IEnumerable<string> stateMachinePaths = StateContext.GetUniqueStateMachinePaths();
+				StateMachines = new IAnimatorStateMachine[StateContext.GetUniqueStateMachinePathsCount()];
 
 				// set Root StateMachine Name from DefaultState Path
 				IAnimatorStateMachine mainStateMachine = VirtualAnimationFactory.CreateStateMachine(VirtualFile, Controller, LayerIndex);
-				string mainStateMachineName = StateContext.GetStateMachinePath(StateContext.DefaultStateIdx);
+				string mainStateMachineName = StateContext.GetStateMachinePath(StateContext.DefaultStateIndex);
 				mainStateMachine.Name = mainStateMachineName;
-				mainStateMachine.DefaultStateP = StateContext.GetState(StateContext.DefaultStateIdx);
+				mainStateMachine.DefaultStateP = StateContext.GetState(StateContext.DefaultStateIndex);
 				mainStateMachine.SetChildStateMachineCapacity(StateMachines.Length - 1);
 
 				// ensure Root StateMachine will be at index 0
 				StateMachines[0] = mainStateMachine;
-				for (int i = 0, j = 1; i < StateMachines.Length; i++, j++)
+				// initialize the rest of StateMachines
+				int j = 1;
+				foreach (string stateMachineName in StateContext.GetUniqueStateMachinePaths())
 				{
-					string stateMachineName = stateMachinePaths[i];
 					if (stateMachineName != mainStateMachineName)
 					{
 						IAnimatorStateMachine stateMachine = VirtualAnimationFactory.CreateStateMachine(VirtualFile, Controller, LayerIndex);
 						stateMachine.Name = stateMachineName;
 						StateMachines[j] = stateMachine;
+						j++;
 						// set Child StateMachines
 						mainStateMachine.ChildStateMachineP.Add(stateMachine);
-					}
-					else
-					{
-						j--;
 					}
 				}
 
 				// set Child States with their Transitions
 				for (int i = 0; i < StateMachines.Length; i++)
 				{
-					int childStateCount = StateContext.StateIdxsForStateMachine(StateMachines[i].Name).Count();
+					int childStateCount = StateContext.StateIndicesForStateMachine(StateMachines[i].Name).Count();
 					StateMachines[i].SetChildStateCapacity(childStateCount);
-					foreach (int stateIdx in StateContext.StateIdxsForStateMachine(StateMachines[i].Name))
+					foreach (int stateIndex in StateContext.StateIndicesForStateMachine(StateMachines[i].Name))
 					{
-						AddStateAndTransitionsToStateMachine(i, stateIdx);
+						AddStateAndTransitionsToStateMachine(i, stateIndex);
 					}
 				}
 			}
 		}
 	}
 
-	private void AddStateAndTransitionsToStateMachine(int parentStateMachineIdx, int stateIdx)
+	private void AddStateAndTransitionsToStateMachine(int parentStateMachineIndex, int stateIndex)
 	{
 		// -- add child State to stateMachine --
-		IAnimatorState state = StateContext.GetState(stateIdx);
-		IStateConstant stateConstant = StateContext.GetStateConstant(stateIdx);
-		IAnimatorStateMachine parentStateMachine = StateMachines[parentStateMachineIdx];
+		IAnimatorState state = StateContext.GetState(stateIndex);
+		IStateConstant stateConstant = StateContext.GetStateConstant(stateIndex);
+		IAnimatorStateMachine parentStateMachine = StateMachines[parentStateMachineIndex];
 		if (parentStateMachine.Has_ChildStates())
 		{
 			ChildAnimatorState childState = parentStateMachine.ChildStates.AddNew();
@@ -244,7 +248,7 @@ public sealed class AnimatorStateMachineContext
 		for (int j = 0; j < stateConstant.TransitionConstantArray.Count; j++)
 		{
 			ITransitionConstant transitionConstant = stateConstant.TransitionConstantArray[j].Data;
-			IAnimatorStateTransition? transition = CreateAnimatorStateTransition(parentStateMachineIdx, transitionConstant);
+			IAnimatorStateTransition? transition = CreateAnimatorStateTransition(parentStateMachineIndex, transitionConstant);
 			if (transition != null)
 			{
 				if (state.Has_Transitions())
@@ -259,36 +263,36 @@ public sealed class AnimatorStateMachineContext
 		}
 	}
 
-	private IAnimatorStateTransition? CreateAnimatorStateTransition(int parentStateMachineIdx, ITransitionConstant Transition)
+	private IAnimatorStateTransition? CreateAnimatorStateTransition(int parentStateMachineIndex, ITransitionConstant Transition)
 	{
-		if (!TryGetDestinationState(Transition.DestinationState, out IAnimatorState? stateDst, out int stateMachineDstIdx, out bool isEntryDst))
+		if (!TryGetDestinationState(Transition.DestinationState, out IAnimatorState? stateDestination, out int stateMachineDestinationIndex, out bool isEntryDestination))
 		{
 			return null;
 		}
 
 		IAnimatorStateTransition animatorStateTransition = VirtualAnimationFactory.CreateAnimatorStateTransition(VirtualFile, Controller.TOS, Transition);
 
-		if (stateDst != null)
+		if (stateDestination != null)
 		{
-			animatorStateTransition.DstStateP = stateDst;
+			animatorStateTransition.DstStateP = stateDestination;
 		}
-		else if (HasSelectorStateConstant() && stateMachineDstIdx != -1)
+		else if (HasSelectorStateConstant() && stateMachineDestinationIndex != -1)
 		{
-			IAnimatorStateMachine stateMachineDst = StateMachines[stateMachineDstIdx];
-			if (isEntryDst)
+			IAnimatorStateMachine stateMachineDestination = StateMachines[stateMachineDestinationIndex];
+			if (isEntryDestination)
 			{
-				animatorStateTransition.DstStateMachineP = stateMachineDst;
+				animatorStateTransition.DstStateMachineP = stateMachineDestination;
 
-				if (stateMachineDst.Name.IsEmpty) // try locate StateMachine of unknown FullPath
+				if (stateMachineDestination.Name.IsEmpty) // try locate StateMachine of unknown FullPath
 				{
-					uint stateMachineDstPathID = StateMachinePathIDs[stateMachineDstIdx];
-					uint stateMachineSrcFullPathID = StateMachineFullPathIDs[parentStateMachineIdx];
+					uint stateMachineDestinationPathID = StateMachinePathIDs[stateMachineDestinationIndex];
+					uint parentStateMachineFullPathID = StateMachineFullPathIDs[parentStateMachineIndex];
 
-					if (!StateContext.TryGetStateMachinePath(stateMachineDstPathID, out string stateMachineDstPath) ||
-						(StateContext.TryGetStateMachinePath(stateMachineSrcFullPathID, out string parentPath) &&
-						IsDeeperHierarchy(stateMachineDstPath, parentPath)))
+					if (!StateContext.TryGetStateMachinePath(stateMachineDestinationPathID, out string destinationPath) ||
+						(StateContext.TryGetStateMachinePath(parentStateMachineFullPathID, out string parentPath) &&
+						IsDeeperHierarchy(destinationPath, parentPath)))
 					{
-						StateMachinePathIDs[stateMachineDstIdx] = stateMachineSrcFullPathID;
+						StateMachinePathIDs[stateMachineDestinationIndex] = parentStateMachineFullPathID;
 					}
 				}
 			}
@@ -302,9 +306,11 @@ public sealed class AnimatorStateMachineContext
 	}
 
 	private bool TryGetDestinationState(uint destinationState,
-	out IAnimatorState? stateDst, out int stateMachineDstIdx, out bool isEntryDst)
+	out IAnimatorState? stateDestination, out int stateMachineDestinationIndex, out bool isEntryDestination)
 	{
-		stateDst = null; stateMachineDstIdx = -1; isEntryDst = false;
+		stateDestination = null;
+		stateMachineDestinationIndex = -1;
+		isEntryDestination = false;
 		if (destinationState == uint.MaxValue)
 		{
 			return false;
@@ -316,8 +322,8 @@ public sealed class AnimatorStateMachineContext
 			{
 				uint stateIndex = destinationState % StateMachineTransitionFlag;
 				SelectorStateConstant selectorState = StateMachineConstant.SelectorStateConstantArray[(int)stateIndex].Data;
-				stateMachineDstIdx = GetStateMachineIdxForId(selectorState.FullPathID);
-				isEntryDst = selectorState.IsEntry;
+				stateMachineDestinationIndex = GetStateMachineIndexForId(selectorState.FullPathID);
+				isEntryDestination = selectorState.IsEntry;
 				return true;
 			}
 			return false;
@@ -325,17 +331,16 @@ public sealed class AnimatorStateMachineContext
 		else
 		{
 			// State
-			stateDst = StateContext.GetState((int)destinationState);
+			stateDestination = StateContext.GetState((int)destinationState);
 			return true;
 		}
 
-		int GetStateMachineIdxForId(uint id)
+		int GetStateMachineIndexForId(uint id)
 		{
-			if (StateMachineFullPathIDs != null)
-			{
-				return StateMachineFullPathIDs.IndexOf(id);
-			}
-			return -1;
+			if (StateMachineFullPathIDs == null)
+				return -1;
+
+			return StateMachineFullPathIDs.IndexOf(id);
 		}
 	}
 
@@ -428,11 +433,11 @@ public sealed class AnimatorStateMachineContext
 				continue;
 			}
 			uint fullPathID = StateMachineFullPathIDs[i];
-			int childStateCount = StateContext.StateIdxsForStateMachine(fullPathID).Count();
+			int childStateCount = StateContext.StateIndicesForStateMachine(fullPathID).Count();
 			StateMachines[i].SetChildStateCapacity(childStateCount);
-			foreach (int stateIdx in StateContext.StateIdxsForStateMachine(fullPathID))
+			foreach (int stateIndex in StateContext.StateIndicesForStateMachine(fullPathID))
 			{
-				AddStateAndTransitionsToStateMachine(i, stateIdx);
+				AddStateAndTransitionsToStateMachine(i, stateIndex);
 			}
 		}
 	}
@@ -443,10 +448,10 @@ public sealed class AnimatorStateMachineContext
 		{
 			return;
 		}
-		for (int stateMachineIdx = 0; stateMachineIdx < StateMachines.Length; stateMachineIdx++)
+		for (int stateMachineIndex = 0; stateMachineIndex < StateMachines.Length; stateMachineIndex++)
 		{
-			IAnimatorStateMachine stateMachine = StateMachines[stateMachineIdx];
-			SelectorTransitionConstant[]? entryTransitions = EntryTransitions[stateMachineIdx];
+			IAnimatorStateMachine stateMachine = StateMachines[stateMachineIndex];
+			SelectorTransitionConstant[]? entryTransitions = EntryTransitions[stateMachineIndex];
 			if (entryTransitions == null)
 			{
 				continue;
@@ -457,7 +462,7 @@ public sealed class AnimatorStateMachineContext
 			for (int j = 0; j < entryTransitions.Length - 1; j++)
 			{
 				SelectorTransitionConstant selectorTransition = entryTransitions[j];
-				IAnimatorTransition? transition = CreateAnimatorTransition(stateMachineIdx, true, selectorTransition);
+				IAnimatorTransition? transition = CreateAnimatorTransition(stateMachineIndex, true, selectorTransition);
 				if (transition != null)
 				{
 					stateMachine.EntryTransitionsP.Add(transition);
@@ -468,44 +473,44 @@ public sealed class AnimatorStateMachineContext
 			uint destination = entryTransitions[^1].Destination;
 			if (destination != uint.MaxValue)
 			{
-				int defaultStateIdx = (int)destination;
-				IAnimatorState defaultState = StateContext.GetState(defaultStateIdx);
+				int defaultStateIndex = (int)destination;
+				IAnimatorState defaultState = StateContext.GetState(defaultStateIndex);
 				stateMachine.DefaultStateP = defaultState;
 			}
 		}
 	}
 
-	private IAnimatorTransition? CreateAnimatorTransition(int stateMachineSrcIdx, bool isEntrySrc, SelectorTransitionConstant transition)
+	private IAnimatorTransition? CreateAnimatorTransition(int stateMachineSourceIndex, bool isEntrySource, SelectorTransitionConstant transition)
 	{
-		if (!TryGetDestinationState(transition.Destination, out IAnimatorState? stateDst, out int stateMachineDstIdx, out bool isEntryDst))
+		if (!TryGetDestinationState(transition.Destination, out IAnimatorState? stateDestination, out int stateMachineDestinationIndex, out bool isEntryDestination))
 		{
 			return null;
 		}
 
 		IAnimatorTransition animatorTransition = VirtualAnimationFactory.CreateAnimatorTransition(VirtualFile, Controller.TOS, transition);
 
-		if (stateDst != null)
+		if (stateDestination != null)
 		{
-			animatorTransition.DstStateP = stateDst;
+			animatorTransition.DstStateP = stateDestination;
 		}
-		else if (HasSelectorStateConstant() && stateMachineDstIdx != -1)
+		else if (HasSelectorStateConstant() && stateMachineDestinationIndex != -1)
 		{
-			if (isEntryDst)
+			if (isEntryDestination)
 			{
-				IAnimatorStateMachine stateMachineDst = StateMachines[stateMachineDstIdx];
-				animatorTransition.DstStateMachineP = stateMachineDst;
+				IAnimatorStateMachine stateMachineDestination = StateMachines[stateMachineDestinationIndex];
+				animatorTransition.DstStateMachineP = stateMachineDestination;
 
 				// try locate StateMachine of unknown FullPath, with Entry Transitions
-				if (isEntrySrc && stateMachineDst.Name.IsEmpty)
+				if (isEntrySource && stateMachineDestination.Name.IsEmpty)
 				{
-					uint stateMachineDstPathID = StateMachinePathIDs[stateMachineDstIdx];
-					uint stateMachineSrcFullPathID = StateMachineFullPathIDs[stateMachineSrcIdx];
+					uint stateMachineDestinationPathID = StateMachinePathIDs[stateMachineDestinationIndex];
+					uint stateMachineSourceFullPathID = StateMachineFullPathIDs[stateMachineSourceIndex];
 
-					if (!StateContext.TryGetStateMachinePath(stateMachineDstPathID, out string stateMachineDstPath) ||
-						(StateContext.TryGetStateMachinePath(stateMachineSrcFullPathID, out string parentPath) &&
-						IsDeeperHierarchy(stateMachineDstPath, parentPath)))
+					if (!StateContext.TryGetStateMachinePath(stateMachineDestinationPathID, out string destinationPath) ||
+						(StateContext.TryGetStateMachinePath(stateMachineSourceFullPathID, out string parentPath) &&
+						IsDeeperHierarchy(destinationPath, parentPath)))
 					{
-						StateMachinePathIDs[stateMachineDstIdx] = stateMachineSrcFullPathID;
+						StateMachinePathIDs[stateMachineDestinationIndex] = stateMachineSourceFullPathID;
 					}
 				}
 			}
@@ -527,11 +532,11 @@ public sealed class AnimatorStateMachineContext
 		{
 			return;
 		}
-		for (int childIdx = 1; childIdx < StateMachines.Length; childIdx++) // skipping 0 because its the Root StateMachine
+		for (int childIndex = 1; childIndex < StateMachines.Length; childIndex++) // skipping 0 because its the Root StateMachine
 		{
 			IAnimatorStateMachine? parentStateMachine = null;
-			IAnimatorStateMachine childStateMachine = StateMachines[childIdx];
-			uint stateMachinePathID = StateMachinePathIDs[childIdx];
+			IAnimatorStateMachine childStateMachine = StateMachines[childIndex];
+			uint stateMachinePathID = StateMachinePathIDs[childIndex];
 			if (stateMachinePathID == 0)
 			{
 				// set unknown stateMachines parent to Root StateMachine
@@ -539,16 +544,16 @@ public sealed class AnimatorStateMachineContext
 			}
 			else
 			{
-				// find parent
-				for (int parentIdx = 0; parentIdx < StateMachines.Length; parentIdx++)
+				// find parent StateMachine
+				for (int parentIndex = 0; parentIndex < StateMachines.Length; parentIndex++)
 				{
-					if (childIdx == parentIdx)
+					if (childIndex == parentIndex)
 					{
 						continue;
 					}
-					if (StateMachinePathIDs[childIdx] == StateMachineFullPathIDs[parentIdx])
+					if (StateMachinePathIDs[childIndex] == StateMachineFullPathIDs[parentIndex])
 					{
-						parentStateMachine = StateMachines[parentIdx];
+						parentStateMachine = StateMachines[parentIndex];
 						break;
 					}
 				}
@@ -562,10 +567,10 @@ public sealed class AnimatorStateMachineContext
 			if (childStateMachine.Name.IsEmpty) // || childStateMachine.Name == FlagName
 			{
 				// for recompiling the AnimatorController back to Release and getting the original StateMachine path hashes:
-				//   stateMachine_FullPath = Crc32Algorithm.ReverseAscii(StateMachineFullPathIDs[childIdx], Parent_StateMachine_FullPath_Name + ".");
+				//   stateMachine_FullPath = Crc32Algorithm.ReverseAscii(StateMachineFullPathIDs[childIndex], Parent_StateMachine_FullPath_Name + ".");
 				//   stateMachine.Name = stateMachine_FullPath[(Parent_StateMachine_FullPath_Name.Length+1)..];
 				// may need to check and set parent StateMachine Name recursively, if its still Empty or FlagName
-				childStateMachine.Name = $"Empty_{StateMachineFullPathIDs[childIdx]}";
+				childStateMachine.Name = $"Empty_{StateMachineFullPathIDs[childIndex]}";
 			}
 
 			// set Child StateMachine for its found Parent
@@ -581,18 +586,18 @@ public sealed class AnimatorStateMachineContext
 			}
 
 			// add StateMachine Transitions (Transitions from Child are stored in Parent)
-			SelectorTransitionConstant[]? exitTransitions = ExitTransitions[childIdx];
+			SelectorTransitionConstant[]? exitTransitions = ExitTransitions[childIndex];
 			if (exitTransitions != null)
 			{
 				// check if its the default exit transition, to not add it
 				if (exitTransitions.Length == 1 && exitTransitions[0].ConditionConstantArray.Count == 0)
 				{
-					uint stateDstId = exitTransitions[0].Destination;
-					if (stateDstId < StateMachineTransitionFlag)
+					uint stateDestinationId = exitTransitions[0].Destination;
+					if (stateDestinationId < StateMachineTransitionFlag)
 					{
-						int stateDstIdx = (int)stateDstId;
-						int defaultStateIdx = StateContext.GetStateIdx(parentStateMachine.DefaultStateP);
-						if (defaultStateIdx == stateDstIdx)
+						int stateDestinationIndex = (int)stateDestinationId;
+						int defaultStateIndex = StateContext.GetStateIndex(parentStateMachine.DefaultStateP);
+						if (defaultStateIndex == stateDestinationIndex)
 						{
 							continue;
 						}
@@ -606,7 +611,7 @@ public sealed class AnimatorStateMachineContext
 				for (int j = 0; j < exitTransitions.Length; j++)
 				{
 					SelectorTransitionConstant selectorTransition = exitTransitions[j];
-					IAnimatorTransition? transition = CreateAnimatorTransition(childIdx, false, selectorTransition);
+					IAnimatorTransition? transition = CreateAnimatorTransition(childIndex, false, selectorTransition);
 					if (transition != null)
 					{
 						transitions.Add(transition);
@@ -690,14 +695,14 @@ public sealed class AnimatorStateMachineContext
 		{
 			return;
 		}
-		for (int stateMachineIdx = 0; stateMachineIdx < StateMachines.Length; stateMachineIdx++)
+		for (int stateMachineIndex = 0; stateMachineIndex < StateMachines.Length; stateMachineIndex++)
 		{
 			// run only for StateMachine with unknown FullPaths; StateMachine Name not set yet
-			if (!StateMachines[stateMachineIdx].Name.IsEmpty)
+			if (!StateMachines[stateMachineIndex].Name.IsEmpty)
 			{
 				continue;
 			}
-			SelectorTransitionConstant[]? exitTransitions = ExitTransitions[stateMachineIdx];
+			SelectorTransitionConstant[]? exitTransitions = ExitTransitions[stateMachineIndex];
 			if (exitTransitions == null)
 			{
 				continue;
@@ -709,25 +714,25 @@ public sealed class AnimatorStateMachineContext
 			{
 				continue;
 			}
-			int exitStateIdx = (int)exitTransitions[0].Destination;
+			int exitStateIndex = (int)exitTransitions[0].Destination;
 
 			uint selectedParentFullPathID = 0;
-			for (int stateMachineParentIdx = 0; stateMachineParentIdx < StateMachines.Length; stateMachineParentIdx++)
+			for (int stateMachineParentIndex = 0; stateMachineParentIndex < StateMachines.Length; stateMachineParentIndex++)
 			{
-				if (stateMachineParentIdx == stateMachineIdx) // can't be its own Parent
+				if (stateMachineParentIndex == stateMachineIndex) // can't be its own Parent
 				{
 					continue;
 				}
-				IAnimatorState? defaultState = StateMachines[stateMachineParentIdx].DefaultStateP;
+				IAnimatorState? defaultState = StateMachines[stateMachineParentIndex].DefaultStateP;
 				if (defaultState == null)
 				{
 					continue;
 				}
-				int defaultStateIdx = StateContext.GetStateIdx(defaultState);
-				if (defaultStateIdx == exitStateIdx)
+				int defaultStateIndex = StateContext.GetStateIndex(defaultState);
+				if (defaultStateIndex == exitStateIndex)
 				{
 					// stateMachine can be Child of stateMachineParent.
-					uint newParentFullPathID = StateMachineFullPathIDs[stateMachineParentIdx];
+					uint newParentFullPathID = StateMachineFullPathIDs[stateMachineParentIndex];
 					// let the loop find more than one possible Parent, but keep the one with deeper hierarchy
 					if (selectedParentFullPathID == 0 ||
 						!StateContext.TryGetStateMachinePath(selectedParentFullPathID, out string selectedParentPath) ||
@@ -741,12 +746,12 @@ public sealed class AnimatorStateMachineContext
 			if (selectedParentFullPathID != 0)
 			{
 				// for recompiling the AnimatorController back to Release and getting the original StateMachine path hashes:
-				//   stateMachine_FullPath = Crc32Algorithm.ReverseAscii(StateMachineFullPathIDs[stateMachineIdx], Parent_StateMachine_FullPath_Name + ".");
+				//   stateMachine_FullPath = Crc32Algorithm.ReverseAscii(StateMachineFullPathIDs[stateMachineIndex], Parent_StateMachine_FullPath_Name + ".");
 				//   stateMachine.Name = stateMachine_FullPath[(Parent_StateMachine_FullPath_Name.Length+1)..];
 				// but don't do it here, not all StateMachine parents have been set yet; set a temporary flag Name to fix later
 				// example FlagName = "." (period is not allowed in StateMachine Name)
-				StateMachines[stateMachineIdx].Name = $"Empty_{StateMachineFullPathIDs[stateMachineIdx]}";
-				StateMachinePathIDs[stateMachineIdx] = selectedParentFullPathID;
+				StateMachines[stateMachineIndex].Name = $"Empty_{StateMachineFullPathIDs[stateMachineIndex]}";
+				StateMachinePathIDs[stateMachineIndex] = selectedParentFullPathID;
 				UnknownFullPaths--;
 			}
 		}

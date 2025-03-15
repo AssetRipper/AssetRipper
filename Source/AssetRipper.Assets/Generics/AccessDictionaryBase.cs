@@ -180,6 +180,15 @@ namespace AssetRipper.Assets.Generics
 			}
 		}
 
+		public bool TryAdd(TKey key, TValue value)
+		{
+			if (ContainsKey(key))
+				return false;
+
+			Add(key, value);
+			return true;
+		}
+
 		private class KeyEnumerable : IEnumerable<TKey>
 		{
 			private readonly AccessDictionaryBase<TKey, TValue> dictionary;
