@@ -41,31 +41,36 @@ namespace AssetRipper.Processing.AnimatorControllers
 			{
 				return CreateBlendTree(virtualFile, controller, stateConstant, nodeIndex); // BlendTree Motion
 			}
-
-			int clipIndex = -1;
-			if (stateConstant.Has_LeafInfoArray())
-			{
-				for (int i = 0; i < stateConstant.LeafInfoArray.Count; i++)
-				{
-					LeafInfoConstant leafInfo = stateConstant.LeafInfoArray[i];
-					int index = leafInfo.IDArray.IndexOf(node.ClipID);
-					if (index >= 0)
-					{
-						clipIndex = (int)leafInfo.IndexOffset + index;
-						break;
-					}
-				}
-			}
 			else
 			{
-				clipIndex = unchecked((int)node.ClipID);
-			}
+				int clipIndex = -1;
+				if (stateConstant.Has_LeafInfoArray())
+				{
+					for (int i = 0; i < stateConstant.LeafInfoArray.Count; i++)
+					{
+						LeafInfoConstant leafInfo = stateConstant.LeafInfoArray[i];
+						int index = leafInfo.IDArray.IndexOf(node.ClipID);
+						if (index >= 0)
+						{
+							clipIndex = (int)leafInfo.IndexOffset + index;
+							break;
+						}
+					}
+				}
+				else
+				{
+					clipIndex = unchecked((int)node.ClipID);
+				}
 
-			if (clipIndex == -1)
-			{
-				return default; // null Motion
+				if (clipIndex == -1)
+				{
+					return default; // null Motion
+				}
+				else
+				{
+					return controller.AnimationClipsP[clipIndex] as IMotion; // AnimationClip Motion
+				}
 			}
-			return controller.AnimationClipsP[clipIndex] as IMotion; // AnimationClip Motion
 		}
 
 		private static IBlendTree CreateBlendTree(ProcessedAssetCollection virtualFile, IAnimatorController controller, IStateConstant state, int nodeIndex)
@@ -158,6 +163,28 @@ namespace AssetRipper.Processing.AnimatorControllers
 			return stateMachineContext.RootStateMachine;
 		}
 
+		public static IAnimatorStateMachine CreateStateMachine(ProcessedAssetCollection virtualFile, IAnimatorController controller, int layerIndex, uint fullPathID = 0)
+		{
+			IAnimatorStateMachine stateMachine = virtualFile.CreateAsset((int)ClassIDType.AnimatorStateMachine, AnimatorStateMachine.Create);
+			stateMachine.HideFlagsE = HideFlags.HideInHierarchy;
+
+			// can add StateMachineBehaviours now
+			if (stateMachine.Has_StateMachineBehaviours())
+			{
+				IMonoBehaviour?[] stateBehaviours = controller.GetStateBehaviours(layerIndex, fullPathID);
+				foreach (IMonoBehaviour? stateBehaviour in stateBehaviours)
+				{
+					if (stateBehaviour != null)
+					{
+						stateBehaviour.HideFlagsE = HideFlags.HideInHierarchy;
+						stateMachine.StateMachineBehavioursP.Add(stateBehaviour);
+					}
+				}
+			}
+
+			return stateMachine;
+		}
+
 		public static IAnimatorState CreateAnimatorState(ProcessedAssetCollection virtualFile, IAnimatorController controller, AssetDictionary<uint, Utf8String> tos, int layerIndex, IStateConstant stateConstant)
 		{
 			IAnimatorState animatorState = virtualFile.CreateAsset((int)ClassIDType.AnimatorState, AnimatorState.Create);
@@ -205,16 +232,6 @@ namespace AssetRipper.Processing.AnimatorControllers
 		{
 			IAnimatorStateTransition animatorStateTransition = virtualFile.CreateAsset((int)ClassIDType.AnimatorStateTransition, AnimatorStateTransition.Create);
 			animatorStateTransition.HideFlags = (uint)HideFlags.HideInHierarchy;
-			animatorStateTransition.Name = TOS[Transition.UserID];
-			animatorStateTransition.Atomic = Transition.Atomic;
-			animatorStateTransition.TransitionDuration = Transition.TransitionDuration;
-			animatorStateTransition.TransitionOffset = Transition.TransitionOffset;
-			animatorStateTransition.ExitTime = Transition.GetExitTime();
-			animatorStateTransition.HasExitTime = Transition.GetHasExitTime();
-			animatorStateTransition.HasFixedDuration = Transition.GetHasFixedDuration();
-			animatorStateTransition.InterruptionSourceE = Transition.GetInterruptionSource();
-			animatorStateTransition.OrderedInterruption = Transition.OrderedInterruption;
-			animatorStateTransition.CanTransitionToSelf = Transition.CanTransitionToSelf;
 
 			animatorStateTransition.Conditions.Capacity = Transition.ConditionConstantArray.Count;
 			for (int i = 0; i < Transition.ConditionConstantArray.Count; i++)
@@ -229,6 +246,18 @@ namespace AssetRipper.Processing.AnimatorControllers
 					condition.ExitTime = conditionConstant.ExitTime;
 				}
 			}
+
+			animatorStateTransition.Name = TOS[Transition.UserID];
+
+			animatorStateTransition.Atomic = Transition.Atomic;
+			animatorStateTransition.TransitionDuration = Transition.TransitionDuration;
+			animatorStateTransition.TransitionOffset = Transition.TransitionOffset;
+			animatorStateTransition.ExitTime = Transition.GetExitTime();
+			animatorStateTransition.HasExitTime = Transition.GetHasExitTime();
+			animatorStateTransition.HasFixedDuration = Transition.GetHasFixedDuration();
+			animatorStateTransition.InterruptionSourceE = Transition.GetInterruptionSource();
+			animatorStateTransition.OrderedInterruption = Transition.OrderedInterruption;
+			animatorStateTransition.CanTransitionToSelf = Transition.CanTransitionToSelf;
 
 			return animatorStateTransition;
 		}
@@ -252,28 +281,6 @@ namespace AssetRipper.Processing.AnimatorControllers
 			}
 
 			return animatorTransition;
-		}
-
-		public static IAnimatorStateMachine CreateStateMachine(ProcessedAssetCollection virtualFile, IAnimatorController controller, int layerIndex, uint fullPathID = 0)
-		{
-			IAnimatorStateMachine stateMachine = virtualFile.CreateAsset((int)ClassIDType.AnimatorStateMachine, AnimatorStateMachine.Create);
-			stateMachine.HideFlagsE = HideFlags.HideInHierarchy;
-
-			// can add StateMachineBehaviours now
-			if (stateMachine.Has_StateMachineBehaviours())
-			{
-				IMonoBehaviour?[] stateBehaviours = controller.GetStateBehaviours(layerIndex, fullPathID);
-				foreach (IMonoBehaviour? stateBehaviour in stateBehaviours)
-				{
-					if (stateBehaviour != null)
-					{
-						stateBehaviour.HideFlagsE = HideFlags.HideInHierarchy;
-						stateMachine.StateMachineBehavioursP.Add(stateBehaviour);
-					}
-				}
-			}
-
-			return stateMachine;
 		}
 	}
 }
