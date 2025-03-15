@@ -11,14 +11,16 @@ namespace AssetRipper.Processing.AnimatorControllers;
 internal sealed class AnimatorStateContext
 {
 	public readonly int DefaultStateIndex;
-	public bool HasStates() => indexedStates.StateCount > 0;
+	public bool HasStates() => IndexedStates.Length > 0;
 
 	private readonly ProcessedAssetCollection VirtualFile;
 	private readonly IAnimatorController Controller;
 	private readonly IStateMachineConstant StateMachineConstant;
 	private readonly int LayerIndex;
-
-	private readonly IndexedStates indexedStates;
+	/// <summary>
+	/// Stores all AnimatorState data, also linking each AnimatorState with its index from StateConstantArray
+	/// </summary>
+	private readonly StateData[] IndexedStates;
 	private readonly BidirectionalDictionary<string, uint> stateMachinePathNamesAndIDs;
 
 	public AnimatorStateContext(ProcessedAssetCollection virtualFile, IAnimatorController controller, IStateMachineConstant stateMachineConstant, int layerIndex)
@@ -30,7 +32,7 @@ internal sealed class AnimatorStateContext
 
 		DefaultStateIndex = stateMachineConstant.DefaultState != uint.MaxValue ? (int)stateMachineConstant.DefaultState : 0;
 
-		indexedStates = new(stateMachineConstant.StateConstantArray.Count);
+		IndexedStates = new StateData[stateMachineConstant.StateConstantArray.Count];
 		stateMachinePathNamesAndIDs = new();
 	}
 
@@ -43,7 +45,7 @@ internal sealed class AnimatorStateContext
 
 		Controller.TOS.TryAdd(0, Utf8String.Empty);
 
-		for (int i = 0; i < indexedStates.StateCount; i++)
+		for (int i = 0; i < IndexedStates.Length; i++)
 		{
 			IStateConstant stateConstant = StateMachineConstant.StateConstantArray[i].Data;
 			IAnimatorState state = VirtualAnimationFactory.CreateAnimatorState(VirtualFile, Controller, Controller.TOS, LayerIndex, stateConstant);
@@ -55,7 +57,7 @@ internal sealed class AnimatorStateContext
 				stateMachinePathNamesAndIDs.Add(stateMachinePath, stateMachinePathID);
 			}
 
-			indexedStates.SetAtIndex(i, state, stateConstant, stateMachinePathID);
+			IndexedStates[i] = new(state, stateConstant, stateMachinePathID);
 		}
 
 		if (StateMachineConstant.StateMachineCount() > stateMachinePathNamesAndIDs.Count) // can only happen on Unity 5+
@@ -89,12 +91,12 @@ internal sealed class AnimatorStateContext
 
 	public IStateConstant GetStateConstant(int index)
 	{
-		return indexedStates.GetStateConstant(index);
+		return IndexedStates[index].StateConstant;
 	}
 
 	public IAnimatorState GetState(int index)
 	{
-		return indexedStates.GetState(index);
+		return IndexedStates[index].State;
 	}
 
 	public int GetStateIndex(IAnimatorState? state)
@@ -102,12 +104,12 @@ internal sealed class AnimatorStateContext
 		if (state == null)
 			return -1;
 
-		return indexedStates.IndexOf(state);
+		return IndexedStates.IndexOf(s => s.State == state);
 	}
 
 	public string GetStateMachinePath(int stateIndex)
 	{
-		uint stateMachinePathID = indexedStates.GetParentStateMachineID(stateIndex);
+		uint stateMachinePathID = IndexedStates[stateIndex].ParentStateMachineID;
 		return stateMachinePathNamesAndIDs[stateMachinePathID];
 	}
 
@@ -147,9 +149,9 @@ internal sealed class AnimatorStateContext
 
 	public IEnumerable<int> StateIndicesForStateMachine(uint pathID) // yield AnimatorStates from provided StateMachine path
 	{
-		for (int i = 0; i < indexedStates.StateCount; i++)
+		for (int i = 0; i < IndexedStates.Length; i++)
 		{
-			if (indexedStates.GetParentStateMachineID(i) == pathID)
+			if (IndexedStates[i].ParentStateMachineID == pathID)
 			{
 				yield return i;
 			}
@@ -173,43 +175,9 @@ internal sealed class AnimatorStateContext
 	}
 
 	/// <summary>
-	/// Stores AnimatorState related data in arrays, retrieves by index
+	/// Stores AnimatorState related data together.
 	/// </summary>
-	/// <param name="StateCount">Total number of AnimatorStates to process.</param>
-	private readonly record struct IndexedStates(int StateCount)
+	private readonly record struct StateData(IAnimatorState State, IStateConstant StateConstant, uint ParentStateMachineID)
 	{
-		private IAnimatorState[] States { get; } = new IAnimatorState[StateCount];
-		private IStateConstant[] StateConstants { get; } = new IStateConstant[StateCount];
-		/// <summary>
-		/// Used for grouping States into their Parent StateMachines
-		/// </summary>
-		private uint[] ParentStateMachineIDs { get; } = new uint[StateCount];
-
-		public void SetAtIndex(int index, IAnimatorState state, IStateConstant stateConstant, uint parentStateMachineID)
-		{
-			States[index] = state;
-			StateConstants[index] = stateConstant;
-			ParentStateMachineIDs[index] = parentStateMachineID;
-		}
-
-		public IAnimatorState GetState(int index)
-		{
-			return States[index];
-		}
-
-		public IStateConstant GetStateConstant(int index)
-		{
-			return StateConstants[index];
-		}
-
-		public uint GetParentStateMachineID(int index)
-		{
-			return ParentStateMachineIDs[index];
-		}
-
-		public int IndexOf(IAnimatorState state)
-		{
-			return States.IndexOf(state);
-		}
 	}
 }
