@@ -22,7 +22,7 @@ public sealed class AnimatorStateContext
 	private readonly IAnimatorState[] states;
 	private readonly IStateConstant[] stateConstants;
 	private readonly uint[] stateIdxsToStateMachinePathIDs; // for grouping States into StateMachines
-	private readonly BidirectionalDictionary<string,uint> stateMachinePathNamesAndIDs;
+	private readonly BidirectionalDictionary<string, uint> stateMachinePathNamesAndIDs;
 
 	public AnimatorStateContext(ProcessedAssetCollection virtualFile, IAnimatorController controller, IStateMachineConstant stateMachineConstant, int layerIndex)
 	{
