@@ -1,0 +1,771 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class AccessList&lt;T, TBase&gt;
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class AccessList&lt;T, TBase&gt;
+   ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="AssetRipper.Assets.Generics.AccessList`2">
+  
+  
+  <h1 id="AssetRipper_Assets_Generics_AccessList_2" data-uid="AssetRipper.Assets.Generics.AccessList`2" class="text-break">Class AccessList&lt;T, TBase&gt;
+  </h1>
+  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="AssetRipper.Assets.Generics.AccessListBase-1.html">AccessListBase</a>&lt;TBase&gt;</div>
+    <div class="level2"><span class="xref">AccessList&lt;T, TBase&gt;</span></div>
+  </div>
+  <div class="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">System.Collections.IList</span>&lt;TBase&gt;</div>
+    <div><span class="xref">IReadOnlyList</span>&lt;TBase&gt;</div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.Generics.AccessListBase-1.html#AssetRipper_Assets_Generics_AccessListBase_1_IsReadOnly">AccessListBase&lt;TBase&gt;.IsReadOnly</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.Generics.AccessListBase-1.html#AssetRipper_Assets_Generics_AccessListBase_1_GetEnumerator">AccessListBase&lt;TBase&gt;.GetEnumerator()</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.Generics.AccessListBase-1.html#AssetRipper_Assets_Generics_AccessListBase_1_System_Collections_IEnumerable_GetEnumerator">AccessListBase&lt;TBase&gt;.IEnumerable.GetEnumerator()</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.Generics.AccessListBase-1.html#AssetRipper_Assets_Generics_AccessListBase_1_ToString">AccessListBase&lt;TBase&gt;.ToString()</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="AssetRipper.Assets.Generics.html">AssetRipper.Assets.Generics</a></h6>
+  <h6><strong>Assembly</strong>: AssetRipper.Assets.dll</h6>
+  <h5 id="AssetRipper_Assets_Generics_AccessList_2_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class AccessList&lt;T, TBase&gt; : AccessListBase&lt;TBase&gt; where T : TBase, new()</code></pre>
+  </div>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="parametername">TBase</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Generics_AccessList_2__ctor_AssetRipper_Assets_Generics_AssetList__0__.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Generics.AccessList%602.%23ctor(AssetRipper.Assets.Generics.AssetList%7B%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Generics/AccessList.cs/#L9">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Generics_AccessList_2__ctor_" data-uid="AssetRipper.Assets.Generics.AccessList`2.#ctor*"></a>
+  <h4 id="AssetRipper_Assets_Generics_AccessList_2__ctor_AssetRipper_Assets_Generics_AssetList__0__" data-uid="AssetRipper.Assets.Generics.AccessList`2.#ctor(AssetRipper.Assets.Generics.AssetList{`0})">AccessList(AssetList&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public AccessList(AssetList&lt;T&gt; referenceList)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Assets.Generics.AssetList-1.html">AssetList</a>&lt;T&gt;</td>
+        <td><span class="parametername">referenceList</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Generics_AccessList_2_Capacity.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Generics.AccessList%602.Capacity%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Generics/AccessList.cs/#L18">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Generics_AccessList_2_Capacity_" data-uid="AssetRipper.Assets.Generics.AccessList`2.Capacity*"></a>
+  <h4 id="AssetRipper_Assets_Generics_AccessList_2_Capacity" data-uid="AssetRipper.Assets.Generics.AccessList`2.Capacity">Capacity</h4>
+  <div class="markdown level1 summary"><p>The capacity of the list</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override int Capacity { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">AssetRipper.Assets.Generics.AccessListBase&lt;TBase&gt;.Capacity</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Generics_AccessList_2_Count.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Generics.AccessList%602.Count%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Generics/AccessList.cs/#L15">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Generics_AccessList_2_Count_" data-uid="AssetRipper.Assets.Generics.AccessList`2.Count*"></a>
+  <h4 id="AssetRipper_Assets_Generics_AccessList_2_Count" data-uid="AssetRipper.Assets.Generics.AccessList`2.Count">Count</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override int Count { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">AssetRipper.Assets.Generics.AccessListBase&lt;TBase&gt;.Count</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Generics_AccessList_2_Item_System_Int32_.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Generics.AccessList%602.Item(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Generics/AccessList.cs/#L67">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Generics_AccessList_2_Item_" data-uid="AssetRipper.Assets.Generics.AccessList`2.Item*"></a>
+  <h4 id="AssetRipper_Assets_Generics_AccessList_2_Item_System_Int32_" data-uid="AssetRipper.Assets.Generics.AccessList`2.Item(System.Int32)">Item[Int32]</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override TBase this[int index] { get; set; }</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">index</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TBase</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">AssetRipper.Assets.Generics.AccessListBase&lt;TBase&gt;.Item[System.Int32]</span></div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Generics_AccessList_2_Add__1_.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Generics.AccessList%602.Add(%601)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Generics/AccessList.cs/#L25">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Generics_AccessList_2_Add_" data-uid="AssetRipper.Assets.Generics.AccessList`2.Add*"></a>
+  <h4 id="AssetRipper_Assets_Generics_AccessList_2_Add__1_" data-uid="AssetRipper.Assets.Generics.AccessList`2.Add(`1)">Add(TBase)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Add(TBase item)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TBase</span></td>
+        <td><span class="parametername">item</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">AssetRipper.Assets.Generics.AccessListBase&lt;TBase&gt;.Add(TBase)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Generics_AccessList_2_AddNew.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Generics.AccessList%602.AddNew%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Generics/AccessList.cs/#L28">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Generics_AccessList_2_AddNew_" data-uid="AssetRipper.Assets.Generics.AccessList`2.AddNew*"></a>
+  <h4 id="AssetRipper_Assets_Generics_AccessList_2_AddNew" data-uid="AssetRipper.Assets.Generics.AccessList`2.AddNew">AddNew()</h4>
+  <div class="markdown level1 summary"><p>Add a new element to the list</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override TBase AddNew()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TBase</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">AssetRipper.Assets.Generics.AccessListBase&lt;TBase&gt;.AddNew()</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Generics_AccessList_2_Clear.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Generics.AccessList%602.Clear%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Generics/AccessList.cs/#L40">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Generics_AccessList_2_Clear_" data-uid="AssetRipper.Assets.Generics.AccessList`2.Clear*"></a>
+  <h4 id="AssetRipper_Assets_Generics_AccessList_2_Clear" data-uid="AssetRipper.Assets.Generics.AccessList`2.Clear">Clear()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Clear()</code></pre>
+  </div>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">AssetRipper.Assets.Generics.AccessListBase&lt;TBase&gt;.Clear()</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Generics_AccessList_2_Contains__1_.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Generics.AccessList%602.Contains(%601)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Generics/AccessList.cs/#L43">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Generics_AccessList_2_Contains_" data-uid="AssetRipper.Assets.Generics.AccessList`2.Contains*"></a>
+  <h4 id="AssetRipper_Assets_Generics_AccessList_2_Contains__1_" data-uid="AssetRipper.Assets.Generics.AccessList`2.Contains(`1)">Contains(TBase)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool Contains(TBase item)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TBase</span></td>
+        <td><span class="parametername">item</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">AssetRipper.Assets.Generics.AccessListBase&lt;TBase&gt;.Contains(TBase)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Generics_AccessList_2_CopyTo__1___System_Int32_.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Generics.AccessList%602.CopyTo(%601%5B%5D%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Generics/AccessList.cs/#L46">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Generics_AccessList_2_CopyTo_" data-uid="AssetRipper.Assets.Generics.AccessList`2.CopyTo*"></a>
+  <h4 id="AssetRipper_Assets_Generics_AccessList_2_CopyTo__1___System_Int32_" data-uid="AssetRipper.Assets.Generics.AccessList`2.CopyTo(`1[],System.Int32)">CopyTo(TBase[], Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void CopyTo(TBase[] array, int arrayIndex)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>TBase[]</td>
+        <td><span class="parametername">array</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">arrayIndex</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">AssetRipper.Assets.Generics.AccessListBase&lt;TBase&gt;.CopyTo(TBase[], System.Int32)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Generics_AccessList_2_EnsureCapacity_System_Int32_.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Generics.AccessList%602.EnsureCapacity(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Generics/AccessList.cs/#L61">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Generics_AccessList_2_EnsureCapacity_" data-uid="AssetRipper.Assets.Generics.AccessList`2.EnsureCapacity*"></a>
+  <h4 id="AssetRipper_Assets_Generics_AccessList_2_EnsureCapacity_System_Int32_" data-uid="AssetRipper.Assets.Generics.AccessList`2.EnsureCapacity(System.Int32)">EnsureCapacity(Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override int EnsureCapacity(int capacity)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">capacity</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">AssetRipper.Assets.Generics.AccessListBase&lt;TBase&gt;.EnsureCapacity(System.Int32)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Generics_AccessList_2_IndexOf__1_.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Generics.AccessList%602.IndexOf(%601)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Generics/AccessList.cs/#L31">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Generics_AccessList_2_IndexOf_" data-uid="AssetRipper.Assets.Generics.AccessList`2.IndexOf*"></a>
+  <h4 id="AssetRipper_Assets_Generics_AccessList_2_IndexOf__1_" data-uid="AssetRipper.Assets.Generics.AccessList`2.IndexOf(`1)">IndexOf(TBase)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override int IndexOf(TBase item)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TBase</span></td>
+        <td><span class="parametername">item</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">AssetRipper.Assets.Generics.AccessListBase&lt;TBase&gt;.IndexOf(TBase)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Generics_AccessList_2_Insert_System_Int32__1_.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Generics.AccessList%602.Insert(System.Int32%2C%601)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Generics/AccessList.cs/#L34">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Generics_AccessList_2_Insert_" data-uid="AssetRipper.Assets.Generics.AccessList`2.Insert*"></a>
+  <h4 id="AssetRipper_Assets_Generics_AccessList_2_Insert_System_Int32__1_" data-uid="AssetRipper.Assets.Generics.AccessList`2.Insert(System.Int32,`1)">Insert(Int32, TBase)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Insert(int index, TBase item)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">index</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">TBase</span></td>
+        <td><span class="parametername">item</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">AssetRipper.Assets.Generics.AccessListBase&lt;TBase&gt;.Insert(System.Int32, TBase)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Generics_AccessList_2_Remove__1_.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Generics.AccessList%602.Remove(%601)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Generics/AccessList.cs/#L64">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Generics_AccessList_2_Remove_" data-uid="AssetRipper.Assets.Generics.AccessList`2.Remove*"></a>
+  <h4 id="AssetRipper_Assets_Generics_AccessList_2_Remove__1_" data-uid="AssetRipper.Assets.Generics.AccessList`2.Remove(`1)">Remove(TBase)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool Remove(TBase item)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TBase</span></td>
+        <td><span class="parametername">item</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">AssetRipper.Assets.Generics.AccessListBase&lt;TBase&gt;.Remove(TBase)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Generics_AccessList_2_RemoveAt_System_Int32_.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Generics.AccessList%602.RemoveAt(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Generics/AccessList.cs/#L37">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Generics_AccessList_2_RemoveAt_" data-uid="AssetRipper.Assets.Generics.AccessList`2.RemoveAt*"></a>
+  <h4 id="AssetRipper_Assets_Generics_AccessList_2_RemoveAt_System_Int32_" data-uid="AssetRipper.Assets.Generics.AccessList`2.RemoveAt(System.Int32)">RemoveAt(Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void RemoveAt(int index)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">index</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">AssetRipper.Assets.Generics.AccessListBase&lt;TBase&gt;.RemoveAt(System.Int32)</span></div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">System.Collections.IList&lt;&gt;</span>
+  </div>
+  <div>
+      <span class="xref">IReadOnlyList&lt;&gt;</span>
+  </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="AssetRipper.Assets.Generics.AccessListBaseExtensions.html#AssetRipper_Assets_Generics_AccessListBaseExtensions_ToPPtrAccessList__2_AssetRipper_Assets_Generics_AccessListBase___0__AssetRipper_Assets_Collections_AssetCollection_">AccessListBaseExtensions.ToPPtrAccessList&lt;TPPtr, TAsset&gt;(AccessListBase&lt;TPPtr&gt;, AssetCollection)</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Generics_AccessList_2.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Generics.AccessList%602%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Generics/AccessList.cs/#L3" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="toggle-mode">
+                <div class="icon">
+                  <i aria-hidden="true">☀</i>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="switch-style">
+                  <span class="slider round"></span>
+                </label>
+                <div class="icon">
+                  <i aria-hidden="true">☾</i>
+                </div>
+              </div>
+          
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <h5>In This Article</h5>
+              <div></div>
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <div class="pull-left">
+              
+              <span>Generated by <strong>DocFX</strong></span>
+            </div>
+            <div class="toggle-mode pull-right visible-sm visible-xs">
+              <div class="icon">
+                <i aria-hidden="true">☀</i>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="switch-style-m">
+                <span class="slider round"></span>
+              </label>
+              <div class="icon">
+                <i aria-hidden="true">☾</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript" src="../styles/toggle-theme.js"></script>
+      </footer>    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
