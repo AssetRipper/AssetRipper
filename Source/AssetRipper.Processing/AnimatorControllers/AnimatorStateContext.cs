@@ -177,7 +177,5 @@ internal sealed class AnimatorStateContext
 	/// <summary>
 	/// Stores AnimatorState related data together.
 	/// </summary>
-	private readonly record struct StateData(IAnimatorState State, IStateConstant StateConstant, uint ParentStateMachineID)
-	{
-	}
+	private readonly record struct StateData(IAnimatorState State, IStateConstant StateConstant, uint ParentStateMachineID);
 }
