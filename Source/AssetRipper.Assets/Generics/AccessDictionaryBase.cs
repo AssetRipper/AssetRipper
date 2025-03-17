@@ -98,6 +98,12 @@ namespace AssetRipper.Assets.Generics
 		public abstract void RemoveAt(int index);
 
 		/// <inheritdoc/>
+		public void RemoveAt(Index index)
+		{
+			RemoveAt(index.GetOffset(Count));
+		}
+
+		/// <inheritdoc/>
 		public abstract void Clear();
 
 		public AccessPairBase<TKey, TValue> GetSinglePairForKey(TKey key)
