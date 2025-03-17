@@ -35,40 +35,42 @@ namespace AssetRipper.Processing.AnimatorControllers
 			{
 				return default; // null Motion
 			}
-
-			IBlendTreeNodeConstant node = stateConstant.GetBlendTree().NodeArray[nodeIndex].Data;
-			if (node.IsBlendTree())
-			{
-				return CreateBlendTree(virtualFile, controller, stateConstant, nodeIndex); // BlendTree Motion
-			}
 			else
 			{
-				int clipIndex = -1;
-				if (stateConstant.Has_LeafInfoArray())
+				IBlendTreeNodeConstant node = stateConstant.GetBlendTree().NodeArray[nodeIndex].Data;
+				if (node.IsBlendTree())
 				{
-					for (int i = 0; i < stateConstant.LeafInfoArray.Count; i++)
+					return CreateBlendTree(virtualFile, controller, stateConstant, nodeIndex); // BlendTree Motion
+				}
+				else
+				{
+					int clipIndex = -1;
+					if (stateConstant.Has_LeafInfoArray())
 					{
-						LeafInfoConstant leafInfo = stateConstant.LeafInfoArray[i];
-						int index = leafInfo.IDArray.IndexOf(node.ClipID);
-						if (index >= 0)
+						for (int i = 0; i < stateConstant.LeafInfoArray.Count; i++)
 						{
-							clipIndex = (int)leafInfo.IndexOffset + index;
-							break;
+							LeafInfoConstant leafInfo = stateConstant.LeafInfoArray[i];
+							int index = leafInfo.IDArray.IndexOf(node.ClipID);
+							if (index >= 0)
+							{
+								clipIndex = (int)leafInfo.IndexOffset + index;
+								break;
+							}
 						}
 					}
-				}
-				else
-				{
-					clipIndex = unchecked((int)node.ClipID);
-				}
+					else
+					{
+						clipIndex = unchecked((int)node.ClipID);
+					}
 
-				if (clipIndex == -1)
-				{
-					return default; // null Motion
-				}
-				else
-				{
-					return controller.AnimationClipsP[clipIndex] as IMotion; // AnimationClip Motion
+					if (clipIndex == -1)
+					{
+						return default; // null Motion
+					}
+					else
+					{
+						return controller.AnimationClipsP[clipIndex] as IMotion; // AnimationClip Motion
+					}
 				}
 			}
 		}

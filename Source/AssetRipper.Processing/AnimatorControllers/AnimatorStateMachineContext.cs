@@ -171,9 +171,7 @@ internal sealed class AnimatorStateMachineContext
 			}
 			else
 			{
-				IEnumerable<string> stateMachinePaths = StateContext.GetUniqueStateMachinePaths();
 				StateMachines = new IAnimatorStateMachine[StateContext.GetUniqueStateMachinePathsCount()];
-
 				// set Root StateMachine Name from DefaultState Path
 				IAnimatorStateMachine mainStateMachine = VirtualAnimationFactory.CreateStateMachine(VirtualFile, Controller, LayerIndex);
 				string mainStateMachineName = StateContext.GetStateMachinePath(StateContext.DefaultStateIndex);
@@ -517,9 +515,6 @@ internal sealed class AnimatorStateMachineContext
 			else
 			{
 				animatorTransition.IsExit = true;
-
-
-
 			}
 		}
 
@@ -624,7 +619,7 @@ internal sealed class AnimatorStateMachineContext
 				}
 				else
 				{
-					parentStateMachine.StateMachineTransitions.RemoveAt(parentStateMachine.StateMachineTransitions.Count - 1);
+					parentStateMachine.StateMachineTransitions.RemoveAt(^1);
 				}
 			}
 		}
