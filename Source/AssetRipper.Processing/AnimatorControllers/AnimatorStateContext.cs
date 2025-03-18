@@ -41,7 +41,10 @@ internal sealed class AnimatorStateContext
 	/// </summary>
 	public void Process()
 	{
-		if (!HasStates()) { return; }
+		if (!HasStates())
+		{
+				return;
+		}
 
 		Controller.TOS.TryAdd(0, Utf8String.Empty);
 
