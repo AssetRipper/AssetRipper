@@ -69,7 +69,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 					}
 					else
 					{
-						return controller.AnimationClipsP[clipIndex] as IMotion; // AnimationClip Motion
+						return controller.AnimationClipsP[clipIndex] as IMotion; // AnimationClip Motion (inherited since Unity 4)
 					}
 				}
 			}
