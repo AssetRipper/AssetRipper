@@ -8,6 +8,7 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 	{
 		void Initialize(PlatformGameStructure gameStructure);
 		void Load(string filePath);
+		void Add(AssemblyDefinition assembly);
 		void Read(Stream stream, string fileName);
 		void Unload(string fileName);
 

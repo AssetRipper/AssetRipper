@@ -59,6 +59,7 @@ public class ExportHandler
 	{
 		yield return new MonoExplicitPropertyRepairProcessor();
 		yield return new ObfuscationRepairProcessor();
+		yield return new ForwardingAssemblyGenerator();
 		if (Settings.ImportSettings.ScriptContentLevel == ScriptContentLevel.Level1)
 		{
 			yield return new MethodStubbingProcessor();
