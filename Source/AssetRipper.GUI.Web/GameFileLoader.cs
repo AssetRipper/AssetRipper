@@ -51,7 +51,7 @@ public static class GameFileLoader
 
 	public static void ExportUnityProject(string path)
 	{
-		if (IsLoaded)
+		if (IsLoaded && IsValidExportDirectory(path))
 		{
 			Directory.Delete(path, true);
 			Directory.CreateDirectory(path);
@@ -61,7 +61,7 @@ public static class GameFileLoader
 
 	public static void ExportPrimaryContent(string path)
 	{
-		if (IsLoaded)
+		if (IsLoaded && IsValidExportDirectory(path))
 		{
 			Directory.Delete(path, true);
 			Directory.CreateDirectory(path);
@@ -78,5 +78,21 @@ public static class GameFileLoader
 		LibraryConfiguration settings = new();
 		settings.LoadFromDefaultPath();
 		return settings;
+	}
+
+	private static bool IsValidExportDirectory(string path)
+	{
+		if (string.IsNullOrEmpty(path))
+		{
+			Logger.Error(LogCategory.Export, "Export path is empty");
+			return false;
+		}
+		string directoryName = Path.GetFileName(path);
+		if (directoryName is "Desktop" or "Documents" or "Downloads")
+		{
+			Logger.Error(LogCategory.Export, $"Export path '{path}' is a system directory");
+			return false;
+		}
+		return true;
 	}
 }
