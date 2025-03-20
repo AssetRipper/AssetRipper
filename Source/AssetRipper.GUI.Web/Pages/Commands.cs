@@ -33,7 +33,7 @@ public static class Commands
 			}
 			else if (Dialogs.Supported)
 			{
-				Dialogs.OpenFiles.GetUserInput(out paths);
+				paths = Dialogs.OpenFiles.GetUserInput();
 			}
 			else
 			{
@@ -61,7 +61,7 @@ public static class Commands
 			}
 			else if (Dialogs.Supported)
 			{
-				Dialogs.OpenFolders.GetUserInput(out paths);
+				paths = Dialogs.OpenFolders.GetUserInput();
 			}
 			else
 			{

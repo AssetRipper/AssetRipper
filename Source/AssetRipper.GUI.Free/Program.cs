@@ -1,3 +1,7 @@
 using AssetRipper.GUI.Web;
 
-WebApplicationLauncher.Launch(args);
+internal static class Program
+{
+	[STAThread]
+	private static void Main(string[] args) => WebApplicationLauncher.Launch(args);
+}
