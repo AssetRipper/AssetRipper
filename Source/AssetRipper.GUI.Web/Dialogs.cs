@@ -19,7 +19,7 @@ internal static class Dialogs
 		{
 			context.Response.DisableCaching();
 			string[] paths = Supported
-				? await Window.ShowOpenFileAsync("Select files", null, true)
+				? await Window.ShowOpenFileAsync(Localization.SelectFiles, null, true)
 				: [];
 			await Results.Json(paths, AppJsonSerializerContext.Default.StringArray).ExecuteAsync(context);
 		}
@@ -33,7 +33,7 @@ internal static class Dialogs
 		{
 			lock (lockObject)
 			{
-				paths = Window?.ShowOpenFile("Select files", defaultPath, true, filters?.Select(pair => (pair.Key, new string[] { pair.Value })).ToArray());
+				paths = Window?.ShowOpenFile(Localization.SelectFiles, defaultPath, true, filters?.Select(pair => (pair.Key, new string[] { pair.Value })).ToArray());
 			}
 			return paths is { Length: > 0 };
 		}
@@ -45,7 +45,7 @@ internal static class Dialogs
 		{
 			context.Response.DisableCaching();
 			string[] paths = Supported
-				? await Window.ShowOpenFolderAsync("Select folders", null, true)
+				? await Window.ShowOpenFolderAsync(Localization.SelectFolders, null, true)
 				: [];
 			await Results.Json(paths, AppJsonSerializerContext.Default.StringArray).ExecuteAsync(context);
 		}
@@ -59,7 +59,7 @@ internal static class Dialogs
 		{
 			lock (lockObject)
 			{
-				paths = Window?.ShowOpenFolder("Select folders", defaultPath, true);
+				paths = Window?.ShowOpenFolder(Localization.SelectFolders, defaultPath, true);
 			}
 			return paths is { Length: > 0 };
 		}
@@ -70,7 +70,7 @@ internal static class Dialogs
 		public static async Task HandleGetRequest(HttpContext context)
 		{
 			context.Response.DisableCaching();
-			string[] paths = Supported ? await Window.ShowOpenFileAsync("Select file") : [];
+			string[] paths = Supported ? await Window.ShowOpenFileAsync(Localization.SelectFile) : [];
 			string path = paths.Length is 1 ? paths[0] : "";
 			await Results.Json(path, AppJsonSerializerContext.Default.String).ExecuteAsync(context);
 		}
@@ -86,7 +86,7 @@ internal static class Dialogs
 			lock (lockObject)
 			{
 				paths = Supported
-					? Window.ShowOpenFile("Select file", defaultPath, false, filters?.Select(pair => (pair.Key, new string[] { pair.Value })).ToArray())
+					? Window.ShowOpenFile(Localization.SelectFile, defaultPath, false, filters?.Select(pair => (pair.Key, new string[] { pair.Value })).ToArray())
 					: [];
 			}
 			path = paths.Length is 1 ? paths[0] : null;
@@ -99,14 +99,14 @@ internal static class Dialogs
 		public static async Task HandleGetRequest(HttpContext context)
 		{
 			context.Response.DisableCaching();
-			string[] paths = Supported ? await Window.ShowOpenFolderAsync("Select folder") : [];
+			string[] paths = Supported ? await Window.ShowOpenFolderAsync(Localization.SelectFolder) : [];
 			string path = paths.Length is 1 ? paths[0] : "";
 			await Results.Json(path, AppJsonSerializerContext.Default.String).ExecuteAsync(context);
 		}
 
 		public static string? GetUserInput(string? defaultPath = null)
 		{
-			string[]? paths = Window?.ShowOpenFolder("Select folder", defaultPath);
+			string[]? paths = Window?.ShowOpenFolder(Localization.SelectFolder, defaultPath);
 			return paths is { Length: 1 } ? paths[0] : null;
 		}
 	}
@@ -116,7 +116,7 @@ internal static class Dialogs
 		public static async Task HandleGetRequest(HttpContext context)
 		{
 			context.Response.DisableCaching();
-			string? path = Supported ? await Window.ShowSaveFileAsync("Save file") : null;
+			string? path = Supported ? await Window.ShowSaveFileAsync(Localization.Save) : null;
 			await Results.Json(path ?? "", AppJsonSerializerContext.Default.String).ExecuteAsync(context);
 		}
 	}
