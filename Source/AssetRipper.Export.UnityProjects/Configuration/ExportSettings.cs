@@ -31,6 +31,11 @@ public sealed record class ExportSettings
 	public ScriptLanguageVersion ScriptLanguageVersion { get; set; } = ScriptLanguageVersion.AutoSafe;
 
 	/// <summary>
+	/// If true, type references in scripts are fully qualified.
+	/// </summary>
+	public bool ScriptTypesFullyQualified { get; set; } = false;
+
+	/// <summary>
 	/// How to export shaders?
 	/// </summary>
 	public ShaderExportMode ShaderExportMode { get; set; } = ShaderExportMode.Dummy;

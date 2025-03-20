@@ -180,6 +180,7 @@ public sealed partial class SettingsPage : DefaultPage
 							{
 								using (new Div(writer).WithClass("col").End())
 								{
+									WriteCheckBoxForScriptTypesFullyQualified(writer, Localization.ScriptsUseFullyQualifiedTypeNames);
 								}
 								using (new Div(writer).WithClass("col").End())
 								{

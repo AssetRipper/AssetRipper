@@ -16,6 +16,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 			{
 				LanguageVersion = configuration.ExportSettings.ScriptLanguageVersion.ToCSharpLanguageVersion(configuration.Version),
 				ScriptContentLevel = configuration.ImportSettings.ScriptContentLevel,
+				FullyQualifiedTypeNames = configuration.ExportSettings.ScriptTypesFullyQualified,
 			};
 			ExportMode = configuration.ExportSettings.ScriptExportMode;
 		}

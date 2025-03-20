@@ -15,6 +15,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 		public LanguageVersion LanguageVersion { get; set; } = LanguageVersion.CSharp7_3;
 		public ScriptContentLevel ScriptContentLevel { get; set; } = ScriptContentLevel.Level2;
 		public ScriptingBackend ScriptingBackend { get; set; } = ScriptingBackend.Unknown;
+		public bool FullyQualifiedTypeNames { get; set; } = false;
 
 		public ScriptDecompiler(IAssemblyManager assemblyManager) : this(new CecilAssemblyResolver(assemblyManager), assemblyManager.ScriptingBackend) { }
 		private ScriptDecompiler(CecilAssemblyResolver cecilAssemblyResolver, ScriptingBackend scriptingBackend)
@@ -34,6 +35,12 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 
 			settings.UseSdkStyleProjectFormat = false;//sdk style can throw and we don't use the csproj file at all
 			settings.UseNestedDirectoriesForNamespaces = true;
+
+			if (FullyQualifiedTypeNames)
+			{
+				settings.AlwaysUseGlobal = true;
+				settings.UsingDeclarations = false;
+			}
 
 			WholeProjectDecompiler decompiler = new(settings, assemblyResolver, null, null, null);
 

@@ -67,6 +67,7 @@ partial class SettingsPage
 		{ nameof(ProcessingSettings.EnablePrefabOutlining), (value) => { Configuration.ProcessingSettings.EnablePrefabOutlining = value; } },
 		{ nameof(ProcessingSettings.EnableStaticMeshSeparation), (value) => { Configuration.ProcessingSettings.EnableStaticMeshSeparation = value; } },
 		{ nameof(ProcessingSettings.EnableAssetDeduplication), (value) => { Configuration.ProcessingSettings.EnableAssetDeduplication = value; } },
+		{ nameof(ExportSettings.ScriptTypesFullyQualified), (value) => { Configuration.ExportSettings.ScriptTypesFullyQualified = value; } },
 		{ nameof(ExportSettings.SaveSettingsToDisk), (value) => { Configuration.ExportSettings.SaveSettingsToDisk = value; } },
 	};
 
@@ -128,6 +129,11 @@ partial class SettingsPage
 	private static void WriteDropDownForScriptLanguageVersion(TextWriter writer)
 	{
 		WriteDropDown(writer, ScriptLanguageVersionDropDownSetting.Instance, Configuration.ExportSettings.ScriptLanguageVersion, nameof(ExportSettings.ScriptLanguageVersion));
+	}
+
+	private static void WriteCheckBoxForScriptTypesFullyQualified(TextWriter writer, string label, bool disabled = false)
+	{
+		WriteCheckBox(writer, label, Configuration.ExportSettings.ScriptTypesFullyQualified, nameof(ExportSettings.ScriptTypesFullyQualified), disabled);
 	}
 
 	private static void WriteDropDownForShaderExportMode(TextWriter writer)

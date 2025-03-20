@@ -185,6 +185,7 @@
     "script_export_format_hybrid_description": "Special assemblies like Assembly-CSharp are decompiled. Other assemblies are exported in their compiled Dll form.",
     "script_export_title": "Script Export Format",
     "script_language_version_title": "C# Language Version",
+    "scripts_use_fully_qualified_type_names": "Scripts use fully-qualified type names",
     "select_file": "Select File",
     "select_folder": "Select Folder",
     "settings": "Settings",
