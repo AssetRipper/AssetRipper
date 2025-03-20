@@ -34,16 +34,11 @@ public sealed class ObfuscationRepairProcessor : IAssetProcessor
 
 			for (int i = type.CustomAttributes.Count - 1; i >= 0; i--)
 			{
-				if (IsCompilerGeneratedAttribute(type.CustomAttributes[i]))
+				if (type.CustomAttributes[i].IsCompilerGeneratedAttribute())
 				{
 					type.CustomAttributes.RemoveAt(i);
 				}
 			}
 		}
-	}
-
-	private static bool IsCompilerGeneratedAttribute(CustomAttribute attribute)
-	{
-		return attribute.Constructor?.DeclaringType is { Namespace.Value: "System.Runtime.CompilerServices", Name.Value: "CompilerGeneratedAttribute" };
 	}
 }
