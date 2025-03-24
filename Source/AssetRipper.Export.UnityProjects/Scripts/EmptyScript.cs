@@ -1,9 +1,13 @@
 ﻿using AssetRipper.SourceGenerated.Classes.ClassID_115;
+using System.Text.RegularExpressions;
 
 namespace AssetRipper.Export.UnityProjects.Scripts;
 
-public static class EmptyScript
+public static partial class EmptyScript
 {
+	[GeneratedRegex(@"^(\w+)`([1-9][0-9]*)$")]
+	private static partial Regex GenericRegex { get; }
+
 	public static string GetContent(IMonoScript script)
 	{
 		return GetContent(script.Namespace.String, script.ClassName_R.String);
@@ -16,6 +20,16 @@ public static class EmptyScript
 
 	public static string GetContent(string? @namespace, string name)
 	{
+		Match match = GenericRegex.Match(name);
+		if (match.Success)
+		{
+			string genericName = match.Groups[1].Value;
+			if (int.TryParse(match.Groups[2].Value, out int genericCount))
+			{
+				string genericParams = string.Join(", ", Enumerable.Range(1, genericCount).Select(i => $"T{i}"));
+				name = $"{genericName}<{genericParams}>";
+			}
+		}
 		if (string.IsNullOrEmpty(@namespace))
 		{
 			//Indented so that the numerical section can be easily copy-pasted when needed.
