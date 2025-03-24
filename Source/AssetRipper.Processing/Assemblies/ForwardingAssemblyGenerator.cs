@@ -5,13 +5,7 @@ namespace AssetRipper.Processing.Assemblies;
 
 public sealed class ForwardingAssemblyGenerator : IAssetProcessor
 {
-	public void Process(GameData gameData) => Process(gameData.AssemblyManager);
-	private static void Process(IAssemblyManager manager)
-	{
-		manager.ClearStreamCache();
-
-		AddCompilerHelperModules(manager);
-	}
+	public void Process(GameData gameData) => AddCompilerHelperModules(gameData.AssemblyManager);
 
 	/// <summary>
 	/// ILSpy needs System.Runtime.CompilerServices.Unsafe and System.Runtime.InteropServices to decompile some code.
@@ -24,6 +18,8 @@ public sealed class ForwardingAssemblyGenerator : IAssetProcessor
 		{
 			return;
 		}
+
+		manager.ClearStreamCache();
 
 		const string UnsafeAssemblyName = "System.Runtime.CompilerServices.Unsafe";
 		if (!HasAssembly(manager, UnsafeAssemblyName))

@@ -57,6 +57,7 @@ public class ExportHandler
 
 	protected virtual IEnumerable<IAssetProcessor> GetProcessors()
 	{
+		yield return new AttributePolyfillGenerator();
 		yield return new MonoExplicitPropertyRepairProcessor();
 		yield return new ObfuscationRepairProcessor();
 		yield return new ForwardingAssemblyGenerator();

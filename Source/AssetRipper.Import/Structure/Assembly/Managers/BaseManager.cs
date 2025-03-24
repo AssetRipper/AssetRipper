@@ -14,7 +14,7 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 		public virtual ScriptingBackend ScriptingBackend => ScriptingBackend.Unknown;
 
 		protected readonly Dictionary<string, AssemblyDefinition?> m_assemblies = new();
-		protected readonly Dictionary<AssemblyDefinition, Stream> m_assemblyStreams = new();
+		protected readonly Dictionary<AssemblyDefinition, Stream> m_assemblyStreams = new(SignatureComparer.Default);
 		protected readonly Dictionary<string, bool> m_validTypes = new();
 		private readonly Dictionary<ITypeDefOrRef, MonoType> monoTypeCache = new(SignatureComparer.Default);
 
