@@ -57,7 +57,8 @@ public class ExportHandler
 
 	protected virtual IEnumerable<IAssetProcessor> GetProcessors()
 	{
-		yield return new AttributePolyfillGenerator();
+		//Temporarily removed because Roslyn might not be trim-compatible and because it inflates the size of the executable beyond the Arm64 limit.
+		//yield return new AttributePolyfillGenerator();
 		yield return new MonoExplicitPropertyRepairProcessor();
 		yield return new ObfuscationRepairProcessor();
 		yield return new ForwardingAssemblyGenerator();

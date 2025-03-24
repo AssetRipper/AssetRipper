@@ -1,4 +1,4 @@
-﻿using AsmResolver.DotNet;
+﻿/*using AsmResolver.DotNet;
 using AsmResolver.DotNet.Cloning;
 using AsmResolver.DotNet.Signatures;
 using AssetRipper.CIL;
@@ -136,4 +136,4 @@ public sealed class AttributePolyfillGenerator : IAssetProcessor
 
 		return MetadataReference.CreateFromStream(memoryStream, filePath: $"{assembly.Name}.dll");
 	}
-}
+}*/
