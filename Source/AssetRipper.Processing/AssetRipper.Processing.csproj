@@ -8,7 +8,6 @@
 
 	<ItemGroup>
 		<PackageReference Include="AssetRipper.CIL" Version="1.1.6" />
-		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.13.0" />
 	</ItemGroup>
 
 	<ItemGroup>
