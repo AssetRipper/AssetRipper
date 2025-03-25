@@ -1,11 +1,12 @@
-﻿using AssetRipper.Import.Structure.Assembly.Serializable;
+﻿using AssetRipper.Import.Structure.Assembly.Mono;
+using AssetRipper.Import.Structure.Assembly.Serializable;
 using AssetRipper.SourceGenerated.Extensions;
 
 namespace AssetRipper.Import.Structure.Assembly.TypeTrees
 {
 	public sealed class SerializableTreeType : SerializableType
 	{
-		private SerializableTreeType(string name, PrimitiveType type, int version, bool flowMappedInYaml) : base("UnityEngine", type, name)
+		private SerializableTreeType(string name, PrimitiveType type, int version, bool flowMappedInYaml) : base(null, type, name)
 		{
 			Version = version;
 			FlowMappedInYaml = flowMappedInYaml;
@@ -32,24 +33,24 @@ namespace AssetRipper.Import.Structure.Assembly.TypeTrees
 		{
 			ToPrimititeType(node, out string typeName, out PrimitiveType primitiveType, out int arrayDepth, out bool alignBytes, out TypeTreeNodeStruct primitiveNode);
 
-			SerializableTreeType serializableTreeType;
+			SerializableType serializableType;
 			if (primitiveType is PrimitiveType.Complex or PrimitiveType.Pair or PrimitiveType.MapPair)
 			{
 				if (primitiveNode.IsPPtr)
 				{
-					serializableTreeType = new SerializableTreeType("Object", primitiveType, primitiveNode.Version, primitiveNode.FlowMappedInYaml);
+					serializableType = SerializablePointerType.Shared;
 				}
 				else
 				{
-					serializableTreeType = FromStructureNode(typeName, primitiveNode, primitiveType);
+					serializableType = FromStructureNode(typeName, primitiveNode, primitiveType);
 				}
 			}
 			else
 			{
-				serializableTreeType = new SerializableTreeType(typeName, primitiveType, primitiveNode.Version, primitiveNode.FlowMappedInYaml);
+				serializableType = new SerializableTreeType(typeName, primitiveType, primitiveNode.Version, primitiveNode.FlowMappedInYaml);
 			}
 
-			fields.Add(new Field(serializableTreeType, arrayDepth, node.Name, alignBytes));
+			fields.Add(new Field(serializableType, arrayDepth, node.Name, alignBytes));
 		}
 
 		private static SerializableTreeType FromStructureNode(string name, TypeTreeNodeStruct node, PrimitiveType type)
