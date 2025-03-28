@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Generics;
-using AssetRipper.Assets.Metadata;
 using AssetRipper.SourceGenerated.Classes.ClassID_1101;
 using AssetRipper.SourceGenerated.Classes.ClassID_1102;
 using AssetRipper.SourceGenerated.Classes.ClassID_1107;
@@ -10,6 +9,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_206;
 using AssetRipper.SourceGenerated.Classes.ClassID_207;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
 using AssetRipper.SourceGenerated.Classes.ClassID_91;
+using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.AnimatorControllerLayer;
 using AssetRipper.SourceGenerated.Subclasses.ChildAnimatorState;
 using AssetRipper.SourceGenerated.Subclasses.ChildAnimatorStateMachine;
@@ -20,10 +20,8 @@ using AssetRipper.SourceGenerated.Subclasses.PPtr_AnimatorStateTransition;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_AnimatorTransition;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_MonoBehaviour;
 using AssetRipper.SourceGenerated.Subclasses.StateBehavioursPair;
-using AssetRipper.SourceGenerated.Subclasses.StateConstant;
 using AssetRipper.SourceGenerated.Subclasses.StateKey;
 using AssetRipper.SourceGenerated.Subclasses.StateMachineBehaviourVectorDescription;
-using AssetRipper.SourceGenerated.Subclasses.StateMachineConstant;
 using AssetRipper.SourceGenerated.Subclasses.StateMotionPair;
 using AssetRipper.SourceGenerated.Subclasses.StateRange;
 
@@ -43,29 +41,10 @@ namespace AssetRipper.SourceGenerated.Extensions
 			return false;
 		}
 
-		public static IMonoBehaviour?[] GetStateBehaviours(this IAnimatorController controller, int layerIndex)
+		public static IMonoBehaviour?[] GetStateBehaviours(this IAnimatorController controller, int layerIndex, uint stateID)
 		{
 			if (controller.Has_StateMachineBehaviourVectorDescription())
 			{
-				uint layerID = controller.Controller.LayerArray[layerIndex].Data.Binding;
-				StateKey key = new();
-				key.SetValues(layerIndex, layerID);
-				if (controller.StateMachineBehaviourVectorDescription.StateMachineBehaviourRanges.TryGetValue(key, out StateRange? range))
-				{
-					return GetStateBehaviours(controller.StateMachineBehaviourVectorDescription, controller.StateMachineBehavioursP, range);
-				}
-			}
-			return Array.Empty<IMonoBehaviour>();
-		}
-
-		public static IMonoBehaviour?[] GetStateBehaviours(this IAnimatorController controller, int stateMachineIndex, int stateIndex)
-		{
-			if (controller.Has_StateMachineBehaviourVectorDescription())
-			{
-				int layerIndex = controller.Controller.GetLayerIndexByStateMachineIndex(stateMachineIndex);
-				IStateMachineConstant stateMachine = controller.Controller.StateMachineArray[stateMachineIndex].Data;
-				IStateConstant state = stateMachine.StateConstantArray[stateIndex].Data;
-				uint stateID = GetIdForStateConstant(state);
 				StateKey key = new();
 				key.SetValues(layerIndex, stateID);
 				if (controller.StateMachineBehaviourVectorDescription.StateMachineBehaviourRanges.TryGetValue(key, out StateRange? range))
@@ -85,25 +64,14 @@ namespace AssetRipper.SourceGenerated.Extensions
 			for (int i = 0; i < range.Count; i++)
 			{
 				int index = (int)controllerStateMachineBehaviourVectorDescription.StateMachineBehaviourIndices[(int)range.StartIndex + i];
-				stateMachineBehaviours[i] = controllerStateMachineBehaviours[index];
+				IMonoBehaviour? stateMachineBehaviour = controllerStateMachineBehaviours[index];
+				if (stateMachineBehaviour != null)
+				{
+					stateMachineBehaviour.HideFlagsE = HideFlags.HideInHierarchy;
+				}
+				stateMachineBehaviours[i] = stateMachineBehaviour;
 			}
 			return stateMachineBehaviours;
-		}
-
-		private static uint GetIdForStateConstant(IStateConstant stateConstant)
-		{
-			if (stateConstant.Has_FullPathID())
-			{
-				return stateConstant.FullPathID;
-			}
-			else if (stateConstant.Has_NameID())
-			{
-				return stateConstant.NameID;
-			}
-			else
-			{
-				return stateConstant.ID;
-			}
 		}
 
 		public static IEnumerable<IUnityObjectBase?> FetchEditorHierarchy(this IAnimatorController animatorController)
