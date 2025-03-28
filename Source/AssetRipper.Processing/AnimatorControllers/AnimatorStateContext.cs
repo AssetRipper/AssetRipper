@@ -53,14 +53,14 @@ internal sealed class AnimatorStateContext
 			IStateConstant stateConstant = StateMachineConstant.StateConstantArray[i].Data;
 			IAnimatorState state = VirtualAnimationFactory.CreateAnimatorState(VirtualFile, Controller, Controller.TOS, LayerIndex, stateConstant);
 
-			string stateMachinePath = MakeStateMachinePath(Controller.TOS, stateConstant.GetId(), state.Name.String); // [stateMachinePath].StateName
-			if (!stateMachinePathNamesAndIDs.TryGetValue(stateMachinePath, out uint stateMachinePathID))
+			string stateMachineFullPath = MakeStateMachinePath(Controller.TOS, stateConstant.GetId(), state.Name.String); // [stateMachinePath].StateName
+			if (!stateMachinePathNamesAndIDs.TryGetValue(stateMachineFullPath, out uint stateMachineFullPathID))
 			{
-				stateMachinePathID = Checksum.Crc32Algorithm.HashUTF8(stateMachinePath);
-				stateMachinePathNamesAndIDs.Add(stateMachinePath, stateMachinePathID);
+				stateMachineFullPathID = Checksum.Crc32Algorithm.HashUTF8(stateMachineFullPath);
+				stateMachinePathNamesAndIDs.Add(stateMachineFullPath, stateMachineFullPathID);
 			}
 
-			IndexedStates[i] = new(state, stateConstant, stateMachinePathID);
+			IndexedStates[i] = new(state, stateConstant, stateMachineFullPathID);
 		}
 
 		if (StateMachineConstant.StateMachineCount() > stateMachinePathNamesAndIDs.Count) // can only happen on Unity 5+
@@ -72,6 +72,8 @@ internal sealed class AnimatorStateContext
 			foreach (string originalStateMachinePathName in originalStateMachinePathNames)
 			{
 				string stateMachinePath = originalStateMachinePathName;
+				// periods are used for concatenating State and StateMachine Names to get their paths.
+				// Unity Editor doesn't allow periods in State and StateMachine Names.
 				int pathDelimiterPos = stateMachinePath.LastIndexOf('.');
 				// loop and trim StateMachine names from end of path
 				while (pathDelimiterPos != -1)
@@ -110,33 +112,43 @@ internal sealed class AnimatorStateContext
 		return IndexedStates.IndexOf(s => s.State == state);
 	}
 
+	public uint GetParentForState(int index)
+	{
+		return IndexedStates[index].ParentStateMachineID;
+	}
+
 	public string GetStateMachinePath(int stateIndex)
 	{
 		uint stateMachinePathID = IndexedStates[stateIndex].ParentStateMachineID;
 		return stateMachinePathNamesAndIDs[stateMachinePathID];
 	}
 
-	public bool TryGetStateMachinePath(uint pathID, out string path)
+	public void AddStateMachineFullPath(string fullPath, uint fullPathID)
 	{
-		if (pathID != 0 && stateMachinePathNamesAndIDs.TryGetValue(pathID, out string? pathName))
+		stateMachinePathNamesAndIDs.Add(fullPath, fullPathID);
+	}
+
+	public bool TryGetStateMachinePath(uint fullPathID, out string fullPath)
+	{
+		if (fullPathID != 0 && stateMachinePathNamesAndIDs.TryGetValue(fullPathID, out string? pathName))
 		{
-			path = pathName;
+			fullPath = pathName;
 			return true;
 		}
 
-		path = string.Empty;
+		fullPath = string.Empty;
 		return false;
 	}
 
-	public bool TryGetStateMachinePathID(string path, out uint pathID)
+	public bool TryGetStateMachinePathID(string fullPath, out uint fullPathID)
 	{
-		if (!string.IsNullOrEmpty(path) && stateMachinePathNamesAndIDs.TryGetValue(path, out uint pathId))
+		if (!string.IsNullOrEmpty(fullPath) && stateMachinePathNamesAndIDs.TryGetValue(fullPath, out uint fullPathId))
 		{
-			pathID = pathId;
+			fullPathID = fullPathId;
 			return true;
 		}
 
-		pathID = 0;
+		fullPathID = 0;
 		return false;
 	}
 
@@ -150,22 +162,22 @@ internal sealed class AnimatorStateContext
 		return stateMachinePathNamesAndIDs.Count;
 	}
 
-	public IEnumerable<int> StateIndicesForStateMachine(uint pathID) // yield AnimatorStates from provided StateMachine path
+	public IEnumerable<int> StateIndicesForStateMachine(uint fullPathID) // yield AnimatorStates from provided StateMachine FullPath
 	{
 		for (int i = 0; i < IndexedStates.Length; i++)
 		{
-			if (IndexedStates[i].ParentStateMachineID == pathID)
+			if (IndexedStates[i].ParentStateMachineID == fullPathID)
 			{
 				yield return i;
 			}
 		}
 	}
 
-	public IEnumerable<int> StateIndicesForStateMachine(string path) // yield AnimatorStates from provided StateMachine path
+	public IEnumerable<int> StateIndicesForStateMachine(string fullPath) // yield AnimatorStates from provided StateMachine FullPath
 	{
-		if (TryGetStateMachinePathID(path, out uint pathID))
+		if (TryGetStateMachinePathID(fullPath, out uint fullPathID))
 		{
-			return StateIndicesForStateMachine(pathID);
+			return StateIndicesForStateMachine(fullPathID);
 		}
 		return Array.Empty<int>();
 	}
