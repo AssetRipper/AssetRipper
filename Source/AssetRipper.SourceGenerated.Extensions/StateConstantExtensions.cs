@@ -48,14 +48,17 @@ namespace AssetRipper.SourceGenerated.Extensions
 				return tos[stateConstant.NameID];
 			}
 
-			string statePath = tos[stateConstant.ID].String; // ParentStateMachineName.StateName
+			Utf8String _statePath = tos[stateConstant.ID];
+			string statePath = _statePath.String; // ParentStateMachineName.StateName
+			// periods are used for concatenating State and StateMachine Names to get their paths.
+			// Unity Editor doesn't allow periods in State and StateMachine Names.
 			int pathDelimiterPos = statePath.IndexOf('.');
 			if (pathDelimiterPos != -1 && pathDelimiterPos + 1 < statePath.Length)
 			{
 				return new Utf8String(statePath[(pathDelimiterPos + 1)..]);
 			}
 
-			return new Utf8String(statePath);
+			return _statePath;
 		}
 	}
 }
