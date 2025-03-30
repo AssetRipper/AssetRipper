@@ -3,6 +3,7 @@ using AssetRipper.Assets.Collections;
 using AssetRipper.Import.Structure.Assembly;
 using AssetRipper.SourceGenerated.Classes.ClassID_1035;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
+using AssetRipper.SourceGenerated.Extensions;
 using System.Diagnostics;
 
 namespace AssetRipper.Export.UnityProjects.Scripts;
@@ -81,7 +82,7 @@ public abstract class ScriptExportCollectionBase : ExportCollection
 
 	protected static void GetExportSubPath(IMonoScript script, out string folderPath, out string fileName)
 	{
-		GetExportSubPath(script.GetAssemblyNameFixed(), script.Namespace.String, script.ClassName_R.String, out folderPath, out fileName);
+		GetExportSubPath(script.GetAssemblyNameFixed(), script.Namespace.String, script.GetNonGenericClassName(), out folderPath, out fileName);
 	}
 
 	private protected static void GetExportSubPath(MonoScriptInfo script, out string folderPath, out string fileName)
