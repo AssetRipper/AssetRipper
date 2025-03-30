@@ -1,0 +1,666 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class FileContainer
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class FileContainer
+   ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="AssetRipper.IO.Files.FileContainer">
+  
+  
+  <h1 id="AssetRipper_IO_Files_FileContainer" data-uid="AssetRipper.IO.Files.FileContainer" class="text-break">Class FileContainer
+  </h1>
+  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="AssetRipper.IO.Files.FileBase.html">FileBase</a></div>
+    <div class="level2"><span class="xref">FileContainer</span></div>
+      <div class="level3"><a class="xref" href="AssetRipper.IO.Files.BundleFiles.FileStream.FileStreamBundleFile.html">FileStreamBundleFile</a></div>
+      <div class="level3"><a class="xref" href="AssetRipper.IO.Files.BundleFiles.RawWeb.RawWebBundleFile-1.html">RawWebBundleFile&lt;THeader&gt;</a></div>
+      <div class="level3"><a class="xref" href="AssetRipper.IO.Files.WebFiles.WebFile.html">WebFile</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="AssetRipper.IO.Files.FileBase.html#AssetRipper_IO_Files_FileBase_ToString">FileBase.ToString()</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.IO.Files.FileBase.html#AssetRipper_IO_Files_FileBase_FilePath">FileBase.FilePath</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.IO.Files.FileBase.html#AssetRipper_IO_Files_FileBase_Name">FileBase.Name</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.IO.Files.FileBase.html#AssetRipper_IO_Files_FileBase_NameFixed">FileBase.NameFixed</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.IO.Files.FileBase.html#AssetRipper_IO_Files_FileBase_Read_AssetRipper_IO_Files_Streams_Smart_SmartStream_">FileBase.Read(SmartStream)</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.IO.Files.FileBase.html#AssetRipper_IO_Files_FileBase_Write_Stream_">FileBase.Write(Stream)</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.IO.Files.FileBase.html#AssetRipper_IO_Files_FileBase_ToByteArray">FileBase.ToByteArray()</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.IO.Files.FileBase.html#AssetRipper_IO_Files_FileBase_Dispose_System_Boolean_">FileBase.Dispose(Boolean)</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.IO.Files.FileBase.html#AssetRipper_IO_Files_FileBase_Dispose">FileBase.Dispose()</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="AssetRipper.IO.Files.html">AssetRipper.IO.Files</a></h6>
+  <h6><strong>Assembly</strong>: AssetRipper.IO.Files.dll</h6>
+  <h5 id="AssetRipper_IO_Files_FileContainer_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract class FileContainer : FileBase</code></pre>
+  </div>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_FileContainer_AllFiles.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.FileContainer.AllFiles%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/FileContainer.cs/#L128">View Source</a>
+  </span>
+  <a id="AssetRipper_IO_Files_FileContainer_AllFiles_" data-uid="AssetRipper.IO.Files.FileContainer.AllFiles*"></a>
+  <h4 id="AssetRipper_IO_Files_FileContainer_AllFiles" data-uid="AssetRipper.IO.Files.FileContainer.AllFiles">AllFiles</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;FileBase&gt; AllFiles { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="AssetRipper.IO.Files.FileBase.html">FileBase</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_FileContainer_FailedFiles.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.FileContainer.FailedFiles%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/FileContainer.cs/#L126">View Source</a>
+  </span>
+  <a id="AssetRipper_IO_Files_FileContainer_FailedFiles_" data-uid="AssetRipper.IO.Files.FileContainer.FailedFiles*"></a>
+  <h4 id="AssetRipper_IO_Files_FileContainer_FailedFiles" data-uid="AssetRipper.IO.Files.FileContainer.FailedFiles">FailedFiles</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IReadOnlyList&lt;FailedFile&gt; FailedFiles { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IReadOnlyList</span>&lt;<a class="xref" href="AssetRipper.IO.Files.FailedFile.html">FailedFile</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_FileContainer_FileLists.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.FileContainer.FileLists%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/FileContainer.cs/#L124">View Source</a>
+  </span>
+  <a id="AssetRipper_IO_Files_FileContainer_FileLists_" data-uid="AssetRipper.IO.Files.FileContainer.FileLists*"></a>
+  <h4 id="AssetRipper_IO_Files_FileContainer_FileLists" data-uid="AssetRipper.IO.Files.FileContainer.FileLists">FileLists</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IReadOnlyList&lt;FileContainer&gt; FileLists { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IReadOnlyList</span>&lt;<a class="xref" href="AssetRipper.IO.Files.FileContainer.html">FileContainer</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_FileContainer_ResourceFiles.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.FileContainer.ResourceFiles%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/FileContainer.cs/#L125">View Source</a>
+  </span>
+  <a id="AssetRipper_IO_Files_FileContainer_ResourceFiles_" data-uid="AssetRipper.IO.Files.FileContainer.ResourceFiles*"></a>
+  <h4 id="AssetRipper_IO_Files_FileContainer_ResourceFiles" data-uid="AssetRipper.IO.Files.FileContainer.ResourceFiles">ResourceFiles</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IReadOnlyList&lt;ResourceFile&gt; ResourceFiles { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IReadOnlyList</span>&lt;<a class="xref" href="AssetRipper.IO.Files.ResourceFiles.ResourceFile.html">ResourceFile</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_FileContainer_SerializedFiles.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.FileContainer.SerializedFiles%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/FileContainer.cs/#L123">View Source</a>
+  </span>
+  <a id="AssetRipper_IO_Files_FileContainer_SerializedFiles_" data-uid="AssetRipper.IO.Files.FileContainer.SerializedFiles*"></a>
+  <h4 id="AssetRipper_IO_Files_FileContainer_SerializedFiles" data-uid="AssetRipper.IO.Files.FileContainer.SerializedFiles">SerializedFiles</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IReadOnlyList&lt;SerializedFile&gt; SerializedFiles { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IReadOnlyList</span>&lt;<a class="xref" href="AssetRipper.IO.Files.SerializedFiles.SerializedFile.html">SerializedFile</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_FileContainer_AddFailedFile_AssetRipper_IO_Files_FailedFile_.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.FileContainer.AddFailedFile(AssetRipper.IO.Files.FailedFile)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/FileContainer.cs/#L83">View Source</a>
+  </span>
+  <a id="AssetRipper_IO_Files_FileContainer_AddFailedFile_" data-uid="AssetRipper.IO.Files.FileContainer.AddFailedFile*"></a>
+  <h4 id="AssetRipper_IO_Files_FileContainer_AddFailedFile_AssetRipper_IO_Files_FailedFile_" data-uid="AssetRipper.IO.Files.FileContainer.AddFailedFile(AssetRipper.IO.Files.FailedFile)">AddFailedFile(FailedFile)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void AddFailedFile(FailedFile file)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.IO.Files.FailedFile.html">FailedFile</a></td>
+        <td><span class="parametername">file</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_FileContainer_AddFile_AssetRipper_IO_Files_FileBase_.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.FileContainer.AddFile(AssetRipper.IO.Files.FileBase)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/FileContainer.cs/#L23">View Source</a>
+  </span>
+  <a id="AssetRipper_IO_Files_FileContainer_AddFile_" data-uid="AssetRipper.IO.Files.FileContainer.AddFile*"></a>
+  <h4 id="AssetRipper_IO_Files_FileContainer_AddFile_AssetRipper_IO_Files_FileBase_" data-uid="AssetRipper.IO.Files.FileContainer.AddFile(AssetRipper.IO.Files.FileBase)">AddFile(FileBase)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void AddFile(FileBase file)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.IO.Files.FileBase.html">FileBase</a></td>
+        <td><span class="parametername">file</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_FileContainer_AddFileContainer_AssetRipper_IO_Files_FileContainer_.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.FileContainer.AddFileContainer(AssetRipper.IO.Files.FileContainer)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/FileContainer.cs/#L57">View Source</a>
+  </span>
+  <a id="AssetRipper_IO_Files_FileContainer_AddFileContainer_" data-uid="AssetRipper.IO.Files.FileContainer.AddFileContainer*"></a>
+  <h4 id="AssetRipper_IO_Files_FileContainer_AddFileContainer_AssetRipper_IO_Files_FileContainer_" data-uid="AssetRipper.IO.Files.FileContainer.AddFileContainer(AssetRipper.IO.Files.FileContainer)">AddFileContainer(FileContainer)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void AddFileContainer(FileContainer container)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.IO.Files.FileContainer.html">FileContainer</a></td>
+        <td><span class="parametername">container</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_FileContainer_AddResourceFile_AssetRipper_IO_Files_ResourceFiles_ResourceFile_.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.FileContainer.AddResourceFile(AssetRipper.IO.Files.ResourceFiles.ResourceFile)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/FileContainer.cs/#L70">View Source</a>
+  </span>
+  <a id="AssetRipper_IO_Files_FileContainer_AddResourceFile_" data-uid="AssetRipper.IO.Files.FileContainer.AddResourceFile*"></a>
+  <h4 id="AssetRipper_IO_Files_FileContainer_AddResourceFile_AssetRipper_IO_Files_ResourceFiles_ResourceFile_" data-uid="AssetRipper.IO.Files.FileContainer.AddResourceFile(AssetRipper.IO.Files.ResourceFiles.ResourceFile)">AddResourceFile(ResourceFile)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void AddResourceFile(ResourceFile resource)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.IO.Files.ResourceFiles.ResourceFile.html">ResourceFile</a></td>
+        <td><span class="parametername">resource</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_FileContainer_AddSerializedFile_AssetRipper_IO_Files_SerializedFiles_SerializedFile_.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.FileContainer.AddSerializedFile(AssetRipper.IO.Files.SerializedFiles.SerializedFile)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/FileContainer.cs/#L44">View Source</a>
+  </span>
+  <a id="AssetRipper_IO_Files_FileContainer_AddSerializedFile_" data-uid="AssetRipper.IO.Files.FileContainer.AddSerializedFile*"></a>
+  <h4 id="AssetRipper_IO_Files_FileContainer_AddSerializedFile_AssetRipper_IO_Files_SerializedFiles_SerializedFile_" data-uid="AssetRipper.IO.Files.FileContainer.AddSerializedFile(AssetRipper.IO.Files.SerializedFiles.SerializedFile)">AddSerializedFile(SerializedFile)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void AddSerializedFile(SerializedFile file)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.IO.Files.SerializedFiles.SerializedFile.html">SerializedFile</a></td>
+        <td><span class="parametername">file</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_FileContainer_FetchSerializedFiles.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.FileContainer.FetchSerializedFiles%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/FileContainer.cs/#L8">View Source</a>
+  </span>
+  <a id="AssetRipper_IO_Files_FileContainer_FetchSerializedFiles_" data-uid="AssetRipper.IO.Files.FileContainer.FetchSerializedFiles*"></a>
+  <h4 id="AssetRipper_IO_Files_FileContainer_FetchSerializedFiles" data-uid="AssetRipper.IO.Files.FileContainer.FetchSerializedFiles">FetchSerializedFiles()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;SerializedFile&gt; FetchSerializedFiles()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="AssetRipper.IO.Files.SerializedFiles.SerializedFile.html">SerializedFile</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_FileContainer_OnFileContainerAdded_AssetRipper_IO_Files_FileContainer_.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.FileContainer.OnFileContainerAdded(AssetRipper.IO.Files.FileContainer)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/FileContainer.cs/#L97">View Source</a>
+  </span>
+  <a id="AssetRipper_IO_Files_FileContainer_OnFileContainerAdded_" data-uid="AssetRipper.IO.Files.FileContainer.OnFileContainerAdded*"></a>
+  <h4 id="AssetRipper_IO_Files_FileContainer_OnFileContainerAdded_AssetRipper_IO_Files_FileContainer_" data-uid="AssetRipper.IO.Files.FileContainer.OnFileContainerAdded(AssetRipper.IO.Files.FileContainer)">OnFileContainerAdded(FileContainer)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void OnFileContainerAdded(FileContainer container)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.IO.Files.FileContainer.html">FileContainer</a></td>
+        <td><span class="parametername">container</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_FileContainer_OnResourceFileAdded_AssetRipper_IO_Files_ResourceFiles_ResourceFile_.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.FileContainer.OnResourceFileAdded(AssetRipper.IO.Files.ResourceFiles.ResourceFile)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/FileContainer.cs/#L99">View Source</a>
+  </span>
+  <a id="AssetRipper_IO_Files_FileContainer_OnResourceFileAdded_" data-uid="AssetRipper.IO.Files.FileContainer.OnResourceFileAdded*"></a>
+  <h4 id="AssetRipper_IO_Files_FileContainer_OnResourceFileAdded_AssetRipper_IO_Files_ResourceFiles_ResourceFile_" data-uid="AssetRipper.IO.Files.FileContainer.OnResourceFileAdded(AssetRipper.IO.Files.ResourceFiles.ResourceFile)">OnResourceFileAdded(ResourceFile)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void OnResourceFileAdded(ResourceFile resource)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.IO.Files.ResourceFiles.ResourceFile.html">ResourceFile</a></td>
+        <td><span class="parametername">resource</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_FileContainer_OnSerializedFileAdded_AssetRipper_IO_Files_SerializedFiles_SerializedFile_.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.FileContainer.OnSerializedFileAdded(AssetRipper.IO.Files.SerializedFiles.SerializedFile)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/FileContainer.cs/#L95">View Source</a>
+  </span>
+  <a id="AssetRipper_IO_Files_FileContainer_OnSerializedFileAdded_" data-uid="AssetRipper.IO.Files.FileContainer.OnSerializedFileAdded*"></a>
+  <h4 id="AssetRipper_IO_Files_FileContainer_OnSerializedFileAdded_AssetRipper_IO_Files_SerializedFiles_SerializedFile_" data-uid="AssetRipper.IO.Files.FileContainer.OnSerializedFileAdded(AssetRipper.IO.Files.SerializedFiles.SerializedFile)">OnSerializedFileAdded(SerializedFile)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void OnSerializedFileAdded(SerializedFile file)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.IO.Files.SerializedFiles.SerializedFile.html">SerializedFile</a></td>
+        <td><span class="parametername">file</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_FileContainer_ReadContents.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.FileContainer.ReadContents%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/FileContainer.cs/#L101">View Source</a>
+  </span>
+  <a id="AssetRipper_IO_Files_FileContainer_ReadContents_" data-uid="AssetRipper.IO.Files.FileContainer.ReadContents*"></a>
+  <h4 id="AssetRipper_IO_Files_FileContainer_ReadContents" data-uid="AssetRipper.IO.Files.FileContainer.ReadContents">ReadContents()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void ReadContents()</code></pre>
+  </div>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="AssetRipper.IO.Files.FileBase.html#AssetRipper_IO_Files_FileBase_ReadContents">FileBase.ReadContents()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_FileContainer_ReadContentsRecursively.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.FileContainer.ReadContentsRecursively%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/FileContainer.cs/#L114">View Source</a>
+  </span>
+  <a id="AssetRipper_IO_Files_FileContainer_ReadContentsRecursively_" data-uid="AssetRipper.IO.Files.FileContainer.ReadContentsRecursively*"></a>
+  <h4 id="AssetRipper_IO_Files_FileContainer_ReadContentsRecursively" data-uid="AssetRipper.IO.Files.FileContainer.ReadContentsRecursively">ReadContentsRecursively()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void ReadContentsRecursively()</code></pre>
+  </div>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="AssetRipper.IO.Files.FileBase.html#AssetRipper_IO_Files_FileBase_ReadContentsRecursively">FileBase.ReadContentsRecursively()</a></div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_IO_Files_FileContainer.md&amp;value=---%0Auid%3A%20AssetRipper.IO.Files.FileContainer%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.IO.Files/FileContainer.cs/#L6" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="toggle-mode">
+                <div class="icon">
+                  <i aria-hidden="true">☀</i>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="switch-style">
+                  <span class="slider round"></span>
+                </label>
+                <div class="icon">
+                  <i aria-hidden="true">☾</i>
+                </div>
+              </div>
+          
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <h5>In This Article</h5>
+              <div></div>
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <div class="pull-left">
+              
+              <span>Generated by <strong>DocFX</strong></span>
+            </div>
+            <div class="toggle-mode pull-right visible-sm visible-xs">
+              <div class="icon">
+                <i aria-hidden="true">☀</i>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="switch-style-m">
+                <span class="slider round"></span>
+              </label>
+              <div class="icon">
+                <i aria-hidden="true">☾</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript" src="../styles/toggle-theme.js"></script>
+      </footer>    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
