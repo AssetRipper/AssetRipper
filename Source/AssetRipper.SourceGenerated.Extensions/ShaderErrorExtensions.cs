@@ -7,7 +7,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 	{
 		public static BuildTarget GetCompilerPlatform(this IShaderError error)
 		{
-			return (BuildTarget)error.CompilerPlatform;
+			return (BuildTarget)(uint)error.CompilerPlatform;
 		}
 	}
 }
