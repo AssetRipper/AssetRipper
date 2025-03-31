@@ -71,6 +71,7 @@ public class ExportHandler
 		{
 			yield return new NullableRemovalProcessor();
 		}
+		yield return new RemoveAssemblyKeyFileAttributeProcessor();
 		yield return new SceneDefinitionProcessor();
 		yield return new MainAssetProcessor();
 		yield return new AnimatorControllerProcessor();
