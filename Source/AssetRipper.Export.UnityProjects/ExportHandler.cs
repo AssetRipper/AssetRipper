@@ -66,6 +66,7 @@ public class ExportHandler
 		{
 			yield return new MethodStubbingProcessor();
 		}
+		yield return new NullRefReturnProcessor(Settings.ImportSettings.ScriptContentLevel);
 		yield return new UnmanagedConstraintRecoveryProcessor();
 		if (Settings.ProcessingSettings.RemoveNullableAttributes)
 		{
