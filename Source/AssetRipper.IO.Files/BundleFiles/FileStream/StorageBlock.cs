@@ -32,11 +32,11 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream
 		{
 			get
 			{
-				return Flags.GetCompression();
+				return Flags.CompressionType;
 			}
 			private set
 			{
-				Flags = (Flags & ~StorageBlockFlags.CompressionTypeMask) | (StorageBlockFlags.CompressionTypeMask & (StorageBlockFlags)value);
+				Flags = Flags.WithCompressionType(value);
 			}
 		}
 	}
