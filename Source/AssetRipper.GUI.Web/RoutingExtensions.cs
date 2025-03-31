@@ -53,15 +53,22 @@ internal static class RoutingExtensions
 	{
 		return endpoints.MapGet(path, async (context) =>
 		{
-			string fileName = Path.GetFileName(path);
-			byte[] data = await StaticContentLoader.LoadRemote(path, source, integrity);
-			if (data.Length == 0)
+			try
 			{
-				await Results.NotFound().ExecuteAsync(context);
+				string fileName = Path.GetFileName(path);
+				byte[] data = await StaticContentLoader.LoadRemote(path, source, integrity);
+				if (data.Length == 0)
+				{
+					await Results.NotFound().ExecuteAsync(context);
+				}
+				else
+				{
+					await Results.Bytes(data, contentType, fileName).ExecuteAsync(context);
+				}
 			}
-			else
+			catch (Exception ex)
 			{
-				await Results.Bytes(data, contentType, fileName).ExecuteAsync(context);
+				await Results.InternalServerError(ex.ToString()).ExecuteAsync(context);
 			}
 		}).Produces<byte[]>(StatusCodes.Status200OK, contentType);
 	}
