@@ -363,10 +363,17 @@ namespace AssetRipper.Export.Modules.Textures
 
 				//BC
 				case TextureFormat.BC4:
+					Bc4.Decompress(inputSpan, width, height, outputSpan);
+					return true;
 				case TextureFormat.BC5:
+					Bc5.Decompress(inputSpan, width, height, outputSpan);
+					return true;
 				case TextureFormat.BC6H:
+					Bc6h.Decompress(inputSpan, width, height, false, outputSpan);
+					return true;
 				case TextureFormat.BC7:
-					return DecodeBC(inputSpan, textureFormat, width, height, outputSpan);
+					Bc7.Decompress(inputSpan, width, height, outputSpan);
+					return true;
 
 				//ETC
 				case TextureFormat.ETC_RGB4:
@@ -541,53 +548,6 @@ namespace AssetRipper.Export.Modules.Textures
 
 				default:
 					Logger.Log(LogType.Error, LogCategory.Export, $"Unsupported texture format '{textureFormat}'");
-					return false;
-			}
-		}
-
-		private static bool DecodeBC(ReadOnlySpan<byte> inputData, TextureFormat textureFormat, int width, int height, Span<byte> outputData)
-		{
-			if (width % 4 != 0 || height % 4 != 0) //Managed code doesn't currently handle partial block sizes well.
-			{
-				return NativeDecodeBC(inputData, textureFormat, width, height, outputData);
-			}
-			else
-			{
-				return ManagedDecodeBC(inputData, textureFormat, width, height, outputData);
-			}
-		}
-
-		private static bool NativeDecodeBC(ReadOnlySpan<byte> inputData, TextureFormat textureFormat, int width, int height, Span<byte> outputData)
-		{
-			Logger.Info(LogCategory.Export, $"Performing alternate decoding for {textureFormat}");
-
-			return textureFormat switch
-			{
-				TextureFormat.BC4 => Texture2DDecoder.TextureDecoder.DecodeBC4(inputData.ToArray(), width, height, outputData),
-				TextureFormat.BC5 => Texture2DDecoder.TextureDecoder.DecodeBC5(inputData.ToArray(), width, height, outputData),
-				TextureFormat.BC6H => Texture2DDecoder.TextureDecoder.DecodeBC6(inputData.ToArray(), width, height, outputData),
-				TextureFormat.BC7 => Texture2DDecoder.TextureDecoder.DecodeBC7(inputData.ToArray(), width, height, outputData),
-				_ => false,
-			};
-		}
-
-		private static bool ManagedDecodeBC(ReadOnlySpan<byte> inputData, TextureFormat textureFormat, int width, int height, Span<byte> outputData)
-		{
-			switch (textureFormat)
-			{
-				case TextureFormat.BC4:
-					Bc4.Decompress(inputData, width, height, outputData);
-					return true;
-				case TextureFormat.BC5:
-					Bc5.Decompress(inputData, width, height, outputData);
-					return true;
-				case TextureFormat.BC6H:
-					Bc6h.Decompress(inputData, width, height, false, outputData);
-					return true;
-				case TextureFormat.BC7:
-					Bc7.Decompress(inputData, width, height, outputData);
-					return true;
-				default:
 					return false;
 			}
 		}
