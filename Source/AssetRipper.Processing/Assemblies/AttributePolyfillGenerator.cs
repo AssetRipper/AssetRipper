@@ -1,13 +1,8 @@
-﻿/*using AsmResolver.DotNet;
+﻿using AsmResolver.DotNet;
 using AsmResolver.DotNet.Cloning;
 using AsmResolver.DotNet.Signatures;
 using AssetRipper.CIL;
-using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly.Managers;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.Emit;
-using System.Text;
 
 namespace AssetRipper.Processing.Assemblies;
 
@@ -30,47 +25,17 @@ public sealed class AttributePolyfillGenerator : IAssetProcessor
 			return;
 		}
 
-		List<SyntaxTree> syntaxTrees = [];
+		manager.ClearStreamCache();
 
-		foreach (AttributePolyfill polyfill in AttributePolyfill.GetPolyfills())
+		ModuleDefinition polyfillModule = EmbeddedAssembly.Load();
+
+		MemberCloner cloner = new(mscorlib, (context) => new CustomCloneReferenceImporter(context));
+		cloner.Include(polyfillModule.TopLevelTypes.Where(t => !mscorlib.HasTopLevelType(t.Namespace, t.Name)));
+
+		MemberCloneResult cloneResult = cloner.Clone();
+		foreach (TypeDefinition type in cloneResult.ClonedTopLevelTypes)
 		{
-			if (!mscorlib.HasTopLevelType(polyfill.Namespace, polyfill.Name))
-			{
-				AddCode(syntaxTrees, polyfill.Code);
-			}
-		}
-
-		if (syntaxTrees.Count == 0)
-		{
-			return;
-		}
-
-		MetadataReference mscorlibMetadataReference = CreateMetadataReference(manager, mscorlib.Assembly!);
-
-		using MemoryStream polyfillOutputStream = new();
-
-		// Emit compiled assembly into MemoryStream
-		CSharpCompilation compilation = CreateCompilation(syntaxTrees, [mscorlibMetadataReference]);
-		EmitResult result = compilation.Emit(polyfillOutputStream);
-
-		if (!result.Success)
-		{
-			Logger.Error(LogCategory.Processing, "Polyfill compilation failed!");
-		}
-		else
-		{
-			ModuleDefinition polyfillModule = ModuleDefinition.FromBytes(polyfillOutputStream.ToArray());
-
-			MemberCloner cloner = new(mscorlib, (context) => new CustomCloneReferenceImporter(context));
-			cloner.Include(polyfillModule.GetAllTypes().Where(t => t.Namespace is not null));
-
-			MemberCloneResult cloneResult = cloner.Clone();
-			foreach (TypeDefinition type in cloneResult.ClonedTopLevelTypes)
-			{
-				mscorlib.TopLevelTypes.Add(type);
-			}
-
-			manager.ClearStreamCache();
+			mscorlib.TopLevelTypes.Add(type);
 		}
 	}
 
@@ -84,8 +49,6 @@ public sealed class AttributePolyfillGenerator : IAssetProcessor
 		{
 			if (type.DeclaringType is null && TargetModule.TryGetTopLevelType(type.Namespace, type.Name, out TypeDefinition? typeDefinition))
 			{
-				// This shouldn't happen. My original intention was in regards to Microsoft.CodeAnalysis.EmbeddedAttribute, but it doesn't seem to be present.
-				Logger.Warning(LogCategory.Processing, $"Type {type.FullName} already exists in the target module");
 				return typeDefinition;
 			}
 			return base.ImportType(type);
@@ -102,38 +65,4 @@ public sealed class AttributePolyfillGenerator : IAssetProcessor
 			return base.ImportType(type);
 		}
 	}
-
-	private static void AddCode(List<SyntaxTree> syntaxTrees, string code)
-	{
-		SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(code, encoding: Encoding.UTF8);
-		syntaxTrees.Add(syntaxTree);
-	}
-
-	private static CSharpCompilation CreateCompilation(IEnumerable<SyntaxTree> syntaxTrees, IEnumerable<MetadataReference> references)
-	{
-		// Define compilation options
-		CSharpCompilationOptions compilationOptions = new(OutputKind.DynamicallyLinkedLibrary);
-
-		// Create the compilation
-		CSharpCompilation compilation = CSharpCompilation.Create(
-			"System.Polyfill",
-			syntaxTrees,
-			references,
-			compilationOptions
-		);
-		return compilation;
-	}
-
-	private static MetadataReference CreateMetadataReference(IAssemblyManager manager, AssemblyDefinition assembly)
-	{
-		Stream stream = manager.GetStreamForAssembly(assembly);
-		stream.Position = 0;
-
-		// We need to copy the stream to a memory stream to prevent it from being disposed
-		MemoryStream memoryStream = new();
-		stream.CopyTo(memoryStream);
-		memoryStream.Position = 0;
-
-		return MetadataReference.CreateFromStream(memoryStream, filePath: $"{assembly.Name}.dll");
-	}
-}*/
+}

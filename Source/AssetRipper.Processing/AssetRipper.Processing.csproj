@@ -4,6 +4,7 @@
 		<IsTrimmable>true</IsTrimmable>
 		<OutputPath>..\0Bins\Other\AssetRipper.Processing\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.Processing\$(Configuration)\</IntermediateOutputPath>
+		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -12,6 +13,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\AssetRipper.Import\AssetRipper.Import.csproj" />
+		<ProjectReference Include="..\AssetRipper.Processing.SourceGenerator\AssetRipper.Processing.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
 	</ItemGroup>
 
 </Project>

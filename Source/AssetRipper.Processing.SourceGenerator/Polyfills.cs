@@ -1,8 +1,227 @@
-﻿namespace AssetRipper.Processing.Assemblies;
+﻿namespace AssetRipper.Processing.SourceGenerator;
 
-internal readonly record struct AttributePolyfill(string Namespace, string Name, string Code)
+/// <summary>
+/// Contains source files for the polyfill assembly.
+/// Some are hand-written, and others are copied from the .NET runtime.
+/// </summary>
+/// <remarks>
+/// <seealso href="https://source.dot.net/"/>
+/// </remarks>
+internal static class Polyfills
 {
-	private const string AttributeCode = """
+	public static IEnumerable<string> Get() =>
+	[
+		Object,
+		ValueType,
+		Enum,
+		Type,
+		SByte,
+		Byte,
+		Int16,
+		UInt16,
+		Int32,
+		UInt32,
+		Int64,
+		UInt64,
+		Single,
+		Double,
+		Void,
+		Boolean,
+		Char,
+		String,
+		Attribute,
+		AttributeTargets,
+		AttributeUsageAttribute,
+		FlagsAttribute,
+		AssemblyVersionAttribute,
+		MethodImplAttributes,
+		MethodCodeType,
+		MethodImplOptions,
+		MethodImplAttribute,
+		TypeForwardedToAttribute,
+		IsUnmanagedAttribute,
+	];
+
+	private const string Object = """
+		namespace System
+		{
+			public class Object
+			{
+				public virtual string? ToString() => null;
+				public virtual bool Equals(object? obj) => false;
+				public virtual int GetHashCode() => 0;
+				public Type GetType() => null;
+			}
+		}
+		""";
+
+	private const string ValueType = """
+		namespace System
+		{
+			public abstract class ValueType
+			{
+			}
+		}
+		""";
+
+	private const string Enum = """
+		namespace System
+		{
+			public abstract class Enum : ValueType
+			{
+			}
+		}
+		""";
+
+	private const string Type = """
+		namespace System
+		{
+			public class Type
+			{
+				//public static Type GetTypeFromHandle(RuntimeTypeHandle handle) => null;
+			}
+		}
+		""";
+
+	private const string SByte = """
+		namespace System
+		{
+			public readonly struct SByte
+			{
+				private readonly sbyte m_value;
+			}
+		}
+		""";
+
+	private const string Byte = """
+		namespace System
+		{
+			public readonly struct Byte
+			{
+				private readonly byte m_value;
+			}
+		}
+		""";
+
+	private const string Int16 = """
+		namespace System
+		{
+			public readonly struct Int16
+			{
+				private readonly short m_value;
+			}
+		}
+		""";
+
+	private const string UInt16 = """
+		namespace System
+		{
+			public readonly struct UInt16
+			{
+				private readonly ushort m_value;
+			}
+		}
+		""";
+
+	private const string Int32 = """
+		namespace System
+		{
+			public readonly struct Int32
+			{
+				private readonly int m_value;
+			}
+		}
+		""";
+
+	private const string UInt32 = """
+		namespace System
+		{
+			public readonly struct UInt32
+			{
+				private readonly int m_value;
+			}
+		}
+		""";
+
+	private const string Int64 = """
+		namespace System
+		{
+			public readonly struct Int64
+			{
+				private readonly long m_value;
+			}
+		}
+		""";
+
+	private const string UInt64 = """
+		namespace System
+		{
+			public readonly struct UInt64
+			{
+				private readonly ulong m_value;
+			}
+		}
+		""";
+
+	private const string Single = """
+		namespace System
+		{
+			public readonly struct Single
+			{
+				private readonly float m_value;
+			}
+		}
+		""";
+
+	private const string Double = """
+		namespace System
+		{
+			public readonly struct Double
+			{
+				private readonly double m_value;
+			}
+		}
+		""";
+
+	private const string Void = """
+		namespace System
+		{
+			public readonly struct Void
+			{
+			}
+		}
+		""";
+
+	private const string Boolean = """
+		namespace System
+		{
+			public readonly struct Boolean
+			{
+				private readonly bool m_value;
+			}
+		}
+		""";
+
+	private const string Char = """
+		namespace System
+		{
+			public readonly struct Char
+			{
+				private readonly char m_value;
+			}
+		}
+		""";
+
+	private const string String = """
+		namespace System
+		{
+			public sealed class String
+			{
+			}
+		}
+		""";
+
+	private const string Attribute = """
 		namespace System
 		{
 			public abstract class Attribute
@@ -10,9 +229,8 @@ internal readonly record struct AttributePolyfill(string Namespace, string Name,
 			}
 		}
 		""";
-	public static AttributePolyfill Attribute => new("System", "Attribute", AttributeCode);
 
-	private const string AttributeTargetsCode = """
+	private const string AttributeTargets = """
 		// Licensed to the .NET Foundation under one or more agreements.
 		// The .NET Foundation licenses this file to you under the MIT license.
 
@@ -48,9 +266,8 @@ internal readonly record struct AttributePolyfill(string Namespace, string Name,
 			}
 		}
 		""";
-	public static AttributePolyfill AttributeTargets => new("System", "AttributeTargets", AttributeTargetsCode);
 
-	private const string AttributeUsageAttributeCode = """
+	private const string AttributeUsageAttribute = """
 		// Licensed to the .NET Foundation under one or more agreements.
 		// The .NET Foundation licenses this file to you under the MIT license.
 
@@ -97,9 +314,31 @@ internal readonly record struct AttributePolyfill(string Namespace, string Name,
 			}
 		}
 		""";
-	public static AttributePolyfill AttributeUsageAttribute => new("System", "AttributeUsageAttribute", AttributeUsageAttributeCode);
 
-	private const string AssemblyVersionAttributeCode = """
+	private const string FlagsAttribute = """
+		// Licensed to the .NET Foundation under one or more agreements.
+		// The .NET Foundation licenses this file to you under the MIT license.
+
+		////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////
+
+		namespace System
+		{
+			// Custom attribute to indicate that the enum
+			// should be treated as a bitfield (or set of flags).
+			// An IDE may use this information to provide a richer
+			// development experience.
+			[AttributeUsage(AttributeTargets.Enum, Inherited = false)]
+			public class FlagsAttribute : Attribute
+			{
+				public FlagsAttribute()
+				{
+				}
+			}
+		}
+		""";
+
+	private const string AssemblyVersionAttribute = """
 		// Licensed to the .NET Foundation under one or more agreements.
 		// The .NET Foundation licenses this file to you under the MIT license.
 
@@ -117,9 +356,8 @@ internal readonly record struct AttributePolyfill(string Namespace, string Name,
 			}
 		}
 		""";
-	public static AttributePolyfill AssemblyVersionAttribute => new("System.Reflection", "AssemblyVersionAttribute", AssemblyVersionAttributeCode);
 
-	private const string MethodImplAttributesCode = """
+	private const string MethodImplAttributes = """
 		// Licensed to the .NET Foundation under one or more agreements.
 		// The .NET Foundation licenses this file to you under the MIT license.
 
@@ -158,9 +396,8 @@ internal readonly record struct AttributePolyfill(string Namespace, string Name,
 			}
 		}
 		""";
-	public static AttributePolyfill MethodImplAttributes => new("System.Reflection", "MethodImplAttributes", MethodImplAttributesCode);
 
-	private const string MethodCodeTypeCode = """
+	private const string MethodCodeType = """
 		// Licensed to the .NET Foundation under one or more agreements.
 		// The .NET Foundation licenses this file to you under the MIT license.
 
@@ -177,9 +414,8 @@ internal readonly record struct AttributePolyfill(string Namespace, string Name,
 			}
 		}
 		""";
-	public static AttributePolyfill MethodCodeType => new("System.Runtime.CompilerServices", "MethodCodeType", MethodCodeTypeCode);
 
-	private const string MethodImplOptionsCode = """
+	private const string MethodImplOptions = """
 		// Licensed to the .NET Foundation under one or more agreements.
 		// The .NET Foundation licenses this file to you under the MIT license.
 
@@ -202,9 +438,8 @@ internal readonly record struct AttributePolyfill(string Namespace, string Name,
 			}
 		}
 		""";
-	public static AttributePolyfill MethodImplOptions => new("System.Runtime.CompilerServices", "MethodImplOptions", MethodImplOptionsCode);
 
-	private const string MethodImplAttributeCode = """
+	private const string MethodImplAttribute = """
 		// Licensed to the .NET Foundation under one or more agreements.
 		// The .NET Foundation licenses this file to you under the MIT license.
 
@@ -234,9 +469,8 @@ internal readonly record struct AttributePolyfill(string Namespace, string Name,
 			}
 		}
 		""";
-	public static AttributePolyfill MethodImplAttribute => new("System.Runtime.CompilerServices", "MethodImplAttribute", MethodImplAttributeCode);
 
-	private const string TypeForwardedToAttributeCode = """
+	private const string TypeForwardedToAttribute = """
 		// Licensed to the .NET Foundation under one or more agreements.
 		// The .NET Foundation licenses this file to you under the MIT license.
 
@@ -254,13 +488,12 @@ internal readonly record struct AttributePolyfill(string Namespace, string Name,
 			}
 		}
 		""";
-	public static AttributePolyfill TypeForwardedToAttribute => new("System.Runtime.CompilerServices", "TypeForwardedToAttribute", TypeForwardedToAttributeCode);
 
 	/// <summary>
 	/// Modified version of the IsUnmanagedAttribute from the .NET runtime.
 	/// References to System.ComponentModel have been removed because they're in System.dll instead of mscorlib.
 	/// </summary>
-	private const string IsUnmanagedAttributeCode = """
+	private const string IsUnmanagedAttribute = """
 		// Licensed to the .NET Foundation under one or more agreements.
 		// The .NET Foundation licenses this file to you under the MIT license.
 
@@ -283,19 +516,4 @@ internal readonly record struct AttributePolyfill(string Namespace, string Name,
 			}
 		}
 		""";
-	public static AttributePolyfill IsUnmanagedAttribute => new("System.Runtime.CompilerServices", "IsUnmanagedAttribute", IsUnmanagedAttributeCode);
-
-	public static IEnumerable<AttributePolyfill> GetPolyfills() =>
-	[
-		Attribute,
-		AttributeTargets,
-		AttributeUsageAttribute,
-		AssemblyVersionAttribute,
-		MethodImplAttributes,
-		MethodCodeType,
-		MethodImplOptions,
-		MethodImplAttribute,
-		TypeForwardedToAttribute,
-		IsUnmanagedAttribute,
-	];
 }
