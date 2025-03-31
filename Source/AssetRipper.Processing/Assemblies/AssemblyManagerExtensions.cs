@@ -9,4 +9,9 @@ internal static class AssemblyManagerExtensions
 	{
 		return manager.GetAssemblies().SelectMany(a => a.Modules).SelectMany(m => m.GetAllTypes());
 	}
+
+	public static IEnumerable<MethodDefinition> GetAllMethods(this IAssemblyManager manager)
+	{
+		return manager.GetAllTypes().SelectMany(t => t.Methods);
+	}
 }
