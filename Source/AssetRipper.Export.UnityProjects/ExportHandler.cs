@@ -66,6 +66,10 @@ public class ExportHandler
 		{
 			yield return new MethodStubbingProcessor();
 		}
+		if (Settings.ProcessingSettings.RemoveNullableAttributes)
+		{
+			yield return new NullableRemovalProcessor();
+		}
 		yield return new SceneDefinitionProcessor();
 		yield return new MainAssetProcessor();
 		yield return new AnimatorControllerProcessor();

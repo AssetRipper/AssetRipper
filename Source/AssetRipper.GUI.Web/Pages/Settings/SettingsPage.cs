@@ -42,20 +42,13 @@ public sealed partial class SettingsPage : DefaultPage
 								{
 									WriteCheckBoxForIgnoreStreamingAssets(writer, Localization.SkipStreamingAssets);
 								}
-
-								if (GameFileLoader.Premium)
+								using (new Div(writer).WithClass("col").End())
 								{
-									using (new Div(writer).WithClass("col").End())
-									{
-										WriteCheckBoxForEnableStaticMeshSeparation(writer, Localization.EnableStaticMeshSeparation);
-									}
+									WriteCheckBoxForEnableStaticMeshSeparation(writer, Localization.EnableStaticMeshSeparation, !GameFileLoader.Premium);
 								}
-								else
+								using (new Div(writer).WithClass("col").End())
 								{
-									using (new Div(writer).WithClass("col").End())
-									{
-										WriteCheckBoxForEnableStaticMeshSeparation(writer, Localization.EnableStaticMeshSeparation, !GameFileLoader.Premium);
-									}
+									WriteCheckBoxForRemoveNullableAttributes(writer, Localization.RemoveNullableAttributes);
 								}
 							}
 
@@ -69,12 +62,10 @@ public sealed partial class SettingsPage : DefaultPage
 
 							using (new Div(writer).WithClass("row").End())
 							{
-
 								using (new Div(writer).WithClass("col").End())
 								{
 									WriteDropDownForBundledAssetsExportMode(writer);
 								}
-
 								using (new Div(writer).WithClass("col").End())
 								{
 									WriteDropDownForScriptContentLevel(writer);
@@ -94,20 +85,9 @@ public sealed partial class SettingsPage : DefaultPage
 								{
 									WriteCheckBoxForEnablePrefabOutlining(writer, Localization.EnablePrefabOutlining);
 								}
-
-								if (GameFileLoader.Premium)
+								using (new Div(writer).WithClass("col").End())
 								{
-									using (new Div(writer).WithClass("col").End())
-									{
-										WriteCheckBoxForEnableAssetDeduplication(writer, Localization.EnableAssetDeduplication);
-									}
-								}
-								else
-								{
-									using (new Div(writer).WithClass("col").End())
-									{
-										WriteCheckBoxForEnableAssetDeduplication(writer, Localization.EnableAssetDeduplication, !GameFileLoader.Premium);
-									}
+									WriteCheckBoxForEnableAssetDeduplication(writer, Localization.EnableAssetDeduplication, !GameFileLoader.Premium);
 								}
 							}
 
@@ -133,12 +113,10 @@ public sealed partial class SettingsPage : DefaultPage
 								{
 									WriteDropDownForAudioExportFormat(writer);
 								}
-
 								using (new Div(writer).WithClass("col").End())
 								{
 									WriteDropDownForImageExportFormat(writer);
 								}
-
 								using (new Div(writer).WithClass("col").End())
 								{
 									WriteDropDownForLightmapTextureExportFormat(writer);
