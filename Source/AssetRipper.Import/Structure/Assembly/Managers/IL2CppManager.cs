@@ -36,6 +36,7 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 		public static List<Cpp2IlProcessingLayer> DefaultProcessingLayers { get; } =
 		[
 			new AttributeAnalysisProcessingLayer(),
+			new MethodOverrideNameFixer(),
 		];
 
 		public static AsmResolverDllOutputFormatDefault DefaultOutputFormat { get; } = new();
