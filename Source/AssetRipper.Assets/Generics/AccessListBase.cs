@@ -52,6 +52,12 @@ namespace AssetRipper.Assets.Generics
 		/// <inheritdoc/>
 		public abstract void RemoveAt(int index);
 
+		/// <inheritdoc cref="IList{T}.RemoveAt(int)"/>
+		public void RemoveAt(Index index)
+		{
+			RemoveAt(index.GetOffset(Count));
+		}
+
 		/// <inheritdoc/>
 		public IEnumerator<T> GetEnumerator()
 		{
