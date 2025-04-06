@@ -29,6 +29,8 @@ namespace AssetRipper.Processing.AnimatorControllers
 		// https://github.com/ds5678/Binoculars/blob/d6702ed3a1db39b1a2788956ff195b2590c3d08b/Unity/Assets/Models/binoculars_animator.controller#L106
 		private static Utf8String BlendTreeName { get; } = new Utf8String("Blend Tree");
 
+		private static Utf8String AnimatorStateName { get; } = new Utf8String("New State");
+
 		private static IMotion? CreateMotion(ProcessedAssetCollection virtualFile, IAnimatorController controller, IStateConstant stateConstant, int nodeIndex)
 		{
 			if (stateConstant.BlendTreeConstantArray.Count == 0)
@@ -222,10 +224,69 @@ namespace AssetRipper.Processing.AnimatorControllers
 			}
 
 			animatorState.Tag = tos[stateConstant.TagID];
-			animatorState.SpeedParameter = tos[stateConstant.SpeedParamID];
-			animatorState.MirrorParameter = tos[stateConstant.MirrorParamID];
-			animatorState.CycleOffsetParameter = tos[stateConstant.CycleOffsetParamID];
-			animatorState.TimeParameter = tos[stateConstant.TimeParamID];
+			if (animatorState.Has_SpeedParameter())
+			{
+				animatorState.SpeedParameter = tos[stateConstant.SpeedParamID];
+			}
+			if (animatorState.Has_MirrorParameter())
+			{
+				animatorState.MirrorParameter = tos[stateConstant.MirrorParamID];
+			}
+			if (animatorState.Has_CycleOffsetParameter())
+			{
+				animatorState.CycleOffsetParameter = tos[stateConstant.CycleOffsetParamID];
+			}
+			if (animatorState.Has_TimeParameter())
+			{
+				animatorState.TimeParameter = tos[stateConstant.TimeParamID];
+			}
+
+			return animatorState;
+		}
+
+		public static IAnimatorState CreateDefaultAnimatorState(ProcessedAssetCollection virtualFile)
+		{
+			IAnimatorState animatorState = virtualFile.CreateAsset((int)ClassIDType.AnimatorState, AnimatorState.Create);
+			animatorState.HideFlagsE = HideFlags.HideInHierarchy;
+
+			animatorState.Name = AnimatorStateName;
+			animatorState.Speed = 1;
+			animatorState.CycleOffset = 0;
+
+			animatorState.IKOnFeet = false;
+			animatorState.WriteDefaultValues = true;
+			animatorState.Mirror = false;
+			animatorState.SpeedParameterActive = false;
+			animatorState.MirrorParameterActive = false;
+			animatorState.CycleOffsetParameterActive = false;
+			animatorState.TimeParameterActive = false;
+
+			if (animatorState.Has_Motion())
+			{
+				animatorState.MotionP = null;
+			}
+			else
+			{
+				animatorState.MotionsP.Add(null);
+			}
+
+			animatorState.Tag = Utf8String.Empty;
+			if (animatorState.Has_SpeedParameter())
+			{
+				animatorState.SpeedParameter = Utf8String.Empty;
+			}
+			if (animatorState.Has_MirrorParameter())
+			{
+				animatorState.MirrorParameter = Utf8String.Empty;
+			}
+			if (animatorState.Has_CycleOffsetParameter())
+			{
+				animatorState.CycleOffsetParameter = Utf8String.Empty;
+			}
+			if (animatorState.Has_TimeParameter())
+			{
+				animatorState.TimeParameter = Utf8String.Empty;
+			}
 
 			return animatorState;
 		}

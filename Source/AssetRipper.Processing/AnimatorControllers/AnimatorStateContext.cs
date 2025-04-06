@@ -130,7 +130,7 @@ internal sealed class AnimatorStateContext
 
 	public bool TryGetStateMachinePath(uint fullPathID, out string fullPath)
 	{
-		if (fullPathID != 0 && stateMachinePathNamesAndIDs.TryGetValue(fullPathID, out string? pathName))
+		if (stateMachinePathNamesAndIDs.TryGetValue(fullPathID, out string? pathName))
 		{
 			fullPath = pathName;
 			return true;
