@@ -224,22 +224,10 @@ namespace AssetRipper.Processing.AnimatorControllers
 			}
 
 			animatorState.Tag = tos[stateConstant.TagID];
-			if (animatorState.Has_SpeedParameter())
-			{
-				animatorState.SpeedParameter = tos[stateConstant.SpeedParamID];
-			}
-			if (animatorState.Has_MirrorParameter())
-			{
-				animatorState.MirrorParameter = tos[stateConstant.MirrorParamID];
-			}
-			if (animatorState.Has_CycleOffsetParameter())
-			{
-				animatorState.CycleOffsetParameter = tos[stateConstant.CycleOffsetParamID];
-			}
-			if (animatorState.Has_TimeParameter())
-			{
-				animatorState.TimeParameter = tos[stateConstant.TimeParamID];
-			}
+			animatorState.SpeedParameter = tos[stateConstant.SpeedParamID];
+			animatorState.MirrorParameter = tos[stateConstant.MirrorParamID];
+			animatorState.CycleOffsetParameter = tos[stateConstant.CycleOffsetParamID];
+			animatorState.TimeParameter = tos[stateConstant.TimeParamID];
 
 			return animatorState;
 		}
@@ -251,41 +239,11 @@ namespace AssetRipper.Processing.AnimatorControllers
 
 			animatorState.Name = AnimatorStateName;
 			animatorState.Speed = 1;
-			animatorState.CycleOffset = 0;
-
-			animatorState.IKOnFeet = false;
 			animatorState.WriteDefaultValues = true;
-			animatorState.Mirror = false;
-			animatorState.SpeedParameterActive = false;
-			animatorState.MirrorParameterActive = false;
-			animatorState.CycleOffsetParameterActive = false;
-			animatorState.TimeParameterActive = false;
 
-			if (animatorState.Has_Motion())
-			{
-				animatorState.MotionP = null;
-			}
-			else
+			if (!animatorState.Has_Motion())
 			{
 				animatorState.MotionsP.Add(null);
-			}
-
-			animatorState.Tag = Utf8String.Empty;
-			if (animatorState.Has_SpeedParameter())
-			{
-				animatorState.SpeedParameter = Utf8String.Empty;
-			}
-			if (animatorState.Has_MirrorParameter())
-			{
-				animatorState.MirrorParameter = Utf8String.Empty;
-			}
-			if (animatorState.Has_CycleOffsetParameter())
-			{
-				animatorState.CycleOffsetParameter = Utf8String.Empty;
-			}
-			if (animatorState.Has_TimeParameter())
-			{
-				animatorState.TimeParameter = Utf8String.Empty;
 			}
 
 			return animatorState;
