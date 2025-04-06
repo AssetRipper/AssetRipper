@@ -30,6 +30,11 @@ namespace AssetRipper.SourceGenerated.Extensions
 			return tierCount;
 		}
 
+		public static int GetSubProgramCount(this ISerializedProgram program)
+		{
+			return program.Has_PlayerSubPrograms() ? program.PlayerSubPrograms.Count : program.SubPrograms.Count;
+		}
+
 		public static IReadOnlyList<ISerializedPlayerSubProgram> GetPlayerSubPrograms(this ISerializedProgram program)
 		{
 			if (program.Has_PlayerSubPrograms())
