@@ -328,9 +328,10 @@ internal sealed class AnimatorStateMachineContext
 				// set Child States with their Transitions
 				for (int i = 0; i < IndexedStateMachines.Length; i++)
 				{
-					int childStateCount = StateContext.StateIndicesForStateMachine(IndexedStateMachines[i].Name).Count();
-					IndexedStateMachines[i].StateMachine.SetChildStateCapacity(childStateCount);
-					foreach (int stateIndex in StateContext.StateIndicesForStateMachine(IndexedStateMachines[i].Name))
+					StateMachineData stateMachineData = IndexedStateMachines[i];
+					int childStateCount = StateContext.StateIndicesForStateMachine(stateMachineData.FullPathID).Count();
+					stateMachineData.StateMachine.SetChildStateCapacity(childStateCount);
+					foreach (int stateIndex in StateContext.StateIndicesForStateMachine(stateMachineData.FullPathID))
 					{
 						AddStateAndTransitionsToStateMachine(i, stateIndex);
 					}
@@ -509,12 +510,10 @@ internal sealed class AnimatorStateMachineContext
 		if (!StateContext.HasStates())
 			return;
 		
-		for (int i = 0; i < IndexedStateMachines.Length; i++)
+		foreach (StateMachineData stateMachineData in IndexedStateMachines)
 		{
-			uint stateMachineFullPathID = IndexedStateMachines[i].FullPathID;
-			if (StateContext.TryGetStateMachinePath(stateMachineFullPathID, out string stateMachineFullPath))
+			if (StateContext.TryGetStateMachinePath(stateMachineData.FullPathID, out string stateMachineFullPath))
 			{
-				StateMachineData stateMachine = IndexedStateMachines[i];
 				// periods are used for concatenating State and StateMachine Names to get their paths.
 				// Unity Editor doesn't allow periods in State and StateMachine Names.
 				int pathDelimiterPos = stateMachineFullPath.LastIndexOf('.');
@@ -524,14 +523,14 @@ internal sealed class AnimatorStateMachineContext
 					if (StateContext.TryGetStateMachinePathID(parentStateMachineFullPath, out uint parentStateMachineFullPathID)) // this shouldn't fail because the FullPath was already found 
 					{
 						// the child StateMachine's PathID will match its parent StateMachine's FullPathID
-						stateMachine.ParentFullPathID = parentStateMachineFullPathID; // this links the i'th stateMachine with its true parent
-						stateMachine.Name = stateMachineFullPath[(pathDelimiterPos + 1)..]; // can set its true Name
+						stateMachineData.ParentFullPathID = parentStateMachineFullPathID; // this links the i'th stateMachine with its true parent
+						stateMachineData.Name = stateMachineFullPath[(pathDelimiterPos + 1)..]; // can set its true Name
 					}
 				}
 				else
 				{
 					// if FullPath doesn't have delimiter '.' , it should be Root StateMachine
-					stateMachine.Name = stateMachineFullPath;
+					stateMachineData.Name = stateMachineFullPath;
 				}
 			}
 			else
@@ -554,11 +553,12 @@ internal sealed class AnimatorStateMachineContext
 		//   to apply extra analysis for locating Unknown-FullPath StateMachines
 		for (int i = 0; i < IndexedStateMachines.Length; i++)
 		{
-			if (IndexedStateMachines[i].Name.IsEmpty)
+			StateMachineData stateMachineData = IndexedStateMachines[i];
+			if (stateMachineData.Name.IsEmpty)
 				continue; // Unknown StateMachines don't contain States
-			uint fullPathID = IndexedStateMachines[i].FullPathID;
+			uint fullPathID = stateMachineData.FullPathID;
 			int childStateCount = StateContext.StateIndicesForStateMachine(fullPathID).Count();
-			IndexedStateMachines[i].StateMachine.SetChildStateCapacity(childStateCount);
+			stateMachineData.StateMachine.SetChildStateCapacity(childStateCount);
 			if (childStateCount == 0)
 				continue;
 			foreach (int stateIndex in StateContext.StateIndicesForStateMachine(fullPathID))
@@ -573,12 +573,11 @@ internal sealed class AnimatorStateMachineContext
 		for (int _stateMachineSourceIndex = 0; _stateMachineSourceIndex < IndexedStateMachines.Length; _stateMachineSourceIndex++)
 		{
 			int stateMachineSourceIndex = _stateMachineSourceIndex;
-			SelectorTransitionConstant[]? Transitions = doEntryTransitions ?
-				IndexedStateMachines[stateMachineSourceIndex].EntryTransitions : IndexedStateMachines[stateMachineSourceIndex].ExitTransitions;
+			StateMachineData stateMachineSource = IndexedStateMachines[stateMachineSourceIndex];
+			SelectorTransitionConstant[]? Transitions = doEntryTransitions ? stateMachineSource.EntryTransitions : stateMachineSource.ExitTransitions;
 			if (Transitions == null)
 				continue;
 
-			StateMachineData stateMachineSource = IndexedStateMachines[stateMachineSourceIndex];
 			if (stateMachineSource.Name == StateMachineFlagName)
 			{
 				// Flagged StateMachine has a set parent already, but that parent is Unknown-FullPath, so transfer the relations to parent
@@ -618,24 +617,24 @@ internal sealed class AnimatorStateMachineContext
 						case 1: // Unknown StateMachine Source goes to FullPath StateMachine Destination
 							if (doEntryTransitions)
 							{
-								TryAssignPossibleParent(stateMachineSourceIndex, IndexedStateMachines[stateMachineDestinationIndex].FullPathID);
+								TryAssignPossibleParent(stateMachineSourceIndex, stateMachineDestination.FullPathID);
 							}
 							else // due to the Exit Transition restrictions, will offer parent of Destination as possible parent for Source
 							{
 								if (stateMachineDestinationIndex != 0) // skip Root StateMachine, doesn't have parent!
-									TryAssignPossibleParent(stateMachineSourceIndex, IndexedStateMachines[stateMachineDestinationIndex].ParentFullPathID);
+									TryAssignPossibleParent(stateMachineSourceIndex, stateMachineDestination.ParentFullPathID);
 							}
 							break;
 
 						case 2: // FullPath StateMachine Source goes to Unknown StateMachine Destination
 							if (doEntryTransitions)
 							{
-								TryAssignPossibleParent(stateMachineDestinationIndex, IndexedStateMachines[stateMachineSourceIndex].FullPathID);
+								TryAssignPossibleParent(stateMachineDestinationIndex, stateMachineSource.FullPathID);
 							}
 							else // due to the Exit Transition restrictions, will offer parent of Source as possible parent for Destination
 							{
 								if (stateMachineSourceIndex != 0) // skip Root StateMachine, doesn't have parent!
-									TryAssignPossibleParent(stateMachineDestinationIndex, IndexedStateMachines[stateMachineSourceIndex].ParentFullPathID);
+									TryAssignPossibleParent(stateMachineDestinationIndex, stateMachineSource.ParentFullPathID);
 							}
 							break;
 
@@ -680,10 +679,10 @@ internal sealed class AnimatorStateMachineContext
 
 	private void CreateEntryTransitions()
 	{
-		for (int stateMachineIndex = 0; stateMachineIndex < IndexedStateMachines.Length; stateMachineIndex++)
+		foreach (StateMachineData stateMachineData in IndexedStateMachines)
 		{
-			IAnimatorStateMachine stateMachine = IndexedStateMachines[stateMachineIndex].StateMachine;
-			SelectorTransitionConstant[]? entryTransitions = IndexedStateMachines[stateMachineIndex].EntryTransitions;
+			IAnimatorStateMachine stateMachine = stateMachineData.StateMachine;
+			SelectorTransitionConstant[]? entryTransitions = stateMachineData.EntryTransitions;
 			if (entryTransitions == null)
 			{
 				continue;
@@ -745,16 +744,16 @@ internal sealed class AnimatorStateMachineContext
 	{
 		for (int childIndex = 1; childIndex < IndexedStateMachines.Length; childIndex++) // skipping 0 because its the Root StateMachine
 		{
-			IAnimatorStateMachine childStateMachine = IndexedStateMachines[childIndex].StateMachine;
-			uint parentStateMachineFullPathID = IndexedStateMachines[childIndex].ParentFullPathID;
+			StateMachineData childStateMachineData = IndexedStateMachines[childIndex];
+			IAnimatorStateMachine childStateMachine = childStateMachineData.StateMachine;
 			IAnimatorStateMachine parentStateMachine;
-			if (parentStateMachineFullPathID == 0) // Unknown StateMachines without possible parent are assigned to ExtraStateMachine
+			if (childStateMachineData.ParentFullPathID == 0) // Unknown StateMachines without possible parent are assigned to ExtraStateMachine
 			{
 				parentStateMachine = ExtraStateMachine!;
 			}
 			else
 			{
-				int parentIndex = GetStateMachineIndexForId(parentStateMachineFullPathID);
+				int parentIndex = GetStateMachineIndexForId(childStateMachineData.ParentFullPathID);
 				parentStateMachine = IndexedStateMachines[parentIndex].StateMachine;
 			}
 
@@ -771,7 +770,7 @@ internal sealed class AnimatorStateMachineContext
 			}
 
 			// add StateMachine Transitions (Transitions from Child are stored in Parent)
-			SelectorTransitionConstant[]? exitTransitions = IndexedStateMachines[childIndex].ExitTransitions;
+			SelectorTransitionConstant[]? exitTransitions = childStateMachineData.ExitTransitions;
 			if (exitTransitions != null)
 			{
 				// check if its the default exit transition, to not add it
@@ -991,14 +990,15 @@ internal sealed class AnimatorStateMachineContext
 			for (int i = listCount - 1; i >= 0; i--)
 			{
 				int stateMachineIndex = FlaggedOrUnknownStateMachineIndexes[i]; // StateMachine to get a FullPath
-				if (StateContext.TryGetStateMachinePath(IndexedStateMachines[stateMachineIndex].ParentFullPathID, out string parentFullPath)) // if its parent has FullPath...
+				StateMachineData stateMachineData = IndexedStateMachines[stateMachineIndex];
+				if (StateContext.TryGetStateMachinePath(stateMachineData.ParentFullPathID, out string parentFullPath)) // if its parent has FullPath...
 				{
 					// ...generate its own FullPath and Name
-					uint stateMachineFullPathID = IndexedStateMachines[stateMachineIndex].FullPathID;
+					uint stateMachineFullPathID = stateMachineData.FullPathID;
 					string newFullPath = GetReversedFullPath(parentFullPath, stateMachineFullPathID);
 					int pathDelimiterPos = newFullPath.LastIndexOf('.');
 					string newName = newFullPath[(pathDelimiterPos + 1)..]; // Name will be "EMPTY_" + something
-					IndexedStateMachines[stateMachineIndex].Name = newName;
+					stateMachineData.Name = newName;
 					StateContext.AddStateMachineFullPath(newFullPath, stateMachineFullPathID); // this "promotes" the Unknown StateMachine to be a FullPath StateMachine
 					FlaggedOrUnknownStateMachineIndexes.RemoveAt(i);
 					UnknownFullPaths--;
@@ -1011,11 +1011,11 @@ internal sealed class AnimatorStateMachineContext
 
 	private void RestrictUnknownStateMachinePossibleParents()
 	{
-		for (int _stateMachineSourceIndex = 0; _stateMachineSourceIndex < IndexedStateMachines.Length; _stateMachineSourceIndex++)
+		for (int stateMachineSourceIndex = 0; stateMachineSourceIndex < IndexedStateMachines.Length; stateMachineSourceIndex++)
 		{
-			int stateMachineSourceIndex = _stateMachineSourceIndex;
+			StateMachineData sourceStateMachineData = IndexedStateMachines[stateMachineSourceIndex];
 			// only Exit Transitions can restrict StateMachine parenting, other Transitions are fully unrestricted
-			SelectorTransitionConstant[]? exitTransitions = IndexedStateMachines[stateMachineSourceIndex].ExitTransitions;
+			SelectorTransitionConstant[]? exitTransitions = sourceStateMachineData.ExitTransitions;
 			if (exitTransitions == null)
 				continue;
 			foreach (SelectorTransitionConstant selectorTransition in exitTransitions)
@@ -1027,7 +1027,7 @@ internal sealed class AnimatorStateMachineContext
 				StateMachineData stateMachineDestination = IndexedStateMachines[stateMachineDestinationIndex];
 
 				// Rule 1) destination StateMachine cannot be in/under source StateMachine
-				if (StateContext.TryGetStateMachinePath(IndexedStateMachines[stateMachineSourceIndex].FullPathID, out string stateMachineSourceFullPath)) // if source has FullPath...
+				if (StateContext.TryGetStateMachinePath(sourceStateMachineData.FullPathID, out string stateMachineSourceFullPath)) // if source has FullPath...
 				{
 					// ...it can restrict destination StateMachine
 					if (!stateMachineDestination.Name.IsEmpty)
@@ -1050,7 +1050,7 @@ internal sealed class AnimatorStateMachineContext
 				else if (!stateMachineDestination.Name.IsEmpty && stateMachineDestination.Name != StateMachineFlagName) // source is Unknown or Flagged; if destination has FullPath...
 				{
 					// ...it can restrict source StateMachine
-					if (IndexedStateMachines[stateMachineSourceIndex].Name == StateMachineFlagName)
+					if (sourceStateMachineData.Name == StateMachineFlagName)
 					{
 						// Flagged StateMachine has a set parent already, this restriction isn't needed
 						continue;
@@ -1060,9 +1060,8 @@ internal sealed class AnimatorStateMachineContext
 						pr = new();
 						UnknownStateMachineRestrictions[stateMachineSourceIndex] = pr;
 					}
-					uint destinationFullPathID = IndexedStateMachines[stateMachineDestinationIndex].FullPathID;
-					if (!pr.NoDirect.Contains(destinationFullPathID))
-						pr.NoDirect.Add(destinationFullPathID);
+					if (!pr.NoDirect.Contains(stateMachineDestination.FullPathID))
+						pr.NoDirect.Add(stateMachineDestination.FullPathID);
 				}
 			}
 		}

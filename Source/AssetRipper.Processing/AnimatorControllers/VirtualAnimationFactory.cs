@@ -241,11 +241,6 @@ namespace AssetRipper.Processing.AnimatorControllers
 			animatorState.Speed = 1;
 			animatorState.WriteDefaultValues = true;
 
-			if (!animatorState.Has_Motion())
-			{
-				animatorState.MotionsP.Add(null);
-			}
-
 			return animatorState;
 		}
 
