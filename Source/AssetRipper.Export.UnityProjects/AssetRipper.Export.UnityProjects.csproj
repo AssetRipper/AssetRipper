@@ -9,9 +9,9 @@
 
 	<ItemGroup>
 		<PackageReference Include="AssetRipper.HashAlgorithms" Version="1.0.0" />
+		<PackageReference Include="AssetRipper.ICSharpCode.Decompiler" Version="9.0.0.7977" />
 		<PackageReference Include="AssetRipper.Mining.PredefinedAssets" Version="1.4.0" />
 		<PackageReference Include="AssetRipper.Tpk" Version="1.1.0" />
-		<PackageReference Include="ICSharpCode.Decompiler" Version="9.0.0.7889" />
 	</ItemGroup>
 
 	<ItemGroup>
