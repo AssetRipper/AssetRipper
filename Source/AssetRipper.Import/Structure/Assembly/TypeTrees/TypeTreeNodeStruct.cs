@@ -360,10 +360,15 @@ public readonly struct TypeTreeNodeStruct : IReadOnlyList<TypeTreeNodeStruct>, I
 		{
 			metaFlag |= TransferMetaFlags.TransferUsingFlowMappingStyle;
 		}
+		if (type.Type is PrimitiveType.Char)
+		{
+			metaFlag |= TransferMetaFlags.CharPropertyMask;
+		}
 
 		string typeName = type.Type switch
 		{
 			PrimitiveType.Bool => "bool",
+			PrimitiveType.Char => "UInt16",
 			PrimitiveType.Byte => "UInt8",
 			PrimitiveType.SByte => "SInt8",
 			PrimitiveType.Short => "SInt16",

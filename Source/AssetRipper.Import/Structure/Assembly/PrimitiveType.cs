@@ -32,11 +32,11 @@ namespace AssetRipper.Import.Structure.Assembly
 			switch (_this)
 			{
 				case PrimitiveType.Bool:
-				case PrimitiveType.Char:
 				case PrimitiveType.Byte:
 				case PrimitiveType.SByte:
 					return 1;
 
+				case PrimitiveType.Char:
 				case PrimitiveType.Short:
 				case PrimitiveType.UShort:
 				case PrimitiveType.Half:

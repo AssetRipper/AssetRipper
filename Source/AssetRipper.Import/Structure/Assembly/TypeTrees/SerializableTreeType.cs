@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Import.Structure.Assembly.Mono;
 using AssetRipper.Import.Structure.Assembly.Serializable;
 using AssetRipper.SourceGenerated.Extensions;
+using System.Diagnostics;
 
 namespace AssetRipper.Import.Structure.Assembly.TypeTrees
 {
@@ -17,7 +18,12 @@ namespace AssetRipper.Import.Structure.Assembly.TypeTrees
 
 		public static SerializableTreeType FromRootNode(TypeTreeNodeStruct rootNode, bool monoBehaviourStructure = false)
 		{
-			SerializableTreeType serializableTreeType = new SerializableTreeType(rootNode.TypeName, PrimitiveType.Complex, rootNode.Version, rootNode.FlowMappedInYaml);
+			ToPrimititeType(rootNode, out string typeName, out PrimitiveType primitiveType, out int arrayDepth, out _, out TypeTreeNodeStruct primitiveNode);
+			Debug.Assert(arrayDepth == 0, "Array depth should be 0 for root node");
+			Debug.Assert(primitiveNode == rootNode, "Primitive node should be the same as root node");
+			Debug.Assert(!monoBehaviourStructure || primitiveType is PrimitiveType.Complex, "MonoBehaviour structure should be complex type");
+
+			SerializableTreeType serializableTreeType = new SerializableTreeType(typeName, primitiveType, rootNode.Version, rootNode.FlowMappedInYaml);
 
 			List<Field> fields = new();
 			int startIndex = monoBehaviourStructure ? FindStartingIndexForMonoBehaviour(rootNode) : 0;
