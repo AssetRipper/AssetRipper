@@ -162,6 +162,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.SmartEnums", "S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.Processing.SourceGenerator", "Source\AssetRipper.Processing.SourceGenerator\AssetRipper.Processing.SourceGenerator.csproj", "{6679D5D0-8D40-44AC-9D20-0FD1303D45A2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.GUI.Licensing.SourceGenerator", "Source\AssetRipper.GUI.Licensing.SourceGenerator\AssetRipper.GUI.Licensing.SourceGenerator.csproj", "{6B3DD564-FD57-4EAA-8696-A15A5A6FFF29}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -340,6 +342,10 @@ Global
 		{6679D5D0-8D40-44AC-9D20-0FD1303D45A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6679D5D0-8D40-44AC-9D20-0FD1303D45A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6679D5D0-8D40-44AC-9D20-0FD1303D45A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B3DD564-FD57-4EAA-8696-A15A5A6FFF29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B3DD564-FD57-4EAA-8696-A15A5A6FFF29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B3DD564-FD57-4EAA-8696-A15A5A6FFF29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B3DD564-FD57-4EAA-8696-A15A5A6FFF29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

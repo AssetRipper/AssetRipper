@@ -4,11 +4,16 @@
 		<IsTrimmable>true</IsTrimmable>
 		<OutputPath>..\0Bins\Other\AssetRipper.GUI.Licensing\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.GUI.Licensing\$(Configuration)\</IntermediateOutputPath>
+		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<None Remove="..\Licenses\*.md" />
-		<EmbeddedResource Include="..\Licenses\*.md" />
+		<AdditionalFiles Include="..\Licenses\*.md" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\AssetRipper.GUI.Licensing.SourceGenerator\AssetRipper.GUI.Licensing.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
 	</ItemGroup>
 
 </Project>

@@ -1,42 +1,24 @@
-﻿using System.Reflection;
+﻿namespace AssetRipper.GUI.Licensing;
 
-namespace AssetRipper.GUI.Licensing;
-
-public static class Licenses
+public static partial class Licenses
 {
-	private const string FilePrefix = "AssetRipper.GUI.Licensing.";
-
-	private static Assembly Assembly => typeof(Licenses).Assembly;
-
-	public static IReadOnlyList<string> Names { get; } = Assembly
-		.GetManifestResourceNames()
-		.Select(t => t.Substring(FilePrefix.Length, t.Length - FilePrefix.Length - 3))
-		.ToArray();
-
 	/// <summary>
-	/// Load a license file from the embedded resources.
+	/// Load a license file.
 	/// </summary>
-	/// <param name="fileName">The name of the file without any extension.</param>
+	/// <param name="name">The name of the license (without any extension).</param>
 	/// <returns>The loaded text.</returns>
-	public static string Load(string fileName)
+	public static string Load(string name)
 	{
-		if (TryLoad(fileName, out string? license))
+		if (TryLoad(name, out string? license))
 		{
 			return license;
 		}
-		throw new LicenseNotFoundException(fileName);
+		throw new LicenseNotFoundException(name);
 	}
 
-	public static bool TryLoad(string fileName, [NotNullWhen(true)] out string? license)
+	public static bool TryLoad(string name, [NotNullWhen(true)] out string? license)
 	{
-		using Stream? stream = Assembly.GetManifestResourceStream(FilePrefix + fileName + ".md");
-		if (stream is null)
-		{
-			license = null;
-			return false;
-		}
-
-		license = new StreamReader(stream).ReadToEnd();
-		return true;
+		license = TryLoad(name);
+		return license is not null;
 	}
 }
