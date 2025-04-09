@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
-using AssetRipper.Assets.Metadata;
 using AssetRipper.Import.Logging;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.SourceGenerated.Classes.ClassID_1107;
@@ -36,7 +35,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 			IAnimatorStateMachine[] StateMachines = new IAnimatorStateMachine[controllerConstant.StateMachineArray.Count];
 			for (int i = 0; i < controllerConstant.StateMachineArray.Count; i++)
 			{
-				IAnimatorStateMachine stateMachine = VirtualAnimationFactory.CreateAnimatorStateMachine(processedCollection, controller, i);
+				IAnimatorStateMachine stateMachine = VirtualAnimationFactory.CreateRootAnimatorStateMachine(processedCollection, controller, i);
 				StateMachines[i] = stateMachine;
 			}
 
@@ -67,8 +66,6 @@ namespace AssetRipper.Processing.AnimatorControllers
 		private static void InitializeLayer(IAnimatorControllerLayer animatorControllerLayer, IAnimatorStateMachine stateMachine, IAnimatorController controller, int layerIndex)
 		{
 			ILayerConstant layer = controller.Controller.LayerArray[layerIndex].Data;
-
-			stateMachine.ParentStateMachinePosition.SetValues(800.0f, 20.0f, 0.0f);//not sure why this happens here
 
 			animatorControllerLayer.Name = controller.TOS[layer.Binding];
 

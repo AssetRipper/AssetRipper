@@ -98,6 +98,12 @@ namespace AssetRipper.Assets.Generics
 		public abstract void RemoveAt(int index);
 
 		/// <inheritdoc/>
+		public void RemoveAt(Index index)
+		{
+			RemoveAt(index.GetOffset(Count));
+		}
+
+		/// <inheritdoc/>
 		public abstract void Clear();
 
 		public AccessPairBase<TKey, TValue> GetSinglePairForKey(TKey key)
@@ -178,6 +184,15 @@ namespace AssetRipper.Assets.Generics
 				AccessPairBase<TKey, TValue> pair = enumerator.Current;
 				yield return new KeyValuePair<TKey, TValue>(pair.Key, pair.Value);
 			}
+		}
+
+		public bool TryAdd(TKey key, TValue value)
+		{
+			if (ContainsKey(key))
+				return false;
+
+			Add(key, value);
+			return true;
 		}
 
 		private class KeyEnumerable : IEnumerable<TKey>
