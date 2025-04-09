@@ -195,12 +195,7 @@ public static class WebApplicationLauncher
 		app.MapStaticFile("/js/site.js", "text/javascript");
 		app.MapStaticFile("/js/commands_page.js", "text/javascript");
 		app.MapStaticFile("/js/mesh_preview.js", "text/javascript");
-
-		//Remote files
-		OnlineDependencies.Babylon.Map(app);
-		OnlineDependencies.Bootstrap.Map(app);
-		OnlineDependencies.Popper.Map(app);
-		OnlineDependencies.Vue.Map(app);
+		OnlineDependencies.MapDependencies(app);
 
 		//Normal Pages
 		app.MapGet("/", (context) =>

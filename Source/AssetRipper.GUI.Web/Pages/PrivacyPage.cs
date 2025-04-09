@@ -11,9 +11,7 @@ public sealed class PrivacyPage : DefaultPage
 		new H1(writer).Close(GetTitle());
 		using (new P(writer).End())
 		{
-			writer.Write("This app does not access the internet, except to download web-hosted content, such as ");
-			new A(writer).WithHref("https://getbootstrap.com/").WithNewTabAttributes().Close("Bootstrap");
-			writer.Write('.');
+			writer.Write("This app does not access the internet.");
 		}
 	}
 }
