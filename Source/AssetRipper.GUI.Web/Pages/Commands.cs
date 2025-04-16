@@ -17,7 +17,16 @@ public static class Commands
 
 	internal static RouteHandlerBuilder AcceptsFormDataContainingPath(this RouteHandlerBuilder builder)
 	{
-		return builder.Accepts<PathFormData>("application/x-www-form-urlencoded");
+	    return builder.Accepts<PathFormData>("application/x-www-form-urlencoded");
+	}
+
+	private static bool TryGetCreateSubfolder(IFormCollection form)
+	{
+	    if (form.TryGetValue("CreateSubfolder", out StringValues values))
+	    {
+		    return values == "true";
+	    }
+	    return false;
 	}
 
 	public readonly struct LoadFile : ICommand
@@ -92,9 +101,11 @@ public static class Commands
 				return CommandsPath;
 			}
 
+			var createSubfolder = TryGetCreateSubfolder(form);
+
 			if (!string.IsNullOrEmpty(path))
 			{
-				GameFileLoader.ExportUnityProject(path);
+				GameFileLoader.ExportUnityProject(path, createSubfolder);
 			}
 			return null;
 		}
@@ -116,9 +127,11 @@ public static class Commands
 				return CommandsPath;
 			}
 
+			bool createSubfolder = TryGetCreateSubfolder(form);
+
 			if (!string.IsNullOrEmpty(path))
 			{
-				GameFileLoader.ExportPrimaryContent(path);
+				GameFileLoader.ExportPrimaryContent(path, createSubfolder);
 			}
 			return null;
 		}

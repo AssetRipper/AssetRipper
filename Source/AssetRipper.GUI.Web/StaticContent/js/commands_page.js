@@ -6,7 +6,13 @@ const app = createApp({
 			load_path: '',
 			load_path_exists: false,
 			export_path: '',
-			export_path_has_files: false
+			export_path_has_files: false,
+			create_subfolder: false
+		}
+	},
+	computed: {
+		showExportWarning() {
+			return this.export_path_has_files && !this.create_subfolder;
 		}
 	},
 	methods: {
