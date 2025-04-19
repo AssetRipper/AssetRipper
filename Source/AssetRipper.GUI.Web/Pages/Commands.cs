@@ -17,7 +17,7 @@ public static class Commands
 
 	internal static RouteHandlerBuilder AcceptsFormDataContainingPath(this RouteHandlerBuilder builder)
 	{
-	    return builder.Accepts<PathFormData>("application/x-www-form-urlencoded");
+		return builder.Accepts<PathFormData>("application/x-www-form-urlencoded");
 	}
 
 	private static bool TryGetCreateSubfolder(IFormCollection form)
@@ -101,11 +101,11 @@ public static class Commands
 				return CommandsPath;
 			}
 
-			var createSubfolder = TryGetCreateSubfolder(form);
-
 			if (!string.IsNullOrEmpty(path))
 			{
-				GameFileLoader.ExportUnityProject(path, createSubfolder);
+			    bool createSubfolder = TryGetCreateSubfolder(form);
+			    path = AdjustPathForSubfolder(path, createSubfolder);
+			    GameFileLoader.ExportUnityProject(path);
 			}
 			return null;
 		}
@@ -127,14 +127,25 @@ public static class Commands
 				return CommandsPath;
 			}
 
-			bool createSubfolder = TryGetCreateSubfolder(form);
-
 			if (!string.IsNullOrEmpty(path))
 			{
-				GameFileLoader.ExportPrimaryContent(path, createSubfolder);
+			    var createSubfolder = TryGetCreateSubfolder(form);
+			    path = AdjustPathForSubfolder(path, createSubfolder);
+			    GameFileLoader.ExportPrimaryContent(path);
 			}
 			return null;
 		}
+	}
+	
+	private static string AdjustPathForSubfolder(string path, bool createSubfolder)
+	{
+		if (createSubfolder)
+		{
+			string timestamp = DateTime.UtcNow.ToString("yyyyMMdd_HHmmss");
+			string subfolder = $"AssetRipper_export_{timestamp}";
+			return Path.Combine(path, subfolder);
+		}
+		return path;
 	}
 
 	public readonly struct Reset : ICommand
