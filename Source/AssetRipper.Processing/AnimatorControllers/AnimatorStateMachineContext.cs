@@ -63,6 +63,7 @@ internal sealed class AnimatorStateMachineContext
 		LayerIndex = controller.Controller.GetLayerIndexByStateMachineIndex(stateMachineIndex, out Layer);
 		StateContext = new(virtualFile, controller, StateMachineConstant, LayerIndex);
 		IsUnity5 = StateMachineConstant.Has_SelectorStateConstantArray();
+		StateContext.Process();
 		int stateMachineCount = IsUnity5 ? StateMachineConstant.StateMachineCount() :
 			(StateContext.HasStates() ? StateContext.GetUniqueStateMachinePathsCount() : 1);
 		IndexedStateMachines = new StateMachineData[stateMachineCount];
@@ -73,8 +74,6 @@ internal sealed class AnimatorStateMachineContext
 	/// </summary>
 	public void Process()
 	{
-		StateContext.Process();
-
 		InitializeStateMachines();
 
 		if (IsUnity5) // Unity 5+
@@ -875,13 +874,13 @@ internal sealed class AnimatorStateMachineContext
 				// Position all Child StateMachines second 
 				else if (stateMachine.Has_ChildStateMachines())
 				{
-					// remember to handle Unity 5- SubStateMachines too
 					ChildAnimatorStateMachine csm = stateMachine.ChildStateMachines[i - stateCount];
 					csm.Position.CopyValues(position);
 				}
 				else
 				{
-					stateMachine.ChildStateMachinePosition.Add(position);
+					Vector3f newPos = stateMachine.ChildStateMachinePosition.AddNew();
+					newPos.CopyValues(position);
 				}
 			}
 		}
