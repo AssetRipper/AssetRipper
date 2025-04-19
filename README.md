@@ -31,7 +31,7 @@ Patreon donors receive special roles on our [Discord server](https://discord.gg/
 
 [Road Map](https://assetripper.github.io/AssetRipper/articles/RoadMap.html)
 
-[Credits](https://assetripper.github.io/AssetRipper/articles/Credits.html)]
+[Credits](https://assetripper.github.io/AssetRipper/articles/Credits.html)
 
 # Discord [![](https://img.shields.io/discord/867514400701153281?color=blue&label=AssetRipper)](https://discord.gg/XqXa53W2Yh)
 
