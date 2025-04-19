@@ -6,7 +6,8 @@ const app = createApp({
 			load_path: '',
 			load_path_exists: false,
 			export_path: '',
-			export_path_has_files: false
+			export_path_has_files: false,
+			create_subfolder: false
 		}
 	},
 	methods: {
@@ -32,7 +33,11 @@ const app = createApp({
 
 			this.debouncedInput = setTimeout(async () => {
 				try {
-					this.export_path_has_files = await this.fetchDirectoryExists(this.export_path) && !(await this.fetchDirectoryEmpty(this.export_path));
+					if (this.create_subfolder) {
+						this.export_path_has_files = false;
+					} else {
+						this.export_path_has_files = await this.fetchDirectoryExists(this.export_path) && !(await this.fetchDirectoryEmpty(this.export_path));
+					}
 				} catch (error) {
 					console.error('Error fetching data:', error);
 				}
