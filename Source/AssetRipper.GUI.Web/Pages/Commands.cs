@@ -20,6 +20,16 @@ public static class Commands
 		return builder.Accepts<PathFormData>("application/x-www-form-urlencoded");
 	}
 
+	private static bool TryGetCreateSubfolder(IFormCollection form)
+	{
+		if (form.TryGetValue("CreateSubfolder", out StringValues values))
+		{
+			return values == "true";
+		}
+
+		return false;
+	}
+
 	public readonly struct LoadFile : ICommand
 	{
 		static async Task<string?> ICommand.Execute(HttpRequest request)
@@ -94,6 +104,8 @@ public static class Commands
 
 			if (!string.IsNullOrEmpty(path))
 			{
+				bool createSubfolder = TryGetCreateSubfolder(form);
+				path = MaybeAppendTimestampedSubfolder(path, createSubfolder);
 				GameFileLoader.ExportUnityProject(path);
 			}
 			return null;
@@ -118,10 +130,24 @@ public static class Commands
 
 			if (!string.IsNullOrEmpty(path))
 			{
+				bool createSubfolder = TryGetCreateSubfolder(form);
+				path = MaybeAppendTimestampedSubfolder(path, createSubfolder);
 				GameFileLoader.ExportPrimaryContent(path);
 			}
 			return null;
 		}
+	}
+
+	private static string MaybeAppendTimestampedSubfolder(string path, bool append)
+	{
+		if (append)
+		{
+			string timestamp = DateTime.UtcNow.ToString("yyyyMMdd_HHmmss");
+			string subfolder = $"AssetRipper_export_{timestamp}";
+			return Path.Combine(path, subfolder);
+		}
+
+		return path;
 	}
 
 	public readonly struct Reset : ICommand

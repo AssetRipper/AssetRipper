@@ -53,7 +53,11 @@ public static class GameFileLoader
 	{
 		if (IsLoaded && IsValidExportDirectory(path))
 		{
-			Directory.Delete(path, true);
+			if (Directory.Exists(path))
+			{
+				Directory.Delete(path, true);
+			}
+			
 			Directory.CreateDirectory(path);
 			ExportHandler.Export(GameData, path);
 		}
@@ -63,13 +67,17 @@ public static class GameFileLoader
 	{
 		if (IsLoaded && IsValidExportDirectory(path))
 		{
-			Directory.Delete(path, true);
+			if (Directory.Exists(path))
+			{
+				Directory.Delete(path, true);
+			}
+			
 			Directory.CreateDirectory(path);
-			Logger.Info(LogCategory.Export, "Starting export");
+			Logger.Info(LogCategory.Export, "Starting primary content export");
 			Logger.Info(LogCategory.Export, $"Attempting to export assets to {path}...");
 			Settings.ExportRootPath = path;
 			PrimaryContentExporter.CreateDefault(GameData).Export(GameBundle, Settings, LocalFileSystem.Instance);
-			Logger.Info(LogCategory.Export, "Finished exporting assets");
+			Logger.Info(LogCategory.Export, "Finished exporting primary content.");
 		}
 	}
 
