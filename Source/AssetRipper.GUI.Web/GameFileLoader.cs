@@ -49,33 +49,29 @@ public static class GameFileLoader
 		GameData = ExportHandler.LoadAndProcess(paths);
 	}
 
-	public static void ExportUnityProject(string path, bool createSubfolder)
+	public static void ExportUnityProject(string path)
 	{
-		path = AdjustPathForSubfolder(path, createSubfolder);
-
 		if (IsLoaded && IsValidExportDirectory(path))
 		{
-			if (!createSubfolder)
+			if (Directory.Exists(path))
 			{
 				Directory.Delete(path, true);
 			}
-
+			
 			Directory.CreateDirectory(path);
 			ExportHandler.Export(GameData, path);
 		}
 	}
 
-	public static void ExportPrimaryContent(string path, bool createSubfolder)
+	public static void ExportPrimaryContent(string path)
 	{
-		path = AdjustPathForSubfolder(path, createSubfolder);
-
 		if (IsLoaded && IsValidExportDirectory(path))
 		{
-			if (!createSubfolder)
+			if (Directory.Exists(path))
 			{
 				Directory.Delete(path, true);
 			}
-
+			
 			Directory.CreateDirectory(path);
 			Logger.Info(LogCategory.Export, "Starting primary content export");
 			Logger.Info(LogCategory.Export, $"Attempting to export assets to {path}...");
@@ -90,17 +86,6 @@ public static class GameFileLoader
 		LibraryConfiguration settings = new();
 		settings.LoadFromDefaultPath();
 		return settings;
-	}
-
-	private static string AdjustPathForSubfolder(string path, bool createSubfolder)
-	{
-		if (createSubfolder)
-		{
-			string timestamp = DateTime.UtcNow.ToString("yyyyMMdd_HHmmss");
-			string subfolder = $"AssetRipper_export_{timestamp}";
-			return Path.Combine(path, subfolder);
-		}
-		return path;
 	}
 
 	private static bool IsValidExportDirectory(string path)

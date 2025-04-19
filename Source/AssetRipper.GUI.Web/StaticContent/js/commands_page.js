@@ -10,11 +10,6 @@ const app = createApp({
 			create_subfolder: false
 		}
 	},
-	computed: {
-		showExportWarning() {
-			return this.export_path_has_files && !this.create_subfolder;
-		}
-	},
 	methods: {
 		async handleLoadPathChange() {
 			// Add a debounce mechanism to avoid too many requests in a short time
@@ -38,7 +33,11 @@ const app = createApp({
 
 			this.debouncedInput = setTimeout(async () => {
 				try {
-					this.export_path_has_files = await this.fetchDirectoryExists(this.export_path) && !(await this.fetchDirectoryEmpty(this.export_path));
+					if (this.create_subfolder) {
+						this.export_path_has_files = false;
+					} else {
+						this.export_path_has_files = await this.fetchDirectoryExists(this.export_path) && !(await this.fetchDirectoryEmpty(this.export_path));
+					}
 				} catch (error) {
 					console.error('Error fetching data:', error);
 				}

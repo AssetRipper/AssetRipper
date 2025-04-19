@@ -51,12 +51,13 @@ public sealed class CommandsPage : VuePage
 						.WithType("checkbox")
 						.WithClass("form-check-input")
 						.WithCustomAttribute("v-model", "create_subfolder")
+						.WithCustomAttribute("@input", "handleExportPathChange")
 						.WithId("createSubfolder")
 						.Close();
 					new Label(writer)
 						.WithClass("form-check-label")
 						.WithCustomAttribute("for", "createSubfolder")
-						.Close("Create Subfolder");
+						.Close(Localization.CreateSubfolder);
 				}
 
 				using (new Form(writer).WithAction("/Export/UnityProject").WithMethod("post").End())
@@ -65,7 +66,7 @@ public sealed class CommandsPage : VuePage
 					new Input(writer).WithType("hidden").WithName("CreateSubfolder").WithCustomAttribute("v-model", "create_subfolder").Close();
 
 					new Button(writer).WithCustomAttribute("v-if", "export_path === '' || export_path !== export_path.trim()").WithClass("btn btn-primary").WithCustomAttribute("disabled").Close(Localization.ExportUnityProject);
-					new Input(writer).WithCustomAttribute("v-else-if", "export_path_has_files && !create_subfolder").WithType("submit").WithClass("btn btn-danger").WithValue(Localization.ExportUnityProject).Close();
+					new Input(writer).WithCustomAttribute("v-else-if", "export_path_has_files").WithType("submit").WithClass("btn btn-danger").WithValue(Localization.ExportUnityProject).Close();
 					new Input(writer).WithCustomAttribute("v-else").WithType("submit").WithClass("btn btn-primary").WithValue(Localization.ExportUnityProject).Close();
 				}
 
@@ -75,7 +76,7 @@ public sealed class CommandsPage : VuePage
 					new Input(writer).WithType("hidden").WithName("CreateSubfolder").WithCustomAttribute("v-model", "create_subfolder").Close();
 
 					new Button(writer).WithCustomAttribute("v-if", "export_path === '' || export_path !== export_path.trim()").WithClass("btn btn-primary").WithCustomAttribute("disabled").Close(Localization.ExportPrimaryContent);
-					new Input(writer).WithCustomAttribute("v-else-if", "export_path_has_files && !create_subfolder").WithType("submit").WithClass("btn btn-danger").WithValue(Localization.ExportPrimaryContent).Close();
+					new Input(writer).WithCustomAttribute("v-else-if", "export_path_has_files").WithType("submit").WithClass("btn btn-danger").WithValue(Localization.ExportPrimaryContent).Close();
 					new Input(writer).WithCustomAttribute("v-else").WithType("submit").WithClass("btn btn-primary").WithValue(Localization.ExportPrimaryContent).Close();
 				}
 
@@ -84,7 +85,7 @@ public sealed class CommandsPage : VuePage
 					new Button(writer).WithCustomAttribute("@click", "handleSelectExportFolder").WithClass("btn btn-success").Close(Localization.SelectFolder);
 				}
 
-				using (new Div(writer).WithCustomAttribute("v-if", "showExportWarning").End())
+				using (new Div(writer).WithCustomAttribute("v-if", "export_path_has_files").End())
 				{
 					new P(writer).Close(Localization.WarningThisDirectoryIsNotEmptyAllContentWillBeDeleted);
 				}
