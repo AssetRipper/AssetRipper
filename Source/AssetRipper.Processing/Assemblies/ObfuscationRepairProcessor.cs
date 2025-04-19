@@ -46,6 +46,13 @@ public sealed class ObfuscationRepairProcessor : IAssetProcessor
 		}
 	}
 
+	/// <summary>
+	/// Renames normal properties and events to match the names of their get/set/add/remove/raise methods.
+	/// They can differ due to obfuscation renaming them, so this changes them back to be consistent.
+	/// </summary>
+	/// <remarks>
+	/// This is needed because differing names can cause issues when attempting to recompile decompiled code.
+	/// </remarks>
 	private static void RenameNormalProperties(IAssemblyManager manager)
 	{
 		foreach (TypeDefinition type in manager.GetAllTypes())
@@ -119,6 +126,13 @@ public sealed class ObfuscationRepairProcessor : IAssetProcessor
 		}
 	}
 
+	/// <summary>
+	/// Renames explicit properties and events to match the names of their get/set/add/remove/raise methods.
+	/// They can differ due to obfuscation renaming them, so this changes them back to be consistent.
+	/// </summary>
+	/// <remarks>
+	/// This is needed because differing names can cause issues when attempting to recompile decompiled code.
+	/// </remarks>
 	private static void RenameExplicitProperties(IAssemblyManager manager)
 	{
 		foreach (TypeDefinition type in manager.GetAllTypes())

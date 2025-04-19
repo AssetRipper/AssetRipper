@@ -3,14 +3,14 @@ using AssetRipper.Import.Structure.Assembly.Managers;
 
 namespace AssetRipper.Processing.Assemblies;
 
+/// <summary>
+/// ILSpy needs System.Runtime.CompilerServices.Unsafe and System.Runtime.InteropServices to decompile some code.
+/// This generates these assemblies with forwarders to the mscorlib types.
+/// </summary>
 public sealed class ForwardingAssemblyGenerator : IAssetProcessor
 {
 	public void Process(GameData gameData) => AddCompilerHelperModules(gameData.AssemblyManager);
 
-	/// <summary>
-	/// ILSpy needs System.Runtime.CompilerServices.Unsafe and System.Runtime.InteropServices to decompile some code.
-	/// This generates these assemblies with forwarders to the mscorlib types.
-	/// </summary>
 	private static void AddCompilerHelperModules(IAssemblyManager manager)
 	{
 		AssemblyDefinition? mscorlib = manager.Mscorlib;

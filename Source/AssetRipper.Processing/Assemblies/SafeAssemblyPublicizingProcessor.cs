@@ -4,6 +4,11 @@ using AssetRipper.Import.Structure.Assembly.Managers;
 
 namespace AssetRipper.Processing.Assemblies;
 
+/// <summary>
+/// This processor makes (nearly) all types, methods, and fields public in the assembly.
+/// It handles edge cases like determing if something should be publicized and
+/// adding [NonSerialized] to newly public instance fields.
+/// </summary>
 public sealed class SafeAssemblyPublicizingProcessor : IAssetProcessor
 {
 	public void Process(GameData gameData) => Process(gameData.AssemblyManager);
