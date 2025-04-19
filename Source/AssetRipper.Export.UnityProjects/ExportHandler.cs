@@ -72,6 +72,10 @@ public class ExportHandler
 		{
 			yield return new NullableRemovalProcessor();
 		}
+		if (Settings.ProcessingSettings.PublicizeAssemblies)
+		{
+			yield return new SafeAssemblyPublicizingProcessor();
+		}
 		yield return new RemoveAssemblyKeyFileAttributeProcessor();
 
 		yield return new SceneDefinitionProcessor();

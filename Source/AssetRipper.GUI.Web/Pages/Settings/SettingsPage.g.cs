@@ -68,6 +68,7 @@ partial class SettingsPage
 		{ nameof(ProcessingSettings.EnableStaticMeshSeparation), (value) => { Configuration.ProcessingSettings.EnableStaticMeshSeparation = value; } },
 		{ nameof(ProcessingSettings.EnableAssetDeduplication), (value) => { Configuration.ProcessingSettings.EnableAssetDeduplication = value; } },
 		{ nameof(ProcessingSettings.RemoveNullableAttributes), (value) => { Configuration.ProcessingSettings.RemoveNullableAttributes = value; } },
+		{ nameof(ProcessingSettings.PublicizeAssemblies), (value) => { Configuration.ProcessingSettings.PublicizeAssemblies = value; } },
 		{ nameof(ExportSettings.ScriptTypesFullyQualified), (value) => { Configuration.ExportSettings.ScriptTypesFullyQualified = value; } },
 		{ nameof(ExportSettings.SaveSettingsToDisk), (value) => { Configuration.ExportSettings.SaveSettingsToDisk = value; } },
 	};
@@ -105,6 +106,11 @@ partial class SettingsPage
 	private static void WriteCheckBoxForRemoveNullableAttributes(TextWriter writer, string label, bool disabled = false)
 	{
 		WriteCheckBox(writer, label, Configuration.ProcessingSettings.RemoveNullableAttributes, nameof(ProcessingSettings.RemoveNullableAttributes), disabled);
+	}
+
+	private static void WriteCheckBoxForPublicizeAssemblies(TextWriter writer, string label, bool disabled = false)
+	{
+		WriteCheckBox(writer, label, Configuration.ProcessingSettings.PublicizeAssemblies, nameof(ProcessingSettings.PublicizeAssemblies), disabled);
 	}
 
 	private static void WriteDropDownForBundledAssetsExportMode(TextWriter writer)

@@ -19,7 +19,7 @@ public sealed class AttributePolyfillGenerator : IAssetProcessor
 	public void Process(GameData gameData) => Process(gameData.AssemblyManager);
 	private static void Process(IAssemblyManager manager)
 	{
-		ModuleDefinition? mscorlib = manager.GetAssemblies().FirstOrDefault(a => a.Name == "mscorlib")?.ManifestModule;
+		ModuleDefinition? mscorlib = manager.Mscorlib?.ManifestModule;
 		if (mscorlib is null)
 		{
 			return;

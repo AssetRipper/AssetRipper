@@ -13,7 +13,7 @@ public sealed class ForwardingAssemblyGenerator : IAssetProcessor
 	/// </summary>
 	private static void AddCompilerHelperModules(IAssemblyManager manager)
 	{
-		AssemblyDefinition? mscorlib = manager.GetAssemblies().FirstOrDefault(a => a.Name == "mscorlib");
+		AssemblyDefinition? mscorlib = manager.Mscorlib;
 		if (mscorlib is null)
 		{
 			return;

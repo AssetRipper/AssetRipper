@@ -157,7 +157,7 @@ namespace AssetRipper.Processing.Editor
 
 			bool HasMscorlib2()
 			{
-				return assemblyManager!.GetAssemblies().FirstOrDefault(a => a.Name == "mscorlib")?.Version.Major == 2;
+				return assemblyManager!.Mscorlib?.Version.Major == 2;
 			}
 		}
 

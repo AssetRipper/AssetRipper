@@ -20,7 +20,7 @@ public sealed class UnmanagedConstraintRecoveryProcessor : IAssetProcessor
 			return;
 		}
 
-		ModuleDefinition? mscorlib = manager.GetAssemblies().FirstOrDefault(a => a.Name == "mscorlib")?.ManifestModule;
+		ModuleDefinition? mscorlib = manager.Mscorlib?.ManifestModule;
 		if (mscorlib is null)
 		{
 			return;

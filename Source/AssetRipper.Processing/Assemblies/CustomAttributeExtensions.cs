@@ -10,8 +10,27 @@ internal static class CustomAttributeExtensions
 		return type is not null && type.Namespace == @namespace && type.Name == name;
 	}
 
+	/// <summary>
+	/// System.Runtime.CompilerServices.CompilerGeneratedAttribute
+	/// </summary>
 	public static bool IsCompilerGeneratedAttribute(this CustomAttribute attribute)
 	{
 		return attribute.IsType("System.Runtime.CompilerServices", "CompilerGeneratedAttribute");
+	}
+
+	/// <summary>
+	/// UnityEngine.SerializeField
+	/// </summary>
+	public static bool IsSerializeField(this CustomAttribute attribute)
+	{
+		return attribute.Constructor?.DeclaringType is { Namespace.Value: "UnityEngine", Name.Value: "SerializeField" };
+	}
+
+	/// <summary>
+	/// System.NonSerializedAttribute
+	/// </summary>
+	public static bool IsNonSerializedAttribute(this CustomAttribute attribute)
+	{
+		return attribute.Constructor?.DeclaringType is { Namespace.Value: "System", Name.Value: "NonSerializedAttribute" };
 	}
 }
