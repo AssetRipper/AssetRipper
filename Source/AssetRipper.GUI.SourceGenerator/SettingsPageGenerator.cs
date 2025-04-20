@@ -87,10 +87,10 @@ internal static class SettingsPageGenerator
 				if (property.IsBoolean)
 				{
 					writer.WriteLineNoTabs();
-					writer.WriteLine($"private static void WriteCheckBoxFor{property.Name}(TextWriter writer, string label)");
+					writer.WriteLine($"private static void WriteCheckBoxFor{property.Name}(TextWriter writer, string label, bool disabled = false)");
 					using (new CurlyBrackets(writer))
 					{
-						writer.WriteLine($"WriteCheckBox(writer, label, Configuration.{property.DeclaringType?.Name}.{property.Name}, {property.NameOfString});");
+						writer.WriteLine($"WriteCheckBox(writer, label, Configuration.{property.DeclaringType?.Name}.{property.Name}, {property.NameOfString}, disabled);");
 					}
 				}
 				else if (property.IsEnum)

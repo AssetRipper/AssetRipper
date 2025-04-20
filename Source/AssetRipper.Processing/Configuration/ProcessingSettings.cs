@@ -7,6 +7,8 @@ public sealed record class ProcessingSettings
 	public bool EnablePrefabOutlining { get; set; } = false;
 	public bool EnableStaticMeshSeparation { get; set; } = true;
 	public bool EnableAssetDeduplication { get; set; } = false;
+	public bool RemoveNullableAttributes { get; set; } = false;
+	public bool PublicizeAssemblies { get; set; } = false;
 	public BundledAssetsExportMode BundledAssetsExportMode { get; set; } = BundledAssetsExportMode.DirectExport;
 
 	public void Log()

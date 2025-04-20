@@ -1,5 +1,4 @@
 using AssetRipper.IO.Files.Streams.Smart;
-using AssetRipper.IO.Files.Utils;
 
 namespace AssetRipper.IO.Files
 {
@@ -20,7 +19,7 @@ namespace AssetRipper.IO.Files
 			set
 			{
 				name = value;
-				NameFixed = FilenameUtils.FixFileIdentifier(value);
+				NameFixed = SpecialFileNames.FixFileIdentifier(value);
 			}
 		}
 		public string NameFixed { get; private set; } = string.Empty;

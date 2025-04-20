@@ -1,13 +1,13 @@
 <Project>
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>net9.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<LangVersion>Latest</LangVersion>
 		<IsAotCompatible>true</IsAotCompatible>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
 
-		<Version>1.1.2</Version>
+		<Version>1.2.1</Version>
 		<AssemblyVersion>$(Version)</AssemblyVersion>
 		<Copyright>Copyright © ds5678</Copyright>
 		<Authors>ds5678</Authors>

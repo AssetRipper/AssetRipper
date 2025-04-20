@@ -3,6 +3,7 @@ using AssetRipper.Assets.Generics;
 using AssetRipper.Processing.Configuration;
 using AssetRipper.SourceGenerated.Classes.ClassID_142;
 using AssetRipper.SourceGenerated.Classes.ClassID_147;
+using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.AssetInfo;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Object;
@@ -28,11 +29,12 @@ internal static class OriginalPathHelper
 				continue;
 			}
 
-			string resourcePath = Path.Combine(ResourceFullPath, kvp.Key.String);
+			string resourcePath = Path.Join(ResourceFullPath, kvp.Key.String);
 			if (asset.OriginalPath is null)
 			{
 				asset.OriginalPath = resourcePath;
 				UndoPathLowercasing(asset);
+				SetOverridePathIfShader(asset);
 			}
 			else if (asset.OriginalPath.Length < resourcePath.Length)
 			{
@@ -40,6 +42,7 @@ internal static class OriginalPathHelper
 				// "inner/resources/extra/file" and "extra/file"
 				asset.OriginalPath = resourcePath;
 				UndoPathLowercasing(asset);
+				SetOverridePathIfShader(asset);
 			}
 		}
 	}
@@ -58,7 +61,7 @@ internal static class OriginalPathHelper
 	{
 		string bundleName = bundle.GetAssetBundleName();
 		string bundleDirectory = bundleName + DirectorySeparator;
-		string directory = Path.Combine(AssetBundleFullPath, bundleName);
+		string directory = Path.Join(AssetBundleFullPath, bundleName);
 		foreach (AccessPairBase<Utf8String, IAssetInfo> kvp in bundle.Container)
 		{
 			// skip shared bundle assets, because we need to export them in their bundle directory
@@ -95,7 +98,7 @@ internal static class OriginalPathHelper
 					{
 						assetPath = assetPath.Substring(bundleDirectory.Length);
 					}
-					asset.OriginalPath = Path.Combine(directory, assetPath);
+					asset.OriginalPath = Path.Join(directory, assetPath);
 					break;
 				case BundledAssetsExportMode.GroupByAssetType:
 					break;
@@ -103,6 +106,7 @@ internal static class OriginalPathHelper
 					throw new ArgumentOutOfRangeException(nameof(bundledAssetsExportMode), $"Invalid {nameof(BundledAssetsExportMode)} : {bundledAssetsExportMode}");
 			}
 			UndoPathLowercasing(asset);
+			SetOverridePathIfShader(asset);
 		}
 	}
 
@@ -116,7 +120,7 @@ internal static class OriginalPathHelper
 				string pathSection = splitPath[i];
 				if (string.Equals(pathSection, AssetsKeyword, StringComparison.OrdinalIgnoreCase))
 				{
-					return string.Join(DirectorySeparator, new ArraySegment<string>(splitPath, i, splitPath.Length - i));
+					return string.Join(DirectorySeparator, new ReadOnlySpan<string?>(splitPath, i, splitPath.Length - i));
 				}
 			}
 			return string.Empty;
@@ -157,6 +161,16 @@ internal static class OriginalPathHelper
 			&& originalName == assetName.ToLowerInvariant())
 		{
 			asset.OriginalName = assetName;
+		}
+	}
+
+	private static void SetOverridePathIfShader(IUnityObjectBase asset)
+	{
+		if (asset is IShader shader)
+		{
+			shader.OverrideDirectory ??= shader.OriginalDirectory;
+			shader.OverrideName ??= shader.OriginalName;
+			shader.OverrideExtension ??= shader.OriginalExtension;
 		}
 	}
 }

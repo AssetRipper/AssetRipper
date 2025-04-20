@@ -8,6 +8,7 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 	{
 		void Initialize(PlatformGameStructure gameStructure);
 		void Load(string filePath);
+		void Add(AssemblyDefinition assembly);
 		void Read(Stream stream, string fileName);
 		void Unload(string fileName);
 
@@ -26,6 +27,8 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 
 		bool IsSet { get; }
 		ScriptingBackend ScriptingBackend { get; }
+
+		public sealed AssemblyDefinition? Mscorlib => GetAssemblies().FirstOrDefault(a => a.Name == "mscorlib");
 	}
 	public static class AssemblyManagerExtensions
 	{
@@ -33,6 +36,12 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 		{
 			Stream readStream = manager.GetStreamForAssembly(assembly);
 			using FileStream writeStream = File.Create(path);
+			readStream.Position = 0;
+			readStream.CopyTo(writeStream);
+		}
+		public static void SaveAssembly(this IAssemblyManager manager, AssemblyDefinition assembly, Stream writeStream)
+		{
+			Stream readStream = manager.GetStreamForAssembly(assembly);
 			readStream.Position = 0;
 			readStream.CopyTo(writeStream);
 		}

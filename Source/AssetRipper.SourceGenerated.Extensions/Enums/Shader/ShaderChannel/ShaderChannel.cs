@@ -218,5 +218,24 @@ namespace AssetRipper.SourceGenerated.Extensions.Enums.Shader.ShaderChannel
 				_ => throw new Exception($"Unsupported channel type {_this}"),
 			};
 		}
+
+		public static string ToSemantic(this ShaderChannel _this) => _this switch
+		{
+			ShaderChannel.Vertex => "POSITION",
+			ShaderChannel.Normal => "NORMAL",
+			ShaderChannel.Tangent => "TANGENT",
+			ShaderChannel.Color => "COLOR",
+			ShaderChannel.UV0 => "TEXCOORD0",
+			ShaderChannel.UV1 => "TEXCOORD1",
+			ShaderChannel.UV2 => "TEXCOORD2",
+			ShaderChannel.UV3 => "TEXCOORD3",
+			ShaderChannel.UV4 => "TEXCOORD4",
+			ShaderChannel.UV5 => "TEXCOORD5",
+			ShaderChannel.UV6 => "TEXCOORD6",
+			ShaderChannel.UV7 => "TEXCOORD7",
+			ShaderChannel.SkinWeight => "BLENDWEIGHT",
+			ShaderChannel.SkinBoneIndex => "BLENDINDICES",
+			_ => throw new Exception($"Unsupported channel type {_this}"),
+		};
 	}
 }

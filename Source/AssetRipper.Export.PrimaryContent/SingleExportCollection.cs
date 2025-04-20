@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.IO.Files.Utils;
 
 namespace AssetRipper.Export.PrimaryContent;
 
@@ -11,17 +10,15 @@ public class SingleExportCollection<T> : ExportCollectionBase where T : IUnityOb
 		Asset = asset ?? throw new ArgumentNullException(nameof(asset));
 	}
 
-	public override bool Export(string projectDirectory)
+	public override bool Export(string projectDirectory, FileSystem fileSystem)
 	{
-		string subPath = Asset.OriginalName is not null || Asset.OriginalDirectory is not null
-			? Path.Combine(projectDirectory, DirectoryUtils.FixInvalidPathCharacters(Asset.OriginalDirectory ?? ""))
-			: Path.Combine(projectDirectory, Asset.ClassName);
-		string fileName = GetUniqueFileName(Asset, subPath);
+		string subPath = fileSystem.Path.Join(projectDirectory, FileSystem.FixInvalidPathCharacters(Asset.GetBestDirectory()));
+		string fileName = GetUniqueFileName(Asset, subPath, fileSystem);
 
-		Directory.CreateDirectory(subPath);
+		fileSystem.Directory.Create(subPath);
 
-		string filePath = Path.Combine(subPath, fileName);
-		return ExportInner(filePath, projectDirectory);
+		string filePath = fileSystem.Path.Join(subPath, fileName);
+		return ExportInner(filePath, projectDirectory, fileSystem);
 	}
 
 	public override bool Contains(IUnityObjectBase asset)
@@ -36,9 +33,9 @@ public class SingleExportCollection<T> : ExportCollectionBase where T : IUnityOb
 	/// <param name="filePath">The full path to the exported asset destination</param>
 	/// <param name="dirPath">The full path to the project export directory</param>
 	/// <returns>True if export was successful, false otherwise</returns>
-	protected virtual bool ExportInner(string filePath, string dirPath)
+	protected virtual bool ExportInner(string filePath, string dirPath, FileSystem fileSystem)
 	{
-		return ContentExtractor.Export(Asset, filePath);
+		return ContentExtractor.Export(Asset, filePath, fileSystem);
 	}
 
 	public override IContentExtractor ContentExtractor { get; }

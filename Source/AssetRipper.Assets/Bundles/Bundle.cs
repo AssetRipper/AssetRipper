@@ -4,7 +4,6 @@ using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.ResourceFiles;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
-using AssetRipper.IO.Files.Utils;
 
 namespace AssetRipper.Assets.Bundles;
 
@@ -109,7 +108,7 @@ public abstract class Bundle : IDisposable
 			return result;
 		}
 
-		string fixedName = FilenameUtils.FixFileIdentifier(name);
+		string fixedName = SpecialFileNames.FixFileIdentifier(name);
 		result = ResolveInternal(fixedName);
 		if (result is not null)
 		{
@@ -118,10 +117,10 @@ public abstract class Bundle : IDisposable
 
 		return fixedName switch
 		{
-			FilenameUtils.DefaultResourceName1 => ResolveInternal(FilenameUtils.DefaultResourceName2),
-			FilenameUtils.DefaultResourceName2 => ResolveInternal(FilenameUtils.DefaultResourceName1),
-			FilenameUtils.BuiltinExtraName1 => ResolveInternal(FilenameUtils.BuiltinExtraName2),
-			FilenameUtils.BuiltinExtraName2 => ResolveInternal(FilenameUtils.BuiltinExtraName1),
+			SpecialFileNames.DefaultResourceName1 => ResolveInternal(SpecialFileNames.DefaultResourceName2),
+			SpecialFileNames.DefaultResourceName2 => ResolveInternal(SpecialFileNames.DefaultResourceName1),
+			SpecialFileNames.BuiltinExtraName1 => ResolveInternal(SpecialFileNames.BuiltinExtraName2),
+			SpecialFileNames.BuiltinExtraName2 => ResolveInternal(SpecialFileNames.BuiltinExtraName1),
 			_ => null,
 		};
 
@@ -185,7 +184,7 @@ public abstract class Bundle : IDisposable
 		}
 
 		string originalName = name;
-		string fixedName = FilenameUtils.FixFileIdentifier(name);
+		string fixedName = SpecialFileNames.FixFileIdentifier(name);
 
 		Bundle? bundleToExclude = null;
 		Bundle? currentBundle = this;

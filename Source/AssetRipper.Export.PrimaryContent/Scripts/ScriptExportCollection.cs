@@ -2,6 +2,7 @@
 using AssetRipper.Assets;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
+using ICSharpCode.Decompiler;
 using ICSharpCode.Decompiler.CSharp.ProjectDecompiler;
 using ICSharpCode.Decompiler.Metadata;
 
@@ -22,12 +23,12 @@ public sealed class ScriptExportCollection : ExportCollectionBase
 
 	public override bool Contains(IUnityObjectBase asset) => asset is IMonoScript;
 
-	public override bool Export(string projectDirectory)
+	public override bool Export(string projectDirectory, FileSystem fileSystem)
 	{
 		IAssemblyManager assemblyManager = ((ScriptContentExtractor)ContentExtractor).AssemblyManager;
 
-		string assemblyDirectory = Path.Combine(projectDirectory, "Assemblies");
-		Directory.CreateDirectory(assemblyDirectory);
+		string assemblyDirectory = fileSystem.Path.Join(projectDirectory, "Assemblies");
+		fileSystem.Directory.Create(assemblyDirectory);
 
 		//Export assemblies
 		List<string> assemblyPaths = new();
@@ -38,22 +39,31 @@ public sealed class ScriptExportCollection : ExportCollectionBase
 
 			//Write assembly
 			{
-				string assemblyPath = Path.Combine(assemblyDirectory, assembly.Name + ".dll");
+				string assemblyPath = fileSystem.Path.Join(assemblyDirectory, assembly.Name + ".dll");
 				assemblyPaths.Add(assemblyPath);
-				using FileStream fileStream = File.Create(assemblyPath);
+				using Stream fileStream = fileSystem.File.Create(assemblyPath);
 				stream.CopyTo(fileStream);
 				stream.Position = 0;
 			}
 		}
 
 		//Decompile scripts
-		string scriptDirectory = Path.Combine(projectDirectory, "Scripts");
+		string scriptDirectory = fileSystem.Path.Join(projectDirectory, "Scripts");
 		foreach (string assemblyPath in assemblyPaths)
 		{
-			string assemblyName = Path.GetFileNameWithoutExtension(assemblyPath);
-			string outputDirectory = Path.Combine(scriptDirectory, assemblyName);
-			Directory.CreateDirectory(outputDirectory);
-			WholeProjectDecompiler decompiler = new(new UniversalAssemblyResolver(assemblyPath, false, null));
+			string assemblyName = fileSystem.Path.GetFileNameWithoutExtension(assemblyPath);
+			string outputDirectory = fileSystem.Path.Join(scriptDirectory, assemblyName);
+			fileSystem.Directory.Create(outputDirectory);
+
+			DecompilerSettings settings = new();
+
+			settings.AlwaysShowEnumMemberValues = true;
+			settings.ShowXmlDocumentation = true;
+
+			settings.UseSdkStyleProjectFormat = false;//sdk style can throw
+			settings.UseNestedDirectoriesForNamespaces = true;
+
+			WholeProjectDecompiler decompiler = new(settings, new UniversalAssemblyResolver(assemblyPath, false, null), null, null, null);
 			PEFile file = new(assemblyPath);
 			decompiler.DecompileProject(file, outputDirectory);
 		}

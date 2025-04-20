@@ -1,38 +1,29 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.IO.Files.Utils;
-using AssetRipper.SourceGenerated.Classes.ClassID_1001;
-using AssetRipper.SourceGenerated.Classes.ClassID_48;
-using AssetRipper.SourceGenerated.Extensions;
 
 namespace AssetRipper.Export.PrimaryContent;
 
 public abstract class ExportCollectionBase
 {
 	public abstract bool Contains(IUnityObjectBase asset);
-	public abstract bool Export(string projectDirectory);
-	protected void ExportAsset(IUnityObjectBase asset, string path, string name)
+	public abstract bool Export(string projectDirectory, FileSystem fileSystem);
+	protected void ExportAsset(IUnityObjectBase asset, string path, string name, FileSystem fileSystem)
 	{
-		if (!Directory.Exists(path))
+		if (!fileSystem.Directory.Exists(path))
 		{
-			Directory.CreateDirectory(path);
+			fileSystem.Directory.Create(path);
 		}
 
 		string fullName = $"{name}.{ExportExtension}";
-		string uniqueName = FileUtils.GetUniqueName(path, fullName, FileUtils.MaxFileNameLength);
-		string filePath = Path.Combine(path, uniqueName);
-		ContentExtractor.Export(asset, filePath);
+		string uniqueName = FileSystem.GetUniqueName(path, fullName, FileSystem.MaxFileNameLength);
+		string filePath = fileSystem.Path.Join(path, uniqueName);
+		ContentExtractor.Export(asset, filePath, fileSystem);
 	}
 
-	protected string GetUniqueFileName(IUnityObjectBase asset, string dirPath)
+	protected string GetUniqueFileName(IUnityObjectBase asset, string dirPath, FileSystem fileSystem)
 	{
-		string fileName = asset switch
-		{
-			IPrefabInstance prefab => prefab.GetName(),
-			IShader shader when !string.IsNullOrEmpty(shader.OriginalName) => shader.OriginalName,
-			_ => asset.GetBestName(),
-		};
-		fileName = FileUtils.RemoveCloneSuffixes(fileName);
-		fileName = FileUtils.RemoveInstanceSuffixes(fileName);
+		string fileName = asset.GetBestName();
+		fileName = FileSystem.RemoveCloneSuffixes(fileName);
+		fileName = FileSystem.RemoveInstanceSuffixes(fileName);
 		fileName = fileName.Trim();
 		if (string.IsNullOrEmpty(fileName))
 		{
@@ -40,18 +31,18 @@ public abstract class ExportCollectionBase
 		}
 		else
 		{
-			fileName = FileUtils.FixInvalidNameCharacters(fileName);
+			fileName = FileSystem.FixInvalidFileNameCharacters(fileName);
 		}
 
 		fileName = $"{fileName}.{ExportExtension}";
-		return GetUniqueFileName(dirPath, fileName);
+		return GetUniqueFileName(dirPath, fileName, fileSystem);
 	}
 
 	protected virtual string ExportExtension => "asset";
 
-	protected static string GetUniqueFileName(string directoryPath, string fileName)
+	protected static string GetUniqueFileName(string directoryPath, string fileName, FileSystem fileSystem)
 	{
-		return FileUtils.GetUniqueName(directoryPath, fileName, FileUtils.MaxFileNameLength);
+		return FileSystem.GetUniqueName(directoryPath, fileName, FileSystem.MaxFileNameLength);
 	}
 
 	public abstract IContentExtractor ContentExtractor { get; }

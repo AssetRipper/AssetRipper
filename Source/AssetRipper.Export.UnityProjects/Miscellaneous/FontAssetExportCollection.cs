@@ -8,7 +8,6 @@ using AssetRipper.SourceGenerated.Classes.ClassID_27;
 using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_Font;
-using System.Buffers.Binary;
 using System.Diagnostics;
 
 namespace AssetRipper.Export.UnityProjects.Miscellaneous

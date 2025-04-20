@@ -78,8 +78,8 @@ public class SmartStreamTests
 			Assert.DoesNotThrow(() => _ = SmartStream.CreateNull().StreamType);
 
 			//Count should match up with the number of references to ThrowIfNull
-			Assert.Throws<NullReferenceException>(() => SmartStream.CreateNull().Read(new byte[2], 1, 1));
-			Assert.Throws<NullReferenceException>(() => SmartStream.CreateNull().Read(new byte[2]));
+			Assert.Throws<NullReferenceException>(() => SmartStream.CreateNull().ReadExactly(new byte[2], 1, 1));
+			Assert.Throws<NullReferenceException>(() => SmartStream.CreateNull().ReadExactly(new byte[2]));
 			Assert.Throws<NullReferenceException>(() => SmartStream.CreateNull().ReadByte());
 			Assert.Throws<NullReferenceException>(() => SmartStream.CreateNull().Seek(0, SeekOrigin.Begin));
 			Assert.Throws<NullReferenceException>(() => SmartStream.CreateNull().SetLength(2));

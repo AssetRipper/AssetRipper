@@ -75,20 +75,23 @@ namespace AssetRipper.SourceGenerated.Extensions
 			Vector3[]? vertices = null;
 			BoneWeight4[]? skin = null;
 
-			origin.RD.VertexData?.ReadData(origin.Collection.Version, origin.Collection.EndianType, null,
-				out vertices,
-				out Vector3[]? _,//normals,
-				out Vector4[]? _,//tangents,
-				out ColorFloat[]? _,//colors,
-				out skin,
-				out Vector2[]? _,//uv0,
-				out Vector2[]? _,//uv1,
-				out Vector2[]? _,//uv2,
-				out Vector2[]? _,//uv3,
-				out Vector2[]? _,//uv4,
-				out Vector2[]? _,//uv5,
-				out Vector2[]? _,//uv6,
-				out Vector2[]? _);//uv7);
+			if (origin.RD.Has_VertexData())
+			{
+				VertexDataBlob.Create(origin.RD.VertexData, origin.Collection.Version, origin.Collection.EndianType).ReadData(
+					out vertices,
+					out Vector3[]? _,//normals,
+					out Vector4[]? _,//tangents,
+					out ColorFloat[]? _,//colors,
+					out skin,
+					out Vector2[]? _,//uv0,
+					out Vector2[]? _,//uv1,
+					out Vector2[]? _,//uv2,
+					out Vector2[]? _,//uv3,
+					out Vector2[]? _,//uv4,
+					out Vector2[]? _,//uv5,
+					out Vector2[]? _,//uv6,
+					out Vector2[]? _);//uv7);
+			}
 
 			if (instance.Has_Vertices())
 			{

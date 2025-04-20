@@ -116,7 +116,7 @@ internal static class Program
 		foreach (SerializableType.Field field in type.Fields)
 		{
 			string typeName = field.Type.ToString();
-			if (field.IsArray)
+			if (field.ArrayDepth > 0)
 			{
 				typeName += string.Join("", Enumerable.Repeat("[]", field.ArrayDepth));
 			}

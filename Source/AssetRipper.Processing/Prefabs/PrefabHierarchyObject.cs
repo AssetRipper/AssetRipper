@@ -1,9 +1,16 @@
 ﻿using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Metadata;
+using AssetRipper.Assets.Traversal;
+using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_1001;
+using AssetRipper.SourceGenerated.Classes.ClassID_18;
+using AssetRipper.SourceGenerated.Classes.ClassID_2;
+using AssetRipper.SourceGenerated.Extensions;
+using AssetRipper.SourceGenerated.MarkerInterfaces;
 
-namespace AssetRipper.Processing;
+namespace AssetRipper.Processing.Prefabs;
 
 public sealed class PrefabHierarchyObject : GameObjectHierarchyObject, INamed
 {
@@ -31,17 +38,54 @@ public sealed class PrefabHierarchyObject : GameObjectHierarchyObject, INamed
 	{
 		Root = root;
 		Prefab = prefab;
+
+		if (Prefab is IPrefabInstanceMarker)
+		{
+			HiddenAssets.Add(Prefab);
+		}
 	}
 
 	public override IEnumerable<(string, PPtr)> FetchDependencies()
 	{
 		return base.FetchDependencies().Append((nameof(Prefab), AssetToPPtr(Prefab)));
 	}
-}
-/*
-Potential issue:
 
-Any object referenced must be emitted and it is nontrivial to find all the references.
-Scene objects can only be referenced within the scene,
-but prefab objects can be referenced from anywhere.
-*/
+	protected override void WalkFields(AssetWalker walker)
+	{
+		this.WalkPrimitiveField(walker, Name);
+
+		walker.DivideAsset(this);
+
+		base.WalkFields(walker);
+
+		walker.DivideAsset(this);
+
+		this.WalkPPtrField(walker, Root);
+
+		walker.DivideAsset(this);
+
+		this.WalkPPtrField(walker, Prefab);
+	}
+
+	public static PrefabHierarchyObject Create(ProcessedAssetCollection collection, IGameObject root, IPrefabInstance prefab)
+	{
+		PrefabHierarchyObject prefabHierarchy = collection.CreateAsset((int)ClassIDType.PrefabInstance, (assetInfo) => new PrefabHierarchyObject(assetInfo, root, prefab));
+
+		foreach (IEditorExtension asset in root.FetchHierarchy())
+		{
+			switch (asset)
+			{
+				case IGameObject gameObject:
+					prefabHierarchy.GameObjects.Add(gameObject);
+					break;
+				case IComponent component:
+					prefabHierarchy.Components.Add(component);
+					break;
+			}
+		}
+
+		prefabHierarchy.SetMainAsset();
+
+		return prefabHierarchy;
+	}
+}

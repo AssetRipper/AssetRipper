@@ -48,9 +48,9 @@ namespace AssetRipper.Export.UnityProjects.Textures
 			}
 		}
 
-		protected override bool ExportInner(IExportContainer container, string filePath, string dirPath)
+		protected override bool ExportInner(IExportContainer container, string filePath, string dirPath, FileSystem fileSystem)
 		{
-			return AssetExporter.Export(container, Asset, filePath);
+			return AssetExporter.Export(container, Asset, filePath, fileSystem);
 		}
 
 		protected override string GetExportExtension(IUnityObjectBase asset)

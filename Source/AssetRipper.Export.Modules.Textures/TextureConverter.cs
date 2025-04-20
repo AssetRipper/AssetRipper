@@ -17,6 +17,7 @@ using AssetRipper.TextureDecoder.Pvrtc;
 using AssetRipper.TextureDecoder.Rgb;
 using AssetRipper.TextureDecoder.Rgb.Formats;
 using AssetRipper.TextureDecoder.Yuy2;
+using System.Runtime.CompilerServices;
 
 namespace AssetRipper.Export.Modules.Textures
 {
@@ -85,12 +86,18 @@ namespace AssetRipper.Export.Modules.Textures
 			// error occurs here
 			// todo fix for texture 2d arrays
 
+			if (!TryGetTextureFormat(texture, out TextureFormat format))
+			{
+				bitmap = DirectBitmap.Empty;
+				return false;
+			}
+
 			if (!TryConvertToBitmap(
-				texture.FormatE,
+				format,
 				texture.Width,
 				texture.Height,
 				texture.Depth,
-				(int)texture.DataSize,
+				texture.GetCompleteImageSize(),
 				texture.Collection.Version,
 				buffer,
 				out bitmap))
@@ -101,6 +108,26 @@ namespace AssetRipper.Export.Modules.Textures
 			bitmap.FlipY();
 
 			return true;
+
+			static bool TryGetTextureFormat(ITexture2DArray texture, out TextureFormat format)
+			{
+				try
+				{
+					format = ((GraphicsFormat)texture.Format).ToTextureFormat();
+					return true;
+				}
+				catch (NotSupportedException)
+				{
+					format = default;
+					return false;
+				}
+				catch (ArgumentOutOfRangeException)
+				{
+					Logger.Log(LogType.Error, LogCategory.Export, $"Unknown GraphicsFormat '{texture.Format}'");
+					format = default;
+					return false;
+				}
+			}
 		}
 
 		public static bool TryConvertToBitmap(ICubemapArray texture, out DirectBitmap bitmap)
@@ -115,9 +142,9 @@ namespace AssetRipper.Export.Modules.Textures
 			if (!TryConvertToBitmap(
 				texture.FormatE,
 				texture.Width,
-				texture.Width,//Not sure if this is correct
-				texture.CubemapCount * 6,//Not sure if this is correct
-				(int)texture.DataSize,
+				texture.GetHeight(),
+				texture.GetDepth(),
+				texture.GetCompleteImageSize(),
 				texture.Collection.Version,
 				buffer,
 				out bitmap))
@@ -125,7 +152,7 @@ namespace AssetRipper.Export.Modules.Textures
 				return false;
 			}
 
-			bitmap.FlipY();
+			bitmap.FlipY();// Maybe not needed?
 
 			return true;
 		}
@@ -226,6 +253,14 @@ namespace AssetRipper.Export.Modules.Textures
 		{
 			if (width <= 0 || height <= 0 || depth <= 0)
 			{
+				Logger.Log(LogType.Error, LogCategory.Export, $"Invalid texture dimensions. Width: {width}, Height: {height}, Depth: {depth}.");
+				bitmap = DirectBitmap.Empty;
+				return false;
+			}
+
+			if (1L * width * height * depth * Unsafe.SizeOf<TColor>() > int.MaxValue)
+			{
+				Logger.Log(LogType.Error, LogCategory.Export, $"Texture size is too large. Width: {width}, Height: {height}, Depth: {depth}.");
 				bitmap = DirectBitmap.Empty;
 				return false;
 			}
@@ -237,33 +272,37 @@ namespace AssetRipper.Export.Modules.Textures
 				return false;
 			}
 
+			ReadOnlySpan<byte> uncompressedSpan;
+			int bytesPerLayer;
+			if (textureFormat.IsCrunched())
+			{
+				if (CrunchHandler.DecompressCrunch(textureFormat, version, data, out byte[]? decompressedData))
+				{
+					uncompressedSpan = decompressedData;
+					bytesPerLayer = decompressedData.Length / depth;
+				}
+				else
+				{
+					bitmap = DirectBitmap.Empty;
+					return false;
+				}
+			}
+			else
+			{
+				uncompressedSpan = data;
+				bytesPerLayer = imageSize;
+			}
+
 			bitmap = new DirectBitmap<TColor, TChannelValue>(width, height, depth);
 			int outputSize = width * height * bitmap.PixelSize;
 			for (int i = 0; i < depth; i++)
 			{
-				ReadOnlySpan<byte> inputSpan = new ReadOnlySpan<byte>(data, i * imageSize, imageSize);
-				ReadOnlySpan<byte> uncompressedSpan;
-				if (textureFormat.IsCrunched())
-				{
-					if (CrunchHandler.DecompressCrunch(textureFormat, version, inputSpan, out byte[]? decompressedData))
-					{
-						uncompressedSpan = decompressedData;
-					}
-					else
-					{
-						bitmap = DirectBitmap.Empty;
-						return false;
-					}
-				}
-				else
-				{
-					uncompressedSpan = inputSpan;
-				}
+				ReadOnlySpan<byte> inputSpan = uncompressedSpan.Slice(i * bytesPerLayer, bytesPerLayer);
 				Span<byte> outputSpan = bitmap.Bits.Slice(i * outputSize, outputSize);
 
 				if (typeof(TColor) == typeof(ColorBGRA32))
 				{
-					if (!TryDecodeTexture(textureFormat, width, height, uncompressedSpan, outputSpan))
+					if (!TryDecodeTexture(textureFormat, width, height, inputSpan, outputSpan))
 					{
 						bitmap = DirectBitmap.Empty;
 						return false;
@@ -271,7 +310,7 @@ namespace AssetRipper.Export.Modules.Textures
 				}
 				else
 				{
-					if (!TryDecodeTexture<TColor, TChannelValue>(textureFormat, width, height, uncompressedSpan, outputSpan))
+					if (!TryDecodeTexture<TColor, TChannelValue>(textureFormat, width, height, inputSpan, outputSpan))
 					{
 						bitmap = DirectBitmap.Empty;
 						return false;
@@ -327,10 +366,17 @@ namespace AssetRipper.Export.Modules.Textures
 
 				//BC
 				case TextureFormat.BC4:
+					Bc4.Decompress(inputSpan, width, height, outputSpan);
+					return true;
 				case TextureFormat.BC5:
+					Bc5.Decompress(inputSpan, width, height, outputSpan);
+					return true;
 				case TextureFormat.BC6H:
+					Bc6h.Decompress(inputSpan, width, height, false, outputSpan);
+					return true;
 				case TextureFormat.BC7:
-					return DecodeBC(inputSpan, textureFormat, width, height, outputSpan);
+					Bc7.Decompress(inputSpan, width, height, outputSpan);
+					return true;
 
 				//ETC
 				case TextureFormat.ETC_RGB4:
@@ -509,54 +555,7 @@ namespace AssetRipper.Export.Modules.Textures
 			}
 		}
 
-		private static bool DecodeBC(ReadOnlySpan<byte> inputData, TextureFormat textureFormat, int width, int height, Span<byte> outputData)
-		{
-			if (width % 4 != 0 || height % 4 != 0) //Managed code doesn't currently handle partial block sizes well.
-			{
-				return NativeDecodeBC(inputData, textureFormat, width, height, outputData);
-			}
-			else
-			{
-				return ManagedDecodeBC(inputData, textureFormat, width, height, outputData);
-			}
-		}
-
-		private static bool NativeDecodeBC(ReadOnlySpan<byte> inputData, TextureFormat textureFormat, int width, int height, Span<byte> outputData)
-		{
-			Logger.Info(LogCategory.Export, $"Performing alternate decoding for {textureFormat}");
-
-			return textureFormat switch
-			{
-				TextureFormat.BC4 => Texture2DDecoder.TextureDecoder.DecodeBC4(inputData.ToArray(), width, height, outputData),
-				TextureFormat.BC5 => Texture2DDecoder.TextureDecoder.DecodeBC5(inputData.ToArray(), width, height, outputData),
-				TextureFormat.BC6H => Texture2DDecoder.TextureDecoder.DecodeBC6(inputData.ToArray(), width, height, outputData),
-				TextureFormat.BC7 => Texture2DDecoder.TextureDecoder.DecodeBC7(inputData.ToArray(), width, height, outputData),
-				_ => false,
-			};
-		}
-
-		private static bool ManagedDecodeBC(ReadOnlySpan<byte> inputData, TextureFormat textureFormat, int width, int height, Span<byte> outputData)
-		{
-			switch (textureFormat)
-			{
-				case TextureFormat.BC4:
-					Bc4.Decompress(inputData, width, height, outputData);
-					return true;
-				case TextureFormat.BC5:
-					Bc5.Decompress(inputData, width, height, outputData);
-					return true;
-				case TextureFormat.BC6H:
-					Bc6h.Decompress(inputData, width, height, false, outputData);
-					return true;
-				case TextureFormat.BC7:
-					Bc7.Decompress(inputData, width, height, outputData);
-					return true;
-				default:
-					return false;
-			}
-		}
-
-		public static void UnpackNormal(Span<byte> data)
+		private static void UnpackNormal(Span<byte> data)
 		{
 			for (int i = 0; i < data.Length; i += 4)
 			{

@@ -1,9 +1,14 @@
-namespace AssetRipper.IO.Files
+using AssetRipper.SmartEnums;
+
+namespace AssetRipper.IO.Files;
+
+[SmartEnum]
+public readonly partial record struct BuildTarget
 {
 	/// <summary>
 	/// <see href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Editor/Mono/BuildTarget.cs"/>
 	/// </summary>
-	public enum BuildTarget : uint
+	private enum Internal : uint
 	{
 		ValidPlayer = 1,
 		/// <summary>
@@ -146,29 +151,30 @@ namespace AssetRipper.IO.Files
 		AnyPlayer = 0xFFFFFFFF,
 	}
 
-	public static class PlatformExtensions
+	public bool IsStandalone
 	{
-		public static bool IsCompatible(this BuildTarget _this, BuildTarget comp)
+		get
 		{
-			return _this == comp || (_this.IsStandalone() && comp.IsStandalone());
-		}
-
-		public static bool IsStandalone(this BuildTarget _this)
-		{
-			switch (_this)
+			switch (this)
 			{
-				case BuildTarget.StandaloneWinPlayer:
-				case BuildTarget.StandaloneWin64Player:
-				case BuildTarget.StandaloneLinux:
-				case BuildTarget.StandaloneLinux64:
-				case BuildTarget.StandaloneLinuxUniversal:
-				case BuildTarget.StandaloneOSXIntel:
-				case BuildTarget.StandaloneOSXIntel64:
-				case BuildTarget.StandaloneOSXPPC:
-				case BuildTarget.StandaloneOSXUniversal:
+				case StandaloneWinPlayer:
+				case StandaloneWin64Player:
+				case StandaloneLinux:
+				case StandaloneLinux64:
+				case StandaloneLinuxUniversal:
+				case StandaloneOSXIntel:
+				case StandaloneOSXIntel64:
+				case StandaloneOSXPPC:
+				case StandaloneOSXUniversal:
 					return true;
+				default:
+					return false;
 			}
-			return false;
 		}
+	}
+
+	public bool IsCompatible(BuildTarget comp)
+	{
+		return this == comp || (IsStandalone && comp.IsStandalone);
 	}
 }

@@ -20,11 +20,11 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous
 			}
 		}
 
-		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
+		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path, FileSystem fileSystem)
 		{
 			if (((IVideoClip)asset).TryGetContent(out byte[]? data))
 			{
-				File.WriteAllBytes(path, data);
+				fileSystem.File.WriteAllBytes(path, data);
 				return true;
 			}
 			else

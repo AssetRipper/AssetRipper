@@ -45,21 +45,38 @@ public sealed class CommandsPage : VuePage
 						.WithCustomAttribute("@input", "handleExportPathChange").Close();
 				}
 
+				using (new Div(writer).WithClass("form-check mb-2").End())
+				{
+					new Input(writer)
+						.WithType("checkbox")
+						.WithClass("form-check-input")
+						.WithCustomAttribute("v-model", "create_subfolder")
+						.WithCustomAttribute("@input", "handleExportPathChange")
+						.WithId("createSubfolder")
+						.Close();
+					new Label(writer)
+						.WithClass("form-check-label")
+						.WithCustomAttribute("for", "createSubfolder")
+						.Close(Localization.CreateSubfolder);
+				}
+
 				using (new Form(writer).WithAction("/Export/UnityProject").WithMethod("post").End())
 				{
 					new Input(writer).WithType("hidden").WithName("Path").WithCustomAttribute("v-model", "export_path").Close();
+					new Input(writer).WithType("hidden").WithName("CreateSubfolder").WithCustomAttribute("v-model", "create_subfolder").Close();
 
-					new Input(writer).WithCustomAttribute("v-if", "export_path_has_files").WithType("submit").WithClass("btn btn-danger").WithValue(Localization.ExportUnityProject).Close();
-					new Button(writer).WithCustomAttribute("v-else-if", "export_path === ''").WithClass("btn btn-primary").WithCustomAttribute("disabled").Close(Localization.ExportUnityProject);
+					new Button(writer).WithCustomAttribute("v-if", "export_path === '' || export_path !== export_path.trim()").WithClass("btn btn-primary").WithCustomAttribute("disabled").Close(Localization.ExportUnityProject);
+					new Input(writer).WithCustomAttribute("v-else-if", "export_path_has_files").WithType("submit").WithClass("btn btn-danger").WithValue(Localization.ExportUnityProject).Close();
 					new Input(writer).WithCustomAttribute("v-else").WithType("submit").WithClass("btn btn-primary").WithValue(Localization.ExportUnityProject).Close();
 				}
 
 				using (new Form(writer).WithAction("/Export/PrimaryContent").WithMethod("post").End())
 				{
 					new Input(writer).WithType("hidden").WithName("Path").WithCustomAttribute("v-model", "export_path").Close();
+					new Input(writer).WithType("hidden").WithName("CreateSubfolder").WithCustomAttribute("v-model", "create_subfolder").Close();
 
-					new Input(writer).WithCustomAttribute("v-if", "export_path_has_files").WithType("submit").WithClass("btn btn-danger").WithValue(Localization.ExportPrimaryContent).Close();
-					new Button(writer).WithCustomAttribute("v-else-if", "export_path === ''").WithClass("btn btn-primary").WithCustomAttribute("disabled").Close(Localization.ExportPrimaryContent);
+					new Button(writer).WithCustomAttribute("v-if", "export_path === '' || export_path !== export_path.trim()").WithClass("btn btn-primary").WithCustomAttribute("disabled").Close(Localization.ExportPrimaryContent);
+					new Input(writer).WithCustomAttribute("v-else-if", "export_path_has_files").WithType("submit").WithClass("btn btn-danger").WithValue(Localization.ExportPrimaryContent).Close();
 					new Input(writer).WithCustomAttribute("v-else").WithType("submit").WithClass("btn btn-primary").WithValue(Localization.ExportPrimaryContent).Close();
 				}
 

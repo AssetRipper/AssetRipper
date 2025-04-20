@@ -4,6 +4,7 @@ using AssetRipper.Export.UnityProjects;
 using AssetRipper.Export.UnityProjects.Configuration;
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly.Managers;
+using AssetRipper.IO.Files;
 using AssetRipper.Processing;
 
 namespace AssetRipper.GUI.Web;
@@ -52,9 +53,13 @@ public static class GameFileLoader
 
 	public static void ExportUnityProject(string path)
 	{
-		if (IsLoaded)
+		if (IsLoaded && IsValidExportDirectory(path))
 		{
-			Directory.Delete(path, true);
+			if (Directory.Exists(path))
+			{
+				Directory.Delete(path, true);
+			}
+			
 			Directory.CreateDirectory(path);
 			ExportHandler.Export(GameData, path);
 		}
@@ -62,15 +67,19 @@ public static class GameFileLoader
 
 	public static void ExportPrimaryContent(string path)
 	{
-		if (IsLoaded)
+		if (IsLoaded && IsValidExportDirectory(path))
 		{
-			Directory.Delete(path, true);
+			if (Directory.Exists(path))
+			{
+				Directory.Delete(path, true);
+			}
+			
 			Directory.CreateDirectory(path);
-			Logger.Info(LogCategory.Export, "Starting export");
+			Logger.Info(LogCategory.Export, "Starting primary content export");
 			Logger.Info(LogCategory.Export, $"Attempting to export assets to {path}...");
 			Settings.ExportRootPath = path;
-			PrimaryContentExporter.CreateDefault(GameData).Export(GameBundle, Settings);
-			Logger.Info(LogCategory.Export, "Finished exporting assets");
+			PrimaryContentExporter.CreateDefault(GameData).Export(GameBundle, Settings, LocalFileSystem.Instance);
+			Logger.Info(LogCategory.Export, "Finished exporting primary content.");
 		}
 	}
 
@@ -79,5 +88,21 @@ public static class GameFileLoader
 		LibraryConfiguration settings = new();
 		settings.LoadFromDefaultPath();
 		return settings;
+	}
+
+	private static bool IsValidExportDirectory(string path)
+	{
+		if (string.IsNullOrEmpty(path))
+		{
+			Logger.Error(LogCategory.Export, "Export path is empty");
+			return false;
+		}
+		string directoryName = Path.GetFileName(path);
+		if (directoryName is "Desktop" or "Documents" or "Downloads")
+		{
+			Logger.Error(LogCategory.Export, $"Export path '{path}' is a system directory");
+			return false;
+		}
+		return true;
 	}
 }

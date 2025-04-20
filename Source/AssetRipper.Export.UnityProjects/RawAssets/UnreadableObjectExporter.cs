@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Import.AssetCreation;
-using AssetRipper.IO.Files;
 
 namespace AssetRipper.Export.UnityProjects.RawAssets
 {
@@ -20,35 +19,35 @@ namespace AssetRipper.Export.UnityProjects.RawAssets
 			}
 		}
 
-		public bool Export(IExportContainer container, IUnityObjectBase asset, string path)
+		public bool Export(IExportContainer container, IUnityObjectBase asset, string path, FileSystem fileSystem)
 		{
-			File.WriteAllBytes(path, ((UnreadableObject)asset).RawData);
+			fileSystem.File.WriteAllBytes(path, ((UnreadableObject)asset).RawData);
 			return true;
 		}
 
-		public void Export(IExportContainer container, IUnityObjectBase asset, string path, Action<IExportContainer, IUnityObjectBase, string>? callback)
+		public void Export(IExportContainer container, IUnityObjectBase asset, string path, FileSystem fileSystem, Action<IExportContainer, IUnityObjectBase, string, FileSystem>? callback)
 		{
-			if (Export(container, asset, path))
+			if (Export(container, asset, path, fileSystem))
 			{
-				callback?.Invoke(container, asset, path);
+				callback?.Invoke(container, asset, path, fileSystem);
 			}
 		}
 
-		public bool Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path)
+		public bool Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path, FileSystem fileSystem)
 		{
 			bool success = true;
 			foreach (IUnityObjectBase? asset in assets)
 			{
-				success &= Export(container, asset, path);
+				success &= Export(container, asset, path, fileSystem);
 			}
 			return success;
 		}
 
-		public void Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path, Action<IExportContainer, IUnityObjectBase, string>? callback)
+		public void Export(IExportContainer container, IEnumerable<IUnityObjectBase> assets, string path, FileSystem fileSystem, Action<IExportContainer, IUnityObjectBase, string, FileSystem>? callback)
 		{
 			foreach (IUnityObjectBase asset in assets)
 			{
-				Export(container, asset, path, callback);
+				Export(container, asset, path, fileSystem, callback);
 			}
 		}
 

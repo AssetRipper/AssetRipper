@@ -32,4 +32,16 @@ public sealed class SingletonDataStorage : DataStorage<DataInstance>
 			throw new KeyNotFoundException();
 		}
 	}
+
+	public void SetStoredValue<T>(string key, T value)
+	{
+		if (data.TryGetValue(key, out DataInstance? storedValue) && storedValue is DataInstance<T> instance)
+		{
+			instance.Value = value;
+		}
+		else
+		{
+			throw new KeyNotFoundException();
+		}
+	}
 }

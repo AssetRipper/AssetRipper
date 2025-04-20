@@ -1,9 +1,9 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Import.Structure.Assembly;
-using AssetRipper.IO.Files.Utils;
 using AssetRipper.SourceGenerated.Classes.ClassID_1035;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
+using AssetRipper.SourceGenerated.Extensions;
 using System.Diagnostics;
 
 namespace AssetRipper.Export.UnityProjects.Scripts;
@@ -73,16 +73,16 @@ public abstract class ScriptExportCollectionBase : ExportCollection
 
 	protected static void GetExportSubPath(string assembly, string @namespace, string @class, out string folderPath, out string fileName)
 	{
-		string assemblyFolder = FilenameUtils.RemoveAssemblyFileExtension(assembly);
+		string assemblyFolder = SpecialFileNames.RemoveAssemblyFileExtension(assembly);
 		string scriptsFolder = GetScriptsFolderName(assemblyFolder);
 		string namespaceFolder = @namespace.Replace('.', Path.DirectorySeparatorChar);
-		folderPath = DirectoryUtils.FixInvalidPathCharacters(Path.Combine(scriptsFolder, assemblyFolder, namespaceFolder));
-		fileName = $"{DirectoryUtils.FixInvalidPathCharacters(@class)}.cs";
+		folderPath = FileSystem.FixInvalidPathCharacters(Path.Join(scriptsFolder, assemblyFolder, namespaceFolder));
+		fileName = $"{FileSystem.FixInvalidPathCharacters(@class)}.cs";
 	}
 
 	protected static void GetExportSubPath(IMonoScript script, out string folderPath, out string fileName)
 	{
-		GetExportSubPath(script.GetAssemblyNameFixed(), script.Namespace.String, script.ClassName_R.String, out folderPath, out fileName);
+		GetExportSubPath(script.GetAssemblyNameFixed(), script.Namespace.String, script.GetNonGenericClassName(), out folderPath, out fileName);
 	}
 
 	private protected static void GetExportSubPath(MonoScriptInfo script, out string folderPath, out string fileName)
@@ -90,11 +90,11 @@ public abstract class ScriptExportCollectionBase : ExportCollection
 		GetExportSubPath(script.Assembly, script.Namespace, script.Class, out folderPath, out fileName);
 	}
 
-	protected static void OnScriptExported(IExportContainer container, IMonoScript script, string path)
+	protected static void OnScriptExported(IExportContainer container, IMonoScript script, string path, FileSystem fileSystem)
 	{
 		IMonoImporter importer = MonoImporter.Create(script.Collection, container.ExportVersion);
 		importer.ExecutionOrder = (short)script.ExecutionOrder;
 		Meta meta = new Meta(ScriptHashing.CalculateScriptGuid(script), importer);
-		ExportMeta(container, meta, path);
+		ExportMeta(container, meta, path, fileSystem);
 	}
 }

@@ -8,8 +8,8 @@ using AssetRipper.Import.Structure.Assembly.Mono;
 using AssetRipper.Import.Structure.Assembly.Serializable;
 using AssetRipper.Import.Structure.Assembly.TypeTrees;
 using AssetRipper.IO.Endian;
+using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
-using AssetRipper.IO.Files.Utils;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
@@ -24,6 +24,7 @@ using AssetRipper.SourceGenerated.Subclasses.GUIStyle;
 using AssetRipper.SourceGenerated.Subclasses.Hash128;
 using AssetRipper.SourceGenerated.Subclasses.LayerMask;
 using AssetRipper.SourceGenerated.Subclasses.Matrix4x4f;
+using AssetRipper.SourceGenerated.Subclasses.PropertyName;
 using AssetRipper.SourceGenerated.Subclasses.Quaternionf;
 using AssetRipper.SourceGenerated.Subclasses.Rectf;
 using AssetRipper.SourceGenerated.Subclasses.RectOffset;
@@ -46,9 +47,11 @@ namespace AssetRipper.Import.AssetCreation
 
 		public override IUnityObjectBase? ReadAsset(AssetInfo assetInfo, ReadOnlyArraySegment<byte> assetData, SerializedType? assetType)
 		{
-			if (assetInfo.Collection.Version.Equals(0, 0, 0))
+			if (assetInfo.Collection.Version.LessThan(3, 5))
 			{
 				//Assets with a stripped version can't be read.
+				//Similarly, Unity versions before 3.5 are not supported.
+				//Most asset types changed in 3.5, so this has minimal impact.
 				return new UnreadableObject(assetInfo, assetData.ToArray());
 			}
 			else if (assetInfo.ClassID == (int)ClassIDType.MonoBehaviour)
@@ -99,7 +102,7 @@ namespace AssetRipper.Import.AssetCreation
 			{
 				return asset;
 			}
-			else if (FilenameUtils.IsDefaultResourceOrBuiltinExtra(assetInfo.Collection.Name))
+			else if (SpecialFileNames.IsDefaultResourceOrBuiltinExtra(assetInfo.Collection.Name))
 			{
 				Logger.Warning(LogCategory.Import, error);
 				return asset;
@@ -160,7 +163,7 @@ namespace AssetRipper.Import.AssetCreation
 
 		private static IUnityObjectBase? CreateAsset(AssetInfo assetInfo, UnityVersion version)
 		{
-			IUnityObjectBase? asset = AssetFactory.Create(assetInfo, version);
+			IUnityObjectBase? asset = AssetFactory.CreateSerialized(assetInfo, version);
 			if (asset is null && TypeTreeNodeStruct.TryMakeFromTpk((ClassIDType)assetInfo.ClassID, version, out TypeTreeNodeStruct releaseRoot, out TypeTreeNodeStruct editorRoot))
 			{
 				return TypeTreeObject.Create(assetInfo, releaseRoot, editorRoot);
@@ -229,7 +232,7 @@ namespace AssetRipper.Import.AssetCreation
 				MonoUtils.GradientName => Gradient.Create(version),
 				MonoUtils.RectOffsetName => RectOffset.Create(),
 				MonoUtils.GUIStyleName => GUIStyle.Create(version),
-				MonoUtils.PropertyNameName => throw new NotSupportedException("PropertyName should be treated as a normal string elsewhere in the codebase, currently MonoType."),
+				MonoUtils.PropertyNameName => PropertyName.Create(version),
 				_ => throw new NotSupportedException(name),
 			};
 		}

@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
-using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
 using System.Diagnostics;
 
@@ -49,7 +48,7 @@ public sealed record class SingleRedirectExportCollection(IUnityObjectBase Asset
 		}
 	}
 
-	bool IExportCollection.Export(IExportContainer container, string projectDirectory)
+	bool IExportCollection.Export(IExportContainer container, string projectDirectory, FileSystem fileSystem)
 	{
 		throw new NotSupportedException();
 	}

@@ -1,6 +1,6 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.GUI.Web.Paths;
-using AssetRipper.IO.Files.Utils;
+using AssetRipper.IO.Files;
 
 namespace AssetRipper.GUI.Web.Pages.Assets;
 
@@ -23,7 +23,7 @@ internal sealed class ImageTab : AssetHtmlTab
 	{
 		string pngUrl = AssetAPI.GetImageUrl(Path, "png");
 		string rawUrl = AssetAPI.GetImageUrl(Path);
-		string fileName = FileUtils.FixInvalidNameCharacters(Asset.GetBestName());
+		string fileName = FileSystem.FixInvalidFileNameCharacters(Asset.GetBestName());
 
 		// Click on image to save
 		using (new A(writer).WithHref(pngUrl).WithDownload(fileName).End())

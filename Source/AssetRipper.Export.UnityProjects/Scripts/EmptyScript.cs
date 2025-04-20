@@ -1,4 +1,5 @@
 ﻿using AssetRipper.SourceGenerated.Classes.ClassID_115;
+using AssetRipper.SourceGenerated.Extensions;
 
 namespace AssetRipper.Export.UnityProjects.Scripts;
 
@@ -16,6 +17,11 @@ public static class EmptyScript
 
 	public static string GetContent(string? @namespace, string name)
 	{
+		if (MonoScriptExtensions.IsGeneric(name, out string genericName, out int genericCount))
+		{
+			string genericParams = string.Join(", ", Enumerable.Range(1, genericCount).Select(i => $"T{i}"));
+			name = $"{genericName}<{genericParams}>";
+		}
 		if (string.IsNullOrEmpty(@namespace))
 		{
 			//Indented so that the numerical section can be easily copy-pasted when needed.

@@ -133,7 +133,7 @@ namespace AssetRipper.IO.Files.Streams.MultiFile
 		/// <returns>True if a valid multi file exists in that directory with that name</returns>
 		private static bool Exists(string dirPath, string fileName)
 		{
-			string filePath = Path.Combine(dirPath, fileName);
+			string filePath = Path.Join(dirPath, fileName);
 			string splitFilePath = filePath + ".split";
 
 			string[] splitFiles = GetFiles(dirPath, fileName);
@@ -166,7 +166,7 @@ namespace AssetRipper.IO.Files.Streams.MultiFile
 
 		private static Stream OpenRead(string dirPath, string fileName)
 		{
-			string filePath = Path.Combine(dirPath, fileName);
+			string filePath = Path.Join(dirPath, fileName);
 			string splitFilePath = filePath + ".split";
 
 			string[] splitFiles = GetFiles(dirPath, fileName);

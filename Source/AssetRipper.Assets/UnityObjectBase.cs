@@ -15,17 +15,19 @@ public abstract partial class UnityObjectBase : UnityAssetBase, IUnityObjectBase
 	}
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-	private OriginalPathDetails? originalPathDetails;
+	private PathDetails? originalPathDetails;
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+	private PathDetails? overridePathDetails;
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public AssetInfo AssetInfo { get; }
 	public AssetCollection Collection => AssetInfo.Collection;
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public int ClassID => AssetInfo.ClassID;
 	public long PathID => AssetInfo.PathID;
 	public virtual string ClassName => GetType().Name;
 	public IUnityObjectBase? MainAsset { get; set; }
 
-	/// <summary>
-	/// The original path of the asset's file, relative to the project root.
-	/// </summary>
+	/// <inheritdoc/>
 	public string? OriginalPath
 	{
 		get => originalPathDetails?.ToString();
@@ -43,9 +45,7 @@ public abstract partial class UnityObjectBase : UnityAssetBase, IUnityObjectBase
 		}
 	}
 
-	/// <summary>
-	/// The original directory containing the asset's file, relative to the project root.
-	/// </summary>
+	/// <inheritdoc/>
 	public string? OriginalDirectory
 	{
 		get => originalPathDetails?.Directory;
@@ -63,9 +63,7 @@ public abstract partial class UnityObjectBase : UnityAssetBase, IUnityObjectBase
 		}
 	}
 
-	/// <summary>
-	/// The original name of the asset's file.
-	/// </summary>
+	/// <inheritdoc/>
 	public string? OriginalName
 	{
 		get => originalPathDetails?.Name;
@@ -83,9 +81,7 @@ public abstract partial class UnityObjectBase : UnityAssetBase, IUnityObjectBase
 		}
 	}
 
-	/// <summary>
-	/// The original extension of the asset's file, not including the period.
-	/// </summary>
+	/// <inheritdoc/>
 	public string? OriginalExtension
 	{
 		get => originalPathDetails?.Extension;
@@ -99,6 +95,78 @@ public abstract partial class UnityObjectBase : UnityAssetBase, IUnityObjectBase
 			{
 				originalPathDetails = new();
 				originalPathDetails.Extension = value;
+			}
+		}
+	}
+
+	/// <inheritdoc/>
+	public string? OverridePath
+	{
+		get => overridePathDetails?.ToString();
+		set
+		{
+			if (value is null)
+			{
+				overridePathDetails = null;
+			}
+			else
+			{
+				overridePathDetails ??= new();
+				overridePathDetails.FullPath = value;
+			}
+		}
+	}
+
+	/// <inheritdoc/>
+	public string? OverrideDirectory
+	{
+		get => overridePathDetails?.Directory;
+		set
+		{
+			if (overridePathDetails is not null)
+			{
+				overridePathDetails.Directory = value;
+			}
+			else if (value is not null)
+			{
+				overridePathDetails = new();
+				overridePathDetails.Directory = value;
+			}
+		}
+	}
+
+	/// <inheritdoc/>
+	public string? OverrideName
+	{
+		get => overridePathDetails?.Name;
+		set
+		{
+			if (overridePathDetails is not null)
+			{
+				overridePathDetails.Name = value;
+			}
+			else if (value is not null)
+			{
+				overridePathDetails = new();
+				overridePathDetails.Name = value;
+			}
+		}
+	}
+
+	/// <inheritdoc/>
+	public string? OverrideExtension
+	{
+		get => overridePathDetails?.Extension;
+		set
+		{
+			if (overridePathDetails is not null)
+			{
+				overridePathDetails.Extension = value;
+			}
+			else if (value is not null)
+			{
+				overridePathDetails = new();
+				overridePathDetails.Extension = value;
 			}
 		}
 	}

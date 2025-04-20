@@ -1,6 +1,6 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.GUI.Web.Paths;
-using AssetRipper.Processing;
+using AssetRipper.Processing.Prefabs;
 using AssetRipper.Processing.Textures;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
@@ -64,12 +64,20 @@ internal sealed class InformationTab(IUnityObjectBase asset, AssetPath path) : A
 					new Th(writer).Close(Localization.ClassIdTypeName);
 					new Td(writer).Close(Asset.ClassName);
 				}
-				if (Asset.OriginalDirectory is not null || Asset.OriginalName is not null || Asset.OriginalExtension is not null)
+				if (Asset.OriginalPath is not null)
 				{
 					using (new Tr(writer).End())
 					{
 						new Th(writer).Close(Localization.OriginalPath);
 						new Td(writer).Close(Asset.OriginalPath);
+					}
+				}
+				if (Asset.OverridePath is not null)
+				{
+					using (new Tr(writer).End())
+					{
+						new Th(writer).Close(Localization.OverridePath);
+						new Td(writer).Close(Asset.OverridePath);
 					}
 				}
 				if (!string.IsNullOrEmpty(Asset.AssetBundleName))

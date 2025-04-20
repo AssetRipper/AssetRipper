@@ -1,6 +1,7 @@
 ﻿using AsmResolver.DotNet;
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly.Managers;
+using AssetRipper.Processing.Assemblies;
 using ICSharpCode.Decompiler.Metadata;
 using System.Collections.Concurrent;
 using IAssemblyResolver = ICSharpCode.Decompiler.Metadata.IAssemblyResolver;
@@ -16,15 +17,11 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 		/// As a result, it tries to load these assemblies:<br />
 		///  * System.Runtime.InteropServices<br />
 		///  * System.Runtime.CompilerServices.Unsafe<br /><br />
-		/// Possible solutions:<br />
-		///	 * The types from these assemblies seem to be included in mscorlib, so forwarding assemblies might work.<br />
-		///	 * Including the ones from a .NET installation as stored resources.<br />
-		///	Current solution:<br />
-		///	 * We currently use a <see cref="backupResolver"/> to resolve references from local .NET installations.
-		///	   Given that this just causes a failed resolve on System.Private.CoreLib, it might not be doing much.
+		/// Current solution:<br />
+		///  * The types from these assemblies always seem to be included in mscorlib, we currently use a <see cref="ForwardingAssemblyGenerator"/>
+		///    to enable these types to be resolved.
 		/// </remarks>
 		private readonly ConcurrentDictionary<string, PEFile> peAssemblies = new();
-		private readonly UniversalAssemblyResolver backupResolver = new UniversalAssemblyResolver(null, false, null);
 		public CecilAssemblyResolver(IAssemblyManager manager)
 		{
 			foreach (AssemblyDefinition assembly in manager.GetAssemblies())
@@ -39,16 +36,11 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 			}
 		}
 
-		public PEFile? Resolve(IAssemblyReference reference)
+		public MetadataFile? Resolve(IAssemblyReference reference)
 		{
-			if (peAssemblies.TryGetValue(reference.Name, out PEFile? result))
+			if (peAssemblies.TryGetValue(reference.Name, out PEFile? peResult))
 			{
-				return result;
-			}
-			else if (backupResolver.TryResolve(reference, out result))
-			{
-				Logger.Info(LogCategory.Export, $"Assembly resolved from local .NET installation: {reference.Name}");
-				return result;
+				return peResult;
 			}
 			else
 			{
@@ -59,7 +51,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 
 		public PEFile Resolve(AssemblyDefinition assembly) => peAssemblies[assembly.Name!];
 
-		public Task<PEFile?> ResolveAsync(IAssemblyReference reference)
+		public Task<MetadataFile?> ResolveAsync(IAssemblyReference reference)
 		{
 			return Task.Run(() => Resolve(reference));
 		}
@@ -70,15 +62,11 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 		/// <param name="mainModule"></param>
 		/// <param name="moduleName"></param>
 		/// <returns></returns>
-		public PEFile? ResolveModule(PEFile mainModule, string moduleName)
+		public MetadataFile? ResolveModule(MetadataFile mainModule, string moduleName)
 		{
-			PEFile? result = peAssemblies.Values.Where(x => x.Name == moduleName).SingleOrDefault();
+			MetadataFile? result = peAssemblies.Values.Where(x => x.Name == moduleName).SingleOrDefault();
 			if (result is not null)
 			{
-			}
-			else if (backupResolver.TryResolveModule(mainModule, moduleName, out result))
-			{
-				Logger.Info(LogCategory.Export, $"Module resolved from local .NET installation: {moduleName}");
 			}
 			else
 			{
@@ -87,7 +75,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 			return result;
 		}
 
-		public Task<PEFile?> ResolveModuleAsync(PEFile mainModule, string moduleName)
+		public Task<MetadataFile?> ResolveModuleAsync(MetadataFile mainModule, string moduleName)
 		{
 			return Task.Run(() => ResolveModule(mainModule, moduleName));
 		}

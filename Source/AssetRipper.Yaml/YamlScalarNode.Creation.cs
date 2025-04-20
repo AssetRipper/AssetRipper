@@ -15,6 +15,10 @@ public abstract partial class YamlScalarNode
 		return new NumericListNode<T>(list);
 	}
 
+	public static YamlScalarNode CreateHex(IReadOnlyList<bool> list) => new BoolListNode(list);
+
+	public static YamlScalarNode CreateHex(IReadOnlyList<char> list) => new CharListNode(list);
+
 	public static YamlScalarNode CreateHex<T>(T value) where T : IBinaryFloatingPointIeee754<T>
 	{
 		return new FloatingPointHexNode<T>(value);

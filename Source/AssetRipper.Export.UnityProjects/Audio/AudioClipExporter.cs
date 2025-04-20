@@ -44,7 +44,7 @@ namespace AssetRipper.Export.UnityProjects.Audio
 			return false;
 		}
 
-		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path)
+		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path, FileSystem fileSystem)
 		{
 			throw new NotSupportedException();
 		}

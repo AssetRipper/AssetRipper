@@ -24,13 +24,13 @@ namespace AssetRipper.Import.Structure.Platforms
 			Name = name;
 			RootPath = rootPath;
 			GameDataPath = dataPath;
-			StreamingAssetsPath = Path.Combine(m_root.FullName, iOSStreamingName);
-			ResourcesPath = Path.Combine(dataPath, ResourcesName);
-			ManagedPath = Path.Combine(dataPath, ManagedName);
+			StreamingAssetsPath = Path.Join(m_root.FullName, iOSStreamingName);
+			ResourcesPath = Path.Join(dataPath, ResourcesName);
+			ManagedPath = Path.Join(dataPath, ManagedName);
 			UnityPlayerPath = null;
 			Version = GetUnityVersionFromDataDirectory(GameDataPath);
-			Il2CppGameAssemblyPath = Path.Combine(appPath, name);
-			Il2CppMetaDataPath = Path.Combine(ManagedPath, MetadataName, DefaultGlobalMetadataName);
+			Il2CppGameAssemblyPath = Path.Join(appPath, name);
+			Il2CppMetaDataPath = Path.Join(ManagedPath, MetadataName, DefaultGlobalMetadataName);
 
 			if (HasIl2CppFiles())
 			{
@@ -61,7 +61,7 @@ namespace AssetRipper.Import.Structure.Platforms
 
 		private static bool GetDataiOSDirectory(DirectoryInfo rootDirectory, [NotNullWhen(true)] out string? dataPath, [NotNullWhen(true)] out string? appPath, [NotNullWhen(true)] out string? appName)
 		{
-			string payloadPath = Path.Combine(rootDirectory.FullName, PayloadName);
+			string payloadPath = Path.Join(rootDirectory.FullName, PayloadName);
 			DirectoryInfo payloadDirectory = new DirectoryInfo(payloadPath);
 			if (!payloadDirectory.Exists)
 			{
@@ -77,7 +77,7 @@ namespace AssetRipper.Import.Structure.Platforms
 				{
 					appPath = dinfo.FullName;
 					appName = dinfo.Name[..^AppExtension.Length];
-					dataPath = Path.Combine(dinfo.FullName, DataFolderName);
+					dataPath = Path.Join(dinfo.FullName, DataFolderName);
 					if (Directory.Exists(dataPath))
 					{
 						return true;
@@ -91,9 +91,9 @@ namespace AssetRipper.Import.Structure.Platforms
 			return false;
 		}
 
-		private void CollectiOSStreamingAssets(DirectoryInfo root, IDictionary<string, string> files)
+		private static void CollectiOSStreamingAssets(DirectoryInfo root, List<KeyValuePair<string, string>> files)
 		{
-			string streamingPath = Path.Combine(root.FullName, iOSStreamingName);
+			string streamingPath = Path.Join(root.FullName, iOSStreamingName);
 			DirectoryInfo streamingDirectory = new DirectoryInfo(streamingPath);
 			if (streamingDirectory.Exists)
 			{

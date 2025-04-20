@@ -15,6 +15,11 @@
 				emitter.Write("&").Write(Anchor).WriteWhitespace();
 				isWrote = true;
 			}
+			if (Stripped)
+			{
+				emitter.Write("stripped").WriteWhitespace();
+				isWrote = true;
+			}
 
 			if (isWrote)
 			{
@@ -36,5 +41,6 @@
 		}
 		public YamlTag CustomTag { get; set; }
 		public string Anchor { get; set; } = string.Empty;
+		public bool Stripped { get; set; }
 	}
 }

@@ -18,14 +18,14 @@ namespace AssetRipper.Import.Structure.Platforms
 
 			Name = m_root.Name;
 			RootPath = m_root.FullName;
-			GameDataPath = Path.Combine(RootPath, ContentName, DataFolderName);
+			GameDataPath = Path.Join(RootPath, ContentName, DataFolderName);
 			if (!Directory.Exists(GameDataPath))
 			{
 				throw new Exception($"Data directory wasn't found");
 			}
-			StreamingAssetsPath = Path.Combine(GameDataPath, StreamingName);
-			ResourcesPath = Path.Combine(GameDataPath, ResourcesName);
-			ManagedPath = Path.Combine(GameDataPath, ManagedName);
+			StreamingAssetsPath = Path.Join(GameDataPath, StreamingName);
+			ResourcesPath = Path.Join(GameDataPath, ResourcesName);
+			ManagedPath = Path.Join(GameDataPath, ManagedName);
 			UnityPlayerPath = null;
 			Version = null;
 			Il2CppGameAssemblyPath = null;
@@ -47,7 +47,7 @@ namespace AssetRipper.Import.Structure.Platforms
 
 		public static bool IsWiiUStructure(string rootPath)
 		{
-			string gameDataPath = Path.Combine(rootPath, ContentName, DataFolderName);
+			string gameDataPath = Path.Join(rootPath, ContentName, DataFolderName);
 			return Directory.Exists(gameDataPath);
 		}
 

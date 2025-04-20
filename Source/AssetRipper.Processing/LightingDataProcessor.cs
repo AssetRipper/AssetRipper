@@ -3,8 +3,12 @@ using AssetRipper.Assets.Cloning;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Import.Logging;
+using AssetRipper.IO.Files.BundleFiles;
+using AssetRipper.IO.Files.BundleFiles.FileStream;
 using AssetRipper.SourceGenerated;
+using AssetRipper.SourceGenerated.Classes.ClassID_0;
 using AssetRipper.SourceGenerated.Classes.ClassID_1032;
+using AssetRipper.SourceGenerated.Classes.ClassID_104;
 using AssetRipper.SourceGenerated.Classes.ClassID_108;
 using AssetRipper.SourceGenerated.Classes.ClassID_1120;
 using AssetRipper.SourceGenerated.Classes.ClassID_157;
@@ -13,6 +17,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_25;
 using AssetRipper.SourceGenerated.Classes.ClassID_258;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_33;
+using AssetRipper.SourceGenerated.Classes.ClassID_850595691;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.LightmapData;
 using AssetRipper.SourceGenerated.Subclasses.RendererData;
@@ -34,6 +39,7 @@ namespace AssetRipper.Processing
 
 			Dictionary<ILightmapSettings, SceneDefinition> lightmapSettingsDictionary = new();
 			Dictionary<ILightProbes, SceneDefinition?> lightProbeDictionary = new();
+			Dictionary<ILightingSettings, SceneDefinition?> lightingSettingsDictionary = new();
 
 			foreach (SceneDefinition scene in gameData.GameBundle.Scenes)
 			{
@@ -44,13 +50,28 @@ namespace AssetRipper.Processing
 					continue;
 				}
 
-				lightmapSettingsDictionary.Add(lightmapSettings, scene);
-				if (lightmapSettings.LightProbesP is { } lightProbes && !lightProbeDictionary.TryAdd(lightProbes, scene))
+				IRenderSettings? renderSettings = scene.Assets.OfType<IRenderSettings>().FirstOrDefault();
+				if (renderSettings is null)
 				{
-					lightProbeDictionary[lightProbes] = null;//This set of light probes is shared between scenes.
+					// This should never happen. All scenes need a RenderSettings asset.
+					continue;
 				}
 
-				if (!lightmapSettings.Has_LightingDataAsset() || !HasLightingData(lightmapSettings))
+				lightmapSettingsDictionary.Add(lightmapSettings, scene);
+
+				if (lightmapSettings.LightProbesP is { } lightProbes && !lightProbeDictionary.TryAdd(lightProbes, scene))
+				{
+					//This set of light probes is shared between scenes.
+					lightProbeDictionary[lightProbes] = null;
+				}
+
+				if (lightmapSettings.LightingSettingsP is { } lightingSettings && !lightingSettingsDictionary.TryAdd(lightingSettings, scene))
+				{
+					//This LightingSettings is shared between scenes.
+					lightingSettingsDictionary[lightingSettings] = null;
+				}
+
+				if (!lightmapSettings.Has_LightingDataAsset())
 				{
 					continue;
 				}
@@ -62,8 +83,11 @@ namespace AssetRipper.Processing
 				PPtrConverter converter = new PPtrConverter(lightmapSettings, lightingDataAsset);
 
 				lightingDataAsset.LightmapsMode = lightmapSettings.LightmapsMode;
-				lightingDataAsset.EnlightenSceneMapping.CopyValues(lightmapSettings.EnlightenSceneMapping, converter);
+				lightingDataAsset.EnlightenData = CreateEnlightenData(lightingDataAsset.Collection.Version);
 
+				SetEnlightenSceneMapping(lightingDataAsset, lightmapSettings, converter);
+				SetBakedAmbientProbes(lightingDataAsset, renderSettings);
+				AddSkyboxReflection(lightingDataAsset, renderSettings);
 				SetLightmaps(lightingDataAsset, lightmapSettings.Lightmaps, converter);
 				SetScene(lightingDataAsset, scene, processedCollection);
 				SetLightProbes(lightingDataAsset, lightmapSettings);
@@ -93,15 +117,15 @@ namespace AssetRipper.Processing
 				{
 					lightProbes = null;//Shared light probes should not have their path set.
 				}
-				SetPathsAndMainAsset(lightmapSettings, lightProbes, scene);
-			}
-		}
 
-		private static bool HasLightingData(ILightmapSettings lightmapSettings)
-		{
-			//Supposedly, a LightingDataAsset without any lightmaps causes Unity to crash.
-			//See: https://github.com/AssetRipper/AssetRipper/issues/811
-			return lightmapSettings.Lightmaps.Count > 0;
+				ILightingSettings? lightingSettings = lightmapSettings.LightingSettingsP;
+				if (lightingSettings is not null && lightingSettingsDictionary[lightingSettings] is null)
+				{
+					lightingSettings = null;//Shared light settings should not have their path set.
+				}
+
+				SetPathsAndMainAsset(lightmapSettings, lightProbes, lightingSettings, scene);
+			}
 		}
 
 		private static void AddRenderer(ILightingDataAsset lightingDataAsset, IRenderer renderer)
@@ -171,7 +195,54 @@ namespace AssetRipper.Processing
 			identifier.TargetObjectReference = light;
 
 			//Information about whether a light is baked or not
-			lightingDataAsset.LightBakingOutputs?.AddNew().CopyValues(light.BakingOutput);
+			if (light.Has_BakingOutput())
+			{
+				lightingDataAsset.LightBakingOutputs?.AddNew().CopyValues(light.BakingOutput);
+			}
+		}
+
+		private static void SetEnlightenSceneMapping(ILightingDataAsset lightingDataAsset, ILightmapSettings lightmapSettings, PPtrConverter converter)
+		{
+			lightingDataAsset.EnlightenSceneMapping.CopyValues(lightmapSettings.EnlightenSceneMapping, converter);
+
+			foreach (IObject? renderer in lightingDataAsset.EnlightenSceneMapping.Renderers.Select(r => r.Renderer.TryGetAsset(lightingDataAsset.Collection)))
+			{
+				lightingDataAsset.EnlightenSceneMappingRendererIDs.AddNew().TargetObjectReference = renderer;
+			}
+		}
+
+		private static void SetBakedAmbientProbes(ILightingDataAsset lightingDataAsset, IRenderSettings renderSettings)
+		{
+			if (renderSettings.Has_AmbientProbeInGamma())
+			{
+				if (lightingDataAsset.Has_BakedAmbientProbeInGamma())
+				{
+					lightingDataAsset.BakedAmbientProbeInGamma.CopyValues(renderSettings.AmbientProbeInGamma);
+				}
+				else if (lightingDataAsset.Has_BakedAmbientProbesInGamma())
+				{
+					lightingDataAsset.BakedAmbientProbesInGamma.AddNew().CopyValues(renderSettings.AmbientProbeInGamma);
+				}
+			}
+			if (renderSettings.Has_AmbientProbe())
+			{
+				if (lightingDataAsset.Has_BakedAmbientProbeInLinear())
+				{
+					lightingDataAsset.BakedAmbientProbeInLinear.CopyValues(renderSettings.AmbientProbe);
+				}
+				else if (lightingDataAsset.Has_BakedAmbientProbesInLinear())
+				{
+					lightingDataAsset.BakedAmbientProbesInLinear.AddNew().CopyValues(renderSettings.AmbientProbe);
+				}
+			}
+		}
+
+		private static void AddSkyboxReflection(ILightingDataAsset lightingDataAsset, IRenderSettings renderSettings)
+		{
+			if (renderSettings.GeneratedSkyboxReflectionP is { } skyboxReflection)
+			{
+				lightingDataAsset.BakedReflectionProbeCubemapsP.Add(skyboxReflection);
+			}
 		}
 
 		/// <summary>
@@ -188,7 +259,7 @@ namespace AssetRipper.Processing
 			}
 		}
 
-		private static void SetPathsAndMainAsset(ILightmapSettings lightmapSettings, ILightProbes? lightProbes, SceneDefinition scene)
+		private static void SetPathsAndMainAsset(ILightmapSettings lightmapSettings, ILightProbes? lightProbes, ILightingSettings? lightingSettings, SceneDefinition scene)
 		{
 			//Several assets should all be exported in a subfolder beside the scene.
 			//Example:
@@ -218,6 +289,14 @@ namespace AssetRipper.Processing
 			if (lightProbes is not null)
 			{
 				lightProbes.OriginalDirectory ??= scene.Path;
+			}
+
+			//Move the light settings to the scene subfolder if it exists and is not shared with other scenes.
+			//There's no requirement to place it there, but it helps with organization.
+			//This is particularly useful when many LightingSettings have the same name.
+			if (lightingSettings is not null)
+			{
+				lightingSettings.OriginalDirectory ??= scene.Path;
 			}
 
 			//Move the lightmap textures to the scene subfolder.
@@ -259,7 +338,7 @@ namespace AssetRipper.Processing
 		/// <param name="lightmapSettings"></param>
 		private static void SetLightProbes(ILightingDataAsset lightingDataAsset, ILightmapSettings lightmapSettings)
 		{
-			lightingDataAsset.LightProbesP = lightmapSettings.LightProbesP as ILightProbes;
+			lightingDataAsset.LightProbesP = lightmapSettings.LightProbesP;
 		}
 
 		/// <summary>
@@ -314,6 +393,29 @@ namespace AssetRipper.Processing
 			ISceneAsset asset = collection.CreateAsset((int)ClassIDType.SceneAsset, SceneAsset.Create);
 			asset.TargetScene = targetScene;
 			return asset;
+		}
+
+		private static byte[] CreateEnlightenData(UnityVersion version)
+		{
+			// For many of the lighting data assets I've encountered, they just contained the bytes of an empty asset bundle.
+			BundleVersion bundleVersion = false switch
+			{
+				_ when version.GreaterThanOrEquals(2022, 2) => BundleVersion.BF_2022_2,
+				_ when version.GreaterThanOrEquals(2020) => BundleVersion.BF_LargeFilesSupport, // This started sometime during 2019.4.X, so we use 2020 just to be safe.
+				_ when version.GreaterThanOrEquals(5, 2, 0, UnityVersionType.Final) => BundleVersion.BF_520_x,
+				_ => BundleVersion.BF_350_4x,
+			};
+
+			FileStreamBundleFile bundle = new();
+			FileStreamBundleHeader header = bundle.Header;
+			header.Version = bundleVersion;
+			header.UnityWebBundleVersion = "5.x.x";
+			header.UnityWebMinimumRevision = version.ToString();
+
+			using MemoryStream stream = new();
+			bundle.Write(stream);
+
+			return stream.ToArray();
 		}
 	}
 }

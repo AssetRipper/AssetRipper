@@ -9,16 +9,22 @@ public class LibraryConfiguration : CoreConfiguration
 	public ProcessingSettings ProcessingSettings
 	{
 		get => SingletonData.GetStoredValue<ProcessingSettings>(nameof(ProcessingSettings));
-		set => SingletonData.GetValue<JsonDataInstance<ProcessingSettings>>(nameof(ProcessingSettings)).Value = value;
+		set => SingletonData.SetStoredValue(nameof(ProcessingSettings), value);
 	}
 
 	public ExportSettings ExportSettings
 	{
 		get => SingletonData.GetStoredValue<ExportSettings>(nameof(ExportSettings));
-		set => SingletonData.GetValue<JsonDataInstance<ExportSettings>>(nameof(ExportSettings)).Value = value;
+		set => SingletonData.SetStoredValue(nameof(ExportSettings), value);
 	}
 
 	public bool SaveSettingsToDisk => ExportSettings.SaveSettingsToDisk;
+
+	public string? LanguageCode
+	{
+		get => ExportSettings.LanguageCode;
+		set => ExportSettings.LanguageCode = value;
+	}
 
 	public LibraryConfiguration()
 	{
@@ -47,5 +53,13 @@ public class LibraryConfiguration : CoreConfiguration
 	public void SaveToDefaultPath()
 	{
 		new SerializedSettings(ImportSettings, ProcessingSettings, ExportSettings).SaveToDefaultPath();
+	}
+
+	public void MaybeSaveToDefaultPath()
+	{
+		if (SaveSettingsToDisk)
+		{
+			SaveToDefaultPath();
+		}
 	}
 }

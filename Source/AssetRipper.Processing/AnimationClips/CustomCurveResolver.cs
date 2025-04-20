@@ -41,7 +41,7 @@ namespace AssetRipper.Processing.AnimationClips
 				case BindingCustomType.BlendShape:
 					{
 						const string Prefix = "blendShape.";
-						if (UnknownPathRegex().IsMatch(path))
+						if (UnknownPathRegex.IsMatch(path))
 						{
 							return Prefix + attribute;
 						}
@@ -84,7 +84,7 @@ namespace AssetRipper.Processing.AnimationClips
 				case BindingCustomType.RendererMaterial:
 					{
 						const string Prefix = "material.";
-						if (UnknownPathRegex().IsMatch(path))
+						if (UnknownPathRegex.IsMatch(path))
 						{
 							return Prefix + attribute;
 						}
@@ -363,7 +363,6 @@ namespace AssetRipper.Processing.AnimationClips
 					}
 					return Crc32Algorithm.ReverseAscii(attribute, $"VisualEffect_0x{attribute:X}_");
 
-				// TryGetPath may not work here
 				case BindingCustomType.ParticleForceField:
 					{
 						if (ParticleSystemForceField.TryGetPath(attribute, out string? foundPath))
@@ -385,15 +384,22 @@ namespace AssetRipper.Processing.AnimationClips
 				case BindingCustomType.UserDefined:
 					return Crc32Algorithm.ReverseAscii(attribute, $"UserDefined_0x{attribute:X}_");
 
-				// TryGetPath may not work here
 				case BindingCustomType.MeshFilter:
 					{
 						if (MeshFilter.TryGetPath(attribute, out string? foundPath))
 						{
 							return foundPath;
 						}
+						else
+						{
+							//This has at least one ordinal property name,
+							//So the precalculated hashes are insufficient for recovery.
+							//Binary analysis may be required.
+							//Example failed attributes:
+							//0xDFF2AF49 (3757223753)
+						}
 					}
-					return ThrowUnknownAttributeException(type, attribute);
+					return Crc32Algorithm.ReverseAscii(attribute, $"MeshFilter_0x{attribute:X}_");
 
 				default:
 					throw new ArgumentException($"Binding type {type} not implemented", nameof(type));
@@ -419,6 +425,6 @@ namespace AssetRipper.Processing.AnimationClips
 		private IGameObject[]? m_roots;
 
 		[GeneratedRegex("^path_[0-9]{1,10}$", RegexOptions.Compiled)]
-		private static partial Regex UnknownPathRegex();
+		private static partial Regex UnknownPathRegex { get; }
 	}
 }

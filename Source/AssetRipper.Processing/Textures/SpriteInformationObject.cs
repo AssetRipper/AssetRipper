@@ -8,7 +8,7 @@ using System.Diagnostics;
 
 namespace AssetRipper.Processing.Textures;
 
-public sealed class SpriteInformationObject : UnityObjectBase, INamed
+public sealed class SpriteInformationObject : AssetGroup, INamed
 {
 	public SpriteInformationObject(AssetInfo assetInfo, ITexture2D texture) : base(assetInfo)
 	{
@@ -25,12 +25,43 @@ public sealed class SpriteInformationObject : UnityObjectBase, INamed
 		set { }
 	}
 
+	public override IEnumerable<IUnityObjectBase> Assets
+	{
+		get
+		{
+			yield return Texture;
+			foreach ((ISprite sprite, ISpriteAtlas? atlas) in dictionary)
+			{
+				yield return sprite;
+				if (atlas is not null)
+				{
+					yield return atlas;
+				}
+			}
+		}
+	}
+
 	public override void WalkStandard(AssetWalker walker)
 	{
 		if (walker.EnterAsset(this))
 		{
 			this.WalkPPtrField(walker, Texture);
+			walker.DivideAsset(this);
+			this.WalkDictionaryPPtrField(walker, Sprites);
 			walker.ExitAsset(this);
+		}
+	}
+
+	public override IEnumerable<(string, PPtr)> FetchDependencies()
+	{
+		yield return (nameof(Texture), AssetToPPtr(Texture));
+		foreach ((ISprite sprite, ISpriteAtlas? atlas) in dictionary)
+		{
+			yield return (nameof(Sprites) + "[].Key", AssetToPPtr(sprite));
+			if (atlas is not null)
+			{
+				yield return (nameof(Sprites) + "[].Value", AssetToPPtr(atlas));
+			}
 		}
 	}
 
@@ -53,18 +84,9 @@ public sealed class SpriteInformationObject : UnityObjectBase, INamed
 		}
 	}
 
-	internal void SetMainAsset()
+	public override void SetMainAsset()
 	{
 		Debug.Assert(Texture.MainAsset is null);
-		MainAsset = this;
-		Texture.MainAsset = this;
-		foreach ((ISprite sprite, ISpriteAtlas? atlas) in dictionary)
-		{
-			sprite.MainAsset = this;
-			if (atlas is not null)
-			{
-				atlas.MainAsset = this;
-			}
-		}
+		base.SetMainAsset();
 	}
 }

@@ -1,10 +1,13 @@
+using AssetRipper.GUI.Web.Documentation;
 using AssetRipper.GUI.Web.Pages;
 using AssetRipper.GUI.Web.Pages.Assets;
 using AssetRipper.GUI.Web.Pages.Bundles;
 using AssetRipper.GUI.Web.Pages.Collections;
+using AssetRipper.GUI.Web.Pages.FailedFiles;
 using AssetRipper.GUI.Web.Pages.Resources;
 using AssetRipper.GUI.Web.Pages.Scenes;
 using AssetRipper.GUI.Web.Pages.Settings;
+using AssetRipper.GUI.Web.Paths;
 using AssetRipper.Import.Logging;
 using AssetRipper.Web.Extensions;
 using Microsoft.AspNetCore.Builder;
@@ -12,12 +15,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
+using Photino.NET;
+using SwaggerThemes;
 using System.CommandLine;
 using System.Diagnostics;
 
@@ -25,10 +29,14 @@ namespace AssetRipper.GUI.Web;
 
 public static class WebApplicationLauncher
 {
+	public static PhotinoWindow? PhotinoWindow { get; private set; }
+
 	private static class Defaults
 	{
 		public const int Port = 0;
 		public const bool LaunchBrowser = true;
+		public const bool Log = true;
+		public const string? LogPath = null;
 	}
 
 	// Only 2 options
@@ -48,32 +56,77 @@ public static class WebApplicationLauncher
 			getDefaultValue: () => Defaults.LaunchBrowser);
 		rootCommand.AddOption(launchBrowserOption);
 
+		Option<bool> logOption = new Option<bool>(
+			name: "--log",
+			description: "If true, the application will log to a file.",
+			getDefaultValue: () => Defaults.Log);
+		rootCommand.AddOption(logOption);
+
+		Option<string?> logPathOption = new Option<string?>(
+			name: "--log-path",
+			description: "The file location at which to save the log, or a sensible default if not provided.",
+			getDefaultValue: () => Defaults.LogPath);
+		rootCommand.AddOption(logPathOption);
+
+		Option<string[]> localWebFilesOption = new Option<string[]>(
+			name: "--local-web-file",
+			description: "Files provided with this option will replace online sources.",
+			getDefaultValue: () => []);
+		rootCommand.AddOption(localWebFilesOption);
+
 		bool shouldRun = false;
 		int port = Defaults.Port;
 		bool launchBrowser = Defaults.LaunchBrowser;
+		bool log = Defaults.Log;
+		string? logFile = Defaults.LogPath;
 
-		rootCommand.SetHandler((int portParsed, bool launchBrowserParsed) =>
+		rootCommand.SetHandler((int portParsed, bool launchBrowserParsed, bool logParsed, string? logFileParsed, string[] localWebFilesParsed) =>
 		{
 			shouldRun = true;
 			port = portParsed;
 			launchBrowser = launchBrowserParsed;
-		}, portOption, launchBrowserOption);
+			log = logParsed;
+			logFile = logFileParsed;
+			foreach (string localWebFile in localWebFilesParsed)
+			{
+				if (File.Exists(localWebFile))
+				{
+					string fileName = Path.GetFileName(localWebFile);
+					string webPrefix = Path.GetExtension(fileName) switch
+					{
+						".css" => "/css/",
+						".js" => "/js/",
+						_ => "/"
+					};
+					StaticContentLoader.Add(webPrefix + fileName, File.ReadAllBytes(localWebFile));
+				}
+				else
+				{
+					Console.WriteLine($"File '{localWebFile}' does not exist.");
+				}
+			}
+		}, portOption, launchBrowserOption, logOption, logPathOption, localWebFilesOption);
 
 		rootCommand.Invoke(args);
 
 		if (shouldRun)
 		{
-			Launch(port, launchBrowser);
+			Launch(port, launchBrowser, log, logFile);
 		}
 	}
 
-	public static void Launch(int port = Defaults.Port, bool launchBrowser = Defaults.LaunchBrowser)
+	public static void Launch(int port = Defaults.Port, bool launchBrowser = Defaults.LaunchBrowser, bool log = Defaults.Log, string? logPath = Defaults.LogPath)
 	{
 		WelcomeMessage.Print();
 
-		Logger.Add(new FileLogger());
+		if (log)
+		{
+			Logger.Add(string.IsNullOrEmpty(logPath) ? new FileLogger() : new FileLogger(logPath));
+		}
 		Logger.LogSystemInformation("AssetRipper");
 		Logger.Add(new ConsoleLogger());
+
+		Localization.LoadLanguage(GameFileLoader.Settings.LanguageCode);
 
 		WebApplicationBuilder builder = WebApplication.CreateSlimBuilder(new WebApplicationOptions()
 		{
@@ -90,7 +143,19 @@ public static class WebApplicationLauncher
 		builder.Services.ConfigureHttpJsonOptions(options =>
 		{
 			options.SerializerOptions.TypeInfoResolverChain.Insert(0, AppJsonSerializerContext.Default);
+			options.SerializerOptions.TypeInfoResolverChain.Insert(1, PathSerializerContext.Default);
+			options.SerializerOptions.TypeInfoResolverChain.Insert(2, NullSerializerContext.Instance);
 		});
+
+		builder.Services.AddOpenApi(options =>
+		{
+			options.AddOperationTransformer(new ClearOperationTagsTransformer());
+			options.AddOperationTransformer(new InsertionOperationTransformer());
+			options.AddDocumentTransformer(new ClearDocumentTagsTransformer());
+			options.AddDocumentTransformer(new SortDocumentPathsTransformer());
+		});
+
+		builder.Services.AddEndpointsApiExplorer();
 
 		builder.Logging.ConfigureLoggingLevel();
 
@@ -102,37 +167,54 @@ public static class WebApplicationLauncher
 #endif
 		if (launchBrowser)
 		{
-			app.Lifetime.ApplicationStarted.Register(() =>
+			app.Lifetime.ApplicationStarted.Register((Action)(() =>
 			{
-				string? address = app.Services.GetRequiredService<IServer>().Features.Get<IServerAddressesFeature>()?.Addresses.FirstOrDefault();
-				if (address is not null)
+				string address = app.Services.GetRequiredService<IServer>().Features.Get<IServerAddressesFeature>()?.Addresses.FirstOrDefault()
+					?? throw new InvalidOperationException("Failed to get server address.");
+
+				WebApplicationLauncher.PhotinoWindow = new PhotinoWindow
 				{
-					OpenUrl(address);
-				}
-			});
+					LogVerbosity = 0,
+					Title = "AssetRipper",
+					Centered = true,
+				};
+
+				PhotinoWindow.Load(address);
+			}));
 		}
+
+		app.MapOpenApi(DocumentationPaths.OpenApi);
+		app.UseSwaggerUI(Theme.Gruvbox, null, c =>
+		{
+			// Point to the static OpenAPI file
+			c.SwaggerEndpoint(DocumentationPaths.OpenApi, "AssetRipper API");
+		});
 
 		//Static files
 		app.MapStaticFile("/favicon.ico", "image/x-icon");
 		app.MapStaticFile("/css/site.css", "text/css");
 		app.MapStaticFile("/js/site.js", "text/javascript");
 		app.MapStaticFile("/js/commands_page.js", "text/javascript");
+		app.MapStaticFile("/js/mesh_preview.js", "text/javascript");
+		OnlineDependencies.MapDependencies(app);
 
 		//Normal Pages
 		app.MapGet("/", (context) =>
 		{
 			context.Response.DisableCaching();
 			return IndexPage.Instance.WriteToResponse(context.Response);
-		});
-		app.MapGet("/Commands", CommandsPage.Instance.ToResult);
-		app.MapGet("/Privacy", PrivacyPage.Instance.ToResult);
-		app.MapGet("/Licenses", LicensesPage.Instance.ToResult);
+		})
+			.WithSummary("The home page")
+			.ProducesHtmlPage();
+		app.MapGet("/Commands", CommandsPage.Instance.ToResult).ProducesHtmlPage();
+		app.MapGet("/Privacy", PrivacyPage.Instance.ToResult).ProducesHtmlPage();
+		app.MapGet("/Licenses", LicensesPage.Instance.ToResult).ProducesHtmlPage();
 
 		app.MapGet("/ConfigurationFiles", (context) =>
 		{
 			context.Response.DisableCaching();
 			return ConfigurationFilesPage.Instance.WriteToResponse(context.Response);
-		});
+		}).ProducesHtmlPage();
 		app.MapPost("/ConfigurationFiles/Singleton/Add", ConfigurationFilesPage.HandleSingletonAddPostRequest);
 		app.MapPost("/ConfigurationFiles/Singleton/Remove", ConfigurationFilesPage.HandleSingletonRemovePostRequest);
 		app.MapPost("/ConfigurationFiles/List/Add", ConfigurationFilesPage.HandleListAddPostRequest);
@@ -143,33 +225,61 @@ public static class WebApplicationLauncher
 		{
 			context.Response.DisableCaching();
 			return SettingsPage.Instance.WriteToResponse(context.Response);
-		});
+		}).ProducesHtmlPage();
 		app.MapPost("/Settings/Update", SettingsPage.HandlePostRequest);
 
 		//Assets
-		app.MapGet(AssetAPI.Urls.View, AssetAPI.GetView);
-		app.MapGet(AssetAPI.Urls.Image, AssetAPI.GetImageData);
-		app.MapGet(AssetAPI.Urls.Audio, AssetAPI.GetAudioData);
-		app.MapGet(AssetAPI.Urls.Model, AssetAPI.GetModelData);
-		app.MapGet(AssetAPI.Urls.Font, AssetAPI.GetFontData);
-		app.MapGet(AssetAPI.Urls.Json, AssetAPI.GetJson);
-		app.MapGet(AssetAPI.Urls.Yaml, AssetAPI.GetYaml);
-		app.MapGet(AssetAPI.Urls.Text, AssetAPI.GetText);
-		app.MapGet(AssetAPI.Urls.Binary, AssetAPI.GetBinaryData);
+		app.MapGet(AssetAPI.Urls.View, AssetAPI.GetView).ProducesHtmlPage();
+		app.MapGet(AssetAPI.Urls.Image, AssetAPI.GetImageData)
+			.Produces<byte[]>(contentType: "application/octet-stream")
+			.WithAssetPathParameter()
+			.WithImageExtensionParameter();
+		app.MapGet(AssetAPI.Urls.Audio, AssetAPI.GetAudioData)
+			.Produces<byte[]>(contentType: "application/octet-stream")
+			.WithAssetPathParameter();
+		app.MapGet(AssetAPI.Urls.Model, AssetAPI.GetModelData)
+			.Produces<byte[]>(contentType: "application/octet-stream")
+			.WithAssetPathParameter();
+		app.MapGet(AssetAPI.Urls.Font, AssetAPI.GetFontData)
+			.Produces<byte[]>(contentType: "application/octet-stream")
+			.WithAssetPathParameter();
+		app.MapGet(AssetAPI.Urls.Video, AssetAPI.GetVideoData)
+			.Produces<byte[]>(contentType: "application/octet-stream")
+			.WithAssetPathParameter();
+		app.MapGet(AssetAPI.Urls.Json, AssetAPI.GetJson)
+			.Produces<string>(contentType: "application/json")
+			.WithAssetPathParameter();
+		app.MapGet(AssetAPI.Urls.Yaml, AssetAPI.GetYaml)
+			.Produces<string>(contentType: "text/yaml")
+			.WithAssetPathParameter();
+		app.MapGet(AssetAPI.Urls.Text, AssetAPI.GetText)
+			.Produces<string>(contentType: "text/plain")
+			.WithAssetPathParameter();
+		app.MapGet(AssetAPI.Urls.Binary, AssetAPI.GetBinaryData)
+			.Produces<byte[]>(contentType: "application/octet-stream")
+			.WithAssetPathParameter();
 
 		//Bundles
-		app.MapGet(BundleAPI.Urls.View, BundleAPI.GetView);
+		app.MapGet(BundleAPI.Urls.View, BundleAPI.GetView).ProducesHtmlPage();
 
 		//Collections
-		app.MapGet(CollectionAPI.Urls.View, CollectionAPI.GetView);
-		app.MapGet(CollectionAPI.Urls.Count, CollectionAPI.GetCount);
+		app.MapGet(CollectionAPI.Urls.View, CollectionAPI.GetView).ProducesHtmlPage();
+		app.MapGet(CollectionAPI.Urls.Count, CollectionAPI.GetCount)
+			.WithSummary("Get the number of elements in the collection.")
+			.Produces<int>();
+
+		//Failed Files
+		app.MapGet(FailedFileAPI.Urls.View, FailedFileAPI.GetView).ProducesHtmlPage();
+		app.MapGet(FailedFileAPI.Urls.StackTrace, FailedFileAPI.GetStackTrace)
+			.Produces<string>();
 
 		//Resources
-		app.MapGet(ResourceAPI.Urls.View, ResourceAPI.GetView);
-		app.MapGet(ResourceAPI.Urls.Data, ResourceAPI.GetData);
+		app.MapGet(ResourceAPI.Urls.View, ResourceAPI.GetView).ProducesHtmlPage();
+		app.MapGet(ResourceAPI.Urls.Data, ResourceAPI.GetData)
+			.Produces<byte[]>(contentType: "application/octet-stream");
 
 		//Scenes
-		app.MapGet(SceneAPI.Urls.View, SceneAPI.GetView);
+		app.MapGet(SceneAPI.Urls.View, SceneAPI.GetView).ProducesHtmlPage();
 
 		app.MapPost("/Localization", (context) =>
 		{
@@ -177,27 +287,36 @@ public static class WebApplicationLauncher
 			if (context.Request.Query.TryGetValue("code", out StringValues code))
 			{
 				string? language = code;
-				if (language is not null && LocalizationLoader.LanguageNameDictionary.ContainsKey(language))
-				{
-					Localization.LoadLanguage(language);
-				}
+				Localization.LoadLanguage(language);
+				GameFileLoader.Settings.LanguageCode = Localization.CurrentLanguageCode;
+				GameFileLoader.Settings.MaybeSaveToDefaultPath();
 			}
 			return Results.Redirect("/").ExecuteAsync(context);
-		});
+		})
+			.WithQueryStringParameter("Code", "Language code", true)
+			.Produces(StatusCodes.Status302Found);
 
 		//Commands
-		app.MapPost("/Export/UnityProject", Commands.HandleCommand<Commands.ExportUnityProject>);
-		app.MapPost("/Export/PrimaryContent", Commands.HandleCommand<Commands.ExportPrimaryContent>);
-		app.MapPost("/LoadFile", Commands.HandleCommand<Commands.LoadFile>);
-		app.MapPost("/LoadFolder", Commands.HandleCommand<Commands.LoadFolder>);
+		app.MapPost("/Export/UnityProject", Commands.HandleCommand<Commands.ExportUnityProject>)
+			.AcceptsFormDataContainingPath()
+			.Produces(StatusCodes.Status302Found);
+		app.MapPost("/Export/PrimaryContent", Commands.HandleCommand<Commands.ExportPrimaryContent>)
+			.AcceptsFormDataContainingPath()
+			.Produces(StatusCodes.Status302Found);
+		app.MapPost("/LoadFile", Commands.HandleCommand<Commands.LoadFile>)
+			.AcceptsFormDataContainingPath()
+			.Produces(StatusCodes.Status302Found);
+		app.MapPost("/LoadFolder", Commands.HandleCommand<Commands.LoadFolder>)
+			.AcceptsFormDataContainingPath()
+			.Produces(StatusCodes.Status302Found);
 		app.MapPost("/Reset", Commands.HandleCommand<Commands.Reset>);
 
 		//Dialogs
-		app.MapGet("/Dialogs/SaveFile", Dialogs.SaveFile.HandleGetRequest);
-		app.MapGet("/Dialogs/OpenFolder", Dialogs.OpenFolder.HandleGetRequest);
-		app.MapGet("/Dialogs/OpenFolders", Dialogs.OpenFolders.HandleGetRequest);
-		app.MapGet("/Dialogs/OpenFile", Dialogs.OpenFile.HandleGetRequest);
-		app.MapGet("/Dialogs/OpenFiles", Dialogs.OpenFiles.HandleGetRequest);
+		app.MapGet("/Dialogs/SaveFile", Dialogs.SaveFile.HandleGetRequest).Produces<string>();
+		app.MapGet("/Dialogs/OpenFolder", Dialogs.OpenFolder.HandleGetRequest).Produces<string>();
+		app.MapGet("/Dialogs/OpenFolders", Dialogs.OpenFolders.HandleGetRequest).Produces<string>();
+		app.MapGet("/Dialogs/OpenFile", Dialogs.OpenFile.HandleGetRequest).Produces<string>();
+		app.MapGet("/Dialogs/OpenFiles", Dialogs.OpenFiles.HandleGetRequest).Produces<string>();
 
 		//File API
 		app.MapGet("/IO/File/Exists", (context) =>
@@ -212,7 +331,10 @@ public static class WebApplicationLauncher
 			{
 				return Results.BadRequest().ExecuteAsync(context);
 			}
-		});
+		})
+			.Produces<bool>()
+			.WithQueryStringParameter("Path", required: true);
+
 		app.MapGet("/IO/Directory/Exists", (context) =>
 		{
 			context.Response.DisableCaching();
@@ -225,7 +347,10 @@ public static class WebApplicationLauncher
 			{
 				return Results.BadRequest().ExecuteAsync(context);
 			}
-		});
+		})
+			.Produces<bool>()
+			.WithQueryStringParameter("Path", required: true);
+
 		app.MapGet("/IO/Directory/Empty", (context) =>
 		{
 			context.Response.DisableCaching();
@@ -239,9 +364,26 @@ public static class WebApplicationLauncher
 			{
 				return Results.BadRequest().ExecuteAsync(context);
 			}
-		});
+		})
+			.Produces<bool>()
+			.WithQueryStringParameter("Path", required: true);
 
-		app.Run();
+		if (launchBrowser)
+		{
+			CancellationTokenSource cts = new();
+			Task _aspTask = app.RunAsync(cts.Token);
+			while (PhotinoWindow is null && !_aspTask.IsCompleted)
+			{
+				Thread.Sleep(100);
+			}
+			PhotinoWindow?.WaitForClose();
+			cts.Cancel();
+			_aspTask.Wait();
+		}
+		else
+		{
+			app.Run();
+		}
 	}
 
 	private static ILoggingBuilder ConfigureLoggingLevel(this ILoggingBuilder builder)
@@ -287,32 +429,5 @@ public static class WebApplicationLauncher
 		{
 			Logger.Error($"Failed to launch web browser for: {url}", ex);
 		}
-	}
-
-	private static void MapGet(this IEndpointRouteBuilder endpoints, [StringSyntax("Route")] string pattern, Func<IResult> handler)
-	{
-		endpoints.MapGet(pattern, (context) =>
-		{
-			IResult result = handler.Invoke();
-			return result.ExecuteAsync(context);
-		});
-	}
-
-	private static void MapGet(this IEndpointRouteBuilder endpoints, [StringSyntax("Route")] string pattern, Func<Task<IResult>> handler)
-	{
-		endpoints.MapGet(pattern, async (context) =>
-		{
-			IResult result = await handler.Invoke();
-			await result.ExecuteAsync(context);
-		});
-	}
-
-	private static void MapStaticFile(this IEndpointRouteBuilder endpoints, [StringSyntax("Route")] string path, string contentType)
-	{
-		endpoints.MapGet(path, async () =>
-		{
-			byte[] data = await StaticContentLoader.Load(path);
-			return Results.Bytes(data, contentType);
-		});
 	}
 }

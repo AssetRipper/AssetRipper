@@ -26,13 +26,13 @@
 			Name = m_root.Name;
 			RootPath = rootPath;
 			GameDataPath = dataPath;
-			StreamingAssetsPath = Path.Combine(dataPath, StreamingName);
-			ResourcesPath = Path.Combine(dataPath, ResourcesName);
-			ManagedPath = Path.Combine(dataPath, ManagedName);
+			StreamingAssetsPath = Path.Join(dataPath, StreamingName);
+			ResourcesPath = Path.Join(dataPath, ResourcesName);
+			ManagedPath = Path.Join(dataPath, ManagedName);
 			UnityPlayerPath = null;
 			Version = GetUnityVersionFromDataDirectory(dataPath);
-			Il2CppGameAssemblyPath = Path.Combine(rootPath, ExefsName, MainName);
-			Il2CppMetaDataPath = Path.Combine(ManagedPath, MetadataName, DefaultGlobalMetadataName);
+			Il2CppGameAssemblyPath = Path.Join(rootPath, ExefsName, MainName);
+			Il2CppMetaDataPath = Path.Join(ManagedPath, MetadataName, DefaultGlobalMetadataName);
 			Backend = HasIl2CppFiles() ? Assembly.ScriptingBackend.IL2Cpp : Assembly.ScriptingBackend.Unknown;
 
 			DataPaths = new string[] { dataPath };
@@ -45,7 +45,7 @@
 			{
 				return false;
 			}
-			if (!Directory.Exists(Path.Combine(rootInfo.FullName, ExefsName)))
+			if (!Directory.Exists(Path.Join(rootInfo.FullName, ExefsName)))
 			{
 				return false;
 			}
@@ -56,13 +56,13 @@
 		private static bool GetDataSwitchDirectory(DirectoryInfo rootDirectory, [NotNullWhen(true)] out string? dataPath)
 		{
 			dataPath = null;
-			string romPath = Path.Combine(rootDirectory.FullName, RomName);
+			string romPath = Path.Join(rootDirectory.FullName, RomName);
 			if (!Directory.Exists(romPath))
 			{
 				return false;
 			}
 
-			string ldataPath = Path.Combine(romPath, DataFolderName);
+			string ldataPath = Path.Join(romPath, DataFolderName);
 			if (!Directory.Exists(ldataPath))
 			{
 				return false;

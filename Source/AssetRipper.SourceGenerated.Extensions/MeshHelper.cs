@@ -2,6 +2,7 @@
 using System.Buffers.Binary;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace AssetRipper.SourceGenerated.Extensions
 {
@@ -90,6 +91,60 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 		}
 
+		public static int ToChannelFormat(VertexFormat format, UnityVersion version)
+		{
+			if (version.LessThan(2017))
+			{
+				return format switch
+				{
+					VertexFormat.kVertexFormatFloat => (int)VertexChannelFormat.kChannelFormatFloat,
+					VertexFormat.kVertexFormatFloat16 => (int)VertexChannelFormat.kChannelFormatFloat16,
+					VertexFormat.kVertexFormatUNorm8 => (int)VertexChannelFormat.kChannelFormatColor,
+					VertexFormat.kVertexFormatUInt8 => (int)VertexChannelFormat.kChannelFormatByte,
+					VertexFormat.kVertexFormatUInt32 => (int)VertexChannelFormat.kChannelFormatUInt32,
+					_ => throw new ArgumentOutOfRangeException(nameof(format), format, null),
+				};
+			}
+			else if (version.LessThan(2019))
+			{
+				return format switch
+				{
+					VertexFormat.kVertexFormatFloat => (int)VertexFormat2017.kVertexFormatFloat,
+					VertexFormat.kVertexFormatFloat16 => (int)VertexFormat2017.kVertexFormatFloat16,
+					VertexFormat.kVertexFormatUNorm8 => (int)VertexFormat2017.kVertexFormatUNorm8,
+					VertexFormat.kVertexFormatSNorm8 => (int)VertexFormat2017.kVertexFormatSNorm8,
+					VertexFormat.kVertexFormatUNorm16 => (int)VertexFormat2017.kVertexFormatUNorm16,
+					VertexFormat.kVertexFormatSNorm16 => (int)VertexFormat2017.kVertexFormatSNorm16,
+					VertexFormat.kVertexFormatUInt8 => (int)VertexFormat2017.kVertexFormatUInt8,
+					VertexFormat.kVertexFormatSInt8 => (int)VertexFormat2017.kVertexFormatSInt8,
+					VertexFormat.kVertexFormatUInt16 => (int)VertexFormat2017.kVertexFormatUInt16,
+					VertexFormat.kVertexFormatSInt16 => (int)VertexFormat2017.kVertexFormatSInt16,
+					VertexFormat.kVertexFormatUInt32 => (int)VertexFormat2017.kVertexFormatUInt32,
+					VertexFormat.kVertexFormatSInt32 => (int)VertexFormat2017.kVertexFormatSInt32,
+					_ => throw new ArgumentOutOfRangeException(nameof(format), format, null),
+				};
+			}
+			else
+			{
+				return (int)format;
+			}
+		}
+
+		public static int GetChannelFormat_Color(UnityVersion version)
+		{
+			if (version.LessThan(2017))
+			{
+				return (int)VertexChannelFormat.kChannelFormatColor;
+			}
+			else if (version.LessThan(2019))
+			{
+				return (int)VertexFormat2017.kVertexFormatColor;
+			}
+			else
+			{
+				return (int)VertexFormat.kVertexFormatUNorm8;
+			}
+		}
 
 		public static int GetFormatSize(VertexFormat format)
 		{
@@ -189,20 +244,33 @@ namespace AssetRipper.SourceGenerated.Extensions
 			ArgumentNullException.ThrowIfNull(input);
 
 			ArgumentOutOfRangeException.ThrowIfLessThan(dimension, 1);
+			ArgumentOutOfRangeException.ThrowIfGreaterThan(dimension, 4);
+			ValidateLength(input, dimension);
 
-			if (input.Length % dimension != 0)
+			Vector2[] result = GC.AllocateUninitializedArray<Vector2>(input.Length / dimension);
+			switch (dimension)
 			{
-				throw new ArgumentException($"Input array length {input.Length} is not divisible by dimension {dimension}", nameof(input));
-			}
-
-			Vector2[] result = new Vector2[input.Length / dimension];
-			for (int i = 0; i < result.Length; i++)
-			{
-				result[i] = dimension switch
-				{
-					1 => new Vector2(input[dimension * i], 0),
-					_ => new Vector2(input[dimension * i], input[dimension * i + 1]),
-				};
+				case 1:
+					for (int i = result.Length - 1; i >= 0; i--)
+					{
+						result[i] = new Vector2(input[i], 0);
+					}
+					break;
+				case 2:
+					MemoryMarshal.Cast<float, Vector2>(input).CopyTo(result);
+					break;
+				case 3:
+					for (int i = result.Length - 1; i >= 0; i--)
+					{
+						result[i] = new Vector2(input[3 * i], input[3 * i + 1]);
+					}
+					break;
+				case 4:
+					for (int i = result.Length - 1; i >= 0; i--)
+					{
+						result[i] = new Vector2(input[4 * i], input[4 * i + 1]);
+					}
+					break;
 			}
 			return result;
 		}
@@ -213,22 +281,36 @@ namespace AssetRipper.SourceGenerated.Extensions
 			ArgumentNullException.ThrowIfNull(input);
 
 			ArgumentOutOfRangeException.ThrowIfLessThan(dimension, 1);
+			ArgumentOutOfRangeException.ThrowIfGreaterThan(dimension, 4);
+			ValidateLength(input, dimension);
 
-			if (input.Length % dimension != 0)
-			{
-				throw new ArgumentException($"Input array length {input.Length} is not divisible by dimension {dimension}", nameof(input));
-			}
+			//In the four dimensional case for Normals, the fourth dimension was always zero
+			//This is seemingly intended to maintain data alignment
 
-			Vector3[] result = new Vector3[input.Length / dimension];
-			for (int i = 0; i < result.Length; i++)
+			Vector3[] result = GC.AllocateUninitializedArray<Vector3>(input.Length / dimension);
+			switch (dimension)
 			{
-				result[i] = dimension switch
-				{
-					1 => new Vector3(input[dimension * i], input[dimension * i + 1], input[dimension * i + 2]),
-					2 => new Vector3(input[dimension * i], input[dimension * i + 1], input[dimension * i + 2]),
-					_ => new Vector3(input[dimension * i], input[dimension * i + 1], input[dimension * i + 2]), //In the four dimensional case for Normals, the fourth dimension was always zero
-																												//This is seemingly intended to maintain data alignment
-				};
+				case 1:
+					for (int i = result.Length - 1; i >= 0; i--)
+					{
+						result[i] = new Vector3(input[i], 0, 0);
+					}
+					break;
+				case 2:
+					for (int i = result.Length - 1; i >= 0; i--)
+					{
+						result[i] = new Vector3(input[2 * i], input[2 * i + 1], 0);
+					}
+					break;
+				case 3:
+					MemoryMarshal.Cast<float, Vector3>(input).CopyTo(result);
+					break;
+				case 4:
+					for (int i = result.Length - 1; i >= 0; i--)
+					{
+						result[i] = new Vector3(input[4 * i], input[4 * i + 1], input[4 * i + 2]);
+					}
+					break;
 			}
 			return result;
 		}
@@ -239,24 +321,43 @@ namespace AssetRipper.SourceGenerated.Extensions
 			ArgumentNullException.ThrowIfNull(input);
 
 			ArgumentOutOfRangeException.ThrowIfLessThan(dimension, 1);
+			ArgumentOutOfRangeException.ThrowIfGreaterThan(dimension, 4);
+			ValidateLength(input, dimension);
 
+			Vector4[] result = GC.AllocateUninitializedArray<Vector4>(input.Length / dimension);
+			switch (dimension)
+			{
+				case 1:
+					for (int i = result.Length - 1; i >= 0; i--)
+					{
+						result[i] = new Vector4(input[i], 0, 0, 0);
+					}
+					break;
+				case 2:
+					for (int i = result.Length - 1; i >= 0; i--)
+					{
+						result[i] = new Vector4(input[2 * i], input[2 * i + 1], 0, 0);
+					}
+					break;
+				case 3:
+					for (int i = result.Length - 1; i >= 0; i--)
+					{
+						result[i] = new Vector4(input[3 * i], input[3 * i + 1], input[3 * i + 2], 0);
+					}
+					break;
+				case 4:
+					MemoryMarshal.Cast<float, Vector4>(input).CopyTo(result);
+					break;
+			}
+			return result;
+		}
+
+		private static void ValidateLength(float[] input, int dimension)
+		{
 			if (input.Length % dimension != 0)
 			{
 				throw new ArgumentException($"Input array length {input.Length} is not divisible by dimension {dimension}", nameof(input));
 			}
-
-			Vector4[] result = new Vector4[input.Length / dimension];
-			for (int i = 0; i < result.Length; i++)
-			{
-				result[i] = dimension switch
-				{
-					1 => new Vector4(input[dimension * i], 0, 0, 0),
-					2 => new Vector4(input[dimension * i], input[dimension * i + 1], 0, 0),
-					3 => new Vector4(input[dimension * i], input[dimension * i + 1], input[dimension * i + 2], 0),
-					_ => new Vector4(input[dimension * i], input[dimension * i + 1], input[dimension * i + 2], input[dimension * i + 3]),
-				};
-			}
-			return result;
 		}
 
 		public static ColorFloat[] FloatArrayToColorFloat(float[] input)
@@ -268,12 +369,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 				throw new ArgumentException($"Input array length {input.Length} is not divisible by four", nameof(input));
 			}
 
-			ColorFloat[] result = new ColorFloat[input.Length / 4];
-			for (int i = 0; i < result.Length; i++)
-			{
-				result[i] = new ColorFloat(input[4 * i], input[4 * i + 1], input[4 * i + 2], input[4 * i + 3]);
-			}
-			return result;
+			return MemoryMarshal.Cast<float, ColorFloat>(input).ToArray();
 		}
 	}
 }

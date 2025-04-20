@@ -6,16 +6,16 @@ namespace AssetRipper.Export.UnityProjects.Project
 	{
 		public ManagerExportCollection(IAssetExporter assetExporter, IUnityObjectBase asset) : base(assetExporter, asset) { }
 
-		public override bool Export(IExportContainer container, string projectDirectory)
+		public override bool Export(IExportContainer container, string projectDirectory, FileSystem fileSystem)
 		{
-			string subPath = Path.Combine(projectDirectory, ProjectSettingsName);
+			string subPath = fileSystem.Path.Join(projectDirectory, ProjectSettingsName);
 			string name = GetCorrectName(Asset.ClassName);
 			string fileName = $"{name}.asset";
-			string filePath = Path.Combine(subPath, fileName);
+			string filePath = fileSystem.Path.Join(subPath, fileName);
 
-			Directory.CreateDirectory(subPath);
+			fileSystem.Directory.Create(subPath);
 
-			ExportInner(container, filePath, projectDirectory);
+			ExportInner(container, filePath, projectDirectory, fileSystem);
 			return true;
 		}
 

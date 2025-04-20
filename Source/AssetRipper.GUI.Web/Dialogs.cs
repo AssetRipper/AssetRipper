@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Web.Extensions;
 using Microsoft.AspNetCore.Http;
-using NativeFileDialogs.Net;
-using System.Runtime.InteropServices;
+using Photino.NET;
 
 namespace AssetRipper.GUI.Web;
 
@@ -9,55 +8,34 @@ internal static class Dialogs
 {
 	private static readonly object lockObject = new();
 
-	public static bool Supported
-	{
-		get
-		{
-			return !OperatingSystem.IsMacOS() && RuntimeInformation.ProcessArchitecture is Architecture.X64;
-		}
-	}
+	private static PhotinoWindow? Window => WebApplicationLauncher.PhotinoWindow;
 
-	private static void ThrowIfNotSupported()
-	{
-		if (!Supported)
-		{
-			throw new PlatformNotSupportedException("NativeFileDialogs is not supported on this platform");
-		}
-	}
+	[MemberNotNullWhen(true, nameof(Window))]
+	public static bool Supported => Window != null;
 
 	public static class OpenFiles
 	{
 		public static async Task HandleGetRequest(HttpContext context)
 		{
 			context.Response.DisableCaching();
-			string[]? paths = await Task.Run(static () =>
-			{
-				if (Supported)
-				{
-					GetUserInput(out string[]? paths);
-					return paths;
-				}
-				else
-				{
-					return null;
-				}
-			});
-			await Results.Json(paths ?? [], AppJsonSerializerContext.Default.StringArray).ExecuteAsync(context);
+			string[] paths = Supported
+				? await Window.ShowOpenFileAsync(Localization.SelectFiles, null, true)
+				: [];
+			await Results.Json(paths, AppJsonSerializerContext.Default.StringArray).ExecuteAsync(context);
 		}
 
-		public static NfdStatus GetUserInput(out string[]? paths, IDictionary<string, string>? filters = null, string? defaultPath = null)
+		public static string[]? GetUserInput(IDictionary<string, string>? filters = null, string? defaultPath = null)
 		{
-			ThrowIfNotSupported();
-			lock (lockObject)
-			{
-				return Nfd.OpenDialogMultiple(out paths, filters, defaultPath);
-			}
+			return TryGetUserInput(out string[]? paths, filters, defaultPath) ? paths : null;
 		}
 
 		public static bool TryGetUserInput([NotNullWhen(true)] out string[]? paths, IDictionary<string, string>? filters = null, string? defaultPath = null)
 		{
-			NfdStatus status = GetUserInput(out paths, filters, defaultPath);
-			return status == NfdStatus.Ok && paths is not null;
+			lock (lockObject)
+			{
+				paths = Window?.ShowOpenFile(Localization.SelectFiles, defaultPath, true, filters?.Select(pair => (pair.Key, new string[] { pair.Value })).ToArray());
+			}
+			return paths is { Length: > 0 };
 		}
 	}
 
@@ -66,34 +44,24 @@ internal static class Dialogs
 		public static async Task HandleGetRequest(HttpContext context)
 		{
 			context.Response.DisableCaching();
-			string[]? paths = await Task.Run(static () =>
-			{
-				if (Supported)
-				{
-					GetUserInput(out string[]? paths);
-					return paths;
-				}
-				else
-				{
-					return null;
-				}
-			});
-			await Results.Json(paths ?? [], AppJsonSerializerContext.Default.StringArray).ExecuteAsync(context);
+			string[] paths = Supported
+				? await Window.ShowOpenFolderAsync(Localization.SelectFolders, null, true)
+				: [];
+			await Results.Json(paths, AppJsonSerializerContext.Default.StringArray).ExecuteAsync(context);
 		}
 
-		public static NfdStatus GetUserInput(out string[]? paths, string? defaultPath = null)
+		public static string[]? GetUserInput(string? defaultPath = null)
 		{
-			ThrowIfNotSupported();
-			lock (lockObject)
-			{
-				return Nfd.PickFolderMultiple(out paths, defaultPath);
-			}
+			return TryGetUserInput(out string[]? paths, defaultPath) ? paths : null;
 		}
 
 		public static bool TryGetUserInput([NotNullWhen(true)] out string[]? paths, string? defaultPath = null)
 		{
-			NfdStatus status = GetUserInput(out paths, defaultPath);
-			return status == NfdStatus.Ok && paths is not null;
+			lock (lockObject)
+			{
+				paths = Window?.ShowOpenFolder(Localization.SelectFolders, defaultPath, true);
+			}
+			return paths is { Length: > 0 };
 		}
 	}
 
@@ -102,34 +70,27 @@ internal static class Dialogs
 		public static async Task HandleGetRequest(HttpContext context)
 		{
 			context.Response.DisableCaching();
-			string? path = await Task.Run(static () =>
-			{
-				if (Supported)
-				{
-					GetUserInput(out string? path);
-					return path;
-				}
-				else
-				{
-					return null;
-				}
-			});
-			await Results.Json(path ?? "", AppJsonSerializerContext.Default.String).ExecuteAsync(context);
+			string[] paths = Supported ? await Window.ShowOpenFileAsync(Localization.SelectFile) : [];
+			string path = paths.Length is 1 ? paths[0] : "";
+			await Results.Json(path, AppJsonSerializerContext.Default.String).ExecuteAsync(context);
 		}
 
-		public static NfdStatus GetUserInput(out string? path, IDictionary<string, string>? filters = null, string? defaultPath = null)
+		public static string? GetUserInput(out string? path, IDictionary<string, string>? filters = null, string? defaultPath = null)
 		{
-			ThrowIfNotSupported();
-			lock (lockObject)
-			{
-				return Nfd.OpenDialog(out path, filters, defaultPath);
-			}
+			return TryGetUserInput(out path, filters, defaultPath) ? path : null;
 		}
 
 		public static bool TryGetUserInput([NotNullWhen(true)] out string? path, IDictionary<string, string>? filters = null, string? defaultPath = null)
 		{
-			NfdStatus status = GetUserInput(out path, filters, defaultPath);
-			return status == NfdStatus.Ok && path is not null;
+			string[] paths;
+			lock (lockObject)
+			{
+				paths = Supported
+					? Window.ShowOpenFile(Localization.SelectFile, defaultPath, false, filters?.Select(pair => (pair.Key, new string[] { pair.Value })).ToArray())
+					: [];
+			}
+			path = paths.Length is 1 ? paths[0] : null;
+			return paths is { Length: > 0 };
 		}
 	}
 
@@ -138,28 +99,15 @@ internal static class Dialogs
 		public static async Task HandleGetRequest(HttpContext context)
 		{
 			context.Response.DisableCaching();
-			string? path = await Task.Run(static () =>
-			{
-				if (Supported)
-				{
-					GetUserInput(out string? path);
-					return path;
-				}
-				else
-				{
-					return null;
-				}
-			});
-			await Results.Json(path ?? "", AppJsonSerializerContext.Default.String).ExecuteAsync(context);
+			string[] paths = Supported ? await Window.ShowOpenFolderAsync(Localization.SelectFolder) : [];
+			string path = paths.Length is 1 ? paths[0] : "";
+			await Results.Json(path, AppJsonSerializerContext.Default.String).ExecuteAsync(context);
 		}
 
-		public static NfdStatus GetUserInput(out string? path, string? defaultPath = null)
+		public static string? GetUserInput(string? defaultPath = null)
 		{
-			ThrowIfNotSupported();
-			lock (lockObject)
-			{
-				return Nfd.PickFolder(out path, defaultPath);
-			}
+			string[]? paths = Window?.ShowOpenFolder(Localization.SelectFolder, defaultPath);
+			return paths is { Length: 1 } ? paths[0] : null;
 		}
 	}
 
@@ -168,28 +116,8 @@ internal static class Dialogs
 		public static async Task HandleGetRequest(HttpContext context)
 		{
 			context.Response.DisableCaching();
-			string? path = await Task.Run(static () =>
-			{
-				if (Supported)
-				{
-					GetUserInput(out string? path);
-					return path;
-				}
-				else
-				{
-					return null;
-				}
-			});
+			string? path = Supported ? await Window.ShowSaveFileAsync(Localization.Save) : null;
 			await Results.Json(path ?? "", AppJsonSerializerContext.Default.String).ExecuteAsync(context);
-		}
-
-		public static NfdStatus GetUserInput(out string? path, IDictionary<string, string>? filters = null, string defaultName = "Untitled", string? defaultPath = null)
-		{
-			ThrowIfNotSupported();
-			lock (lockObject)
-			{
-				return Nfd.SaveDialog(out path, filters, defaultName, defaultPath);
-			}
 		}
 	}
 }

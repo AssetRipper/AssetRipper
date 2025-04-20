@@ -7,7 +7,7 @@ namespace AssetRipper.Tools.TypeTreeExtractor
 {
 	internal static class Program
 	{
-		private static readonly string outputDirectory = System.IO.Path.Combine(AppContext.BaseDirectory, "Output");
+		private static readonly string outputDirectory = System.IO.Path.Join(AppContext.BaseDirectory, "Output");
 
 		static void Main(string[] args)
 		{
@@ -95,7 +95,7 @@ namespace AssetRipper.Tools.TypeTreeExtractor
 			string text = sb.ToString();
 			if (!string.IsNullOrWhiteSpace(text))
 			{
-				string filePath = System.IO.Path.Combine(outputDirectory, file.Name + ".txt");
+				string filePath = System.IO.Path.Join(outputDirectory, file.Name + ".txt");
 				System.IO.File.WriteAllText(filePath, text);
 			}
 		}

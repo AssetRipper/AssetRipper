@@ -96,7 +96,7 @@ namespace AssetRipper.Tools.DependenceGrapher
 				List<IAssetFilter> filters = CreateFilterList(name, className, classID, pathID);
 				if (string.IsNullOrEmpty(outputFile))
 				{
-					outputFile = Path.Combine(AppContext.BaseDirectory, "output.txt");
+					outputFile = Path.Join(AppContext.BaseDirectory, "output.txt");
 				}
 				using FileStream stream = File.Create(outputFile);
 				using TextWriter writer = new StreamWriter(stream);

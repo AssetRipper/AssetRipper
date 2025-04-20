@@ -3,8 +3,10 @@ using AssetRipper.Assets.Metadata;
 using AssetRipper.Assets.Traversal;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
+using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.GUID;
 using AssetRipper.SourceGenerated.Subclasses.Hash128;
+using AssetRipper.SourceGenerated.Subclasses.PropertyName;
 using AssetRipper.Yaml;
 using AssetRipper.Yaml.Extensions;
 using System.Diagnostics;
@@ -67,6 +69,13 @@ public class YamlWalker : AssetWalker
 		ContextStack.Push(new(root, null, asset.ClassName));
 		asset.WalkEditor(this);
 
+		if (asset.IsStripped())
+		{
+			Debug.Assert(root.Children.Count == 1);
+			asset.RemoveStrippedFields((YamlMappingNode)root.Children[0].Value);
+			root.Stripped = true;
+		}
+
 		return document;
 	}
 
@@ -82,14 +91,19 @@ public class YamlWalker : AssetWalker
 
 	public override bool EnterAsset(IUnityAssetBase asset)
 	{
-		if (asset is GUID)
+		if (asset is GUID guid)
 		{
-			VisitPrimitive(asset?.ToString());
+			VisitPrimitive(guid.ToString());
 			return false;
 		}
 		else if (asset is IHash128 hash)
 		{
 			AddNode(HashHelper.ExportYaml(hash));
+			return false;
+		}
+		else if (asset is IPropertyName propertyName)
+		{
+			VisitPrimitive(propertyName.GetIdString());
 			return false;
 		}
 		else
@@ -148,7 +162,19 @@ public class YamlWalker : AssetWalker
 
 	public override bool EnterList<T>(IReadOnlyList<T> list)
 	{
-		if (typeof(T) == typeof(byte))
+		// Integer arrays and lists are emitted as hex strings by Unity, both in custom MonoBehaviour fields and internal engine classes.
+		// In this particular case, integer means the traditional C# integer types, bool, and char.
+		// float and double are not emitted as hex strings. They are emitted as regular sequences.
+		if (typeof(T) == typeof(sbyte) ||
+			typeof(T) == typeof(byte) ||
+			typeof(T) == typeof(short) ||
+			typeof(T) == typeof(ushort) ||
+			typeof(T) == typeof(int) ||
+			typeof(T) == typeof(uint) ||
+			typeof(T) == typeof(long) ||
+			typeof(T) == typeof(ulong) ||
+			typeof(T) == typeof(bool) ||
+			typeof(T) == typeof(char))
 		{
 			VisitPrimitive(list);
 			return false;
@@ -298,14 +324,50 @@ public class YamlWalker : AssetWalker
 
 		static YamlNode ToNode(T value)
 		{
-			if (typeof(T) == typeof(IReadOnlyList<byte>))
+			// IReadOnlyList<T> branches are from EnterList
+			if (typeof(T) == typeof(IReadOnlyList<sbyte>))
 			{
-				// This is from EnterList.
-				return Unsafe.As<T, IReadOnlyList<byte>>(ref value).ExportYaml();
+				return YamlScalarNode.CreateHex((IReadOnlyList<sbyte>)value);
+			}
+			else if (typeof(T) == typeof(IReadOnlyList<byte>))
+			{
+				return YamlScalarNode.CreateHex((IReadOnlyList<byte>)value);
+			}
+			else if (typeof(T) == typeof(IReadOnlyList<short>))
+			{
+				return YamlScalarNode.CreateHex((IReadOnlyList<short>)value);
+			}
+			else if (typeof(T) == typeof(IReadOnlyList<ushort>))
+			{
+				return YamlScalarNode.CreateHex((IReadOnlyList<ushort>)value);
+			}
+			else if (typeof(T) == typeof(IReadOnlyList<int>))
+			{
+				return YamlScalarNode.CreateHex((IReadOnlyList<int>)value);
+			}
+			else if (typeof(T) == typeof(IReadOnlyList<uint>))
+			{
+				return YamlScalarNode.CreateHex((IReadOnlyList<uint>)value);
+			}
+			else if (typeof(T) == typeof(IReadOnlyList<long>))
+			{
+				return YamlScalarNode.CreateHex((IReadOnlyList<long>)value);
+			}
+			else if (typeof(T) == typeof(IReadOnlyList<ulong>))
+			{
+				return YamlScalarNode.CreateHex((IReadOnlyList<ulong>)value);
+			}
+			else if (typeof(T) == typeof(IReadOnlyList<bool>))
+			{
+				return YamlScalarNode.CreateHex((IReadOnlyList<bool>)value);
+			}
+			else if (typeof(T) == typeof(IReadOnlyList<char>))
+			{
+				return YamlScalarNode.CreateHex((IReadOnlyList<char>)value);
 			}
 			else if (typeof(T) == typeof(byte[]))
 			{
-				return Unsafe.As<T, byte[]>(ref value).ExportYaml();
+				return YamlScalarNode.CreateHex(Unsafe.As<T, byte[]>(ref value));
 			}
 			else if (typeof(T) == typeof(bool))
 			{

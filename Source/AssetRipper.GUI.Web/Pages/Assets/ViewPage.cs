@@ -19,8 +19,10 @@ public sealed class ViewPage : DefaultPage
 				new InformationTab(Asset, Path),
 				new AudioTab(Asset, Path),
 				new ImageTab(Asset, Path),
+				new ModelTab(Asset, Path),
 				new TextTab(Asset, Path),
 				new FontTab(Asset, Path),
+				new VideoTab(Asset, Path),
 				new YamlTab(Asset, Path),
 				new JsonTab(Asset, Path),
 				new HexTab(Asset, Path),
@@ -30,5 +32,12 @@ public sealed class ViewPage : DefaultPage
 
 		HtmlTab.WriteNavigation(writer, tabs);
 		HtmlTab.WriteContent(writer, tabs);
+	}
+
+	protected override void WriteScriptReferences(TextWriter writer)
+	{
+		base.WriteScriptReferences(writer);
+		OnlineDependencies.Babylon.WriteScriptReference(writer);
+		new Script(writer).WithSrc("/js/mesh_preview.js").Close();
 	}
 }

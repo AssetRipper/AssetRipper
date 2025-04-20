@@ -5,15 +5,23 @@ using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_1001;
 using AssetRipper.SourceGenerated.Classes.ClassID_2;
 
-namespace AssetRipper.Processing;
+namespace AssetRipper.Processing.Prefabs;
 
-public abstract class GameObjectHierarchyObject : UnityObjectBase
+public abstract class GameObjectHierarchyObject : AssetGroup
 {
-	public List<IGameObject> GameObjects { get; } = new();
-	public List<IComponent> Components { get; } = new();
-	public List<IPrefabInstance> PrefabInstances { get; } = new();
+	public List<IGameObject> GameObjects { get; } = [];
+	public List<IComponent> Components { get; } = [];
+	public List<IPrefabInstance> PrefabInstances { get; } = [];
+	/// <summary>
+	/// <see cref="Assets"/> that should be marked as stripped.
+	/// </summary>
+	public HashSet<IUnityObjectBase> StrippedAssets { get; } = new();
+	/// <summary>
+	/// <see cref="Assets"/> that should not be part of YAML export.
+	/// </summary>
+	public HashSet<IUnityObjectBase> HiddenAssets { get; } = new();
 
-	public virtual IEnumerable<IUnityObjectBase> Assets
+	public override IEnumerable<IUnityObjectBase> Assets
 	{
 		get
 		{
@@ -23,17 +31,16 @@ public abstract class GameObjectHierarchyObject : UnityObjectBase
 		}
 	}
 
-	protected GameObjectHierarchyObject(AssetInfo assetInfo) : base(assetInfo)
+	public IEnumerable<IUnityObjectBase> ExportableAssets
 	{
+		get
+		{
+			return Assets.Where(asset => !HiddenAssets.Contains(asset));
+		}
 	}
 
-	public void SetMainAssets()
+	protected GameObjectHierarchyObject(AssetInfo assetInfo) : base(assetInfo)
 	{
-		MainAsset = this;
-		foreach (IUnityObjectBase asset in Assets)
-		{
-			asset.MainAsset = this;
-		}
 	}
 
 	public override IEnumerable<(string, PPtr)> FetchDependencies()
@@ -63,14 +70,14 @@ public abstract class GameObjectHierarchyObject : UnityObjectBase
 
 	protected virtual void WalkFields(AssetWalker walker)
 	{
+		this.WalkPPtrListField(walker, GameObjects);
+
+		walker.DivideAsset(this);
+
+		this.WalkPPtrListField(walker, Components);
+
+		walker.DivideAsset(this);
+
+		this.WalkPPtrListField(walker, PrefabInstances);
 	}
-
-	protected PPtr AssetToPPtr(IUnityObjectBase? asset) => Collection.ForceCreatePPtr(asset);
 }
-/*
-Potential issue:
-
-Any object referenced must be emitted and it is nontrivial to find all the references.
-Scene objects can only be referenced within the scene,
-but prefab objects can be referenced from anywhere.
-*/

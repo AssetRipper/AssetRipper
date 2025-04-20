@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<ImplicitUsings>enable</ImplicitUsings>
@@ -7,7 +7,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\AssetRipper.Decompilation.CSharp\AssetRipper.Decompilation.CSharp.csproj" />
 		<ProjectReference Include="..\AssetRipper.Export.PrimaryContent\AssetRipper.Export.PrimaryContent.csproj" />
 		<ProjectReference Include="..\AssetRipper.Export.UnityProjects\AssetRipper.Export.UnityProjects.csproj" />
 		<ProjectReference Include="..\AssetRipper.GUI.Licensing\AssetRipper.GUI.Licensing.csproj" />
@@ -24,11 +23,17 @@
 		<EmbeddedResource Include="StaticContent/favicon.ico" />
 		<EmbeddedResource Include="StaticContent/js/site.js" />
 		<EmbeddedResource Include="StaticContent/js/commands_page.js" />
+		<EmbeddedResource Include="StaticContent/js/mesh_preview.js" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AssetRipper.Text.Html" Version="1.0.0" />
-		<PackageReference Include="NativeFileDialogs.Net" Version="1.2.1" />
+		<PackageReference Include="AssetRipper.GUI.Web.Dependencies" Version="1.0.0" />
+		<PackageReference Include="AssetRipper.Text.Html" Version="2.1.0" />
+		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
+		<PackageReference Include="Microsoft.OpenApi" Version="1.6.24" />
+		<PackageReference Include="oqo0.SwaggerThemes" Version="1.4.3" />
+		<PackageReference Include="Photino.NET" Version="4.0.16" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.0" />
 		<PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
 		<PackageReference Include="System.Text.Json" Version="8.0.3" />
 	</ItemGroup>

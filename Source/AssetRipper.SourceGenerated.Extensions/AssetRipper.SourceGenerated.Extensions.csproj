@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<IsTrimmable>true</IsTrimmable>
@@ -13,7 +13,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="AssetRipper.Checksum" Version="1.0.0" />
-		<PackageReference Include="AssetRipper.SourceGenerated" Version="1.1.0" />
+		<PackageReference Include="AssetRipper.SourceGenerated" Version="1.1.13.1" />
 		<PackageReference Include="System.Text.Json" Version="8.0.3" />
 	</ItemGroup>
 

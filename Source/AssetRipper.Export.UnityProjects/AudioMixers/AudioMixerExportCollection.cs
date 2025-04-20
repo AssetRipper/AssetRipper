@@ -42,10 +42,10 @@ namespace AssetRipper.Export.UnityProjects.AudioMixers
 			return exportID;
 		}
 
-		protected override bool ExportInner(IExportContainer container, string filePath, string dirPath)
+		protected override bool ExportInner(IExportContainer container, string filePath, string dirPath, FileSystem fileSystem)
 		{
-			UnityPatches.ApplyPatchFromText(AudioMixerPatchText, "AudioMixerPostprocessor", dirPath);
-			return base.ExportInner(container, filePath, dirPath);
+			UnityPatches.ApplyPatchFromText(AudioMixerPatchText, "AudioMixerPostprocessor", dirPath, fileSystem);
+			return base.ExportInner(container, filePath, dirPath, fileSystem);
 		}
 
 		private const string AudioMixerPatchText = """

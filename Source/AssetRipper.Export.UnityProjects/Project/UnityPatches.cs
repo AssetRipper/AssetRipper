@@ -13,17 +13,17 @@ public static class UnityPatches
 	/// <param name="text">The text of the patch</param>
 	/// <param name="name">The name of the patch</param>
 	/// <param name="exportDirectoryPath">The path of the exported project</param>
-	public static void ApplyPatchFromText(string text, string name, string exportDirectoryPath)
+	public static void ApplyPatchFromText(string text, string name, string exportDirectoryPath, FileSystem fileSystem)
 	{
 		string patchFileName = $"{name}.cs";
-		string patchDirectoryPath = Path.Combine(exportDirectoryPath, RelativePathToPatchesDirectory);
-		string patchFilePath = Path.Combine(patchDirectoryPath, patchFileName);
-		if (File.Exists(patchFilePath))
+		string patchDirectoryPath = fileSystem.Path.Join(exportDirectoryPath, RelativePathToPatchesDirectory);
+		string patchFilePath = fileSystem.Path.Join(patchDirectoryPath, patchFileName);
+		if (fileSystem.File.Exists(patchFilePath))
 		{
 			return;
 		}
 
-		Directory.CreateDirectory(patchDirectoryPath);
-		File.WriteAllBytes(patchFilePath, Encoding.UTF8.GetBytes(text));
+		fileSystem.Directory.Create(patchDirectoryPath);
+		fileSystem.File.WriteAllBytes(patchFilePath, Encoding.UTF8.GetBytes(text));
 	}
 }

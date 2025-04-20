@@ -74,16 +74,22 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 			set => SetPrimitive(value);
 		}
 
+		public Half AsHalf
+		{
+			readonly get => BitConverter.UInt16BitsToHalf(AsUInt16);
+			set => AsUInt16 = BitConverter.HalfToUInt16Bits(value);
+		}
+
 		public float AsSingle
 		{
-			readonly get => BitConverter.UInt32BitsToSingle(unchecked((uint)PValue));
-			set => SetPrimitive(BitConverter.SingleToUInt32Bits(value));
+			readonly get => BitConverter.UInt32BitsToSingle(AsUInt32);
+			set => AsUInt32 = BitConverter.SingleToUInt32Bits(value);
 		}
 
 		public double AsDouble
 		{
-			readonly get => BitConverter.UInt64BitsToDouble(PValue);
-			set => SetPrimitive(BitConverter.DoubleToUInt64Bits(value));
+			readonly get => BitConverter.UInt64BitsToDouble(AsUInt64);
+			set => AsUInt64 = BitConverter.DoubleToUInt64Bits(value);
 		}
 
 		public string AsString
@@ -165,6 +171,12 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 		public ulong[] AsUInt64Array
 		{
 			readonly get => CValue as ulong[] ?? [];
+			set => SetReference(value);
+		}
+
+		public Half[] AsHalfArray
+		{
+			readonly get => CValue as Half[] ?? [];
 			set => SetReference(value);
 		}
 
@@ -258,6 +270,12 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 			set => SetReference(value);
 		}
 
+		public Half[][] AsHalfArrayArray
+		{
+			readonly get => CValue as Half[][] ?? [];
+			set => SetReference(value);
+		}
+
 		public float[][] AsSingleArrayArray
 		{
 			readonly get => CValue as float[][] ?? [];
@@ -313,6 +331,76 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 
 		public readonly ref SerializableValue this[string name] => ref AsStructure[name];
 
+		public static SerializableValue FromPrimitive<T>(T value) where T : notnull
+		{
+			SerializableValue result = default;
+			if (typeof(T) == typeof(bool))
+			{
+				result.AsBoolean = (bool)(object)value;
+			}
+			else if (typeof(T) == typeof(char))
+			{
+				result.AsChar = (char)(object)value;
+			}
+			else if (typeof(T) == typeof(sbyte))
+			{
+				result.AsSByte = (sbyte)(object)value;
+			}
+			else if (typeof(T) == typeof(byte))
+			{
+				result.AsByte = (byte)(object)value;
+			}
+			else if (typeof(T) == typeof(short))
+			{
+				result.AsInt16 = (short)(object)value;
+			}
+			else if (typeof(T) == typeof(ushort))
+			{
+				result.AsUInt16 = (ushort)(object)value;
+			}
+			else if (typeof(T) == typeof(int))
+			{
+				result.AsInt32 = (int)(object)value;
+			}
+			else if (typeof(T) == typeof(uint))
+			{
+				result.AsUInt32 = (uint)(object)value;
+			}
+			else if (typeof(T) == typeof(long))
+			{
+				result.AsInt64 = (long)(object)value;
+			}
+			else if (typeof(T) == typeof(ulong))
+			{
+				result.AsUInt64 = (ulong)(object)value;
+			}
+			else if (typeof(T) == typeof(Half))
+			{
+				result.AsHalf = (Half)(object)value;
+			}
+			else if (typeof(T) == typeof(float))
+			{
+				result.AsSingle = (float)(object)value;
+			}
+			else if (typeof(T) == typeof(double))
+			{
+				result.AsDouble = (double)(object)value;
+			}
+			else if (typeof(T) == typeof(string))
+			{
+				result.AsString = (string)(object)value;
+			}
+			else if (typeof(T) == typeof(Utf8String))
+			{
+				result.AsString = ((Utf8String)(object)value).String;
+			}
+			else
+			{
+				throw new NotSupportedException($"Type {typeof(T)} is not supported.");
+			}
+			return result;
+		}
+
 		public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, int depth, in SerializableType.Field etalon)
 		{
 			switch (etalon.ArrayDepth)
@@ -349,6 +437,9 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 							break;
 						case PrimitiveType.ULong:
 							AsUInt64 = reader.ReadUInt64();
+							break;
+						case PrimitiveType.Half:
+							AsHalf = reader.ReadHalf();
 							break;
 						case PrimitiveType.Single:
 							AsSingle = reader.ReadSingle();
@@ -406,6 +497,9 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 							break;
 						case PrimitiveType.ULong:
 							AsUInt64Array = reader.ReadPrimitiveArray<ulong>(version);
+							break;
+						case PrimitiveType.Half:
+							AsHalfArray = reader.ReadPrimitiveArray<Half>(version);
 							break;
 						case PrimitiveType.Single:
 							AsSingleArray = reader.ReadPrimitiveArray<float>(version);
@@ -487,6 +581,9 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 							break;
 						case PrimitiveType.ULong:
 							AsUInt64ArrayArray = reader.ReadPrimitiveArrayArray<ulong>(version);
+							break;
+						case PrimitiveType.Half:
+							AsHalfArrayArray = reader.ReadPrimitiveArrayArray<Half>(version);
 							break;
 						case PrimitiveType.Single:
 							AsSingleArrayArray = reader.ReadPrimitiveArrayArray<float>(version);
@@ -599,6 +696,9 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 						case PrimitiveType.ULong:
 							writer.Write(AsUInt64);
 							break;
+						case PrimitiveType.Half:
+							writer.Write(AsHalf);
+							break;
 						case PrimitiveType.Single:
 							writer.Write(AsSingle);
 							break;
@@ -651,6 +751,9 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 							break;
 						case PrimitiveType.ULong:
 							writer.WriteArray(AsUInt64Array);
+							break;
+						case PrimitiveType.Half:
+							writer.WriteArray(AsHalfArray);
 							break;
 						case PrimitiveType.Single:
 							writer.WriteArray(AsSingleArray);
@@ -727,6 +830,9 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 						case PrimitiveType.ULong:
 							walker.VisitPrimitive(AsUInt64);
 							break;
+						case PrimitiveType.Half:
+							walker.VisitPrimitive(AsHalf);
+							break;
 						case PrimitiveType.Single:
 							walker.VisitPrimitive(AsSingle);
 							break;
@@ -778,6 +884,9 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 							break;
 						case PrimitiveType.ULong:
 							VisitPrimitiveArray(walker, AsUInt64Array);
+							break;
+						case PrimitiveType.Half:
+							VisitPrimitiveArray(walker, AsHalfArray);
 							break;
 						case PrimitiveType.Single:
 							VisitPrimitiveArray(walker, AsSingleArray);
@@ -834,7 +943,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 			}
 		}
 
-		private static void VisitPrimitiveArray<T>(AssetWalker walker, T[] array)
+		private static void VisitPrimitiveArray<T>(AssetWalker walker, T[] array) where T : notnull
 		{
 			if (walker.EnterList(array))
 			{
@@ -958,6 +1067,12 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 								CValue = span.ToArray();
 							}
 							break;
+						case PrimitiveType.Half:
+							{
+								ReadOnlySpan<Half> span = source.CValue as Half[];
+								CValue = span.ToArray();
+							}
+							break;
 						case PrimitiveType.Single:
 							{
 								ReadOnlySpan<float> span = source.CValue as float[];
@@ -1051,6 +1166,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 					PrimitiveType.UInt => Array.Empty<uint>(),
 					PrimitiveType.Long => Array.Empty<long>(),
 					PrimitiveType.ULong => Array.Empty<ulong>(),
+					PrimitiveType.Half => Array.Empty<Half>(),
 					PrimitiveType.Single => Array.Empty<float>(),
 					PrimitiveType.Double => Array.Empty<double>(),
 					PrimitiveType.String => Array.Empty<string>(),
@@ -1070,6 +1186,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 					PrimitiveType.UInt => Array.Empty<uint[]>(),
 					PrimitiveType.Long => Array.Empty<long[]>(),
 					PrimitiveType.ULong => Array.Empty<ulong[]>(),
+					PrimitiveType.Half => Array.Empty<Half[]>(),
 					PrimitiveType.Single => Array.Empty<float[]>(),
 					PrimitiveType.Double => Array.Empty<double[]>(),
 					PrimitiveType.String => Array.Empty<string[]>(),
@@ -1097,6 +1214,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 				}
 				else
 				{
+					Debug.Assert(etalon.ArrayDepth == 0);
 					IUnityAssetBase structure = (IUnityAssetBase)CValue;
 					foreach ((string path, PPtr pptr) in structure.FetchDependencies())
 					{
@@ -1152,6 +1270,9 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 				case ulong[]:
 					CValue = Array.Empty<ulong>();
 					break;
+				case Half[]:
+					CValue = Array.Empty<Half>();
+					break;
 				case float[]:
 					CValue = Array.Empty<float>();
 					break;
@@ -1197,6 +1318,9 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 				case ulong[][]:
 					CValue = Array.Empty<ulong[]>();
 					break;
+				case Half[][]:
+					CValue = Array.Empty<Half[]>();
+					break;
 				case float[][]:
 					CValue = Array.Empty<float[]>();
 					break;
@@ -1220,6 +1344,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable
 		private static T[] CreateArray<T>(int length) => length is 0 ? [] : new T[length];
 
 		private sealed class PairCollection<TKey>(SerializablePair[] array) : IReadOnlyCollection<KeyValuePair<TKey, SerializableValue>>
+			where TKey : notnull
 		{
 			public int Count => array.Length;
 

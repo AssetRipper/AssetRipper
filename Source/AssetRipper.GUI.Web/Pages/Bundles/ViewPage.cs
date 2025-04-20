@@ -76,10 +76,12 @@ public sealed class ViewPage : DefaultPage
 			new H2(writer).Close(Localization.FailedFiles);
 			using (new Ul(writer).End())
 			{
-				foreach (FailedFile failedFile in Bundle.FailedFiles)
+				for (int i = 0; i < Bundle.FailedFiles.Count; i++)
 				{
-					// Todo: page for failed files
-					new Li(writer).Close(failedFile.Name);
+					using (new Li(writer).End())
+					{
+						PathLinking.WriteLink(writer, Path.GetFailedFile(i), Bundle.FailedFiles[i].NameFixed);
+					}
 				}
 			}
 		}

@@ -1,7 +1,5 @@
-﻿using AssetRipper.Assets.Cloning;
-using AssetRipper.Assets.Collections;
+﻿using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Generics;
-using AssetRipper.Import.Logging;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1101;
 using AssetRipper.SourceGenerated.Classes.ClassID_1102;
@@ -16,20 +14,12 @@ using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.AnimatorCondition;
 using AssetRipper.SourceGenerated.Subclasses.BlendTreeConstant;
 using AssetRipper.SourceGenerated.Subclasses.BlendTreeNodeConstant;
-using AssetRipper.SourceGenerated.Subclasses.ChildAnimatorState;
 using AssetRipper.SourceGenerated.Subclasses.ChildMotion;
 using AssetRipper.SourceGenerated.Subclasses.ConditionConstant;
-using AssetRipper.SourceGenerated.Subclasses.LayerConstant;
 using AssetRipper.SourceGenerated.Subclasses.LeafInfoConstant;
-using AssetRipper.SourceGenerated.Subclasses.OffsetPtr_SelectorStateConstant;
-using AssetRipper.SourceGenerated.Subclasses.PPtr_AnimatorState;
-using AssetRipper.SourceGenerated.Subclasses.PPtr_AnimatorStateTransition;
-using AssetRipper.SourceGenerated.Subclasses.SelectorStateConstant;
 using AssetRipper.SourceGenerated.Subclasses.SelectorTransitionConstant;
 using AssetRipper.SourceGenerated.Subclasses.StateConstant;
-using AssetRipper.SourceGenerated.Subclasses.StateMachineConstant;
 using AssetRipper.SourceGenerated.Subclasses.TransitionConstant;
-using AssetRipper.SourceGenerated.Subclasses.Vector3f;
 
 namespace AssetRipper.Processing.AnimatorControllers
 {
@@ -39,18 +29,20 @@ namespace AssetRipper.Processing.AnimatorControllers
 		// https://github.com/ds5678/Binoculars/blob/d6702ed3a1db39b1a2788956ff195b2590c3d08b/Unity/Assets/Models/binoculars_animator.controller#L106
 		private static Utf8String BlendTreeName { get; } = new Utf8String("Blend Tree");
 
-		private static IMotion? CreateMotion(this IStateConstant stateConstant, ProcessedAssetCollection file, IAnimatorController controller, int nodeIndex)
+		private static Utf8String AnimatorStateName { get; } = new Utf8String("New State");
+
+		private static IMotion? CreateMotion(ProcessedAssetCollection virtualFile, IAnimatorController controller, IStateConstant stateConstant, int nodeIndex)
 		{
 			if (stateConstant.BlendTreeConstantArray.Count == 0)
 			{
-				return default;
+				return default; // null Motion
 			}
 			else
 			{
 				IBlendTreeNodeConstant node = stateConstant.GetBlendTree().NodeArray[nodeIndex].Data;
 				if (node.IsBlendTree())
 				{
-					return CreateBlendTree(file, controller, stateConstant, nodeIndex);
+					return CreateBlendTree(virtualFile, controller, stateConstant, nodeIndex); // BlendTree Motion
 				}
 				else
 				{
@@ -75,11 +67,11 @@ namespace AssetRipper.Processing.AnimatorControllers
 
 					if (clipIndex == -1)
 					{
-						return default;
+						return default; // null Motion
 					}
 					else
 					{
-						return controller.AnimationClipsP[clipIndex] as IMotion;//AnimationClip has inherited from Motion since Unity 4.
+						return controller.AnimationClipsP[clipIndex] as IMotion; // AnimationClip Motion (inherited since Unity 4)
 					}
 				}
 			}
@@ -97,7 +89,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 			blendTree.Childs.Capacity = node.ChildIndices.Count;
 			for (int i = 0; i < node.ChildIndices.Count; i++)
 			{
-				blendTree.AddAndInitializeNewChild(virtualFile, controller, state, nodeIndex, i);
+				AddAndInitializeNewChild(virtualFile, controller, state, blendTree, nodeIndex, i);
 			}
 
 			if (node.BlendEventID != uint.MaxValue)
@@ -120,16 +112,23 @@ namespace AssetRipper.Processing.AnimatorControllers
 			{
 				blendTree.BlendType_UInt32 = node.BlendType;
 			}
+
 			return blendTree;
 		}
 
-		private static IChildMotion AddAndInitializeNewChild(this IBlendTree tree, ProcessedAssetCollection file, IAnimatorController controller, IStateConstant state, int nodeIndex, int childIndex)
+		private static IChildMotion AddAndInitializeNewChild(ProcessedAssetCollection virtualFile, IAnimatorController controller, IStateConstant state, IBlendTree tree, int nodeIndex, int childIndex)
 		{
 			IChildMotion childMotion = tree.Childs.AddNew();
 			IBlendTreeConstant treeConstant = state.GetBlendTree();
 			IBlendTreeNodeConstant node = treeConstant.NodeArray[nodeIndex].Data;
 			int childNodeIndex = (int)node.ChildIndices[childIndex];
-			IMotion? motion = state.CreateMotion(file, controller, childNodeIndex);
+			// https://github.com/AssetRipper/AssetRipper/issues/1566
+			// Strangely, some BlendTree nodes have the same index as the child node index.
+			// In the case of the above issue, both indices were 0.
+			IMotion? motion = nodeIndex != childNodeIndex
+				? CreateMotion(virtualFile, controller, state, childNodeIndex)
+				: null; // tree might be more accurate here since the indices are the same, but it doesn't make sense for a BlendTree to be a child of itself.
+
 			childMotion.Motion.SetAsset(tree.Collection, motion);
 
 			IBlendTreeNodeConstant childNode = treeConstant.NodeArray[childNodeIndex].Data;
@@ -158,269 +157,94 @@ namespace AssetRipper.Processing.AnimatorControllers
 			return childMotion;
 		}
 
-		private static void CreateEntryTransitions(
-			IAnimatorStateMachine generatedStateMachine,
-			IStateMachineConstant stateMachineConstant,
-			ProcessedAssetCollection file,
-			uint ID,
-			IReadOnlyList<IAnimatorState> States,
-			AssetDictionary<uint, Utf8String> TOS)
+		/// <summary>
+		/// Create a fully solved Root AnimatorStateMachine for the corresponding index
+		/// </summary>
+		public static IAnimatorStateMachine CreateRootAnimatorStateMachine(ProcessedAssetCollection virtualFile, IAnimatorController controller, int stateMachineIndex)
 		{
-			if (generatedStateMachine.Has_EntryTransitions() && stateMachineConstant.Has_SelectorStateConstantArray())
-			{
-				foreach (OffsetPtr_SelectorStateConstant selectorPtr in stateMachineConstant.SelectorStateConstantArray)
-				{
-					SelectorStateConstant selector = selectorPtr;
-					if (selector.FullPathID == ID && selector.IsEntry)
-					{
-						for (int i = 0; i < selector.TransitionConstantArray.Count - 1; i++)
-						{
-							SelectorTransitionConstant selectorTrans = selector.TransitionConstantArray[i].Data;
-							IAnimatorTransition transition = CreateAnimatorTransition(file, stateMachineConstant, States, TOS, selectorTrans);
-							generatedStateMachine.EntryTransitionsP.Add(transition);
-						}
-					}
-				}
-			}
+			AnimatorStateMachineContext stateMachineContext = new(virtualFile, controller, stateMachineIndex);
+			stateMachineContext.Process();
+			return stateMachineContext.RootStateMachine;
 		}
 
-		public static IAnimatorStateMachine CreateAnimatorStateMachine(ProcessedAssetCollection virtualFile, IAnimatorController controller, int stateMachineIndex)
+		public static IAnimatorStateMachine CreateStateMachine(ProcessedAssetCollection virtualFile, IAnimatorController controller, int layerIndex, uint fullPathID = 0)
 		{
-			const float StateOffset = 250.0f;
+			IAnimatorStateMachine stateMachine = virtualFile.CreateAsset((int)ClassIDType.AnimatorStateMachine, AnimatorStateMachine.Create);
+			stateMachine.HideFlagsE = HideFlags.HideInHierarchy;
 
-			IAnimatorStateMachine generatedStateMachine = virtualFile.CreateAsset((int)ClassIDType.AnimatorStateMachine, AnimatorStateMachine.Create);
-			generatedStateMachine.HideFlagsE = HideFlags.HideInHierarchy;
-
-			int layerIndex = controller.Controller.GetLayerIndexByStateMachineIndex(stateMachineIndex);
-			ILayerConstant layer = controller.Controller.LayerArray[layerIndex].Data;
-			generatedStateMachine.Name = controller.TOS[layer.Binding];
-
-			IStateMachineConstant stateMachine = controller.Controller.StateMachineArray[stateMachineIndex].Data;
-
-			int stateCount = stateMachine.StateConstantArray.Count;
-			int stateMachineCount = 0;
-			int stateAndStateMachineCount = stateCount + stateMachineCount;
-			int side = (int)Math.Ceiling(Math.Sqrt(stateAndStateMachineCount));
-
-			List<IAnimatorState> states = new();
-			if (generatedStateMachine.Has_ChildStates())
+			// can add StateMachineBehaviours now
+			if (stateMachine.Has_StateMachineBehaviours())
 			{
-				generatedStateMachine.ChildStates.Clear();
-				generatedStateMachine.ChildStates.Capacity = stateCount;
-			}
-			else if (generatedStateMachine.Has_States())
-			{
-				generatedStateMachine.States.Clear();
-				generatedStateMachine.States.Capacity = stateCount;
-			}
-			for (int y = 0, stateIndex = 0; y < side && stateIndex < stateCount; y++)
-			{
-				for (int x = 0; x < side && stateIndex < stateCount; x++, stateIndex++)
+				IMonoBehaviour?[] stateBehaviours = controller.GetStateBehaviours(layerIndex, fullPathID);
+				foreach (IMonoBehaviour? stateBehaviour in stateBehaviours)
 				{
-					Vector3f position = new() { X = x * StateOffset, Y = y * StateOffset };
-					IAnimatorState state = CreateAnimatorState(virtualFile, controller, stateMachineIndex, stateIndex, position);
-
-					if (generatedStateMachine.Has_ChildStates())
+					if (stateBehaviour != null)
 					{
-						ChildAnimatorState childState = generatedStateMachine.ChildStates.AddNew();
-						childState.Position.CopyValues(position);
-						childState.State.SetAsset(generatedStateMachine.Collection, state);
-					}
-					else if (generatedStateMachine.Has_States())
-					{
-						generatedStateMachine.StatesP.Add(state);
-					}
-
-					states.Add(state);
-				}
-			}
-
-#warning TODO: child StateMachines
-			//generatedStateMachine.ChildStateMachines = new ChildAnimatorStateMachine[stateMachineCount];
-
-			// set destination state for transitions here because all states have only become valid now
-			for (int i = 0; i < stateMachine.StateConstantArray.Count; i++)
-			{
-				IAnimatorState state = states[i];
-				IStateConstant stateConstant = stateMachine.StateConstantArray[i].Data;
-
-				AssetList<PPtr_AnimatorStateTransition_4>? transitionList;
-				if (state.Has_Transitions())
-				{
-					state.Transitions.EnsureCapacity(state.Transitions.Count + stateConstant.TransitionConstantArray.Count);
-					transitionList = null;
-				}
-				else if (generatedStateMachine.Has_OrderedTransitions())
-				{
-					//I'm not sure if this is correct, but it seems to be the only logical way to store the transitions before Unity 5.
-					//IAnimatorStateMachine.LocalTransitions only exists until Unity 4.2.0, so by process of elimination, this is the only option.
-
-					AssetPair<PPtr_AnimatorState_4, AssetList<PPtr_AnimatorStateTransition_4>> pair = generatedStateMachine.OrderedTransitions.AddNew();
-					pair.Key.SetAsset(generatedStateMachine.Collection, state);
-					transitionList = pair.Value;
-				}
-				else
-				{
-					//This should never happen.
-					Logger.Error(LogCategory.Processing, "Loose Transitions will be created. This can only happen when the AnimatorState and AnimatorStateMachine have different Unity versions, specifically on opposite sides of Unity 5.");
-					transitionList = null;
-				}
-
-				for (int j = 0; j < stateConstant.TransitionConstantArray.Count; j++)
-				{
-					ITransitionConstant transitionConstant = stateConstant.TransitionConstantArray[j].Data;
-					IAnimatorStateTransition transition = CreateAnimatorStateTransition(virtualFile, stateMachine, states, controller.TOS, transitionConstant);
-					if (state.Has_Transitions())
-					{
-						state.TransitionsP.Add(transition);
-					}
-					else
-					{
-						transitionList?.AddNew().SetAsset(generatedStateMachine.Collection, transition);
+						stateBehaviour.HideFlagsE = HideFlags.HideInHierarchy;
+						stateMachine.StateMachineBehavioursP.Add(stateBehaviour);
 					}
 				}
 			}
 
-			//AnyStateTransitions
-			{
-				int count = stateMachine.AnyStateTransitionConstantArray.Count;
-				if (generatedStateMachine.Has_AnyStateTransitions())
-				{
-					generatedStateMachine.AnyStateTransitions.Capacity = count;
-					for (int i = 0; i < count; i++)
-					{
-						ITransitionConstant transitionConstant = stateMachine.AnyStateTransitionConstantArray[i].Data;
-						IAnimatorStateTransition transition = CreateAnimatorStateTransition(virtualFile, stateMachine, states, controller.TOS, transitionConstant);
-						generatedStateMachine.AnyStateTransitionsP.Add(transition);
-					}
-				}
-				else
-				{
-					//https://github.com/AssetRipper/AssetRipper/issues/1028
-					AssetList<PPtr_AnimatorStateTransition_4> newList = generatedStateMachine.OrderedTransitions.AddNew().Value;
-					newList.Capacity = count;
-					PPtrAccessList<PPtr_AnimatorStateTransition_4, IAnimatorStateTransition> anyStateTransitions = new(newList, generatedStateMachine.Collection);
-					for (int i = 0; i < count; i++)
-					{
-						ITransitionConstant transitionConstant = stateMachine.AnyStateTransitionConstantArray[i].Data;
-						IAnimatorStateTransition transition = CreateAnimatorStateTransition(virtualFile, stateMachine, states, controller.TOS, transitionConstant);
-						anyStateTransitions.Add(transition);
-					}
-				}
-			}
-
-			CreateEntryTransitions(generatedStateMachine, stateMachine, virtualFile, layer.Binding, states, controller.TOS);
-
-			generatedStateMachine.StateMachineBehaviours?.Clear();
-#warning TEMP: enable when AnimatorStateMachine's child StateMachines has been implemented
-			if (false)
-			{
-				generatedStateMachine.StateMachineBehavioursP.AddRange(controller.GetStateBehaviours(layerIndex));
-			}
-
-			generatedStateMachine.AnyStatePosition.SetValues(0.0f, -StateOffset, 0.0f);
-			generatedStateMachine.EntryPosition?.SetValues(StateOffset, -StateOffset, 0.0f);
-			generatedStateMachine.ExitPosition?.SetValues(2.0f * StateOffset, -StateOffset, 0.0f);
-			generatedStateMachine.ParentStateMachinePosition.SetValues(0.0f, -2.0f * StateOffset, 0.0f);
-
-			if (generatedStateMachine.Has_ChildStates() && generatedStateMachine.ChildStates.Count > 0)
-			{
-				PPtr_AnimatorState_5 defaultStatePPtr = generatedStateMachine.ChildStates[(int)stateMachine.DefaultState].State;
-
-				generatedStateMachine.DefaultState.CopyValues(defaultStatePPtr, new PPtrConverter(generatedStateMachine));
-			}
-			else if (generatedStateMachine.Has_States() && generatedStateMachine.States.Count > 0)
-			{
-				PPtr_AnimatorState_4 defaultStatePPtr = generatedStateMachine.States[(int)stateMachine.DefaultState];
-
-				generatedStateMachine.DefaultState.CopyValues(defaultStatePPtr, new PPtrConverter(generatedStateMachine));
-			}
-
-			return generatedStateMachine;
+			return stateMachine;
 		}
 
-		private static IAnimatorState CreateAnimatorState(ProcessedAssetCollection virtualFile, IAnimatorController controller, int stateMachineIndex, int stateIndex, Vector3f position)
+		public static IAnimatorState CreateAnimatorState(ProcessedAssetCollection virtualFile, IAnimatorController controller, AssetDictionary<uint, Utf8String> tos, int layerIndex, IStateConstant stateConstant)
 		{
-			IAnimatorState generatedState = virtualFile.CreateAsset((int)ClassIDType.AnimatorState, AnimatorState.Create);
-			generatedState.HideFlagsE = HideFlags.HideInHierarchy;
+			IAnimatorState animatorState = virtualFile.CreateAsset((int)ClassIDType.AnimatorState, AnimatorState.Create);
+			animatorState.HideFlagsE = HideFlags.HideInHierarchy;
 
-			AssetDictionary<uint, Utf8String> tos;
-			if (controller.TOS.ContainsKey(0))
+			animatorState.Name = stateConstant.GetName(tos);
+			animatorState.Speed = stateConstant.Speed;
+			animatorState.CycleOffset = stateConstant.CycleOffset;
+
+			if (animatorState.Has_StateMachineBehaviours())
 			{
-				tos = controller.TOS;
+				uint stateID = stateConstant.GetId();
+				IMonoBehaviour?[] stateBehaviours = controller.GetStateBehaviours(layerIndex, stateID);
+				animatorState.StateMachineBehavioursP.AddRange(stateBehaviours);
+			}
+
+			animatorState.IKOnFeet = stateConstant.IKOnFeet;
+			animatorState.WriteDefaultValues = stateConstant.GetWriteDefaultValues();
+			animatorState.Mirror = stateConstant.Mirror;
+			animatorState.SpeedParameterActive = stateConstant.SpeedParamID > 0;
+			animatorState.MirrorParameterActive = stateConstant.MirrorParamID > 0;
+			animatorState.CycleOffsetParameterActive = stateConstant.CycleOffsetParamID > 0;
+			animatorState.TimeParameterActive = stateConstant.TimeParamID > 0;
+
+			IMotion? motion = CreateMotion(virtualFile, controller, stateConstant, 0);
+			if (animatorState.Has_Motion())
+			{
+				animatorState.MotionP = motion;
 			}
 			else
 			{
-				tos = new AssetDictionary<uint, Utf8String>() { { 0, Utf8String.Empty } };
-				foreach ((uint hash, Utf8String str) in controller.TOS)
-				{
-					tos.Add(hash, str);
-				}
-			}
-			IStateMachineConstant stateMachine = controller.Controller.StateMachineArray[stateMachineIndex].Data;
-			IStateConstant state = stateMachine.StateConstantArray[stateIndex].Data;
-
-			generatedState.Name = tos[state.NameID];
-
-			generatedState.Speed = state.Speed;
-			generatedState.CycleOffset = state.CycleOffset;
-
-			// skip Transitions because not all state exists at this moment
-
-			if (generatedState.Has_StateMachineBehaviours())
-			{
-				// exclude StateMachine's behaviours
-				int layerIndex = controller.Controller.GetLayerIndexByStateMachineIndex(stateMachineIndex);
-				IMonoBehaviour?[] machineBehaviours = controller.GetStateBehaviours(layerIndex);
-				IMonoBehaviour?[] stateBehaviours = controller.GetStateBehaviours(stateMachineIndex, stateIndex);
-				IMonoBehaviour?[] behaviours = stateBehaviours;
-#warning TEMP: remove comment when AnimatorStateMachine's child StateMachines has been implemented
-				//List<IMonoBehaviour?> behaviours = new List<IMonoBehaviour?>(stateBehaviours.Length);
-				//foreach (IMonoBehaviour? behaviour in stateBehaviours)
-				//{
-				//	if (!machineBehaviours.Contains(behaviour))
-				//	{
-				//		behaviours.Add(behaviour);
-				//	}
-				//}
-
-				generatedState.StateMachineBehavioursP.AddRange(behaviours);
+				animatorState.MotionsP.Add(motion);
 			}
 
-			generatedState.Position.CopyValues(position);
-			generatedState.IKOnFeet = state.IKOnFeet;
-			generatedState.WriteDefaultValues = state.GetWriteDefaultValues();
-			generatedState.Mirror = state.Mirror;
-			generatedState.SpeedParameterActive = state.SpeedParamID > 0;
-			generatedState.MirrorParameterActive = state.MirrorParamID > 0;
-			generatedState.CycleOffsetParameterActive = state.CycleOffsetParamID > 0;
-			generatedState.TimeParameterActive = state.TimeParamID > 0;
+			animatorState.Tag = tos[stateConstant.TagID];
+			animatorState.SpeedParameter = tos[stateConstant.SpeedParamID];
+			animatorState.MirrorParameter = tos[stateConstant.MirrorParamID];
+			animatorState.CycleOffsetParameter = tos[stateConstant.CycleOffsetParamID];
+			animatorState.TimeParameter = tos[stateConstant.TimeParamID];
 
-			IMotion? motion = state.CreateMotion(virtualFile, controller, 0);
-			if (generatedState.Has_Motion())
-			{
-				generatedState.MotionP = motion;
-			}
-			else
-			{
-				generatedState.MotionsP.Add(motion);
-			}
-
-			generatedState.Tag = tos[state.TagID];
-			generatedState.SpeedParameter = tos[state.SpeedParamID];
-			generatedState.MirrorParameter = tos[state.MirrorParamID];
-			generatedState.CycleOffsetParameter = tos[state.CycleOffsetParamID];
-			generatedState.TimeParameter = tos[state.TimeParamID];
-
-			return generatedState;
+			return animatorState;
 		}
 
-		private static IAnimatorStateTransition CreateAnimatorStateTransition(
-			ProcessedAssetCollection virtualFile,
-			IStateMachineConstant StateMachine,
-			IReadOnlyList<IAnimatorState> States,
-			AssetDictionary<uint, Utf8String> TOS,
-			ITransitionConstant Transition)
+		public static IAnimatorState CreateDefaultAnimatorState(ProcessedAssetCollection virtualFile)
+		{
+			IAnimatorState animatorState = virtualFile.CreateAsset((int)ClassIDType.AnimatorState, AnimatorState.Create);
+			animatorState.HideFlagsE = HideFlags.HideInHierarchy;
+
+			animatorState.Name = AnimatorStateName;
+			animatorState.Speed = 1;
+			animatorState.WriteDefaultValues = true;
+
+			return animatorState;
+		}
+
+		public static IAnimatorStateTransition CreateAnimatorStateTransition(ProcessedAssetCollection virtualFile, AssetDictionary<uint, Utf8String> TOS, ITransitionConstant Transition)
 		{
 			IAnimatorStateTransition animatorStateTransition = virtualFile.CreateAsset((int)ClassIDType.AnimatorStateTransition, AnimatorStateTransition.Create);
 			animatorStateTransition.HideFlags = (uint)HideFlags.HideInHierarchy;
@@ -439,10 +263,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 				}
 			}
 
-			animatorStateTransition.DstStateP = GetDestinationState(Transition.DestinationState, StateMachine, States);
-
 			animatorStateTransition.Name = TOS[Transition.UserID];
-			animatorStateTransition.IsExit = Transition.IsExit();
 
 			animatorStateTransition.Atomic = Transition.Atomic;
 			animatorStateTransition.TransitionDuration = Transition.TransitionDuration;
@@ -457,20 +278,15 @@ namespace AssetRipper.Processing.AnimatorControllers
 			return animatorStateTransition;
 		}
 
-		private static IAnimatorTransition CreateAnimatorTransition(
-			ProcessedAssetCollection virtualFile,
-			IStateMachineConstant StateMachine,
-			IReadOnlyList<IAnimatorState> States,
-			AssetDictionary<uint, Utf8String> TOS,
-			SelectorTransitionConstant Transition)
+		public static IAnimatorTransition CreateAnimatorTransition(ProcessedAssetCollection virtualFile, AssetDictionary<uint, Utf8String> TOS, SelectorTransitionConstant transition)
 		{
 			IAnimatorTransition animatorTransition = virtualFile.CreateAsset((int)ClassIDType.AnimatorTransition, AnimatorTransition.Create);
 			animatorTransition.HideFlagsE = HideFlags.HideInHierarchy;
 
-			animatorTransition.Conditions.Capacity = Transition.ConditionConstantArray.Count;
-			for (int i = 0; i < Transition.ConditionConstantArray.Count; i++)
+			animatorTransition.Conditions.Capacity = transition.ConditionConstantArray.Count;
+			for (int i = 0; i < transition.ConditionConstantArray.Count; i++)
 			{
-				ConditionConstant conditionConstant = Transition.ConditionConstantArray[i].Data;
+				ConditionConstant conditionConstant = transition.ConditionConstantArray[i].Data;
 				if (conditionConstant.ConditionMode != (int)AnimatorConditionMode.ExitTime)
 				{
 					IAnimatorCondition condition = animatorTransition.Conditions.AddNew();
@@ -480,42 +296,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 				}
 			}
 
-			animatorTransition.DstStateP = GetDestinationState(Transition.Destination, StateMachine, States);
-
 			return animatorTransition;
-		}
-
-		private static IAnimatorState? GetDestinationState(uint destinationState, IStateMachineConstant stateMachine, IReadOnlyList<IAnimatorState> states)
-		{
-			if (destinationState == uint.MaxValue)
-			{
-				return null;
-			}
-			else if (destinationState >= 30000)
-			{
-				// Entry and Exit states
-				uint stateIndex = destinationState % 30000;
-				if (stateIndex == 0 || stateIndex == 1)
-				{
-					// base layer node. Default value is valid
-					return null;
-				}
-				else if (stateMachine.Has_SelectorStateConstantArray())
-				{
-					SelectorStateConstant selectorState = stateMachine.SelectorStateConstantArray[(int)stateIndex].Data;
-#warning		HACK: take default Entry destination. TODO: child StateMachines
-					SelectorTransitionConstant selectorTransition = selectorState.TransitionConstantArray[^1].Data;
-					return GetDestinationState(selectorTransition.Destination, stateMachine, states);
-				}
-				else
-				{
-					return null;
-				}
-			}
-			else
-			{
-				return states[(int)destinationState];
-			}
 		}
 	}
 }

@@ -31,14 +31,14 @@ namespace AssetRipper.Import.Structure.Platforms
 			Name = m_root.Name;
 			RootPath = rootPath;
 			GameDataPath = dataPath;
-			ResourcesPath = Path.Combine(GameDataPath, ResourcesName);
-			ManagedPath = Path.Combine(GameDataPath, ManagedName);
-			ModulesPath = Path.Combine(GameDataPath, ModulesName);
+			ResourcesPath = Path.Join(GameDataPath, ResourcesName);
+			ManagedPath = Path.Join(GameDataPath, ManagedName);
+			ModulesPath = Path.Join(GameDataPath, ModulesName);
 			UnityPlayerPath = null;
-			string globalGameManagersPath = Path.Combine(GameDataPath, GlobalGameManagersName);
+			string globalGameManagersPath = Path.Join(GameDataPath, GlobalGameManagersName);
 			Version = GetUnityVersionFromDataDirectory(globalGameManagersPath);
-			Il2CppGameAssemblyPath = Path.Combine(ModulesPath, PS4IL2CppGameAssemblyName);
-			Il2CppMetaDataPath = Path.Combine(GameDataPath, MetadataName, DefaultGlobalMetadataName);
+			Il2CppGameAssemblyPath = Path.Join(ModulesPath, PS4IL2CppGameAssemblyName);
+			Il2CppMetaDataPath = Path.Join(GameDataPath, MetadataName, DefaultGlobalMetadataName);
 
 			if (HasIl2CppFiles())
 			{
@@ -77,7 +77,7 @@ namespace AssetRipper.Import.Structure.Platforms
 			{
 				if (finfo.Name == PS4ExecutableName)
 				{
-					dataPath = Path.Combine(rootDiectory.FullName, PS4DataFolderName);
+					dataPath = Path.Join(rootDiectory.FullName, PS4DataFolderName);
 					if (Directory.Exists(dataPath))
 					{
 						return true;

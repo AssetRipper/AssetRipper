@@ -33,6 +33,20 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 			LibCpp2IlBinaryRegistry.RegisterBuiltInBinarySupport();
 		}
 
+		public static List<Cpp2IlProcessingLayer> DefaultProcessingLayers { get; } =
+		[
+			new AttributeAnalysisProcessingLayer(),
+			new MethodOverrideNameFixer(),
+		];
+
+		public static AsmResolverDllOutputFormatDefault DefaultOutputFormat { get; } = new();
+
+		public static List<Cpp2IlProcessingLayer>? RecoveryProcessingLayers { get; set; }
+
+		public static AsmResolverDllOutputFormat? RecoveryOutputFormat { get; set; }
+
+		public static event Action? ClearStaticState;
+
 		public string? GameAssemblyPath { get; private set; }
 		public string? UnityPlayerPath { get; private set; }
 		public string? GameDataPath { get; private set; }
@@ -76,14 +90,15 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 
 			Logger.SendStatusChange("loading_step_parse_il2cpp_metadata");
 
+			ClearStaticState?.Invoke();
+
 			Cpp2IlApi.InitializeLibCpp2Il(GameAssemblyPath!, MetaDataPath!, UnityVersion, false);
 
 			Logger.SendStatusChange("loading_step_generate_dummy_dll");
 
-			List<Cpp2IlProcessingLayer> processingLayers = new()
-			{
-				new AttributeAnalysisProcessingLayer(),
-			};
+			List<Cpp2IlProcessingLayer> processingLayers = contentLevel == ScriptContentLevel.Level3
+				? RecoveryProcessingLayers ?? DefaultProcessingLayers
+				: DefaultProcessingLayers;
 
 			foreach (Cpp2IlProcessingLayer cpp2IlProcessingLayer in processingLayers)
 			{
@@ -95,7 +110,11 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 				cpp2IlProcessingLayer.Process(GetCurrentAppContext());
 			}
 
-			List<AssemblyDefinition> assemblies = new AsmResolverDllOutputFormatDefault().BuildAssemblies(GetCurrentAppContext());
+			AsmResolverDllOutputFormat outputFormat = contentLevel == ScriptContentLevel.Level3
+				? RecoveryOutputFormat ?? DefaultOutputFormat
+				: DefaultOutputFormat;
+
+			List<AssemblyDefinition> assemblies = outputFormat.BuildAssemblies(GetCurrentAppContext());
 
 			foreach (AssemblyDefinition assembly in assemblies)
 			{

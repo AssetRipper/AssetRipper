@@ -1,31 +1,37 @@
-﻿using AsmResolver.DotNet;
-using AssetRipper.Assets;
-using AssetRipper.Decompilation.CSharp;
+﻿using AssetRipper.Assets;
 using AssetRipper.Export.Modules.Audio;
+using AssetRipper.Export.Modules.Models;
 using AssetRipper.Export.Modules.Shaders.IO;
 using AssetRipper.Export.Modules.Textures;
 using AssetRipper.Export.PrimaryContent;
 using AssetRipper.Export.UnityProjects;
 using AssetRipper.Export.UnityProjects.Scripts;
 using AssetRipper.Export.UnityProjects.Shaders;
-using AssetRipper.Export.UnityProjects.Terrains;
+using AssetRipper.GUI.Web.Documentation;
 using AssetRipper.GUI.Web.Paths;
 using AssetRipper.Import.AssetCreation;
+using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.Processing.Textures;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using AssetRipper.SourceGenerated.Classes.ClassID_128;
 using AssetRipper.SourceGenerated.Classes.ClassID_156;
+using AssetRipper.SourceGenerated.Classes.ClassID_189;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
+using AssetRipper.SourceGenerated.Classes.ClassID_329;
+using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Classes.ClassID_49;
 using AssetRipper.SourceGenerated.Classes.ClassID_83;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.Web.Extensions;
 using AssetRipper.Yaml;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using SharpGLTF.Scenes;
+using SharpGLTF.Schema2;
 using System.Globalization;
 using System.Runtime.InteropServices;
 
@@ -39,8 +45,9 @@ internal static class AssetAPI
 		public const string View = Base + "/View";
 		public const string Image = Base + "/Image";
 		public const string Audio = Base + "/Audio";
-		public const string Model = Base + "/Model";
+		public const string Model = Base + "/Model.glb";
 		public const string Font = Base + "/Font";
+		public const string Video = Base + "/Video";
 		public const string Json = Base + "/Json";
 		public const string Yaml = Base + "/Yaml";
 		public const string Text = Base + "/Text";
@@ -81,8 +88,14 @@ internal static class AssetAPI
 
 		if (TryGetImageExtensionFromQuery(context, out string? extension, out ImageExportFormat format))
 		{
+			DirectBitmap bitmap = GetImageBitmap(asset);
+			if (bitmap.IsEmpty)
+			{
+				return context.Response.NotFound("Image data could not be decoded.");
+			}
+
 			MemoryStream stream = new();
-			GetImageBitmap(asset).Save(stream, format);
+			bitmap.Save(stream, format);
 			return Results.Bytes(stream.ToArray(), $"image/{extension}").ExecuteAsync(context);
 		}
 		else
@@ -93,7 +106,7 @@ internal static class AssetAPI
 
 	public static bool HasImageData(IUnityObjectBase asset) => asset switch
 	{
-		ITexture2D texture => texture.CheckAssetIntegrity(),
+		IImageTexture texture => texture.CheckAssetIntegrity(),
 		SpriteInformationObject spriteInformationObject => spriteInformationObject.Texture.CheckAssetIntegrity(),
 		ISprite sprite => sprite.TryGetTexture()?.CheckAssetIntegrity() ?? false,
 		ITerrainData terrainData => terrainData.Heightmap.Heights.Count > 0,
@@ -104,14 +117,14 @@ internal static class AssetAPI
 	{
 		return asset switch
 		{
-			ITexture2D texture => TextureToBitmap(texture),
+			IImageTexture texture => TextureToBitmap(texture),
 			SpriteInformationObject spriteInformationObject => TextureToBitmap(spriteInformationObject.Texture),
 			ISprite sprite => SpriteToBitmap(sprite),
 			ITerrainData terrainData => TerrainHeatmap.GetBitmap(terrainData),
 			_ => DirectBitmap.Empty,
 		};
 
-		static DirectBitmap TextureToBitmap(ITexture2D texture)
+		static DirectBitmap TextureToBitmap(IImageTexture texture)
 		{
 			return TextureConverter.TryConvertToBitmap(texture, out DirectBitmap bitmap) ? bitmap : DirectBitmap.Empty;
 		}
@@ -190,12 +203,36 @@ internal static class AssetAPI
 
 	public static Task GetModelData(HttpContext context)
 	{
-		//Only accept Path in the query.
-		throw new NotImplementedException();
+		context.Response.DisableCaching();
+		if (!TryGetAssetFromQuery(context, out IUnityObjectBase? asset, out Task? failureTask))
+		{
+			return failureTask;
+		}
+
+		if (asset is not IMesh mesh)
+		{
+			return context.Response.NotFound("Asset was not a mesh.");
+		}
+		else
+		{
+			MemoryStream stream = new();
+			try
+			{
+				SceneBuilder sceneBuilder = GlbMeshBuilder.Build(mesh);
+				sceneBuilder.ToGltf2().WriteGLB(stream, new WriteSettings() { MergeBuffers = false });
+			}
+			catch (Exception ex)
+			{
+				Logger.Error(ex);
+				return context.Response.NotFound("Model data could not be decoded.");
+			}
+			return Results.Bytes(stream.ToArray(), "model/gltf-binary", "model.glb").ExecuteAsync(context);
+		}
 	}
+
 	public static bool HasModelData(IUnityObjectBase asset)
 	{
-		throw new NotImplementedException();
+		return asset is IMesh;
 	}
 	#endregion
 
@@ -259,6 +296,41 @@ internal static class AssetAPI
 	}
 	#endregion
 
+	#region Video
+	public static string GetVideoUrl(AssetPath path)
+	{
+		return $"{Urls.Video}?{GetPathQuery(path)}";
+	}
+
+	public static Task GetVideoData(HttpContext context)
+	{
+		//Only accept Path in the query.
+		context.Response.DisableCaching();
+		if (!TryGetAssetFromQuery(context, out IUnityObjectBase? asset, out Task? failureTask))
+		{
+			return failureTask;
+		}
+
+		if (asset is not IVideoClip videoClip)
+		{
+			return context.Response.NotFound("Asset was not a video clip.");
+		}
+		else if (videoClip.TryGetExtensionFromPath(out string? extension) && videoClip.TryGetContent(out byte[]? content))
+		{
+			return Results.Bytes(content, $"video/{extension}", $"{videoClip.GetBestName()}.{extension}").ExecuteAsync(context);
+		}
+		else
+		{
+			return context.Response.NotFound("Video data could not be decoded.");
+		}
+	}
+
+	public static bool HasVideoData(IUnityObjectBase asset)
+	{
+		return asset is IVideoClip clip && clip.CheckIntegrity();
+	}
+	#endregion
+
 	#region Json
 	public static string GetJsonUrl(AssetPath path)
 	{
@@ -272,8 +344,15 @@ internal static class AssetAPI
 			return failureTask;
 		}
 
-		string text = new DefaultJsonWalker().SerializeStandard(asset);
-		return Results.Text(text, "application/json").ExecuteAsync(context);
+		try
+		{
+			string text = new DefaultJsonWalker().SerializeStandard(asset);
+			return Results.Text(text, "application/json").ExecuteAsync(context);
+		}
+		catch (Exception ex)
+		{
+			return Results.Text(ex.ToString()).ExecuteAsync(context);
+		}
 	}
 	#endregion
 
@@ -290,17 +369,24 @@ internal static class AssetAPI
 			return failureTask;
 		}
 
-		string text;
-		using (StringWriter stringWriter = new(CultureInfo.InvariantCulture) { NewLine = "\n" })
+		try
 		{
-			YamlWriter writer = new();
-			writer.WriteHead(stringWriter);
-			YamlDocument document = new YamlWalker().ExportYamlDocument(asset, ExportIdHandler.GetMainExportID(asset));
-			writer.WriteDocument(document);
-			writer.WriteTail(stringWriter);
-			text = stringWriter.ToString();
+			string text;
+			using (StringWriter stringWriter = new(CultureInfo.InvariantCulture) { NewLine = "\n" })
+			{
+				YamlWriter writer = new();
+				writer.WriteHead(stringWriter);
+				YamlDocument document = new YamlWalker().ExportYamlDocument(asset, ExportIdHandler.GetMainExportID(asset));
+				writer.WriteDocument(document);
+				writer.WriteTail(stringWriter);
+				text = stringWriter.ToString();
+			}
+			return Results.Text(text, "application/yaml").ExecuteAsync(context);
 		}
-		return Results.Text(text, "application/yaml").ExecuteAsync(context);
+		catch (Exception ex)
+		{
+			return Results.Text(ex.ToString()).ExecuteAsync(context);
+		}
 	}
 	#endregion
 
@@ -350,7 +436,7 @@ internal static class AssetAPI
 
 		static string GetTextAssetExtension(ITextAsset textAsset)
 		{
-			return string.IsNullOrEmpty(textAsset.OriginalExtension) ? "txt" : textAsset.OriginalExtension;
+			return textAsset.GetBestExtension() ?? "txt";
 		}
 	}
 
@@ -372,8 +458,8 @@ internal static class AssetAPI
 		{
 			try
 			{
-				TypeDefinition type = monoScript.GetTypeDefinition(assemblyManager);
-				return CSharpDecompiler.Decompile(type);
+				_ = monoScript.GetTypeDefinition(assemblyManager);
+				return EmptyScript.GetContent(monoScript); // Todo: replace with ILSpy
 			}
 			catch (Exception ex)
 			{
@@ -455,5 +541,15 @@ internal static class AssetAPI
 			failureTask = null;
 			return true;
 		}
+	}
+
+	public static RouteHandlerBuilder WithAssetPathParameter(this RouteHandlerBuilder builder)
+	{
+		return builder.WithQueryStringParameter(Path, "Path to the asset", true);
+	}
+
+	public static RouteHandlerBuilder WithImageExtensionParameter(this RouteHandlerBuilder builder)
+	{
+		return builder.WithQueryStringParameter(Extension, "Extension for decoding the image.", true);
 	}
 }

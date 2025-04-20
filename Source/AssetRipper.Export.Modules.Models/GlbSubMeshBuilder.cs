@@ -13,10 +13,10 @@ namespace AssetRipper.Export.Modules.Models
 {
 	internal static class GlbSubMeshBuilder
 	{
-		public static IMeshBuilder<MaterialBuilder> BuildSubMeshes(ArraySegment<ValueTuple<ISubMesh, MaterialBuilder>> subMeshes, MeshData meshData, Transformation transform, Transformation inverseTransform)
+		public static IMeshBuilder<MaterialBuilder> BuildSubMeshes(ArraySegment<ValueTuple<ISubMesh, MaterialBuilder>> subMeshes, bool is16BitIndices, MeshData meshData, Transformation transform, Transformation inverseTransform)
 		{
-			BuildSubMeshParameters parameters = new BuildSubMeshParameters(subMeshes, meshData, transform, inverseTransform);
-			switch (meshData.MeshType)
+			BuildSubMeshParameters parameters = new BuildSubMeshParameters(subMeshes, is16BitIndices, meshData, transform, inverseTransform);
+			switch (meshData.GetMeshType())
 			{
 				case GlbMeshType.Position | GlbMeshType.Empty | GlbMeshType.Empty:
 					return BuildSubMeshes<VertexPosition, VertexEmpty, VertexEmpty>(parameters);
@@ -60,6 +60,16 @@ namespace AssetRipper.Export.Modules.Models
 				case GlbMeshType.PositionNormalTangent | GlbMeshType.Color1Texture2 | GlbMeshType.Empty:
 					return BuildSubMeshes<VertexPositionNormalTangent, VertexColor1Texture2, VertexEmpty>(parameters);
 
+				case GlbMeshType.Position | GlbMeshType.TextureN | GlbMeshType.Empty:
+				case GlbMeshType.Position | GlbMeshType.Color1TextureN | GlbMeshType.Empty:
+					return BuildSubMeshes<VertexPosition, VertexColor1Texture8, VertexEmpty>(parameters);
+				case GlbMeshType.PositionNormal | GlbMeshType.TextureN | GlbMeshType.Empty:
+				case GlbMeshType.PositionNormal | GlbMeshType.Color1TextureN | GlbMeshType.Empty:
+					return BuildSubMeshes<VertexPositionNormal, VertexColor1Texture8, VertexEmpty>(parameters);
+				case GlbMeshType.PositionNormalTangent | GlbMeshType.TextureN | GlbMeshType.Empty:
+				case GlbMeshType.PositionNormalTangent | GlbMeshType.Color1TextureN | GlbMeshType.Empty:
+					return BuildSubMeshes<VertexPositionNormalTangent, VertexColor1Texture8, VertexEmpty>(parameters);
+
 				case GlbMeshType.Position | GlbMeshType.Empty | GlbMeshType.Joints4:
 					return BuildSubMeshes<VertexPosition, VertexEmpty, VertexJoints4>(parameters);
 				case GlbMeshType.PositionNormal | GlbMeshType.Empty | GlbMeshType.Joints4:
@@ -102,8 +112,18 @@ namespace AssetRipper.Export.Modules.Models
 				case GlbMeshType.PositionNormalTangent | GlbMeshType.Color1Texture2 | GlbMeshType.Joints4:
 					return BuildSubMeshes<VertexPositionNormalTangent, VertexColor1Texture2, VertexJoints4>(parameters);
 
+				case GlbMeshType.Position | GlbMeshType.TextureN | GlbMeshType.Joints4:
+				case GlbMeshType.Position | GlbMeshType.Color1TextureN | GlbMeshType.Joints4:
+					return BuildSubMeshes<VertexPosition, VertexColor1Texture8, VertexJoints4>(parameters);
+				case GlbMeshType.PositionNormal | GlbMeshType.TextureN | GlbMeshType.Joints4:
+				case GlbMeshType.PositionNormal | GlbMeshType.Color1TextureN | GlbMeshType.Joints4:
+					return BuildSubMeshes<VertexPositionNormal, VertexColor1Texture8, VertexJoints4>(parameters);
+				case GlbMeshType.PositionNormalTangent | GlbMeshType.TextureN | GlbMeshType.Joints4:
+				case GlbMeshType.PositionNormalTangent | GlbMeshType.Color1TextureN | GlbMeshType.Joints4:
+					return BuildSubMeshes<VertexPositionNormalTangent, VertexColor1Texture8, VertexJoints4>(parameters);
+
 				default:
-					throw new ArgumentOutOfRangeException(nameof(meshData), meshData.MeshType, "Mesh type not supported.");
+					throw new ArgumentOutOfRangeException(nameof(meshData), meshData.GetMeshType(), "Mesh type not supported.");
 			}
 		}
 
@@ -120,7 +140,7 @@ namespace AssetRipper.Export.Modules.Models
 			for (int i = 0; i < parameters.SubMeshes.Count; i++)
 			{
 				(ISubMesh subMesh, MaterialBuilder material) = parameters.SubMeshes[i];
-				BuildSubMesh(meshBuilder, subMesh, material, parameters.MeshData, positionTransform, tangentTransform, normalTransform);
+				BuildSubMesh(meshBuilder, subMesh, material, parameters.Is16BitIndices, parameters.MeshData, positionTransform, tangentTransform, normalTransform);
 			}
 
 			return meshBuilder;
@@ -130,6 +150,7 @@ namespace AssetRipper.Export.Modules.Models
 			MeshBuilder<TvG, TvM, TvS> meshBuilder,
 			ISubMesh subMesh,
 			MaterialBuilder material,
+			bool is16BitIndices,
 			MeshData meshData,
 			Transformation positionTransform,
 			Transformation tangentTransform,
@@ -138,7 +159,7 @@ namespace AssetRipper.Export.Modules.Models
 			where TvM : unmanaged, IVertexMaterial
 			where TvS : unmanaged, IVertexSkinning
 		{
-			uint firstIndex = meshData.Mesh.Is16BitIndices() ? subMesh.FirstByte / sizeof(ushort) : subMesh.FirstByte / sizeof(uint);
+			uint firstIndex = subMesh.GetFirstIndex(is16BitIndices);
 
 			uint indexCount = subMesh.IndexCount;
 			MeshTopology topology = subMesh.GetTopology();
@@ -316,6 +337,22 @@ namespace AssetRipper.Export.Modules.Models
 			{
 				return Cast<VertexColor1Texture2, TvM>(new VertexColor1Texture2(meshData.TryGetColorAtIndex(index).Vector, meshData.TryGetUV0AtIndex(index), meshData.TryGetUV1AtIndex(index)));
 			}
+			else if (typeof(TvM) == typeof(VertexColor1Texture8))
+			{
+				VertexColor1Texture8 result = new()
+				{
+					Color = meshData.TryGetColorAtIndex(index).Vector,
+					TexCoord0 = meshData.TryGetUV0AtIndex(index),
+					TexCoord1 = meshData.TryGetUV1AtIndex(index),
+					TexCoord2 = meshData.TryGetUV2AtIndex(index),
+					TexCoord3 = meshData.TryGetUV3AtIndex(index),
+					TexCoord4 = meshData.TryGetUV4AtIndex(index),
+					TexCoord5 = meshData.TryGetUV5AtIndex(index),
+					TexCoord6 = meshData.TryGetUV6AtIndex(index),
+					TexCoord7 = meshData.TryGetUV7AtIndex(index),
+				};
+				return Cast<VertexColor1Texture8, TvM>(result);
+			}
 			else
 			{
 				return default;
@@ -360,6 +397,7 @@ namespace AssetRipper.Export.Modules.Models
 
 		private readonly record struct BuildSubMeshParameters(
 			ArraySegment<ValueTuple<ISubMesh, MaterialBuilder>> SubMeshes,
+			bool Is16BitIndices,
 			MeshData MeshData,
 			Transformation Transform,
 			Transformation InverseTransform)

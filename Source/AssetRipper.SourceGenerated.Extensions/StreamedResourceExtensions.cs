@@ -28,7 +28,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			{
 				return null;
 			}
-			if (streamedResource.Size == 0)
+			if (streamedResource.Size <= 0 || streamedResource.Offset > long.MaxValue)
 			{
 				return null;
 			}

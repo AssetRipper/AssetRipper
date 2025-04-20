@@ -22,30 +22,30 @@ public sealed class EmptyScriptExportCollection : ScriptExportCollectionBase
 
 	public override string Name => nameof(EmptyScriptExportCollection);
 
-	public override bool Export(IExportContainer container, string projectDirectory)
+	public override bool Export(IExportContainer container, string projectDirectory, FileSystem fileSystem)
 	{
 		Logger.Info(LogCategory.Export, "Exporting scripts...");
 
-		string assetsDirectoryPath = Path.Combine(projectDirectory, AssetsKeyword);
+		string assetsDirectoryPath = fileSystem.Path.Join(projectDirectory, AssetsKeyword);
 
 		Dictionary<string, AssemblyDefinitionDetails> assemblyDefinitionDetailsDictionary = new();
 
 		foreach ((MonoScriptInfo info, IMonoScript script) in UniqueScripts)
 		{
 			GetExportSubPath(info, out string subFolderPath, out string fileName);
-			string folderPath = Path.Combine(assetsDirectoryPath, subFolderPath);
-			string filePath = Path.Combine(folderPath, fileName);
-			Directory.CreateDirectory(folderPath);
-			System.IO.File.WriteAllText(filePath, EmptyScript.GetContent(info));
+			string folderPath = fileSystem.Path.Join(assetsDirectoryPath, subFolderPath);
+			string filePath = fileSystem.Path.Join(folderPath, fileName);
+			fileSystem.Directory.Create(folderPath);
+			fileSystem.File.WriteAllText(filePath, EmptyScript.GetContent(info));
 			string assemblyName = info.Assembly;
 			if (!assemblyDefinitionDetailsDictionary.ContainsKey(assemblyName))
 			{
-				string assemblyDirectoryPath = Path.Combine(assetsDirectoryPath, GetScriptsFolderName(assemblyName), assemblyName);
+				string assemblyDirectoryPath = fileSystem.Path.Join(assetsDirectoryPath, GetScriptsFolderName(assemblyName), assemblyName);
 				AssemblyDefinitionDetails details = new AssemblyDefinitionDetails(assemblyName, assemblyDirectoryPath);
 				assemblyDefinitionDetailsDictionary.Add(assemblyName, details);
 			}
 
-			OnScriptExported(container, script, filePath);
+			OnScriptExported(container, script, filePath, fileSystem);
 		}
 
 		// assembly definitions were added in 2017.3
@@ -58,7 +58,7 @@ public sealed class EmptyScriptExportCollection : ScriptExportCollectionBase
 				//    see: https://docs.unity3d.com/2017.3/Documentation/Manual/ScriptCompilationAssemblyDefinitionFiles.html
 				if (!ReferenceAssemblies.IsPredefinedAssembly(details.AssemblyName))
 				{
-					AssemblyDefinitionExporter.Export(details);
+					AssemblyDefinitionExporter.Export(details, fileSystem);
 				}
 			}
 		}
