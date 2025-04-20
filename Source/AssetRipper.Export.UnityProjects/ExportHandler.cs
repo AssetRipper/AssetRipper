@@ -77,6 +77,7 @@ public class ExportHandler
 			yield return new SafeAssemblyPublicizingProcessor();
 		}
 		yield return new RemoveAssemblyKeyFileAttributeProcessor();
+		yield return new InternalsVisibileToPublicKeyRemover();
 
 		yield return new SceneDefinitionProcessor();
 		yield return new MainAssetProcessor();
