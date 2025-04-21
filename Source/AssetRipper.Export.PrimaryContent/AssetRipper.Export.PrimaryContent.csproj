@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<IsTrimmable>true</IsTrimmable>
@@ -7,7 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AssetRipper.ICSharpCode.Decompiler" Version="9.0.0.7977" />
+		<PackageReference Include="AssetRipper.ICSharpCode.Decompiler" Version="9.0.0.7986" />
 	</ItemGroup>
 
 	<ItemGroup>
