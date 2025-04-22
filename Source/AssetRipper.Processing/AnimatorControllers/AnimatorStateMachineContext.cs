@@ -879,8 +879,7 @@ internal sealed class AnimatorStateMachineContext
 				}
 				else
 				{
-					Vector3f newPos = stateMachine.ChildStateMachinePosition.AddNew();
-					newPos.CopyValues(position);
+					stateMachine.ChildStateMachinePosition.AddNew().CopyValues(position);
 				}
 			}
 		}
