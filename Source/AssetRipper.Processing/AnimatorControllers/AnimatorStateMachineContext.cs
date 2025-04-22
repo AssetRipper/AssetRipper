@@ -842,8 +842,8 @@ internal sealed class AnimatorStateMachineContext
 
 	private void ProcessChildrenPosForStateMachine(IAnimatorStateMachine stateMachine)
 	{
-		const float StateOffsetX = 250.0f;
-		const float StateOffsetY = 100f;
+		const int StateOffsetX = 250;
+		const int StateOffsetY = 100;
 
 		int stateCount = stateMachine.ChildStatesCount();
 		int stateMachineCount = stateMachine.ChildStateMachinesCount();
@@ -854,7 +854,7 @@ internal sealed class AnimatorStateMachineContext
 		{
 			for (int x = 0; x < side && i < totalChildrenCount; x++, i++)
 			{
-				Vector3f position = new() { X = x * StateOffsetX, Y = y * StateOffsetY };
+				System.Numerics.Vector3 position = new() { X = x * StateOffsetX, Y = y * StateOffsetY };
 				// Position all Child States first
 				if (i < stateCount)
 				{
