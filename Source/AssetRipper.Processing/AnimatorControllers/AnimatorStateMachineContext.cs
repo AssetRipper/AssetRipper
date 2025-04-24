@@ -19,7 +19,7 @@ using AssetRipper.SourceGenerated.Subclasses.SelectorTransitionConstant;
 using AssetRipper.SourceGenerated.Subclasses.StateConstant;
 using AssetRipper.SourceGenerated.Subclasses.StateMachineConstant;
 using AssetRipper.SourceGenerated.Subclasses.TransitionConstant;
-using AssetRipper.SourceGenerated.Subclasses.Vector3f;
+using System.Numerics;
 
 namespace AssetRipper.Processing.AnimatorControllers;
 
@@ -37,8 +37,12 @@ internal sealed class AnimatorStateMachineContext
 	private readonly AnimatorStateContext StateContext;
 	private readonly bool IsUnity5;
 
-	private readonly StateMachineData[] IndexedStateMachines;
-	
+	private StateMachineData[] IndexedStateMachines
+	{
+		get => field ?? throw new NullReferenceException(nameof(IndexedStateMachines));
+		set;
+	}
+
 	/// <summary>
 	/// Restrictions for parenting Unknown StateMachines. Dict keys are the StateMachine array indexes
 	/// </summary>
@@ -854,7 +858,7 @@ internal sealed class AnimatorStateMachineContext
 		{
 			for (int x = 0; x < side && i < totalChildrenCount; x++, i++)
 			{
-				System.Numerics.Vector3 position = new() { X = x * StateOffsetX, Y = y * StateOffsetY };
+				Vector3 position = new() { X = x * StateOffsetX, Y = y * StateOffsetY };
 				// Position all Child States first
 				if (i < stateCount)
 				{
