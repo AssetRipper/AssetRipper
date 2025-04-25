@@ -37,6 +37,7 @@ internal sealed class AnimatorStateMachineContext
 	private readonly AnimatorStateContext StateContext;
 	private readonly bool IsUnity5;
 
+	[field:MaybeNull]
 	private StateMachineData[] IndexedStateMachines
 	{
 		get => field ?? throw new NullReferenceException(nameof(IndexedStateMachines));
@@ -67,10 +68,6 @@ internal sealed class AnimatorStateMachineContext
 		LayerIndex = controller.Controller.GetLayerIndexByStateMachineIndex(stateMachineIndex, out Layer);
 		StateContext = new(virtualFile, controller, StateMachineConstant, LayerIndex);
 		IsUnity5 = StateMachineConstant.Has_SelectorStateConstantArray();
-		StateContext.Process();
-		int stateMachineCount = IsUnity5 ? StateMachineConstant.StateMachineCount() :
-			(StateContext.HasStates() ? StateContext.GetUniqueStateMachinePathsCount() : 1);
-		IndexedStateMachines = new StateMachineData[stateMachineCount];
 	}
 
 	/// <summary>
@@ -78,6 +75,8 @@ internal sealed class AnimatorStateMachineContext
 	/// </summary>
 	public void Process()
 	{
+		StateContext.Process();
+
 		InitializeStateMachines();
 
 		if (IsUnity5) // Unity 5+
@@ -242,6 +241,9 @@ internal sealed class AnimatorStateMachineContext
 		{
 			// Unity 5+
 
+			int stateMachineCount =  StateMachineConstant.StateMachineCount();
+			IndexedStateMachines = new StateMachineData[stateMachineCount];
+
 			// assuming SelectorStateConstantArray follows the sequence: [Entry1, Exit1, Entry2, Exit2, ...]
 			// just in case, next code can handle StateMachines missing Entry or Exit SelectorStateConstant
 			int stateMachineIndex = 0;
@@ -291,6 +293,9 @@ internal sealed class AnimatorStateMachineContext
 		else
 		{
 			// Unity 4.x-
+
+			int stateMachineCount = StateContext.HasStates() ? StateContext.GetUniqueStateMachinePathsCount() : 1;
+			IndexedStateMachines = new StateMachineData[stateMachineCount];
 
 			// StateMachines don't have FullPaths.
 			// can set Names, Child States (with their Transitions),
