@@ -19,7 +19,7 @@ using AssetRipper.SourceGenerated.Subclasses.SelectorTransitionConstant;
 using AssetRipper.SourceGenerated.Subclasses.StateConstant;
 using AssetRipper.SourceGenerated.Subclasses.StateMachineConstant;
 using AssetRipper.SourceGenerated.Subclasses.TransitionConstant;
-using AssetRipper.SourceGenerated.Subclasses.Vector3f;
+using System.Numerics;
 
 namespace AssetRipper.Processing.AnimatorControllers;
 
@@ -37,8 +37,13 @@ internal sealed class AnimatorStateMachineContext
 	private readonly AnimatorStateContext StateContext;
 	private readonly bool IsUnity5;
 
-	private readonly StateMachineData[] IndexedStateMachines;
-	
+	private StateMachineData[]? _IndexedStateMachines;
+	private StateMachineData[] IndexedStateMachines
+	{
+		get => _IndexedStateMachines ?? throw new NullReferenceException(nameof(IndexedStateMachines));
+		set { _IndexedStateMachines = value; }
+	}
+
 	/// <summary>
 	/// Restrictions for parenting Unknown StateMachines. Dict keys are the StateMachine array indexes
 	/// </summary>
@@ -63,9 +68,6 @@ internal sealed class AnimatorStateMachineContext
 		LayerIndex = controller.Controller.GetLayerIndexByStateMachineIndex(stateMachineIndex, out Layer);
 		StateContext = new(virtualFile, controller, StateMachineConstant, LayerIndex);
 		IsUnity5 = StateMachineConstant.Has_SelectorStateConstantArray();
-		int stateMachineCount = IsUnity5 ? StateMachineConstant.StateMachineCount() :
-			(StateContext.HasStates() ? StateContext.GetUniqueStateMachinePathsCount() : 1);
-		IndexedStateMachines = new StateMachineData[stateMachineCount];
 	}
 
 	/// <summary>
@@ -239,6 +241,9 @@ internal sealed class AnimatorStateMachineContext
 		{
 			// Unity 5+
 
+			int stateMachineCount =  StateMachineConstant.StateMachineCount();
+			IndexedStateMachines = new StateMachineData[stateMachineCount];
+
 			// assuming SelectorStateConstantArray follows the sequence: [Entry1, Exit1, Entry2, Exit2, ...]
 			// just in case, next code can handle StateMachines missing Entry or Exit SelectorStateConstant
 			int stateMachineIndex = 0;
@@ -288,6 +293,9 @@ internal sealed class AnimatorStateMachineContext
 		else
 		{
 			// Unity 4.x-
+
+			int stateMachineCount = StateContext.HasStates() ? StateContext.GetUniqueStateMachinePathsCount() : 1;
+			IndexedStateMachines = new StateMachineData[stateMachineCount];
 
 			// StateMachines don't have FullPaths.
 			// can set Names, Child States (with their Transitions),
@@ -843,8 +851,8 @@ internal sealed class AnimatorStateMachineContext
 
 	private void ProcessChildrenPosForStateMachine(IAnimatorStateMachine stateMachine)
 	{
-		const float StateOffsetX = 250.0f;
-		const float StateOffsetY = 100f;
+		const int StateOffsetX = 250;
+		const int StateOffsetY = 100;
 
 		int stateCount = stateMachine.ChildStatesCount();
 		int stateMachineCount = stateMachine.ChildStateMachinesCount();
@@ -855,7 +863,7 @@ internal sealed class AnimatorStateMachineContext
 		{
 			for (int x = 0; x < side && i < totalChildrenCount; x++, i++)
 			{
-				Vector3f position = new() { X = x * StateOffsetX, Y = y * StateOffsetY };
+				Vector3 position = new() { X = x * StateOffsetX, Y = y * StateOffsetY };
 				// Position all Child States first
 				if (i < stateCount)
 				{
@@ -875,13 +883,12 @@ internal sealed class AnimatorStateMachineContext
 				// Position all Child StateMachines second 
 				else if (stateMachine.Has_ChildStateMachines())
 				{
-					// remember to handle Unity 5- SubStateMachines too
 					ChildAnimatorStateMachine csm = stateMachine.ChildStateMachines[i - stateCount];
 					csm.Position.CopyValues(position);
 				}
 				else
 				{
-					stateMachine.ChildStateMachinePosition.Add(position);
+					stateMachine.ChildStateMachinePosition.AddNew().CopyValues(position);
 				}
 			}
 		}
