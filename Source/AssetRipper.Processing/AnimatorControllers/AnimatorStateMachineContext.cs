@@ -37,11 +37,11 @@ internal sealed class AnimatorStateMachineContext
 	private readonly AnimatorStateContext StateContext;
 	private readonly bool IsUnity5;
 
-	[field:MaybeNull]
+	private StateMachineData[]? _IndexedStateMachines;
 	private StateMachineData[] IndexedStateMachines
 	{
-		get => field ?? throw new NullReferenceException(nameof(IndexedStateMachines));
-		set;
+		get => _IndexedStateMachines ?? throw new NullReferenceException(nameof(IndexedStateMachines));
+		set { _IndexedStateMachines = value; }
 	}
 
 	/// <summary>
