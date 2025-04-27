@@ -1,9 +1,11 @@
-# AssetRipper
+# AssetRipper CLI
 
 [![](https://img.shields.io/github/downloads/AssetRipper/AssetRipper/total.svg)](https://github.com/AssetRipper/AssetRipper/releases)
 [![](https://img.shields.io/github/downloads/AssetRipper/AssetRipper/latest/total.svg)](https://github.com/AssetRipper/AssetRipper/releases/latest)
 [![](https://img.shields.io/github/v/release/AssetRipper/AssetRipper)](https://github.com/AssetRipper/AssetRipper/releases/latest)
 [![](https://weblate.samboy.dev/widgets/assetripper/-/gui/svg-badge.svg)](http://weblate.samboy.dev/engage/assetripper/)
+
+THIS IS A CLI VERSION OF ASSETRIPPER
 
 AssetRipper is a tool for extracting assets from Unity serialized files (*CAB-*\*, *\*.assets*, *\*.sharedAssets*, etc.) and asset bundles (*\*.unity3d*, *\*.bundle*, etc.) and converting them into the native Unity engine format.
 
