@@ -39,6 +39,8 @@ namespace AssetRipper.Import.Logging
 
 			lock (_lock)
 			{
+
+				Console.WriteLine(message);
 				foreach (ILogger instance in loggers)
 				{
 					instance?.Log(type, category, message);
