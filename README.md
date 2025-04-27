@@ -15,7 +15,7 @@ AssetRipper supports Unity versions from `3.5.0` to `6000.2.X`. However, support
 
 [Patreon](https://www.patreon.com/ds5678) supporters at the `Premium` tier or higher receive access to the premium edition of AssetRipper. This edition includes additional [features and improvements](https://assetripper.github.io/AssetRipper/articles/PremiumFeatures.html).
 
-# Donations
+# Donationsa
 
 Your support helps maintain and improve AssetRipper. If you find this tool useful, please consider donating:
 
