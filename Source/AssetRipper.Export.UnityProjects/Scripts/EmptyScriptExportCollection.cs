@@ -32,6 +32,11 @@ public sealed class EmptyScriptExportCollection : ScriptExportCollectionBase
 
 		foreach ((MonoScriptInfo info, IMonoScript script) in UniqueScripts)
 		{
+			if (info.IsInjected())
+			{
+				continue;
+			}
+
 			GetExportSubPath(info, out string subFolderPath, out string fileName);
 			string folderPath = fileSystem.Path.Join(assetsDirectoryPath, subFolderPath);
 			string filePath = fileSystem.Path.Join(folderPath, fileName);
