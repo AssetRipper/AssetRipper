@@ -16,7 +16,14 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static string GetAssetBundleName(this IAssetBundle bundle)
 		{
-			return bundle.Has_AssetBundleName_R() ? bundle.AssetBundleName_R : bundle.Collection.Bundle.Name;
+			if (bundle.Has_AssetBundleName_R() && !bundle.AssetBundleName_R.IsEmpty)
+			{
+				return bundle.AssetBundleName_R;
+			}
+			else
+			{
+				return bundle.Collection.Bundle.Name;
+			}
 		}
 	}
 }

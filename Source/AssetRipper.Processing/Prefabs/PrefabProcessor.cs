@@ -4,8 +4,10 @@ using AssetRipper.Import.Logging;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_1001;
+using AssetRipper.SourceGenerated.Classes.ClassID_142;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
 using AssetRipper.SourceGenerated.Extensions;
+using System.Diagnostics;
 
 namespace AssetRipper.Processing.Prefabs;
 
@@ -28,6 +30,21 @@ public sealed class PrefabProcessor : IAssetProcessor
 			ProcessedAssetCollection sceneCollection = GetOrCreateSceneCollection(gameData, processedBundle, sceneCollectionDictionary, scene);
 			SceneHierarchyObject sceneHierarchy = SceneHierarchyObject.Create(sceneCollection, scene);
 			gameObjectsAlreadyProcessed.AddRange(sceneHierarchy.GameObjects);
+
+			Bundle? bundle = scene.Collections.Select(c => c.Bundle).FirstOrDefault(b => b is SerializedBundle);
+			if (bundle is not null)
+			{
+				IAssetBundle? assetBundleAsset = bundle.FetchAssets().OfType<IAssetBundle>().FirstOrDefault();
+				if (assetBundleAsset is not null)
+				{
+					Debug.Assert(!assetBundleAsset.Has_IsStreamedSceneAssetBundle() || assetBundleAsset.IsStreamedSceneAssetBundle);
+					sceneHierarchy.AssetBundleName = assetBundleAsset.GetAssetBundleName();
+				}
+				else
+				{
+					sceneHierarchy.AssetBundleName = bundle.Name;
+				}
+			}
 		}
 
 		//Create hierarchies for prefabs with an existing PrefabInstance

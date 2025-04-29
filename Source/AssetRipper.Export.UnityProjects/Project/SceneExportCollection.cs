@@ -49,6 +49,10 @@ namespace AssetRipper.Export.UnityProjects.Project
 		{
 			AssetExporter.Export(container, ExportableAssets, filePath, fileSystem);
 			IDefaultImporter sceneImporter = DefaultImporter.Create(container.File, container.ExportVersion);
+			if (sceneImporter.Has_AssetBundleName_R() && Hierarchy.AssetBundleName is not null)
+			{
+				sceneImporter.AssetBundleName_R = Hierarchy.AssetBundleName;
+			}
 			Meta meta = new Meta(GUID, sceneImporter);
 			ExportMeta(container, meta, filePath, fileSystem);
 			return true;
