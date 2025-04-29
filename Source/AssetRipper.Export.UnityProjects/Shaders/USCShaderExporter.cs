@@ -639,7 +639,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 				}
 
 				// skip instanced shaders
-				Utf8String INSTANCING_ON = "INSTANCING_ON"u8;
+				Utf8String INSTANCING_ON = (Utf8String)"INSTANCING_ON"u8;
 				if (pass.NameIndices.ContainsKey(INSTANCING_ON))
 				{
 					if (program.Has_PlayerSubPrograms())

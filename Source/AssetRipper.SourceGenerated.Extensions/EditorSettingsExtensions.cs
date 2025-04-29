@@ -41,7 +41,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 			settings.CacheServerModeE = CacheServerMode_1.AsPreferences;
 			settings.CacheServerEndpoint = Utf8String.Empty;
-			settings.CacheServerNamespacePrefix = "default"u8;
+			settings.CacheServerNamespacePrefix = (Utf8String)"default"u8;
 			settings.CacheServerEnableDownload = true;
 			settings.CacheServerEnableUpload = true;
 
