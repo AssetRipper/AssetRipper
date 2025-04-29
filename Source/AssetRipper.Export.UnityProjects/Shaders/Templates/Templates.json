@@ -31,49 +31,6 @@
 					"PropertyName" : "_Color",
 					"PropertyTypeName" : "Color"
 				}]
-		},
-		{
-			"TemplateName" : "Billboard",
-			"RequiredProperties" : [
-				{
-					"PropertyName" : "_MainTex",
-					"PropertyTypeName" : "Texture"
-				},
-				{
-					"PropertyName" : "_Clipping",
-					"PropertyTypeName" : "Range"
-				}
-			]
-		},
-		{
-			"TemplateName" : "ParticlesLit",
-			"RequiredProperties" : [
-				{
-					"PropertyName" : "_MainTex",
-					"PropertyTypeName" : "Texture"
-				},
-				{
-					"PropertyName" : "_InvFade",
-					"PropertyTypeName" : "Range"
-				},
-				{
-					"PropertyName" : "_TintColor",
-					"PropertyTypeName" : "Color"
-				}
-			]
-		},
-		{
-			"TemplateName" : "Unlit",
-			"RequiredProperties" : [
-				{
-					"PropertyName" : "_MainTex",
-					"PropertyTypeName" : "Texture"
-				},
-				{
-					"PropertyName" : "_Culling",
-					"PropertyTypeName" : "Range"
-				}
-			]
 		}
 	]
 }

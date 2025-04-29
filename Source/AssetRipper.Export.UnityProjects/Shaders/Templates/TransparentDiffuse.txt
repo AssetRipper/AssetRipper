@@ -1,22 +1,46 @@
 	SubShader{
 		Tags { "RenderType"="Opaque" }
 		LOD 200
-		CGPROGRAM
-#pragma surface surf Standard
-#pragma target 3.0
 
-		sampler2D _MainTex;
-		fixed4 _Color;
-		struct Input
+		Pass
 		{
-			float2 uv_MainTex;
-		};
-		
-		void surf(Input IN, inout SurfaceOutputStandard o)
-		{
-			fixed4 c = tex2D(_MainTex, IN.uv_MainTex) * _Color;
-			o.Albedo = c.rgb;
-			o.Alpha = c.a;
+			HLSLPROGRAM
+			#pragma vertex vert
+			#pragma fragment frag
+
+			float4x4 unity_MatrixMVP;
+
+			struct Vertex_Stage_Input
+			{
+				float3 pos : POSITION;
+			};
+
+			struct Vertex_Stage_Output
+			{
+				float4 pos : SV_POSITION;
+			};
+
+			Vertex_Stage_Output vert(Vertex_Stage_Input input)
+			{
+				Vertex_Stage_Output output;
+				output.pos = mul(unity_MatrixMVP, float4(input.pos, 1.0));
+				return output;
+			}
+
+			Texture2D<float4> _MainTex;
+			SamplerState _MainTex_sampler;
+			fixed4 _Color;
+
+			struct Fragment_Stage_Input
+			{
+				float2 uv : TEXCOORD0;
+			};
+
+			float4 frag(Fragment_Stage_Input input) : SV_TARGET
+			{
+				return _MainTex.Sample(_MainTex_sampler, float2(input.uv.x, input.uv.y)) * _Color;
+			}
+
+			ENDHLSL
 		}
-		ENDCG
 	}
