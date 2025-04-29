@@ -42,7 +42,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 				settings.UsingDeclarations = false;
 			}
 
-			WholeProjectDecompiler decompiler = new(settings, assemblyResolver, null, null, null);
+			CustomWholeProjectDecompiler decompiler = new(settings, assemblyResolver, fileSystem);
 
 			DecompileWholeProject(decompiler, assembly, outputFolder, fileSystem);
 		}
@@ -56,6 +56,28 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 			catch (Exception exception)
 			{
 				Logger.Error(exception);
+			}
+		}
+
+		private sealed class CustomWholeProjectDecompiler(DecompilerSettings settings, CecilAssemblyResolver assemblyResolver, FileSystem fileSystem) : WholeProjectDecompiler(settings, assemblyResolver, null, null, null)
+		{
+			protected override void CreateDirectory(string path)
+			{
+				try
+				{
+					fileSystem.Directory.Create(path);
+				}
+				catch (IOException)
+				{
+					fileSystem.File.Delete(path);
+					fileSystem.Directory.Create(path);
+				}
+			}
+
+			protected override TextWriter CreateFile(string path)
+			{
+				Stream stream = fileSystem.File.Create(path);
+				return new StreamWriter(stream);
 			}
 		}
 	}
