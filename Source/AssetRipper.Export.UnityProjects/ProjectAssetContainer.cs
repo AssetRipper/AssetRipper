@@ -2,7 +2,6 @@ using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Export.UnityProjects.Project;
 using AssetRipper.Import.Configuration;
-using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.Processing.Scenes;
 using AssetRipper.SourceGenerated.Classes.ClassID_141;
 using System.Diagnostics;
@@ -19,8 +18,6 @@ namespace AssetRipper.Export.UnityProjects
 			CurrentCollection = null!;
 
 			ExportVersion = options.Version;
-			ExportPlatform = options.Platform;
-			_exportFlags = options.Flags;
 
 			m_buildSettings = assets.OfType<IBuildSettings>().FirstOrDefault();
 
@@ -91,10 +88,7 @@ namespace AssetRipper.Export.UnityProjects
 		public IExportCollection CurrentCollection { get; set; }
 		public AssetCollection File => CurrentCollection.File;
 		public UnityVersion ExportVersion { get; }
-		public BuildTarget ExportPlatform { get; }
-		public TransferInstructionFlags ExportFlags => _exportFlags | CurrentCollection.Flags;
 
-		private readonly TransferInstructionFlags _exportFlags;
 		private readonly ProjectExporter m_exporter;
 		private readonly Dictionary<IUnityObjectBase, IExportCollection> m_assetCollections = new();
 

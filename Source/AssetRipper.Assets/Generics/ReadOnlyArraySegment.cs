@@ -14,7 +14,6 @@ public readonly struct ReadOnlyArraySegment<T> : IReadOnlyList<T>
 
 	private readonly T[]? _array;
 	private readonly int _offset;
-	private readonly int _count;
 
 	public ReadOnlyArraySegment(T[] array)
 	{
@@ -22,7 +21,7 @@ public readonly struct ReadOnlyArraySegment<T> : IReadOnlyList<T>
 
 		_array = array;
 		_offset = 0;
-		_count = array.Length;
+		Count = array.Length;
 	}
 
 	public ReadOnlyArraySegment(T[] array, int offset, int count)
@@ -32,10 +31,10 @@ public readonly struct ReadOnlyArraySegment<T> : IReadOnlyList<T>
 
 		_array = array;
 		_offset = offset;
-		_count = count;
+		Count = count;
 	}
 
-	public int Count => _count;
+	public int Count { get; }
 
 	public T this[int index]
 	{
@@ -51,12 +50,12 @@ public readonly struct ReadOnlyArraySegment<T> : IReadOnlyList<T>
 	public ArraySegment<T>.Enumerator GetEnumerator()
 	{
 		ThrowInvalidOperationIfDefault();
-		return new ArraySegment<T>(_array, _offset, _count).GetEnumerator();
+		return new ArraySegment<T>(_array, _offset, Count).GetEnumerator();
 	}
 
 	public override int GetHashCode()
 	{
-		return _array is null ? 0 : HashCode.Combine(_offset, _count, _array);
+		return _array is null ? 0 : HashCode.Combine(_offset, Count, _array);
 	}
 
 	public override bool Equals([NotNullWhen(true)] object? obj)
@@ -66,7 +65,7 @@ public readonly struct ReadOnlyArraySegment<T> : IReadOnlyList<T>
 
 	public bool Equals(ReadOnlyArraySegment<T> obj)
 	{
-		return obj._array == _array && obj._offset == _offset && obj._count == _count;
+		return obj._array == _array && obj._offset == _offset && obj.Count == Count;
 	}
 
 	public ReadOnlyArraySegment<T> Slice(int index)
@@ -74,14 +73,14 @@ public readonly struct ReadOnlyArraySegment<T> : IReadOnlyList<T>
 		ThrowInvalidOperationIfDefault();
 		ThrowIfIndexNegativeOrGreaterThanCount(index);
 
-		return new ReadOnlyArraySegment<T>(_array, _offset + index, _count - index);
+		return new ReadOnlyArraySegment<T>(_array, _offset + index, Count - index);
 	}
 
 	public ReadOnlyArraySegment<T> Slice(int index, int count)
 	{
 		ThrowInvalidOperationIfDefault();
 
-		if ((uint)index > (uint)_count || (uint)count > (uint)(_count - index))
+		if ((uint)index > (uint)Count || (uint)count > (uint)(Count - index))
 		{
 			throw new ArgumentOutOfRangeException(nameof(index));
 		}
@@ -91,15 +90,15 @@ public readonly struct ReadOnlyArraySegment<T> : IReadOnlyList<T>
 
 	public T[] ToArray()
 	{
-		if (_count == 0)
+		if (Count == 0)
 		{
 			return Array.Empty<T>();
 		}
 
 		ThrowInvalidOperationIfDefault();
 
-		T[] array = new T[_count];
-		Array.Copy(_array, _offset, array, 0, _count);
+		T[] array = new T[Count];
+		Array.Copy(_array, _offset, array, 0, Count);
 		return array;
 	}
 
@@ -118,7 +117,7 @@ public readonly struct ReadOnlyArraySegment<T> : IReadOnlyList<T>
 
 	public static implicit operator ReadOnlySpan<T>(ReadOnlyArraySegment<T> segment)
 	{
-		return new ReadOnlySpan<T>(segment._array, segment._offset, segment._count);
+		return new ReadOnlySpan<T>(segment._array, segment._offset, segment.Count);
 	}
 
 	IEnumerator<T> IEnumerable<T>.GetEnumerator() => GetEnumerator();
@@ -134,7 +133,7 @@ public readonly struct ReadOnlyArraySegment<T> : IReadOnlyList<T>
 
 	private void ThrowIfIndexNegativeOrGreaterThanCount(int index)
 	{
-		if ((uint)index > (uint)_count)
+		if ((uint)index > (uint)Count)
 		{
 			throw new ArgumentOutOfRangeException(nameof(index));
 		}
@@ -142,7 +141,7 @@ public readonly struct ReadOnlyArraySegment<T> : IReadOnlyList<T>
 
 	private void ThrowIfIndexNegativeOrGreaterEqualThanCount(int index)
 	{
-		if (index < 0 || index >= _count)
+		if (index < 0 || index >= Count)
 		{
 			throw new ArgumentOutOfRangeException(nameof(index));
 		}

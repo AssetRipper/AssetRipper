@@ -17,20 +17,17 @@ public static class GameFileLoader
 	public static GameBundle GameBundle => GameData!.GameBundle;
 	public static IAssemblyManager AssemblyManager => GameData!.AssemblyManager;
 	public static LibraryConfiguration Settings { get; } = LoadSettings();
-	private static ExportHandler exportHandler = new(Settings);
+
 	public static ExportHandler ExportHandler
 	{
-		private get
-		{
-			return exportHandler;
-		}
+		private get;
 		set
 		{
 			ArgumentNullException.ThrowIfNull(value);
 			value.ThrowIfSettingsDontMatch(Settings);
-			exportHandler = value;
+			field = value;
 		}
-	}
+	} = new(Settings);
 	public static bool Premium => ExportHandler.GetType() != typeof(ExportHandler);
 
 	public static void Reset()

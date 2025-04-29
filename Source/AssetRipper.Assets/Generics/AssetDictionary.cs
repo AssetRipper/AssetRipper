@@ -32,10 +32,7 @@
 			get => pairs.Length;
 			set
 			{
-				if (value < count)
-				{
-					throw new ArgumentOutOfRangeException(nameof(value));
-				}
+				ArgumentOutOfRangeException.ThrowIfLessThan(value, count);
 
 				if (value != pairs.Length)
 				{
@@ -204,10 +201,7 @@
 		/// <returns>The new capacity of this list.</returns>
 		public int EnsureCapacity(int capacity)
 		{
-			if (capacity < 0)
-			{
-				throw new ArgumentOutOfRangeException(nameof(capacity));
-			}
+			ArgumentOutOfRangeException.ThrowIfNegative(capacity);
 			if (pairs.Length < capacity)
 			{
 				Grow(capacity);

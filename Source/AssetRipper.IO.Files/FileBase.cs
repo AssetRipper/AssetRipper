@@ -15,15 +15,15 @@ namespace AssetRipper.IO.Files
 		public string FilePath { get; set; } = string.Empty;
 		public string Name
 		{
-			get => name;
+			get;
 			set
 			{
-				name = value;
+				field = value;
 				NameFixed = SpecialFileNames.FixFileIdentifier(value);
 			}
-		}
+		} = string.Empty;
 		public string NameFixed { get; private set; } = string.Empty;
-		private string name = string.Empty;
+
 		public abstract void Read(SmartStream stream);
 		public abstract void Write(Stream stream);
 		public virtual void ReadContents() { }

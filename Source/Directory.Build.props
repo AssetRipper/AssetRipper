@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<TargetFramework>net9.0</TargetFramework>
 		<Nullable>enable</Nullable>
-		<LangVersion>Latest</LangVersion>
+		<LangVersion>preview</LangVersion>
 		<IsAotCompatible>true</IsAotCompatible>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>

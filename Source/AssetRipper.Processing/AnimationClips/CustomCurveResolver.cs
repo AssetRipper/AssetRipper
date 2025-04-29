@@ -412,17 +412,17 @@ namespace AssetRipper.Processing.AnimationClips
 			}
 		}
 
+		[field: MaybeNull]
 		private IGameObject[] Roots
 		{
 			get
 			{
-				m_roots ??= m_clip.FindRoots().ToArray();
-				return m_roots;
+				field ??= m_clip.FindRoots().ToArray();
+				return field;
 			}
 		}
 
 		private readonly IAnimationClip m_clip;
-		private IGameObject[]? m_roots;
 
 		[GeneratedRegex("^path_[0-9]{1,10}$", RegexOptions.Compiled)]
 		private static partial Regex UnknownPathRegex { get; }

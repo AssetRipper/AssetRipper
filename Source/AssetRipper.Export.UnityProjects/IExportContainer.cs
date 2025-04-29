@@ -1,6 +1,5 @@
 using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
-using AssetRipper.IO.Files.SerializedFiles;
 
 namespace AssetRipper.Export.UnityProjects
 {
@@ -16,7 +15,5 @@ namespace AssetRipper.Export.UnityProjects
 		AssetCollection File { get; }
 
 		UnityVersion ExportVersion { get; }
-		BuildTarget ExportPlatform { get; }
-		TransferInstructionFlags ExportFlags { get; }
 	}
 }

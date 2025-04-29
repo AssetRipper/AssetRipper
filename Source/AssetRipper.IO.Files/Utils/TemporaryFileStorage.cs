@@ -6,19 +6,17 @@ public static class TemporaryFileStorage
 
 	public static string LocalTemporaryDirectory { get; } = Path.Join(ExecutingDirectory, "temp", GetRandomString()[0..4]);
 
-	private static string temporaryDirectory = LocalTemporaryDirectory;
-
 	public static string TemporaryDirectory
 	{
-		get => temporaryDirectory;
+		get;
 		set
 		{
 			if (!string.IsNullOrWhiteSpace(value))
 			{
-				temporaryDirectory = Path.GetFullPath(value);
+				field = Path.GetFullPath(value);
 			}
 		}
-	}
+	} = LocalTemporaryDirectory;
 
 	public static void DeleteTemporaryDirectory()
 	{

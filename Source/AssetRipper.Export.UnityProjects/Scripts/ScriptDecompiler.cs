@@ -44,10 +44,10 @@ namespace AssetRipper.Export.UnityProjects.Scripts
 
 			CustomWholeProjectDecompiler decompiler = new(settings, assemblyResolver, fileSystem);
 
-			DecompileWholeProject(decompiler, assembly, outputFolder, fileSystem);
+			DecompileWholeProject(decompiler, assembly, outputFolder);
 		}
 
-		private void DecompileWholeProject(WholeProjectDecompiler decompiler, AssemblyDefinition assembly, string outputFolder, FileSystem fileSystem)
+		private void DecompileWholeProject(WholeProjectDecompiler decompiler, AssemblyDefinition assembly, string outputFolder)
 		{
 			try
 			{

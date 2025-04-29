@@ -28,25 +28,20 @@
 
 			public override string ToString()
 			{
-				return m_refCount.ToString();
+				return RefCount.ToString();
 			}
 
 			public bool IsZero => RefCount == 0;
 
 			public int RefCount
 			{
-				get => m_refCount;
+				get;
 				private set
 				{
-					if (value < 0)
-					{
-						throw new ArgumentOutOfRangeException(nameof(value));
-					}
-					m_refCount = value;
+					ArgumentOutOfRangeException.ThrowIfNegative(value);
+					field = value;
 				}
-			}
-
-			private int m_refCount = 0;
+			} = 0;
 		}
 	}
 }

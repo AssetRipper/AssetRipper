@@ -12,13 +12,13 @@ namespace AssetRipper.Import.Structure.Assembly.TypeTrees;
 
 public readonly struct TypeTreeNodeStruct : IReadOnlyList<TypeTreeNodeStruct>, IEquatable<TypeTreeNodeStruct>
 {
-	private static TpkTypeTreeBlob? _typeTreeBlob;
+	[field: MaybeNull]
 	private static TpkTypeTreeBlob TypeTreeBlob
 	{
 		get
 		{
-			_typeTreeBlob ??= (TpkTypeTreeBlob)TpkFile.FromStream(SourceTpk.GetStream()).GetDataBlob();
-			return _typeTreeBlob;
+			field ??= (TpkTypeTreeBlob)TpkFile.FromStream(SourceTpk.GetStream()).GetDataBlob();
+			return field;
 		}
 	}
 

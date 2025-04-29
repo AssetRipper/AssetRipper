@@ -5,19 +5,18 @@ namespace AssetRipper.Import.AssetCreation
 {
 	public sealed class UnreadableObject : RawDataObject, INamed
 	{
-		private Utf8String? name;
-
 		[AllowNull]
+		[field: MaybeNull]
 		public Utf8String Name
 		{
 			get
 			{
-				return Utf8String.IsNullOrEmpty(name)
+				return Utf8String.IsNullOrEmpty(field)
 					? $"Unreadable{ClassName}_{RawDataHash:X}"
-					: name;
+					: field;
 			}
 
-			set => name = value;
+			set;
 		}
 
 		public UnreadableObject(AssetInfo assetInfo, byte[] data) : base(assetInfo, data) { }

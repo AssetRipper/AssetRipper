@@ -99,7 +99,7 @@ public class ExportHandler
 		Logger.Info(LogCategory.Export, $"Exporting to Unity version {gameData.ProjectVersion}");
 
 		Settings.ExportRootPath = outputPath;
-		Settings.SetProjectSettings(gameData.ProjectVersion, BuildTarget.NoTarget, TransferInstructionFlags.NoTransferInstructionFlags);
+		Settings.SetProjectSettings(gameData.ProjectVersion);
 
 		ProjectExporter projectExporter = new(Settings, gameData.AssemblyManager);
 		BeforeExport(projectExporter);
