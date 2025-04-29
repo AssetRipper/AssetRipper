@@ -17,12 +17,20 @@ namespace AssetRipper.SourceGenerated.Extensions
 		/// <summary>
 		/// For versions &lt; 4, IsTriStrip is used here instead.<br/>
 		/// For it, 0 cooresponds to <see cref="MeshTopology.Triangles"/>,<br/>
-		/// and 1 cooresponds to <see cref="MeshTopology.TriangleStrip"/>.<br/>
+		/// and non-zero cooresponds to <see cref="MeshTopology.TriangleStrip"/>.<br/>
 		/// This conveniently matches the <see cref="MeshTopology"/> enumeration.
 		/// </summary>
 		public static MeshTopology GetTopology(this ISubMesh subMesh)
 		{
-			return subMesh.Has_Topology() ? subMesh.TopologyE : subMesh.IsTriStripE;
+			if (subMesh.Has_Topology())
+			{
+				return subMesh.TopologyE;
+			}
+			else
+			{
+				// https://github.com/AssetRipper/AssetRipper/issues/1759
+				return subMesh.IsTriStrip != 0 ? MeshTopology.TriangleStrip : MeshTopology.Triangles;
+			}
 		}
 
 		public static void SetTopology(this ISubMesh subMesh, MeshTopology topology)
