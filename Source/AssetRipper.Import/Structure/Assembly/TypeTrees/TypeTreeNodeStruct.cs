@@ -1,6 +1,6 @@
-﻿using AssetRipper.Import.Structure.Assembly.Serializable;
-using AssetRipper.IO.Files.SerializedFiles;
+﻿using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.IO.Files.SerializedFiles.Parser.TypeTrees;
+using AssetRipper.SerializationLogic;
 using AssetRipper.SourceGenerated;
 using AssetRipper.Tpk;
 using AssetRipper.Tpk.Shared;

@@ -2,8 +2,8 @@
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly;
 using AssetRipper.Import.Structure.Assembly.Managers;
-using AssetRipper.Import.Structure.Assembly.Serializable;
 using AssetRipper.Import.Structure.Platforms;
+using AssetRipper.SerializationLogic;
 
 namespace AssetRipper.Tools.MonoBehaviourTester;
 

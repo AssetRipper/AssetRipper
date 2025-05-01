@@ -1,7 +1,5 @@
 ﻿using AsmResolver.DotNet;
 using AsmResolver.DotNet.Signatures;
-using AssetRipper.Import.Structure.Assembly.Mono;
-using AssetRipper.Import.Structure.Assembly.Serializable;
 using AssetRipper.Import.Structure.Platforms;
 using AssetRipper.IO.Files;
 using AssetRipper.SerializationLogic;
@@ -16,7 +14,7 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 		protected readonly Dictionary<string, AssemblyDefinition?> m_assemblies = new();
 		protected readonly Dictionary<AssemblyDefinition, Stream> m_assemblyStreams = new(SignatureComparer.Default);
 		protected readonly Dictionary<string, bool> m_validTypes = new();
-		private readonly Dictionary<ITypeDefOrRef, MonoType> monoTypeCache = new(SignatureComparer.Default);
+		private readonly Dictionary<ITypeDefOrRef, SerializableType> monoTypeCache = new(SignatureComparer.Default);
 
 		private event Action<string> m_requestAssemblyCallback;
 		private readonly Dictionary<string, SerializableType> m_serializableTypes = new();
@@ -202,9 +200,10 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 				failureReason = $"Can't find type: {scriptID.UniqueName}";
 				return false;
 			}
-			else if (monoTypeCache.TryGetValue(type, out MonoType? monoType)
-				|| MonoType.TryCreate(type, monoTypeCache, out monoType, out failureReason))
+			else if (monoTypeCache.TryGetValue(type, out SerializableType? monoType)
+				|| new FieldSerializer(new UnityVersion(6000)).TryCreateSerializableType(type, monoTypeCache, out monoType, out failureReason))
 			{
+				// Todo: Use the actual Unity version when constructing the FieldSerializer
 				scriptType = monoType;
 				failureReason = null;
 				return true;

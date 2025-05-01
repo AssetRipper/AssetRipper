@@ -4,7 +4,7 @@ using AssetRipper.Assets.Metadata;
 using AssetRipper.Checksum;
 using AssetRipper.Import.Structure.Assembly;
 using AssetRipper.Import.Structure.Assembly.Managers;
-using AssetRipper.Import.Structure.Assembly.Serializable;
+using AssetRipper.SerializationLogic;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_111;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;

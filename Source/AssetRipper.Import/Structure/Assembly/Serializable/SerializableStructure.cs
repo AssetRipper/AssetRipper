@@ -4,9 +4,9 @@ using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Assets.Traversal;
 using AssetRipper.Import.Logging;
-using AssetRipper.Import.Structure.Assembly.Mono;
 using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files.SerializedFiles;
+using AssetRipper.SerializationLogic;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 
 namespace AssetRipper.Import.Structure.Assembly.Serializable

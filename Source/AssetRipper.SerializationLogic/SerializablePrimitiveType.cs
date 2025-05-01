@@ -1,6 +1,4 @@
-﻿using AssetRipper.Import.Structure.Assembly.Serializable;
-
-namespace AssetRipper.Import.Structure.Assembly.Mono;
+﻿namespace AssetRipper.SerializationLogic;
 
 public sealed class SerializablePrimitiveType : SerializableType
 {
@@ -8,6 +6,7 @@ public sealed class SerializablePrimitiveType : SerializableType
 
 	private SerializablePrimitiveType(PrimitiveType primitiveType) : base("System", primitiveType, primitiveType.ToSystemTypeName())
 	{
+		MaxDepth = 0;
 	}
 
 	public static SerializablePrimitiveType GetOrCreate(PrimitiveType primitiveType)

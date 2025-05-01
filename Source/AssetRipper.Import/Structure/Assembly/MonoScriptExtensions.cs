@@ -4,6 +4,7 @@ using AssetRipper.Import.Structure.Assembly.Serializable;
 using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
+using AssetRipper.SerializationLogic;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using AssetRipper.SourceGenerated.Subclasses.Hash128;
 using System.Buffers.Binary;

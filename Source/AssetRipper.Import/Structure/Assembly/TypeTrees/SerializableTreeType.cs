@@ -1,5 +1,4 @@
-﻿using AssetRipper.Import.Structure.Assembly.Mono;
-using AssetRipper.Import.Structure.Assembly.Serializable;
+﻿using AssetRipper.SerializationLogic;
 using AssetRipper.SourceGenerated.Extensions;
 using System.Diagnostics;
 
@@ -32,6 +31,7 @@ namespace AssetRipper.Import.Structure.Assembly.TypeTrees
 				AddNode(rootNode.SubNodes[i], fields);
 			}
 			serializableTreeType.Fields = fields;
+			serializableTreeType.SetMaxDepth();
 			return serializableTreeType;
 		}
 
@@ -53,7 +53,10 @@ namespace AssetRipper.Import.Structure.Assembly.TypeTrees
 			}
 			else
 			{
-				serializableType = new SerializableTreeType(typeName, primitiveType, primitiveNode.Version, primitiveNode.FlowMappedInYaml);
+				serializableType = new SerializableTreeType(typeName, primitiveType, primitiveNode.Version, primitiveNode.FlowMappedInYaml)
+				{
+					MaxDepth = 0
+				};
 			}
 
 			fields.Add(new Field(serializableType, arrayDepth, node.Name, alignBytes));
@@ -68,6 +71,7 @@ namespace AssetRipper.Import.Structure.Assembly.TypeTrees
 				AddNode(subNode, fields);
 			}
 			serializableTreeType.Fields = fields;
+			serializableTreeType.SetMaxDepth();
 			return serializableTreeType;
 		}
 
@@ -136,7 +140,6 @@ namespace AssetRipper.Import.Structure.Assembly.TypeTrees
 					"UInt64" or "FileSize" or "unsigned long long" => PrimitiveType.ULong,
 					"float" => PrimitiveType.Single,
 					"double" => PrimitiveType.Double,
-					"half" => PrimitiveType.Half,
 					_ => PrimitiveType.Complex,
 				}
 				: false switch
@@ -154,6 +157,17 @@ namespace AssetRipper.Import.Structure.Assembly.TypeTrees
 					local = value;
 				}
 			}
+		}
+
+		private void SetMaxDepth()
+		{
+			int maxDepth = 0;
+			foreach (Field field in Fields)
+			{
+				Debug.Assert(field.Type.IsMaxDepthKnown, "The depth of this type is not known.");
+				maxDepth = Math.Max(maxDepth, field.Type.MaxDepth + 1);
+			}
+			MaxDepth = maxDepth;
 		}
 	}
 }

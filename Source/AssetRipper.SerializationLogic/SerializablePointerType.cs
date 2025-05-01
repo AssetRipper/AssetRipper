@@ -1,6 +1,4 @@
-﻿using AssetRipper.Import.Structure.Assembly.Serializable;
-
-namespace AssetRipper.Import.Structure.Assembly.Mono;
+﻿namespace AssetRipper.SerializationLogic;
 
 public sealed class SerializablePointerType : SerializableType
 {
@@ -8,5 +6,6 @@ public sealed class SerializablePointerType : SerializableType
 
 	private SerializablePointerType() : base("UnityEngine", PrimitiveType.Complex, "Object")
 	{
+		MaxDepth = 0;
 	}
 }

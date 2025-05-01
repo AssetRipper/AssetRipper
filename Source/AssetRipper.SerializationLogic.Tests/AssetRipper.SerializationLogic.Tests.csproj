@@ -2,6 +2,7 @@
 
 	<PropertyGroup>
 		<IsPackable>false</IsPackable>
+		<IsAotCompatible>false</IsAotCompatible>
 		<OutputPath>..\0Bins\Other\AssetRipper.SerializationLogic.Tests\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.SerializationLogic.Tests\$(Configuration)\</IntermediateOutputPath>
 		<NoWarn>CS0169</NoWarn><!--Unused field-->

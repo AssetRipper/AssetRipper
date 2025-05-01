@@ -1,6 +1,6 @@
 namespace AssetRipper.SerializationLogic.Extensions
 {
-	public static class TypeDefinitionExtensions
+	internal static class TypeDefinitionExtensions
 	{
 		public static bool IsSubclassOf(this TypeDefinition type, string ns, string name)
 		{
@@ -66,17 +66,31 @@ namespace AssetRipper.SerializationLogic.Extensions
 
 		public static bool InheritsFromMonoBehaviour(this TypeDefinition type)
 		{
-			return type.InheritsFrom("UnityEngine.MonoBehaviour");
+			return type.InheritsFrom("UnityEngine", "MonoBehaviour");
 		}
 
 		public static bool InheritsFromObject(this TypeDefinition type)
 		{
-			return type.InheritsFrom("UnityEngine.Object");
+			return type.InheritsFrom("UnityEngine", "Object");
 		}
 
 		public static TypeDefinition? TryGetBaseClass(this TypeDefinition current)
 		{
 			return current.BaseType?.Resolve();
+		}
+
+		public static bool TryGetPrimitiveType(this TypeDefinition typeDefinition, out PrimitiveType primitiveType)
+		{
+			if ((typeDefinition.Module?.Assembly?.IsCorLib ?? false) && typeDefinition.ToTypeSignature() is CorLibTypeSignature corLibTypeSignature)
+			{
+				primitiveType = corLibTypeSignature.ToPrimitiveType();
+				return primitiveType.IsCSharpPrimitive();
+			}
+			else
+			{
+				primitiveType = PrimitiveType.Complex;
+				return false;
+			}
 		}
 	}
 }
