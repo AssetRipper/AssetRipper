@@ -1,0 +1,64 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <OutputType>Library</OutputType>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <IsPackable>false</IsPackable>
+    <OutputPath>..\0Bins\AssetRipper.GUI.Free\$(Configuration)\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <ManagedPath>$(MSBuildProjectDirectory)\..\AssetRipper.Import\bin\$(Configuration)\net9.0\Managed</ManagedPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AssetRipper.Import\AssetRipper.Import.csproj" />
+    <ProjectReference Include="..\AssetRipper.IO.Files\AssetRipper.IO.Files.csproj" />
+    <ProjectReference Include="..\AssetRipper.SmartEnums\AssetRipper.SmartEnums.csproj" />
+    <ProjectReference Include="..\AssetRipper.Assets\AssetRipper.Assets.csproj" />
+    <ProjectReference Include="..\AssetRipper.SerializationLogic\AssetRipper.SerializationLogic.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Elringus.Naninovel.Runtime">
+      <HintPath>$(ManagedPath)\Elringus.Naninovel.Runtime.dll</HintPath>
+      <Private>false</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Elringus.NaninovelInventory.Runtime">
+      <HintPath>$(ManagedPath)\Elringus.NaninovelInventory.Runtime.dll</HintPath>
+      <Private>false</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Naninovel.Lexing">
+      <HintPath>$(ManagedPath)\Naninovel.Lexing.dll</HintPath>
+      <Private>false</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Naninovel.NCalc">
+      <HintPath>$(ManagedPath)\Naninovel.NCalc.dll</HintPath>
+      <Private>false</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Naninovel.Parsing">
+      <HintPath>$(ManagedPath)\Naninovel.Parsing.dll</HintPath>
+      <Private>false</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="NLayer">
+      <HintPath>$(ManagedPath)\NLayer.dll</HintPath>
+      <Private>false</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="UniRx.Async">
+      <HintPath>$(ManagedPath)\UniRx.Async.dll</HintPath>
+      <Private>false</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+  </ItemGroup>
+
+</Project>
