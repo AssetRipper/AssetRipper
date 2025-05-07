@@ -1,6 +1,4 @@
 ﻿using AssetRipper.Assets.Collections;
-using AssetRipper.IO.Files.ResourceFiles;
-using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Subclasses.StreamingInfo;
 
 namespace AssetRipper.SourceGenerated.Extensions
@@ -11,25 +9,12 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static bool CheckIntegrity(this IStreamingInfo streamingInfo, AssetCollection file)
 		{
-			if (!streamingInfo.IsSet())
-			{
-				return true;
-			}
-			return file.Bundle.ResolveResource(streamingInfo.Path.String) != null;
+			return StreamedResourceExtensions.CheckIntegrity(streamingInfo.Path, streamingInfo.GetOffset(), streamingInfo.Size, file);
 		}
 
 		public static byte[] GetContent(this IStreamingInfo streamingInfo, AssetCollection file)
 		{
-			ResourceFile? res = file.Bundle.ResolveResource(streamingInfo.Path.String);
-			if (res == null)
-			{
-				return Array.Empty<byte>();
-			}
-
-			byte[] data = new byte[streamingInfo.Size];
-			res.Stream.Position = (long)streamingInfo.GetOffset();
-			res.Stream.ReadExactly(data);
-			return data;
+			return StreamedResourceExtensions.GetContent(streamingInfo.Path, streamingInfo.GetOffset(), streamingInfo.Size, file) ?? [];
 		}
 
 		public static ulong GetOffset(this IStreamingInfo streamingInfo)
@@ -62,6 +47,20 @@ namespace AssetRipper.SourceGenerated.Extensions
 			streamingInfo.Offset_UInt64 = default;
 			streamingInfo.Path = Utf8String.Empty;
 			streamingInfo.Size = default;
+		}
+
+		public static void GetValues(this IStreamingInfo streamingInfo, out Utf8String path, out ulong offset, out uint size)
+		{
+			path = streamingInfo.Path;
+			offset = streamingInfo.GetOffset();
+			size = streamingInfo.Size;
+		}
+
+		public static void SetValues(this IStreamingInfo streamingInfo, Utf8String path, ulong offset, uint size)
+		{
+			streamingInfo.Path = path;
+			streamingInfo.SetOffset(offset);
+			streamingInfo.Size = size;
 		}
 	}
 }

@@ -131,7 +131,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 			else
 			{
-				return mesh.VertexData?.Data ?? Array.Empty<byte>();
+				return mesh.VertexData?.Data ?? [];
 			}
 		}
 
