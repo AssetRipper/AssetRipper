@@ -410,14 +410,14 @@ internal sealed class AnimatorStateMachineContext
 
 		if (stateDestination != null) // destination is State
 		{
-			animatorStateTransition.DstStateP = stateDestination;
+			animatorStateTransition.DestinationStateP = stateDestination;
 		}
 		else if (IsUnity5 && stateMachineDestinationIndex != -1) // destination is StateMachine
 		{
 			IAnimatorStateMachine stateMachineDestination = IndexedStateMachines[stateMachineDestinationIndex].StateMachine;
 			if (isEntryDestination)
 			{
-				animatorStateTransition.DstStateMachineP = stateMachineDestination;
+				animatorStateTransition.DestinationStateMachineP = stateMachineDestination;
 
 				if (stateMachineDestination.Name.IsEmpty || stateMachineDestination.Name == StateMachineFlagName) // try locate StateMachine with Unknown FullPath
 				{
@@ -730,14 +730,14 @@ internal sealed class AnimatorStateMachineContext
 
 		if (stateDestination != null)
 		{
-			animatorTransition.DstStateP = stateDestination;
+			animatorTransition.DestinationStateP = stateDestination;
 		}
 		else if (IsUnity5 && stateMachineDestinationIndex != -1)
 		{
 			if (isEntryDestination)
 			{
 				IAnimatorStateMachine stateMachineDestination = IndexedStateMachines[stateMachineDestinationIndex].StateMachine;
-				animatorTransition.DstStateMachineP = stateMachineDestination;
+				animatorTransition.DestinationStateMachineP = stateMachineDestination;
 			}
 			else
 			{
