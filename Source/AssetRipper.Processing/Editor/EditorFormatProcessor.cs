@@ -27,6 +27,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_78;
 using AssetRipper.SourceGenerated.Classes.ClassID_850595691;
 using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Extensions;
+using System.Diagnostics;
 
 namespace AssetRipper.Processing.Editor
 {
@@ -134,7 +135,8 @@ namespace AssetRipper.Processing.Editor
 					}
 					ApiCompatibilityLevel compatibilityLevel;
 					ScriptingRuntimeVersion runtimeVersion;
-					if (HasMscorlib2())
+					Debug.Assert(assemblyManager is not null);
+					if (assemblyManager.HasMscorlib2)
 					{
 						compatibilityLevel = ApiCompatibilityLevel.NET_2_0;
 						runtimeVersion = ScriptingRuntimeVersion.Legacy;
@@ -153,11 +155,6 @@ namespace AssetRipper.Processing.Editor
 						editorStructure["scriptingRuntimeVersion"].AsInt32 = (int)runtimeVersion;
 					}
 					break;
-			}
-
-			bool HasMscorlib2()
-			{
-				return assemblyManager!.Mscorlib?.Version.Major == 2;
 			}
 		}
 

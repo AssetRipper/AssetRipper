@@ -63,7 +63,7 @@ public sealed class EmptyScriptExportCollection : ScriptExportCollectionBase
 				//    see: https://docs.unity3d.com/2017.3/Documentation/Manual/ScriptCompilationAssemblyDefinitionFiles.html
 				if (!ReferenceAssemblies.IsPredefinedAssembly(details.AssemblyName))
 				{
-					AssemblyDefinitionExporter.Export(details, fileSystem);
+					AssemblyDefinitionExporter.Export(details, fileSystem, AssetExporter.ReferenceAssemblyDictionary);
 				}
 			}
 		}

@@ -5,7 +5,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts.AssemblyDefinitions
 {
 	public static class AssemblyDefinitionExporter
 	{
-		public static void Export(AssemblyDefinitionDetails details, FileSystem fileSystem)
+		public static void Export(AssemblyDefinitionDetails details, FileSystem fileSystem, Dictionary<string, UnityGuid> referenceAssemblies)
 		{
 			string assetPath = fileSystem.Path.Join(details.OutputFolder, $"{details.AssemblyName}.asmdef");
 
@@ -15,7 +15,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts.AssemblyDefinitions
 			{
 				foreach (AssemblyReference reference in module.AssemblyReferences)
 				{
-					if (reference.Name is null || ReferenceAssemblies.IsReferenceAssembly(reference.Name))
+					if (reference.Name is null || referenceAssemblies.ContainsKey(reference.Name))
 					{
 						continue;
 					}
