@@ -51,6 +51,11 @@ namespace AssetRipper.SerializationLogic.Extensions
 			// let's assume it is not assignable to our target type
 		}
 
+		public static bool InheritsFromObject(this ITypeDescriptor type)
+		{
+			return type.IsAssignableTo("UnityEngine", "Object");
+		}
+
 		public static bool IsEnum(this ITypeDescriptor type)
 		{
 			return type.IsValueType && !type.IsPrimitive() && type.CheckedResolve().IsEnum;
