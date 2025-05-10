@@ -241,7 +241,13 @@ public readonly struct FieldSerializer(UnityVersion version)
 				return TryCreateSerializableField(typeStack, name, szArrayTypeSignature.BaseType, arrayDepth + 1, typeCache, out result, out failureReason);
 
 			case GenericInstanceTypeSignature genericInstanceTypeSignature:
-				if (typeCache.TryGetValue(genericInstanceTypeSignature.ToTypeDefOrRef(), out SerializableType? cachedGenericMonoType))
+				if (genericInstanceTypeSignature.InheritsFromObject())
+				{
+					result = new Field(SerializablePointerType.Shared, arrayDepth, name, true);
+					failureReason = null;
+					return true;
+				}
+				else if (typeCache.TryGetValue(genericInstanceTypeSignature.ToTypeDefOrRef(), out SerializableType? cachedGenericMonoType))
 				{
 					result = new Field(cachedGenericMonoType, arrayDepth, name, true);
 					failureReason = null;

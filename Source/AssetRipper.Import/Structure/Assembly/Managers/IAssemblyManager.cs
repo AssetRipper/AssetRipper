@@ -29,6 +29,7 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 		ScriptingBackend ScriptingBackend { get; }
 
 		public sealed AssemblyDefinition? Mscorlib => GetAssemblies().FirstOrDefault(a => a.Name == "mscorlib");
+		public sealed bool HasMscorlib2 => Mscorlib?.Version.Major == 2;
 	}
 	public static class AssemblyManagerExtensions
 	{
