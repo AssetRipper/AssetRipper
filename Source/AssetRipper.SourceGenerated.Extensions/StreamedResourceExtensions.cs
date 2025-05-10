@@ -30,7 +30,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 				return false;
 			}
 
-			return file.Stream.Length <= unchecked((long)(offset + size));
+			return file.Stream.Length >= unchecked((long)(offset + size));
 		}
 
 		internal static byte[]? GetContent(Utf8String? path, ulong offset, ulong size, AssetCollection collection)
@@ -52,7 +52,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 
 			ResourceFile? file = collection.Bundle.ResolveResource(path.String);
-			if (file == null)
+			if (file == null || file.Stream.Length < unchecked((long)(offset + size)))
 			{
 				return null;
 			}
