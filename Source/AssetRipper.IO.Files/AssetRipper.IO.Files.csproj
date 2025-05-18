@@ -15,8 +15,4 @@
 		<PackageReference Include="ZstdSharp.Port" Version="0.8.5" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\AssetRipper.SmartEnums\AssetRipper.SmartEnums.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
-	</ItemGroup>
-
 </Project>
