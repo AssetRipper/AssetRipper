@@ -10,8 +10,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Classes.ClassID_2;
 using AssetRipper.SourceGenerated.Classes.ClassID_25;
 using AssetRipper.SourceGenerated.Subclasses.ComponentPair;
-using AssetRipper.SourceGenerated.Subclasses.PPtr_Component;
-using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace AssetRipper.Import.Structure;
 
@@ -50,6 +49,8 @@ internal sealed partial record class GameInitializer
 					HandleDifferingFields(original, replacement);
 					collection.ReplaceAsset(replacement);
 				}
+
+				Version(collection) = targetVersion;
 			}
 		}
 
@@ -126,5 +127,9 @@ internal sealed partial record class GameInitializer
 				}
 			}
 		}
+
+		// We use an unsafe accessor to avoid the need for public access to the property backing field.
+		[UnsafeAccessor(UnsafeAccessorKind.Field, Name = $"<{nameof(AssetCollection.Version)}>k__BackingField")]
+		private static extern ref UnityVersion Version(AssetCollection collection);
 	}
 }
