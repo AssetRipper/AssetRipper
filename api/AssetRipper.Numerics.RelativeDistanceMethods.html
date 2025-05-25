@@ -1,0 +1,985 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class RelativeDistanceMethods
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class RelativeDistanceMethods
+   ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="AssetRipper.Numerics.RelativeDistanceMethods">
+  
+  
+  <h1 id="AssetRipper_Numerics_RelativeDistanceMethods" data-uid="AssetRipper.Numerics.RelativeDistanceMethods" class="text-break">Class RelativeDistanceMethods
+  </h1>
+  <div class="markdown level0 summary"><p>A collection of methods calculating the relative distance between two points.
+All methods return a <span class="xref">langword_csharp_float</span> between 0 and 1 (inclusive).
+0 indicates equality and 1 indicates great distance
+For the array methods, the return value is an average of the relative distances for the individual points.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">RelativeDistanceMethods</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="AssetRipper.Numerics.html">AssetRipper.Numerics</a></h6>
+  <h6><strong>Assembly</strong>: AssetRipper.Numerics.dll</h6>
+  <h5 id="AssetRipper_Numerics_RelativeDistanceMethods_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static class RelativeDistanceMethods</code></pre>
+  </div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_AssetRipper_Numerics_BoneWeight4_AssetRipper_Numerics_BoneWeight4_.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance(AssetRipper.Numerics.BoneWeight4%2CAssetRipper.Numerics.BoneWeight4)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/RelativeDistanceMethods.cs/#L118">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_" data-uid="AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance*"></a>
+  <h4 id="AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_AssetRipper_Numerics_BoneWeight4_AssetRipper_Numerics_BoneWeight4_" data-uid="AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance(AssetRipper.Numerics.BoneWeight4,AssetRipper.Numerics.BoneWeight4)">RelativeDistance(BoneWeight4, BoneWeight4)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float RelativeDistance(BoneWeight4 v1, BoneWeight4 v2)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">AssetRipper.Numerics.BoneWeight4</span></td>
+        <td><span class="parametername">v1</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">AssetRipper.Numerics.BoneWeight4</span></td>
+        <td><span class="parametername">v2</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_AssetRipper_Numerics_BoneWeight4___AssetRipper_Numerics_BoneWeight4___System_Single__System_Int32__.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance(AssetRipper.Numerics.BoneWeight4%5B%5D%2CAssetRipper.Numerics.BoneWeight4%5B%5D%2CSystem.Single%40%2CSystem.Int32%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/RelativeDistanceMethods.cs/#L107">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_" data-uid="AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance*"></a>
+  <h4 id="AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_AssetRipper_Numerics_BoneWeight4___AssetRipper_Numerics_BoneWeight4___System_Single__System_Int32__" data-uid="AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance(AssetRipper.Numerics.BoneWeight4[],AssetRipper.Numerics.BoneWeight4[],System.Single@,System.Int32@)">RelativeDistance(BoneWeight4[], BoneWeight4[], out Single, out Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void RelativeDistance(BoneWeight4[] v1, BoneWeight4[] v2, out float sum, out int count)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">AssetRipper.Numerics.BoneWeight4</span>[]</td>
+        <td><span class="parametername">v1</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">AssetRipper.Numerics.BoneWeight4</span>[]</td>
+        <td><span class="parametername">v2</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">sum</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">count</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_AssetRipper_Numerics_ColorFloat_AssetRipper_Numerics_ColorFloat_.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance(AssetRipper.Numerics.ColorFloat%2CAssetRipper.Numerics.ColorFloat)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/RelativeDistanceMethods.cs/#L102">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_" data-uid="AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance*"></a>
+  <h4 id="AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_AssetRipper_Numerics_ColorFloat_AssetRipper_Numerics_ColorFloat_" data-uid="AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance(AssetRipper.Numerics.ColorFloat,AssetRipper.Numerics.ColorFloat)">RelativeDistance(ColorFloat, ColorFloat)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float RelativeDistance(ColorFloat v1, ColorFloat v2)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">AssetRipper.Numerics.ColorFloat</span></td>
+        <td><span class="parametername">v1</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">AssetRipper.Numerics.ColorFloat</span></td>
+        <td><span class="parametername">v2</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_AssetRipper_Numerics_ColorFloat___AssetRipper_Numerics_ColorFloat___System_Single__System_Int32__.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance(AssetRipper.Numerics.ColorFloat%5B%5D%2CAssetRipper.Numerics.ColorFloat%5B%5D%2CSystem.Single%40%2CSystem.Int32%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/RelativeDistanceMethods.cs/#L91">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_" data-uid="AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance*"></a>
+  <h4 id="AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_AssetRipper_Numerics_ColorFloat___AssetRipper_Numerics_ColorFloat___System_Single__System_Int32__" data-uid="AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance(AssetRipper.Numerics.ColorFloat[],AssetRipper.Numerics.ColorFloat[],System.Single@,System.Int32@)">RelativeDistance(ColorFloat[], ColorFloat[], out Single, out Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void RelativeDistance(ColorFloat[] v1, ColorFloat[] v2, out float sum, out int count)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">AssetRipper.Numerics.ColorFloat</span>[]</td>
+        <td><span class="parametername">v1</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">AssetRipper.Numerics.ColorFloat</span>[]</td>
+        <td><span class="parametername">v2</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">sum</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">count</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_Matrix4x4_Matrix4x4_.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance(Matrix4x4%2CMatrix4x4)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/RelativeDistanceMethods.cs/#L137">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_" data-uid="AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance*"></a>
+  <h4 id="AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_Matrix4x4_Matrix4x4_" data-uid="AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance(Matrix4x4,Matrix4x4)">RelativeDistance(Matrix4x4, Matrix4x4)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float RelativeDistance(Matrix4x4 v1, Matrix4x4 v2)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Matrix4x4</span></td>
+        <td><span class="parametername">v1</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Matrix4x4</span></td>
+        <td><span class="parametername">v2</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_Matrix4x4___Matrix4x4___System_Single__System_Int32__.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance(Matrix4x4%5B%5D%2CMatrix4x4%5B%5D%2CSystem.Single%40%2CSystem.Int32%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/RelativeDistanceMethods.cs/#L126">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_" data-uid="AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance*"></a>
+  <h4 id="AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_Matrix4x4___Matrix4x4___System_Single__System_Int32__" data-uid="AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance(Matrix4x4[],Matrix4x4[],System.Single@,System.Int32@)">RelativeDistance(Matrix4x4[], Matrix4x4[], out Single, out Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void RelativeDistance(Matrix4x4[] v1, Matrix4x4[] v2, out float sum, out int count)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Matrix4x4</span>[]</td>
+        <td><span class="parametername">v1</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Matrix4x4</span>[]</td>
+        <td><span class="parametername">v2</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">sum</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">count</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_System_Single_System_Single_.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance(System.Single%2CSystem.Single)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/RelativeDistanceMethods.cs/#L14">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_" data-uid="AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance*"></a>
+  <h4 id="AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_System_Single_System_Single_" data-uid="AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance(System.Single,System.Single)">RelativeDistance(Single, Single)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float RelativeDistance(float x1, float x2)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">x1</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">x2</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_System_Single___System_Single___System_Single__System_Int32__.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance(System.Single%5B%5D%2CSystem.Single%5B%5D%2CSystem.Single%40%2CSystem.Int32%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/RelativeDistanceMethods.cs/#L47">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_" data-uid="AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance*"></a>
+  <h4 id="AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_System_Single___System_Single___System_Single__System_Int32__" data-uid="AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance(System.Single[],System.Single[],System.Single@,System.Int32@)">RelativeDistance(Single[], Single[], out Single, out Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void RelativeDistance(float[] x1, float[] x2, out float sum, out int count)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span>[]</td>
+        <td><span class="parametername">x1</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Single</span>[]</td>
+        <td><span class="parametername">x2</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">sum</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">count</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_Vector2_Vector2_.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance(Vector2%2CVector2)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/RelativeDistanceMethods.cs/#L27">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_" data-uid="AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance*"></a>
+  <h4 id="AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_Vector2_Vector2_" data-uid="AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance(Vector2,Vector2)">RelativeDistance(Vector2, Vector2)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float RelativeDistance(Vector2 v1, Vector2 v2)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Vector2</span></td>
+        <td><span class="parametername">v1</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Vector2</span></td>
+        <td><span class="parametername">v2</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_Vector2___Vector2___System_Single__System_Int32__.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance(Vector2%5B%5D%2CVector2%5B%5D%2CSystem.Single%40%2CSystem.Int32%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/RelativeDistanceMethods.cs/#L58">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_" data-uid="AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance*"></a>
+  <h4 id="AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_Vector2___Vector2___System_Single__System_Int32__" data-uid="AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance(Vector2[],Vector2[],System.Single@,System.Int32@)">RelativeDistance(Vector2[], Vector2[], out Single, out Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void RelativeDistance(Vector2[] v1, Vector2[] v2, out float sum, out int count)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Vector2</span>[]</td>
+        <td><span class="parametername">v1</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Vector2</span>[]</td>
+        <td><span class="parametername">v2</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">sum</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">count</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_Vector3_Vector3_.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance(Vector3%2CVector3)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/RelativeDistanceMethods.cs/#L37">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_" data-uid="AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance*"></a>
+  <h4 id="AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_Vector3_Vector3_" data-uid="AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance(Vector3,Vector3)">RelativeDistance(Vector3, Vector3)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float RelativeDistance(Vector3 v1, Vector3 v2)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Vector3</span></td>
+        <td><span class="parametername">v1</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Vector3</span></td>
+        <td><span class="parametername">v2</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_Vector3___Vector3___System_Single__System_Int32__.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance(Vector3%5B%5D%2CVector3%5B%5D%2CSystem.Single%40%2CSystem.Int32%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/RelativeDistanceMethods.cs/#L69">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_" data-uid="AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance*"></a>
+  <h4 id="AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_Vector3___Vector3___System_Single__System_Int32__" data-uid="AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance(Vector3[],Vector3[],System.Single@,System.Int32@)">RelativeDistance(Vector3[], Vector3[], out Single, out Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void RelativeDistance(Vector3[] v1, Vector3[] v2, out float sum, out int count)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Vector3</span>[]</td>
+        <td><span class="parametername">v1</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Vector3</span>[]</td>
+        <td><span class="parametername">v2</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">sum</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">count</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_Vector4_Vector4_.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance(Vector4%2CVector4)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/RelativeDistanceMethods.cs/#L42">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_" data-uid="AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance*"></a>
+  <h4 id="AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_Vector4_Vector4_" data-uid="AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance(Vector4,Vector4)">RelativeDistance(Vector4, Vector4)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float RelativeDistance(Vector4 v1, Vector4 v2)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Vector4</span></td>
+        <td><span class="parametername">v1</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Vector4</span></td>
+        <td><span class="parametername">v2</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_Vector4___Vector4___System_Single__System_Int32__.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance(Vector4%5B%5D%2CVector4%5B%5D%2CSystem.Single%40%2CSystem.Int32%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/RelativeDistanceMethods.cs/#L80">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_" data-uid="AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance*"></a>
+  <h4 id="AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance_Vector4___Vector4___System_Single__System_Int32__" data-uid="AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance(Vector4[],Vector4[],System.Single@,System.Int32@)">RelativeDistance(Vector4[], Vector4[], out Single, out Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void RelativeDistance(Vector4[] v1, Vector4[] v2, out float sum, out int count)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Vector4</span>[]</td>
+        <td><span class="parametername">v1</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Vector4</span>[]</td>
+        <td><span class="parametername">v2</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">sum</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">count</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance2_System_Single_System_Single_.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance2(System.Single%2CSystem.Single)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/RelativeDistanceMethods.cs/#L21">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance2_" data-uid="AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance2*"></a>
+  <h4 id="AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance2_System_Single_System_Single_" data-uid="AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance2(System.Single,System.Single)">RelativeDistance2(Single, Single)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float RelativeDistance2(float x1, float x2)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">x1</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">x2</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance2_Vector2_Vector2_.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance2(Vector2%2CVector2)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/RelativeDistanceMethods.cs/#L32">View Source</a>
+  </span>
+  <a id="AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance2_" data-uid="AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance2*"></a>
+  <h4 id="AssetRipper_Numerics_RelativeDistanceMethods_RelativeDistance2_Vector2_Vector2_" data-uid="AssetRipper.Numerics.RelativeDistanceMethods.RelativeDistance2(Vector2,Vector2)">RelativeDistance2(Vector2, Vector2)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float RelativeDistance2(Vector2 v1, Vector2 v2)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Vector2</span></td>
+        <td><span class="parametername">v1</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Vector2</span></td>
+        <td><span class="parametername">v2</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Numerics_RelativeDistanceMethods.md&amp;value=---%0Auid%3A%20AssetRipper.Numerics.RelativeDistanceMethods%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Numerics/RelativeDistanceMethods.cs/#L12" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="toggle-mode">
+                <div class="icon">
+                  <i aria-hidden="true">☀</i>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="switch-style">
+                  <span class="slider round"></span>
+                </label>
+                <div class="icon">
+                  <i aria-hidden="true">☾</i>
+                </div>
+              </div>
+          
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <h5>In This Article</h5>
+              <div></div>
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <div class="pull-left">
+              
+              <span>Generated by <strong>DocFX</strong></span>
+            </div>
+            <div class="toggle-mode pull-right visible-sm visible-xs">
+              <div class="icon">
+                <i aria-hidden="true">☀</i>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="switch-style-m">
+                <span class="slider round"></span>
+              </label>
+              <div class="icon">
+                <i aria-hidden="true">☾</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript" src="../styles/toggle-theme.js"></script>
+      </footer>    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
