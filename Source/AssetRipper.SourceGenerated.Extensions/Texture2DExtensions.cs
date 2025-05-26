@@ -17,6 +17,26 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 		}
 
+		public static int GetActualImageSize(this ITexture2D texture)
+		{
+			int completeImageSize = texture.GetCompleteImageSize();
+			if (completeImageSize > 0)
+			{
+				return completeImageSize;
+			}
+
+			int dataLength = texture.GetImageDataLength();
+			int count = texture.ImageCount_C28;
+			if (count > 1 && dataLength % count == 0)
+			{
+				return dataLength / count;
+			}
+			else
+			{
+				return dataLength;
+			}
+		}
+
 		public static bool GetMips(this ITexture2D texture)
 		{
 			return texture.MipMap_C28 || texture.MipCount_C28 > 0;
@@ -60,6 +80,22 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 
 			return data;
+		}
+
+		public static int GetImageDataLength(this ITexture2D texture)
+		{
+			if (texture.ImageData_C28.Length != 0)
+			{
+				return texture.ImageData_C28.Length;
+			}
+			else if (texture.StreamData_C28 is not null && texture.StreamData_C28.IsSet())
+			{
+				return (int)texture.StreamData_C28.Size;
+			}
+			else
+			{
+				return 0;
+			}
 		}
 
 		public static bool IsSwapBytes(IO.Files.BuildTarget platform, TextureFormat format)
