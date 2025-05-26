@@ -15,6 +15,6 @@ All the MonoBehaviours have a standard fileID, ie 114 followed by 15 random digi
 
 Without the `VisualEffectResource`, errors are thrown when adding a visual effect to a scene.
 
-```
+```text
 NullReferenceException: VFX resource does not exist for this asset at path:
 ```

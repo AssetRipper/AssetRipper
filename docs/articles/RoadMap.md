@@ -21,7 +21,6 @@
 
 ### 1.4 Remove Native Dependencies
 - Replace crunch with managed code
-- Implement support for decoding Bc textures with managed code for non-multiples of 4
 
 ---
 

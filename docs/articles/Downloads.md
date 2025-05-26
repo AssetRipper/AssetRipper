@@ -21,9 +21,9 @@ Pre-releases showcase experimental features and are available in the [releases s
 
 ⚠️ These versions may be unstable and are recommended for testing purposes only.
 
-## Alpha Builds [![Build Status](https://img.shields.io/github/workflow/status/AssetRipper/AssetRipper/Publish/master?label=Build%20Status&style=flat-square)](https://nightly.link/AssetRipper/AssetRipper/workflows/publish/master)
+## Nightly Builds [![Build Status](https://img.shields.io/github/workflow/status/AssetRipper/AssetRipper/Publish/master?label=Build%20Status&style=flat-square)](https://nightly.link/AssetRipper/AssetRipper/workflows/publish/master)
 
-For advanced users, every commit triggers an automatic alpha build via Github Actions:
+For advanced users, every commit triggers an automatic nightly build via Github Actions:
 
 | Platform      | Download Link                                                                                               |
 |---------------|-------------------------------------------------------------------------------------------------------------|

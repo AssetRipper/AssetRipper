@@ -22,7 +22,7 @@ If it didn't work, there will be this line:
 Import : Files use the 'Unknown' scripting backend.
 ```
 
-For IL2Cpp games, use [Cpp2IL](https://github.com/SamboyCoding/Cpp2IL) to generate assemblies. [Unhollowed assemblies](https://github.com/knah/Il2CppAssemblyUnhollower) used in modding will not work.
+For IL2Cpp games, use [Cpp2IL](https://github.com/SamboyCoding/Cpp2IL) to generate assemblies. [Il2CppInterop assemblies](https://github.com/BepInEx/Il2CppInterop) used in modding will not work.
 
 ## Duplicate Assemblies
 
@@ -34,7 +34,7 @@ It is almost always caused by having two assemblies with the same name in the Ma
 
 ## Modified Assemblies
 
-> This can include publicized assemblies and/or unhollowed assemblies.
+> This can include publicized assemblies and/or Il2CppInterop assemblies.
 
 Modified assemblies almost always cause read errors when used in AssetRipper. Here are some common changes that are known to cause lots of problems:
 * Publicizing an assembly changes field deserialization on Monobehaviours.
