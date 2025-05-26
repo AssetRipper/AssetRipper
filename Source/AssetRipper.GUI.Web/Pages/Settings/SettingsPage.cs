@@ -46,6 +46,9 @@ public sealed partial class SettingsPage : DefaultPage
 								{
 									WriteCheckBoxForEnableStaticMeshSeparation(writer, Localization.EnableStaticMeshSeparation, !GameFileLoader.Premium);
 								}
+								using (new Div(writer).WithClass("col").End())
+								{
+								}
 							}
 
 							using (new Div(writer).WithClass("row").End())
@@ -57,6 +60,10 @@ public sealed partial class SettingsPage : DefaultPage
 								using (new Div(writer).WithClass("col").End())
 								{
 									WriteCheckBoxForPublicizeAssemblies(writer, Localization.PublicizeAssemblies);
+								}
+								using (new Div(writer).WithClass("col").End())
+								{
+									WriteCheckBoxForInitializeLocalsAndOutParameters(writer, Localization.InitializeLocalsAndOutParameters);
 								}
 							}
 

@@ -72,6 +72,10 @@ public class ExportHandler
 		{
 			yield return new NullableRemovalProcessor();
 		}
+		if (Settings.ProcessingSettings.InitializeLocalsAndOutParameters)
+		{
+			yield return new InitializeLocalsAndOutParametersProcessor();
+		}
 		if (Settings.ProcessingSettings.PublicizeAssemblies)
 		{
 			yield return new SafeAssemblyPublicizingProcessor();
