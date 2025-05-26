@@ -17,13 +17,39 @@ public partial class FileSystem
 	private const int ReservedCharacterCount = 10;
 	public const int MaxFileNameLength = ActualMaxFileNameLength - ReservedCharacterCount;
 
+	public abstract string TemporaryDirectory { get; set; }
+
 	public partial class FileImplementation
 	{
+		public string CreateTemporary()
+		{
+			Directory.Create(Parent.TemporaryDirectory);
+			string path = Path.Join(Parent.TemporaryDirectory, GetRandomString());
+			File.Create(path).Dispose();
+			return path;
+		}
 	}
 
 	public partial class DirectoryImplementation
 	{
 		public virtual void Create(string path) => throw new NotSupportedException();
+
+		public virtual void Delete(string path) => throw new NotSupportedException();
+
+		public string CreateTemporaryFolder()
+		{
+			string path = Path.Join(Parent.TemporaryDirectory, GetRandomString()[0..8]);
+			Directory.Create(path);
+			return path;
+		}
+	}
+
+	public void DeleteTemporaryDirectory()
+	{
+		if (Directory.Exists(TemporaryDirectory))
+		{
+			Directory.Delete(TemporaryDirectory);
+		}
 	}
 
 	public static string GetUniqueName(string dirPath, string fileName, int maxNameLength)
@@ -73,12 +99,12 @@ public partial class FileSystem
 
 	public static string RemoveCloneSuffixes(string path)
 	{
-		return path.Replace("(Clone)", string.Empty);
+		return path.Replace("(Clone)", null);
 	}
 
 	public static string RemoveInstanceSuffixes(string path)
 	{
-		return path.Replace("(Instance)", string.Empty);
+		return path.Replace("(Instance)", null);
 	}
 
 	public static string FixInvalidFileNameCharacters(string path)
@@ -91,7 +117,7 @@ public partial class FileSystem
 		string invalidChars = GetInvalidFileNameChars();
 		string escapedChars = Regex.Escape(invalidChars);
 		// Updated regex to include commas, square brackets, and ASCII control characters
-		return new Regex($@"[{escapedChars},\[\]\x00-\x1F]");
+		return new Regex($@"[{escapedChars},\[\]\x00-\x1F]", RegexOptions.Compiled);
 	}
 
 	/// <summary>
@@ -134,23 +160,25 @@ public partial class FileSystem
 
 	private static Regex CreatePathRegex()
 	{
-		string invalidChars = new string(System.IO.Path.GetInvalidFileNameChars().Except(new char[] { '\\', '/' }).ToArray());
+		string invalidChars = new string(System.IO.Path.GetInvalidFileNameChars().Except(['\\', '/']).ToArray());
 		string escapedChars = Regex.Escape(invalidChars);
 		// Updated regex to include commas, square brackets, and ASCII control characters
-		return new Regex($@"[{escapedChars},\[\]\x00-\x1F]");
+		return new Regex($@"[{escapedChars},\[\]\x00-\x1F]", RegexOptions.Compiled);
 	}
 
 	private static readonly Regex PathRegex = CreatePathRegex();
 
 	public static bool IsReservedName(string name)
 	{
-		return OperatingSystem.IsWindows() && name.Length is 3 or 4 && ReservedNames.Contains(name.ToLowerInvariant());
+		return OperatingSystem.IsWindows() && name.Length is 3 or 4 && ReservedNames.Contains(name);
 	}
 
-	private static readonly HashSet<string> ReservedNames =
-	[
+	private static readonly HashSet<string> ReservedNames = new(StringComparer.OrdinalIgnoreCase)
+	{
 		"aux", "con", "nul", "prn",
 		"com1", "com2", "com3", "com4", "com5", "com6", "com7", "com8", "com9",
 		"lpt1", "lpt2", "lpt3", "lpt4", "lpt5", "lpt6", "lpt7", "lpt8", "lpt9",
-	];
+	};
+
+	private protected static string GetRandomString() => Guid.NewGuid().ToString();
 }

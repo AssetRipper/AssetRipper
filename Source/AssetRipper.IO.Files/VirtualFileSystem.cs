@@ -30,6 +30,18 @@ public partial class VirtualFileSystem : FileSystem
 		return Path.GetFullPath(directory);
 	}
 
+	public override string TemporaryDirectory
+	{
+		get;
+		set
+		{
+			if (!string.IsNullOrWhiteSpace(value))
+			{
+				field = Path.GetFullPath(value);
+			}
+		}
+	} = "/temp";
+
 	public partial class VirtualFileImplementation
 	{
 		public override SmartStream Create(string path)

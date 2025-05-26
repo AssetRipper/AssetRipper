@@ -1,6 +1,6 @@
 ﻿using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files.ResourceFiles;
-using AssetRipper.IO.Files.Streams.MultiFile;
+using AssetRipper.IO.Files.Streams;
 using AssetRipper.IO.Files.Streams.Smart;
 using System.Diagnostics;
 

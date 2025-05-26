@@ -5,7 +5,7 @@ using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.BundleFiles;
 using AssetRipper.IO.Files.BundleFiles.FileStream;
 using AssetRipper.IO.Files.SerializedFiles;
-using AssetRipper.IO.Files.Streams.MultiFile;
+using AssetRipper.IO.Files.Streams;
 using System.Text.RegularExpressions;
 
 namespace AssetRipper.Import.Structure.Platforms;

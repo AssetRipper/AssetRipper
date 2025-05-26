@@ -8,8 +8,10 @@ public abstract partial class FileSystem
 
 	public abstract partial class FileImplementation(FileSystem fileSystem)
 	{
-		protected DirectoryImplementation Directory => fileSystem.Directory;
-		protected PathImplementation Path => fileSystem.Path;
+		protected FileSystem Parent { get; } = fileSystem;
+		protected FileImplementation File => this;
+		protected DirectoryImplementation Directory => Parent.Directory;
+		protected PathImplementation Path => Parent.Path;
 		public virtual global::System.IO.Stream Create(global::System.String path)
 		{
 			throw new global::System.NotSupportedException();
@@ -75,8 +77,10 @@ public abstract partial class FileSystem
 
 	public abstract partial class DirectoryImplementation(FileSystem fileSystem)
 	{
-		protected FileImplementation File => fileSystem.File;
-		protected PathImplementation Path => fileSystem.Path;
+		protected FileSystem Parent { get; } = fileSystem;
+		protected FileImplementation File => Parent.File;
+		protected DirectoryImplementation Directory => this;
+		protected PathImplementation Path => Parent.Path;
 		public virtual global::System.Collections.Generic.IEnumerable<global::System.String> EnumerateDirectories(global::System.String path, global::System.String searchPattern, global::System.IO.SearchOption searchOption)
 		{
 			throw new global::System.NotSupportedException();
@@ -102,8 +106,10 @@ public abstract partial class FileSystem
 
 	public abstract partial class PathImplementation(FileSystem fileSystem)
 	{
-		protected FileImplementation File => fileSystem.File;
-		protected DirectoryImplementation Directory => fileSystem.Directory;
+		protected FileSystem Parent { get; } = fileSystem;
+		protected FileImplementation File => Parent.File;
+		protected DirectoryImplementation Directory => Parent.Directory;
+		protected PathImplementation Path => this;
 		public virtual global::System.String Join(global::System.String path1, global::System.String path2)
 		{
 			return global::System.IO.Path.Join(path1, path2);

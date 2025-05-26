@@ -34,11 +34,16 @@ internal static class Program
 				writer.WriteLine($"public abstract partial class {classPropertyName}Implementation(FileSystem fileSystem)");
 				using (new CurlyBrackets(writer))
 				{
+					writer.WriteLine("protected FileSystem Parent { get; } = fileSystem;");
 					foreach (string otherClassPropertyName in apiDictionary.Keys)
 					{
 						if (otherClassPropertyName != classPropertyName)
 						{
-							writer.WriteLine($"protected {otherClassPropertyName}Implementation {otherClassPropertyName} => fileSystem.{otherClassPropertyName};");
+							writer.WriteLine($"protected {otherClassPropertyName}Implementation {otherClassPropertyName} => Parent.{otherClassPropertyName};");
+						}
+						else
+						{
+							writer.WriteLine($"protected {otherClassPropertyName}Implementation {otherClassPropertyName} => this;");
 						}
 					}
 

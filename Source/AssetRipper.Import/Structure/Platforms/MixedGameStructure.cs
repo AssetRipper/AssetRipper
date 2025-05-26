@@ -1,7 +1,7 @@
 ﻿using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly;
 using AssetRipper.Import.Structure.Assembly.Managers;
-using AssetRipper.IO.Files.Streams.MultiFile;
+using AssetRipper.IO.Files.Streams;
 
 namespace AssetRipper.Import.Structure.Platforms;
 

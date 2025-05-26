@@ -6,7 +6,7 @@ using AssetRipper.IO.Files.CompressedFiles.Brotli;
 using AssetRipper.IO.Files.CompressedFiles.GZip;
 using AssetRipper.IO.Files.ResourceFiles;
 using AssetRipper.IO.Files.SerializedFiles;
-using AssetRipper.IO.Files.Streams.MultiFile;
+using AssetRipper.IO.Files.Streams;
 using AssetRipper.IO.Files.Streams.Smart;
 using AssetRipper.IO.Files.WebFiles;
 

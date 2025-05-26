@@ -1,5 +1,4 @@
-﻿using AssetRipper.IO.Files.Streams.MultiFile;
-using AssetRipper.IO.Files.Utils;
+﻿using AssetRipper.IO.Files.Utils;
 
 namespace AssetRipper.IO.Files.Streams.Smart;
 
