@@ -165,7 +165,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 		{
 			//if (mesh.Has_CompressedMesh())
 			{
-				if (mesh.CompressedMesh.Vertices.IsSet())
+				if (mesh.CompressedMesh.Vertices.IsSet)
 				{
 					float[] vertices = mesh.CompressedMesh.Vertices.Unpack();
 					FindMinMaxBounds(vertices, (int)submesh.FirstVertex, (int)submesh.VertexCount, out min, out max);
