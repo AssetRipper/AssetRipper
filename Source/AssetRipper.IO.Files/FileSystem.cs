@@ -48,7 +48,7 @@ public partial class FileSystem
 
 		for (int counter = initial; counter < int.MaxValue; counter++)
 		{
-			int suffixLength =  1 + (int)Math.Ceiling(Math.Log10(counter + 1));
+			int suffixLength =  2 + (counter < 10 ? 0 : (int)Math.Log10(counter));
 			if (nameLength + suffixLength + extLength > maxNameLength)
 			{
 				nameLength = maxNameLength - suffixLength - extLength;
