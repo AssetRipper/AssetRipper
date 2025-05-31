@@ -22,37 +22,38 @@ public partial class FileSystem
 
 	public static string GetUniqueName(string dirPath, string fileName, int maxNameLength)
 	{
-		string? ext = null;
-		string? name = null;
-		string validFileName = fileName;
-		if (Encoding.UTF8.GetByteCount(fileName) > maxNameLength)
+		int lastIndex = fileName.LastIndexOf('.');
+		if (lastIndex < 0) {
+			lastIndex = fileName.Length;
+		}
+		string name = fileName[..lastIndex];
+		string ext = fileName[lastIndex..];
+		int nameLength = Encoding.UTF8.GetByteCount(name);
+		int extLength = Encoding.UTF8.GetByteCount(ext);
+
+		if (nameLength + extLength > maxNameLength)
 		{
-			ext = System.IO.Path.GetExtension(validFileName);
-			name = Utf8Truncation.TruncateToUTF8ByteLength(fileName, maxNameLength - Encoding.UTF8.GetByteCount(ext));
-			validFileName = name + ext;
+			nameLength = maxNameLength - extLength;
+			name = Utf8Truncation.TruncateToUTF8ByteLength(name,  nameLength);
+			fileName = name + ext;
 		}
 
-		if (!System.IO.Directory.Exists(dirPath))
+		if (!IsReservedName(name) && !System.IO.File.Exists(System.IO.Path.Join(dirPath, fileName)))
 		{
-			return validFileName;
+			return fileName;
 		}
-
-		name ??= System.IO.Path.GetFileNameWithoutExtension(validFileName);
-		if (!IsReservedName(name))
-		{
-			if (!System.IO.File.Exists(System.IO.Path.Join(dirPath, validFileName)))
-			{
-				return validFileName;
-			}
-		}
-
-		ext ??= System.IO.Path.GetExtension(validFileName);
 
 		string key = System.IO.Path.Join(dirPath, $"{name}{ext}");
 		UniqueNamesByInitialPath.TryGetValue(key, out int initial);
 
 		for (int counter = initial; counter < int.MaxValue; counter++)
 		{
+			int suffixLength =  1 + (int)Math.Ceiling(Math.Log10(counter + 1));
+			if (nameLength + suffixLength + extLength > maxNameLength)
+			{
+				nameLength = maxNameLength - suffixLength - extLength;
+				name = Utf8Truncation.TruncateToUTF8ByteLength(name, nameLength);
+			}
 			string proposedName = $"{name}_{counter}{ext}";
 			if (!System.IO.File.Exists(System.IO.Path.Join(dirPath, proposedName)))
 			{
