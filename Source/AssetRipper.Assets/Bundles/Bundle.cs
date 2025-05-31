@@ -152,7 +152,15 @@ public abstract class Bundle : IDisposable
 		static AssetCollection? TryResolveFromCollections(Bundle currentBundle, string name)
 		{
 			//Uniqueness is not guaranteed because of asset bundle variants
-			return currentBundle.Collections.FirstOrDefault(c => c.Name == name);
+			foreach (AssetCollection collection in currentBundle.Collections)
+			{
+				if (collection.Name == name)
+				{
+					return collection;
+				}
+			}
+
+			return null;
 		}
 
 		/// <summary>
