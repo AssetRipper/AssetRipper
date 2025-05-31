@@ -164,10 +164,15 @@ public abstract class Bundle : IDisposable
 		/// <returns>The resolved <see cref="AssetCollection"/> if it exists, else null.</returns>
 		static AssetCollection? TryResolveFromChildBundles(Bundle currentBundle, string name, Bundle? bundleToExclude)
 		{
-			return currentBundle.Bundles
-				.Where(b => b != bundleToExclude)
-				.Select(b => TryResolveFromCollections(b, name))
-				.FirstOrDefault(c => c is not null);
+			foreach (Bundle bundle in currentBundle.Bundles)
+			{
+				if (bundle != bundleToExclude && TryResolveFromCollections(bundle, name) is { } collection)
+				{
+					return collection;
+				}
+			}
+
+			return null;
 		}
 	}
 
