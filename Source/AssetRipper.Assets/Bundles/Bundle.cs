@@ -152,7 +152,15 @@ public abstract class Bundle : IDisposable
 		static AssetCollection? TryResolveFromCollections(Bundle currentBundle, string name)
 		{
 			//Uniqueness is not guaranteed because of asset bundle variants
-			return currentBundle.Collections.FirstOrDefault(c => c.Name == name);
+			foreach (AssetCollection collection in currentBundle.Collections)
+			{
+				if (collection.Name == name)
+				{
+					return collection;
+				}
+			}
+
+			return null;
 		}
 
 		/// <summary>
@@ -164,10 +172,15 @@ public abstract class Bundle : IDisposable
 		/// <returns>The resolved <see cref="AssetCollection"/> if it exists, else null.</returns>
 		static AssetCollection? TryResolveFromChildBundles(Bundle currentBundle, string name, Bundle? bundleToExclude)
 		{
-			return currentBundle.Bundles
-				.Where(b => b != bundleToExclude)
-				.Select(b => TryResolveFromCollections(b, name))
-				.FirstOrDefault(c => c is not null);
+			foreach (Bundle bundle in currentBundle.Bundles)
+			{
+				if (bundle != bundleToExclude && TryResolveFromCollections(bundle, name) is { } collection)
+				{
+					return collection;
+				}
+			}
+
+			return null;
 		}
 	}
 
@@ -213,7 +226,15 @@ public abstract class Bundle : IDisposable
 		static ResourceFile? TryResolveFromResources(Bundle currentBundle, string fixedName)
 		{
 			//Uniqueness is not guaranteed because of asset bundle variants
-			return currentBundle.Resources.FirstOrDefault(c => c.NameFixed == fixedName);
+			foreach (ResourceFile resource in currentBundle.Resources)
+			{
+				if (resource.NameFixed == fixedName)
+				{
+					return resource;
+				}
+			}
+
+			return null;
 		}
 
 		/// <summary>
@@ -226,10 +247,15 @@ public abstract class Bundle : IDisposable
 		/// <returns>The resolved ResourceFile if it exists, else null.</returns>
 		static ResourceFile? TryResolveFromChildBundles(Bundle currentBundle, string originalName, string fixedName, Bundle? bundleToExclude)
 		{
-			return currentBundle.Bundles
-				.Where(b => b != bundleToExclude)
-				.Select(b => TryResolveFromResources(b, fixedName))
-				.FirstOrDefault(r => r is not null);
+			foreach (Bundle bundle in currentBundle.Bundles)
+			{
+				if (bundle != bundleToExclude && TryResolveFromResources(bundle, fixedName) is { } resource)
+				{
+					return resource;
+				}
+			}
+
+			return null;
 		}
 	}
 
