@@ -28,8 +28,8 @@
 			}
 
 			Texture2D<float4> _MainTex;
-			SamplerState _MainTex_sampler;
-			fixed4 _Color;
+			SamplerState sampler_MainTex;
+			float4 _Color;
 
 			struct Fragment_Stage_Input
 			{
@@ -38,7 +38,7 @@
 
 			float4 frag(Fragment_Stage_Input input) : SV_TARGET
 			{
-				return _MainTex.Sample(_MainTex_sampler, float2(input.uv.x, input.uv.y)) * _Color;
+				return _MainTex.Sample(sampler_MainTex, float2(input.uv.x, input.uv.y)) * _Color;
 			}
 
 			ENDHLSL

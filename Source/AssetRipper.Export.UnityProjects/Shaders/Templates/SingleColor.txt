@@ -27,7 +27,7 @@
 				return output;
 			}
 
-			fixed4 _Color;
+			float4 _Color;
 
 			float4 frag(Vertex_Stage_Output input) : SV_TARGET
 			{
