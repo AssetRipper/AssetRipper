@@ -168,7 +168,7 @@ namespace AssetRipper.Export.Modules.Textures
 				texture.Width_C28,
 				texture.Height_C28,
 				texture.ImageCount_C28,
-				texture.GetCompleteImageSize(),
+				texture.ActualImageSize,
 				texture.Collection.Version,
 				buffer,
 				out bitmap))

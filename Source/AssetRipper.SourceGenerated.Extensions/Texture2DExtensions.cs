@@ -1,28 +1,65 @@
 ﻿using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Enums;
 
-namespace AssetRipper.SourceGenerated.Extensions
+namespace AssetRipper.SourceGenerated.Extensions;
+
+public static class Texture2DExtensions
 {
-	public static class Texture2DExtensions
+	extension(ITexture2D texture)
 	{
-		public static int GetCompleteImageSize(this ITexture2D texture)
+		public int CompleteImageSize
 		{
-			if (texture.Has_CompleteImageSize_C28_UInt32())
+			get
 			{
-				return (int)texture.CompleteImageSize_C28_UInt32;//No texture is larger than 2GB
-			}
-			else
-			{
-				return texture.CompleteImageSize_C28_Int32;
+				if (texture.Has_CompleteImageSize_C28_UInt32())
+				{
+					return (int)texture.CompleteImageSize_C28_UInt32;//No texture is larger than 2GB
+				}
+				else
+				{
+					return texture.CompleteImageSize_C28_Int32;
+				}
 			}
 		}
 
-		public static bool GetMips(this ITexture2D texture)
+		/// <summary>
+		/// Get the CompleteImageSize, or a calculated value if necessary
+		/// </summary>
+		/// <remarks>
+		/// <see href="https://github.com/AssetRipper/AssetRipper/issues/1789"/>
+		/// </remarks>
+		public int ActualImageSize
 		{
-			return texture.MipMap_C28 || texture.MipCount_C28 > 0;
+			get
+			{
+				int completeImageSize = texture.CompleteImageSize;
+				if (completeImageSize > 0)
+				{
+					return completeImageSize;
+				}
+
+				// Normally, the complete image size is non-zero, so this only applies in certain situations.
+				// One way this can happen is for server builds of a game.
+				// In server builds, textures are often 1 pixel and have an image size equal to be zero.
+				// However, they still contain a small amount of texture data, so the image size is actual non-zero.
+				// We calculate the actual value below.
+
+				int dataLength = texture.ImageDataLength;
+				int count = texture.ImageCount_C28;
+				if (count > 1 && dataLength % count == 0)
+				{
+					return dataLength / count;
+				}
+				else
+				{
+					return dataLength;
+				}
+			}
 		}
 
-		public static bool CheckAssetIntegrity(this ITexture2D texture)
+		public bool Mips => texture.MipMap_C28 || texture.MipCount_C28 > 0;
+
+		public bool CheckAssetIntegrity()
 		{
 			if (!texture.ImageData_C28.IsNullOrEmpty())
 			{
@@ -38,20 +75,26 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 		}
 
-		public static byte[] GetImageData(this ITexture2D texture)
+		public byte[] GetImageData()
 		{
 			byte[] data = texture.ImageData_C28;
 
+			bool swapBytes = IsSwapBytes(texture.Collection.Platform, texture.Format_C28E);
+
 			if (data.Length != 0)
 			{
-				return texture.ImageData_C28;
+				if (swapBytes)
+				{
+					// Need to copy the data to avoid modifying the original
+					data = data.AsSpan().ToArray();
+				}
 			}
 			else if (texture.StreamData_C28 is not null && texture.StreamData_C28.IsSet())
 			{
 				data = texture.StreamData_C28.GetContent(texture.Collection);
 			}
 
-			if (IsSwapBytes(texture.Collection.Platform, texture.Format_C28E))
+			if (swapBytes)
 			{
 				for (int i = 0; i < data.Length; i += 2)
 				{
@@ -62,23 +105,42 @@ namespace AssetRipper.SourceGenerated.Extensions
 			return data;
 		}
 
-		public static bool IsSwapBytes(IO.Files.BuildTarget platform, TextureFormat format)
+		public int ImageDataLength
 		{
-			if (platform == IO.Files.BuildTarget.XBox360)
+			get
 			{
-				switch (format)
+				if (texture.ImageData_C28.Length != 0)
 				{
-					case TextureFormat.ARGB4444:
-					case TextureFormat.RGB565:
-					case TextureFormat.DXT1:
-					case TextureFormat.DXT1Crunched:
-					case TextureFormat.DXT3:
-					case TextureFormat.DXT5:
-					case TextureFormat.DXT5Crunched:
-						return true;
+					return texture.ImageData_C28.Length;
+				}
+				else if (texture.StreamData_C28 is not null && texture.StreamData_C28.IsSet())
+				{
+					return (int)texture.StreamData_C28.Size;
+				}
+				else
+				{
+					return 0;
 				}
 			}
-			return false;
 		}
+	}
+
+	private static bool IsSwapBytes(IO.Files.BuildTarget platform, TextureFormat format)
+	{
+		if (platform == IO.Files.BuildTarget.XBox360)
+		{
+			switch (format)
+			{
+				case TextureFormat.ARGB4444:
+				case TextureFormat.RGB565:
+				case TextureFormat.DXT1:
+				case TextureFormat.DXT1Crunched:
+				case TextureFormat.DXT3:
+				case TextureFormat.DXT5:
+				case TextureFormat.DXT5Crunched:
+					return true;
+			}
+		}
+		return false;
 	}
 }
