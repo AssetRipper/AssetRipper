@@ -13,6 +13,7 @@ using AssetRipper.SerializationLogic;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
+using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Subclasses.AABB;
 using AssetRipper.SourceGenerated.Subclasses.AABBInt;
 using AssetRipper.SourceGenerated.Subclasses.AnimationCurve_Single;
@@ -109,7 +110,14 @@ namespace AssetRipper.Import.AssetCreation
 			}
 			else if (SpecialFileNames.IsDefaultResourceOrBuiltinExtra(assetInfo.Collection.Name))
 			{
-				Logger.Warning(LogCategory.Import, error);
+				if (asset is IShader)
+				{
+					Logger.Info(LogCategory.Import, $"Shader with PathID {asset.PathID} in {assetInfo.Collection.Name} uses engine type trees.");
+				}
+				else
+				{
+					Logger.Warning(LogCategory.Import, error);
+				}
 				return asset;
 			}
 			else if (assetInfo.Collection.Version.Type == UnityVersionType.Patch)
