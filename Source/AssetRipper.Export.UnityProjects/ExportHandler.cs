@@ -91,7 +91,8 @@ public class ExportHandler
 		yield return new ScriptableObjectProcessor();
 	}
 
-	public void Export(GameData gameData, string outputPath)
+	public void Export(GameData gameData, string outputPath) => Export(gameData, outputPath, LocalFileSystem.Instance);
+	public void Export(GameData gameData, string outputPath, FileSystem fileSystem)
 	{
 		Logger.Info(LogCategory.Export, "Starting export");
 		Logger.Info(LogCategory.Export, $"Attempting to export assets to {outputPath}...");
@@ -104,13 +105,13 @@ public class ExportHandler
 		ProjectExporter projectExporter = new(Settings, gameData.AssemblyManager);
 		BeforeExport(projectExporter);
 		projectExporter.DoFinalOverrides(Settings);
-		projectExporter.Export(gameData.GameBundle, Settings, LocalFileSystem.Instance);
+		projectExporter.Export(gameData.GameBundle, Settings, fileSystem);
 
 		Logger.Info(LogCategory.Export, "Finished exporting assets");
 
 		foreach (IPostExporter postExporter in GetPostExporters())
 		{
-			postExporter.DoPostExport(gameData, Settings, LocalFileSystem.Instance);
+			postExporter.DoPostExport(gameData, Settings, fileSystem);
 		}
 		Logger.Info(LogCategory.Export, "Finished post-export");
 

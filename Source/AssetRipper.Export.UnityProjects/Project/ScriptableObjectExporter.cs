@@ -8,14 +8,13 @@ namespace AssetRipper.Export.UnityProjects.Project
 	{
 		private IExportCollection CreateCollection(IMonoBehaviour monoBehaviour)
 		{
-			if (monoBehaviour.IsScriptableObject())
+			if (monoBehaviour.IsComponentOnGameObject())
 			{
-				return new ScriptableObjectExportCollection(this, monoBehaviour);
+				return EmptyExportCollection.Instance;
 			}
 			else
 			{
-				// such MonoBehaviours as StateMachineBehaviour in AnimatorController
-				return EmptyExportCollection.Instance;
+				return new ScriptableObjectExportCollection(this, monoBehaviour);
 			}
 		}
 

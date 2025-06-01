@@ -50,7 +50,7 @@ namespace AssetRipper.Processing.Scenes
 			{
 				IGameObject => true,
 				ILevelGameManager => true,
-				IMonoBehaviour monoBeh => monoBeh.IsSceneObject(),
+				IMonoBehaviour monoBeh => monoBeh.IsComponentOnGameObject(),
 				IComponent => true,
 				IPrefabInstance => true,
 				_ => false,
