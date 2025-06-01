@@ -110,9 +110,9 @@ namespace AssetRipper.Tools.RawTextureExtractor
 							"Type" : "{{texture.ClassName}}",
 							"Format" : "{{texture.Format_C28E}}",
 							"FileSize" : {{data.Length}},
-							"ImageSize" : {{texture.GetCompleteImageSize()}},
+							"ImageSize" : {{texture.CompleteImageSize}},
 							"ImageCount" : {{texture.ImageCount_C28}},
-							"Mips" : {{texture.GetMips().ToJson()}},
+							"Mips" : {{texture.Mips.ToJson()}},
 							"Width" : {{texture.Width_C28}},
 							"Height" : {{texture.Height_C28}}
 						}
