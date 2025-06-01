@@ -9,7 +9,13 @@ public partial class FileSystem
 	/// <summary>
 	/// <see href="https://en.wikipedia.org/wiki/Comparison_of_file_systems#Limits"/>
 	/// </summary>
-	public const int MaxFileNameLength = 255;
+	private const int ActualMaxFileNameLength = 255;
+	/// <summary>
+	/// We reserve 10 characters for handling file name conflicts, an underscore and up to 9 digits.
+	/// This allows us to handle up to 1 billion duplicates, far more than we'll ever need.
+	/// </summary>
+	private const int ReservedCharacterCount = 10;
+	public const int MaxFileNameLength = ActualMaxFileNameLength - ReservedCharacterCount;
 
 	public partial class FileImplementation
 	{
