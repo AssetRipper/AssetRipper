@@ -1,5 +1,4 @@
 ﻿using AssetRipper.Primitives;
-using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1006;
 using AssetRipper.SourceGenerated.Extensions;
 using NUnit.Framework.Internal;
@@ -96,11 +95,11 @@ internal class TextureImporterTests
 
 	private static ITextureImporter CreateImporterWithSwizzleField()
 	{
-		return AssetCreator.Create<ITextureImporter>(ClassIDType.TextureImporter, new UnityVersion(2022, 2));
+		return AssetCreator.CreateTextureImporter(new UnityVersion(2022, 2));
 	}
 
 	private static ITextureImporter CreateImporterWithoutSwizzleField()
 	{
-		return AssetCreator.Create<ITextureImporter>(ClassIDType.TextureImporter, new UnityVersion(2020, 1));
+		return AssetCreator.CreateTextureImporter(new UnityVersion(2020, 1));
 	}
 }

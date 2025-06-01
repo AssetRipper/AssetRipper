@@ -96,7 +96,7 @@ public sealed class PrefabProcessor : IAssetProcessor
 				collection = missingPrefabTransformCollection;
 			}
 
-			ITransform transform = collection.CreateAsset((int)ClassIDType.Transform, Transform.Create);
+			ITransform transform = collection.CreateTransform();
 
 			transform.InitializeDefault();
 

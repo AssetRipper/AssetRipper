@@ -9,27 +9,11 @@ namespace AssetRipper.SourceGenerated.Extensions;
 /// <summary>
 /// A helper class for creating assets, generally for unit testing.
 /// </summary>
-public static class AssetCreator
+public static partial class AssetCreator
 {
-	public static T CreateAsset<T>(this ProcessedAssetCollection collection, ClassIDType classID) where T : IUnityObjectBase
-	{
-		return collection.CreateAsset((int)classID, (assetInfo) =>
-		{
-			return (T)AssetFactory.Create(assetInfo);
-		});
-	}
-
 	public static T Create<T>(ClassIDType classID, UnityVersion version, Func<AssetInfo, T> factory) where T : IUnityObjectBase
 	{
 		return CreateCollection(version).CreateAsset((int)classID, factory);
-	}
-
-	public static T Create<T>(ClassIDType classID, UnityVersion version) where T : IUnityObjectBase
-	{
-		return CreateCollection(version).CreateAsset((int)classID, (assetInfo) =>
-		{
-			return (T)AssetFactory.Create(assetInfo);
-		});
 	}
 
 	/// <summary>

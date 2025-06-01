@@ -76,7 +76,7 @@ namespace AssetRipper.Processing
 					continue;
 				}
 
-				ILightingDataAsset lightingDataAsset = CreateLightingDataAsset(processedCollection);
+				ILightingDataAsset lightingDataAsset = processedCollection.CreateLightingDataAsset();
 
 				lightmapSettings.LightingDataAssetP = lightingDataAsset;
 
@@ -378,19 +378,9 @@ namespace AssetRipper.Processing
 			lightingDataAsset.EnlightenDataVersion = 112;
 		}
 
-		/// <summary>
-		/// Create a new, empty <see cref="ILightingDataAsset"/>.
-		/// </summary>
-		/// <param name="collection"></param>
-		/// <returns></returns>
-		private static ILightingDataAsset CreateLightingDataAsset(ProcessedAssetCollection collection)
-		{
-			return collection.CreateAsset((int)ClassIDType.LightingDataAsset, LightingDataAsset.Create);
-		}
-
 		private static ISceneAsset CreateSceneAsset(ProcessedAssetCollection collection, SceneDefinition targetScene)
 		{
-			ISceneAsset asset = collection.CreateAsset((int)ClassIDType.SceneAsset, SceneAsset.Create);
+			ISceneAsset asset = collection.CreateSceneAsset();
 			asset.TargetScene = targetScene;
 			return asset;
 		}

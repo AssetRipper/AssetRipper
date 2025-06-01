@@ -79,7 +79,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 
 		private static IBlendTree CreateBlendTree(ProcessedAssetCollection virtualFile, IAnimatorController controller, IStateConstant state, int nodeIndex)
 		{
-			IBlendTree blendTree = virtualFile.CreateAsset((int)ClassIDType.BlendTree, BlendTree.Create);
+			IBlendTree blendTree = virtualFile.CreateBlendTree();
 			blendTree.HideFlagsE = HideFlags.HideInHierarchy;
 
 			IBlendTreeNodeConstant node = state.GetBlendTree().NodeArray[nodeIndex].Data;
@@ -169,7 +169,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 
 		public static IAnimatorStateMachine CreateStateMachine(ProcessedAssetCollection virtualFile, IAnimatorController controller, int layerIndex, uint fullPathID = 0)
 		{
-			IAnimatorStateMachine stateMachine = virtualFile.CreateAsset((int)ClassIDType.AnimatorStateMachine, AnimatorStateMachine.Create);
+			IAnimatorStateMachine stateMachine = virtualFile.CreateAnimatorStateMachine();
 			stateMachine.HideFlagsE = HideFlags.HideInHierarchy;
 
 			// can add StateMachineBehaviours now
@@ -191,7 +191,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 
 		public static IAnimatorState CreateAnimatorState(ProcessedAssetCollection virtualFile, IAnimatorController controller, AssetDictionary<uint, Utf8String> tos, int layerIndex, IStateConstant stateConstant)
 		{
-			IAnimatorState animatorState = virtualFile.CreateAsset((int)ClassIDType.AnimatorState, AnimatorState.Create);
+			IAnimatorState animatorState = virtualFile.CreateAnimatorState();
 			animatorState.HideFlagsE = HideFlags.HideInHierarchy;
 
 			animatorState.Name = stateConstant.GetName(tos);
@@ -234,7 +234,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 
 		public static IAnimatorState CreateDefaultAnimatorState(ProcessedAssetCollection virtualFile)
 		{
-			IAnimatorState animatorState = virtualFile.CreateAsset((int)ClassIDType.AnimatorState, AnimatorState.Create);
+			IAnimatorState animatorState = virtualFile.CreateAnimatorState();
 			animatorState.HideFlagsE = HideFlags.HideInHierarchy;
 
 			animatorState.Name = AnimatorStateName;
@@ -246,7 +246,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 
 		public static IAnimatorStateTransition CreateAnimatorStateTransition(ProcessedAssetCollection virtualFile, AssetDictionary<uint, Utf8String> TOS, ITransitionConstant Transition)
 		{
-			IAnimatorStateTransition animatorStateTransition = virtualFile.CreateAsset((int)ClassIDType.AnimatorStateTransition, AnimatorStateTransition.Create);
+			IAnimatorStateTransition animatorStateTransition = virtualFile.CreateAnimatorStateTransition();
 			animatorStateTransition.HideFlags = (uint)HideFlags.HideInHierarchy;
 
 			animatorStateTransition.Conditions.Capacity = Transition.ConditionConstantArray.Count;
@@ -280,7 +280,7 @@ namespace AssetRipper.Processing.AnimatorControllers
 
 		public static IAnimatorTransition CreateAnimatorTransition(ProcessedAssetCollection virtualFile, AssetDictionary<uint, Utf8String> TOS, SelectorTransitionConstant transition)
 		{
-			IAnimatorTransition animatorTransition = virtualFile.CreateAsset((int)ClassIDType.AnimatorTransition, AnimatorTransition.Create);
+			IAnimatorTransition animatorTransition = virtualFile.CreateAnimatorTransition();
 			animatorTransition.HideFlagsE = HideFlags.HideInHierarchy;
 
 			animatorTransition.Conditions.Capacity = transition.ConditionConstantArray.Count;

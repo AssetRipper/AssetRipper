@@ -9,6 +9,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\AssetRipper.Assets\AssetRipper.Assets.csproj" />
 		<ProjectReference Include="..\AssetRipper.Numerics\AssetRipper.Numerics.csproj" />
+		<ProjectReference Include="..\AssetRipper.SourceGenerated.Extensions.SourceGenerator\AssetRipper.SourceGenerated.Extensions.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
 	</ItemGroup>
 
 	<ItemGroup>

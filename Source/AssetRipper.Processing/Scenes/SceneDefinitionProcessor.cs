@@ -134,7 +134,7 @@ namespace AssetRipper.Processing.Scenes
 
 				if (buildSettings is not null)
 				{
-					IEditorBuildSettings editorBuildSettings = processedCollection.CreateAsset((int)ClassIDType.EditorBuildSettings, EditorBuildSettings.Create);
+					IEditorBuildSettings editorBuildSettings = processedCollection.CreateEditorBuildSettings();
 					{
 						int numScenes = buildSettings.Scenes.Count;
 						editorBuildSettings.Scenes.Capacity = numScenes;
@@ -150,7 +150,7 @@ namespace AssetRipper.Processing.Scenes
 
 				//EditorSettings
 				//Is this the best place to create this? It doesn't have anything to do with scenes.
-				processedCollection.CreateAsset((int)ClassIDType.EditorSettings, EditorSettings.Create)
+				processedCollection.CreateEditorSettings()
 					.SetToDefaults();
 			}
 		}

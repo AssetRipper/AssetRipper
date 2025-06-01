@@ -115,7 +115,7 @@ namespace AssetRipper.Processing.AudioMixers
 
 			for (int i = 0; i < effects.Length; i++)
 			{
-				IAudioMixerEffectController effect = virtualFile.CreateAsset((int)ClassIDType.AudioMixerEffectController, AudioMixerEffectController.Create);
+				IAudioMixerEffectController effect = virtualFile.CreateAudioMixerEffectController();
 				effect.HideFlagsE = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
 				effects[i] = effect;
 				effect.MainAsset = mixer;
@@ -175,7 +175,7 @@ namespace AssetRipper.Processing.AudioMixers
 			{
 				if (!groupsWithAttenuation.Contains(group))
 				{
-					IAudioMixerEffectController effect = virtualFile.CreateAsset((int)ClassIDType.AudioMixerEffectController, AudioMixerEffectController.Create);
+					IAudioMixerEffectController effect = virtualFile.CreateAudioMixerEffectController();
 					effect.HideFlagsE = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
 					effect.EffectID.CopyValues(UnityGuid.NewGuid());
 					effect.EffectName = "Attenuation";

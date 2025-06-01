@@ -209,7 +209,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 
 		public static IPrefabInstance CreatePrefabForRoot(this IGameObject root, ProcessedAssetCollection collection)
 		{
-			IPrefabInstance prefab = collection.CreateAsset((int)ClassIDType.PrefabInstance, PrefabInstance.Create);
+			IPrefabInstance prefab = collection.CreatePrefabInstance();
 
 			prefab.HideFlagsE = HideFlags.HideInHierarchy;
 			prefab.RootGameObjectP = root;

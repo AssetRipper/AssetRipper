@@ -13,8 +13,8 @@ internal class AssetEqualityTests
 	[Test]
 	public void DefaultGameObjectEqualityTest()
 	{
-		IGameObject gameObject1 = AssetCreator.Create<IGameObject>(ClassIDType.GameObject, new UnityVersion(2017));
-		IGameObject gameObject2 = AssetCreator.Create<IGameObject>(ClassIDType.GameObject, new UnityVersion(2017));
+		IGameObject gameObject1 = AssetCreator.CreateGameObject(new UnityVersion(2017));
+		IGameObject gameObject2 = AssetCreator.CreateGameObject(new UnityVersion(2017));
 		AssetEqualityComparer comparer = new();
 		Assert.That(comparer.Equals(gameObject1, gameObject2));
 	}
@@ -30,8 +30,8 @@ internal class AssetEqualityTests
 		static IGameObject CreateGameObject()
 		{
 			ProcessedAssetCollection collection = AssetCreator.CreateCollection(new UnityVersion(2017));
-			IGameObject gameObject = collection.CreateAsset<IGameObject>(ClassIDType.GameObject);
-			ITransform transform = collection.CreateAsset<ITransform>(ClassIDType.Transform);
+			IGameObject gameObject = collection.CreateGameObject();
+			ITransform transform = collection.CreateTransform();
 			gameObject.AddComponent(ClassIDType.Transform, transform);
 			transform.GameObject_C4P = gameObject;
 			return gameObject;
@@ -49,8 +49,8 @@ internal class AssetEqualityTests
 		static IGameObject CreateGameObject(float x, float y, float z)
 		{
 			ProcessedAssetCollection collection = AssetCreator.CreateCollection(new UnityVersion(2017));
-			IGameObject gameObject = collection.CreateAsset<IGameObject>(ClassIDType.GameObject);
-			ITransform transform = collection.CreateAsset<ITransform>(ClassIDType.Transform);
+			IGameObject gameObject = collection.CreateGameObject();
+			ITransform transform = collection.CreateTransform();
 			transform.LocalPosition_C4.SetValues(x, y, z);
 			gameObject.AddComponent(ClassIDType.Transform, transform);
 			transform.GameObject_C4P = gameObject;
