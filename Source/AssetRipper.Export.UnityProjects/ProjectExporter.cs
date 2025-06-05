@@ -99,7 +99,7 @@ namespace AssetRipper.Export.UnityProjects
 					bool exportedSuccessfully = collection.Export(container, options.ProjectRootPath, fileSystem);
 					if (!exportedSuccessfully)
 					{
-						Logger.Warning(LogCategory.ExportProgress, $"Failed to export '{collection.Name}'");
+						Logger.Warning(LogCategory.ExportProgress, $"Failed to export '{collection.Name}' ({collection.GetType().Name})");
 					}
 				}
 				EventExportProgressUpdated?.Invoke(i, collections.Count);
