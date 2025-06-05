@@ -102,7 +102,9 @@ namespace AssetRipper.Export.Modules.Audio
 
 			decodedData = null;
 			fileExtension = null;
-			message = "Failed to convert audio";
+			Span<char> magicCharacters = stackalloc char[4];
+			CopyPrintable(rawData, magicCharacters);
+			message = $"Failed to convert audio starting with '{magicCharacters}'";
 			return false;
 		}
 
@@ -113,6 +115,22 @@ namespace AssetRipper.Export.Modules.Audio
 				return false;
 			}
 			return data.AsSpan(startIndex, magic.Length).SequenceEqual(magic);
+		}
+
+		private static void CopyPrintable(ReadOnlySpan<byte> data, Span<char> characters)
+		{
+			const char FillCharacter = 'Ø';
+			characters.Fill(FillCharacter);
+			for (int i = 0; i < data.Length && i < characters.Length; i++)
+			{
+				char c = (char)data[i];
+				if (IsAsciiPrintable(c) && c != '\t')
+				{
+					characters[i] = c;
+				}
+			}
+
+			static bool IsAsciiPrintable(char c) => c >= (char)32 && c <= (char)126;
 		}
 	}
 }
