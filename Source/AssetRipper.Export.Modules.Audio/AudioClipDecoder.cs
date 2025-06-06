@@ -102,9 +102,11 @@ namespace AssetRipper.Export.Modules.Audio
 
 			decodedData = null;
 			fileExtension = null;
-			Span<char> magicCharacters = stackalloc char[4];
-			CopyPrintable(rawData, magicCharacters);
-			message = $"Failed to convert audio starting with '{magicCharacters}'";
+			Span<char> asciiCharacters = stackalloc char[4];
+			CopyPrintable(rawData, asciiCharacters);
+			Span<char> hexCharacters = stackalloc char[8];
+			CopyHex(rawData, hexCharacters);
+			message = $"Failed to convert audio starting with '{asciiCharacters}' ({hexCharacters})";
 			return false;
 		}
 
@@ -131,6 +133,21 @@ namespace AssetRipper.Export.Modules.Audio
 			}
 
 			static bool IsAsciiPrintable(char c) => c >= (char)32 && c <= (char)126;
+		}
+
+		private static void CopyHex(ReadOnlySpan<byte> data, Span<char> characters)
+		{
+			ReadOnlySpan<char> hexCharacterLookup = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'];
+			const char FillCharacter = '0';
+			characters.Fill(FillCharacter);
+			for (int i = 0; i < data.Length && i < characters.Length / 2; i++)
+			{
+				byte b = data[i];
+				byte upper = (b & 0xF0) >> 4;
+				characters[2 * i] = hexCharacterLookup[upper];
+				byte lower = b & 0x0F;
+				characters[2 * i + 1] = hexCharacterLookup[lower];
+			}
 		}
 	}
 }
