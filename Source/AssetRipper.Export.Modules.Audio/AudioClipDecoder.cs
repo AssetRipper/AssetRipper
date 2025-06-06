@@ -143,9 +143,9 @@ namespace AssetRipper.Export.Modules.Audio
 			for (int i = 0; i < data.Length && i < characters.Length / 2; i++)
 			{
 				byte b = data[i];
-				byte upper = (b & 0xF0) >> 4;
+				int upper = (b & 0xF0) >> 4;
 				characters[2 * i] = hexCharacterLookup[upper];
-				byte lower = b & 0x0F;
+				int lower = b & 0x0F;
 				characters[2 * i + 1] = hexCharacterLookup[lower];
 			}
 		}
