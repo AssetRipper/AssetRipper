@@ -1,0 +1,191 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Premium Features </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Premium Features ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="premium-features">Premium Features</h1>
+
+<h2 id="traditional-il2cpp-recovery">Traditional Il2Cpp Recovery</h2>
+<p>This is an experimental feature for recovering code compiled with Il2Cpp. It takes a traditional decompilation approach. It can be enabled by selecting Script Content Level 3 in the settings.</p>
+<p>For performance, mscorlib and any assemblies whose names start with System or Unity have been excluded from analysis. The source code for those assemblies should be publicly available, in one form or another.</p>
+<p>From a quick glance, the success rate seems to be currently between 10 and 20 percent of methods on x86 games. Other platforms have lower rates of recovery. Improvements are ongoing.</p>
+<h2 id="static-mesh-separation">Static Mesh Separation</h2>
+<p>Objects marked as static in a scene get merged when the game is compiled. This is an optimization Unity uses to reduce draw calls. Unfortunately, it also makes game recovery more difficult. This feature reverses that process to the best of its ability.</p>
+<ul>
+<li>If a mesh is used statically multiple times in the game, even across different scenes, AssetRipper intelligently identifies these duplicates and generates a single mesh for all the instances.</li>
+<li>If the original mesh exists in the game files, it's used instead of generating a new mesh.</li>
+<li>Mesh names are lost during static batching, so the GameObject name is used instead. Some sensible name cleaning is applied.</li>
+</ul>
+<p>This feature has a setting for enabling it, which defaults to true.</p>
+<h2 id="prefab-outlining">Prefab Outlining</h2>
+<p>When a game is compiled, all prefabs in a scene are inlined (instantiated), so any information about the original prefab is lost. This feature attempts to reverse that process by analyzing all GameObject hierarchies in the game and identifying repetitions that can be replaced with new (or existing) prefabs.</p>
+<p>This feature has a setting for enabling it, which defaults to false.</p>
+<h2 id="asset-deduplication">Asset Deduplication</h2>
+<p>When building multiple asset bundles, it's very common for Unity to duplicate assets shared between bundles. This allows each bundle to stay self-contained. Asset deduplication is an experimental feature for reversing that process.</p>
+<p>Some assets are easier to deduplicate than others. Currently, this is limited to:</p>
+<ul>
+<li>Mono Scripts</li>
+<li>Shaders</li>
+<li>Compute Shaders</li>
+<li>Audio Clips</li>
+<li>Text Assets</li>
+<li>Meshes</li>
+<li>Textures without sprites</li>
+</ul>
+<p>This feature has a setting for enabling it, which defaults to false.</p>
+<h2 id="user-defined-package-export">User Defined Package Export</h2>
+<p>One of the most frustrating things for users is package export. Previously, exported projects referenced only the default set of Unity core modules. Whenever a user would reference a package that the game had used, the new package would conflict with assemblies and scripts within the exported project. Deleting the conflicting exported files would break any asset references to those files.</p>
+<p>There are third-party tools available to help fix broken script references, but they mostly rely on guessing the scripts from the MonoBehaviour fields. In addition, they do nothing to fix broken references for other asset types. That is the purpose of this feature: export asset and package references, so that the user doesn't have to fix broken references later.</p>
+<p>Unfortunately, it is not feasible to datamine all possible packages, not even restricted to the official offerings from Unity. As such, users and communities be responsible for mining the packages specific to their game. However, there are some resources to help programmers do the required datamining. <a href="https://github.com/AssetRipper/MarrowMiningDemo">https://github.com/AssetRipper/MarrowMiningDemo</a></p>
+<p>This experimental feature can be enabled by going to the Configuration Files page, which can be accessed with &quot;View/Configuration Files&quot; in the file menu. To enable the feature, the user must upload package data json files appropriate for the game being ripped. Example json files are available in the Marrow Mining Demo I linked above.</p>
+<h2 id="asset-path-overrides">Asset Path Overrides</h2>
+<p>This feature allows users to change the export destination of an asset. It can be enabled by going to the Configuration Files page, which can be accessed with &quot;View/Configuration Files&quot; in the file menu. To enable the feature, the user must upload a json file appropriate for the game being ripped.</p>
+<h3 id="path-override-file-structure">Path Override File Structure</h3>
+<p>Path overrides can be supplied as a json file.</p>
+<pre><code class="lang-json">{
+	&quot;Files&quot;: {
+		&quot;cab-bcaf22789432bda1e5d0eea9d2521ddd&quot;: {
+			&quot;4476349470337976665&quot;: &quot;Assets/AssetRenamed.txt&quot;
+		},
+		&quot;level1.assets&quot;:
+		{
+			&quot;1&quot;: &quot;Assets/Prefabs/Prefab1.prefab&quot;,
+			&quot;2&quot;: &quot;Assets/Prefabs/Prefab2.prefab&quot;,
+			&quot;3&quot;: &quot;Assets/Prefabs/Subfolder/SpecialPrefab.prefab&quot;,
+			&quot;12&quot;: &quot;Assets/Images/MyTexture.png&quot;
+		}
+	}
+}
+</code></pre>
+<p><code>Files</code> is a dictionary with string keys representing asset collection names. The values are also dictionaries. They use the asset path id as the key and the new output path as the value. Paths are relative to the project root.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/docs/articles/PremiumFeatures.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="toggle-mode">
+                <div class="icon">
+                  <i aria-hidden="true">☀</i>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="switch-style">
+                  <span class="slider round"></span>
+                </label>
+                <div class="icon">
+                  <i aria-hidden="true">☾</i>
+                </div>
+              </div>
+          
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <h5>In This Article</h5>
+              <div></div>
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <div class="pull-left">
+              
+              <span>Generated by <strong>DocFX</strong></span>
+            </div>
+            <div class="toggle-mode pull-right visible-sm visible-xs">
+              <div class="icon">
+                <i aria-hidden="true">☀</i>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="switch-style-m">
+                <span class="slider round"></span>
+              </label>
+              <div class="icon">
+                <i aria-hidden="true">☾</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript" src="../styles/toggle-theme.js"></script>
+      </footer>    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
