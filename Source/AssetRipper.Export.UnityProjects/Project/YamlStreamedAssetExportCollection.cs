@@ -37,12 +37,7 @@ namespace AssetRipper.Export.UnityProjects.Project
 			}
 			else
 			{
-				byte[]? data = mesh.StreamData.GetContent(mesh.Collection);
-				if (data.IsNullOrEmpty())
-				{
-					return false;
-				}
-				mesh.VertexData.Data = data;
+				mesh.VertexData.Data = mesh.StreamData.GetContent(mesh.Collection);
 				mesh.StreamData.ClearValues();
 				result = base.ExportInner(container, filePath, dirPath, fileSystem);
 				mesh.VertexData.Data = [];

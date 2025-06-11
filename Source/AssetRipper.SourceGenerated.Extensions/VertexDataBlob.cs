@@ -422,7 +422,6 @@ public readonly record struct VertexDataBlob(
 			out Vector3[]? normals,
 			out Vector4[]? tangents,
 			out ColorFloat[]? colors,
-			out BoneWeight4[]? skin,
 			out Vector2[]? uv0,
 			out Vector2[]? uv1,
 			out Vector2[]? uv2,
@@ -430,9 +429,10 @@ public readonly record struct VertexDataBlob(
 			out Vector2[]? uv4,
 			out Vector2[]? uv5,
 			out Vector2[]? uv6,
-			out Vector2[]? uv7))
+			out Vector2[]? uv7,
+			out BoneWeight4[]? skin))
 		{
-			return new MeshData(vertices, normals, tangents, colors, uv0, uv1, uv2, uv3, uv4, uv5, uv6, uv7, skin, []);
+			return new MeshData(vertices, normals, tangents, colors, uv0, uv1, uv2, uv3, uv4, uv5, uv6, uv7, skin, [], [], []);
 		}
 		else
 		{
@@ -456,7 +456,6 @@ public readonly record struct VertexDataBlob(
 		out Vector3[]? normals,
 		out Vector4[]? tangents,
 		out ColorFloat[]? colors,
-		out BoneWeight4[]? skin,
 		out Vector2[]? uv0,
 		out Vector2[]? uv1,
 		out Vector2[]? uv2,
@@ -464,7 +463,8 @@ public readonly record struct VertexDataBlob(
 		out Vector2[]? uv4,
 		out Vector2[]? uv5,
 		out Vector2[]? uv6,
-		out Vector2[]? uv7)
+		out Vector2[]? uv7,
+		out BoneWeight4[]? skin)
 	{
 		int vertexCount = VertexCount;
 
@@ -472,7 +472,6 @@ public readonly record struct VertexDataBlob(
 		normals = default;
 		tangents = default;
 		colors = default;
-		skin = default;
 		uv0 = default;
 		uv1 = default;
 		uv2 = default;
@@ -481,6 +480,7 @@ public readonly record struct VertexDataBlob(
 		uv5 = default;
 		uv6 = default;
 		uv7 = default;
+		skin = default;
 
 		byte[] data = Data;
 		if (data.Length == 0)

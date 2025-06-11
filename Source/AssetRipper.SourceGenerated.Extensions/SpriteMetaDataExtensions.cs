@@ -82,7 +82,6 @@ namespace AssetRipper.SourceGenerated.Extensions
 					out Vector3[]? _,//normals,
 					out Vector4[]? _,//tangents,
 					out ColorFloat[]? _,//colors,
-					out skin,
 					out Vector2[]? _,//uv0,
 					out Vector2[]? _,//uv1,
 					out Vector2[]? _,//uv2,
@@ -90,7 +89,8 @@ namespace AssetRipper.SourceGenerated.Extensions
 					out Vector2[]? _,//uv4,
 					out Vector2[]? _,//uv5,
 					out Vector2[]? _,//uv6,
-					out Vector2[]? _);//uv7);
+					out Vector2[]? _,//uv7),
+					out skin);
 			}
 
 			if (instance.Has_Vertices())

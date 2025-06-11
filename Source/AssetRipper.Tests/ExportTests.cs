@@ -6,6 +6,7 @@ using AssetRipper.IO.Files;
 using AssetRipper.Primitives;
 using AssetRipper.Processing;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
+using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Extensions;
 using NUnit.Framework.Internal;
 
@@ -21,9 +22,7 @@ internal class ExportTests
 		IMonoBehaviour monoBehaviour = collection.CreateMonoBehaviour();
 		monoBehaviour.Name = "Name";
 
-		VirtualFileSystem fileSystem = new();
-
-		Export(collection, "output", fileSystem);
+		VirtualFileSystem fileSystem = Export(collection);
 
 		Assert.That(fileSystem.File.Exists("/output/ExportedProject/Assets/MonoBehaviour/Name.asset"));
 	}
@@ -35,16 +34,41 @@ internal class ExportTests
 
 		collection.CreateMonoBehaviour();
 
-		VirtualFileSystem fileSystem = new();
-
-		Export(collection, "output", fileSystem);
+		VirtualFileSystem fileSystem = Export(collection);
 
 		Assert.That(fileSystem.File.Exists("/output/ExportedProject/Assets/MonoBehaviour/MonoBehaviour.asset"));
 	}
 
-	private static void Export(ProcessedAssetCollection collection, string outputPath, VirtualFileSystem fileSystem)
+	[Test]
+	public void EmptyMeshIsExported()
 	{
+		ProcessedAssetCollection collection = AssetCreator.CreateCollection(UnityVersion.V_2022);
+
+		collection.CreateMesh();
+
+		VirtualFileSystem fileSystem = Export(collection);
+
+		Assert.That(fileSystem.File.Exists("/output/ExportedProject/Assets/Mesh/Mesh.asset"));
+	}
+
+	[Test]
+	public void CompressedMeshIsExported()
+	{
+		ProcessedAssetCollection collection = AssetCreator.CreateCollection(UnityVersion.V_2022);
+
+		IMesh mesh = collection.CreateMesh();
+		mesh.FillWithCompressedMeshData(MeshData.CreateTriangleMesh());
+
+		VirtualFileSystem fileSystem = Export(collection);
+
+		Assert.That(fileSystem.File.Exists("/output/ExportedProject/Assets/Mesh/Mesh.asset"));
+	}
+
+	private static VirtualFileSystem Export(ProcessedAssetCollection collection, string outputPath = "output", VirtualFileSystem? fileSystem = null)
+	{
+		fileSystem ??= new();
 		new ExportHandler(new()).Export(CreateGameData(collection), outputPath, fileSystem);
+		return fileSystem;
 	}
 
 	private static GameData CreateGameData(ProcessedAssetCollection collection)

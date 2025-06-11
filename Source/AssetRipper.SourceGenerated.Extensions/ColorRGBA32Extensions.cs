@@ -1,36 +1,48 @@
-﻿using AssetRipper.SourceGenerated.Subclasses.ColorRGBA32;
+﻿using AssetRipper.Numerics;
+using AssetRipper.SourceGenerated.Subclasses.ColorRGBA32;
 
-namespace AssetRipper.SourceGenerated.Extensions
+namespace AssetRipper.SourceGenerated.Extensions;
+
+public static class ColorRGBA32Extensions
 {
-	public static class ColorRGBA32Extensions
+	extension(ColorRGBA32 color)
 	{
-		public static void SetValues(this IColorRGBA32 color, byte r, byte g, byte b, byte a)
+		public void SetValues(byte r, byte g, byte b, byte a)
 		{
 			color.Rgba = unchecked((uint)(r | g << 8 | b << 16 | a << 24));
 		}
 
-		public static void SetAsBlack(this IColorRGBA32 color) => color.SetValues(byte.MinValue, byte.MinValue, byte.MinValue, byte.MaxValue);
+		public void SetAsBlack() => color.SetValues(byte.MinValue, byte.MinValue, byte.MinValue, byte.MaxValue);
 
-		public static void SetAsWhite(this IColorRGBA32 color) => color.SetValues(uint.MaxValue);
+		public void SetAsWhite() => color.SetValues(uint.MaxValue);
 
-		public static byte GetR(this IColorRGBA32 color)
+		public byte R
 		{
-			return unchecked((byte)color.Rgba);
+			get => unchecked((byte)color.Rgba);
+			set => color.SetValues(value, color.G, color.B, color.A);
 		}
 
-		public static byte GetG(this IColorRGBA32 color)
+		public byte G
 		{
-			return unchecked((byte)(color.Rgba >> 8));
+			get => unchecked((byte)(color.Rgba >> 8));
+			set => color.SetValues(color.R, value, color.B, color.A);
 		}
 
-		public static byte GetB(this IColorRGBA32 color)
+		public byte B
 		{
-			return unchecked((byte)(color.Rgba >> 16));
+			get => unchecked((byte)(color.Rgba >> 16));
+			set => color.SetValues(color.R, color.G, value, color.A);
 		}
 
-		public static byte GetA(this IColorRGBA32 color)
+		public byte A
 		{
-			return unchecked((byte)(color.Rgba >> 24));
+			get => unchecked((byte)(color.Rgba >> 24));
+			set => color.SetValues(color.R, color.G, color.B, value);
+		}
+
+		public ColorFloat ToColorFloat()
+		{
+			return (ColorFloat)Color32.FromRgba(color.Rgba);
 		}
 	}
 }
