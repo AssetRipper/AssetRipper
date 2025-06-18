@@ -1,0 +1,719 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class GameBundle
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class GameBundle
+   ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="AssetRipper.Assets.Bundles.GameBundle">
+  
+  
+  <h1 id="AssetRipper_Assets_Bundles_GameBundle" data-uid="AssetRipper.Assets.Bundles.GameBundle" class="text-break">Class GameBundle
+  </h1>
+  <div class="markdown level0 summary"><p>A <a class="xref" href="AssetRipper.Assets.Bundles.Bundle.html">Bundle</a> encompassing an entire game.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="AssetRipper.Assets.Bundles.Bundle.html">Bundle</a></div>
+    <div class="level2"><span class="xref">GameBundle</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.Bundles.Bundle.html#AssetRipper_Assets_Bundles_Bundle_Parent">Bundle.Parent</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.Bundles.Bundle.html#AssetRipper_Assets_Bundles_Bundle_Resources">Bundle.Resources</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.Bundles.Bundle.html#AssetRipper_Assets_Bundles_Bundle_Collections">Bundle.Collections</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.Bundles.Bundle.html#AssetRipper_Assets_Bundles_Bundle_Bundles">Bundle.Bundles</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.Bundles.Bundle.html#AssetRipper_Assets_Bundles_Bundle_FailedFiles">Bundle.FailedFiles</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.Bundles.Bundle.html#AssetRipper_Assets_Bundles_Bundle_Scenes">Bundle.Scenes</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.Bundles.Bundle.html#AssetRipper_Assets_Bundles_Bundle_ResolveCollection_AssetRipper_IO_Files_SerializedFiles_Parser_FileIdentifier_">Bundle.ResolveCollection(FileIdentifier)</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.Bundles.Bundle.html#AssetRipper_Assets_Bundles_Bundle_ResolveCollection_System_String_">Bundle.ResolveCollection(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.Bundles.Bundle.html#AssetRipper_Assets_Bundles_Bundle_ResolveResource_System_String_">Bundle.ResolveResource(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.Bundles.Bundle.html#AssetRipper_Assets_Bundles_Bundle_AddResource_AssetRipper_IO_Files_ResourceFiles_ResourceFile_">Bundle.AddResource(ResourceFile)</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.Bundles.Bundle.html#AssetRipper_Assets_Bundles_Bundle_AddCollection_AssetRipper_Assets_Collections_AssetCollection_">Bundle.AddCollection(AssetCollection)</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.Bundles.Bundle.html#AssetRipper_Assets_Bundles_Bundle_AddBundle_AssetRipper_Assets_Bundles_Bundle_">Bundle.AddBundle(Bundle)</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.Bundles.Bundle.html#AssetRipper_Assets_Bundles_Bundle_AddFailed_AssetRipper_IO_Files_FailedFile_">Bundle.AddFailed(FailedFile)</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.Bundles.Bundle.html#AssetRipper_Assets_Bundles_Bundle_IsCompatibleCollection_AssetRipper_Assets_Collections_AssetCollection_">Bundle.IsCompatibleCollection(AssetCollection)</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.Bundles.Bundle.html#AssetRipper_Assets_Bundles_Bundle_GetRoot">Bundle.GetRoot()</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.Bundles.Bundle.html#AssetRipper_Assets_Bundles_Bundle_FetchAssets">Bundle.FetchAssets()</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.Bundles.Bundle.html#AssetRipper_Assets_Bundles_Bundle_FetchAssetCollections">Bundle.FetchAssetCollections()</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.Bundles.Bundle.html#AssetRipper_Assets_Bundles_Bundle_FetchResourceFiles">Bundle.FetchResourceFiles()</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.Bundles.Bundle.html#AssetRipper_Assets_Bundles_Bundle_ToString">Bundle.ToString()</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.Bundles.Bundle.html#AssetRipper_Assets_Bundles_Bundle_AddCollectionFromSerializedFile_AssetRipper_IO_Files_SerializedFiles_SerializedFile_AssetRipper_Assets_IO_AssetFactoryBase_UnityVersion_">Bundle.AddCollectionFromSerializedFile(SerializedFile, AssetFactoryBase, UnityVersion)</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.Bundles.Bundle.html#AssetRipper_Assets_Bundles_Bundle_Dispose_System_Boolean_">Bundle.Dispose(Boolean)</a>
+    </div>
+    <div>
+      <a class="xref" href="AssetRipper.Assets.Bundles.Bundle.html#AssetRipper_Assets_Bundles_Bundle_Dispose">Bundle.Dispose()</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="AssetRipper.Assets.Bundles.html">AssetRipper.Assets.Bundles</a></h6>
+  <h6><strong>Assembly</strong>: AssetRipper.Assets.dll</h6>
+  <h5 id="AssetRipper_Assets_Bundles_GameBundle_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class GameBundle : Bundle</code></pre>
+  </div>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Bundles_GameBundle_Name.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Bundles.GameBundle.Name%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Bundles/GameBundle.cs/#L19">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Bundles_GameBundle_Name_" data-uid="AssetRipper.Assets.Bundles.GameBundle.Name*"></a>
+  <h4 id="AssetRipper_Assets_Bundles_GameBundle_Name" data-uid="AssetRipper.Assets.Bundles.GameBundle.Name">Name</h4>
+  <div class="markdown level1 summary"><p>The name of this bundle which is 'GameBundle'.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string Name { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="AssetRipper.Assets.Bundles.Bundle.html#AssetRipper_Assets_Bundles_Bundle_Name">Bundle.Name</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Bundles_GameBundle_ResourceProvider.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Bundles.GameBundle.ResourceProvider%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Bundles/GameBundle.cs/#L14">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Bundles_GameBundle_ResourceProvider_" data-uid="AssetRipper.Assets.Bundles.GameBundle.ResourceProvider*"></a>
+  <h4 id="AssetRipper_Assets_Bundles_GameBundle_ResourceProvider" data-uid="AssetRipper.Assets.Bundles.GameBundle.ResourceProvider">ResourceProvider</h4>
+  <div class="markdown level1 summary"><p>The <a class="xref" href="AssetRipper.Assets.Bundles.IResourceProvider.html">IResourceProvider</a> being used for this bundle.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IResourceProvider ResourceProvider { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Assets.Bundles.IResourceProvider.html">IResourceProvider</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Bundles_GameBundle_AddNewProcessedBundle_System_String_.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Bundles.GameBundle.AddNewProcessedBundle(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Bundles/GameBundle.cs/#L79">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Bundles_GameBundle_AddNewProcessedBundle_" data-uid="AssetRipper.Assets.Bundles.GameBundle.AddNewProcessedBundle*"></a>
+  <h4 id="AssetRipper_Assets_Bundles_GameBundle_AddNewProcessedBundle_System_String_" data-uid="AssetRipper.Assets.Bundles.GameBundle.AddNewProcessedBundle(System.String)">AddNewProcessedBundle(String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ProcessedBundle AddNewProcessedBundle(string name = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Assets.Bundles.ProcessedBundle.html">ProcessedBundle</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Bundles_GameBundle_AddNewProcessedCollection_System_String_UnityVersion_.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Bundles.GameBundle.AddNewProcessedCollection(System.String%2CUnityVersion)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Bundles/GameBundle.cs/#L71">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Bundles_GameBundle_AddNewProcessedCollection_" data-uid="AssetRipper.Assets.Bundles.GameBundle.AddNewProcessedCollection*"></a>
+  <h4 id="AssetRipper_Assets_Bundles_GameBundle_AddNewProcessedCollection_System_String_UnityVersion_" data-uid="AssetRipper.Assets.Bundles.GameBundle.AddNewProcessedCollection(System.String,UnityVersion)">AddNewProcessedCollection(String, UnityVersion)</h4>
+  <div class="markdown level1 summary"><p>Adds a new processed asset collection to this bundle.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ProcessedAssetCollection AddNewProcessedCollection(string name, UnityVersion version)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name of the new asset collection.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">UnityVersion</span></td>
+        <td><span class="parametername">version</span></td>
+        <td><p>The Unity version of the new asset collection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Assets.Collections.ProcessedAssetCollection.html">ProcessedAssetCollection</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Bundles_GameBundle_FetchAssetsInHierarchy.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Bundles.GameBundle.FetchAssetsInHierarchy%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Bundles/GameBundle.cs/#L51">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Bundles_GameBundle_FetchAssetsInHierarchy_" data-uid="AssetRipper.Assets.Bundles.GameBundle.FetchAssetsInHierarchy*"></a>
+  <h4 id="AssetRipper_Assets_Bundles_GameBundle_FetchAssetsInHierarchy" data-uid="AssetRipper.Assets.Bundles.GameBundle.FetchAssetsInHierarchy">FetchAssetsInHierarchy()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;IUnityObjectBase&gt; FetchAssetsInHierarchy()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="AssetRipper.Assets.IUnityObjectBase.html">IUnityObjectBase</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Bundles_GameBundle_FromPaths_IEnumerable_System_String__AssetRipper_Assets_IO_AssetFactoryBase_AssetRipper_Assets_Bundles_IGameInitializer_.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Bundles.GameBundle.FromPaths(IEnumerable%7BSystem.String%7D%2CAssetRipper.Assets.IO.AssetFactoryBase%2CAssetRipper.Assets.Bundles.IGameInitializer)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Bundles/GameBundle.FromPaths.cs/#L21">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Bundles_GameBundle_FromPaths_" data-uid="AssetRipper.Assets.Bundles.GameBundle.FromPaths*"></a>
+  <h4 id="AssetRipper_Assets_Bundles_GameBundle_FromPaths_IEnumerable_System_String__AssetRipper_Assets_IO_AssetFactoryBase_AssetRipper_Assets_Bundles_IGameInitializer_" data-uid="AssetRipper.Assets.Bundles.GameBundle.FromPaths(IEnumerable{System.String},AssetRipper.Assets.IO.AssetFactoryBase,AssetRipper.Assets.Bundles.IGameInitializer)">FromPaths(IEnumerable&lt;String&gt;, AssetFactoryBase, IGameInitializer)</h4>
+  <div class="markdown level1 summary"><p>Create and initialize a <a class="xref" href="AssetRipper.Assets.Bundles.GameBundle.html">GameBundle</a> from a set of paths.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static GameBundle FromPaths(IEnumerable&lt;string&gt; paths, AssetFactoryBase assetFactory, IGameInitializer initializer = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><span class="parametername">paths</span></td>
+        <td><p>The set of paths to load.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Assets.IO.AssetFactoryBase.html">AssetFactoryBase</a></td>
+        <td><span class="parametername">assetFactory</span></td>
+        <td><p>The factory for reading assets.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Assets.Bundles.IGameInitializer.html">IGameInitializer</a></td>
+        <td><span class="parametername">initializer</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Assets.Bundles.GameBundle.html">GameBundle</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Bundles_GameBundle_GetMaxUnityVersion.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Bundles.GameBundle.GetMaxUnityVersion%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Bundles/GameBundle.cs/#L89">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Bundles_GameBundle_GetMaxUnityVersion_" data-uid="AssetRipper.Assets.Bundles.GameBundle.GetMaxUnityVersion*"></a>
+  <h4 id="AssetRipper_Assets_Bundles_GameBundle_GetMaxUnityVersion" data-uid="AssetRipper.Assets.Bundles.GameBundle.GetMaxUnityVersion">GetMaxUnityVersion()</h4>
+  <div class="markdown level1 summary"><p>Returns the maximum Unity version of all asset collections in this bundle.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public UnityVersion GetMaxUnityVersion()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">UnityVersion</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Bundles_GameBundle_HasAnyAssetCollections.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Bundles.GameBundle.HasAnyAssetCollections%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Bundles/GameBundle.cs/#L61">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Bundles_GameBundle_HasAnyAssetCollections_" data-uid="AssetRipper.Assets.Bundles.GameBundle.HasAnyAssetCollections*"></a>
+  <h4 id="AssetRipper_Assets_Bundles_GameBundle_HasAnyAssetCollections" data-uid="AssetRipper.Assets.Bundles.GameBundle.HasAnyAssetCollections">HasAnyAssetCollections()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool HasAnyAssetCollections()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Bundles_GameBundle_InitializeAllDependencyLists_AssetRipper_Assets_Bundles_IDependencyProvider_.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Bundles.GameBundle.InitializeAllDependencyLists(AssetRipper.Assets.Bundles.IDependencyProvider)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Bundles/GameBundle.cs/#L57">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Bundles_GameBundle_InitializeAllDependencyLists_" data-uid="AssetRipper.Assets.Bundles.GameBundle.InitializeAllDependencyLists*"></a>
+  <h4 id="AssetRipper_Assets_Bundles_GameBundle_InitializeAllDependencyLists_AssetRipper_Assets_Bundles_IDependencyProvider_" data-uid="AssetRipper.Assets.Bundles.GameBundle.InitializeAllDependencyLists(AssetRipper.Assets.Bundles.IDependencyProvider)">InitializeAllDependencyLists(IDependencyProvider)</h4>
+  <div class="markdown level1 summary"><p>Initializes all dependency lists.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void InitializeAllDependencyLists(IDependencyProvider dependencyProvider = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Assets.Bundles.IDependencyProvider.html">IDependencyProvider</a></td>
+        <td><span class="parametername">dependencyProvider</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Bundles_GameBundle_IsCompatibleBundle_AssetRipper_Assets_Bundles_Bundle_.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Bundles.GameBundle.IsCompatibleBundle(AssetRipper.Assets.Bundles.Bundle)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Bundles/GameBundle.cs/#L25">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Bundles_GameBundle_IsCompatibleBundle_" data-uid="AssetRipper.Assets.Bundles.GameBundle.IsCompatibleBundle*"></a>
+  <h4 id="AssetRipper_Assets_Bundles_GameBundle_IsCompatibleBundle_AssetRipper_Assets_Bundles_Bundle_" data-uid="AssetRipper.Assets.Bundles.GameBundle.IsCompatibleBundle(AssetRipper.Assets.Bundles.Bundle)">IsCompatibleBundle(Bundle)</h4>
+  <div class="markdown level1 summary"><p>Returns true if the given bundle is compatible with this bundle.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override bool IsCompatibleBundle(Bundle bundle)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.Assets.Bundles.Bundle.html">Bundle</a></td>
+        <td><span class="parametername">bundle</span></td>
+        <td><p>The bundle to check compatibility with.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="AssetRipper.Assets.Bundles.Bundle.html#AssetRipper_Assets_Bundles_Bundle_IsCompatibleBundle_AssetRipper_Assets_Bundles_Bundle_">Bundle.IsCompatibleBundle(Bundle)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Bundles_GameBundle_ResolveExternalResource_System_String_.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Bundles.GameBundle.ResolveExternalResource(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Bundles/GameBundle.cs/#L34">View Source</a>
+  </span>
+  <a id="AssetRipper_Assets_Bundles_GameBundle_ResolveExternalResource_" data-uid="AssetRipper.Assets.Bundles.GameBundle.ResolveExternalResource*"></a>
+  <h4 id="AssetRipper_Assets_Bundles_GameBundle_ResolveExternalResource_System_String_" data-uid="AssetRipper.Assets.Bundles.GameBundle.ResolveExternalResource(System.String)">ResolveExternalResource(String)</h4>
+  <div class="markdown level1 summary"><p>Resolves an external ResourceFile, or returns null if it cannot be found.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override ResourceFile ResolveExternalResource(string originalName)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">originalName</span></td>
+        <td><p>The original name of the ResourceFile.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="AssetRipper.IO.Files.ResourceFiles.ResourceFile.html">ResourceFile</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="AssetRipper.Assets.Bundles.Bundle.html#AssetRipper_Assets_Bundles_Bundle_ResolveExternalResource_System_String_">Bundle.ResolveExternalResource(String)</a></div>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="AssetRipper.GUI.Web.Paths.PathExtensions.html#AssetRipper_GUI_Web_Paths_PathExtensions_GetPath_AssetRipper_Assets_Bundles_Bundle_">PathExtensions.GetPath(Bundle)</a>
+  </div>
+  <div>
+      <a class="xref" href="AssetRipper.GUI.Web.Paths.PathExtensions.html#AssetRipper_GUI_Web_Paths_PathExtensions_TryGetBundle_AssetRipper_Assets_Bundles_GameBundle_AssetRipper_GUI_Web_Paths_BundlePath_">PathExtensions.TryGetBundle(GameBundle, BundlePath)</a>
+  </div>
+  <div>
+      <a class="xref" href="AssetRipper.GUI.Web.Paths.PathExtensions.html#AssetRipper_GUI_Web_Paths_PathExtensions_TryGetBundle_AssetRipper_Assets_Bundles_GameBundle_AssetRipper_GUI_Web_Paths_BundlePath_AssetRipper_Assets_Bundles_Bundle__">PathExtensions.TryGetBundle(GameBundle, BundlePath, out Bundle)</a>
+  </div>
+  <div>
+      <a class="xref" href="AssetRipper.GUI.Web.Paths.PathExtensions.html#AssetRipper_GUI_Web_Paths_PathExtensions_TryGetCollection_AssetRipper_Assets_Bundles_GameBundle_AssetRipper_GUI_Web_Paths_CollectionPath_">PathExtensions.TryGetCollection(GameBundle, CollectionPath)</a>
+  </div>
+  <div>
+      <a class="xref" href="AssetRipper.GUI.Web.Paths.PathExtensions.html#AssetRipper_GUI_Web_Paths_PathExtensions_TryGetCollection_AssetRipper_Assets_Bundles_GameBundle_AssetRipper_GUI_Web_Paths_CollectionPath_AssetRipper_Assets_Collections_AssetCollection__">PathExtensions.TryGetCollection(GameBundle, CollectionPath, out AssetCollection)</a>
+  </div>
+  <div>
+      <a class="xref" href="AssetRipper.GUI.Web.Paths.PathExtensions.html#AssetRipper_GUI_Web_Paths_PathExtensions_TryGetResource_AssetRipper_Assets_Bundles_GameBundle_AssetRipper_GUI_Web_Paths_ResourcePath_">PathExtensions.TryGetResource(GameBundle, ResourcePath)</a>
+  </div>
+  <div>
+      <a class="xref" href="AssetRipper.GUI.Web.Paths.PathExtensions.html#AssetRipper_GUI_Web_Paths_PathExtensions_TryGetResource_AssetRipper_Assets_Bundles_GameBundle_AssetRipper_GUI_Web_Paths_ResourcePath_AssetRipper_IO_Files_ResourceFiles_ResourceFile__">PathExtensions.TryGetResource(GameBundle, ResourcePath, out ResourceFile)</a>
+  </div>
+  <div>
+      <a class="xref" href="AssetRipper.GUI.Web.Paths.PathExtensions.html#AssetRipper_GUI_Web_Paths_PathExtensions_TryGetFailedFile_AssetRipper_Assets_Bundles_GameBundle_AssetRipper_GUI_Web_Paths_FailedFilePath_">PathExtensions.TryGetFailedFile(GameBundle, FailedFilePath)</a>
+  </div>
+  <div>
+      <a class="xref" href="AssetRipper.GUI.Web.Paths.PathExtensions.html#AssetRipper_GUI_Web_Paths_PathExtensions_TryGetFailedFile_AssetRipper_Assets_Bundles_GameBundle_AssetRipper_GUI_Web_Paths_FailedFilePath_AssetRipper_IO_Files_FailedFile__">PathExtensions.TryGetFailedFile(GameBundle, FailedFilePath, out FailedFile)</a>
+  </div>
+  <div>
+      <a class="xref" href="AssetRipper.GUI.Web.Paths.PathExtensions.html#AssetRipper_GUI_Web_Paths_PathExtensions_TryGetAsset_AssetRipper_Assets_Bundles_GameBundle_AssetRipper_GUI_Web_Paths_AssetPath_">PathExtensions.TryGetAsset(GameBundle, AssetPath)</a>
+  </div>
+  <div>
+      <a class="xref" href="AssetRipper.GUI.Web.Paths.PathExtensions.html#AssetRipper_GUI_Web_Paths_PathExtensions_TryGetAsset_AssetRipper_Assets_Bundles_GameBundle_AssetRipper_GUI_Web_Paths_AssetPath_AssetRipper_Assets_IUnityObjectBase__">PathExtensions.TryGetAsset(GameBundle, AssetPath, out IUnityObjectBase)</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/AssetRipper/AssetRipper/new/master/apiSpec/new?filename=AssetRipper_Assets_Bundles_GameBundle.md&amp;value=---%0Auid%3A%20AssetRipper.Assets.Bundles.GameBundle%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/Source/AssetRipper.Assets/Bundles/GameBundle.FromPaths.cs/#L11" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="toggle-mode">
+                <div class="icon">
+                  <i aria-hidden="true">☀</i>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="switch-style">
+                  <span class="slider round"></span>
+                </label>
+                <div class="icon">
+                  <i aria-hidden="true">☾</i>
+                </div>
+              </div>
+          
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <h5>In This Article</h5>
+              <div></div>
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <div class="pull-left">
+              
+              <span>Generated by <strong>DocFX</strong></span>
+            </div>
+            <div class="toggle-mode pull-right visible-sm visible-xs">
+              <div class="icon">
+                <i aria-hidden="true">☀</i>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="switch-style-m">
+                <span class="slider round"></span>
+              </label>
+              <div class="icon">
+                <i aria-hidden="true">☾</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript" src="../styles/toggle-theme.js"></script>
+      </footer>    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
