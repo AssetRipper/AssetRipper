@@ -30,17 +30,17 @@ public class GetFieldsInTypeAndBaseTests
 	public void GenericFieldTypesGetResolvedCorrectly()
 	{
 		TypeDefinition type = ReferenceAssemblies.GetType<Delta>();
-		
+
 		IEnumerable<(FieldDefinition, TypeSignature)> fields = FieldQuery.GetFieldsInTypeAndBase(type);
-		
+
 		Assert.That(fields.Count(), Is.EqualTo(1));
 		(FieldDefinition field, TypeSignature fieldType) = fields.First();
 		Assert.That(field.Name?.ToString(), Is.EqualTo(nameof(Delta.alphaField)));
 		Assert.That(fieldType, Is.InstanceOf<GenericInstanceTypeSignature>());
-		
+
 		GenericInstanceTypeSignature genericFieldType = (GenericInstanceTypeSignature)fieldType;
 		Assert.That(genericFieldType.GenericType.Name!.Value, Is.EqualTo("Alpha`1"));
-		Assert.That(genericFieldType.TypeArguments.Count, Is.EqualTo(1));
+		Assert.That(genericFieldType.TypeArguments, Has.Count.EqualTo(1));
 		Assert.That(genericFieldType.TypeArguments[0].Name, Is.EqualTo("Int32"));
 	}
 

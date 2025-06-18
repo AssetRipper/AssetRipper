@@ -54,7 +54,7 @@ public static class GameFileLoader
 			{
 				Directory.Delete(path, true);
 			}
-			
+
 			Directory.CreateDirectory(path);
 			ExportHandler.Export(GameData, path);
 		}
@@ -68,7 +68,7 @@ public static class GameFileLoader
 			{
 				Directory.Delete(path, true);
 			}
-			
+
 			Directory.CreateDirectory(path);
 			Logger.Info(LogCategory.Export, "Starting primary content export");
 			Logger.Info(LogCategory.Export, $"Attempting to export assets to {path}...");

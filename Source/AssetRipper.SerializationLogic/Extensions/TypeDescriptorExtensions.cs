@@ -16,7 +16,7 @@ namespace AssetRipper.SerializationLogic.Extensions
 				_ => type.Namespace,
 			};
 		}
-		
+
 		public static bool IsAssignableTo(this ITypeDescriptor typeRef, string ns, string name)
 		{
 			if (typeRef.ToTypeSignature() is GenericInstanceTypeSignature genericInstanceTypeSignature)
@@ -28,7 +28,7 @@ namespace AssetRipper.SerializationLogic.Extensions
 			{
 				return true;
 			}
-			
+
 			return typeRef.Resolve()?.IsSubclassOf(ns, name) ?? false;
 			// If we can't resolve our typeref or one of its base types,
 			// let's assume it is not assignable to our target type

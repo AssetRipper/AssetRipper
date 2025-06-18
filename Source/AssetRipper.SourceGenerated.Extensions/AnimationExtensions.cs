@@ -1,5 +1,4 @@
-﻿using AssetRipper.Assets.Metadata;
-using AssetRipper.SourceGenerated.Classes.ClassID_111;
+﻿using AssetRipper.SourceGenerated.Classes.ClassID_111;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
 using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.PPtr_AnimationClip;

@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Text.RegularExpressions;
 
 namespace AssetRipper.IO.Files.Streams.MultiFile

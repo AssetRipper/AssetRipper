@@ -1,5 +1,4 @@
-﻿using AssetRipper.Primitives;
-using AssetRipper.SourceGenerated.Classes.ClassID_159;
+﻿using AssetRipper.SourceGenerated.Classes.ClassID_159;
 using AssetRipper.SourceGenerated.Enums;
 
 namespace AssetRipper.SourceGenerated.Extensions

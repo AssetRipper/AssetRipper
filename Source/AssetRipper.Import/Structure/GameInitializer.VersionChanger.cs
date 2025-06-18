@@ -113,7 +113,7 @@ internal sealed partial record class GameInitializer
 				PPtrConverter converter = new(gameObject, newGameObject);
 				if (newGameObject.Components.Count > 0 && newGameObject.Components[0].Has_ClassID() && !gameObject.Components[0].Has_ClassID())
 				{
-					foreach (IComponentPair pair in  newGameObject.Components)
+					foreach (IComponentPair pair in newGameObject.Components)
 					{
 						if (pair.Component.TryGetAsset(newGameObject.Collection, out IComponent? component))
 						{

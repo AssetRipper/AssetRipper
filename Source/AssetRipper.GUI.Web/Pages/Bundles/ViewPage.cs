@@ -1,7 +1,6 @@
 ﻿using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
 using AssetRipper.GUI.Web.Paths;
-using AssetRipper.IO.Files;
 
 namespace AssetRipper.GUI.Web.Pages.Bundles;
 

@@ -1,6 +1,5 @@
 ﻿using AssetRipper.IO.Files.SerializedFiles.FileIdentifiers;
 using AssetRipper.IO.Files.SerializedFiles.IO;
-using AssetRipper.Primitives;
 
 namespace AssetRipper.IO.Files.SerializedFiles.Parser
 {

@@ -215,7 +215,7 @@ public sealed class PredefinedAssetCache
 			IShader shader => Contains(shader, out fileID, out guid, out assetType),
 			_ => Default(textAsset, out fileID, out guid, out assetType),
 		};
-		
+
 		bool Default(ITextAsset textAsset, out long fileID, out UnityGuid guid, out AssetType assetType)
 		{
 			if (textAssetDictionary.TryGetValue(new TextAsset(textAsset.Name, textAsset.Script_C49.Data), out AssetMetaPtr assetMetaPtr))
@@ -296,10 +296,10 @@ public sealed class PredefinedAssetCache
 	public bool Contains(IMesh mesh, out long fileID, out UnityGuid guid, out AssetType assetType)
 	{
 		if (meshDictionary.TryGetValue(new MeshKey(mesh.Name, (int)mesh.VertexData.VertexCount, mesh.SubMeshes.Count, new()
-		    {
-			    Center = mesh.LocalAABB.Center,
-			    Extent = mesh.LocalAABB.Extent
-		    }), out AssetMetaPtr assetMetaPtr))
+		{
+			Center = mesh.LocalAABB.Center,
+			Extent = mesh.LocalAABB.Extent
+		}), out AssetMetaPtr assetMetaPtr))
 		{
 			(fileID, guid, assetType) = assetMetaPtr;
 			return true;

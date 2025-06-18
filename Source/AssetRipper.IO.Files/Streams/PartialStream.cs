@@ -41,7 +41,7 @@ namespace AssetRipper.IO.Files.Streams
 			return m_stream.Read(buffer[..count]);
 		}
 
-		public override int ReadByte() 
+		public override int ReadByte()
 			=> m_stream.ReadByte();
 
 		/// <inheritdoc/>

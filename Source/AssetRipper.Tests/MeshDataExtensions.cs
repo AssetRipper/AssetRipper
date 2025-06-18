@@ -7,7 +7,7 @@ namespace AssetRipper.Tests;
 
 internal static class MeshDataExtensions
 {
-	extension (MeshData)
+	extension(MeshData)
 	{
 		public static MeshData CreateTriangleMesh()
 		{

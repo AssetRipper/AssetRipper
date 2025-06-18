@@ -3,13 +3,12 @@ using AsmResolver.DotNet.Signatures;
 
 namespace AssetRipper.Import.Structure.Assembly.Managers
 {
-
 	public partial class BaseManager
 	{
 		private sealed class Resolver : IAssemblyResolver
 		{
-			private static readonly SignatureComparer Comparer = new SignatureComparer(SignatureComparisonFlags.VersionAgnostic);
-			private readonly Dictionary<AssemblyDescriptor, AssemblyDefinition> cache = new Dictionary<AssemblyDescriptor, AssemblyDefinition>(Comparer);
+			private static readonly SignatureComparer Comparer = new(SignatureComparisonFlags.VersionAgnostic);
+			private readonly Dictionary<AssemblyDescriptor, AssemblyDefinition> cache = new(Comparer);
 			private readonly BaseManager assemblyManager;
 
 			public Resolver(BaseManager assemblyManager)
@@ -47,7 +46,7 @@ namespace AssetRipper.Import.Structure.Assembly.Managers
 
 			public AssemblyDefinition? Resolve(AssemblyDescriptor assembly)
 			{
-				if (cache.TryGetValue(assembly, out var value))
+				if (cache.TryGetValue(assembly, out AssemblyDefinition? value))
 				{
 					return value;
 				}

@@ -69,8 +69,8 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 
 			if (reader.Generation >= FormatVersion.HasTypeTreeHashes)
 			{
-				bool readScriptID = (typeIdLocal == -1) 
-					|| (typeIdLocal == 114) 
+				bool readScriptID = (typeIdLocal == -1)
+					|| (typeIdLocal == 114)
 					|| (!IgnoreScriptTypeForHash(reader.Generation, reader.Version) && ScriptTypeIndex >= 0);
 				if (readScriptID)
 				{
@@ -112,8 +112,8 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser
 			}
 			if (writer.Generation >= FormatVersion.HasTypeTreeHashes)
 			{
-				bool writeScriptID = (RawTypeID == -1) 
-					|| (RawTypeID == 114) 
+				bool writeScriptID = (RawTypeID == -1)
+					|| (RawTypeID == 114)
 					|| (!IgnoreScriptTypeForHash(writer.Generation, writer.Version) && ScriptTypeIndex >= 0);
 				if (writeScriptID)
 				{

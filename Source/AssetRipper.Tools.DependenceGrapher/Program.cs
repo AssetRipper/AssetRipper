@@ -203,7 +203,7 @@ namespace AssetRipper.Tools.DependenceGrapher
 		private static void ExtractDependencies(SerializedFile file, GameAssetFactory factory, TextWriter writer, List<IAssetFilter> filters, bool verbose, Dictionary<string, string> cabMap)
 		{
 			GameBundle bundle = new();
-			
+
 			SerializedAssetCollection collection = bundle.AddCollectionFromSerializedFile(file, factory);
 			bundle.InitializeAllDependencyLists();
 			ExtractDependencies(file, collection, writer, filters, verbose, cabMap);

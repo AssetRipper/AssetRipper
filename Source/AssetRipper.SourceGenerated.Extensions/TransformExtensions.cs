@@ -1,8 +1,6 @@
-﻿using AssetRipper.Assets.Metadata;
-using AssetRipper.Numerics;
+﻿using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
-using AssetRipper.SourceGenerated.Subclasses.PPtr_Transform;
 
 namespace AssetRipper.SourceGenerated.Extensions
 {

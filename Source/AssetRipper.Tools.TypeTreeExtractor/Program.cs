@@ -81,13 +81,13 @@ namespace AssetRipper.Tools.TypeTreeExtractor
 			StringBuilder sb = new();
 			foreach (SerializedType type in file.Types.ToArray().OrderBy(t => t.TypeID))
 			{
-				Console.WriteLine($"\tType ID: {type.TypeID,-10} Script Index: {type.ScriptTypeIndex, -5} Node Count: {type.OldType.Nodes.Count}");
+				Console.WriteLine($"\tType ID: {type.TypeID,-10} Script Index: {type.ScriptTypeIndex,-5} Node Count: {type.OldType.Nodes.Count}");
 
 				AppendTypeTree(sb, type);
 			}
 			foreach (SerializedTypeReference type in file.RefTypes.ToArray().OrderBy(t => t.TypeID))
 			{
-				Console.WriteLine($"\tType ID: {type.TypeID,-10} Script Index: {type.ScriptTypeIndex, -5} Node Count: {type.OldType.Nodes.Count}");
+				Console.WriteLine($"\tType ID: {type.TypeID,-10} Script Index: {type.ScriptTypeIndex,-5} Node Count: {type.OldType.Nodes.Count}");
 				Console.WriteLine($"\t\t{type.AsmName} {type.FullName}");
 
 				AppendTypeTree(sb, type);

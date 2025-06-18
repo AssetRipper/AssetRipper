@@ -43,7 +43,7 @@ internal sealed class AnimatorStateContext
 	{
 		if (!HasStates())
 		{
-				return;
+			return;
 		}
 
 		Controller.TOS.TryAdd(0, Utf8String.Empty);

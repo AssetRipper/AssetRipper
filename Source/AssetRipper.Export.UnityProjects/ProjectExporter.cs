@@ -87,7 +87,7 @@ namespace AssetRipper.Export.UnityProjects
 			ProjectAssetContainer container = new ProjectAssetContainer(this, options, fileCollection.FetchAssets(), collections);
 			int exportableCount = collections.Count(c => c.Exportable);
 			int currentExportable = 0;
-			
+
 			for (int i = 0; i < collections.Count; i++)
 			{
 				IExportCollection collection = collections[i];

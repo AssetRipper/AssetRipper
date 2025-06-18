@@ -1,5 +1,4 @@
 ﻿using AssetRipper.SourceGenerated.Classes.ClassID_83;
-using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.NativeEnums.Fmod;
 
 namespace AssetRipper.SourceGenerated.Extensions

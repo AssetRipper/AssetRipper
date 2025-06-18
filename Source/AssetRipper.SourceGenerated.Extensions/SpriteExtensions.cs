@@ -1,5 +1,4 @@
-﻿using AssetRipper.Assets.Metadata;
-using AssetRipper.Numerics;
+﻿using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_687078895;

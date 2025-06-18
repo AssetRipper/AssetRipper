@@ -1,4 +1,3 @@
-using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Export.Modules.Shaders.ShaderBlob.Parameters;
 using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Extensions.Enums.Shader;

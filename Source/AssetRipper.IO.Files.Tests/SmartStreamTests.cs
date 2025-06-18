@@ -46,7 +46,7 @@ public class SmartStreamTests
 		stream.FreeReference();
 		Assert.Multiple(() =>
 		{
-			Assert.That(stream.RefCount, Is.EqualTo(0));
+			Assert.That(stream.RefCount, Is.Zero);
 			Assert.That(stream.IsNull, Is.True);
 			Assert.That(stream.StreamType, Is.EqualTo(SmartStreamType.Null));
 		});
@@ -57,7 +57,7 @@ public class SmartStreamTests
 	{
 		Assert.Multiple(() =>
 		{
-			Assert.That(SmartStream.CreateNull().RefCount, Is.EqualTo(0));
+			Assert.That(SmartStream.CreateNull().RefCount, Is.Zero);
 			Assert.That(SmartStream.CreateNull().IsNull);
 		});
 	}

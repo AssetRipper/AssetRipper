@@ -1,5 +1,4 @@
-﻿using AssetRipper.Assets.Metadata;
-using AssetRipper.SourceGenerated.Classes.ClassID_1102;
+﻿using AssetRipper.SourceGenerated.Classes.ClassID_1102;
 using AssetRipper.SourceGenerated.Classes.ClassID_207;
 using AssetRipper.SourceGenerated.Classes.ClassID_91;
 using AssetRipper.SourceGenerated.Subclasses.StateMotionPair;

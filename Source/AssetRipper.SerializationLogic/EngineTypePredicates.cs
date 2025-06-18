@@ -26,15 +26,15 @@ namespace AssetRipper.SerializationLogic
 		private const string GUIStyle = "UnityEngine.GUIStyle";
 		private const string RectOffset = "UnityEngine.RectOffset";
 		protected const string UnityEngineObject = "UnityEngine.Object";
-		
+
 		public const string MonoBehaviour = "MonoBehaviour";
 		public const string ScriptableObject = "ScriptableObject";
-		
+
 		public const string MonoBehaviourFullName = $"{UnityEngineNamespace}.{MonoBehaviour}";
 		public const string ScriptableObjectFullName = $"{UnityEngineNamespace}.{ScriptableObject}";
 		protected const string Matrix4x4 = "UnityEngine.Matrix4x4";
 		protected const string Color32 = "UnityEngine.Color32";
-		
+
 		public const string UnityEngineNamespace = "UnityEngine";
 		private const string SerializeFieldAttribute = "SerializeField";
 		private const string SerializeReferenceAttribute = "SerializeReference";

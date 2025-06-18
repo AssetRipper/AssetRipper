@@ -2,130 +2,130 @@
 
 public class DiscontinuousRangeTests
 {
-	private static readonly Range<float> MinToZero = new Range<float>(float.MinValue, 0);
-	private static readonly Range<float> ZeroToThree = new Range<float>(0, 3);
-	private static readonly Range<float> ThreeToFour = new Range<float>(3, 4);
-	private static readonly Range<float> FourToFive = new Range<float>(4, 5);
-	private static readonly Range<float> FiveToSeven = new Range<float>(5, 7);
-	private static readonly Range<float> SevenToNine = new Range<float>(7, 9);
-	private static readonly Range<float> NineToTen = new Range<float>(9, 10);
-	private static readonly Range<float> ZeroToTen = new Range<float>(0, 110);
-	private static readonly Range<float> ZeroToEleven = new Range<float>(0, 11);
-	private static readonly Range<float> TenToTwenty = new Range<float>(10, 20);
-	private static readonly Range<float> ZeroToTwenty = new Range<float>(0, 20);
-	private static readonly Range<float> ZeroToMax = new Range<float>(0, float.MaxValue);
-	private static readonly Range<float> TwentyToMax = new Range<float>(20, float.MaxValue);
-	private static readonly Range<float> MinToMax = new Range<float>(float.MinValue, float.MaxValue);
+	private static readonly Range<float> MinToZero = new(float.MinValue, 0);
+	private static readonly Range<float> ZeroToThree = new(0, 3);
+	private static readonly Range<float> ThreeToFour = new(3, 4);
+	private static readonly Range<float> FourToFive = new(4, 5);
+	private static readonly Range<float> FiveToSeven = new(5, 7);
+	private static readonly Range<float> SevenToNine = new(7, 9);
+	private static readonly Range<float> NineToTen = new(9, 10);
+	private static readonly Range<float> ZeroToTen = new(0, 110);
+	private static readonly Range<float> ZeroToEleven = new(0, 11);
+	private static readonly Range<float> TenToTwenty = new(10, 20);
+	private static readonly Range<float> ZeroToTwenty = new(0, 20);
+	private static readonly Range<float> ZeroToMax = new(0, float.MaxValue);
+	private static readonly Range<float> TwentyToMax = new(20, float.MaxValue);
+	private static readonly Range<float> MinToMax = new(float.MinValue, float.MaxValue);
 
 	[Test]
 	public void DisjointConstructionSucceedsAndHasCorrectCount()
 	{
-		var range = new DiscontinuousRange<float>(ZeroToThree, SevenToNine, FourToFive);
-		Assert.That(range.Count, Is.EqualTo(3));
+		DiscontinuousRange<float> range = new(ZeroToThree, SevenToNine, FourToFive);
+		Assert.That(range, Has.Count.EqualTo(3));
 	}
 
 	[Test]
 	public void OverlappingConstructionSucceedsAndHasCorrectCount()
 	{
-		var range = new DiscontinuousRange<float>(ZeroToThree, SevenToNine, ZeroToEleven, FourToFive);
-		Assert.That(range.Count, Is.EqualTo(1));
+		DiscontinuousRange<float> range = new(ZeroToThree, SevenToNine, ZeroToEleven, FourToFive);
+		Assert.That(range, Has.Count.EqualTo(1));
 	}
 
 	[Test]
 	public void EmptyHasCountZero()
 	{
-		Assert.That(DiscontinuousRange<float>.Empty.Count, Is.EqualTo(0));
+		Assert.That(DiscontinuousRange<float>.Empty.Count, Is.Zero);
 	}
 
 	[Test]
 	public void CommutativeConstruction()
 	{
-		var range1 = new DiscontinuousRange<float>(ZeroToThree, SevenToNine, FourToFive);
-		var range2 = new DiscontinuousRange<float>(SevenToNine, FourToFive, ZeroToThree);
+		DiscontinuousRange<float> range1 = new(ZeroToThree, SevenToNine, FourToFive);
+		DiscontinuousRange<float> range2 = new(SevenToNine, FourToFive, ZeroToThree);
 		AssertEqual(range1, range2);
 	}
 
 	[Test]
 	public void MergingConstruction()
 	{
-		var range1 = new DiscontinuousRange<float>(TenToTwenty, TwentyToMax, ZeroToTen);
-		var expected = new DiscontinuousRange<float>(ZeroToMax);
+		DiscontinuousRange<float> range1 = new(TenToTwenty, TwentyToMax, ZeroToTen);
+		DiscontinuousRange<float> expected = new(ZeroToMax);
 		AssertEqual(range1, expected);
 	}
 
 	[Test]
 	public void UnionTest()
 	{
-		var range1 = new DiscontinuousRange<float>(TwentyToMax, ZeroToTen);
-		var range2 = new DiscontinuousRange<float>(ZeroToTwenty);
-		var expected = new DiscontinuousRange<float>(ZeroToMax);
+		DiscontinuousRange<float> range1 = new(TwentyToMax, ZeroToTen);
+		DiscontinuousRange<float> range2 = new(ZeroToTwenty);
+		DiscontinuousRange<float> expected = new(ZeroToMax);
 		AssertEqual(range1.Union(range2), expected);
 	}
 
 	[Test]
 	public void NegationTest()
 	{
-		var range1 = new DiscontinuousRange<float>(MinToZero);
-		var expected = new DiscontinuousRange<float>(ZeroToMax);
+		DiscontinuousRange<float> range1 = new(MinToZero);
+		DiscontinuousRange<float> expected = new(ZeroToMax);
 		AssertEqual(range1.Negate(float.MinValue, float.MaxValue), expected);
 	}
 
 	[Test]
 	public void SubtractMiddleTest()
 	{
-		var range1 = new DiscontinuousRange<float>(MinToMax);
-		var expected = new DiscontinuousRange<float>(MinToZero, TwentyToMax);
+		DiscontinuousRange<float> range1 = new(MinToMax);
+		DiscontinuousRange<float> expected = new(MinToZero, TwentyToMax);
 		AssertEqual(range1.Subtract(ZeroToTwenty), expected);
 	}
 
 	[Test]
 	public void SubtractLeftTest()
 	{
-		var range1 = new DiscontinuousRange<float>(MinToMax);
-		var expected = new DiscontinuousRange<float>(ZeroToMax);
+		DiscontinuousRange<float> range1 = new(MinToMax);
+		DiscontinuousRange<float> expected = new(ZeroToMax);
 		AssertEqual(range1.Subtract(MinToZero), expected);
 	}
 
 	[Test]
 	public void SubtractRightTest()
 	{
-		var range1 = new DiscontinuousRange<float>(MinToMax);
-		var expected = new DiscontinuousRange<float>(MinToZero);
+		DiscontinuousRange<float> range1 = new(MinToMax);
+		DiscontinuousRange<float> expected = new(MinToZero);
 		AssertEqual(range1.Subtract(ZeroToMax), expected);
 	}
 
 	[Test]
 	public void SubtractAllTest()
 	{
-		var range1 = new DiscontinuousRange<float>(TenToTwenty);
-		var expected = DiscontinuousRange<float>.Empty;
+		DiscontinuousRange<float> range1 = new(TenToTwenty);
+		DiscontinuousRange<float> expected = DiscontinuousRange<float>.Empty;
 		AssertEqual(range1.Subtract(ZeroToMax), expected);
 	}
 
 	[Test]
 	public void SubtractLeftOverlappingTest()
 	{
-		var range1 = new DiscontinuousRange<float>(ZeroToMax);
-		var range2 = new DiscontinuousRange<float>(MinToZero, ZeroToTwenty);
-		var expected = new DiscontinuousRange<float>(TwentyToMax);
+		DiscontinuousRange<float> range1 = new(ZeroToMax);
+		DiscontinuousRange<float> range2 = new(MinToZero, ZeroToTwenty);
+		DiscontinuousRange<float> expected = new(TwentyToMax);
 		AssertEqual(range1.Subtract(range2), expected);
 	}
 
 	[Test]
 	public void SubtractEndsTest()
 	{
-		var range1 = new DiscontinuousRange<float>(ZeroToMax);
-		var range2 = new DiscontinuousRange<float>(MinToZero, TwentyToMax);
-		var expected = new DiscontinuousRange<float>(ZeroToTwenty);
+		DiscontinuousRange<float> range1 = new(ZeroToMax);
+		DiscontinuousRange<float> range2 = new(MinToZero, TwentyToMax);
+		DiscontinuousRange<float> expected = new(ZeroToTwenty);
 		AssertEqual(range1.Subtract(range2), expected);
 	}
 
 	[Test]
 	public void SubtractManyTest()
 	{
-		var range1 = new DiscontinuousRange<float>(ZeroToMax);
-		var range2 = new DiscontinuousRange<float>(MinToZero, ZeroToThree, ThreeToFour, FiveToSeven, SevenToNine, TenToTwenty);
-		var expected = new DiscontinuousRange<float>(FourToFive, NineToTen, TwentyToMax);
+		DiscontinuousRange<float> range1 = new(ZeroToMax);
+		DiscontinuousRange<float> range2 = new(MinToZero, ZeroToThree, ThreeToFour, FiveToSeven, SevenToNine, TenToTwenty);
+		DiscontinuousRange<float> expected = new(FourToFive, NineToTen, TwentyToMax);
 		AssertEqual(range1.Subtract(range2), expected);
 	}
 

@@ -1,5 +1,4 @@
 ﻿using AssetRipper.IO.Endian;
-using AssetRipper.Primitives;
 
 namespace AssetRipper.IO.Files.SerializedFiles.FileIdentifiers;
 

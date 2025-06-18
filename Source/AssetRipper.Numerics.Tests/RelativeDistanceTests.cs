@@ -35,7 +35,7 @@
 			static void AssertEqualZero(float value)
 			{
 				float distance = RelativeDistanceMethods.RelativeDistance(value, value);
-				Assert.That(distance, Is.EqualTo(0f), () => $"Value {value} did not have zero distance with itself.");
+				Assert.That(distance, Is.Zero, () => $"Value {value} did not have zero distance with itself.");
 			}
 		}
 
@@ -117,10 +117,10 @@
 		{
 			Assert.Multiple(() =>
 			{
-				Assert.That(RelativeDistanceMethods.RelativeDistance(0f, 0f), Is.EqualTo(0f), () => $"1D distance between zero was not zero.");
-				Assert.That(RelativeDistanceMethods.RelativeDistance(Vector2.Zero, Vector2.Zero), Is.EqualTo(0f), () => $"2D distance between zero was not zero.");
-				Assert.That(RelativeDistanceMethods.RelativeDistance(Vector3.Zero, Vector3.Zero), Is.EqualTo(0f), () => $"3D distance between zero was not zero.");
-				Assert.That(RelativeDistanceMethods.RelativeDistance(Vector4.Zero, Vector4.Zero), Is.EqualTo(0f), () => $"4D distance between zero was not zero.");
+				Assert.That(RelativeDistanceMethods.RelativeDistance(0f, 0f), Is.Zero, () => $"1D distance between zero was not zero.");
+				Assert.That(RelativeDistanceMethods.RelativeDistance(Vector2.Zero, Vector2.Zero), Is.Zero, () => $"2D distance between zero was not zero.");
+				Assert.That(RelativeDistanceMethods.RelativeDistance(Vector3.Zero, Vector3.Zero), Is.Zero, () => $"3D distance between zero was not zero.");
+				Assert.That(RelativeDistanceMethods.RelativeDistance(Vector4.Zero, Vector4.Zero), Is.Zero, () => $"4D distance between zero was not zero.");
 			});
 		}
 	}

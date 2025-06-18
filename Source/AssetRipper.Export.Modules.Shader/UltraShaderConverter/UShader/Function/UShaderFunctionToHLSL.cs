@@ -1,6 +1,6 @@
 ﻿using AssetRipper.Export.Modules.Shaders.Extensions;
 using AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL;
-using System.Globalization;
+using AssetRipper.SourceGenerated.Extensions;
 using System.Text;
 
 namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Function

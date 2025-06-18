@@ -144,7 +144,7 @@ public sealed class ScriptExportCollection : ScriptExportCollectionBase
 			editorPlatformSettings.Enabled = false;
 			editorPlatformSettings.Settings.Add("DefaultValueInitialized", "true");
 		}
-		
+
 		Meta meta = new Meta(guid, importer);
 		ExportMeta(container, meta, path, fileSystem);
 

@@ -27,7 +27,7 @@ public sealed class MethodStubbingProcessor : IAssetProcessor
 			{
 				foreach (MethodDefinition method in type.Methods)
 				{
-				   method.ReplaceMethodBodyWithMinimalImplementation();
+					method.ReplaceMethodBodyWithMinimalImplementation();
 				}
 			}
 		}

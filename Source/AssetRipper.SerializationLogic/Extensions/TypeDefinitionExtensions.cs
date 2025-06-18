@@ -16,7 +16,7 @@ namespace AssetRipper.SerializationLogic.Extensions
 
 			return false;
 		}
-		
+
 		public static bool IsSubclassOf(this TypeDefinition type, string baseTypeName)
 		{
 			ITypeDefOrRef? baseType = type.BaseType;

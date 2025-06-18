@@ -48,7 +48,7 @@ namespace AssetRipper.Export.UnityProjects
 			}
 			//if (Importer.IncludesImporter(container.ExportVersion)) //For now, assume true
 			{
-				root.Add(Importer.ClassName, new ProjectYamlWalker(container){ ExportingAssetImporter = true }.ExportYamlNode(Importer));
+				root.Add(Importer.ClassName, new ProjectYamlWalker(container) { ExportingAssetImporter = true }.ExportYamlNode(Importer));
 			}
 			return document;
 		}

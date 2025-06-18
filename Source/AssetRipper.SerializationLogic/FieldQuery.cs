@@ -18,7 +18,7 @@ public static class FieldQuery
 
 		return IterateFields(hierarchy);
 	}
-	
+
 	public static IEnumerable<(FieldDefinition, TypeSignature)> GetFieldsInTypeAndBase(GenericInstanceTypeSignature genericInst)
 	{
 		Stack<(TypeDefinition, GenericContext)> hierarchy = new();

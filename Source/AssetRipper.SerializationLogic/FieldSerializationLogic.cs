@@ -85,7 +85,7 @@ namespace AssetRipper.SerializationLogic
 
 		private static bool IsDelegate(ITypeDescriptor typeReference)
 		{
-			return typeReference.IsAssignableTo("System" , "Delegate");
+			return typeReference.IsAssignableTo("System", "Delegate");
 		}
 
 		public static bool ShouldFieldBePPtrRemapped(FieldDefinition fieldDefinition)
@@ -211,7 +211,7 @@ namespace AssetRipper.SerializationLogic
 				//Early-out if we're already resolved.
 				return false;
 			}
-			
+
 			string? typeReferenceScopeName = typeReference.Scope?.Name;
 			if (typeReferenceScopeName == "Windows")
 			{
@@ -400,16 +400,16 @@ namespace AssetRipper.SerializationLogic
 				return true;
 			}
 
-			if (typeDeclaration.ToTypeSignature() is CorLibTypeSignature {ElementType: ElementType.Object})
+			if (typeDeclaration.ToTypeSignature() is CorLibTypeSignature { ElementType: ElementType.Object })
 			{
 				return true;
 			}
-			
+
 			if (typeDeclaration.IsArray())
 			{
 				return true;
 			}
-			
+
 			if (typeDeclaration.IsEnum())
 			{
 				return true;
@@ -445,10 +445,10 @@ namespace AssetRipper.SerializationLogic
 			TypeDefinition resolvedTypeDeclaration = typeDeclaration.CheckedResolve();
 
 			bool isSerializable = resolvedTypeDeclaration.IsSerializable;
-			
+
 			//If serializable, also check we're not compiler generated
-			isSerializable &= resolvedTypeDeclaration.CustomAttributes.All(a => a.Constructor?.DeclaringType is not {} type || type.Namespace != "System.Runtime.CompilerServices" || !type.Name!.Value.StartsWith("CompilerGenerated"));
-			
+			isSerializable &= resolvedTypeDeclaration.CustomAttributes.All(a => a.Constructor?.DeclaringType is not { } type || type.Namespace != "System.Runtime.CompilerServices" || !type.Name!.Value.StartsWith("CompilerGenerated"));
+
 			if (typeDeclaration.IsValueType)
 			{
 				return isSerializable;

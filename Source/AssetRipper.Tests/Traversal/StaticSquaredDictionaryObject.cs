@@ -1,8 +1,6 @@
 ﻿using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.Metadata;
-using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Subclasses.StaticBatchInfo;
-using AssetRipper.SourceGenerated.Subclasses.Vector3f;
 
 namespace AssetRipper.Tests.Traversal;
 

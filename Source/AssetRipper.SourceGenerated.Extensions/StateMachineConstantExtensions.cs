@@ -1,5 +1,5 @@
-﻿using AssetRipper.SourceGenerated.Subclasses.StateMachineConstant;
-using AssetRipper.SourceGenerated.Subclasses.SelectorStateConstant;
+﻿using AssetRipper.SourceGenerated.Subclasses.SelectorStateConstant;
+using AssetRipper.SourceGenerated.Subclasses.StateMachineConstant;
 
 namespace AssetRipper.SourceGenerated.Extensions
 {

@@ -170,14 +170,14 @@ namespace AssetRipper.Import.Structure.Platforms
 			{
 				AddAssetBundle(files, DataBundleName, dataBundlePath);
 			}
-			
+
 			string dataPackBundlePath = Path.Join(root.FullName, DataPackBundleName);
 			if (MultiFileStream.Exists(dataPackBundlePath))
 			{
 				AddAssetBundle(files, DataPackBundleName, dataPackBundlePath);
 			}
 		}
-		
+
 		/// <summary>
 		/// Collects global game managers and all the level files
 		/// </summary>

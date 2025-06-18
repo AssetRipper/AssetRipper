@@ -77,7 +77,7 @@ public class FieldSerializationTests
 		{
 			Assert.That(field.Name, Is.EqualTo(nameof(CustomMonoBehaviourWithGenericField.testGenericClass)));
 			Assert.That(field.Type.Type, Is.EqualTo(PrimitiveType.Complex));
-			Assert.That(field.ArrayDepth, Is.EqualTo(0));
+			Assert.That(field.ArrayDepth, Is.Zero);
 			Assert.That(field.Type.Fields, Has.Count.EqualTo(1));
 		}
 		SerializableType.Field subField = field.Type.Fields[0];
@@ -129,7 +129,7 @@ public class FieldSerializationTests
 		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(field.Type, Is.EqualTo(SerializablePointerType.Shared));
-			Assert.That(field.ArrayDepth, Is.EqualTo(0));
+			Assert.That(field.ArrayDepth, Is.Zero);
 		}
 	}
 }

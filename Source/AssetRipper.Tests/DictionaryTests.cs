@@ -36,7 +36,7 @@ namespace AssetRipper.Tests
 
 			Assert.Multiple(() =>
 			{
-				Assert.That(dictionary.Count, Is.EqualTo(3));
+				Assert.That(dictionary, Has.Count.EqualTo(3));
 				Assert.That(dictionary.ContainsKey(Cast("One")));
 				Assert.That(dictionary.ContainsKey(Cast("Three")));
 				Assert.That(!dictionary.ContainsKey(Cast("Four")));

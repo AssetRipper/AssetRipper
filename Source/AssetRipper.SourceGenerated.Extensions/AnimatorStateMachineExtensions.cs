@@ -57,7 +57,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			{
 				return stateMachine.ChildStateMachines.Count;
 			}
-			return stateMachine.ChildStateMachine.Count; 
+			return stateMachine.ChildStateMachine.Count;
 		}
 	}
 }

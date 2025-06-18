@@ -4,7 +4,6 @@ using AssetRipper.Assets.Collections;
 using AssetRipper.Export.UnityProjects;
 using AssetRipper.Primitives;
 using AssetRipper.Processing.Prefabs;
-using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_1001;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;

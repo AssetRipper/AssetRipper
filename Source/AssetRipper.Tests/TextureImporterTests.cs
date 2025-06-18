@@ -15,13 +15,13 @@ internal class TextureImporterTests
 		{
 			ITextureImporter importer = CreateImporterWithSwizzleField();
 			Assert.That(importer.Has_Swizzle(), Is.True);
-			Assert.That(importer.Swizzle, Is.EqualTo(0));
+			Assert.That(importer.Swizzle, Is.Zero);
 		});
 		Assert.Multiple(() =>
 		{
 			ITextureImporter importer = CreateImporterWithoutSwizzleField();
 			Assert.That(importer.Has_Swizzle(), Is.False);
-			Assert.That(importer.Swizzle, Is.EqualTo(0));
+			Assert.That(importer.Swizzle, Is.Zero);
 		});
 	}
 
@@ -36,7 +36,7 @@ internal class TextureImporterTests
 			Assert.That(channel1, Is.EqualTo(Swizzle.R));
 			Assert.That(channel2, Is.EqualTo(Swizzle.R));
 			Assert.That(channel3, Is.EqualTo(Swizzle.R));
-			Assert.That(importer.Swizzle, Is.EqualTo(0));//Check that GetSwizzle hasn't changed the value.
+			Assert.That(importer.Swizzle, Is.Zero);//Check that GetSwizzle hasn't changed the value.
 		});
 	}
 
@@ -58,7 +58,7 @@ internal class TextureImporterTests
 		{
 			ITextureImporter importer = CreateImporterWithoutSwizzleField();
 			importer.Swizzle = 534232;//arbitrary
-			Assert.That(importer.Swizzle, Is.EqualTo(0));
+			Assert.That(importer.Swizzle, Is.Zero);
 			importer.SetSwizzle(Swizzle.One, Swizzle.OneMinusR, Swizzle.G, Swizzle.OneMinusA);//arbitrary
 			importer.GetSwizzle(out Swizzle channel0, out Swizzle channel1, out Swizzle channel2, out Swizzle channel3);
 			Assert.That(channel0, Is.EqualTo(Swizzle.R));

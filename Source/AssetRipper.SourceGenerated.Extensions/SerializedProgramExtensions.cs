@@ -1,5 +1,4 @@
-﻿using AssetRipper.Assets.Generics;
-using AssetRipper.SourceGenerated.Subclasses.SerializedPlayerSubProgram;
+﻿using AssetRipper.SourceGenerated.Subclasses.SerializedPlayerSubProgram;
 using AssetRipper.SourceGenerated.Subclasses.SerializedProgram;
 
 namespace AssetRipper.SourceGenerated.Extensions

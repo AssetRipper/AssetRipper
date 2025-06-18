@@ -24,7 +24,7 @@ namespace AssetRipper.Export.Modules.Shaders.ShaderBlob
 		{
 			while (m_decompressedBlobSegments.Count < segment + 1) { m_decompressedBlobSegments.Add([]); }
 			m_decompressedBlobSegments[segment] = DecompressedBlob.DecompressBlob(compressedBlob, offset, compressedLength, decompressedLength);
-			
+
 			if (segment == 0)
 			{
 				using MemoryStream blobMem = new MemoryStream(m_decompressedBlobSegments[segment]);

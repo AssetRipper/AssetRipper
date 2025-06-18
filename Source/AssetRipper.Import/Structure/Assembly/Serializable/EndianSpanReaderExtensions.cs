@@ -1,5 +1,4 @@
 ﻿using AssetRipper.IO.Endian;
-using AssetRipper.Primitives;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 

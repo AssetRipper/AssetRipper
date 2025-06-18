@@ -17,7 +17,7 @@
 
 			double angleToP1 = Math.Atan2(transformedP1Y, transformedP1X);
 			double angleToP2 = Math.Atan2(transformedP2Y, transformedP2X);
-			
+
 			double angle = angleToP1 - angleToP2;
 			if (angle < 0)
 			{

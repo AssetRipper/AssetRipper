@@ -18,7 +18,6 @@ using AssetRipper.SourceGenerated.Subclasses.SerializedStencilOp;
 using AssetRipper.SourceGenerated.Subclasses.SerializedSubProgram;
 using AssetRipper.SourceGenerated.Subclasses.SerializedSubShader;
 using AssetRipper.SourceGenerated.Subclasses.SerializedTagMap;
-using System.Globalization;
 
 namespace AssetRipper.Export.Modules.Shaders.IO
 {
@@ -336,7 +335,8 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 						writer.Write('A');
 					}
 				}
-				if (index != -1) { 
+				if (index != -1)
+				{
 					writer.Write($" {index}");
 				}
 				writer.Write($"\n");
@@ -479,8 +479,8 @@ namespace AssetRipper.Export.Modules.Shaders.IO
 				// https://github.com/AssetRipper/AssetRipper/pull/1337
 				writer.Write($"Comp{type.ToSuffixString()} [{_this.CompValue()}]\n");
 			}
-			else 
-			{ 
+			else
+			{
 				writer.Write($"Comp{type.ToSuffixString()} {_this.CompValue()}\n");
 			}
 			writer.WriteIndent(4);

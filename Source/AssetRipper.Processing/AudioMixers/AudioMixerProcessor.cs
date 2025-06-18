@@ -2,7 +2,6 @@
 using AssetRipper.Assets.Generics;
 using AssetRipper.Checksum;
 using AssetRipper.Import.Logging;
-using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_240;
 using AssetRipper.SourceGenerated.Classes.ClassID_241;
 using AssetRipper.SourceGenerated.Classes.ClassID_243;
@@ -36,7 +35,7 @@ namespace AssetRipper.Processing.AudioMixers
 
 			ProcessedAssetCollection processedCollection = gameData.AddNewProcessedCollection("Generated Audio Mixer Effects");
 
-			Dictionary<IAudioMixer, Dictionary<UnityGuid, IAudioMixerGroup >> groupGuidMixerMap = new();
+			Dictionary<IAudioMixer, Dictionary<UnityGuid, IAudioMixerGroup>> groupGuidMixerMap = new();
 			foreach (IAudioMixerGroup group in gameData.GameBundle.FetchAssets().OfType<IAudioMixerGroup>())
 			{
 				IAudioMixer? mixer = group.AudioMixer_C273P;

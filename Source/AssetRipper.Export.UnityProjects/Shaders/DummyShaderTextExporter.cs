@@ -5,7 +5,6 @@ using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Extensions.Enums.Shader.SerializedShader;
 using AssetRipper.SourceGenerated.Subclasses.SerializedProperties;
 using AssetRipper.SourceGenerated.Subclasses.SerializedProperty;
-using System.Globalization;
 
 namespace AssetRipper.Export.UnityProjects.Shaders
 {
@@ -37,7 +36,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path, FileSystem fileSystem)
 		{
 			using Stream fileStream = fileSystem.File.Create(path);
-			using InvariantStreamWriter writer = new InvariantStreamWriter(fileStream);
+			using InvariantStreamWriter writer = new(fileStream);
 			ExportShader((IShader)asset, writer);
 			return true;
 		}
@@ -147,9 +146,7 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 					break;
 
 				case SerializedPropertyType.Range:
-					writer.Write($"Range({
-						_this.DefValue_1_.ToString(CultureInfo.InvariantCulture)}, {
-						_this.DefValue_2_.ToString(CultureInfo.InvariantCulture)})");
+					writer.Write($"Range({_this.DefValue_1_.ToStringInvariant()}, {_this.DefValue_2_.ToStringInvariant()})");
 					break;
 
 				case SerializedPropertyType.Texture:
@@ -192,17 +189,13 @@ namespace AssetRipper.Export.UnityProjects.Shaders
 			{
 				case SerializedPropertyType.Color:
 				case SerializedPropertyType.Vector:
-					writer.Write($"({
-						_this.DefValue_0_.ToString(CultureInfo.InvariantCulture)},{
-						_this.DefValue_1_.ToString(CultureInfo.InvariantCulture)},{
-						_this.DefValue_2_.ToString(CultureInfo.InvariantCulture)},{
-						_this.DefValue_3_.ToString(CultureInfo.InvariantCulture)})");
+					writer.Write($"({_this.DefValue_0_.ToStringInvariant()},{_this.DefValue_1_.ToStringInvariant()},{_this.DefValue_2_.ToStringInvariant()},{_this.DefValue_3_.ToStringInvariant()})");
 					break;
 
 				case SerializedPropertyType.Float:
 				case SerializedPropertyType.Range:
 				case SerializedPropertyType.Int:
-					writer.Write(_this.DefValue_0_.ToString(CultureInfo.InvariantCulture));
+					writer.Write(_this.DefValue_0_.ToStringInvariant());
 					break;
 
 				case SerializedPropertyType.Texture:

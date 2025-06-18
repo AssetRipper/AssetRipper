@@ -17,7 +17,7 @@ public static class FileUtilsTests
 			Assert.That(FileSystem.GetUniqueName("/dir", "A文.ext", 9), Is.EqualTo("A文.ext"));
 		});
 	}
-	
+
 	[Test]
 	public static void ExtensionLength()
 	{
@@ -25,12 +25,12 @@ public static class FileUtilsTests
 		{
 			Assert.That(FileSystem.GetUniqueName("/dir", "A文.ext", 7), Is.EqualTo("A.ext"));
 			Assert.That(FileSystem.GetUniqueName("/dir", "A文.ext", 8), Is.EqualTo("A文.ext"));
-			
+
 			Assert.That(FileSystem.GetUniqueName("/dir", "A文.exte", 8), Is.EqualTo("A.exte"));
 			Assert.That(FileSystem.GetUniqueName("/dir", "A文.exte", 9), Is.EqualTo("A文.exte"));
 		});
 	}
-	
+
 	[Test]
 	public static void WithoutExtension()
 	{

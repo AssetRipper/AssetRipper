@@ -100,14 +100,14 @@ public static class Generator
 			castGetAccessor = false; //assume implicit conversions available
 			castSetAccessor = propertyType != fieldType;
 		}
-		
+
 		string processMethodName = $"On{propertyName}Assignment";
 
 		declaration.TryGetPropertyDocumentation(propertyName, out string? summary, out string? remarks);
 		MaybeWriteDocumentation(writer, summary, remarks);
 		string defaultValue = field.TypeIsString(out _) ? "string.Empty" : "new()";
-		writer.WriteLine(isReadOnly 
-			? $"private readonly {fieldType} {fieldName} = {defaultValue};" 
+		writer.WriteLine(isReadOnly
+			? $"private readonly {fieldType} {fieldName} = {defaultValue};"
 			: $"private {fieldType} {fieldName} = {defaultValue};");
 		writer.WriteLine();
 
@@ -232,8 +232,8 @@ public static class Generator
 				}
 				else
 				{
-					string parameter = string.IsNullOrEmpty(serializableField.FieldName) 
-						? $"default({serializableField.TypeName})" 
+					string parameter = string.IsNullOrEmpty(serializableField.FieldName)
+						? $"default({serializableField.TypeName})"
 						: $"m_{serializableField.FieldName}";
 					if (PrimitiveHandler.GetTypeNameForKeyword(serializableField.TypeName, out string? typeName))
 					{

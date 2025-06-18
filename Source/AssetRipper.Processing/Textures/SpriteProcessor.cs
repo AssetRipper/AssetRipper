@@ -1,7 +1,5 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Cloning;
-using AssetRipper.Assets.Metadata;
 using AssetRipper.IO.Files;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
