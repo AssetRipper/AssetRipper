@@ -21,6 +21,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\AssetRipper.Export.PrimaryContent\AssetRipper.Export.PrimaryContent.csproj" />
 		<ProjectReference Include="..\AssetRipper.Export.UnityProjects\AssetRipper.Export.UnityProjects.csproj" />
+		<ProjectReference Include="..\UnityEngine\UnityEngine.csproj" />
 	</ItemGroup>
 
 </Project>

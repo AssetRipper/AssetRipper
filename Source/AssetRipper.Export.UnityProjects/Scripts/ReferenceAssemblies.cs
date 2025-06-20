@@ -39,6 +39,9 @@ public static class ReferenceAssemblies
 			referenceAssemblies.TryAdd(assembly, UnityEngineGUID);
 		}
 
+		// Todo: investigate why 5.4.0a0 does not have UnityEngine
+		referenceAssemblies.TryAdd("UnityEngine", UnityEngineGUID);
+
 		return referenceAssemblies;
 
 		static IReadOnlyList<string> GetMonoAssemblies(IAssemblyManager assemblyManager, AssemblyData assemblyData)

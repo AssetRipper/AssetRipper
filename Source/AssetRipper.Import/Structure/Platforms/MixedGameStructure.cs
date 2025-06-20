@@ -42,7 +42,7 @@ namespace AssetRipper.Import.Structure.Platforms
 			Backend = Assemblies.Count > 0 ? ScriptingBackend.Mono : ScriptingBackend.Unknown;
 		}
 
-		private IEnumerable<string> SelectUniquePaths(IEnumerable<string> paths)
+		private static IEnumerable<string> SelectUniquePaths(IEnumerable<string> paths)
 		{
 			return paths.Select(t => MultiFileStream.GetFilePath(t)).Distinct();
 		}
