@@ -34,7 +34,7 @@
 		<PackageReference Include="oqo0.SwaggerThemes" Version="1.4.3" />
 		<PackageReference Include="Photino.NET" Version="4.0.16" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.1" />
-		<PackageReference Include="System.CommandLine" Version="2.0.0-beta5.25306.1" />
+		<PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
 	</ItemGroup>
 
 </Project>
