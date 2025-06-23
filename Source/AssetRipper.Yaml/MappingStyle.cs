@@ -1,18 +1,17 @@
-namespace AssetRipper.Yaml
+namespace AssetRipper.Yaml;
+
+/// <summary>
+/// Specifies the style of a mapping.
+/// </summary>
+public enum MappingStyle
 {
 	/// <summary>
-	/// Specifies the style of a mapping.
+	/// The block mapping style.
 	/// </summary>
-	public enum MappingStyle
-	{
-		/// <summary>
-		/// The block mapping style.
-		/// </summary>
-		Block,
+	Block,
 
-		/// <summary>
-		/// The flow mapping style.
-		/// </summary>
-		Flow
-	}
+	/// <summary>
+	/// The flow mapping style.
+	/// </summary>
+	Flow
 }

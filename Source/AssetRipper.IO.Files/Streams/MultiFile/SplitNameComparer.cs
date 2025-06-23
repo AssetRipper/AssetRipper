@@ -1,32 +1,31 @@
-﻿namespace AssetRipper.IO.Files.Streams.MultiFile
+﻿namespace AssetRipper.IO.Files.Streams.MultiFile;
+
+internal sealed class SplitNameComparer : IComparer<string>
 {
-	internal sealed class SplitNameComparer : IComparer<string>
+	public int Compare(string? x, string? y)
 	{
-		public int Compare(string? x, string? y)
+		int xNumber = GetSplitIndex(x);
+		int yNumber = GetSplitIndex(y);
+		return xNumber.CompareTo(yNumber);
+	}
+
+	private static int GetSplitIndex(string? value)
+	{
+		if (string.IsNullOrEmpty(value))
 		{
-			int xNumber = GetSplitIndex(x);
-			int yNumber = GetSplitIndex(y);
-			return xNumber.CompareTo(yNumber);
+			return -1;
 		}
 
-		private static int GetSplitIndex(string? value)
+		int i;
+		for (i = value.Length - 1; i >= 0; i--)
 		{
-			if (string.IsNullOrEmpty(value))
+			if (!char.IsDigit(value[i]))
 			{
-				return -1;
+				i++;
+				break;
 			}
-
-			int i;
-			for (i = value.Length - 1; i >= 0; i--)
-			{
-				if (!char.IsDigit(value[i]))
-				{
-					i++;
-					break;
-				}
-			}
-			string number = value.Substring(i);
-			return int.Parse(number);
 		}
+		string number = value.Substring(i);
+		return int.Parse(number);
 	}
 }

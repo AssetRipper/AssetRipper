@@ -1,23 +1,22 @@
-namespace AssetRipper.Yaml
+namespace AssetRipper.Yaml;
+
+/// <summary>
+/// Specifies the style of a Yaml scalar.
+/// </summary>
+public enum ScalarStyle
 {
 	/// <summary>
-	/// Specifies the style of a Yaml scalar.
+	/// The plain scalar style.
 	/// </summary>
-	public enum ScalarStyle
-	{
-		/// <summary>
-		/// The plain scalar style.
-		/// </summary>
-		Plain,
+	Plain,
 
-		/// <summary>
-		/// The single-quoted scalar style.
-		/// </summary>
-		SingleQuoted,
+	/// <summary>
+	/// The single-quoted scalar style.
+	/// </summary>
+	SingleQuoted,
 
-		/// <summary>
-		/// The double-quoted scalar style.
-		/// </summary>
-		DoubleQuoted,
-	}
+	/// <summary>
+	/// The double-quoted scalar style.
+	/// </summary>
+	DoubleQuoted,
 }

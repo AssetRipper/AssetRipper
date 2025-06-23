@@ -1,11 +1,10 @@
 ﻿using AssetRipper.IO.Endian;
 
-namespace AssetRipper.IO.Files.BundleFiles.RawWeb.Web
+namespace AssetRipper.IO.Files.BundleFiles.RawWeb.Web;
+
+public sealed record class WebBundleHeader : RawWebBundleHeader
 {
-	public sealed record class WebBundleHeader : RawWebBundleHeader
-	{
-		private const string UnityWebMagic = "UnityWeb";
-		protected override string MagicString => UnityWebMagic;
-		internal static bool IsBundleHeader(EndianReader reader) => IsBundleHeader(reader, UnityWebMagic);
-	}
+	private const string UnityWebMagic = "UnityWeb";
+	protected override string MagicString => UnityWebMagic;
+	internal static bool IsBundleHeader(EndianReader reader) => IsBundleHeader(reader, UnityWebMagic);
 }

@@ -1,96 +1,95 @@
-namespace AssetRipper.SerializationLogic.Extensions
+namespace AssetRipper.SerializationLogic.Extensions;
+
+internal static class TypeDefinitionExtensions
 {
-	internal static class TypeDefinitionExtensions
+	public static bool IsSubclassOf(this TypeDefinition type, string ns, string name)
 	{
-		public static bool IsSubclassOf(this TypeDefinition type, string ns, string name)
+		ITypeDefOrRef? baseType = type.BaseType;
+		while (baseType != null)
 		{
-			ITypeDefOrRef? baseType = type.BaseType;
-			while (baseType != null)
-			{
-				if (baseType.Namespace == ns && baseType.Name == name)
-				{
-					return true;
-				}
-				baseType = baseType.Resolve()?.BaseType;
-			}
-
-			return false;
-		}
-
-		public static bool IsSubclassOf(this TypeDefinition type, string baseTypeName)
-		{
-			ITypeDefOrRef? baseType = type.BaseType;
-			if (baseType == null)
-			{
-				return false;
-			}
-
-			if (baseType.FullName == baseTypeName)
+			if (baseType.Namespace == ns && baseType.Name == name)
 			{
 				return true;
 			}
-
-			TypeDefinition? baseTypeDef = baseType.Resolve();
-			if (baseTypeDef == null)
-			{
-				return false;
-			}
-
-			return baseTypeDef.IsSubclassOf(baseTypeName);
+			baseType = baseType.Resolve()?.BaseType;
 		}
 
-		public static bool IsSubclassOfAny(this TypeDefinition type, params string[] baseTypeNames)
+		return false;
+	}
+
+	public static bool IsSubclassOf(this TypeDefinition type, string baseTypeName)
+	{
+		ITypeDefOrRef? baseType = type.BaseType;
+		if (baseType == null)
 		{
-			ITypeDefOrRef? baseType = type.BaseType;
-			if (baseType == null)
-			{
-				return false;
-			}
-
-			for (int i = 0; i < baseTypeNames.Length; i++)
-			{
-				if (baseType.FullName == baseTypeNames[i])
-				{
-					return true;
-				}
-			}
-
-			TypeDefinition? baseTypeDef = baseType.Resolve();
-			if (baseTypeDef == null)
-			{
-				return false;
-			}
-
-			return baseTypeDef.IsSubclassOfAny(baseTypeNames);
+			return false;
 		}
 
-		public static bool InheritsFromMonoBehaviour(this TypeDefinition type)
+		if (baseType.FullName == baseTypeName)
 		{
-			return type.InheritsFrom("UnityEngine", "MonoBehaviour");
+			return true;
 		}
 
-		public static bool InheritsFromObject(this TypeDefinition type)
+		TypeDefinition? baseTypeDef = baseType.Resolve();
+		if (baseTypeDef == null)
 		{
-			return type.InheritsFrom("UnityEngine", "Object");
+			return false;
 		}
 
-		public static TypeDefinition? TryGetBaseClass(this TypeDefinition current)
+		return baseTypeDef.IsSubclassOf(baseTypeName);
+	}
+
+	public static bool IsSubclassOfAny(this TypeDefinition type, params string[] baseTypeNames)
+	{
+		ITypeDefOrRef? baseType = type.BaseType;
+		if (baseType == null)
 		{
-			return current.BaseType?.Resolve();
+			return false;
 		}
 
-		public static bool TryGetPrimitiveType(this TypeDefinition typeDefinition, out PrimitiveType primitiveType)
+		for (int i = 0; i < baseTypeNames.Length; i++)
 		{
-			if ((typeDefinition.Module?.Assembly?.IsCorLib ?? false) && typeDefinition.ToTypeSignature() is CorLibTypeSignature corLibTypeSignature)
+			if (baseType.FullName == baseTypeNames[i])
 			{
-				primitiveType = corLibTypeSignature.ToPrimitiveType();
-				return primitiveType.IsCSharpPrimitive();
+				return true;
 			}
-			else
-			{
-				primitiveType = PrimitiveType.Complex;
-				return false;
-			}
+		}
+
+		TypeDefinition? baseTypeDef = baseType.Resolve();
+		if (baseTypeDef == null)
+		{
+			return false;
+		}
+
+		return baseTypeDef.IsSubclassOfAny(baseTypeNames);
+	}
+
+	public static bool InheritsFromMonoBehaviour(this TypeDefinition type)
+	{
+		return type.InheritsFrom("UnityEngine", "MonoBehaviour");
+	}
+
+	public static bool InheritsFromObject(this TypeDefinition type)
+	{
+		return type.InheritsFrom("UnityEngine", "Object");
+	}
+
+	public static TypeDefinition? TryGetBaseClass(this TypeDefinition current)
+	{
+		return current.BaseType?.Resolve();
+	}
+
+	public static bool TryGetPrimitiveType(this TypeDefinition typeDefinition, out PrimitiveType primitiveType)
+	{
+		if ((typeDefinition.Module?.Assembly?.IsCorLib ?? false) && typeDefinition.ToTypeSignature() is CorLibTypeSignature corLibTypeSignature)
+		{
+			primitiveType = corLibTypeSignature.ToPrimitiveType();
+			return primitiveType.IsCSharpPrimitive();
+		}
+		else
+		{
+			primitiveType = PrimitiveType.Complex;
+			return false;
 		}
 	}
 }

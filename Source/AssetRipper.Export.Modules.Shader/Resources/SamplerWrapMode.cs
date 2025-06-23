@@ -1,10 +1,9 @@
-﻿namespace AssetRipper.Export.Modules.Shaders.Resources
+﻿namespace AssetRipper.Export.Modules.Shaders.Resources;
+
+internal enum SamplerWrapMode
 {
-	internal enum SamplerWrapMode
-	{
-		Repeat,
-		Clamp,
-		Mirror,
-		MirrorOnce,
-	}
+	Repeat,
+	Clamp,
+	Mirror,
+	MirrorOnce,
 }

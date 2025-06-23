@@ -7,42 +7,41 @@ using AssetRipper.SourceGenerated.Classes.ClassID_27;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Extensions;
 
-namespace AssetRipper.Processing
+namespace AssetRipper.Processing;
+
+public class MainAssetProcessor : IAssetProcessor
 {
-	public class MainAssetProcessor : IAssetProcessor
+	public void Process(GameData gameData)
 	{
-		public void Process(GameData gameData)
+		Logger.Info(LogCategory.Processing, "Main Asset Pairing");
+		foreach (IUnityObjectBase asset in gameData.GameBundle.FetchAssets())
 		{
-			Logger.Info(LogCategory.Processing, "Main Asset Pairing");
-			foreach (IUnityObjectBase asset in gameData.GameBundle.FetchAssets())
+			switch (asset)
 			{
-				switch (asset)
-				{
-					case IFont font:
+				case IFont font:
+					{
+						font.MainAsset = font;
+						if (font.TryGetFontMaterial(out IMaterial? fontMaterial))
 						{
-							font.MainAsset = font;
-							if (font.TryGetFontMaterial(out IMaterial? fontMaterial))
-							{
-								fontMaterial.MainAsset = font;
-							}
-							if (font.TryGetFontTexture(out ITexture? fontTexture))
-							{
-								fontTexture.MainAsset = font;
-							}
+							fontMaterial.MainAsset = font;
 						}
-						break;
-					case ITerrainData terrainData:
+						if (font.TryGetFontTexture(out ITexture? fontTexture))
 						{
-							terrainData.MainAsset = terrainData;
-							foreach (ITexture2D alphaTexture in terrainData.GetSplatAlphaTextures())
-							{
-								//Sometimes TerrainData can be duplicated, but retain the same alpha textures.
-								//https://github.com/AssetRipper/AssetRipper/issues/1356
-								alphaTexture.MainAsset ??= terrainData;
-							}
+							fontTexture.MainAsset = font;
 						}
-						break;
-				}
+					}
+					break;
+				case ITerrainData terrainData:
+					{
+						terrainData.MainAsset = terrainData;
+						foreach (ITexture2D alphaTexture in terrainData.GetSplatAlphaTextures())
+						{
+							//Sometimes TerrainData can be duplicated, but retain the same alpha textures.
+							//https://github.com/AssetRipper/AssetRipper/issues/1356
+							alphaTexture.MainAsset ??= terrainData;
+						}
+					}
+					break;
 			}
 		}
 	}

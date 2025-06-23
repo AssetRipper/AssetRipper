@@ -1,59 +1,58 @@
-﻿namespace AssetRipper.Assets.Generics
+﻿namespace AssetRipper.Assets.Generics;
+
+public sealed class AssetPair<TKey, TValue> : AccessPairBase<TKey, TValue>, IEquatable<AssetPair<TKey, TValue>>
+	where TKey : notnull, new()
+	where TValue : notnull, new()
 {
-	public sealed class AssetPair<TKey, TValue> : AccessPairBase<TKey, TValue>, IEquatable<AssetPair<TKey, TValue>>
-		where TKey : notnull, new()
-		where TValue : notnull, new()
+	private TKey key;
+	private TValue value;
+
+	public AssetPair()
 	{
-		private TKey key;
-		private TValue value;
+		key = new();
+		value = new();
+	}
 
-		public AssetPair()
+	public override TKey Key
+	{
+		get => key;
+		set
 		{
-			key = new();
-			value = new();
+			ThrowIfKeyNotImmutable();
+			key = value;
 		}
+	}
 
-		public override TKey Key
+	public override TValue Value
+	{
+		get => value;
+		set
 		{
-			get => key;
-			set
-			{
-				ThrowIfKeyNotImmutable();
-				key = value;
-			}
+			ThrowIfValueNotImmutable();
+			this.value = value;
 		}
+	}
 
-		public override TValue Value
+	private static void ThrowIfKeyNotImmutable()
+	{
+		if (!typeof(TKey).IsValueType && typeof(TKey) != typeof(string) && typeof(TKey) != typeof(Utf8String))
 		{
-			get => value;
-			set
-			{
-				ThrowIfValueNotImmutable();
-				this.value = value;
-			}
+			throw new NotSupportedException($"Only immutable values can be used in the setter for {nameof(Key)}.");
 		}
+	}
 
-		private static void ThrowIfKeyNotImmutable()
+	private static void ThrowIfValueNotImmutable()
+	{
+		if (!typeof(TValue).IsValueType && typeof(TValue) != typeof(string) && typeof(TValue) != typeof(Utf8String))
 		{
-			if (!typeof(TKey).IsValueType && typeof(TKey) != typeof(string) && typeof(TKey) != typeof(Utf8String))
-			{
-				throw new NotSupportedException($"Only immutable values can be used in the setter for {nameof(Key)}.");
-			}
+			throw new NotSupportedException($"Only immutable values can be used in the setter for {nameof(Value)}.");
 		}
+	}
 
-		private static void ThrowIfValueNotImmutable()
-		{
-			if (!typeof(TValue).IsValueType && typeof(TValue) != typeof(string) && typeof(TValue) != typeof(Utf8String))
-			{
-				throw new NotSupportedException($"Only immutable values can be used in the setter for {nameof(Value)}.");
-			}
-		}
+	bool IEquatable<AssetPair<TKey, TValue>>.Equals(AssetPair<TKey, TValue>? other) => Equals(other);
 
-		bool IEquatable<AssetPair<TKey, TValue>>.Equals(AssetPair<TKey, TValue>? other) => Equals(other);
-
-		public static implicit operator KeyValuePair<TKey, TValue>(AssetPair<TKey, TValue> pair)
-		{
-			return new KeyValuePair<TKey, TValue>(pair.Key, pair.Value);
-		}
+	public static implicit operator KeyValuePair<TKey, TValue>(AssetPair<TKey, TValue> pair)
+	{
+		return new KeyValuePair<TKey, TValue>(pair.Key, pair.Value);
 	}
 }

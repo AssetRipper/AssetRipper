@@ -1,10 +1,9 @@
-﻿namespace AssetRipper.Export.Modules.Shaders.ConstantBuffers
+﻿namespace AssetRipper.Export.Modules.Shaders.ConstantBuffers;
+
+internal enum ConstantBufferType
 {
-	internal enum ConstantBufferType
-	{
-		ConstantBuffer,
-		TextureBuffer,
-		InterfacePointers,
-		ResourceBindInformation,
-	}
+	ConstantBuffer,
+	TextureBuffer,
+	InterfacePointers,
+	ResourceBindInformation,
 }

@@ -1,179 +1,178 @@
 ﻿using AssetRipper.Assets.Metadata;
 using System.Diagnostics;
 
-namespace AssetRipper.Assets.Cloning
+namespace AssetRipper.Assets.Cloning;
+
+public sealed class AssetEqualityComparer : IEqualityComparer<IUnityObjectBase>
 {
-	public sealed class AssetEqualityComparer : IEqualityComparer<IUnityObjectBase>
+	private readonly Dictionary<UnorderedPair, bool> compareCache = new();
+	private readonly Dictionary<UnorderedPair, List<UnorderedPair>> dependentEqualityPairs = new();
+	public IUnityObjectBase CallingObject { get; private set; } = default!;
+	public IUnityObjectBase OtherObject { get; private set; } = default!;
+
+	/// <summary>
+	/// Used for source generation.
+	/// </summary>
+	/// <param name="pptrFromCallingObject"></param>
+	/// <param name="pptrFromOtherObject"></param>
+	/// <returns>True if they're equal, false if they're inequal, or null if it was added to the list of dependent pairs.</returns>
+	public bool? MaybeAddDependentComparison(IPPtr pptrFromCallingObject, IPPtr pptrFromOtherObject)
 	{
-		private readonly Dictionary<UnorderedPair, bool> compareCache = new();
-		private readonly Dictionary<UnorderedPair, List<UnorderedPair>> dependentEqualityPairs = new();
-		public IUnityObjectBase CallingObject { get; private set; } = default!;
-		public IUnityObjectBase OtherObject { get; private set; } = default!;
+		IUnityObjectBase? x = CallingObject.Collection.TryGetAsset(pptrFromCallingObject.FileID, pptrFromCallingObject.PathID);
+		IUnityObjectBase? y = OtherObject.Collection.TryGetAsset(pptrFromOtherObject.FileID, pptrFromOtherObject.PathID);
 
-		/// <summary>
-		/// Used for source generation.
-		/// </summary>
-		/// <param name="pptrFromCallingObject"></param>
-		/// <param name="pptrFromOtherObject"></param>
-		/// <returns>True if they're equal, false if they're inequal, or null if it was added to the list of dependent pairs.</returns>
-		public bool? MaybeAddDependentComparison(IPPtr pptrFromCallingObject, IPPtr pptrFromOtherObject)
+		if (ReferenceEquals(x, y)) //Both null or both same instance
 		{
-			IUnityObjectBase? x = CallingObject.Collection.TryGetAsset(pptrFromCallingObject.FileID, pptrFromCallingObject.PathID);
-			IUnityObjectBase? y = OtherObject.Collection.TryGetAsset(pptrFromOtherObject.FileID, pptrFromOtherObject.PathID);
-
-			if (ReferenceEquals(x, y)) //Both null or both same instance
+			return true;
+		}
+		else if (x is null || y is null || x.GetType() != y.GetType())
+		{
+			return false;
+		}
+		else if (compareCache.TryGetValue((x, y), out bool value))
+		{
+			return value;
+		}
+		else
+		{
+			if (dependentEqualityPairs.TryGetValue((CallingObject, OtherObject), out List<UnorderedPair>? list))
 			{
-				return true;
-			}
-			else if (x is null || y is null || x.GetType() != y.GetType())
-			{
-				return false;
-			}
-			else if (compareCache.TryGetValue((x, y), out bool value))
-			{
-				return value;
+				list.Add((x, y));
 			}
 			else
 			{
-				if (dependentEqualityPairs.TryGetValue((CallingObject, OtherObject), out List<UnorderedPair>? list))
-				{
-					list.Add((x, y));
-				}
-				else
-				{
-					list = [(x, y)];
-					dependentEqualityPairs.Add((CallingObject, OtherObject), list);
-				}
-				return null;
+				list = [(x, y)];
+				dependentEqualityPairs.Add((CallingObject, OtherObject), list);
 			}
+			return null;
+		}
+	}
+
+	public bool Equals(IUnityObjectBase? x, IUnityObjectBase? y)
+	{
+		if (ReferenceEquals(x, y)) //Both null or both same instance
+		{
+			return true;
+		}
+		else if (x is null || y is null || x.GetType() != y.GetType())
+		{
+			return false;
 		}
 
-		public bool Equals(IUnityObjectBase? x, IUnityObjectBase? y)
+		DoComparison(x, y);
+		EvaluateDependentEqualityComparisons();
+		Debug.Assert(dependentEqualityPairs.Count == 0, "Dependent equality pairs should have been resolved");
+
+		return compareCache[(x, y)];
+	}
+
+	private void EvaluateDependentEqualityComparisons()
+	{
+		if (dependentEqualityPairs.Count == 0)
 		{
-			if (ReferenceEquals(x, y)) //Both null or both same instance
-			{
-				return true;
-			}
-			else if (x is null || y is null || x.GetType() != y.GetType())
-			{
-				return false;
-			}
-
-			DoComparison(x, y);
-			EvaluateDependentEqualityComparisons();
-			Debug.Assert(dependentEqualityPairs.Count == 0, "Dependent equality pairs should have been resolved");
-
-			return compareCache[(x, y)];
+			return;
 		}
 
-		private void EvaluateDependentEqualityComparisons()
+		List<UnorderedPair> pairsToCompare = new();
+		bool hasChanged;
+		do
 		{
-			if (dependentEqualityPairs.Count == 0)
-			{
-				return;
-			}
+			hasChanged = false;
+			pairsToCompare.Clear();
 
-			List<UnorderedPair> pairsToCompare = new();
-			bool hasChanged;
-			do
+			foreach ((UnorderedPair keyPair, List<UnorderedPair> list) in dependentEqualityPairs.ToArray())
 			{
-				hasChanged = false;
-				pairsToCompare.Clear();
-
-				foreach ((UnorderedPair keyPair, List<UnorderedPair> list) in dependentEqualityPairs.ToArray())
+				for (int i = list.Count - 1; i >= 0; i--)
 				{
-					for (int i = list.Count - 1; i >= 0; i--)
+					UnorderedPair valuePair = list[i];
+					if (compareCache.TryGetValue(valuePair, out bool value))
 					{
-						UnorderedPair valuePair = list[i];
-						if (compareCache.TryGetValue(valuePair, out bool value))
+						hasChanged = true;
+						if (value)
 						{
-							hasChanged = true;
-							if (value)
-							{
-								list.RemoveAt(i);
-							}
-							else
-							{
-								compareCache[keyPair] = false;
-								dependentEqualityPairs.Remove(keyPair);
-								break;
-							}
+							list.RemoveAt(i);
 						}
-						else if (!dependentEqualityPairs.ContainsKey(valuePair))
+						else
 						{
-							pairsToCompare.Add(valuePair);
+							compareCache[keyPair] = false;
+							dependentEqualityPairs.Remove(keyPair);
+							break;
 						}
 					}
-				}
-
-				if (pairsToCompare.Count > 0)
-				{
-					hasChanged = true;
-
-					foreach (UnorderedPair pair in pairsToCompare)
+					else if (!dependentEqualityPairs.ContainsKey(valuePair))
 					{
-						DoComparison(pair.First, pair.Second);
+						pairsToCompare.Add(valuePair);
 					}
 				}
-			} while (hasChanged);
+			}
 
-			if (dependentEqualityPairs.Count > 0)
+			if (pairsToCompare.Count > 0)
 			{
-				foreach ((UnorderedPair keyPair, _) in dependentEqualityPairs)
+				hasChanged = true;
+
+				foreach (UnorderedPair pair in pairsToCompare)
 				{
-					compareCache[keyPair] = true;
+					DoComparison(pair.First, pair.Second);
 				}
-				dependentEqualityPairs.Clear();
 			}
+		} while (hasChanged);
+
+		if (dependentEqualityPairs.Count > 0)
+		{
+			foreach ((UnorderedPair keyPair, _) in dependentEqualityPairs)
+			{
+				compareCache[keyPair] = true;
+			}
+			dependentEqualityPairs.Clear();
+		}
+	}
+
+	private void DoComparison(IUnityObjectBase x, IUnityObjectBase y)
+	{
+		CallingObject = x;
+		OtherObject = y;
+
+		bool? result = x.AddToEqualityComparer(y, this);
+		if (result is { } value)
+		{
+			dependentEqualityPairs.Remove((x, y));
+			compareCache[(x, y)] = value;
 		}
 
-		private void DoComparison(IUnityObjectBase x, IUnityObjectBase y)
+		CallingObject = default!;
+		OtherObject = default!;
+	}
+
+	public int GetHashCode(IUnityObjectBase? obj)
+	{
+		if (obj == null)
 		{
-			CallingObject = x;
-			OtherObject = y;
-
-			bool? result = x.AddToEqualityComparer(y, this);
-			if (result is { } value)
-			{
-				dependentEqualityPairs.Remove((x, y));
-				compareCache[(x, y)] = value;
-			}
-
-			CallingObject = default!;
-			OtherObject = default!;
+			return 0;
 		}
 
-		public int GetHashCode(IUnityObjectBase? obj)
-		{
-			if (obj == null)
-			{
-				return 0;
-			}
+		return HashCode.Combine(obj.GetType(), obj.GetBestName());
+	}
 
-			return HashCode.Combine(obj.GetType(), obj.GetBestName());
+	private readonly record struct UnorderedPair(IUnityObjectBase First, IUnityObjectBase Second)
+	{
+		public bool Equals(UnorderedPair other)
+		{
+			return (First == other.First && Second == other.Second) || (First == other.Second && Second == other.First);
 		}
 
-		private readonly record struct UnorderedPair(IUnityObjectBase First, IUnityObjectBase Second)
+		public override int GetHashCode()
 		{
-			public bool Equals(UnorderedPair other)
-			{
-				return (First == other.First && Second == other.Second) || (First == other.Second && Second == other.First);
-			}
+			return First.GetHashCode() ^ Second.GetHashCode();
+		}
 
-			public override int GetHashCode()
-			{
-				return First.GetHashCode() ^ Second.GetHashCode();
-			}
+		public static implicit operator UnorderedPair((IUnityObjectBase First, IUnityObjectBase Second) pair)
+		{
+			return new(pair.First, pair.Second);
+		}
 
-			public static implicit operator UnorderedPair((IUnityObjectBase First, IUnityObjectBase Second) pair)
-			{
-				return new(pair.First, pair.Second);
-			}
-
-			public static implicit operator (IUnityObjectBase, IUnityObjectBase)(UnorderedPair pair)
-			{
-				return (pair.First, pair.Second);
-			}
+		public static implicit operator (IUnityObjectBase, IUnityObjectBase)(UnorderedPair pair)
+		{
+			return (pair.First, pair.Second);
 		}
 	}
 }

@@ -1,13 +1,12 @@
 ﻿using AssetRipper.SourceGenerated.Subclasses.QuaternionCurve;
 
-namespace AssetRipper.SourceGenerated.Extensions
+namespace AssetRipper.SourceGenerated.Extensions;
+
+public static class QuaternionCurveExtensions
 {
-	public static class QuaternionCurveExtensions
+	public static void SetValues(this IQuaternionCurve curve, string path)
 	{
-		public static void SetValues(this IQuaternionCurve curve, string path)
-		{
-			curve.Path = path;
-			curve.Curve.SetDefaultRotationOrderAndCurveLoopType();
-		}
+		curve.Path = path;
+		curve.Curve.SetDefaultRotationOrderAndCurveLoopType();
 	}
 }

@@ -1,6 +1,5 @@
-﻿namespace AssetRipper.SourceGenerated.Extensions
+﻿namespace AssetRipper.SourceGenerated.Extensions;
+
+public static class SpriteAtlasEditorDataExtensions
 {
-	public static class SpriteAtlasEditorDataExtensions
-	{
-	}
 }

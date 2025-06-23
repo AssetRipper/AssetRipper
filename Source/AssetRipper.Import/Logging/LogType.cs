@@ -1,11 +1,10 @@
-﻿namespace AssetRipper.Import.Logging
+﻿namespace AssetRipper.Import.Logging;
+
+public enum LogType
 {
-	public enum LogType
-	{
-		Info,
-		Warning,
-		Error,
-		Verbose,
-		Debug,
-	}
+	Info,
+	Warning,
+	Error,
+	Verbose,
+	Debug,
 }

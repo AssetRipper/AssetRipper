@@ -4,49 +4,48 @@ using AssetRipper.Export.UnityProjects.Configuration;
 using AssetRipper.Import.Logging;
 using AssetRipper.SourceGenerated.Classes.ClassID_83;
 
-namespace AssetRipper.Export.UnityProjects.Audio
+namespace AssetRipper.Export.UnityProjects.Audio;
+
+public sealed class AudioClipExporter : BinaryAssetExporter
 {
-	public sealed class AudioClipExporter : BinaryAssetExporter
+	public AudioExportFormat AudioFormat { get; }
+	public AudioClipExporter(LibraryConfiguration configuration) => AudioFormat = configuration.ExportSettings.AudioExportFormat;
+
+	public static bool IsSupportedExportFormat(AudioExportFormat format) => format switch
 	{
-		public AudioExportFormat AudioFormat { get; }
-		public AudioClipExporter(LibraryConfiguration configuration) => AudioFormat = configuration.ExportSettings.AudioExportFormat;
+		AudioExportFormat.Default or AudioExportFormat.PreferWav => true,
+		_ => false,
+	};
 
-		public static bool IsSupportedExportFormat(AudioExportFormat format) => format switch
+	public override bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection)
+	{
+		if (asset is IAudioClip audio)
 		{
-			AudioExportFormat.Default or AudioExportFormat.PreferWav => true,
-			_ => false,
-		};
-
-		public override bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection)
-		{
-			if (asset is IAudioClip audio)
+			if (AudioClipDecoder.TryDecode(audio, out byte[]? decodedData, out string? fileExtension, out string? message))
 			{
-				if (AudioClipDecoder.TryDecode(audio, out byte[]? decodedData, out string? fileExtension, out string? message))
+				if (AudioFormat == AudioExportFormat.PreferWav && fileExtension == "ogg")
 				{
-					if (AudioFormat == AudioExportFormat.PreferWav && fileExtension == "ogg")
-					{
-						exportCollection = new AudioClipExportCollection(this, audio, AudioConverter.OggToWav(decodedData), "wav");
-					}
-					else
-					{
-						exportCollection = new AudioClipExportCollection(this, audio, decodedData, fileExtension);
-					}
-
-					return true;
+					exportCollection = new AudioClipExportCollection(this, audio, AudioConverter.OggToWav(decodedData), "wav");
 				}
 				else
 				{
-					Logger.Error(LogCategory.Export, message);
+					exportCollection = new AudioClipExportCollection(this, audio, decodedData, fileExtension);
 				}
+
+				return true;
 			}
-
-			exportCollection = null;
-			return false;
+			else
+			{
+				Logger.Error(LogCategory.Export, message);
+			}
 		}
 
-		public override bool Export(IExportContainer container, IUnityObjectBase asset, string path, FileSystem fileSystem)
-		{
-			throw new NotSupportedException();
-		}
+		exportCollection = null;
+		return false;
+	}
+
+	public override bool Export(IExportContainer container, IUnityObjectBase asset, string path, FileSystem fileSystem)
+	{
+		throw new NotSupportedException();
 	}
 }

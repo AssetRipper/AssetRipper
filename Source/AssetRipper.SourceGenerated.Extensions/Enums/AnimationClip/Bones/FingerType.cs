@@ -1,25 +1,24 @@
-﻿namespace AssetRipper.SourceGenerated.Extensions.Enums.AnimationClip.Bones
+﻿namespace AssetRipper.SourceGenerated.Extensions.Enums.AnimationClip.Bones;
+
+public enum FingerType
 {
-	public enum FingerType
-	{
-		Thumb = 0,
-		Index = 1,
-		Middle = 2,
-		Ring = 3,
-		Little = 4,
+	Thumb = 0,
+	Index = 1,
+	Middle = 2,
+	Ring = 3,
+	Little = 4,
 
-		Last,
-	}
+	Last,
+}
 
-	public static class FingerTypeExtensions
+public static class FingerTypeExtensions
+{
+	public static string ToAttributeString(this FingerType _this)
 	{
-		public static string ToAttributeString(this FingerType _this)
+		if (_this < FingerType.Last)
 		{
-			if (_this < FingerType.Last)
-			{
-				return _this.ToString();
-			}
-			throw new ArgumentException(_this.ToString());
+			return _this.ToString();
 		}
+		throw new ArgumentException(_this.ToString());
 	}
 }

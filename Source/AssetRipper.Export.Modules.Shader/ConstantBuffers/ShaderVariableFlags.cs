@@ -1,12 +1,11 @@
-﻿namespace AssetRipper.Export.Modules.Shaders.ConstantBuffers
+﻿namespace AssetRipper.Export.Modules.Shaders.ConstantBuffers;
+
+[Flags]
+internal enum ShaderVariableFlags
 {
-	[Flags]
-	internal enum ShaderVariableFlags
-	{
-		None = 0,
-		UserPacked = 1,
-		Used = 2,
-		InterfacePointer = 4,
-		InterfaceParameter = 8,
-	}
+	None = 0,
+	UserPacked = 1,
+	Used = 2,
+	InterfacePointer = 4,
+	InterfaceParameter = 8,
 }

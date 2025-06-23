@@ -1,8 +1,7 @@
-namespace AssetRipper.Export.Modules.Shaders.ConstantBuffers
+namespace AssetRipper.Export.Modules.Shaders.ConstantBuffers;
+
+public enum ConstantBufferFlags
 {
-	public enum ConstantBufferFlags
-	{
-		None = 0,
-		UserPacked = 1,
-	}
+	None = 0,
+	UserPacked = 1,
 }

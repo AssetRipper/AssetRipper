@@ -1,9 +1,8 @@
-﻿namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Function
+﻿namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.UShader.Function;
+
+public enum UShaderFunctionType
 {
-	public enum UShaderFunctionType
-	{
-		Unknown,
-		Vertex,
-		Fragment
-	}
+	Unknown,
+	Vertex,
+	Fragment
 }

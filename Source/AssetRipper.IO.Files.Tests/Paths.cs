@@ -1,7 +1,6 @@
-﻿namespace AssetRipper.IO.Files.Tests
+﻿namespace AssetRipper.IO.Files.Tests;
+
+public static class Paths
 {
-	public static class Paths
-	{
-		public const string ProjectPath = "../../../";
-	}
+	public const string ProjectPath = "../../../";
 }

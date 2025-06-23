@@ -2,34 +2,33 @@
 using NAudio.Vorbis;
 using NAudio.Wave;
 
-namespace AssetRipper.Export.Modules.Audio
+namespace AssetRipper.Export.Modules.Audio;
+
+public static class AudioConverter
 {
-	public static class AudioConverter
+	public static byte[] OggToWav(byte[] oggData)
 	{
-		public static byte[] OggToWav(byte[] oggData)
+		if (oggData == null)
 		{
-			if (oggData == null)
-			{
-				throw new ArgumentNullException(nameof(oggData));
-			}
+			throw new ArgumentNullException(nameof(oggData));
+		}
 
-			if (oggData.Length == 0)
-			{
-				return Array.Empty<byte>();
-			}
+		if (oggData.Length == 0)
+		{
+			return Array.Empty<byte>();
+		}
 
-			try
-			{
-				using VorbisWaveReader vorbisStream = new VorbisWaveReader(new MemoryStream(oggData), true);
-				using MemoryStream writeStream = new MemoryStream();
-				WaveFileWriter.WriteWavFileToStream(writeStream, vorbisStream);
-				return writeStream.ToArray();
-			}
-			catch (Exception ex)
-			{
-				Logger.Error(LogCategory.Export, "Failed to convert audio from OGG to WAV", ex);
-				return Array.Empty<byte>();
-			}
+		try
+		{
+			using VorbisWaveReader vorbisStream = new VorbisWaveReader(new MemoryStream(oggData), true);
+			using MemoryStream writeStream = new MemoryStream();
+			WaveFileWriter.WriteWavFileToStream(writeStream, vorbisStream);
+			return writeStream.ToArray();
+		}
+		catch (Exception ex)
+		{
+			Logger.Error(LogCategory.Export, "Failed to convert audio from OGG to WAV", ex);
+			return Array.Empty<byte>();
 		}
 	}
 }

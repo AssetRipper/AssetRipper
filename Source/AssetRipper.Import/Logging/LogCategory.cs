@@ -1,19 +1,18 @@
-﻿namespace AssetRipper.Import.Logging
-{
-	public enum LogCategory
-	{
-		General,
-		Import,
-		Export,
-		ExportProgress,
-		Cpp2IL,
-		System,
-		LibVlc,
-		Avalonia,
-		Plugin,
-		Processing,
+﻿namespace AssetRipper.Import.Logging;
 
-		None,
-		Debug,
-	}
+public enum LogCategory
+{
+	General,
+	Import,
+	Export,
+	ExportProgress,
+	Cpp2IL,
+	System,
+	LibVlc,
+	Avalonia,
+	Plugin,
+	Processing,
+
+	None,
+	Debug,
 }

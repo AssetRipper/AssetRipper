@@ -1,37 +1,36 @@
 ﻿using AssetRipper.SourceGenerated.Enums;
 using AssetRipper.SourceGenerated.Subclasses.UVModule;
 
-namespace AssetRipper.SourceGenerated.Extensions
+namespace AssetRipper.SourceGenerated.Extensions;
+
+public static class UVModuleExtensions
 {
-	public static class UVModuleExtensions
+	public static ParticleSystemAnimationRowMode GetRowMode(this IUVModule module)
 	{
-		public static ParticleSystemAnimationRowMode GetRowMode(this IUVModule module)
+		if (module.Has_RowMode())
 		{
-			if (module.Has_RowMode())
-			{
-				return (ParticleSystemAnimationRowMode)module.RowMode;
-			}
-			else
-			{
-				return module.RandomRow ? ParticleSystemAnimationRowMode.Random : ParticleSystemAnimationRowMode.Custom;
-			}
+			return (ParticleSystemAnimationRowMode)module.RowMode;
 		}
-
-		public static bool GetRandomRow(this IUVModule module)
+		else
 		{
-			return module.RandomRow || module.RowMode == (int)ParticleSystemAnimationRowMode.Random;
+			return module.RandomRow ? ParticleSystemAnimationRowMode.Random : ParticleSystemAnimationRowMode.Custom;
 		}
+	}
 
-		public static void SetRandomRow(this IUVModule module, bool value)
+	public static bool GetRandomRow(this IUVModule module)
+	{
+		return module.RandomRow || module.RowMode == (int)ParticleSystemAnimationRowMode.Random;
+	}
+
+	public static void SetRandomRow(this IUVModule module, bool value)
+	{
+		if (module.Has_RandomRow())
 		{
-			if (module.Has_RandomRow())
-			{
-				module.RandomRow = value;
-			}
-			else
-			{
-				module.RowMode = (int)(value ? ParticleSystemAnimationRowMode.Random : ParticleSystemAnimationRowMode.Custom);
-			}
+			module.RandomRow = value;
+		}
+		else
+		{
+			module.RowMode = (int)(value ? ParticleSystemAnimationRowMode.Random : ParticleSystemAnimationRowMode.Custom);
 		}
 	}
 }

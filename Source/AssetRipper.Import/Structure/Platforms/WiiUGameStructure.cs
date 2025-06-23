@@ -1,56 +1,55 @@
 ﻿using AssetRipper.Import.Structure.Assembly;
 
-namespace AssetRipper.Import.Structure.Platforms
+namespace AssetRipper.Import.Structure.Platforms;
+
+internal sealed class WiiUGameStructure : PlatformGameStructure
 {
-	internal sealed class WiiUGameStructure : PlatformGameStructure
+	public WiiUGameStructure(string rootPath)
 	{
-		public WiiUGameStructure(string rootPath)
+		if (string.IsNullOrEmpty(rootPath))
 		{
-			if (string.IsNullOrEmpty(rootPath))
-			{
-				throw new ArgumentNullException(nameof(rootPath));
-			}
-			m_root = new DirectoryInfo(rootPath);
-			if (!m_root.Exists)
-			{
-				throw new Exception($"Directory '{rootPath}' doesn't exist");
-			}
-
-			Name = m_root.Name;
-			RootPath = m_root.FullName;
-			GameDataPath = Path.Join(RootPath, ContentName, DataFolderName);
-			if (!Directory.Exists(GameDataPath))
-			{
-				throw new Exception($"Data directory wasn't found");
-			}
-			StreamingAssetsPath = Path.Join(GameDataPath, StreamingName);
-			ResourcesPath = Path.Join(GameDataPath, ResourcesName);
-			ManagedPath = Path.Join(GameDataPath, ManagedName);
-			UnityPlayerPath = null;
-			Version = null;
-			Il2CppGameAssemblyPath = null;
-			Il2CppMetaDataPath = null;
-			//WiiU doesn't support IL2Cpp
-			//See https://docs.unity3d.com/2017.4/Documentation/Manual/ScriptingRestrictions.html
-
-			if (HasMonoAssemblies(ManagedPath))
-			{
-				Backend = ScriptingBackend.Mono;
-			}
-			else
-			{
-				Backend = ScriptingBackend.Unknown;
-			}
-
-			DataPaths = new string[] { GameDataPath };
+			throw new ArgumentNullException(nameof(rootPath));
+		}
+		m_root = new DirectoryInfo(rootPath);
+		if (!m_root.Exists)
+		{
+			throw new Exception($"Directory '{rootPath}' doesn't exist");
 		}
 
-		public static bool IsWiiUStructure(string rootPath)
+		Name = m_root.Name;
+		RootPath = m_root.FullName;
+		GameDataPath = Path.Join(RootPath, ContentName, DataFolderName);
+		if (!Directory.Exists(GameDataPath))
 		{
-			string gameDataPath = Path.Join(rootPath, ContentName, DataFolderName);
-			return Directory.Exists(gameDataPath);
+			throw new Exception($"Data directory wasn't found");
+		}
+		StreamingAssetsPath = Path.Join(GameDataPath, StreamingName);
+		ResourcesPath = Path.Join(GameDataPath, ResourcesName);
+		ManagedPath = Path.Join(GameDataPath, ManagedName);
+		UnityPlayerPath = null;
+		Version = null;
+		Il2CppGameAssemblyPath = null;
+		Il2CppMetaDataPath = null;
+		//WiiU doesn't support IL2Cpp
+		//See https://docs.unity3d.com/2017.4/Documentation/Manual/ScriptingRestrictions.html
+
+		if (HasMonoAssemblies(ManagedPath))
+		{
+			Backend = ScriptingBackend.Mono;
+		}
+		else
+		{
+			Backend = ScriptingBackend.Unknown;
 		}
 
-		private const string ContentName = "content";
+		DataPaths = new string[] { GameDataPath };
 	}
+
+	public static bool IsWiiUStructure(string rootPath)
+	{
+		string gameDataPath = Path.Join(rootPath, ContentName, DataFolderName);
+		return Directory.Exists(gameDataPath);
+	}
+
+	private const string ContentName = "content";
 }

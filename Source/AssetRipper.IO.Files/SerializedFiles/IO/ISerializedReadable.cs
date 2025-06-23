@@ -1,7 +1,6 @@
-﻿namespace AssetRipper.IO.Files.SerializedFiles.IO
+﻿namespace AssetRipper.IO.Files.SerializedFiles.IO;
+
+public interface ISerializedReadable
 {
-	public interface ISerializedReadable
-	{
-		void Read(SerializedReader reader);
-	}
+	void Read(SerializedReader reader);
 }

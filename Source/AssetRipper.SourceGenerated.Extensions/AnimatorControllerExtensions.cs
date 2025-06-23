@@ -25,137 +25,67 @@ using AssetRipper.SourceGenerated.Subclasses.StateMachineBehaviourVectorDescript
 using AssetRipper.SourceGenerated.Subclasses.StateMotionPair;
 using AssetRipper.SourceGenerated.Subclasses.StateRange;
 
-namespace AssetRipper.SourceGenerated.Extensions
+namespace AssetRipper.SourceGenerated.Extensions;
+
+public static class AnimatorControllerExtensions
 {
-	public static class AnimatorControllerExtensions
+	public static bool ContainsAnimationClip(this IAnimatorController controller, IAnimationClip clip)
 	{
-		public static bool ContainsAnimationClip(this IAnimatorController controller, IAnimationClip clip)
+		foreach (IPPtr_AnimationClip clipPtr in controller.AnimationClips)
 		{
-			foreach (IPPtr_AnimationClip clipPtr in controller.AnimationClips)
+			if (clipPtr.IsAsset(controller.Collection, clip))
 			{
-				if (clipPtr.IsAsset(controller.Collection, clip))
-				{
-					return true;
-				}
+				return true;
 			}
-			return false;
 		}
+		return false;
+	}
 
-		public static IMonoBehaviour?[] GetStateBehaviours(this IAnimatorController controller, int layerIndex, uint stateID)
+	public static IMonoBehaviour?[] GetStateBehaviours(this IAnimatorController controller, int layerIndex, uint stateID)
+	{
+		if (controller.Has_StateMachineBehaviourVectorDescription())
 		{
-			if (controller.Has_StateMachineBehaviourVectorDescription())
+			StateKey key = new();
+			key.SetValues(layerIndex, stateID);
+			if (controller.StateMachineBehaviourVectorDescription.StateMachineBehaviourRanges.TryGetValue(key, out StateRange? range))
 			{
-				StateKey key = new();
-				key.SetValues(layerIndex, stateID);
-				if (controller.StateMachineBehaviourVectorDescription.StateMachineBehaviourRanges.TryGetValue(key, out StateRange? range))
-				{
-					return GetStateBehaviours(controller.StateMachineBehaviourVectorDescription, controller.StateMachineBehavioursP, range);
-				}
+				return GetStateBehaviours(controller.StateMachineBehaviourVectorDescription, controller.StateMachineBehavioursP, range);
 			}
-			return Array.Empty<IMonoBehaviour>();
 		}
+		return Array.Empty<IMonoBehaviour>();
+	}
 
-		private static IMonoBehaviour?[] GetStateBehaviours(
-			IStateMachineBehaviourVectorDescription controllerStateMachineBehaviourVectorDescription,
-			PPtrAccessList<PPtr_MonoBehaviour_5, IMonoBehaviour> controllerStateMachineBehaviours,
-			StateRange range)
+	private static IMonoBehaviour?[] GetStateBehaviours(
+		IStateMachineBehaviourVectorDescription controllerStateMachineBehaviourVectorDescription,
+		PPtrAccessList<PPtr_MonoBehaviour_5, IMonoBehaviour> controllerStateMachineBehaviours,
+		StateRange range)
+	{
+		IMonoBehaviour?[] stateMachineBehaviours = new IMonoBehaviour?[range.Count];
+		for (int i = 0; i < range.Count; i++)
 		{
-			IMonoBehaviour?[] stateMachineBehaviours = new IMonoBehaviour?[range.Count];
-			for (int i = 0; i < range.Count; i++)
+			int index = (int)controllerStateMachineBehaviourVectorDescription.StateMachineBehaviourIndices[(int)range.StartIndex + i];
+			IMonoBehaviour? stateMachineBehaviour = controllerStateMachineBehaviours[index];
+			if (stateMachineBehaviour != null)
 			{
-				int index = (int)controllerStateMachineBehaviourVectorDescription.StateMachineBehaviourIndices[(int)range.StartIndex + i];
-				IMonoBehaviour? stateMachineBehaviour = controllerStateMachineBehaviours[index];
-				if (stateMachineBehaviour != null)
-				{
-					stateMachineBehaviour.HideFlagsE = HideFlags.HideInHierarchy;
-				}
-				stateMachineBehaviours[i] = stateMachineBehaviour;
+				stateMachineBehaviour.HideFlagsE = HideFlags.HideInHierarchy;
 			}
-			return stateMachineBehaviours;
+			stateMachineBehaviours[i] = stateMachineBehaviour;
 		}
+		return stateMachineBehaviours;
+	}
 
-		public static IEnumerable<IUnityObjectBase?> FetchEditorHierarchy(this IAnimatorController animatorController)
+	public static IEnumerable<IUnityObjectBase?> FetchEditorHierarchy(this IAnimatorController animatorController)
+	{
+		yield return animatorController;
+
+		foreach (IAnimatorControllerLayer layer in animatorController.AnimatorLayers)
 		{
-			yield return animatorController;
-
-			foreach (IAnimatorControllerLayer layer in animatorController.AnimatorLayers)
+			//Ignoring layer.Controller, layer.Mask, and layer.SkeletonMask
+			if (layer.Has_Behaviours())
 			{
-				//Ignoring layer.Controller, layer.Mask, and layer.SkeletonMask
-				if (layer.Has_Behaviours())
+				foreach (IStateBehavioursPair pair in layer.Behaviours)
 				{
-					foreach (IStateBehavioursPair pair in layer.Behaviours)
-					{
-						IAnimatorState? state = pair.State.TryGetAsset(animatorController.Collection);
-						if (state is not null)
-						{
-							foreach (IUnityObjectBase? reference in state.FetchHierarchy())
-							{
-								yield return reference;
-							}
-						}
-						foreach (PPtr_MonoBehaviour_5 stateMachineBehaviour in pair.StateMachineBehaviours)
-						{
-							yield return stateMachineBehaviour.TryGetAsset(animatorController.Collection);
-						}
-					}
-					foreach (IStateMotionPair pair in layer.Motions)
-					{
-						IAnimatorState? state = pair.State.TryGetAsset(animatorController.Collection);
-						if (state is not null)
-						{
-							foreach (IUnityObjectBase? reference in state.FetchHierarchy())
-							{
-								yield return reference;
-							}
-						}
-
-						//AnimationClip also inherits from Motion, but we don't want to include that.
-						IBlendTree? blendTree = pair.Motion.TryGetAsset(animatorController.Collection) as IBlendTree;
-						if (blendTree is not null)
-						{
-							foreach (IUnityObjectBase? reference in blendTree.FetchHierarchy())
-							{
-								yield return reference;
-							}
-						}
-					}
-				}
-				IAnimatorStateMachine? stateMachine = layer.StateMachine.TryGetAsset(animatorController.Collection);
-				if (stateMachine is not null)
-				{
-					foreach (IUnityObjectBase? reference in stateMachine.FetchEditorHierarchy())
-					{
-						yield return reference;
-					}
-				}
-			}
-			//Ignoring animatorController.AnimatorParameters.Controller
-			//It has no other PPtr's.
-		}
-
-		private static IEnumerable<IUnityObjectBase?> FetchEditorHierarchy(this IAnimatorStateMachine stateMachine)
-		{
-			yield return stateMachine;
-			if (stateMachine.Has_ChildStateMachines())
-			{
-				foreach (IAnimatorStateTransition? anyStateTransition in stateMachine.AnyStateTransitionsP)
-				{
-					yield return anyStateTransition;
-				}
-				foreach (ChildAnimatorStateMachine childAnimatorStateMachine in stateMachine.ChildStateMachines)
-				{
-					IAnimatorStateMachine? childStateMachine = childAnimatorStateMachine.StateMachine.TryGetAsset(stateMachine.Collection);
-					if (childStateMachine is not null)
-					{
-						foreach (IUnityObjectBase? reference in childStateMachine.FetchEditorHierarchy())
-						{
-							yield return reference;
-						}
-					}
-				}
-				foreach (ChildAnimatorState childState in stateMachine.ChildStates)
-				{
-					IAnimatorState? state = childState.State.TryGetAsset(stateMachine.Collection);
+					IAnimatorState? state = pair.State.TryGetAsset(animatorController.Collection);
 					if (state is not null)
 					{
 						foreach (IUnityObjectBase? reference in state.FetchHierarchy())
@@ -163,55 +93,109 @@ namespace AssetRipper.SourceGenerated.Extensions
 							yield return reference;
 						}
 					}
-				}
-				foreach (IAnimatorTransition? entryTransition in stateMachine.EntryTransitionsP)
-				{
-					yield return entryTransition;
-				}
-				foreach (IMonoBehaviour? behaviour in stateMachine.StateMachineBehavioursP)
-				{
-					yield return behaviour;
-				}
-				foreach (AssetList<PPtr_AnimatorTransition> list in stateMachine.StateMachineTransitions.Values)
-				{
-					//Skipping keys because they're IAnimatorStateMachine
-					foreach (PPtr_AnimatorTransition transition in list)
+					foreach (PPtr_MonoBehaviour_5 stateMachineBehaviour in pair.StateMachineBehaviours)
 					{
-						yield return transition.TryGetAsset(stateMachine.Collection);
+						yield return stateMachineBehaviour.TryGetAsset(animatorController.Collection);
 					}
 				}
-			}
-			else
-			{
-				foreach (IAnimatorStateMachine? childStateMachine in stateMachine.ChildStateMachineP)
+				foreach (IStateMotionPair pair in layer.Motions)
 				{
-					if (childStateMachine is not null)
+					IAnimatorState? state = pair.State.TryGetAsset(animatorController.Collection);
+					if (state is not null)
 					{
-						foreach (IUnityObjectBase? reference in childStateMachine.FetchEditorHierarchy())
+						foreach (IUnityObjectBase? reference in state.FetchHierarchy())
+						{
+							yield return reference;
+						}
+					}
+
+					//AnimationClip also inherits from Motion, but we don't want to include that.
+					IBlendTree? blendTree = pair.Motion.TryGetAsset(animatorController.Collection) as IBlendTree;
+					if (blendTree is not null)
+					{
+						foreach (IUnityObjectBase? reference in blendTree.FetchHierarchy())
 						{
 							yield return reference;
 						}
 					}
 				}
-				if (stateMachine.Has_LocalTransitions())
+			}
+			IAnimatorStateMachine? stateMachine = layer.StateMachine.TryGetAsset(animatorController.Collection);
+			if (stateMachine is not null)
+			{
+				foreach (IUnityObjectBase? reference in stateMachine.FetchEditorHierarchy())
 				{
-					foreach ((PPtr_AnimatorState_4 statePPtr, AssetList<PPtr_AnimatorStateTransition_4> list) in stateMachine.LocalTransitions)
+					yield return reference;
+				}
+			}
+		}
+		//Ignoring animatorController.AnimatorParameters.Controller
+		//It has no other PPtr's.
+	}
+
+	private static IEnumerable<IUnityObjectBase?> FetchEditorHierarchy(this IAnimatorStateMachine stateMachine)
+	{
+		yield return stateMachine;
+		if (stateMachine.Has_ChildStateMachines())
+		{
+			foreach (IAnimatorStateTransition? anyStateTransition in stateMachine.AnyStateTransitionsP)
+			{
+				yield return anyStateTransition;
+			}
+			foreach (ChildAnimatorStateMachine childAnimatorStateMachine in stateMachine.ChildStateMachines)
+			{
+				IAnimatorStateMachine? childStateMachine = childAnimatorStateMachine.StateMachine.TryGetAsset(stateMachine.Collection);
+				if (childStateMachine is not null)
+				{
+					foreach (IUnityObjectBase? reference in childStateMachine.FetchEditorHierarchy())
 					{
-						IAnimatorState? state = statePPtr.TryGetAsset(stateMachine.Collection);
-						if (state is not null)
-						{
-							foreach (IUnityObjectBase? reference in state.FetchHierarchy())
-							{
-								yield return reference;
-							}
-						}
-						foreach (PPtr_AnimatorStateTransition_4 transition in list)
-						{
-							yield return transition.TryGetAsset(stateMachine.Collection);
-						}
+						yield return reference;
 					}
 				}
-				foreach ((PPtr_AnimatorState_4 statePPtr, AssetList<PPtr_AnimatorStateTransition_4> list) in stateMachine.OrderedTransitions)
+			}
+			foreach (ChildAnimatorState childState in stateMachine.ChildStates)
+			{
+				IAnimatorState? state = childState.State.TryGetAsset(stateMachine.Collection);
+				if (state is not null)
+				{
+					foreach (IUnityObjectBase? reference in state.FetchHierarchy())
+					{
+						yield return reference;
+					}
+				}
+			}
+			foreach (IAnimatorTransition? entryTransition in stateMachine.EntryTransitionsP)
+			{
+				yield return entryTransition;
+			}
+			foreach (IMonoBehaviour? behaviour in stateMachine.StateMachineBehavioursP)
+			{
+				yield return behaviour;
+			}
+			foreach (AssetList<PPtr_AnimatorTransition> list in stateMachine.StateMachineTransitions.Values)
+			{
+				//Skipping keys because they're IAnimatorStateMachine
+				foreach (PPtr_AnimatorTransition transition in list)
+				{
+					yield return transition.TryGetAsset(stateMachine.Collection);
+				}
+			}
+		}
+		else
+		{
+			foreach (IAnimatorStateMachine? childStateMachine in stateMachine.ChildStateMachineP)
+			{
+				if (childStateMachine is not null)
+				{
+					foreach (IUnityObjectBase? reference in childStateMachine.FetchEditorHierarchy())
+					{
+						yield return reference;
+					}
+				}
+			}
+			if (stateMachine.Has_LocalTransitions())
+			{
+				foreach ((PPtr_AnimatorState_4 statePPtr, AssetList<PPtr_AnimatorStateTransition_4> list) in stateMachine.LocalTransitions)
 				{
 					IAnimatorState? state = statePPtr.TryGetAsset(stateMachine.Collection);
 					if (state is not null)
@@ -226,57 +210,62 @@ namespace AssetRipper.SourceGenerated.Extensions
 						yield return transition.TryGetAsset(stateMachine.Collection);
 					}
 				}
-				foreach (IAnimatorState? state in stateMachine.StatesP)
+			}
+			foreach ((PPtr_AnimatorState_4 statePPtr, AssetList<PPtr_AnimatorStateTransition_4> list) in stateMachine.OrderedTransitions)
+			{
+				IAnimatorState? state = statePPtr.TryGetAsset(stateMachine.Collection);
+				if (state is not null)
 				{
-					if (state is not null)
+					foreach (IUnityObjectBase? reference in state.FetchHierarchy())
 					{
-						foreach (IUnityObjectBase? reference in state.FetchHierarchy())
-						{
-							yield return reference;
-						}
+						yield return reference;
 					}
 				}
-			}
-			//Ignoring DefaultState because redundant
-		}
-
-		private static IEnumerable<IUnityObjectBase?> FetchHierarchy(this IBlendTree blendTree)
-		{
-			yield return blendTree;
-			foreach (IChildMotion childMotion in blendTree.Childs)
-			{
-				//AnimationClips are excluded from the hierarchy
-				IBlendTree? child = childMotion.Motion.TryGetAsset(blendTree.Collection) as IBlendTree;
-				if (child is not null)
+				foreach (PPtr_AnimatorStateTransition_4 transition in list)
 				{
-					foreach (IUnityObjectBase? reference in child.FetchHierarchy())
+					yield return transition.TryGetAsset(stateMachine.Collection);
+				}
+			}
+			foreach (IAnimatorState? state in stateMachine.StatesP)
+			{
+				if (state is not null)
+				{
+					foreach (IUnityObjectBase? reference in state.FetchHierarchy())
 					{
 						yield return reference;
 					}
 				}
 			}
 		}
+		//Ignoring DefaultState because redundant
+	}
 
-		private static IEnumerable<IUnityObjectBase?> FetchHierarchy(this IAnimatorState state)
+	private static IEnumerable<IUnityObjectBase?> FetchHierarchy(this IBlendTree blendTree)
+	{
+		yield return blendTree;
+		foreach (IChildMotion childMotion in blendTree.Childs)
 		{
-			yield return state;
-
-			if (state.Has_Motions())
+			//AnimationClips are excluded from the hierarchy
+			IBlendTree? child = childMotion.Motion.TryGetAsset(blendTree.Collection) as IBlendTree;
+			if (child is not null)
 			{
-				foreach (IMotion? motion in state.MotionsP)
+				foreach (IUnityObjectBase? reference in child.FetchHierarchy())
 				{
-					if (motion is IBlendTree blendTree)
-					{
-						foreach (IUnityObjectBase? reference in blendTree.FetchHierarchy())
-						{
-							yield return reference;
-						}
-					}
+					yield return reference;
 				}
 			}
-			else
+		}
+	}
+
+	private static IEnumerable<IUnityObjectBase?> FetchHierarchy(this IAnimatorState state)
+	{
+		yield return state;
+
+		if (state.Has_Motions())
+		{
+			foreach (IMotion? motion in state.MotionsP)
 			{
-				if (state.MotionP is IBlendTree blendTree)
+				if (motion is IBlendTree blendTree)
 				{
 					foreach (IUnityObjectBase? reference in blendTree.FetchHierarchy())
 					{
@@ -284,20 +273,30 @@ namespace AssetRipper.SourceGenerated.Extensions
 					}
 				}
 			}
-			//Ignoring ParentStateMachine
-			if (state.Has_StateMachineBehaviours())
+		}
+		else
+		{
+			if (state.MotionP is IBlendTree blendTree)
 			{
-				foreach (IMonoBehaviour? behaviour in state.StateMachineBehavioursP)
+				foreach (IUnityObjectBase? reference in blendTree.FetchHierarchy())
 				{
-					yield return behaviour;
+					yield return reference;
 				}
 			}
-			if (state.Has_Transitions())
+		}
+		//Ignoring ParentStateMachine
+		if (state.Has_StateMachineBehaviours())
+		{
+			foreach (IMonoBehaviour? behaviour in state.StateMachineBehavioursP)
 			{
-				foreach (IAnimatorStateTransition? transition in state.TransitionsP)
-				{
-					yield return transition;
-				}
+				yield return behaviour;
+			}
+		}
+		if (state.Has_Transitions())
+		{
+			foreach (IAnimatorStateTransition? transition in state.TransitionsP)
+			{
+				yield return transition;
 			}
 		}
 	}

@@ -1,6 +1,5 @@
-﻿namespace AssetRipper.Numerics
+﻿namespace AssetRipper.Numerics;
+
+public record struct BoneWeight1(float Weight, int Index)
 {
-	public record struct BoneWeight1(float Weight, int Index)
-	{
-	}
 }

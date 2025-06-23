@@ -1,14 +1,13 @@
-﻿namespace AssetRipper.Export.Modules.Shaders.Types
+﻿namespace AssetRipper.Export.Modules.Shaders.Types;
+
+internal enum ShaderVariableClass
 {
-	internal enum ShaderVariableClass
-	{
-		Scalar,
-		Vector,
-		MatrixRows,
-		MatrixColumns,
-		Object,
-		Struct,
-		InterfaceClass,
-		InterfacePointer,
-	}
+	Scalar,
+	Vector,
+	MatrixRows,
+	MatrixColumns,
+	Object,
+	Struct,
+	InterfaceClass,
+	InterfacePointer,
 }

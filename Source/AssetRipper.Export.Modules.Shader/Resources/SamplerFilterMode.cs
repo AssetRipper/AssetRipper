@@ -1,9 +1,8 @@
-﻿namespace AssetRipper.Export.Modules.Shaders.Resources
+﻿namespace AssetRipper.Export.Modules.Shaders.Resources;
+
+internal enum SamplerFilterMode
 {
-	internal enum SamplerFilterMode
-	{
-		Point,
-		Linear,
-		Trilinear,
-	}
+	Point,
+	Linear,
+	Trilinear,
 }

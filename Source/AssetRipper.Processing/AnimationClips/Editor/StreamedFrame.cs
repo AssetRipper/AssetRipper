@@ -1,72 +1,71 @@
 using AssetRipper.IO.Endian;
 using System.Diagnostics;
 
-namespace AssetRipper.Processing.AnimationClips.Editor
+namespace AssetRipper.Processing.AnimationClips.Editor;
+
+[DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
+public sealed class StreamedFrame
 {
-	[DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
-	public sealed class StreamedFrame
+	public void Read(ref EndianSpanReader reader, UnityVersion version)
 	{
-		public void Read(ref EndianSpanReader reader, UnityVersion version)
+		Time = reader.ReadSingle();
+		Curves = ReadAssetArray(ref reader, version);
+	}
+
+	public float Time { get; set; }
+	public StreamedCurveKey[] Curves { get; set; } = Array.Empty<StreamedCurveKey>();
+
+	private static StreamedCurveKey[] ReadAssetArray(ref EndianSpanReader reader, UnityVersion version)
+	{
+		int curveCount = reader.ReadInt32();
+		ThrowIfNegative(curveCount);
+
+		StreamedCurveKey[] curvesArray = curveCount == 0 ? Array.Empty<StreamedCurveKey>() : new StreamedCurveKey[curveCount];
+		if (curveCount > 0)
 		{
-			Time = reader.ReadSingle();
-			Curves = ReadAssetArray(ref reader, version);
-		}
+			StreamedCurveKey instance = ReadNextCurve(ref reader);
+			curvesArray[0] = instance;
 
-		public float Time { get; set; }
-		public StreamedCurveKey[] Curves { get; set; } = Array.Empty<StreamedCurveKey>();
-
-		private static StreamedCurveKey[] ReadAssetArray(ref EndianSpanReader reader, UnityVersion version)
-		{
-			int curveCount = reader.ReadInt32();
-			ThrowIfNegative(curveCount);
-
-			StreamedCurveKey[] curvesArray = curveCount == 0 ? Array.Empty<StreamedCurveKey>() : new StreamedCurveKey[curveCount];
-			if (curveCount > 0)
+			int saveIdx = 1;
+			for (int readIdx = 1; readIdx < curveCount; readIdx++, saveIdx++)
 			{
-				StreamedCurveKey instance = ReadNextCurve(ref reader);
-				curvesArray[0] = instance;
-
-				int saveIdx = 1;
-				for (int readIdx = 1; readIdx < curveCount; readIdx++, saveIdx++)
+				instance = ReadNextCurve(ref reader);
+				if (curvesArray[saveIdx - 1].Index == instance.Index)
 				{
-					instance = ReadNextCurve(ref reader);
-					if (curvesArray[saveIdx - 1].Index == instance.Index)
-					{
-						saveIdx--; // keep only last curve from sequence of duplicated binding/Index
-					}
-					curvesArray[saveIdx] = instance;
+					saveIdx--; // keep only last curve from sequence of duplicated binding/Index
 				}
-				if (saveIdx != curveCount)
-				{
-					curvesArray = curvesArray.AsSpan(0, saveIdx).ToArray();
-				}
+				curvesArray[saveIdx] = instance;
 			}
-
-			if (version.GreaterThanOrEquals(2017, 1))
+			if (saveIdx != curveCount)
 			{
-				reader.Align();
-			}
-			return curvesArray;
-
-			static StreamedCurveKey ReadNextCurve(ref EndianSpanReader reader)
-			{
-				StreamedCurveKey instance = new();
-				instance.Read(ref reader);
-				return instance;
-			}
-
-			static void ThrowIfNegative(int count)
-			{
-				if (count < 0)
-				{
-					throw new ArgumentOutOfRangeException(nameof(count), $"Cannot be negative: {count}");
-				}
+				curvesArray = curvesArray.AsSpan(0, saveIdx).ToArray();
 			}
 		}
 
-		private string GetDebuggerDisplay()
+		if (version.GreaterThanOrEquals(2017, 1))
 		{
-			return $$"""{ {{nameof(Time)}} : {{Time}}, {{nameof(Curves)}}.Length : {{Curves?.Length}} }""";
+			reader.Align();
 		}
+		return curvesArray;
+
+		static StreamedCurveKey ReadNextCurve(ref EndianSpanReader reader)
+		{
+			StreamedCurveKey instance = new();
+			instance.Read(ref reader);
+			return instance;
+		}
+
+		static void ThrowIfNegative(int count)
+		{
+			if (count < 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(count), $"Cannot be negative: {count}");
+			}
+		}
+	}
+
+	private string GetDebuggerDisplay()
+	{
+		return $$"""{ {{nameof(Time)}} : {{Time}}, {{nameof(Curves)}}.Length : {{Curves?.Length}} }""";
 	}
 }

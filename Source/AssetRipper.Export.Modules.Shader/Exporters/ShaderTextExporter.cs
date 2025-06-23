@@ -2,106 +2,105 @@ using AssetRipper.Export.Modules.Shaders.IO;
 using AssetRipper.Export.Modules.Shaders.ShaderBlob;
 using AssetRipper.SourceGenerated.Extensions;
 
-namespace AssetRipper.Export.Modules.Shaders.Exporters
+namespace AssetRipper.Export.Modules.Shaders.Exporters;
+
+public class ShaderTextExporter
 {
-	public class ShaderTextExporter
+	public virtual string Name => "ShaderTextExporter";
+
+	public virtual void Export(ShaderWriter writer, ref ShaderSubProgram subProgram)
 	{
-		public virtual string Name => "ShaderTextExporter";
+		byte[] exportData = subProgram.ProgramData;
+		using MemoryStream memStream = new MemoryStream(exportData);
+		using BinaryReader reader = new BinaryReader(memStream);
+		ExportText(writer, reader, Name);
+	}
 
-		public virtual void Export(ShaderWriter writer, ref ShaderSubProgram subProgram)
+	protected static void ExportText(TextWriter writer, BinaryReader reader) => ExportText(writer, reader, null);
+	protected static void ExportText(TextWriter writer, BinaryReader reader, string? name)
+	{
+		List<char> characters = new List<char>();
+		if (!string.IsNullOrEmpty(name))
 		{
-			byte[] exportData = subProgram.ProgramData;
-			using MemoryStream memStream = new MemoryStream(exportData);
-			using BinaryReader reader = new BinaryReader(memStream);
-			ExportText(writer, reader, Name);
-		}
-
-		protected static void ExportText(TextWriter writer, BinaryReader reader) => ExportText(writer, reader, null);
-		protected static void ExportText(TextWriter writer, BinaryReader reader, string? name)
-		{
-			List<char> characters = new List<char>();
-			if (!string.IsNullOrEmpty(name))
+			characters.Add('/');
+			characters.Add('/');
+			foreach (char c in name.ToCharArray())
 			{
-				characters.Add('/');
-				characters.Add('/');
-				foreach (char c in name.ToCharArray())
-				{
-					characters.Add(c);
-				}
-				characters.Add('\n');
+				characters.Add(c);
 			}
-			while (reader.BaseStream.Position != reader.BaseStream.Length)
-			{
-				characters.Add(reader.ReadChar());
-			}
-			ExportText(writer, characters.ToArray());
+			characters.Add('\n');
 		}
-		protected static void ExportText(TextWriter writer, char[] array)
+		while (reader.BaseStream.Position != reader.BaseStream.Length)
 		{
-			for (int i = 0; i < array.Length; i++)
+			characters.Add(reader.ReadChar());
+		}
+		ExportText(writer, characters.ToArray());
+	}
+	protected static void ExportText(TextWriter writer, char[] array)
+	{
+		for (int i = 0; i < array.Length; i++)
+		{
+			char c = array[i];
+			if (c == '\n')
 			{
-				char c = array[i];
-				if (c == '\n')
+				if (i == array.Length - 1)
 				{
-					if (i == array.Length - 1)
-					{
-						break;
-					}
-					writer.Write(c);
-					writer.WriteIndent(ExpectedIndent);
+					break;
 				}
-				else
-				{
-					writer.Write(c);
-				}
+				writer.Write(c);
+				writer.WriteIndent(ExpectedIndent);
+			}
+			else
+			{
+				writer.Write(c);
 			}
 		}
+	}
 
-		protected static void ExportListing(TextWriter writer, string listing)
+	protected static void ExportListing(TextWriter writer, string listing)
+	{
+		writer.Write('\n');
+		writer.WriteIndent(ExpectedIndent);
+
+		for (int i = 0; i < listing.Length;)
 		{
-			writer.Write('\n');
-			writer.WriteIndent(ExpectedIndent);
-
-			for (int i = 0; i < listing.Length;)
+			char c = listing[i++];
+			bool newLine = false;
+			if (c == '\r')
 			{
-				char c = listing[i++];
-				bool newLine = false;
-				if (c == '\r')
-				{
-					if (i == listing.Length)
-					{
-						newLine = true;
-					}
-					else
-					{
-						char nc = listing[i];
-						if (nc != '\n')
-						{
-							newLine = true;
-						}
-					}
-				}
-				else if (c == '\n')
+				if (i == listing.Length)
 				{
 					newLine = true;
 				}
-
-				if (newLine)
-				{
-					if (i == listing.Length)
-					{
-						break;
-					}
-					writer.Write(c);
-					writer.WriteIndent(ExpectedIndent);
-				}
 				else
 				{
-					writer.Write(c);
+					char nc = listing[i];
+					if (nc != '\n')
+					{
+						newLine = true;
+					}
 				}
 			}
-		}
+			else if (c == '\n')
+			{
+				newLine = true;
+			}
 
-		protected const int ExpectedIndent = 5;
+			if (newLine)
+			{
+				if (i == listing.Length)
+				{
+					break;
+				}
+				writer.Write(c);
+				writer.WriteIndent(ExpectedIndent);
+			}
+			else
+			{
+				writer.Write(c);
+			}
+		}
 	}
+
+	protected const int ExpectedIndent = 5;
 }
