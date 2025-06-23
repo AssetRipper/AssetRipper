@@ -105,11 +105,11 @@ public class VirtualFileSystemTests
 	{
 		VirtualFileSystem fs = new();
 		fs.Directory.Create("/test/");
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(fs.Directory.Exists("/test"), Is.True);
 			Assert.That(fs.Count, Is.EqualTo(2));// root and test
-		});
+		}
 	}
 
 	[Test]

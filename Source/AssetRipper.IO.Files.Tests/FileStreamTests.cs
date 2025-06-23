@@ -29,19 +29,19 @@ namespace AssetRipper.IO.Files.Tests
 			bundle.Write(stream);
 			long positionAfterWrite = stream.Position;
 			stream.Position = 0;
-			Assert.Multiple(() =>
+			using (Assert.EnterMultipleScope())
 			{
 				Assert.That(positionAfterWrite, Is.GreaterThan(0));
 				Assert.That(scheme.CanRead(stream));
-			});
+			}
 
 			FileStreamBundleFile readBundle = scheme.Read(stream, bundle.FilePath, bundle.Name);
 			long positionAfterRead = stream.Position;
-			Assert.Multiple(() =>
+			using (Assert.EnterMultipleScope())
 			{
 				Assert.That(readBundle.Header, Is.EqualTo(bundle.Header));
 				Assert.That(positionAfterRead, Is.EqualTo(positionAfterWrite));
-			});
+			}
 		}
 
 		[Test]
@@ -51,17 +51,17 @@ namespace AssetRipper.IO.Files.Tests
 			header.Flags = BundleFlags.BlockInfoNeedPaddingAtStart | BundleFlags.BlocksInfoAtTheEnd;
 			Assert.That(header.CompressionType, Is.EqualTo(CompressionType.None));
 			header.CompressionType = CompressionType.Lzma;
-			Assert.Multiple(() =>
+			using (Assert.EnterMultipleScope())
 			{
 				Assert.That(header.CompressionType, Is.EqualTo(CompressionType.Lzma));
 				Assert.That(header.Flags, Is.EqualTo(BundleFlags.BlockInfoNeedPaddingAtStart | BundleFlags.BlocksInfoAtTheEnd | BundleFlags.CompressionBit1));
-			});
+			}
 			header.CompressionType = CompressionType.Lz4;
-			Assert.Multiple(() =>
+			using (Assert.EnterMultipleScope())
 			{
 				Assert.That(header.CompressionType, Is.EqualTo(CompressionType.Lz4));
 				Assert.That(header.Flags, Is.EqualTo(BundleFlags.BlockInfoNeedPaddingAtStart | BundleFlags.BlocksInfoAtTheEnd | BundleFlags.CompressionBit2));
-			});
+			}
 		}
 
 		private static FileStreamBundleFile MakeEmptyBundle(BundleVersion bundleVersion, string unityVersion)

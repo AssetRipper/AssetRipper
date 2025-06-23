@@ -194,7 +194,7 @@ namespace AssetRipper.Tests
 			compressedMesh.SetVertices(vectors);//Need to set the correct vertex count by filling the vertex buffer.
 			compressedMesh.SetUV(uv0, uv1, null, null, null, null, null, null);
 			compressedMesh.GetUV(out Vector2[]? unpackedUV0, out Vector2[]? unpackedUV1, out Vector2[]? unpackedUV2, out Vector2[]? unpackedUV3, out Vector2[]? unpackedUV4, out Vector2[]? unpackedUV5, out Vector2[]? unpackedUV6, out Vector2[]? unpackedUV7);
-			Assert.Multiple(() =>
+			using (Assert.EnterMultipleScope())
 			{
 				//These UV channels did not exist on versions before Unity 5.
 				Assert.That(unpackedUV2, Is.Null);
@@ -203,7 +203,7 @@ namespace AssetRipper.Tests
 				Assert.That(unpackedUV5, Is.Null);
 				Assert.That(unpackedUV6, Is.Null);
 				Assert.That(unpackedUV7, Is.Null);
-			});
+			}
 			AreAlmostEqual(uv0, unpackedUV0, 0.000001f);
 			AreAlmostEqual(uv1, unpackedUV1, 0.000001f);
 		}
@@ -215,7 +215,7 @@ namespace AssetRipper.Tests
 			compressedMesh.SetVertices(vectors);//Need to set the correct vertex count by filling the vertex buffer.
 			compressedMesh.SetUV(uv0, uv1, null, null, null, null, null, null);
 			compressedMesh.GetUV(out Vector2[]? unpackedUV0, out Vector2[]? unpackedUV1, out Vector2[]? unpackedUV2, out Vector2[]? unpackedUV3, out Vector2[]? unpackedUV4, out Vector2[]? unpackedUV5, out Vector2[]? unpackedUV6, out Vector2[]? unpackedUV7);
-			Assert.Multiple(() =>
+			using (Assert.EnterMultipleScope())
 			{
 				Assert.That(unpackedUV0, Is.Not.Null, () => "UV0");
 				Assert.That(unpackedUV1, Is.Not.Null, () => "UV1");
@@ -225,7 +225,7 @@ namespace AssetRipper.Tests
 				Assert.That(unpackedUV5, Is.Null, () => "UV5");
 				Assert.That(unpackedUV6, Is.Null, () => "UV6");
 				Assert.That(unpackedUV7, Is.Null, () => "UV7");
-			});
+			}
 			AreAlmostEqual(uv0, unpackedUV0, 0.000001f);
 			AreAlmostEqual(uv1, unpackedUV1, 0.000001f);
 		}
@@ -241,7 +241,7 @@ namespace AssetRipper.Tests
 
 			compressedMesh.GetUV(out Vector2[]? unpackedUV0, out Vector2[]? unpackedUV1, out Vector2[]? unpackedUV2, out Vector2[]? unpackedUV3, out Vector2[]? unpackedUV4, out Vector2[]? unpackedUV5, out Vector2[]? unpackedUV6, out Vector2[]? unpackedUV7);
 
-			Assert.Multiple(() =>
+			using (Assert.EnterMultipleScope())
 			{
 				Assert.That(unpackedUV0, Is.Not.Null, () => "UV0");
 				Assert.That(unpackedUV1, Is.Not.Null, () => "UV1");
@@ -251,7 +251,7 @@ namespace AssetRipper.Tests
 				Assert.That(unpackedUV5, Is.Null, () => "UV5");
 				Assert.That(unpackedUV6, Is.Not.Null, () => "UV6");
 				Assert.That(unpackedUV7, Is.Null, () => "UV7");
-			});
+			}
 			AreAlmostEqual(uv0, unpackedUV0, 0.000001f);
 			AreAlmostEqual(uv1, unpackedUV1, 0.000001f);
 			AreAlmostEqual(uv1, unpackedUV3, 0.000001f);

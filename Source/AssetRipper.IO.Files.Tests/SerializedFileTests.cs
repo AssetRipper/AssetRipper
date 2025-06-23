@@ -50,7 +50,7 @@ internal class SerializedFileTests
 			read = SerializedFileScheme.Default.Read(stream, original.FilePath, original.Name);
 		}
 
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(read.Generation, Is.EqualTo(original.Generation));
 			Assert.That(read.Version, Is.EqualTo(original.Version));
@@ -59,7 +59,7 @@ internal class SerializedFileTests
 			Assert.That(read.Flags, Is.EqualTo(original.Flags));
 			Assert.That(read.Dependencies.ToArray(), Is.EqualTo(original.Dependencies.ToArray()));
 			Assert.That(read.Objects.ToArray(), Is.EqualTo(original.Objects.ToArray()));
-		});
+		}
 	}
 
 	[Theory]
@@ -84,10 +84,10 @@ internal class SerializedFileTests
 			readHeader.Read(reader);
 		}
 
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(stream.Position, Is.EqualTo(stream.Length));
 			Assert.That(readHeader, Is.EqualTo(header));
-		});
+		}
 	}
 }

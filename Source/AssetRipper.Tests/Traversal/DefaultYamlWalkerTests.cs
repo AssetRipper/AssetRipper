@@ -15,11 +15,11 @@ internal class DefaultYamlWalkerTests
 	public static void SerializedObjectIsConsistent(Type type, string yamlExpectedHyphen, string? yamlExpectedNoHyphen)
 	{
 		UnityObjectBase asset = AssetCreator.CreateUnsafe(type);
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			AssertYamlGeneratedAsExpected(new DefaultYamlWalker(), asset, yamlExpectedHyphen);
 			AssertYamlGeneratedAsExpected(new YamlWalkerWithoutHyphens(), asset, /*yamlExpectedNoHyphen ??*/ yamlExpectedHyphen);
-		});
+		}
 
 		static void AssertYamlGeneratedAsExpected(YamlWalker yamlWalker, IUnityObjectBase asset, string yamlExpected)
 		{

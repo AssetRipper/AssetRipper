@@ -11,24 +11,24 @@ internal class TextureImporterTests
 	[Test]
 	public void DefaultSwizzleIsZero()
 	{
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			ITextureImporter importer = CreateImporterWithSwizzleField();
 			Assert.That(importer.Has_Swizzle(), Is.True);
 			Assert.That(importer.Swizzle, Is.Zero);
-		});
-		Assert.Multiple(() =>
+		}
+		using (Assert.EnterMultipleScope())
 		{
 			ITextureImporter importer = CreateImporterWithoutSwizzleField();
 			Assert.That(importer.Has_Swizzle(), Is.False);
 			Assert.That(importer.Swizzle, Is.Zero);
-		});
+		}
 	}
 
 	[Test]
 	public void DefaultFieldSwizzleIsRRRR()
 	{
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			ITextureImporter importer = CreateImporterWithSwizzleField();
 			importer.GetSwizzle(out Swizzle channel0, out Swizzle channel1, out Swizzle channel2, out Swizzle channel3);
@@ -37,24 +37,24 @@ internal class TextureImporterTests
 			Assert.That(channel2, Is.EqualTo(Swizzle.R));
 			Assert.That(channel3, Is.EqualTo(Swizzle.R));
 			Assert.That(importer.Swizzle, Is.Zero);//Check that GetSwizzle hasn't changed the value.
-		});
+		}
 	}
 
 	[Test]
 	public void SwizzleHasCorrectRGBA()
 	{
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			ITextureImporter importer = CreateImporterWithSwizzleField();
 			importer.SetSwizzle(Swizzle.R, Swizzle.G, Swizzle.B, Swizzle.A);
 			Assert.That(importer.Swizzle, Is.EqualTo(0x_03_02_01_00));
-		});
+		}
 	}
 
 	[Test]
 	public void FieldlessSwizzleIsAlwaysRGBA()
 	{
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			ITextureImporter importer = CreateImporterWithoutSwizzleField();
 			importer.Swizzle = 534232;//arbitrary
@@ -65,13 +65,13 @@ internal class TextureImporterTests
 			Assert.That(channel1, Is.EqualTo(Swizzle.G));
 			Assert.That(channel2, Is.EqualTo(Swizzle.B));
 			Assert.That(channel3, Is.EqualTo(Swizzle.A));
-		});
+		}
 	}
 
 	[TestCaseSource(nameof(GetRandomSwizzles), new object[] { 10 })]
 	public void GetSwizzleMatchesSetSwizzle(Swizzle s0, Swizzle s1, Swizzle s2, Swizzle s3)
 	{
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			ITextureImporter importer = CreateImporterWithSwizzleField();
 			importer.SetSwizzle(s0, s1, s2, s3);
@@ -80,7 +80,7 @@ internal class TextureImporterTests
 			Assert.That(channel1, Is.EqualTo(s1));
 			Assert.That(channel2, Is.EqualTo(s2));
 			Assert.That(channel3, Is.EqualTo(s3));
-		});
+		}
 	}
 
 	private static IEnumerable<Swizzle[]> GetRandomSwizzles(int count)

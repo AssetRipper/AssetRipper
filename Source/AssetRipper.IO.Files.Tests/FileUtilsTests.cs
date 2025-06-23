@@ -5,7 +5,7 @@ public static class FileUtilsTests
 	[Test]
 	public static void FilenameTruncationMultibyteCharacter()
 	{
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			// A        length 3 cont     cont     cont
 			// 01000001 11100110 10010110 10000111 00001010
@@ -15,29 +15,29 @@ public static class FileUtilsTests
 			Assert.That(FileSystem.GetUniqueName("/dir", "A文.ext", 7), Is.EqualTo("A.ext"));
 			Assert.That(FileSystem.GetUniqueName("/dir", "A文.ext", 8), Is.EqualTo("A文.ext"));
 			Assert.That(FileSystem.GetUniqueName("/dir", "A文.ext", 9), Is.EqualTo("A文.ext"));
-		});
+		}
 	}
 
 	[Test]
 	public static void ExtensionLength()
 	{
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(FileSystem.GetUniqueName("/dir", "A文.ext", 7), Is.EqualTo("A.ext"));
 			Assert.That(FileSystem.GetUniqueName("/dir", "A文.ext", 8), Is.EqualTo("A文.ext"));
 
 			Assert.That(FileSystem.GetUniqueName("/dir", "A文.exte", 8), Is.EqualTo("A.exte"));
 			Assert.That(FileSystem.GetUniqueName("/dir", "A文.exte", 9), Is.EqualTo("A文.exte"));
-		});
+		}
 	}
 
 	[Test]
 	public static void WithoutExtension()
 	{
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(FileSystem.GetUniqueName("/dir", "A文", 3), Is.EqualTo("A"));
 			Assert.That(FileSystem.GetUniqueName("/dir", "A文", 4), Is.EqualTo("A文"));
-		});
+		}
 	}
 }

@@ -7,7 +7,7 @@ internal class PPtrAccessListTests
 	[Test]
 	public void EmptyListIsImmutable()
 	{
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Assert.Throws<NotSupportedException>(() =>
 			{
@@ -17,7 +17,7 @@ internal class PPtrAccessListTests
 			{
 				ObjectPPtrAccessList.Empty.AddNew();
 			});
-		});
+		}
 	}
 
 	[Test]

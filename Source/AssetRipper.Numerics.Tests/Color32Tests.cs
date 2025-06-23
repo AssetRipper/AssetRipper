@@ -70,13 +70,13 @@ public class Color32Tests
 	[Test]
 	public void ConversionToSystemDrawingColorIsCorrect()
 	{
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Color color = (Color)_color;
 			Assert.That(color.R, Is.EqualTo(_color.R));
 			Assert.That(color.G, Is.EqualTo(_color.G));
 			Assert.That(color.B, Is.EqualTo(_color.B));
 			Assert.That(color.A, Is.EqualTo(_color.A));
-		});
+		}
 	}
 }

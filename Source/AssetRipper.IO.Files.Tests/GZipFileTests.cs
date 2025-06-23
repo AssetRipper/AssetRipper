@@ -23,24 +23,24 @@ public static class GZipFileTests
 
 		SmartStream memoryStream = SmartStream.CreateMemory();
 		file.Write(memoryStream);
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(memoryStream.Position, Is.GreaterThan(0));
 			Assert.That(memoryStream.IsNull, Is.False);
-		});
+		}
 		memoryStream.Position = 0;
 
 		GZipFileScheme fileScheme = new();
 		Assert.That(fileScheme.CanRead(memoryStream));
 		GZipFile newFile = fileScheme.Read(memoryStream, FilePath, Name);
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(newFile.Name, Is.EqualTo(file.Name));
 			Assert.That(newFile.FilePath, Is.EqualTo(file.FilePath));
 			Assert.That(newFile.UncompressedFile, Is.Not.Null);
 			Assert.That(memoryStream.Position, Is.GreaterThan(0));
 			Assert.That(memoryStream.IsNull, Is.False);
-		});
+		}
 		byte[] decompressedData = newFile.UncompressedFile!.ToByteArray();
 		Assert.That(decompressedData, Is.EqualTo(randomData));
 	}

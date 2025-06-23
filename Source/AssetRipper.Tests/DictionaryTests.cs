@@ -16,12 +16,12 @@ namespace AssetRipper.Tests
 				{ 4, 4 }
 			};
 
-			Assert.Multiple(() =>
+			using (Assert.EnterMultipleScope())
 			{
 				Assert.That(dictionary.ContainsKey(1));
 				Assert.That(!dictionary.ContainsKey(2));
 				Assert.That(dictionary[3], Is.EqualTo(4));
-			});
+			}
 		}
 
 		[Test]
@@ -34,7 +34,7 @@ namespace AssetRipper.Tests
 				{ Cast("Three"), 3 }
 			};
 
-			Assert.Multiple(() =>
+			using (Assert.EnterMultipleScope())
 			{
 				Assert.That(dictionary, Has.Count.EqualTo(3));
 				Assert.That(dictionary.ContainsKey(Cast("One")));
@@ -45,13 +45,13 @@ namespace AssetRipper.Tests
 #pragma warning restore NUnit2009 // The same value has been provided as both the actual and the expected argument
 				Assert.That(Cast("Three").Equals(Cast("Three")));
 				Assert.That(dictionary[Cast("Three")], Is.EqualTo(3));
-			});
+			}
 		}
 
 		[Test]
 		public void Utf8StringTests()
 		{
-			Assert.Multiple(() =>
+			using (Assert.EnterMultipleScope())
 			{
 #pragma warning disable NUnit2009 // The same value has been provided as both the actual and the expected argument
 				Assert.That(Cast(""), Is.EqualTo(Cast("")));
@@ -59,7 +59,7 @@ namespace AssetRipper.Tests
 				Assert.That(Cast("Two"), Is.EqualTo(Cast("Two")));
 				Assert.That(Cast("Three"), Is.EqualTo(Cast("Three")));
 #pragma warning restore NUnit2009 // The same value has been provided as both the actual and the expected argument
-			});
+			}
 		}
 
 		private static Utf8String Cast(string str) => str;
@@ -72,7 +72,7 @@ namespace AssetRipper.Tests
 			AddFastPropertyName(dictionary, "Two", 2);
 			AddFastPropertyName(dictionary, "Three", 3);
 
-			Assert.Multiple(() =>
+			using (Assert.EnterMultipleScope())
 			{
 				Assert.That(dictionary, Has.Count.EqualTo(3));
 				Assert.That(dictionary.ContainsKey(MakeFastPropertyName("One")));
@@ -83,7 +83,7 @@ namespace AssetRipper.Tests
 #pragma warning restore NUnit2009 // The same value has been provided as both the actual and the expected argument
 				Assert.That(MakeFastPropertyName("Three").Equals(MakeFastPropertyName("Three")));
 				Assert.That(dictionary[MakeFastPropertyName("Three")], Is.EqualTo(3));
-			});
+			}
 
 			static FastPropertyName MakeFastPropertyName(string str) => new() { Name = str };
 

@@ -17,7 +17,7 @@ internal class VertexDataBlobTests
 		VertexDataBlob vertexDataBlob = VertexDataBlob.Create(meshData, version, endianType);
 		MeshData meshData2 = vertexDataBlob.ToMeshData();
 
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			AssertEquivalence(meshData2.Vertices, meshData.Vertices);
 			AssertEquivalence(meshData2.Normals, meshData.Normals);
@@ -88,7 +88,7 @@ internal class VertexDataBlobTests
 			{
 				Assert.That(meshData2.Skin, Is.Null);
 			}
-		});
+		}
 	}
 
 	private static EquivalenceResolveConstraint IsEquivalentTo(IEnumerable? expected)

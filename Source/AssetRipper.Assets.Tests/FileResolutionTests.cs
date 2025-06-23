@@ -24,13 +24,13 @@ public class FileResolutionTests
 		ProcessedAssetCollection collection2 = new ProcessedAssetCollection(processedBundle);
 		collection2.Name = name2;
 
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(gameBundle.ResolveCollection(name1), Is.EqualTo(collection1));
 			Assert.That(gameBundle.ResolveCollection(name2), Is.EqualTo(collection2));
 			Assert.That(processedBundle.ResolveCollection(name1), Is.EqualTo(collection1));
 			Assert.That(processedBundle.ResolveCollection(name2), Is.EqualTo(collection2));
-		});
+		}
 	}
 
 	[Test]
@@ -51,12 +51,11 @@ public class FileResolutionTests
 
 		ProcessedAssetCollection collection2 = new ProcessedAssetCollection(processedBundle2);
 		collection2.Name = name2;
-
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(gameBundle.ResolveCollection(name1), Is.EqualTo(collection1));
 			Assert.That(gameBundle.ResolveCollection(name2), Is.EqualTo(collection2));
-		});
+		}
 	}
 
 	[Test]
@@ -82,13 +81,12 @@ public class FileResolutionTests
 
 		ProcessedAssetCollection collection = new ProcessedAssetCollection(gameBundle);
 		collection.Name = name;
-
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(gameBundle.ResolveCollection(name), Is.EqualTo(collection));
 			Assert.That(gameBundle.ResolveCollection($"library/{name}"), Is.EqualTo(collection));
 			Assert.That(gameBundle.ResolveCollection($"resources/{name}"), Is.EqualTo(collection));
-		});
+		}
 	}
 
 	[TestCase("unity default resources")]
@@ -105,13 +103,12 @@ public class FileResolutionTests
 
 		ProcessedAssetCollection collection = new ProcessedAssetCollection(processedBundle);
 		collection.Name = name;
-
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(gameBundle.ResolveCollection(name), Is.EqualTo(collection));
 			Assert.That(gameBundle.ResolveCollection($"library/{name}"), Is.EqualTo(collection));
 			Assert.That(gameBundle.ResolveCollection($"resources/{name}"), Is.EqualTo(collection));
-		});
+		}
 	}
 
 	[Test]
@@ -129,14 +126,13 @@ public class FileResolutionTests
 
 		ResourceFile resource2 = CreateNewResourceFile(name2);
 		processedBundle.AddResource(resource2);
-
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(gameBundle.ResolveResource(name1), Is.EqualTo(resource1));
 			Assert.That(gameBundle.ResolveResource(name2), Is.EqualTo(resource2));
 			Assert.That(processedBundle.ResolveResource(name1), Is.EqualTo(resource1));
 			Assert.That(processedBundle.ResolveResource(name2), Is.EqualTo(resource2));
-		});
+		}
 	}
 
 	[Test]
@@ -157,12 +153,11 @@ public class FileResolutionTests
 
 		ResourceFile resource2 = CreateNewResourceFile(name2);
 		processedBundle2.AddResource(resource2);
-
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(gameBundle.ResolveResource(name1), Is.EqualTo(resource1));
 			Assert.That(gameBundle.ResolveResource(name2), Is.EqualTo(resource2));
-		});
+		}
 	}
 
 	[Test]

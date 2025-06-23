@@ -103,7 +103,7 @@
 
 		private static void AssertApproximatelyEqual(Matrix4x4 actual, Matrix4x4 expected, float maxDeviation)
 		{
-			Assert.Multiple(() =>
+			using (Assert.EnterMultipleScope())
 			{
 				AssertApproximatelyEqual(actual.M11, expected.M11, maxDeviation, nameof(Matrix4x4.M11));
 				AssertApproximatelyEqual(actual.M12, expected.M12, maxDeviation, nameof(Matrix4x4.M12));
@@ -121,7 +121,7 @@
 				AssertApproximatelyEqual(actual.M42, expected.M42, maxDeviation, nameof(Matrix4x4.M42));
 				AssertApproximatelyEqual(actual.M43, expected.M43, maxDeviation, nameof(Matrix4x4.M43));
 				AssertApproximatelyEqual(actual.M44, expected.M44, maxDeviation, nameof(Matrix4x4.M44));
-			});
+			}
 		}
 
 		private static void AssertApproximatelyEqual(float actual, float expected, float maxDeviation, string name)
