@@ -1,3 +1,4 @@
+using AssetRipper.Conversions.FastPng;
 using AssetRipper.TextureDecoder.Exr;
 using AssetRipper.TextureDecoder.Rgb;
 using AssetRipper.TextureDecoder.Rgb.Formats;
@@ -133,10 +134,33 @@ public sealed class DirectBitmap<TColor, TChannel> : DirectBitmap
 
 	public override void SaveAsPng(Stream stream)
 	{
-		GetDataAndComponentsForSaving(out byte[] data, out ColorComponents components);
-		lock (imageWriter)
+		if (Width > ushort.MaxValue || Height * Depth > ushort.MaxValue)
 		{
-			imageWriter.WritePng(data, Width, Height * Depth, components, stream);
+			// https://github.com/richgel999/fpng/issues/31
+			GetDataAndComponentsForSaving(out byte[] data, out ColorComponents components);
+			lock (imageWriter)
+			{
+				imageWriter.WritePng(data, Width, Height * Depth, components, stream);
+			}
+		}
+		else
+		{
+			byte[] data;
+
+			if (typeof(TColor) == typeof(ColorRGBA<byte>) || typeof(TColor) == typeof(ColorRGB<byte>))
+			{
+				data = Data;
+			}
+			else if (TColor.HasAlphaChannel)
+			{
+				RgbConverter.Convert<TColor, TChannel, ColorRGBA<byte>, byte>(Bits, Width, Height * Depth, out data);
+			}
+			else
+			{
+				RgbConverter.Convert<TColor, TChannel, ColorRGB<byte>, byte>(Bits, Width, Height * Depth, out data);
+			}
+			byte[] result = FPng.EncodeImageToMemory(data, Width, Height * Depth);
+			new MemoryStream(result).CopyTo(stream);
 		}
 	}
 
