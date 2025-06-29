@@ -85,8 +85,9 @@ public sealed class YamlSequenceNode : YamlNode
 		base.Emit(emitter);
 
 		StartChildren(emitter);
-		foreach (YamlNode child in Children)
+		for (int i = 0; i < Children.Count; i++)
 		{
+			YamlNode child = Children[i];
 			StartChild(emitter, child);
 			child.Emit(emitter);
 			EndChild(emitter, child);
