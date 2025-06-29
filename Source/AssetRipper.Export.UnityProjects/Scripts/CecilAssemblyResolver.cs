@@ -8,7 +8,7 @@ using IAssemblyResolver = ICSharpCode.Decompiler.Metadata.IAssemblyResolver;
 
 namespace AssetRipper.Export.UnityProjects.Scripts;
 
-internal class CecilAssemblyResolver : IAssemblyResolver
+internal class CecilAssemblyResolver(IAssemblyManager manager) : IAssemblyResolver
 {
 	/// <remarks>
 	/// In <see cref="ICSharpCode.Decompiler.TypeSystem.DecompilerTypeSystem"/>, it states:<br /><br />
@@ -22,34 +22,16 @@ internal class CecilAssemblyResolver : IAssemblyResolver
 	///    to enable these types to be resolved.
 	/// </remarks>
 	private readonly ConcurrentDictionary<string, PEFile> peAssemblies = new();
-	public CecilAssemblyResolver(IAssemblyManager manager)
-	{
-		foreach (AssemblyDefinition assembly in manager.GetAssemblies())
-		{
-			Stream stream = manager.GetStreamForAssembly(assembly);
-			stream.Position = 0;
-			PEFile peFile = new PEFile(assembly.Name!, stream);
-			if (!peAssemblies.TryAdd(assembly.Name!, peFile))
-			{
-				throw new Exception($"Could not add pe assembly: {assembly.Name} to name dictionary!");
-			}
-		}
-	}
 
 	public MetadataFile? Resolve(IAssemblyReference reference)
 	{
-		if (peAssemblies.TryGetValue(reference.Name, out PEFile? peResult))
-		{
-			return peResult;
-		}
-		else
-		{
-			Logger.Warning(LogCategory.Export, $"Could not resolve assembly: {reference.Name}");
-			return null;
-		}
+		return ResolveAssembly(reference.Name);
 	}
 
-	public PEFile Resolve(AssemblyDefinition assembly) => peAssemblies[assembly.Name!];
+	public PEFile Resolve(AssemblyDefinition assembly)
+	{
+		return ResolveAssembly(assembly.Name!)!;
+	}
 
 	public Task<MetadataFile?> ResolveAsync(IAssemblyReference reference)
 	{
@@ -64,19 +46,79 @@ internal class CecilAssemblyResolver : IAssemblyResolver
 	/// <returns></returns>
 	public MetadataFile? ResolveModule(MetadataFile mainModule, string moduleName)
 	{
-		MetadataFile? result = peAssemblies.Values.Where(x => x.Name == moduleName).SingleOrDefault();
-		if (result is not null)
-		{
-		}
-		else
-		{
-			Logger.Warning(LogCategory.Export, $"Could not resolve module: {moduleName}");
-		}
-		return result;
+		return ResolveModule(moduleName);
 	}
 
 	public Task<MetadataFile?> ResolveModuleAsync(MetadataFile mainModule, string moduleName)
 	{
 		return Task.Run(() => ResolveModule(mainModule, moduleName));
+	}
+
+	private PEFile? ResolveAssembly(string referenceName)
+	{
+		if (peAssemblies.TryGetValue(referenceName, out PEFile? peResult))
+		{
+			return peResult;
+		}
+		else
+		{
+			lock (peAssemblies)
+			{
+				if (peAssemblies.TryGetValue(referenceName, out peResult))
+				{
+					return peResult;
+				}
+
+				AssemblyDefinition? assembly = manager.GetAssemblies().FirstOrDefault(x => x.Name == referenceName);
+				if (assembly is not null)
+				{
+					Stream stream = manager.GetStreamForAssembly(assembly);
+					stream.Position = 0;
+					string assemblyName = assembly.Name!;
+					peResult = new PEFile(assemblyName, stream);
+					if (!peAssemblies.TryAdd(assemblyName, peResult))
+					{
+						throw new Exception($"Could not add pe assembly: {assemblyName} to name dictionary!");
+					}
+					return peResult;
+				}
+			}
+
+			Logger.Warning(LogCategory.Export, $"Could not resolve assembly: {referenceName}");
+			return null;
+		}
+	}
+
+	private PEFile? ResolveModule(string moduleName)
+	{
+		lock (peAssemblies)
+		{
+			PEFile? result = peAssemblies.Values.Where(x => x.Name == moduleName).SingleOrDefault();
+			if (result is not null)
+			{
+			}
+			else
+			{
+				foreach (AssemblyDefinition assembly in manager.GetAssemblies())
+				{
+					if (!assembly.Modules.Any(m => m.Name == moduleName))
+					{
+						continue;
+					}
+
+					Stream stream = manager.GetStreamForAssembly(assembly);
+					stream.Position = 0;
+					string assemblyName = assembly.Name!;
+					result = new PEFile(assemblyName, stream);
+					if (!peAssemblies.TryAdd(assemblyName, result))
+					{
+						throw new Exception($"Could not add pe assembly: {assemblyName} to name dictionary!");
+					}
+					return result;
+				}
+				Logger.Warning(LogCategory.Export, $"Could not resolve module: {moduleName}");
+			}
+			return result;
+		}
 	}
 }
