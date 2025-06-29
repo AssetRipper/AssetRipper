@@ -22,7 +22,6 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Photino.NET;
 using SwaggerThemes;
-using System.CommandLine;
 using System.Diagnostics;
 
 namespace AssetRipper.GUI.Web;
@@ -31,7 +30,7 @@ public static class WebApplicationLauncher
 {
 	public static PhotinoWindow? PhotinoWindow { get; private set; }
 
-	private static class Defaults
+	internal static class Defaults
 	{
 		public const int Port = 0;
 		public const bool LaunchBrowser = true;
@@ -41,77 +40,33 @@ public static class WebApplicationLauncher
 
 	public static void Launch(string[] args)
 	{
-		RootCommand rootCommand = new() { Description = "AssetRipper" };
+		Arguments? arguments = Arguments.Parse(args);
 
-		Option<int> portOption = new Option<int>(
-			name: "--port",
-			description: "If nonzero, the application will attempt to host on this port, instead of finding a random unused port.",
-			getDefaultValue: () => Defaults.Port);
-		rootCommand.AddOption(portOption);
-
-		Option<bool> launchBrowserOption = new Option<bool>(
-			name: "--launch-browser",
-			description: "If true, a browser window will be launched automatically.",
-			getDefaultValue: () => Defaults.LaunchBrowser);
-		rootCommand.AddOption(launchBrowserOption);
-
-		Option<bool> logOption = new Option<bool>(
-			name: "--log",
-			description: "If true, the application will log to a file.",
-			getDefaultValue: () => Defaults.Log);
-		rootCommand.AddOption(logOption);
-
-		Option<string?> logPathOption = new Option<string?>(
-			name: "--log-path",
-			description: "The file location at which to save the log, or a sensible default if not provided.",
-			getDefaultValue: () => Defaults.LogPath);
-		rootCommand.AddOption(logPathOption);
-
-		Option<string[]> localWebFilesOption = new Option<string[]>(
-			name: "--local-web-file",
-			description: "Files provided with this option will replace online sources.",
-			getDefaultValue: () => []);
-		rootCommand.AddOption(localWebFilesOption);
-
-		bool shouldRun = false;
-		int port = Defaults.Port;
-		bool launchBrowser = Defaults.LaunchBrowser;
-		bool log = Defaults.Log;
-		string? logFile = Defaults.LogPath;
-
-		rootCommand.SetHandler((int portParsed, bool launchBrowserParsed, bool logParsed, string? logFileParsed, string[] localWebFilesParsed) =>
+		if (arguments is null)
 		{
-			shouldRun = true;
-			port = portParsed;
-			launchBrowser = launchBrowserParsed;
-			log = logParsed;
-			logFile = logFileParsed;
-			foreach (string localWebFile in localWebFilesParsed)
-			{
-				if (File.Exists(localWebFile))
-				{
-					string fileName = Path.GetFileName(localWebFile);
-					string webPrefix = Path.GetExtension(fileName) switch
-					{
-						".css" => "/css/",
-						".js" => "/js/",
-						_ => "/"
-					};
-					StaticContentLoader.Add(webPrefix + fileName, File.ReadAllBytes(localWebFile));
-				}
-				else
-				{
-					Console.WriteLine($"File '{localWebFile}' does not exist.");
-				}
-			}
-		}, portOption, launchBrowserOption, logOption, logPathOption, localWebFilesOption);
-
-		rootCommand.Invoke(args);
-
-		if (shouldRun)
-		{
-			Launch(port, launchBrowser, log, logFile);
+			return;
 		}
+
+		foreach (string localWebFile in arguments.LocalWebFiles ?? [])
+		{
+			if (File.Exists(localWebFile))
+			{
+				string fileName = Path.GetFileName(localWebFile);
+				string webPrefix = Path.GetExtension(fileName) switch
+				{
+					".css" => "/css/",
+					".js" => "/js/",
+					_ => "/"
+				};
+				StaticContentLoader.Add(webPrefix + fileName, File.ReadAllBytes(localWebFile));
+			}
+			else
+			{
+				Console.WriteLine($"File '{localWebFile}' does not exist.");
+			}
+		}
+
+		Launch(arguments.Port, arguments.LaunchBrowser, arguments.Log, arguments.LogPath);
 	}
 
 	public static void Launch(int port = Defaults.Port, bool launchBrowser = Defaults.LaunchBrowser, bool log = Defaults.Log, string? logPath = Defaults.LogPath)

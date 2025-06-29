@@ -9,7 +9,6 @@ using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.Tools.DependenceGrapher.Filters;
-using System.CommandLine;
 using System.Text.Json;
 
 namespace AssetRipper.Tools.DependenceGrapher;
@@ -27,86 +26,39 @@ internal static class Program
 
 	static void Main(string[] args)
 	{
-		RootCommand rootCommand = new() { Description = "AssetRipper Dependence Grapher" };
-
-		Argument<List<string>> filesToExportOption = new();
-		rootCommand.AddArgument(filesToExportOption);
-
-		Option<string?> outputOption = new Option<string?>(
-						aliases: new[] { "-o", "--output" },
-						description: "The output file to save the information. If not specified, it will be called \"output.txt\".",
-						getDefaultValue: () => null);
-		rootCommand.AddOption(outputOption);
-
-		Option<string?> cabMapOption = new Option<string?>(
-						name: "--cab-map",
-						description: "If provided, a cab map json file will be used to list bundle names for referenced files.",
-						getDefaultValue: () => null);
-		rootCommand.AddOption(cabMapOption);
-
-		Option<string?> nameOption = new Option<string?>(
-						name: "--name",
-						description: "If used, only assets with this name will be analyzed for external references.",
-						getDefaultValue: () => null);
-		rootCommand.AddOption(nameOption);
-
-		Option<string?> classNameOption = new Option<string?>(
-						name: "--class-name",
-						description: "If used, only assets with this class name will be analyzed for external references.",
-						getDefaultValue: () => null);
-		rootCommand.AddOption(classNameOption);
-
-		Option<int> classIDOption = new Option<int>(
-						name: "--class-id",
-						description: "If used, only assets with this class ID will be analyzed for external references.",
-						getDefaultValue: () => DefaultClassID);
-		rootCommand.AddOption(classIDOption);
-
-		Option<long> pathIDOption = new Option<long>(
-						name: "--path-id",
-						description: "If used, only assets with this PathID will be analyzed for external references.",
-						getDefaultValue: () => DefaultPathID);
-		rootCommand.AddOption(pathIDOption);
-
-		Option<bool> verboseOption = new Option<bool>(
-						aliases: new[] { "-v", "--verbose" },
-						description: "If true, additional information will be outputted about referencing assets.",
-						getDefaultValue: () => false);
-		rootCommand.AddOption(verboseOption);
-
-		rootCommand.SetHandler((List<string> filesToExport, string? outputFile, string? cabMapPath, string? name, string? className, int classID, long pathID, bool verbose) =>
+		Arguments? arguments = Arguments.Parse(args);
+		if (arguments is null)
 		{
-			if (filesToExport.Count == 0)
-			{
-				Console.WriteLine("No files were specified for analysis.");
-				return;
-			}
+			return;
+		}
 
-			Dictionary<string, string> cabMap;
-			if (File.Exists(cabMapPath))
-			{
-				using FileStream cabMapStream = File.OpenRead(cabMapPath);
-				cabMap = JsonSerializer.Deserialize(cabMapPath, DictionarySerializerContext.Default.DictionaryStringString) ?? new();
-			}
-			else
-			{
-				cabMap = new();
-			}
+		if (arguments.FilesToExport is null or { Length: 0 })
+		{
+			Console.WriteLine("No files were specified for analysis.");
+			return;
+		}
 
-			List<IAssetFilter> filters = CreateFilterList(name, className, classID, pathID);
-			if (string.IsNullOrEmpty(outputFile))
-			{
-				outputFile = Path.Join(AppContext.BaseDirectory, "output.txt");
-			}
-			using FileStream stream = File.Create(outputFile);
-			using TextWriter writer = new StreamWriter(stream);
-			LoadFiles(GetAllFilePaths(filesToExport), writer, filters, verbose, cabMap);
-			writer.Flush();
-			Console.WriteLine("Done!");
-		},
-		filesToExportOption, outputOption, cabMapOption, nameOption, classNameOption, classIDOption, pathIDOption, verboseOption);
+		Dictionary<string, string> cabMap;
+		if (File.Exists(arguments.CabMapPath))
+		{
+			using FileStream cabMapStream = File.OpenRead(arguments.CabMapPath);
+			cabMap = JsonSerializer.Deserialize(arguments.CabMapPath, DictionarySerializerContext.Default.DictionaryStringString) ?? new();
+		}
+		else
+		{
+			cabMap = new();
+		}
 
-		rootCommand.Invoke(args);
+		List<IAssetFilter> filters = CreateFilterList(arguments.Name, arguments.ClassName, arguments.ClassID, arguments.PathID);
+		if (string.IsNullOrEmpty(arguments.OutputFile))
+		{
+			arguments.OutputFile = Path.Join(AppContext.BaseDirectory, "output.txt");
+		}
+		using FileStream stream = File.Create(arguments.OutputFile);
+		using TextWriter writer = new StreamWriter(stream);
+		LoadFiles(GetAllFilePaths(arguments.FilesToExport), writer, filters, arguments.Verbose, cabMap);
+		writer.Flush();
+		Console.WriteLine("Done!");
 	}
 
 	private static IEnumerable<string> GetAllFilePaths(IEnumerable<string> paths)

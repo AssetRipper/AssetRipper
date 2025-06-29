@@ -1,6 +1,5 @@
 ﻿using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
-using System.CommandLine;
 using System.Text.Json;
 
 namespace AssetRipper.Tools.CabMapGenerator;
@@ -9,38 +8,27 @@ internal static class Program
 {
 	static void Main(string[] args)
 	{
-		RootCommand rootCommand = new() { Description = "AssetRipper Cab Map Generator" };
-
-		Argument<List<string>> filesToExportOption = new();
-		rootCommand.AddArgument(filesToExportOption);
-
-		Option<string?> outputOption = new Option<string?>(
-						aliases: new[] { "-o", "--output" },
-						description: "The output file to save the information. If not specified, it will be called \"cabmap.json\".",
-						getDefaultValue: () => null);
-		rootCommand.AddOption(outputOption);
-
-		rootCommand.SetHandler((List<string> filesToExport, string? outputFile) =>
+		Arguments? arguments = Arguments.Parse(args);
+		if (arguments is null)
 		{
-			if (filesToExport.Count == 0)
-			{
-				Console.WriteLine("No files were specified for analysis.");
-				return;
-			}
+			return;
+		}
 
-			if (string.IsNullOrEmpty(outputFile))
-			{
-				outputFile = Path.Join(AppContext.BaseDirectory, "cabmap.json");
-			}
-			using FileStream stream = File.Create(outputFile);
-			Dictionary<string, string> map = new();
-			LoadFiles(GetAllFilePaths(filesToExport), map);
-			JsonSerializer.Serialize(stream, map, DictionarySerializerContext.Default.DictionaryStringString);
-			Console.WriteLine("Done!");
-		},
-		filesToExportOption, outputOption);
+		if (arguments.FilesToExport is null or { Length: 0 })
+		{
+			Console.WriteLine("No files were specified for analysis.");
+			return;
+		}
 
-		rootCommand.Invoke(args);
+		if (string.IsNullOrEmpty(arguments.OutputFile))
+		{
+			arguments.OutputFile = Path.Join(AppContext.BaseDirectory, "cabmap.json");
+		}
+		using FileStream stream = File.Create(arguments.OutputFile);
+		Dictionary<string, string> map = new();
+		LoadFiles(GetAllFilePaths(arguments.FilesToExport), map);
+		JsonSerializer.Serialize(stream, map, DictionarySerializerContext.Default.DictionaryStringString);
+		Console.WriteLine("Done!");
 	}
 
 	private static IEnumerable<string> GetAllFilePaths(IEnumerable<string> paths)
