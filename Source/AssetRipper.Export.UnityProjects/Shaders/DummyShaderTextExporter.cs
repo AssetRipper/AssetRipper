@@ -37,11 +37,10 @@ public sealed class DummyShaderTextExporter : ShaderExporterBase
 	{
 		using Stream fileStream = fileSystem.File.Create(path);
 		using InvariantStreamWriter writer = new(fileStream);
-		ExportShader((IShader)asset, writer);
-		return true;
+		return ExportShader((IShader)asset, writer);
 	}
 
-	public static void ExportShader(IShader shader, TextWriter writer)
+	public static bool ExportShader(IShader shader, TextWriter writer)
 	{
 		if (shader.Has_ParsedForm())
 		{
@@ -77,6 +76,10 @@ public sealed class DummyShaderTextExporter : ShaderExporterBase
 		{
 			string header = shader.Script.String;
 			int subshaderIndex = header.IndexOf("SubShader");
+			if (subshaderIndex < 0)
+			{
+				return false;
+			}
 			writer.WriteString(header, 0, subshaderIndex);
 
 			writer.Write("\t//DummyShaderTextExporter\n");
@@ -85,6 +88,7 @@ public sealed class DummyShaderTextExporter : ShaderExporterBase
 
 			writer.Write('}');
 		}
+		return true;
 	}
 
 	private static void Export(ISerializedProperties _this, TextWriter writer)
