@@ -76,13 +76,12 @@ public static class WebApplicationLauncher
 
 		if (log)
 		{
-			string resolvedLogPath = logPath;
-			if (string.IsNullOrEmpty(resolvedLogPath))
+			if (string.IsNullOrEmpty(logPath))
 			{
-				resolvedLogPath = ExecutingDirectory.Combine($"AssetRipper_{DateTime.Now:yyyyMMdd_HHmmss}.log");
-				RotateLogs(resolvedLogPath);
+				logPath = ExecutingDirectory.Combine($"AssetRipper_{DateTime.Now:yyyyMMdd_HHmmss}.log");
+				RotateLogs(logPath);
 			}
-			Logger.Add(new FileLogger(resolvedLogPath));
+			Logger.Add(new FileLogger(logPath));
 		}
 		Logger.LogSystemInformation("AssetRipper");
 		Logger.Add(new ConsoleLogger());
@@ -400,26 +399,21 @@ public static class WebApplicationLauncher
 		{
 			return;
 		}
-		string prefix = System.IO.Path.GetFileNameWithoutExtension(path).Split('_')[0];
-		string extension = System.IO.Path.GetExtension(path);
 
-		var logFiles = new DirectoryInfo(directory)
-			.GetFiles($"{prefix}_*{extension}")
+		FileInfo[] logFiles = new DirectoryInfo(directory)
+			.GetFiles("AssetRipper_*.log")
 			.OrderBy(f => f.Name)
 			.ToArray();
 
-		if (logFiles.Length >= MaxLogFiles)
+		for (int i = 0; i <= logFiles.Length - MaxLogFiles; i++)
 		{
-			for (int i = 0; i <= logFiles.Length - MaxLogFiles; i++)
+			try
 			{
-				try
-				{
-					logFiles[i].Delete();
-				}
-				catch (IOException)
-				{
-					// Could not delete log file, ignore
-				}
+				logFiles[i].Delete();
+			}
+			catch (IOException)
+			{
+				// Could not delete log file, ignore
 			}
 		}
 	}
