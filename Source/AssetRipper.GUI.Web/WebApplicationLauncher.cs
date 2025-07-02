@@ -9,6 +9,7 @@ using AssetRipper.GUI.Web.Pages.Scenes;
 using AssetRipper.GUI.Web.Pages.Settings;
 using AssetRipper.GUI.Web.Paths;
 using AssetRipper.Import.Logging;
+using AssetRipper.Import.Utils;
 using AssetRipper.Web.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -75,7 +76,13 @@ public static class WebApplicationLauncher
 
 		if (log)
 		{
-			Logger.Add(string.IsNullOrEmpty(logPath) ? new FileLogger() : new FileLogger(logPath));
+			string resolvedLogPath = logPath;
+			if (string.IsNullOrEmpty(resolvedLogPath))
+			{
+				resolvedLogPath = ExecutingDirectory.Combine($"AssetRipper_{DateTime.Now:yyyyMMdd_HHmmss}.log");
+				RotateLogs(resolvedLogPath);
+			}
+			Logger.Add(new FileLogger(resolvedLogPath));
 		}
 		Logger.LogSystemInformation("AssetRipper");
 		Logger.Add(new ConsoleLogger());
@@ -382,6 +389,38 @@ public static class WebApplicationLauncher
 		catch (Exception ex)
 		{
 			Logger.Error($"Failed to launch web browser for: {url}", ex);
+		}
+	}
+
+	private static void RotateLogs(string path)
+	{
+		const int MaxLogFiles = 5;
+		string? directory = Path.GetDirectoryName(path);
+		if (directory is null)
+		{
+			return;
+		}
+		string prefix = System.IO.Path.GetFileNameWithoutExtension(path).Split('_')[0];
+		string extension = System.IO.Path.GetExtension(path);
+
+		var logFiles = new DirectoryInfo(directory)
+			.GetFiles($"{prefix}_*{extension}")
+			.OrderBy(f => f.Name)
+			.ToArray();
+
+		if (logFiles.Length >= MaxLogFiles)
+		{
+			for (int i = 0; i <= logFiles.Length - MaxLogFiles; i++)
+			{
+				try
+				{
+					logFiles[i].Delete();
+				}
+				catch (IOException)
+				{
+					// Could not delete log file, ignore
+				}
+			}
 		}
 	}
 }
