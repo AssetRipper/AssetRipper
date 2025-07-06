@@ -92,6 +92,7 @@
     "export_unity_project": "Export Unity Project",
     "create_subfolder": "Create Subfolder",
     "failed_files": "Failed Files",
+    "file_id": "File ID",
     "format": "Format",
     "frequency": "Frequency",
     "game_object": "GameObject",
