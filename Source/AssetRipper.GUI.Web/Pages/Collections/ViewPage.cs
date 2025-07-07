@@ -55,5 +55,41 @@ public sealed class ViewPage : DefaultPage
 				}
 			}
 		}
+
+		if (Collection.Dependencies.Count > 1)
+		{
+			new H2(writer).Close(Localization.AssetTabDependencies);
+			using (new Table(writer).WithClass("table").End())
+			{
+				using (new Thead(writer).End())
+				{
+					using (new Tr(writer).End())
+					{
+						new Th(writer).Close(Localization.FileId);
+						new Th(writer).Close(Localization.Name);
+					}
+				}
+				using (new Tbody(writer).End())
+				{
+					for (int i = 1; i < Collection.Dependencies.Count; i++)
+					{
+						AssetCollection? dependency = Collection.Dependencies[i];
+						if (dependency is null)
+						{
+							continue;
+						}
+
+						using (new Tr(writer).End())
+						{
+							new Td(writer).Close(i.ToString());
+							using (new Td(writer).End())
+							{
+								PathLinking.WriteLink(writer, dependency);
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 }
