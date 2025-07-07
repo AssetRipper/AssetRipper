@@ -74,7 +74,11 @@ public sealed class ViewPage : DefaultPage
 					for (int i = 1; i < Collection.Dependencies.Count; i++)
 					{
 						AssetCollection? dependency = Collection.Dependencies[i];
-						if (dependency is null) continue;
+						if (dependency is null)
+						{
+							continue;
+						}
+
 						using (new Tr(writer).End())
 						{
 							new Td(writer).Close(i.ToString());
