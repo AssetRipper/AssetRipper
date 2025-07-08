@@ -10,22 +10,24 @@ namespace AssetRipper.Export.UnityProjects.Shaders;
 
 public sealed class DummyShaderTextExporter : ShaderExporterBase
 {
+	// This uses CGPROGRAM instead of HLSLPROGRAM because the latter was supposedly introduced in Unity 5.6.
+	// https://github.com/UnityCommunity/UnityReleaseNotes/blob/7b417b8ff64415e1e509d8c345b829c7cc11b650/5.6-Beta/5.6.0b1.txt#L143
 	private static string FallbackDummyShader { get; } = """
 
 			SubShader{
 				Tags { "RenderType" = "Opaque" }
 				LOD 200
 				CGPROGRAM
-		#pragma surface surf Standard fullforwardshadows
+		#pragma surface surf Lambert
 		#pragma target 3.0
 				sampler2D _MainTex;
 				struct Input
 				{
 					float2 uv_MainTex;
 				};
-				void surf(Input IN, inout SurfaceOutputStandard o)
+				void surf(Input IN, inout SurfaceOutput o)
 				{
-					fixed4 c = tex2D(_MainTex, IN.uv_MainTex);
+					float4 c = tex2D(_MainTex, IN.uv_MainTex);
 					o.Albedo = c.rgb;
 				}
 				ENDCG
@@ -42,6 +44,7 @@ public sealed class DummyShaderTextExporter : ShaderExporterBase
 
 	public static bool ExportShader(IShader shader, TextWriter writer)
 	{
+		// Technically, this outputs invalid shader code for Unity 5.5 because HLSLPROGRAM was not introduced until Unity 5.6.
 		if (shader.Has_ParsedForm())
 		{
 			writer.Write($"Shader \"{shader.ParsedForm.Name}\" {{\n");
