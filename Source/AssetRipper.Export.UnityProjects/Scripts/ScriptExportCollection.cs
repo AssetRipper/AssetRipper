@@ -79,7 +79,7 @@ public sealed class ScriptExportCollection : ScriptExportCollectionBase
 				Logger.Info(LogCategory.Export, $"Saving {assemblyName}");
 				fileSystem.Directory.Create(pluginsFolder);
 				string outputPath = fileSystem.Path.Join(pluginsFolder, SpecialFileNames.AddAssemblyFileExtension(assemblyName));
-				AssetExporter.AssemblyManager.SaveAssembly(assembly, outputPath);
+				AssetExporter.AssemblyManager.SaveAssembly(assembly, outputPath, fileSystem);
 				OnAssemblyExported(container, outputPath, fileSystem);
 			}
 		}

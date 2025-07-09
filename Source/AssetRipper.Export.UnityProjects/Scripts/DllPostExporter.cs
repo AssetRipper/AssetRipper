@@ -21,8 +21,7 @@ public class DllPostExporter : IPostExporter
 			foreach (AssemblyDefinition assembly in assemblies)
 			{
 				string filepath = fileSystem.Path.Join(outputDirectory, SpecialFileNames.AddAssemblyFileExtension(assembly.Name!));
-				using Stream stream = fileSystem.File.Create(filepath);
-				assemblyManager.SaveAssembly(assembly, stream);
+				assemblyManager.SaveAssembly(assembly, filepath, fileSystem);
 			}
 		}
 	}
