@@ -12,9 +12,19 @@ using System.Diagnostics;
 namespace AssetRipper.Import.Structure.Assembly.Serializable;
 
 [DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
-public record struct SerializableValue(ulong PValue, object CValue)
+public record struct SerializableValue([property: DebuggerBrowsable(DebuggerBrowsableState.Never)] ulong PValue, object CValue)
 {
 	#region AsType Properties
+
+	// For brevity, we hide a lot of the properties in the debugger. We only show:
+	// * Boolean
+	// * Char
+	// * Signed integer (long)
+	// * Unsigned integer (ulong)
+	// * Single
+	// * Double
+	// * Object
+
 	public bool AsBoolean
 	{
 		readonly get => PValue != 0;
@@ -27,36 +37,42 @@ public record struct SerializableValue(ulong PValue, object CValue)
 		set => SetPrimitive(unchecked((byte)value));
 	}
 
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public sbyte AsSByte
 	{
 		readonly get => unchecked((sbyte)PValue);
 		set => SetPrimitive(unchecked((byte)value));
 	}
 
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public byte AsByte
 	{
 		readonly get => unchecked((byte)PValue);
 		set => SetPrimitive(value);
 	}
 
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public short AsInt16
 	{
 		readonly get => unchecked((short)PValue);
 		set => SetPrimitive(unchecked((ushort)value));
 	}
 
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public ushort AsUInt16
 	{
 		readonly get => unchecked((ushort)PValue);
 		set => SetPrimitive(value);
 	}
 
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public int AsInt32
 	{
 		readonly get => unchecked((int)PValue);
 		set => SetPrimitive(unchecked((uint)value));
 	}
 
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public uint AsUInt32
 	{
 		readonly get => unchecked((uint)PValue);
@@ -87,196 +103,230 @@ public record struct SerializableValue(ulong PValue, object CValue)
 		set => AsUInt64 = BitConverter.DoubleToUInt64Bits(value);
 	}
 
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public string AsString
 	{
 		readonly get => CValue as string ?? "";
 		set => SetReference(value);
 	}
 
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public IUnityAssetBase AsAsset
 	{
-		readonly get => (IUnityAssetBase)CValue;
+		readonly get => CValue as IUnityAssetBase ?? EmptyAsset.Instance;
 		set => SetReference(value);
 	}
 
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public readonly SerializableStructure AsStructure => (SerializableStructure)CValue;
 
-	public readonly IPPtr AsPPtr => (IPPtr)CValue;
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+	public readonly IPPtr AsPPtr => CValue as IPPtr ?? NullPPtr.Instance;
 
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public SerializablePair AsPair
 	{
 		readonly get => (SerializablePair)CValue;
 		set => SetReference(value);
 	}
 
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public bool[] AsBooleanArray
 	{
 		readonly get => CValue as bool[] ?? [];
 		set => SetReference(value);
 	}
 
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public char[] AsCharArray
 	{
 		readonly get => CValue as char[] ?? [];
 		set => SetReference(value);
 	}
 
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public sbyte[] AsSByteArray
 	{
 		readonly get => CValue as sbyte[] ?? [];
 		set => SetReference(value);
 	}
 
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public byte[] AsByteArray
 	{
 		readonly get => CValue as byte[] ?? [];
 		set => SetReference(value);
 	}
 
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public short[] AsInt16Array
 	{
 		readonly get => CValue as short[] ?? [];
 		set => SetReference(value);
 	}
 
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public ushort[] AsUInt16Array
 	{
 		readonly get => CValue as ushort[] ?? [];
 		set => SetReference(value);
 	}
 
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public int[] AsInt32Array
 	{
 		readonly get => CValue as int[] ?? [];
 		set => SetReference(value);
 	}
 
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public uint[] AsUInt32Array
 	{
 		readonly get => CValue as uint[] ?? [];
 		set => SetReference(value);
 	}
 
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public long[] AsInt64Array
 	{
 		readonly get => CValue as long[] ?? [];
 		set => SetReference(value);
 	}
 
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public ulong[] AsUInt64Array
 	{
 		readonly get => CValue as ulong[] ?? [];
 		set => SetReference(value);
 	}
 
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public float[] AsSingleArray
 	{
 		readonly get => CValue as float[] ?? [];
 		set => SetReference(value);
 	}
 
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public double[] AsDoubleArray
 	{
 		readonly get => CValue as double[] ?? [];
 		set => SetReference(value);
 	}
 
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public string[] AsStringArray
 	{
 		readonly get => CValue as string[] ?? [];
 		set => SetReference(value);
 	}
 
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public IUnityAssetBase[] AsAssetArray
 	{
 		readonly get => CValue as IUnityAssetBase[] ?? [];
 		set => SetReference(value);
 	}
 
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public SerializablePair[] AsPairArray
 	{
 		readonly get => CValue as SerializablePair[] ?? [];
 		set => SetReference(value);
 	}
 
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public bool[][] AsBooleanArrayArray
 	{
 		readonly get => CValue as bool[][] ?? [];
 		set => SetReference(value);
 	}
 
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public char[][] AsCharArrayArray
 	{
 		readonly get => CValue as char[][] ?? [];
 		set => SetReference(value);
 	}
 
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public sbyte[][] AsSByteArrayArray
 	{
 		readonly get => CValue as sbyte[][] ?? [];
 		set => SetReference(value);
 	}
 
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public byte[][] AsByteArrayArray
 	{
 		readonly get => CValue as byte[][] ?? [];
 		set => SetReference(value);
 	}
 
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public short[][] AsInt16ArrayArray
 	{
 		readonly get => CValue as short[][] ?? [];
 		set => SetReference(value);
 	}
 
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public ushort[][] AsUInt16ArrayArray
 	{
 		readonly get => CValue as ushort[][] ?? [];
 		set => SetReference(value);
 	}
 
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public int[][] AsInt32ArrayArray
 	{
 		readonly get => CValue as int[][] ?? [];
 		set => SetReference(value);
 	}
 
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public uint[][] AsUInt32ArrayArray
 	{
 		readonly get => CValue as uint[][] ?? [];
 		set => SetReference(value);
 	}
 
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public long[][] AsInt64ArrayArray
 	{
 		readonly get => CValue as long[][] ?? [];
 		set => SetReference(value);
 	}
 
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public ulong[][] AsUInt64ArrayArray
 	{
 		readonly get => CValue as ulong[][] ?? [];
 		set => SetReference(value);
 	}
 
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public float[][] AsSingleArrayArray
 	{
 		readonly get => CValue as float[][] ?? [];
 		set => SetReference(value);
 	}
 
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public double[][] AsDoubleArrayArray
 	{
 		readonly get => CValue as double[][] ?? [];
 		set => SetReference(value);
 	}
 
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public string[][] AsStringArrayArray
 	{
 		readonly get => CValue as string[][] ?? [];
 		set => SetReference(value);
 	}
 
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	public IUnityAssetBase[][] AsAssetArrayArray
 	{
 		readonly get => CValue as IUnityAssetBase[][] ?? [];
