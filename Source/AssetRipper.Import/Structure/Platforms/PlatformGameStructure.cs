@@ -136,11 +136,28 @@ public abstract partial class PlatformGameStructure
 			return;
 		}
 
+		// Process directories in DataPaths
 		foreach (string dataPath in DataPaths)
 		{
 			DirectoryInfo dataDirectory = new DirectoryInfo(dataPath);
 			CollectGameFiles(dataDirectory, Files);
 		}
+
+		// Process other subdirectories under the root directory
+		if (!string.IsNullOrEmpty(RootPath))
+		{
+			DirectoryInfo rootDirectory = new DirectoryInfo(RootPath);
+			foreach (DirectoryInfo subDirectory in rootDirectory.EnumerateDirectories())
+			{
+				// Skip directories already processed in DataPaths
+				if (!DataPaths.Contains(subDirectory.FullName, StringComparer.OrdinalIgnoreCase))
+				{
+					CollectGameFiles(subDirectory, Files);
+				CollectAssetBundlesRecursively(subDirectory, Files);
+				}
+			}
+		}
+
 		CollectMainAssemblies();
 		if (!skipStreamingAssets)
 		{
