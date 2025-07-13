@@ -1,4 +1,4 @@
-﻿using AssetRipper.IO.Files.Exceptions;
+using AssetRipper.IO.Files.Exceptions;
 using AssetRipper.IO.Files.Streams;
 using AssetRipper.IO.Files.Streams.Smart;
 using K4os.Compression.LZ4;
@@ -183,7 +183,7 @@ internal sealed class BundleFileBlockReader : IDisposable
 	/// <remarks>
 	/// This number can be set to any integer value, including <see cref="int.MaxValue"/>.
 	/// </remarks>
-	private const int MaxMemoryStreamLength = int.MaxValue;
+	private const int MaxMemoryStreamLength = 1073741824; // 1 GB
 	/// <summary>
 	/// The arbitrary maximum size of a decompressed stream to be pre-allocated. 100 MB
 	/// </summary>
