@@ -13,9 +13,16 @@ public static class WelcomeMessage
 		                                   |_|   |_|              
 		""";
 
+	private const string Directions = """
+		In a moment, a line will appear: "Now listening on:" followed by a url.
+		Open that url in any web browser to access the AssetRipper user interface.
+		""";
+
 	public static void Print()
 	{
 		Console.WriteLine(AsciiArt);
+		Console.WriteLine();
+		Console.WriteLine(Directions);
 		Console.WriteLine();
 	}
 }

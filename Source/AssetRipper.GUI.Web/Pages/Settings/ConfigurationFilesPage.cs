@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Import.Configuration;
+using AssetRipper.NativeDialogs;
 using AssetRipper.SourceGenerated.Extensions;
 using Microsoft.AspNetCore.Http;
 
@@ -19,16 +20,21 @@ public sealed partial class ConfigurationFilesPage : DefaultPage
 		HtmlTab.WriteContent(writer, tabs);
 	}
 
-	public static Task HandleSingletonAddPostRequest(HttpContext context)
+	public static async Task HandleSingletonAddPostRequest(HttpContext context)
 	{
 		if (!context.Request.Form.TryGetString("Key", out string? key))
 		{
-			return Results.BadRequest().ExecuteAsync(context);
+			await Results.BadRequest().ExecuteAsync(context);
+			return;
 		}
 
-		if (!context.Request.Form.TryGetString("Content", out string? content) && Dialogs.OpenFile.TryGetUserInput(out string? path))
+		if (!context.Request.Form.TryGetString("Content", out string? content))
 		{
-			content = File.ReadAllText(path);
+			string? path = await OpenFileDialog.OpenFile();
+			if (!string.IsNullOrEmpty(path))
+			{
+				content = File.ReadAllText(path);
+			}
 		}
 
 		if (content is not null)
@@ -36,7 +42,7 @@ public sealed partial class ConfigurationFilesPage : DefaultPage
 			GameFileLoader.Settings.SingletonData.GetOrAdd(key).Text = content;
 		}
 
-		return Results.Redirect("/ConfigurationFiles").ExecuteAsync(context);
+		await Results.Redirect("/ConfigurationFiles").ExecuteAsync(context);
 	}
 
 	public static Task HandleSingletonRemovePostRequest(HttpContext context)
@@ -51,11 +57,12 @@ public sealed partial class ConfigurationFilesPage : DefaultPage
 		return Results.Redirect("/ConfigurationFiles").ExecuteAsync(context);
 	}
 
-	public static Task HandleListAddPostRequest(HttpContext context)
+	public static async Task HandleListAddPostRequest(HttpContext context)
 	{
 		if (!context.Request.Form.TryGetString("Key", out string? key))
 		{
-			return Results.BadRequest().ExecuteAsync(context);
+			await Results.BadRequest().ExecuteAsync(context);
+			return;
 		}
 
 		if (context.Request.Form.TryGetStringArray("Content", out string?[]? contentArray))
@@ -63,16 +70,20 @@ public sealed partial class ConfigurationFilesPage : DefaultPage
 			DataSet set = GameFileLoader.Settings.ListData.GetOrAdd(key);
 			set.Strings.AddRange(contentArray.WhereNotNull());
 		}
-		else if (Dialogs.OpenFiles.TryGetUserInput(out string[]? paths))
+		else
 		{
-			DataSet set = GameFileLoader.Settings.ListData.GetOrAdd(key);
-			foreach (string path in paths)
+			string[]? paths = await OpenFileDialog.OpenFiles();
+			if (paths is { Length: > 0 })
 			{
-				set.Strings.Add(File.ReadAllText(path));
+				DataSet set = GameFileLoader.Settings.ListData.GetOrAdd(key);
+				foreach (string path in paths)
+				{
+					set.Strings.Add(File.ReadAllText(path));
+				}
 			}
 		}
 
-		return Results.Redirect("/ConfigurationFiles").ExecuteAsync(context);
+		await Results.Redirect("/ConfigurationFiles").ExecuteAsync(context);
 	}
 
 	public static Task HandleListRemovePostRequest(HttpContext context)
@@ -90,19 +101,24 @@ public sealed partial class ConfigurationFilesPage : DefaultPage
 		return Results.Redirect("/ConfigurationFiles").ExecuteAsync(context);
 	}
 
-	public static Task HandleListReplacePostRequest(HttpContext context)
+	public static async Task HandleListReplacePostRequest(HttpContext context)
 	{
 		if (!context.Request.Form.TryGetString("Key", out string? key)
 			|| GameFileLoader.Settings.ListData[key] is not { } list
 			|| !context.Request.Form.TryGetInteger("Index", out int index)
 			|| !list.ContainsIndex(index))
 		{
-			return Results.BadRequest().ExecuteAsync(context);
+			await Results.BadRequest().ExecuteAsync(context);
+			return;
 		}
 
-		if (!context.Request.Form.TryGetString("Content", out string? content) && Dialogs.OpenFile.TryGetUserInput(out string? path))
+		if (!context.Request.Form.TryGetString("Content", out string? content))
 		{
-			content = File.ReadAllText(path);
+			string? path = await OpenFileDialog.OpenFile();
+			if (!string.IsNullOrEmpty(path))
+			{
+				content = File.ReadAllText(path);
+			}
 		}
 
 		if (content is not null)
@@ -111,6 +127,6 @@ public sealed partial class ConfigurationFilesPage : DefaultPage
 			strings[index] = content;
 		}
 
-		return Results.Redirect("/ConfigurationFiles").ExecuteAsync(context);
+		await Results.Redirect("/ConfigurationFiles").ExecuteAsync(context);
 	}
 }
