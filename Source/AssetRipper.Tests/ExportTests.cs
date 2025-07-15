@@ -6,6 +6,7 @@ using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.IO.Files;
 using AssetRipper.Primitives;
 using AssetRipper.Processing;
+using AssetRipper.Processing.ScriptableObject;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
@@ -39,6 +40,48 @@ internal class ExportTests
 		VirtualFileSystem fileSystem = Export(collection);
 
 		Assert.That(fileSystem.File.Exists("/output/ExportedProject/Assets/MonoBehaviour/MonoBehaviour.asset"));
+	}
+
+	[Test]
+	public void ScriptableObjectGroupIsExported_1()
+	{
+		ProcessedAssetCollection collection = AssetCreator.CreateCollection(UnityVersion.V_2022);
+
+		IMonoBehaviour behaviour1 = collection.CreateMonoBehaviour();
+		IMonoBehaviour behaviour2 = collection.CreateMonoBehaviour();
+		ScriptableObjectGroup group = collection.CreateAsset(default, (assetInfo) => new ScriptableObjectGroup(assetInfo, behaviour1));
+		group.Children.Add(behaviour2);
+		group.SetMainAsset();
+
+		Assert.DoesNotThrow(() => Export(collection));
+	}
+
+	[Test]
+	public void ScriptableObjectGroupIsExported_2()
+	{
+		ProcessedAssetCollection collection = AssetCreator.CreateCollection(UnityVersion.V_2022);
+
+		IMonoBehaviour behaviour1 = collection.CreateMonoBehaviour();
+		IMonoBehaviour behaviour2 = collection.CreateMonoBehaviour();
+		ScriptableObjectGroup group = collection.CreateAsset(default, (assetInfo) => new ScriptableObjectGroup(assetInfo, behaviour2));
+		group.Children.Add(behaviour1);
+		group.SetMainAsset();
+
+		Assert.DoesNotThrow(() => Export(collection));
+	}
+
+	[Test]
+	public void ScriptableObjectGroupIsExported_3()
+	{
+		ProcessedAssetCollection collection = AssetCreator.CreateCollection(UnityVersion.V_2022);
+
+		IMonoBehaviour behaviour1 = collection.CreateMonoBehaviour();
+		ScriptableObjectGroup group = collection.CreateAsset(default, (assetInfo) => new ScriptableObjectGroup(assetInfo, behaviour1));
+		IMonoBehaviour behaviour2 = collection.CreateMonoBehaviour();
+		group.Children.Add(behaviour2);
+		group.SetMainAsset();
+
+		Assert.DoesNotThrow(() => Export(collection));
 	}
 
 	[Test]

@@ -12,7 +12,7 @@ public sealed class ScriptableObjectGroup : AssetGroup, INamed
 		Root = root;
 	}
 
-	public IMonoBehaviour Root { get; set; }
+	public IMonoBehaviour Root { get; }
 	public List<IMonoBehaviour> Children { get; } = [];
 
 	public override IEnumerable<IMonoBehaviour> Assets => Children.Prepend(Root);
@@ -36,7 +36,7 @@ public sealed class ScriptableObjectGroup : AssetGroup, INamed
 		{
 			this.WalkPrimitiveField(walker, Name);
 			walker.DivideAsset(this);
-			this.WalkPrimitiveField(walker, FileExtension ?? "");
+			this.WalkPrimitiveField(walker, FileExtension ?? "", nameof(FileExtension));
 			walker.DivideAsset(this);
 			this.WalkPPtrField(walker, Root);
 			walker.DivideAsset(this);

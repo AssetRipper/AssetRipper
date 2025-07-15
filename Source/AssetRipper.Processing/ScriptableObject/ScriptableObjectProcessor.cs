@@ -55,13 +55,23 @@ public class ScriptableObjectProcessor : IAssetProcessor
 					continue;
 				}
 
-				children.Add(child);
-
 				SerializableStructure? childStructure = child.LoadStructure();
 				if (childStructure is null)
 				{
 					continue;
 				}
+
+				if (!childStructure.TryGetField("m_Parent", out SerializableValue parent))
+				{
+					continue;
+				}
+
+				if (root.Collection.TryGetAsset(parent.AsPPtr.FileID, parent.AsPPtr.PathID) != root)
+				{
+					continue;
+				}
+
+				children.Add(child);
 
 				if (childStructure.TryGetField("m_Clips", out SerializableValue clips))
 				{
