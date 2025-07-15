@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Metadata;
 using System.Collections;
+using System.Diagnostics;
 
 namespace AssetRipper.Assets.Generics;
 
@@ -18,8 +19,8 @@ public abstract class AccessListBase<T> : IList<T>, IReadOnlyList<T>
 	/// </summary>
 	public abstract int Capacity { get; set; }
 
-	/// <inheritdoc/>
-	public bool IsReadOnly => false;
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+	bool ICollection<T>.IsReadOnly => false;
 
 	/// <inheritdoc/>
 	public abstract void Add(T item);

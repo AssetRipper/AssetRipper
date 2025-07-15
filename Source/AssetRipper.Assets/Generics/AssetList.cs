@@ -1,12 +1,18 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace AssetRipper.Assets.Generics;
 
 public sealed class AssetList<T> : AccessListBase<T>
 	where T : notnull, new()
 {
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	private const int DefaultCapacity = 4;
+
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	private int count = 0;
+
+	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 	private T[] items;
 
 	public AssetList()
