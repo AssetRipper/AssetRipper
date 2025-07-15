@@ -8,11 +8,12 @@
 			#pragma vertex vert
 			#pragma fragment frag
 
-			float4x4 unity_MatrixMVP;
+			float4x4 unity_ObjectToWorld;
+			float4x4 unity_MatrixVP;
 
 			struct Vertex_Stage_Input
 			{
-				float3 pos : POSITION;
+				float4 pos : POSITION;
 			};
 
 			struct Vertex_Stage_Output
@@ -23,7 +24,7 @@
 			Vertex_Stage_Output vert(Vertex_Stage_Input input)
 			{
 				Vertex_Stage_Output output;
-				output.pos = mul(unity_MatrixMVP, float4(input.pos, 1.0));
+				output.pos = mul(unity_MatrixVP, mul(unity_ObjectToWorld, input.pos));
 				return output;
 			}
 
