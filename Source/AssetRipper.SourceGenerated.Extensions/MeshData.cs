@@ -185,6 +185,6 @@ public readonly record struct MeshData(
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 	private static T TryGetAtIndex<T>(T[]? array, uint index) where T : struct
 	{
-		return array is null ? default : array[index];
+		return array is null or { Length: 0 } ? default : array[index];
 	}
 }
