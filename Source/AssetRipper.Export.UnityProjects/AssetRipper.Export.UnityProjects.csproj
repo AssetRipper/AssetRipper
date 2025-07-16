@@ -9,7 +9,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="AssetRipper.HashAlgorithms" Version="1.0.0" />
-		<PackageReference Include="AssetRipper.ICSharpCode.Decompiler" Version="9.1.0.8017" />
+		<PackageReference Include="AssetRipper.ICSharpCode.Decompiler" Version="9.1.0.8018" />
 		<PackageReference Include="AssetRipper.Mining.PredefinedAssets" Version="1.5.0" />
 		<PackageReference Include="AssetRipper.Tpk" Version="1.1.0" />
 	</ItemGroup>
@@ -30,6 +30,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
+
+	  <PackageReference Include="Microsoft.NET.ILLink.Tasks" Version="9.0.7" />
 		<Content Remove="C:\Users\**\.nuget\packages\icsharpcode.decompiler\**\Humanizer\LICENSE" />
 		<Content Remove="C:\Users\**\.nuget\packages\icsharpcode.decompiler\**\Pattern Matching.html" />
 	</ItemGroup>

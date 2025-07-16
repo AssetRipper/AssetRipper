@@ -15,6 +15,7 @@
 	<ItemGroup>
 		<PackageReference Include="AssetRipper.Checksum" Version="1.0.0" />
 		<PackageReference Include="AssetRipper.SourceGenerated" Version="1.2.5" />
+		<PackageReference Include="Microsoft.NET.ILLink.Tasks" Version="9.0.7" />
 	</ItemGroup>
 
 </Project>
