@@ -20,7 +20,6 @@ public class ScriptExporter : IAssetExporter
 		};
 		ExportMode = configuration.ExportSettings.ScriptExportMode;
 		ReferenceAssemblyDictionary = ReferenceAssemblies.GetReferenceAssemblies(AssemblyManager, configuration.Version);
-		ExportType = GetAssetType(configuration.Version);
 	}
 
 	public IAssemblyManager AssemblyManager { get; }
@@ -28,7 +27,6 @@ public class ScriptExporter : IAssetExporter
 	internal ScriptDecompiler Decompiler { get; }
 	internal Dictionary<string, UnityGuid> ReferenceAssemblyDictionary { get; }
 	private bool HasDecompiled { get; set; } = false;
-	private AssetType ExportType { get; }
 	private static long MonoScriptDecompiledFileID { get; } = ExportIdHandler.GetMainExportID((int)ClassIDType.MonoScript);
 
 	public bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection)
@@ -69,9 +67,9 @@ public class ScriptExporter : IAssetExporter
 	{
 		return GetExportType(script) switch
 		{
-			AssemblyExportType.Decompile => new(MonoScriptDecompiledFileID, ScriptHashing.CalculateScriptGuid(script), ExportType),
-			AssemblyExportType.Skip => new(ScriptHashing.CalculateScriptFileID(script), ReferenceAssemblyDictionary[script.GetAssemblyNameFixed()], ExportType),
-			_ => new(ScriptHashing.CalculateScriptFileID(script), ScriptHashing.CalculateAssemblyGuid(script), ExportType),
+			AssemblyExportType.Decompile => new(MonoScriptDecompiledFileID, ScriptHashing.CalculateScriptGuid(script), AssetType.Meta),
+			AssemblyExportType.Skip => new(ScriptHashing.CalculateScriptFileID(script), ReferenceAssemblyDictionary[script.GetAssemblyNameFixed()], AssetType.Meta),
+			_ => new(ScriptHashing.CalculateScriptFileID(script), ScriptHashing.CalculateAssemblyGuid(script), AssetType.Meta),
 		};
 	}
 
@@ -101,19 +99,11 @@ public class ScriptExporter : IAssetExporter
 		}
 	}
 
-	AssetType IAssetExporter.ToExportType(IUnityObjectBase asset) => ExportType;
+	AssetType IAssetExporter.ToExportType(IUnityObjectBase asset) => AssetType.Meta;
 
 	bool IAssetExporter.ToUnknownExportType(Type type, out AssetType assetType)
 	{
-		assetType = ExportType;
+		assetType = AssetType.Meta;
 		return true;
-	}
-
-	private static AssetType GetAssetType(UnityVersion version)
-	{
-		// https://github.com/AssetRipper/AssetRipper/issues/1329
-		return version.GreaterThanOrEquals(4)
-			? AssetType.Meta
-			: AssetType.Cached;
 	}
 }

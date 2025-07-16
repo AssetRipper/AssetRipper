@@ -18,5 +18,8 @@ public enum AssetType
 	/// <summary>
 	/// Binary asset file. It contains all parameters inside meta file
 	/// </summary>
+	/// <remarks>
+	/// On Unity 3, this is only used for 3D models. Images and audio use <see cref="Cached"/> instead.
+	/// </remarks>
 	Meta = 3,
 }

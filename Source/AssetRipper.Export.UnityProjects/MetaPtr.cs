@@ -8,7 +8,7 @@ public readonly record struct MetaPtr(long FileID, UnityGuid GUID, AssetType Ass
 	{
 	}
 
-	public YamlNode ExportYaml()
+	public YamlNode ExportYaml(UnityVersion exportVersion)
 	{
 		YamlMappingNode node = new();
 		node.Style = MappingStyle.Flow;
@@ -16,7 +16,20 @@ public readonly record struct MetaPtr(long FileID, UnityGuid GUID, AssetType Ass
 		if (!GUID.IsZero)
 		{
 			node.Add(GuidName, GUID.ToString());
-			node.Add(TypeName, (int)AssetType);
+			if (exportVersion.GreaterThanOrEquals(4) || AssetType is not AssetType.Meta)
+			{
+				node.Add(TypeName, (int)AssetType);
+			}
+			else
+			{
+				// For Unity 3, type 3 (Meta) is only used for 3d models.
+				// All other imported assets (eg images and audio) use type 1 (Cached).
+				// Since we only export yaml meshes during Unity project export and have no plans to change that,
+				// we can safely redirect all type 3 references to type 1.
+				// https://github.com/AssetRipper/AssetRipper/issues/1827
+				// https://github.com/AssetRipper/AssetRipper/issues/1329
+				node.Add(TypeName, (int)AssetType.Cached);
+			}
 		}
 		return node;
 	}
