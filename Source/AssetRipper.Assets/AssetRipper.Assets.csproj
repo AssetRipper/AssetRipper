@@ -11,6 +11,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
+
+	  <PackageReference Include="Microsoft.NET.ILLink.Tasks" Version="9.0.7" />
 		<ProjectReference Include="..\AssetRipper.IO.Files\AssetRipper.IO.Files.csproj" />
 	</ItemGroup>
 
