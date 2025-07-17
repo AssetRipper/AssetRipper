@@ -1,6 +1,4 @@
-﻿using System.Buffers.Binary;
-using System.Diagnostics;
-using System.Numerics;
+﻿using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace AssetRipper.Yaml.Extensions;
@@ -14,49 +12,49 @@ internal static class ReverseHexString
 	{
 		if (typeof(T) == typeof(byte) || typeof(T) == typeof(sbyte))
 		{
-			byte b = Unsafe.As<T, byte>(ref value);
-			buffer[0] = NybbleToLowercaseHexCharacter(b >> 4);
-			buffer[1] = NybbleToLowercaseHexCharacter(b & 0x0F);
+			byte x = Unsafe.As<T, byte>(ref value);
+			buffer[0] = NybbleToLowercaseHexCharacter(x >> 4);
+			buffer[1] = NybbleToLowercaseHexCharacter(x & 0x0F);
 		}
 		else if (typeof(T) == typeof(short) || typeof(T) == typeof(ushort) || typeof(T) == typeof(char))
 		{
-			ushort reverse = BinaryPrimitives.ReverseEndianness(Unsafe.As<T, ushort>(ref value));
-			buffer[0] = NybbleToLowercaseHexCharacter(reverse >> 12);
-			buffer[1] = NybbleToLowercaseHexCharacter((reverse >> 8) & 0x0F);
-			buffer[2] = NybbleToLowercaseHexCharacter((reverse >> 4) & 0x0F);
-			buffer[3] = NybbleToLowercaseHexCharacter(reverse & 0x0F);
+			ushort x = Unsafe.As<T, ushort>(ref value);
+			buffer[0] = NybbleToLowercaseHexCharacter((x >> 4) & 0x0F);
+			buffer[1] = NybbleToLowercaseHexCharacter(x & 0x0F);
+			buffer[2] = NybbleToLowercaseHexCharacter(x >> 12);
+			buffer[3] = NybbleToLowercaseHexCharacter((x >> 8) & 0x0F);
 		}
 		else if (typeof(T) == typeof(int) || typeof(T) == typeof(uint))
 		{
-			int reverse = BinaryPrimitives.ReverseEndianness(Unsafe.As<T, int>(ref value));
-			buffer[0] = NybbleToLowercaseHexCharacter(reverse >> 28);
-			buffer[1] = NybbleToLowercaseHexCharacter((reverse >> 24) & 0x0F);
-			buffer[2] = NybbleToLowercaseHexCharacter((reverse >> 20) & 0x0F);
-			buffer[3] = NybbleToLowercaseHexCharacter((reverse >> 16) & 0x0F);
-			buffer[4] = NybbleToLowercaseHexCharacter((reverse >> 12) & 0x0F);
-			buffer[5] = NybbleToLowercaseHexCharacter((reverse >> 8) & 0x0F);
-			buffer[6] = NybbleToLowercaseHexCharacter((reverse >> 4) & 0x0F);
-			buffer[7] = NybbleToLowercaseHexCharacter(reverse & 0x0F);
+			int x = Unsafe.As<T, int>(ref value);
+			buffer[0] = NybbleToLowercaseHexCharacter((x >> 4) & 0x0F);
+			buffer[1] = NybbleToLowercaseHexCharacter(x & 0x0F);
+			buffer[2] = NybbleToLowercaseHexCharacter((x >> 12) & 0x0F);
+			buffer[3] = NybbleToLowercaseHexCharacter((x >> 8) & 0x0F);
+			buffer[4] = NybbleToLowercaseHexCharacter((x >> 20) & 0x0F);
+			buffer[5] = NybbleToLowercaseHexCharacter((x >> 16) & 0x0F);
+			buffer[6] = NybbleToLowercaseHexCharacter(x >> 28);
+			buffer[7] = NybbleToLowercaseHexCharacter((x >> 24) & 0x0F);
 		}
 		else if (typeof(T) == typeof(long) || typeof(T) == typeof(ulong))
 		{
-			long reverse = BinaryPrimitives.ReverseEndianness(Unsafe.As<T, long>(ref value));
-			buffer[0] = NybbleToLowercaseHexCharacter(reverse >> 60);
-			buffer[1] = NybbleToLowercaseHexCharacter((reverse >> 56) & 0x0F);
-			buffer[2] = NybbleToLowercaseHexCharacter((reverse >> 52) & 0x0F);
-			buffer[3] = NybbleToLowercaseHexCharacter((reverse >> 48) & 0x0F);
-			buffer[4] = NybbleToLowercaseHexCharacter((reverse >> 44) & 0x0F);
-			buffer[5] = NybbleToLowercaseHexCharacter((reverse >> 40) & 0x0F);
-			buffer[6] = NybbleToLowercaseHexCharacter((reverse >> 36) & 0x0F);
-			buffer[7] = NybbleToLowercaseHexCharacter((reverse >> 32) & 0x0F);
-			buffer[8] = NybbleToLowercaseHexCharacter((reverse >> 28) & 0x0F);
-			buffer[9] = NybbleToLowercaseHexCharacter((reverse >> 24) & 0x0F);
-			buffer[10] = NybbleToLowercaseHexCharacter((reverse >> 20) & 0x0F);
-			buffer[11] = NybbleToLowercaseHexCharacter((reverse >> 16) & 0x0F);
-			buffer[12] = NybbleToLowercaseHexCharacter((reverse >> 12) & 0x0F);
-			buffer[13] = NybbleToLowercaseHexCharacter((reverse >> 8) & 0x0F);
-			buffer[14] = NybbleToLowercaseHexCharacter((reverse >> 4) & 0x0F);
-			buffer[15] = NybbleToLowercaseHexCharacter(reverse & 0x0F);
+			long x = Unsafe.As<T, long>(ref value);
+			buffer[0] = NybbleToLowercaseHexCharacter((x >> 4) & 0x0F);
+			buffer[1] = NybbleToLowercaseHexCharacter(x & 0x0F);
+			buffer[2] = NybbleToLowercaseHexCharacter((x >> 12) & 0x0F);
+			buffer[3] = NybbleToLowercaseHexCharacter((x >> 8) & 0x0F);
+			buffer[4] = NybbleToLowercaseHexCharacter((x >> 20) & 0x0F);
+			buffer[5] = NybbleToLowercaseHexCharacter((x >> 16) & 0x0F);
+			buffer[6] = NybbleToLowercaseHexCharacter((x >> 28) & 0x0F);
+			buffer[7] = NybbleToLowercaseHexCharacter((x >> 24) & 0x0F);
+			buffer[8] = NybbleToLowercaseHexCharacter((x >> 36) & 0x0F);
+			buffer[9] = NybbleToLowercaseHexCharacter((x >> 32) & 0x0F);
+			buffer[10] = NybbleToLowercaseHexCharacter((x >> 44) & 0x0F);
+			buffer[11] = NybbleToLowercaseHexCharacter((x >> 40) & 0x0F);
+			buffer[12] = NybbleToLowercaseHexCharacter((x >> 52) & 0x0F);
+			buffer[13] = NybbleToLowercaseHexCharacter((x >> 48) & 0x0F);
+			buffer[14] = NybbleToLowercaseHexCharacter(x >> 60);
+			buffer[15] = NybbleToLowercaseHexCharacter((x >> 56) & 0x0F);
 		}
 		else if (typeof(T) == typeof(float))
 		{
