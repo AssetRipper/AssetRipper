@@ -88,8 +88,14 @@ public static class TransformExtensions
 		{
 			return 0;
 		}
-		for (int i = 0; i < father.Children_C4P.Count; i++)
+		for (int i = father.Children_C4.Count - 1; i >= 0; i--)
 		{
+			// Performance optimization: check PathID first to avoid unnecessary asset resolution.
+			if (father.Children_C4[i].PathID != transform.PathID)
+			{
+				continue;
+			}
+
 			if (father.Children_C4P[i] == transform)
 			{
 				return i;
