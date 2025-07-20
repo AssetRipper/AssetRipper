@@ -12,7 +12,7 @@ internal sealed partial class Arguments
 	public int Port { get; set; }
 
 	[CommandLineArgument(DefaultValue = WebApplicationLauncher.Defaults.LaunchBrowser)]
-	[Description("If true, a browser window will be launched automatically.")]
+	[Description("If true, a browser window will be launched automatically. Use --launch-browser=false to set this as false.")]
 	public bool LaunchBrowser { get; set; }
 
 	[CommandLineArgument(DefaultValue = WebApplicationLauncher.Defaults.Log)]
