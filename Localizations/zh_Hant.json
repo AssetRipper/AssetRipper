@@ -143,5 +143,6 @@
     "text_asset_format_parse_description": "匯出為純文字檔案，並嘗試猜測正確的檔案格式。 (例：JSON 格式檔案將會以 .json 作為副檔名)",
     "text_asset_format_text": "純文字",
     "text_asset_format_text_description": "匯出為純文字檔案 (.txt)",
-    "welcome_title": "歡迎來到 AssetRipper"
+    "welcome_title": "歡迎來到 AssetRipper",
+    "asset_tab_font": "字型"
 }
