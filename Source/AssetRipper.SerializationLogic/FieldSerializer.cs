@@ -1,4 +1,5 @@
-﻿using AssetRipper.Primitives;
+﻿using AsmResolver.PE.DotNet.Metadata.Tables;
+using AssetRipper.Primitives;
 using AssetRipper.SerializationLogic.Extensions;
 using System.Diagnostics;
 using System.Numerics;
@@ -8,18 +9,27 @@ namespace AssetRipper.SerializationLogic;
 
 public readonly struct FieldSerializer(UnityVersion version)
 {
-	public UnityVersion Version => version;
 	/// <summary>
 	/// Not sure about the exact version boundary, structs are supposedly only serializable on 4.5.0 and greater.
 	/// </summary>
-	private bool IsStructSerializable => version.GreaterThanOrEquals(4, 5);
+	private bool IsStructSerializable { get; } = version.GreaterThanOrEquals(4, 5);
+	private bool IsInt8Serializable => IsInt16Serializable;
+	/// <summary>
+	/// Not sure about the exact version boundary, but int8, int16, uint16, and uint32 were added around 5.0.0.
+	/// </summary>
+	/// <remarks>
+	/// <see href="https://github.com/AssetRipper/AssetRipper/issues/1851"/>
+	/// </remarks>
+	private bool IsInt16Serializable { get; } = version.GreaterThanOrEquals(5);
+	private bool IsUInt32Serializable => IsInt16Serializable;
+	private bool IsCharSerializable => IsInt64Serializable;
 	/// <summary>
 	/// Not sure about the exact version boundary, but online references suggest that 2017 was the first version to support this.
 	/// </summary>
 	/// <remarks>
 	/// <see href="https://github.com/AssetRipper/AssetRipper/issues/647"/>
 	/// </remarks>
-	private bool IsInt64Serializable => version.GreaterThanOrEquals(2017);
+	private bool IsInt64Serializable { get; } = version.GreaterThanOrEquals(2017);
 	/// <summary>
 	/// Prior to some unknown version, System.Collections.Generic.List`1 and UnityEngine.ExposedReference`1 were the only supported generic types.
 	/// </summary>
@@ -27,7 +37,19 @@ public readonly struct FieldSerializer(UnityVersion version)
 
 	private bool WillUnitySerialize(FieldDefinition field, TypeSignature type)
 	{
-		return FieldSerializationLogic.WillUnitySerialize(field, type);
+		return FieldSerializationLogic.WillUnitySerialize(field, type) && type switch
+		{
+			CorLibTypeSignature corLibType => corLibType.ElementType switch
+			{
+				ElementType.I1 => IsInt8Serializable,
+				ElementType.I2 or ElementType.U2 => IsInt16Serializable,
+				ElementType.U4 => IsUInt32Serializable,
+				ElementType.I8 or ElementType.U8 => IsInt64Serializable,
+				ElementType.Char => IsCharSerializable,
+				_ => true,
+			},
+			_ => true,
+		};
 	}
 
 	public bool TryCreateSerializableType(TypeDefinition typeDefinition,

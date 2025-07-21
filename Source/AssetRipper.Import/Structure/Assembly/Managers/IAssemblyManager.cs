@@ -18,6 +18,7 @@ public interface IAssemblyManager : IDisposable
 	bool IsValid(ScriptIdentifier scriptID);
 	bool TryGetSerializableType(
 		ScriptIdentifier scriptID,
+		UnityVersion version,
 		[NotNullWhen(true)] out SerializableType? scriptType,
 		[NotNullWhen(false)] out string? failureReason);
 	TypeDefinition GetTypeDefinition(ScriptIdentifier scriptID);

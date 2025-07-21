@@ -43,6 +43,11 @@ public static class MonoScriptExtensions
 
 	public static SerializableType? GetBehaviourType(this IMonoScript monoScript, IAssemblyManager assemblyManager, out string? failureReason)
 	{
+		// Note: We use the MonoScript collection version here, not the MonoBehaviour version.
+		// It probably doesn't matter because MonoScript and MonoBehaviour versions are usually the same,
+		// and even when they are different, they still have the same major and minor version.
+		// Also, Unity doesn't change serialization very often at all.
+
 		ScriptIdentifier scriptID = assemblyManager.GetScriptID(monoScript.GetAssemblyNameFixed(), monoScript.Namespace, monoScript.ClassName_R);
 		if (!assemblyManager.IsSet)
 		{
@@ -52,7 +57,7 @@ public static class MonoScriptExtensions
 		{
 			failureReason = "Script ID is invalid";
 		}
-		else if (assemblyManager.TryGetSerializableType(scriptID, out SerializableType? result, out failureReason))
+		else if (assemblyManager.TryGetSerializableType(scriptID, monoScript.Collection.Version, out SerializableType? result, out failureReason))
 		{
 			return result;
 		}

@@ -127,7 +127,7 @@ public class EngineTypePredicates
 			}
 		}
 
-		if (type.FullName.IndexOf("UnityEngine.LazyLoadReference`1") == 0)
+		if (type.FullName.StartsWith("UnityEngine.LazyLoadReference`1", StringComparison.Ordinal))
 		{
 			return true;
 		}
