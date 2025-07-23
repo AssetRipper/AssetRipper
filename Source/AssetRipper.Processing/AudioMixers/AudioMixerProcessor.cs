@@ -249,7 +249,7 @@ public sealed class AudioMixerProcessor : IAssetProcessor
 			{
 				ExposedAudioParameter exposedParam = mixer.ExposedParameters.AddNew();
 				exposedParam.Guid.CopyValues(paramGuid);
-				exposedParam.Name = Crc32Algorithm.ReverseAscii(paramNameCrc);
+				exposedParam.Name = Crc32Algorithm.Reverse(paramNameCrc);
 			}
 			else
 			{

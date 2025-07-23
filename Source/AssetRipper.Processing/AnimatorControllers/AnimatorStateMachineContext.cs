@@ -1107,7 +1107,7 @@ internal sealed class AnimatorStateMachineContext
 
 	private static string GetReversedFullPath(string parentFullPath, uint fullPathID)
 	{
-		return Crc32Algorithm.ReverseAscii(fullPathID, $"{parentFullPath}.EMPTY_");
+		return Crc32Algorithm.ReverseUTF8(fullPathID, $"{parentFullPath}.EMPTY_");
 	}
 
 	/// <summary>
