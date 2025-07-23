@@ -546,6 +546,38 @@ public static class TextureConverter
 				RgbConverter.Convert<ColorRGB9e5, double, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
 				return true;
 
+			case TextureFormat.R8_SIGNED:
+				RgbConverter.Convert<ColorR<sbyte>, sbyte, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
+				return true;
+
+			case TextureFormat.RG16_SIGNED:
+				RgbConverter.Convert<ColorRG<sbyte>, sbyte, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
+				return true;
+
+			case TextureFormat.RGB24_SIGNED:
+				RgbConverter.Convert<ColorRGB<sbyte>, sbyte, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
+				return true;
+
+			case TextureFormat.RGBA32_SIGNED:
+				RgbConverter.Convert<ColorRGBA<sbyte>, sbyte, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
+				return true;
+
+			case TextureFormat.R16_SIGNED:
+				RgbConverter.Convert<ColorR<short>, short, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
+				return true;
+
+			case TextureFormat.RG32_SIGNED:
+				RgbConverter.Convert<ColorRG<short>, short, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
+				return true;
+
+			case TextureFormat.RGB48_SIGNED:
+				RgbConverter.Convert<ColorRGB<short>, short, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
+				return true;
+
+			case TextureFormat.RGBA64_SIGNED:
+				RgbConverter.Convert<ColorRGBA<short>, short, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
+				return true;
+
 			default:
 				Logger.Log(LogType.Error, LogCategory.Export, $"Unsupported texture format '{textureFormat}'");
 				return false;
