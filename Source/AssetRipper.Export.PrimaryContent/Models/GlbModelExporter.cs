@@ -31,13 +31,13 @@ public class GlbModelExporter : IContentExtractor
 
 	public static bool ExportModel(IEnumerable<IUnityObjectBase> assets, string path, bool isScene, FileSystem fileSystem)
 	{
-  		try
+		try
 		{
-  			SceneBuilder sceneBuilder = GlbLevelBuilder.Build(assets, isScene);
+			SceneBuilder sceneBuilder = GlbLevelBuilder.Build(assets, isScene);
 			using Stream fileStream = fileSystem.File.Create(path);
 			sceneBuilder.ToGltf2().WriteGLB(fileStream, new WriteSettings() { MergeBuffers = false });
 			return true;
-  		}
+		}
 		catch (InvalidOperationException ex) when (ex.Message == "Can't merge a buffer larger than 2Gb")
 		{
 			Logger.Error(LogCategory.Export, $"Model was too large to export as GLB.");
