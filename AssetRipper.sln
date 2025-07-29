@@ -49,6 +49,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\analysis.yml = .github\workflows\analysis.yml
 		.github\workflows\cla.yml = .github\workflows\cla.yml
+		.github\dependabot.yml = .github\dependabot.yml
 		.github\workflows\docfx_build.yml = .github\workflows\docfx_build.yml
 		.github\workflows\greetings.yml = .github\workflows\greetings.yml
 		.github\workflows\publish.yml = .github\workflows\publish.yml

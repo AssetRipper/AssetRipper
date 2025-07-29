@@ -4,7 +4,7 @@
 # https://help.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
 
 version: 2
-updates:
+updates: []
 #  - package-ecosystem: "nuget" # See documentation for possible values
 #    directory: "/" # Location of package manifests
 #    schedule:
