@@ -44,5 +44,10 @@ public class GlbModelExporter : IContentExtractor
 			Logger.Error(LogCategory.Export, $"Model was too large to export as GLB.");
 			return false;
 		}
+		catch (OutOfMemoryException)
+		{
+			Logger.Error(LogCategory.Export, $"Could not allocate enough contiguous memory to export the model as GLB.");
+			return false;
+		}
 	}
 }
