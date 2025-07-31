@@ -3,6 +3,7 @@ using AssetRipper.Assets.Collections;
 using AssetRipper.Export.UnityProjects.Project;
 using AssetRipper.Import.Configuration;
 using AssetRipper.Processing.Scenes;
+using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Classes.ClassID_141;
 using System.Diagnostics;
 
@@ -26,8 +27,16 @@ public class ProjectAssetContainer : IExportContainer
 		{
 			foreach (IUnityObjectBase asset in collection.Assets)
 			{
-				CheckIfAlreadyAdded(this, asset, collection);
-				m_assetCollections.Add(asset, collection);
+				var key = asset;
+				if (m_assetCollections.ContainsKey(key))
+				{
+					if (key is MonoBehaviour_2019_1_0_b4 monoBehaviour201910B4)
+					{
+						key = new MonoBehaviour_2019_1_0_b4(monoBehaviour201910B4.AssetInfo);
+					}
+				}
+				CheckIfAlreadyAdded(this, key, collection);
+				m_assetCollections.Add(key, collection);
 			}
 			if (collection is SceneExportCollection scene)
 			{
