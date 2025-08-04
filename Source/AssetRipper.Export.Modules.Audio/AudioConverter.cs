@@ -8,14 +8,11 @@ public static class AudioConverter
 {
 	public static byte[] OggToWav(byte[] oggData)
 	{
-		if (oggData == null)
-		{
-			throw new ArgumentNullException(nameof(oggData));
-		}
+		ArgumentNullException.ThrowIfNull(oggData);
 
 		if (oggData.Length == 0)
 		{
-			return Array.Empty<byte>();
+			return [];
 		}
 
 		try
@@ -28,7 +25,7 @@ public static class AudioConverter
 		catch (Exception ex)
 		{
 			Logger.Error(LogCategory.Export, "Failed to convert audio from OGG to WAV", ex);
-			return Array.Empty<byte>();
+			return [];
 		}
 	}
 }

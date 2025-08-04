@@ -28,7 +28,7 @@ internal sealed class AudioTab : AssetHtmlTab
 				{
 					using (new Td(writer).WithAlign("center").WithCustomAttribute("valign", "middle").End())
 					{
-						new Audio(writer).WithControls("").WithClass("mt-4").WithSrc(Source).Close();
+						new Audio(writer).WithControls("").WithPreload("auto").WithClass("mt-4").WithSrc(Source).Close();
 					}
 				}
 			}

@@ -181,6 +181,15 @@ internal static class AssetAPI
 		}
 		else if (AudioClipDecoder.TryDecode(clip, out byte[]? decodedAudioData, out string? extension, out _))
 		{
+			if (extension is "ogg")
+			{
+				byte[] wavData = AudioConverter.OggToWav(decodedAudioData);
+				if (wavData.Length > 0)
+				{
+					decodedAudioData = wavData;
+					extension = "wav";
+				}
+			}
 			return Results.Bytes(decodedAudioData, $"audio/{extension}").ExecuteAsync(context);
 		}
 		else
