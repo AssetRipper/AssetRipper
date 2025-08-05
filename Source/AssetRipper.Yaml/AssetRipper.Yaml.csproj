@@ -8,6 +8,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="AssetRipper.Primitives" Version="3.2.0" />
+		<PackageReference Include="Microsoft.NET.ILLink.Tasks" Version="9.0.8" />
 	</ItemGroup>
 
 </Project>
