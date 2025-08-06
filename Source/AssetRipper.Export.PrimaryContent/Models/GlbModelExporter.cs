@@ -36,7 +36,9 @@ public class GlbModelExporter : IContentExtractor
 		{
 			SceneBuilder sceneBuilder = GlbLevelBuilder.Build(assets, isScene);
 			using Stream fileStream = fileSystem.File.Create(path);
-			sceneBuilder.ToGltf2().WriteGLB(fileStream, new WriteSettings() { MergeBuffers = false });
+			sceneBuilder
+				.ToGltf2(SceneBuilderSchema2Settings.Default with { MergeBuffers = false }) // Setting MergeBuffers here to false is actually meaningful.
+				.WriteGLB(fileStream, new WriteSettings() { MergeBuffers = false }); // Setting MergeBuffers here to false doesn't actually do anything because SharpGLTF changes it back to true.
 			return true;
 		}
 		catch (InvalidOperationException ex) when (ex.Message == "Can't merge a buffer larger than 2Gb")
