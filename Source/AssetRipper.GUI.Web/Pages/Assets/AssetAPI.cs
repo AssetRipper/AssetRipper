@@ -225,17 +225,26 @@ internal static class AssetAPI
 		else
 		{
 			MemoryStream stream = new();
+			SceneBuilder sceneBuilder;
 			try
 			{
-				SceneBuilder sceneBuilder = GlbMeshBuilder.Build(mesh);
-				sceneBuilder.ToGltf2().WriteGLB(stream, new WriteSettings() { MergeBuffers = false });
+				sceneBuilder = GlbMeshBuilder.Build(mesh);
 			}
 			catch (Exception ex)
 			{
 				Logger.Error(ex);
 				return context.Response.NotFound("Model data could not be decoded.");
 			}
-			return Results.Bytes(stream.ToArray(), "model/gltf-binary", "model.glb").ExecuteAsync(context);
+
+			if (GlbWriter.TryWrite(sceneBuilder, stream, out string? errorMessage))
+			{
+				return Results.Bytes(stream.ToArray(), "model/gltf-binary", "model.glb").ExecuteAsync(context);
+			}
+			else
+			{
+				Logger.Error(errorMessage);
+				return context.Response.NotFound("Model data could not be decoded.");
+			}
 		}
 	}
 
