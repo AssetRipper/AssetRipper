@@ -37,15 +37,44 @@ public static class Texture3DExtensions
 		}
 	}
 
+	extension (ITexture3D texture)
+	{
+		public int Format
+		{
+			get
+			{
+				if (texture.Has_Format_Int32())
+				{
+					return texture.Format_Int32;
+				}
+				else
+				{
+					return unchecked((int)texture.Format_UInt32);
+				}
+			}
+			set
+			{
+				if (texture.Has_Format_Int32())
+				{
+					texture.Format_Int32 = value;
+				}
+				else
+				{
+					texture.Format_UInt32 = unchecked((uint)value);
+				}
+			}
+		}
+	}
+
 	public static TextureFormat GetTextureFormat(this ITexture3D texture)
 	{
 		if (texture.Has_Format_Int32())
 		{
-			return texture.Format_Int32E;
+			return ((GraphicsFormat)texture.Format_Int32).ToTextureFormat();
 		}
 		else
 		{
-			return texture.Format_UInt32E;
+			return ((GraphicsFormat)texture.Format_UInt32).ToTextureFormat();
 		}
 	}
 
@@ -63,13 +92,13 @@ public static class Texture3DExtensions
 
 	public static int GetCompleteImageSize(this ITexture3D texture)
 	{
-		if (texture.Has_DataSize())
+		if (texture.Has_CompleteImageSize_UInt32())
 		{
-			return (int)texture.DataSize;
+			return (int)texture.CompleteImageSize_UInt32;
 		}
 		else
 		{
-			return texture.CompleteImageSize;
+			return texture.CompleteImageSize_Int32;
 		}
 	}
 

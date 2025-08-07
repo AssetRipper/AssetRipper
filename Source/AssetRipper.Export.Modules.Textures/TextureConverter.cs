@@ -50,11 +50,17 @@ public static class TextureConverter
 			return false;
 		}
 
+		if (!TryGetTextureFormat((GraphicsFormat)texture.Format, out TextureFormat format))
+		{
+			bitmap = DirectBitmap.Empty;
+			return false;
+		}
+
 		if (!TryConvertToBitmap(
-			texture.GetTextureFormat(),
+			format,
 			texture.Width,
 			texture.Height,
-			texture.ImageCount,
+			texture.Depth,
 			texture.GetCompleteImageSize(),
 			texture.Collection.Version,
 			buffer,
@@ -83,7 +89,7 @@ public static class TextureConverter
 			return false;
 		}
 
-		if (!TryGetTextureFormat(texture, out TextureFormat format))
+		if (!TryGetTextureFormat((GraphicsFormat)texture.Format, out TextureFormat format))
 		{
 			bitmap = DirectBitmap.Empty;
 			return false;
@@ -105,26 +111,6 @@ public static class TextureConverter
 		bitmap.FlipY();
 
 		return true;
-
-		static bool TryGetTextureFormat(ITexture2DArray texture, out TextureFormat format)
-		{
-			try
-			{
-				format = ((GraphicsFormat)texture.Format).ToTextureFormat();
-				return true;
-			}
-			catch (NotSupportedException)
-			{
-				format = default;
-				return false;
-			}
-			catch (ArgumentOutOfRangeException)
-			{
-				Logger.Log(LogType.Error, LogCategory.Export, $"Unknown GraphicsFormat '{texture.Format}'");
-				format = default;
-				return false;
-			}
-		}
 	}
 
 	public static bool TryConvertToBitmap(ICubemapArray texture, out DirectBitmap bitmap)
@@ -136,8 +122,14 @@ public static class TextureConverter
 			return false;
 		}
 
+		if (!TryGetTextureFormat((GraphicsFormat)texture.Format, out TextureFormat format))
+		{
+			bitmap = DirectBitmap.Empty;
+			return false;
+		}
+
 		if (!TryConvertToBitmap(
-			texture.FormatE,
+			format,
 			texture.Width,
 			texture.GetHeight(),
 			texture.GetDepth(),
@@ -581,6 +573,26 @@ public static class TextureConverter
 			default:
 				Logger.Log(LogType.Error, LogCategory.Export, $"Unsupported texture format '{textureFormat}'");
 				return false;
+		}
+	}
+
+	private static bool TryGetTextureFormat(GraphicsFormat graphicsFormat, out TextureFormat format)
+	{
+		try
+		{
+			format = graphicsFormat.ToTextureFormat();
+			return true;
+		}
+		catch (NotSupportedException)
+		{
+			format = default;
+			return false;
+		}
+		catch (ArgumentOutOfRangeException)
+		{
+			Logger.Log(LogType.Error, LogCategory.Export, $"Unknown GraphicsFormat '{(int)graphicsFormat}'");
+			format = default;
+			return false;
 		}
 	}
 
