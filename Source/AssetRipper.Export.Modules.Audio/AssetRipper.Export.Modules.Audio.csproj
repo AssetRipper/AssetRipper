@@ -17,6 +17,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+  	<PackageReference Include="Microsoft.NET.ILLink.Tasks" Version="9.0.8" />
 		<None Remove="C:\Users\**\.nuget\packages\naudio.vorbis\**\README.md" />
 	</ItemGroup>
 
