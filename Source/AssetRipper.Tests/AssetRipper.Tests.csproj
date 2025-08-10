@@ -12,7 +12,7 @@
 		<PackageReference Include="Moq" Version="4.20.72" />
 		<PackageReference Include="NUnit" Version="4.3.2" />
 		<PackageReference Include="NUnit3TestAdapter" Version="5.0.0" />
-		<PackageReference Include="NUnit.Analyzers" Version="4.9.2">
+		<PackageReference Include="NUnit.Analyzers" Version="4.10.0">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
