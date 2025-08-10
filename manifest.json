@@ -1,0 +1,410 @@
+{
+  "homepages": [],
+  "source_base_path": "D:/a/AssetRipper/AssetRipper/docs",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "Conceptual",
+      "source_relative_path": "api/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/index.html",
+          "hash": "8+H2YW0CyV5pZLgk6otyTptyDQPg5aP6kmIyMdMC7V8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/CommonIssues.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/CommonIssues.html",
+          "hash": "2CPYXPdqCOuypZOWeceWyU9CKXD45X7aVrf17OlNUBQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/Credits.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/Credits.html",
+          "hash": "U4PmXjOyToTKxp1FWsJM26p6SAAZH8SEpmGBgsCO0bM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/Downloads.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/Downloads.html",
+          "hash": "6LcrMPBu7OVhzV8/dIXeR+BmgbFGHmySIuy6hGNG+Nk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/PremiumFeatures.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/PremiumFeatures.html",
+          "hash": "ikfIkV3sPtK4Wkl83KGGMU3JBULIHcKlKS/pTWQ1kNU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/Requirements.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/Requirements.html",
+          "hash": "XSWu79DYgPjo014gglEoifXy8SkGD0Vw8AxjEH0hpFg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/RoadMap.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/RoadMap.html",
+          "hash": "W/XGhAT3zEd/KWxZSWZb7MfmLxu6mu3zTfwYWBmWJYM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/RunningOnMac.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/RunningOnMac.html",
+          "hash": "d+cs8nV/92sRI9u1ovkVDWw+pFAHfuYY9mYD8R3E+JQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/images/RunningOnMac/001.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/images/RunningOnMac/001.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/images/RunningOnMac/002.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/images/RunningOnMac/002.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/images/RunningOnMac/003.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/images/RunningOnMac/003.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/images/RunningOnMac/004.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/images/RunningOnMac/004.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/images/RunningOnMac/005.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/images/RunningOnMac/005.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/images/RunningOnMac/006.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/images/RunningOnMac/006.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/images/RunningOnMac/007.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/images/RunningOnMac/007.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/images/RunningOnMac/008.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/images/RunningOnMac/008.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/images/RunningOnMac/009.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/images/RunningOnMac/009.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/images/RunningOnMac/010.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/images/RunningOnMac/010.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/images/RunningOnMac/011.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/images/RunningOnMac/011.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/images/RunningOnMac/012.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/images/RunningOnMac/012.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/images/RunningOnMac/013.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/images/RunningOnMac/013.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/images/RunningOnMac/014.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/images/RunningOnMac/014.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/images/RunningOnMac/015.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/images/RunningOnMac/015.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/images/RunningOnMac/016.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/images/RunningOnMac/016.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/images/RunningOnMac/017.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/images/RunningOnMac/017.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/images/RunningOnMac/018.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/images/RunningOnMac/018.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "articles/images/RunningOnMac/019.png",
+      "output": {
+        "resource": {
+          "relative_path": "articles/images/RunningOnMac/019.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/intro.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/intro.html",
+          "hash": "ZalLH6RazHbEzg4UmgcE+RklYTc2wtL7hnLRvurNVGY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "articles/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "articles/toc.html",
+          "hash": "4f2XpfK0PHeXQpJq43SDhnc3qCmM0/yq1cuN8mrattE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "index.md",
+      "output": {
+        ".html": {
+          "relative_path": "index.html",
+          "hash": "NRzNeJU27cqUVwmjGnBkmjZ49YELeQ7IRAz3meaJ2as="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "toc.html",
+          "hash": "4TEgJl9AhuPIoP9weFbgLuRejAX7WRouRdNP0UiX0nY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    }
+  ],
+  "incremental_info": [
+    {
+      "status": {
+        "can_incremental": false,
+        "details": "Cannot build incrementally because last build info is missing.",
+        "incrementalPhase": "build",
+        "total_file_count": 0,
+        "skipped_file_count": 0,
+        "full_build_reason_code": "NoAvailableBuildCache"
+      },
+      "processors": {
+        "ConceptualDocumentProcessor": {
+          "can_incremental": false,
+          "incrementalPhase": "build",
+          "total_file_count": 10,
+          "skipped_file_count": 0
+        },
+        "ResourceDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor ResourceDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        },
+        "TocDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        }
+      }
+    },
+    {
+      "status": {
+        "can_incremental": false,
+        "details": "Cannot support incremental post processing, the reason is: last post processor info is null.",
+        "incrementalPhase": "postProcessing",
+        "total_file_count": 0,
+        "skipped_file_count": 0
+      },
+      "processors": {}
+    }
+  ],
+  "version_info": {},
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}
