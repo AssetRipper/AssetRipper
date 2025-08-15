@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Assets.Generics;
 using AssetRipper.Export.Modules.Shaders.Extensions;
 using AssetRipper.Export.Modules.Shaders.ShaderBlob;
+using AssetRipper.Import.Logging;
 using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Extensions.Enums.Shader;
@@ -109,7 +110,14 @@ public static class SerializedExtensions
 			IReadOnlyList<ISerializedPlayerSubProgram> subPrograms = _this.GetPlayerSubPrograms();
 			for (int i = 0; i < subPrograms.Count; i++)
 			{
-				subPrograms[i].Export(_this.GetParameterBlobIndices()[i], writer, type);
+				try
+				{
+					subPrograms[i].Export(_this.GetParameterBlobIndices()[i], writer, type);
+				}
+				catch (Exception ex)
+				{
+					Logger.Error(ex.Message, ex);
+				}
 			}
 		}
 		else
@@ -117,7 +125,14 @@ public static class SerializedExtensions
 			int tierCount = _this.GetTierCount();
 			for (int i = 0; i < _this.SubPrograms.Count; i++)
 			{
-				_this.SubPrograms[i].Export(writer, type, tierCount > 1);
+				try
+				{
+					_this.SubPrograms[i].Export(writer, type, tierCount > 1);
+				}
+				catch (Exception ex)
+				{
+					Logger.Error(ex.Message, ex);
+				}
 			}
 		}
 		writer.WriteIndent(3);
