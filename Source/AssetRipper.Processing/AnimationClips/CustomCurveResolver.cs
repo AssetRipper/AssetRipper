@@ -424,6 +424,9 @@ public partial class CustomCurveResolver
 
 	private readonly IAnimationClip m_clip;
 
-	[GeneratedRegex("^path_[0-9]{1,10}$", RegexOptions.Compiled)]
+	/// <summary>
+	/// Matches AnimationClipConverter.GetReversedPath(AnimationClipConverter.UnknownPathPrefix, hash)
+	/// </summary>
+	[GeneratedRegex("^path_0x[0-9A-F]{1,10}_[H-Wh-w]{6}[HJLN]$", RegexOptions.Compiled)]
 	private static partial Regex UnknownPathRegex { get; }
 }
