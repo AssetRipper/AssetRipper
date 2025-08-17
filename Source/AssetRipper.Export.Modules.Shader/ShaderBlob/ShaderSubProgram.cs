@@ -324,19 +324,19 @@ public sealed class ShaderSubProgram
 		}
 	}
 
-    public void ApplyCommonParams(ISerializedProgramParameters commonParams, IReadOnlyDictionary<int, string> nameIndices)
-    {
-        ConstantBuffers = ConstantBuffers.Concat(commonParams.ConstantBuffers.Select(item => item.ToConstantBuffer(nameIndices))).ToArray();
-        VectorParameters = VectorParameters.Concat(commonParams.VectorParams.Select(item => item.ToVectorParameter(nameIndices))).ToArray();
-        MatrixParameters = MatrixParameters.Concat(commonParams.MatrixParams.Select(item => item.ToMatrixParameter(nameIndices))).ToArray();
-        TextureParameters = TextureParameters.Concat(commonParams.TextureParams.Select(item => item.ToTextureParameter(nameIndices))).ToArray();
-        BufferParameters = BufferParameters.Concat(commonParams.BufferParams.Select(item => item.ToBufferBinding(nameIndices))).ToArray();
-        UAVParameters = UAVParameters.Concat(commonParams.UAVParams.Select(item => item.ToUAVParameter(nameIndices))).ToArray();
-        SamplerParameters = SamplerParameters.Concat(commonParams.Samplers.Select(item => item.ToSamplerParameter())).ToArray();
-        ConstantBufferBindings = ConstantBufferBindings.Concat(commonParams.ConstantBufferBindings.Select(item => item.ToBufferBinding(nameIndices))).ToArray();
-    }
+	public void ApplyCommonParams(ISerializedProgramParameters commonParams, IReadOnlyDictionary<int, string> nameIndices)
+	{
+		ConstantBuffers = ConstantBuffers.Concat(commonParams.ConstantBuffers.Select(item => item.ToConstantBuffer(nameIndices))).ToArray();
+		VectorParameters = VectorParameters.Concat(commonParams.VectorParams.Select(item => item.ToVectorParameter(nameIndices))).ToArray();
+		MatrixParameters = MatrixParameters.Concat(commonParams.MatrixParams.Select(item => item.ToMatrixParameter(nameIndices))).ToArray();
+		TextureParameters = TextureParameters.Concat(commonParams.TextureParams.Select(item => item.ToTextureParameter(nameIndices))).ToArray();
+		BufferParameters = BufferParameters.Concat(commonParams.BufferParams.Select(item => item.ToBufferBinding(nameIndices))).ToArray();
+		UAVParameters = UAVParameters.Concat(commonParams.UAVParams.Select(item => item.ToUAVParameter(nameIndices))).ToArray();
+		SamplerParameters = SamplerParameters.Concat(commonParams.Samplers.Select(item => item.ToSamplerParameter())).ToArray();
+		ConstantBufferBindings = ConstantBufferBindings.Concat(commonParams.ConstantBufferBindings.Select(item => item.ToBufferBinding(nameIndices))).ToArray();
+	}
 
-    public ShaderGpuProgramType GetProgramType(UnityVersion version)
+	public ShaderGpuProgramType GetProgramType(UnityVersion version)
 	{
 		if (ShaderGpuProgramTypeExtensions.GpuProgramType55Relevant(version))
 		{
@@ -353,8 +353,8 @@ public sealed class ShaderSubProgram
 	public int StatsTEX { get; set; }
 	public int StatsFlow { get; set; }
 	public int StatsTempRegister { get; set; }
-    public string[] Keywords { get; set; } = Array.Empty<string>();
-    public string[] GlobalKeywords { get; set; } = Array.Empty<string>();
+	public string[] Keywords { get; set; } = Array.Empty<string>();
+	public string[] GlobalKeywords { get; set; } = Array.Empty<string>();
 	public string[] LocalKeywords { get; set; } = Array.Empty<string>();
 	public byte[] ProgramData { get; set; } = Array.Empty<byte>();
 	public VectorParameter[] VectorParameters { get; set; } = Array.Empty<VectorParameter>();
@@ -367,6 +367,4 @@ public sealed class ShaderSubProgram
 	public BufferBinding[] ConstantBufferBindings { get; set; } = Array.Empty<BufferBinding>();
 	public StructParameter[] StructParameters { get; set; } = Array.Empty<StructParameter>();
 	public ParserBindChannels BindChannels { get; set; } = new();
-}
-}
 }

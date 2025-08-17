@@ -374,9 +374,9 @@ public sealed class USCShaderExporter : ShaderExporterBase
 				writer.WriteIndent(3);
 				writer.WriteLine("");
 
-					if (hasVertex)
-					{
-						string keywordsList = string.Join(' ', vertexSubProgram!.Keywords);
+				if (hasVertex)
+				{
+					string keywordsList = string.Join(' ', vertexSubProgram!.Keywords);
 
 					writer.WriteIndent(3);
 					writer.WriteLine($"// Keywords: {keywordsList}");
@@ -395,9 +395,9 @@ public sealed class USCShaderExporter : ShaderExporterBase
 					writer.WriteLine("}");
 				}
 
-					if (hasFragment)
-					{
-						string keywordsList = string.Join(' ', fragmentSubProgram!.Keywords);
+				if (hasFragment)
+				{
+					string keywordsList = string.Join(' ', fragmentSubProgram!.Keywords);
 
 					writer.WriteIndent(3);
 					writer.WriteLine($"// Keywords: {keywordsList}");
@@ -627,15 +627,15 @@ public sealed class USCShaderExporter : ShaderExporterBase
 			ShaderSubProgram? matchedProgram = null;
 			if (matched && shader.Has_Platforms())
 			{
-                void ApplyCommonParams(ShaderSubProgram subProgram)
-                {
-                    if (program.Has_CommonParameters())
-                    {
-                        subProgram.ApplyCommonParams(program.CommonParameters, pass.NameIndices.ToDictionary(k => k.Value, v => (string)v.Key));
-                    }
-                }
+				void ApplyCommonParams(ShaderSubProgram subProgram)
+				{
+					if (program.Has_CommonParameters())
+					{
+						subProgram.ApplyCommonParams(program.CommonParameters, pass.NameIndices.AsKeyValuePairs().ToDictionary(k => k.Value, v => (string)v.Key));
+					}
+				}
 
-                int platformIndex = shader.Platforms.IndexOf((uint)graphicApi);
+				int platformIndex = shader.Platforms.IndexOf((uint)graphicApi);
 				if (program.Has_PlayerSubPrograms())
 				{
 					matchedProgram = blobs[platformIndex].GetSubProgram(program.GetPlayerSubPrograms()[i].BlobIndex, program.GetParameterBlobIndices()[i], ApplyCommonParams);

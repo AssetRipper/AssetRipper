@@ -88,11 +88,11 @@ public sealed class ShaderSubProgramBlob
 		subProgram = new ShaderSubProgram();
 		ReadSubProgram(blobReader, subProgram, blobIndex, true, true);
 
-			onRead?.Invoke(subProgram);
+		onRead?.Invoke(subProgram);
 
-			m_cachedSubPrograms.TryAdd((blobIndex, blobIndex), subProgram);
-			return subProgram;
-		}
+		m_cachedSubPrograms.TryAdd((blobIndex, blobIndex), subProgram);
+		return subProgram;
+	}
 
 	public ShaderSubProgram GetSubProgram(uint blobIndex, uint paramBlobIndex, Action<ShaderSubProgram>? onRead)
 	{
