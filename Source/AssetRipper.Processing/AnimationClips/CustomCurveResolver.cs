@@ -43,7 +43,7 @@ public partial class CustomCurveResolver
 					const string Prefix = "blendShape.";
 					if (UnknownPathRegex.IsMatch(path))
 					{
-						return Prefix + attribute;
+						return Prefix + path;
 					}
 
 					foreach (IGameObject root in Roots)
@@ -72,7 +72,7 @@ public partial class CustomCurveResolver
 
 						return Prefix + shapeName;
 					}
-					return Prefix + attribute;
+					return Prefix + Crc32Algorithm.ReverseAscii(attribute, $"path_0x{attribute:X}_");
 				}
 
 			case BindingCustomType.Renderer:
@@ -86,7 +86,7 @@ public partial class CustomCurveResolver
 					const string Prefix = "material.";
 					if (UnknownPathRegex.IsMatch(path))
 					{
-						return Prefix + attribute;
+						return Prefix + path;
 					}
 
 					foreach (IGameObject root in Roots)
@@ -126,7 +126,7 @@ public partial class CustomCurveResolver
 						};
 						return Prefix + property + "." + subProperty;
 					}
-					return Prefix + attribute;
+					return Prefix + Crc32Algorithm.ReverseAscii(attribute, $"path_0x{attribute:X}_");
 				}
 
 			case BindingCustomType.SpriteRenderer:
