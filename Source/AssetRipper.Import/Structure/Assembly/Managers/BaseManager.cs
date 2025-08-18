@@ -1,5 +1,7 @@
 ﻿using AsmResolver.DotNet;
+using AsmResolver.DotNet.Builder;
 using AsmResolver.DotNet.Signatures;
+using AsmResolver.PE.Builder;
 using AssetRipper.Import.Structure.Platforms;
 using AssetRipper.IO.Files;
 using AssetRipper.SerializationLogic;
@@ -72,7 +74,7 @@ public partial class BaseManager : IAssemblyManager
 		else
 		{
 			MemoryStream memoryStream = new();
-			assembly.WriteManifest(memoryStream);
+			assembly.ManifestModule?.ToPEImage(new ManagedPEImageBuilder(), false).ToPEFile(new ManagedPEFileBuilder()).Write(memoryStream);
 			m_assemblyStreams.Add(assembly, memoryStream);
 			return memoryStream;
 		}
