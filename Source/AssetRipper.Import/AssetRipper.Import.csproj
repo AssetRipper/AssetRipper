@@ -17,6 +17,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+  	<PackageReference Include="Microsoft.NET.ILLink.Tasks" Version="9.0.8" />
 		<ProjectReference Include="..\AssetRipper.Assets\AssetRipper.Assets.csproj" />
 		<ProjectReference Include="..\AssetRipper.Numerics\AssetRipper.Numerics.csproj" />
 		<ProjectReference Include="..\AssetRipper.SerializationLogic\AssetRipper.SerializationLogic.csproj" />
