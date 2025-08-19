@@ -14,6 +14,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="DXDecompiler-ly" Version="0.0.1" />
+		<PackageReference Include="Microsoft.NET.ILLink.Tasks" Version="9.0.8" />
 	</ItemGroup>
 
 </Project>

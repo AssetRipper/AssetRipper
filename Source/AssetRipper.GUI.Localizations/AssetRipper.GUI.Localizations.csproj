@@ -13,6 +13,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+  	<PackageReference Include="Microsoft.NET.ILLink.Tasks" Version="9.0.8" />
 		<ProjectReference Include="..\AssetRipper.GUI.Localizations.SourceGenerator\AssetRipper.GUI.Localizations.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
 	</ItemGroup>
 
