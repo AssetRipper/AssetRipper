@@ -9,6 +9,7 @@ public static class ZipExtractor
 	private const string ZipExtension = ".zip";
 	private const string ApkExtension = ".apk";
 	private const string ApksExtension = ".apks";
+	private const string ApkPlusExtension = ".apk+";
 	private const string ObbExtension = ".obb";
 	private const string XapkExtension = ".xapk";
 	private const string VpkExtension = ".vpk"; //PS Vita
@@ -32,6 +33,7 @@ public static class ZipExtractor
 					result.Add(ExtractZip(path));
 					break;
 				case ApksExtension:
+				case ApkPlusExtension:
 				case XapkExtension:
 					result.Add(ExtractXapk(path));
 					break;
