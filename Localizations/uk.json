@@ -247,5 +247,6 @@
     "remove_nullable_attributes": "Видалити нульові атрибути",
     "scripts_use_fully_qualified_type_names": "Скрипти використовують повні імена типів",
     "select_files": "Вибрати файли",
-    "select_folders": "Вибрати папки"
+    "select_folders": "Вибрати папки",
+    "file_id": "ID файлу"
 }
