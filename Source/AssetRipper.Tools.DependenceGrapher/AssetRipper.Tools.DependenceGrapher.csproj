@@ -8,7 +8,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Ookii.CommandLine" />
+		<PackageReference Include="Ookii.CommandLine" Version="5.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>

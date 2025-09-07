@@ -7,7 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AssetRipper.Primitives" />
+		<PackageReference Include="AssetRipper.Primitives" Version="3.2.0" />
 	</ItemGroup>
 
 </Project>
