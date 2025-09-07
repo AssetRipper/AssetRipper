@@ -2,6 +2,7 @@ using AssetRipper.Assets;
 using AssetRipper.Export.Modules.Shaders.Exporters;
 using AssetRipper.Export.Modules.Shaders.Exporters.DirectX;
 using AssetRipper.Export.Modules.Shaders.IO;
+using AssetRipper.Import.Logging;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Extensions.Enums.Shader;
 
@@ -11,8 +12,17 @@ public sealed class ShaderDisassemblyExporter : ShaderExporterBase
 {
 	public override bool Export(IExportContainer container, IUnityObjectBase asset, string path, FileSystem fileSystem)
 	{
-		using Stream fileStream = fileSystem.File.Create(path);
-		ExportBinary((IShader)asset, fileStream, ShaderExporterInstantiator);
+		try
+		{
+			using Stream fileStream = fileSystem.File.Create(path);
+			ExportBinary((IShader)asset, fileStream, ShaderExporterInstantiator);
+		}
+		catch (Exception ex)
+		{
+			Logger.Error(ex);
+			using Stream fileStream = fileSystem.File.Create(path);
+			DummyShaderTextExporter.ExportShader((IShader)asset, new InvariantStreamWriter(fileStream));
+		}
 		return true;
 	}
 
