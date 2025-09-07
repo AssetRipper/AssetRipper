@@ -12,14 +12,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AssetRipper.Conversions.FastPng" Version="1.1.0" />
-		<PackageReference Include="AssetRipper.TextureDecoder" Version="2.3.0" />
-		<PackageReference Include="AssetRipper.Tpk" Version="1.1.0" />
-		<PackageReference Include="Kyaru.Texture2DDecoder" Version="0.17.0" />
-		<PackageReference Include="Kyaru.Texture2DDecoder.Windows" Version="0.1.0" />
-		<PackageReference Include="Kyaru.Texture2DDecoder.macOS" Version="0.1.0" />
-		<PackageReference Include="Kyaru.Texture2DDecoder.Linux" Version="0.1.0" />
-		<PackageReference Include="StbImageWriteSharp" Version="1.16.7" />
+		<PackageReference Include="AssetRipper.Conversions.FastPng" />
+		<PackageReference Include="AssetRipper.TextureDecoder" />
+		<PackageReference Include="AssetRipper.Tpk" />
+		<PackageReference Include="Kyaru.Texture2DDecoder" />
+		<PackageReference Include="Kyaru.Texture2DDecoder.Windows" />
+		<PackageReference Include="Kyaru.Texture2DDecoder.macOS" />
+		<PackageReference Include="Kyaru.Texture2DDecoder.Linux" />
+		<PackageReference Include="StbImageWriteSharp" />
 	</ItemGroup>
 
 	<ItemGroup>
