@@ -6,7 +6,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AssetRipper.SharpGLTF.Toolkit" Version="1.0.2" />
+		<PackageReference Include="AssetRipper.SharpGLTF.Toolkit" />
 	</ItemGroup>
 
 	<ItemGroup>

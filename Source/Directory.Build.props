@@ -4,6 +4,8 @@
 		<Nullable>enable</Nullable>
 		<LangVersion>preview</LangVersion>
 		<IsAotCompatible>true</IsAotCompatible>
+		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+		<NoWarn>$(NoWarn);NU1507</NoWarn> <!-- NuGet wants you to use https://aka.ms/nuget-package-source-mapping but setting that up doesn't help -->
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
 

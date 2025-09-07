@@ -8,11 +8,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AssetRipper.IO.Endian" Version="2.0.2" />
-		<PackageReference Include="AssetRipper.Primitives" Version="3.2.0" />
-		<PackageReference Include="K4os.Compression.LZ4" Version="1.3.8" />
-		<PackageReference Include="SharpCompress" Version="0.40.0" />
-		<PackageReference Include="ZstdSharp.Port" Version="0.8.6" />
+		<PackageReference Include="AssetRipper.IO.Endian" />
+		<PackageReference Include="AssetRipper.Primitives" />
+		<PackageReference Include="K4os.Compression.LZ4" />
+		<PackageReference Include="SharpCompress" />
+		<PackageReference Include="ZstdSharp.Port" />
 	</ItemGroup>
 
 </Project>
