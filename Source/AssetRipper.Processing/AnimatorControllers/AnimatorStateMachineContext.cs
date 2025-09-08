@@ -19,6 +19,7 @@ using AssetRipper.SourceGenerated.Subclasses.SelectorTransitionConstant;
 using AssetRipper.SourceGenerated.Subclasses.StateConstant;
 using AssetRipper.SourceGenerated.Subclasses.StateMachineConstant;
 using AssetRipper.SourceGenerated.Subclasses.TransitionConstant;
+using System.Diagnostics;
 using System.Numerics;
 
 namespace AssetRipper.Processing.AnimatorControllers;
@@ -347,6 +348,8 @@ internal sealed class AnimatorStateMachineContext
 				}
 			}
 		}
+
+		Debug.Assert(IndexedStateMachines.Select(x => x.StateMachine).Distinct().Count() == IndexedStateMachines.Length);
 	}
 
 	private void AddStateAndTransitionsToStateMachine(int parentStateMachineIndex, int stateIndex)
@@ -371,7 +374,8 @@ internal sealed class AnimatorStateMachineContext
 		AssetList<PPtr_AnimatorStateTransition_4>? transitionList = null;
 		if (state.Has_Transitions())
 		{
-			state.Transitions.Capacity = stateConstant.TransitionConstantArray.Count;
+			//Not sure if it's correct for the state transitions to be non-empty, but I encountered it in some files.
+			state.Transitions.Capacity = state.Transitions.Count + stateConstant.TransitionConstantArray.Count;
 		}
 		else if (parentStateMachine.Has_OrderedTransitions())
 		{
