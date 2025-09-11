@@ -442,8 +442,7 @@ internal sealed class AnimatorStateMachineContext
 		return animatorStateTransition;
 	}
 
-	private bool TryGetDestinationState(uint destinationState,
-	out IAnimatorState? stateDestination, out int stateMachineDestinationIndex, out bool isEntryDestination)
+	private bool TryGetDestinationState(uint destinationState, out IAnimatorState? stateDestination, out int stateMachineDestinationIndex, out bool isEntryDestination)
 	{
 		stateDestination = null;
 		stateMachineDestinationIndex = -1;
@@ -458,6 +457,11 @@ internal sealed class AnimatorStateMachineContext
 			if (StateMachineConstant.Has_SelectorStateConstantArray())
 			{
 				uint stateIndex = destinationState % StateMachineTransitionFlag;
+				if (stateIndex >= StateMachineConstant.SelectorStateConstantArray.Count)
+				{
+					return false;
+				}
+
 				SelectorStateConstant selectorState = StateMachineConstant.SelectorStateConstantArray[(int)stateIndex].Data;
 				stateMachineDestinationIndex = GetStateMachineIndexForId(selectorState.FullPathID);
 				isEntryDestination = selectorState.IsEntry;
