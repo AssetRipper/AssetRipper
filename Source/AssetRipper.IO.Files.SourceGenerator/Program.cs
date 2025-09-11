@@ -143,6 +143,18 @@ internal static class Program
 				writer.WriteLine($"public sealed partial class Virtual{classPropertyName}Implementation(VirtualFileSystem fileSystem) : {classPropertyName}Implementation(fileSystem)");
 				using (new CurlyBrackets(writer))
 				{
+					writer.WriteLine("private new VirtualFileSystem Parent => (VirtualFileSystem)base.Parent;");
+					foreach (string otherClassPropertyName in apiDictionary.Keys)
+					{
+						if (otherClassPropertyName != classPropertyName)
+						{
+							writer.WriteLine($"private new Virtual{otherClassPropertyName}Implementation {otherClassPropertyName} => Parent.{otherClassPropertyName};");
+						}
+						else
+						{
+							writer.WriteLine($"private new Virtual{otherClassPropertyName}Implementation {otherClassPropertyName} => this;");
+						}
+					}
 				}
 				writer.WriteLineNoTabs();
 			}
