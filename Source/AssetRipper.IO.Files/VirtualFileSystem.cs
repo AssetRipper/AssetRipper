@@ -288,7 +288,7 @@ public partial class VirtualFileSystem : FileSystem
 
 	public partial class VirtualDirectoryImplementation
 	{
-		public override void Create(string path)
+		public override void Create(string? path)
 		{
 			string[] parts = Path.GetPathParts(path);
 			DirectoryEntity current = Parent.root;
@@ -298,14 +298,91 @@ public partial class VirtualFileSystem : FileSystem
 			}
 		}
 
-		public override IEnumerable<string> EnumerateDirectories(string path, string searchPattern, SearchOption searchOption)
+		public override IEnumerable<string> EnumerateDirectories(string? path, string searchPattern, SearchOption searchOption)
 		{
-			throw new NotImplementedException();
+			if (searchPattern != "*")
+			{
+				throw new NotImplementedException("Only '*' search pattern is supported.");
+			}
+
+			string[] parts = Path.GetPathParts(path);
+			DirectoryEntity directory = Parent.OpenDirectory(parts);
+			if (searchOption == SearchOption.TopDirectoryOnly)
+			{
+				foreach (DirectoryEntity child in directory.Children.Values)
+				{
+					yield return child.FullName;
+				}
+			}
+			else
+			{
+				Stack<DirectoryEntity> stack = new();
+				stack.Push(directory);
+				while (stack.Count > 0)
+				{
+					DirectoryEntity current = stack.Pop();
+					foreach (DirectoryEntity child in current.Children.Values)
+					{
+						yield return child.FullName;
+						stack.Push(child);
+					}
+				}
+			}
 		}
 
-		public override IEnumerable<string> EnumerateFiles(string path, string searchPattern, SearchOption searchOption)
+		public override IEnumerable<string> EnumerateFiles(string? path, string searchPattern, SearchOption searchOption)
 		{
-			throw new NotImplementedException();
+			string[] pathParts = Path.GetPathParts(path);
+
+			string extension;
+			if (searchPattern == "*")
+			{
+				extension = string.Empty;
+			}
+			else if (searchPattern.StartsWith("*.") && searchPattern.Length > 2)
+			{
+				extension = searchPattern[1..];
+				if (extension.Contains('*') || extension.Contains('?'))
+				{
+					throw new NotImplementedException("Only '*' and '*.<extension>' search patterns are supported.");
+				}
+			}
+			else
+			{
+				throw new NotImplementedException("Only '*' and '*.<extension>' search patterns are supported.");
+			}
+
+			DirectoryEntity directory = Parent.OpenDirectory(pathParts);
+			if (searchOption == SearchOption.TopDirectoryOnly)
+			{
+				foreach (FileEntity file in directory.Files.Values)
+				{
+					if (file.Name.EndsWith(extension, StringComparison.Ordinal))
+					{
+						yield return file.FullName;
+					}
+				}
+			}
+			else
+			{
+				Stack<DirectoryEntity> stack = new();
+				stack.Push(directory);
+				while (stack.Count > 0)
+				{
+					DirectoryEntity current = stack.Pop();
+					foreach (FileEntity file in current.Files.Values)
+					{
+						if (file.Name.EndsWith(extension, StringComparison.Ordinal))
+						{
+							yield return file.FullName;
+						}
+					}
+					foreach (DirectoryEntity child in current.Children.Values)
+					{
+						stack.Push(child);
+					}
+				}
+			}
 		}
 
 		public override bool Exists(string? path)
