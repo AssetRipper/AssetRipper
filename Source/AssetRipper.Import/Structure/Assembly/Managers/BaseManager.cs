@@ -43,10 +43,7 @@ public partial class BaseManager : IAssemblyManager
 		AssemblyDefinition assembly;
 		try
 		{
-			MemoryStream memoryStream = new();
-			stream.CopyTo(memoryStream);
-			assembly = AssemblyDefinition.FromBytes(memoryStream.ToArray());
-			//assembly = AssemblyDefinition.FromStream(stream);
+			assembly = AssemblyDefinition.FromStream(stream);
 		}
 		catch (BadImageFormatException badImageFormatException)
 		{
@@ -95,16 +92,13 @@ public partial class BaseManager : IAssemblyManager
 
 	public virtual void Read(Stream stream, string fileName)
 	{
-		MemoryStream memoryStream = new();
-		stream.CopyTo(memoryStream);
-		AssemblyDefinition assembly = AssemblyDefinition.FromBytes(memoryStream.ToArray());
-		//AssemblyDefinition assembly = AssemblyDefinition.FromStream(stream);//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		AssemblyDefinition assembly = AssemblyDefinition.FromStream(stream);
 		assembly.InitializeResolvers(this);
 		fileName = Path.GetFileNameWithoutExtension(fileName);
 		string assemblyName = ToAssemblyName(assembly);
 		m_assemblies.Add(fileName, assembly);
 		m_assemblies[assemblyName] = assembly;
-		m_assemblyStreams.Add(assembly, memoryStream);
+		m_assemblyStreams.Add(assembly, stream);
 	}
 
 	public virtual void Unload(string fileName)

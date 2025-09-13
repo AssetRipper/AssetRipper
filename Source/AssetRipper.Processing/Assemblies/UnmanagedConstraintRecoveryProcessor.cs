@@ -76,7 +76,7 @@ public sealed class UnmanagedConstraintRecoveryProcessor : IAssetProcessor
 	{
 		if (!genericParameter.HasCustomAttribute("System.Runtime.CompilerServices", "IsUnmanagedAttribute"))
 		{
-			genericParameter.AddCustomAttribute(genericParameter.Module!.DefaultImporter.ImportMethod(constructor));
+			genericParameter.AddCustomAttribute(genericParameter.DeclaringModule!.DefaultImporter.ImportMethod(constructor));
 		}
 	}
 }

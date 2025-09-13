@@ -32,7 +32,7 @@ public sealed class NullRefReturnProcessor(ScriptContentLevel scriptContentLevel
 		{
 			if (method.Signature?.ReturnType is ByReferenceTypeSignature)
 			{
-				method.CilMethodBody = new CilMethodBody(method);
+				method.CilMethodBody = new CilMethodBody();
 				CilInstructionCollection instructions = method.CilMethodBody.Instructions;
 				instructions.Add(CilOpCodes.Ldnull);
 				instructions.Add(CilOpCodes.Throw);

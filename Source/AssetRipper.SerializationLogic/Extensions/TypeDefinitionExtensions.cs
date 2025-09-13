@@ -81,7 +81,7 @@ internal static class TypeDefinitionExtensions
 
 	public static bool TryGetPrimitiveType(this TypeDefinition typeDefinition, out PrimitiveType primitiveType)
 	{
-		if ((typeDefinition.Module?.Assembly?.IsCorLib ?? false) && typeDefinition.ToTypeSignature() is CorLibTypeSignature corLibTypeSignature)
+		if ((typeDefinition.DeclaringModule?.Assembly?.IsCorLib ?? false) && typeDefinition.ToTypeSignature() is CorLibTypeSignature corLibTypeSignature)
 		{
 			primitiveType = corLibTypeSignature.ToPrimitiveType();
 			return primitiveType.IsCSharpPrimitive();

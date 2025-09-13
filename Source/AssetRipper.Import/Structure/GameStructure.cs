@@ -144,7 +144,7 @@ public sealed class GameStructure : IDisposable
 		if (resFile is not null)
 		{
 			resFile.Stream.Position = 0;
-			AssemblyManager.Read(resFile.Stream, assemblyName);
+			AssemblyManager.Read(resFile.Stream.CreateReference(), assemblyName);
 		}
 		else
 		{

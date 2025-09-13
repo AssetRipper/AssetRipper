@@ -19,11 +19,8 @@ public sealed class MonoManager : BaseManager
 		{
 			try
 			{
-				// Needs FromStream
 				using Stream stream = gameStructure.FileSystem.File.OpenRead(assemblyPath);
-				using MemoryStream memoryStream = new();
-				stream.CopyTo(memoryStream);
-				PEFile peFile = PEFile.FromBytes(memoryStream.ToArray());
+				PEFile peFile = PEFile.FromStream(stream);
 				if (!peFile.OptionalHeader.GetDataDirectory(DataDirectoryIndex.ClrDirectory).IsPresentInPE)
 				{
 					Logger.Info(LogCategory.Import, $"Skipping native assembly: {assemblyName}");
