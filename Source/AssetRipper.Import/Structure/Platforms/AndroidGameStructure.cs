@@ -1,37 +1,29 @@
-﻿namespace AssetRipper.Import.Structure.Platforms;
+﻿using AssetRipper.IO.Files;
+
+namespace AssetRipper.Import.Structure.Platforms;
 
 internal sealed class AndroidGameStructure : PlatformGameStructure
 {
-	public AndroidGameStructure(string rootPath) : this(rootPath, string.Empty) { }
-
-	public AndroidGameStructure(string rootPath, string? obbPath)
+	public AndroidGameStructure(string rootPath, FileSystem fileSystem) : this(rootPath, string.Empty, fileSystem)
 	{
-		if (string.IsNullOrEmpty(rootPath))
-		{
-			throw new ArgumentNullException(nameof(rootPath));
-		}
-		m_root = new DirectoryInfo(rootPath);
-		if (!m_root.Exists)
-		{
-			throw new Exception($"Root directory '{rootPath}' doesn't exist");
-		}
+	}
 
-		string apkDataPath = Path.Join(rootPath, AssetName, BinName, DataFolderName);
-		DirectoryInfo apkDataDirectory = new DirectoryInfo(apkDataPath);
-		if (!apkDataDirectory.Exists)
+	public AndroidGameStructure(string rootPath, string? obbPath, FileSystem fileSystem) : base(rootPath, fileSystem)
+	{
+		string apkDataPath = FileSystem.Path.Join(rootPath, AssetName, BinName, DataFolderName);
+		if (!FileSystem.Directory.Exists(apkDataPath))
 		{
 			throw new Exception($"Data directory hasn't been found");
 		}
-		List<string> dataPaths = new List<string>() { apkDataPath };
+		List<string> dataPaths = [apkDataPath];
 
-		RootPath = rootPath;
 		GameDataPath = apkDataPath;
 		StreamingAssetsPath = null;
-		ResourcesPath = Path.Join(GameDataPath, ResourcesName);
-		ManagedPath = Path.Join(GameDataPath, ManagedName);
-		LibPath = Path.Join(RootPath, LibName);
+		ResourcesPath = FileSystem.Path.Join(GameDataPath, ResourcesName);
+		ManagedPath = FileSystem.Path.Join(GameDataPath, ManagedName);
+		LibPath = FileSystem.Path.Join(RootPath, LibName);
 		Il2CppGameAssemblyPath = GetIl2CppGameAssemblyPath(LibPath);
-		Il2CppMetaDataPath = Path.Join(ManagedPath, MetadataName, DefaultGlobalMetadataName);
+		Il2CppMetaDataPath = FileSystem.Path.Join(ManagedPath, MetadataName, DefaultGlobalMetadataName);
 		UnityPlayerPath = null;
 		Version = GetUnityVersionFromDataDirectory(GameDataPath);
 
@@ -50,14 +42,14 @@ internal sealed class AndroidGameStructure : PlatformGameStructure
 
 		if (obbPath != null)
 		{
-			m_obbRoot = new DirectoryInfo(obbPath);
-			if (!m_obbRoot.Exists)
+			m_obbRoot = obbPath;
+			if (!FileSystem.Directory.Exists(obbPath))
 			{
 				throw new Exception($"Obb directory '{obbPath}' doesn't exist");
 			}
 
-			string obbDataPath = Path.Join(obbPath, AssetName, BinName, DataFolderName);
-			if (!Directory.Exists(obbDataPath))
+			string obbDataPath = FileSystem.Path.Join(obbPath, AssetName, BinName, DataFolderName);
+			if (!FileSystem.Directory.Exists(obbDataPath))
 			{
 				throw new Exception($"Obb data directory '{obbDataPath}' wasn't found");
 			}
@@ -72,50 +64,48 @@ internal sealed class AndroidGameStructure : PlatformGameStructure
 		CollectApkAssetBundles(Files);
 	}
 
-	public static bool IsAndroidStructure(string path)
+	public static bool IsAndroidStructure(string path, FileSystem fileSystem)
 	{
-		DirectoryInfo directory = new DirectoryInfo(path);
-		if (!directory.Exists)
+		if (!fileSystem.Directory.Exists(path))
 		{
 			return false;
 		}
 
-		int match = GetRootAndroidDirectoryMatch(directory);
+		int match = GetRootAndroidDirectoryMatch(path, fileSystem);
 		if (match <= 8)
 		{
 			return false;
 		}
 
-		string dataPath = Path.Join(path, AssetName, BinName, DataFolderName);
+		string dataPath = fileSystem.Path.Join(path, AssetName, BinName, DataFolderName);
 
-		return Directory.Exists(dataPath);
+		return fileSystem.Directory.Exists(dataPath);
 	}
 
-	public static bool IsAndroidObbStructure(string path)
+	public static bool IsAndroidObbStructure(string path, FileSystem fileSystem)
 	{
-		DirectoryInfo directory = new DirectoryInfo(path);
-		if (!directory.Exists)
+		if (!fileSystem.Directory.Exists(path))
 		{
 			return false;
 		}
 
-		int match = GetRootAndroidDirectoryMatch(directory);
+		int match = GetRootAndroidDirectoryMatch(path, fileSystem);
 		if (match != 8)
 		{
 			return false;
 		}
 
-		string dataPath = Path.Join(path, AssetName, BinName, DataFolderName);
+		string dataPath = fileSystem.Path.Join(path, AssetName, BinName, DataFolderName);
 
-		return Directory.Exists(dataPath);
+		return fileSystem.Directory.Exists(dataPath);
 	}
 
-	private static int GetRootAndroidDirectoryMatch(DirectoryInfo directory)
+	private static int GetRootAndroidDirectoryMatch(string directory, FileSystem fileSystem)
 	{
 		int matches = 0;
-		foreach (DirectoryInfo subDirectory in directory.EnumerateDirectories())
+		foreach (string subDirectory in fileSystem.Directory.EnumerateDirectories(directory))
 		{
-			switch (subDirectory.Name)
+			switch (fileSystem.Path.GetFileName(subDirectory))
 			{
 				case AssetName:
 					matches |= 8;
@@ -135,13 +125,12 @@ internal sealed class AndroidGameStructure : PlatformGameStructure
 
 	private void CollectApkAssetBundles(List<KeyValuePair<string, string>> files)
 	{
-		string assetPath = Path.Join(m_root.FullName, AssetName);
-		DirectoryInfo root = new DirectoryInfo(assetPath);
+		string assetPath = FileSystem.Path.Join(RootPath, AssetName);
 
-		CollectAssetBundles(root, files);
-		foreach (DirectoryInfo subDirectory in root.EnumerateDirectories())
+		CollectAssetBundles(assetPath, files);
+		foreach (string subDirectory in FileSystem.Directory.EnumerateDirectories(assetPath))
 		{
-			if (subDirectory.Name == BinName)
+			if (FileSystem.Path.GetFileName(subDirectory) == BinName)
 			{
 				continue;
 			}
@@ -149,34 +138,34 @@ internal sealed class AndroidGameStructure : PlatformGameStructure
 		}
 	}
 
-	private static string? GetIl2CppGameAssemblyPath(string libDirectory)
+	private string? GetIl2CppGameAssemblyPath(string libDirectory)
 	{
-		if (string.IsNullOrEmpty(libDirectory) || !Directory.Exists(libDirectory))
+		if (string.IsNullOrEmpty(libDirectory) || !FileSystem.Directory.Exists(libDirectory))
 		{
 			return null;
 		}
 
-		return Directory.GetFiles(libDirectory, Il2CppGameAssemblyName, SearchOption.AllDirectories).FirstOrDefault();
+		return FileSystem.Directory.EnumerateFiles(libDirectory, Il2CppGameAssemblyName, SearchOption.AllDirectories).FirstOrDefault();
 	}
 
-	private static string? GetAndroidUnityAssemblyPath(string libDirectory)
+	private string? GetAndroidUnityAssemblyPath(string libDirectory)
 	{
-		if (string.IsNullOrEmpty(libDirectory) || !Directory.Exists(libDirectory))
+		if (string.IsNullOrEmpty(libDirectory) || !FileSystem.Directory.Exists(libDirectory))
 		{
 			return null;
 		}
 
-		return Directory.GetFiles(libDirectory, AndroidUnityAssemblyName, SearchOption.AllDirectories).FirstOrDefault();
+		return FileSystem.Directory.EnumerateFiles(libDirectory, AndroidUnityAssemblyName, SearchOption.AllDirectories).FirstOrDefault();
 	}
 
-	private static bool IsMono(string managedDirectory)
+	private bool IsMono(string managedDirectory)
 	{
-		if (string.IsNullOrEmpty(managedDirectory) || !Directory.Exists(managedDirectory))
+		if (string.IsNullOrEmpty(managedDirectory) || !FileSystem.Directory.Exists(managedDirectory))
 		{
 			return false;
 		}
 
-		return Directory.GetFiles(managedDirectory, "*.dll").Length > 0;
+		return FileSystem.Directory.EnumerateFiles(managedDirectory, "*.dll").Any();
 	}
 
 	public string LibPath { get; private set; }
@@ -187,5 +176,5 @@ internal sealed class AndroidGameStructure : PlatformGameStructure
 	private const string Il2CppGameAssemblyName = "libil2cpp.so";
 	private const string AndroidUnityAssemblyName = "libunity.so";
 
-	private readonly DirectoryInfo? m_obbRoot;
+	private readonly string? m_obbRoot;
 }

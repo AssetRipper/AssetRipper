@@ -5,9 +5,9 @@ using System.Diagnostics;
 
 namespace AssetRipper.Import.Structure.Platforms;
 
-internal sealed class LinuxGameStructure : PlatformGameStructure
+internal sealed class WindowsGameStructure : PlatformGameStructure
 {
-	public LinuxGameStructure(string rootPath, FileSystem fileSystem) : base(GetActualRootPath(rootPath, fileSystem), fileSystem)
+	public WindowsGameStructure(string rootPath, FileSystem fileSystem) : base(GetActualRootPath(rootPath, fileSystem), fileSystem)
 	{
 		Debug.Assert(RootPath is not null);
 		if (rootPath != RootPath)
@@ -15,7 +15,7 @@ internal sealed class LinuxGameStructure : PlatformGameStructure
 			Logger.Info(LogCategory.Import, "An executable file or data directory was found, so the parent directory is being used instead.");
 		}
 
-		if (!GetDataDirectory(RootPath, FileSystem, out string? dataPath, out string? name))
+		if (!GetDataDirectory(RootPath, fileSystem, out string? dataPath, out string? name))
 		{
 			throw new DirectoryNotFoundException($"Data directory wasn't found");
 		}
@@ -81,10 +81,8 @@ internal sealed class LinuxGameStructure : PlatformGameStructure
 		string folderName = fileSystem.Path.GetFileName(folderPath);
 		string gameName = folderName[..^Suffix.Length];
 		string rootPath = fileSystem.Path.GetDirectoryName(folderPath);
-		string x86Path = fileSystem.Path.Join(rootPath, gameName + x86Extension);
-		string x64Path = fileSystem.Path.Join(rootPath, gameName + x64Extension);
-		string x86_64Path = fileSystem.Path.Join(rootPath, gameName + x86_64Extension);
-		if (fileSystem.File.Exists(x86Path) || fileSystem.File.Exists(x64Path) || fileSystem.File.Exists(x86_64Path))
+		string exePath = fileSystem.Path.Join(rootPath, gameName + ExeExtension);
+		if (fileSystem.File.Exists(exePath))
 		{
 			return true;
 		}
@@ -96,9 +94,7 @@ internal sealed class LinuxGameStructure : PlatformGameStructure
 
 	private static bool IsExecutableFile(string filePath, FileSystem fileSystem)
 	{
-		return !string.IsNullOrEmpty(filePath)
-			&& (filePath.EndsWith(x86Extension, StringComparison.Ordinal) || filePath.EndsWith(x64Extension, StringComparison.Ordinal) || filePath.EndsWith(x86_64Extension, StringComparison.Ordinal))
-			&& fileSystem.File.Exists(filePath);
+		return !string.IsNullOrEmpty(filePath) && filePath.EndsWith(ExeExtension, StringComparison.OrdinalIgnoreCase) && fileSystem.File.Exists(filePath);
 	}
 
 	private static string GetActualRootPath(string rootPath, FileSystem fileSystem)
@@ -118,25 +114,37 @@ internal sealed class LinuxGameStructure : PlatformGameStructure
 		}
 	}
 
-	private static bool IsRootDirectory(string rootDiectory, FileSystem fileSystem)
+	private static bool IsRootDirectory(string rootDirectory, FileSystem fileSystem)
 	{
-		return GetDataDirectory(rootDiectory, fileSystem, out _, out _);
+		return GetDataDirectory(rootDirectory, fileSystem, out string? _, out string? _);
 	}
 
-	private static bool GetDataDirectory(string rootDiectory, FileSystem fileSystem, [NotNullWhen(true)] out string? dataPath, [NotNullWhen(true)] out string? name)
+	private static bool GetDataDirectory(string rootDirectory, FileSystem fileSystem, [NotNullWhen(true)] out string? dataPath, [NotNullWhen(true)] out string? name)
 	{
-		foreach (string file in fileSystem.Directory.EnumerateFiles(rootDiectory))
+		name = "";
+		int exeCount = 0;
+		foreach (string file in fileSystem.Directory.EnumerateFiles(rootDirectory))
 		{
-			string extension = fileSystem.Path.GetExtension(file);
-			if (extension is x86Extension or x64Extension or x86_64Extension)
+			if (file.EndsWith(ExeExtension, StringComparison.OrdinalIgnoreCase))
 			{
+				exeCount++;
 				name = fileSystem.Path.GetFileNameWithoutExtension(file);
 				string dataFolder = $"{name}_{DataFolderName}";
-				dataPath = fileSystem.Path.Join(rootDiectory, dataFolder);
+				dataPath = fileSystem.Path.Join(rootDirectory, dataFolder);
 				if (fileSystem.Directory.Exists(dataPath))
 				{
 					return true;
 				}
+			}
+		}
+
+		if (exeCount > 0)
+		{
+			name = exeCount == 1 ? name : fileSystem.Path.GetFileName(rootDirectory);
+			dataPath = fileSystem.Path.Join(rootDirectory, DataFolderName);
+			if (fileSystem.Directory.Exists(dataPath))
+			{
+				return true;
 			}
 		}
 
@@ -146,7 +154,5 @@ internal sealed class LinuxGameStructure : PlatformGameStructure
 	}
 
 
-	private const string x86Extension = ".x86";
-	private const string x64Extension = ".x64";
-	private const string x86_64Extension = ".x86_64";
+	private const string ExeExtension = ".exe";
 }

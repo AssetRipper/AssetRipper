@@ -1,7 +1,9 @@
-﻿namespace AssetRipper.IO.Files.Streams.MultiFile;
+﻿namespace AssetRipper.IO.Files.Streams;
 
 internal sealed class SplitNameComparer : IComparer<string>
 {
+	public static SplitNameComparer Instance { get; } = new();
+
 	public int Compare(string? x, string? y)
 	{
 		int xNumber = GetSplitIndex(x);

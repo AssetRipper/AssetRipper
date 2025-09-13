@@ -1,4 +1,6 @@
-﻿namespace AssetRipper.Import.Structure.Platforms;
+﻿using AssetRipper.IO.Files;
+
+namespace AssetRipper.Import.Structure.Platforms;
 
 internal sealed class SwitchGameStructure : PlatformGameStructure
 {
@@ -6,64 +8,45 @@ internal sealed class SwitchGameStructure : PlatformGameStructure
 	private const string RomName = "romfs";
 	private const string MainName = "main";
 
-	public SwitchGameStructure(string rootPath)
+	public SwitchGameStructure(string rootPath, FileSystem fileSystem) : base(rootPath, fileSystem)
 	{
-		if (string.IsNullOrEmpty(rootPath))
+		if (!GetDataSwitchDirectory(rootPath, FileSystem, out string? dataPath))
 		{
-			throw new ArgumentNullException(nameof(rootPath));
-		}
-		m_root = new DirectoryInfo(rootPath);
-		if (!m_root.Exists)
-		{
-			throw new Exception($"Root directory '{rootPath}' doesn't exist");
+			throw new DirectoryNotFoundException($"Data directory wasn't found");
 		}
 
-		if (!GetDataSwitchDirectory(m_root, out string? dataPath))
-		{
-			throw new Exception($"Data directory wasn't found");
-		}
-
-		Name = m_root.Name;
-		RootPath = rootPath;
+		Name = FileSystem.Path.GetFileName(rootPath);
 		GameDataPath = dataPath;
-		StreamingAssetsPath = Path.Join(dataPath, StreamingName);
-		ResourcesPath = Path.Join(dataPath, ResourcesName);
-		ManagedPath = Path.Join(dataPath, ManagedName);
+		StreamingAssetsPath = FileSystem.Path.Join(GameDataPath, StreamingName);
+		ResourcesPath = FileSystem.Path.Join(GameDataPath, ResourcesName);
+		ManagedPath = FileSystem.Path.Join(GameDataPath, ManagedName);
 		UnityPlayerPath = null;
-		Version = GetUnityVersionFromDataDirectory(dataPath);
-		Il2CppGameAssemblyPath = Path.Join(rootPath, ExefsName, MainName);
-		Il2CppMetaDataPath = Path.Join(ManagedPath, MetadataName, DefaultGlobalMetadataName);
+		Version = GetUnityVersionFromDataDirectory(GameDataPath);
+		Il2CppGameAssemblyPath = FileSystem.Path.Join(rootPath, ExefsName, MainName);
+		Il2CppMetaDataPath = FileSystem.Path.Join(ManagedPath, MetadataName, DefaultGlobalMetadataName);
 		Backend = HasIl2CppFiles() ? Assembly.ScriptingBackend.IL2Cpp : Assembly.ScriptingBackend.Unknown;
 
-		DataPaths = new string[] { dataPath };
+		DataPaths = [GameDataPath];
 	}
 
-	public static bool IsSwitchStructure(string path)
+	public static bool Exists(string path, FileSystem fileSystem)
 	{
-		DirectoryInfo rootInfo = new DirectoryInfo(path);
-		if (!rootInfo.Exists)
-		{
-			return false;
-		}
-		if (!Directory.Exists(Path.Join(rootInfo.FullName, ExefsName)))
-		{
-			return false;
-		}
-
-		return GetDataSwitchDirectory(rootInfo, out _);
+		return fileSystem.Directory.Exists(path)
+			&& fileSystem.Directory.Exists(fileSystem.Path.Join(path, ExefsName))
+			&& GetDataSwitchDirectory(path, fileSystem, out _);
 	}
 
-	private static bool GetDataSwitchDirectory(DirectoryInfo rootDirectory, [NotNullWhen(true)] out string? dataPath)
+	private static bool GetDataSwitchDirectory(string rootDirectory, FileSystem fileSystem, [NotNullWhen(true)] out string? dataPath)
 	{
 		dataPath = null;
-		string romPath = Path.Join(rootDirectory.FullName, RomName);
-		if (!Directory.Exists(romPath))
+		string romPath = fileSystem.Path.Join(rootDirectory, RomName);
+		if (!fileSystem.Directory.Exists(romPath))
 		{
 			return false;
 		}
 
-		string ldataPath = Path.Join(romPath, DataFolderName);
-		if (!Directory.Exists(ldataPath))
+		string ldataPath = fileSystem.Path.Join(romPath, DataFolderName);
+		if (!fileSystem.Directory.Exists(ldataPath))
 		{
 			return false;
 		}

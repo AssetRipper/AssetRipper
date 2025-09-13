@@ -2,6 +2,7 @@ using AsmResolver.DotNet;
 using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Platforms;
+using AssetRipper.IO.Files;
 using Cpp2IL.Core.Api;
 using Cpp2IL.Core.InstructionSets;
 using Cpp2IL.Core.Model.Contexts;
@@ -128,7 +129,7 @@ public sealed class IL2CppManager : BaseManager
 		return Cpp2IlApi.CurrentAppContext ?? throw new NullReferenceException();
 	}
 
-	public override void Load(string filePath)
+	public override void Load(string filePath, FileSystem fileSystem)
 	{
 		throw new NotSupportedException();
 	}

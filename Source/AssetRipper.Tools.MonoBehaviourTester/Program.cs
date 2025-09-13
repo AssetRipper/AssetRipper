@@ -3,6 +3,7 @@ using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.Import.Structure.Platforms;
+using AssetRipper.IO.Files;
 using AssetRipper.Primitives;
 using AssetRipper.SerializationLogic;
 
@@ -29,7 +30,7 @@ internal static class Program
 
 		Logger.Info("Determining platform...");
 
-		PlatformChecker.CheckPlatform(new() { gamePath }, out PlatformGameStructure? platformStructure, out MixedGameStructure? _);
+		PlatformChecker.CheckPlatform([gamePath], LocalFileSystem.Instance, out PlatformGameStructure? platformStructure, out MixedGameStructure? _);
 		if (platformStructure == null)
 		{
 			Logger.Error("Game structure is not supported");
@@ -108,7 +109,7 @@ internal static class Program
 			return;
 		}
 
-		AssemblyManager.Load(assemblyPath);
+		AssemblyManager.Load(assemblyPath, LocalFileSystem.Instance);
 		Logger.Info(LogCategory.Import, $"Assembly '{assembly}' has been loaded");
 	}
 

@@ -1,31 +1,21 @@
 ﻿using AssetRipper.Import.Structure.Assembly;
+using AssetRipper.IO.Files;
 
 namespace AssetRipper.Import.Structure.Platforms;
 
 internal sealed class WiiUGameStructure : PlatformGameStructure
 {
-	public WiiUGameStructure(string rootPath)
+	public WiiUGameStructure(string rootPath, FileSystem fileSystem) : base(rootPath, fileSystem)
 	{
-		if (string.IsNullOrEmpty(rootPath))
+		Name = fileSystem.Path.GetFileName(rootPath);
+		GameDataPath = fileSystem.Path.Join(RootPath, ContentName, DataFolderName);
+		if (!fileSystem.Directory.Exists(GameDataPath))
 		{
-			throw new ArgumentNullException(nameof(rootPath));
+			throw new DirectoryNotFoundException($"Data directory wasn't found");
 		}
-		m_root = new DirectoryInfo(rootPath);
-		if (!m_root.Exists)
-		{
-			throw new Exception($"Directory '{rootPath}' doesn't exist");
-		}
-
-		Name = m_root.Name;
-		RootPath = m_root.FullName;
-		GameDataPath = Path.Join(RootPath, ContentName, DataFolderName);
-		if (!Directory.Exists(GameDataPath))
-		{
-			throw new Exception($"Data directory wasn't found");
-		}
-		StreamingAssetsPath = Path.Join(GameDataPath, StreamingName);
-		ResourcesPath = Path.Join(GameDataPath, ResourcesName);
-		ManagedPath = Path.Join(GameDataPath, ManagedName);
+		StreamingAssetsPath = fileSystem.Path.Join(GameDataPath, StreamingName);
+		ResourcesPath = fileSystem.Path.Join(GameDataPath, ResourcesName);
+		ManagedPath = fileSystem.Path.Join(GameDataPath, ManagedName);
 		UnityPlayerPath = null;
 		Version = null;
 		Il2CppGameAssemblyPath = null;
@@ -42,13 +32,13 @@ internal sealed class WiiUGameStructure : PlatformGameStructure
 			Backend = ScriptingBackend.Unknown;
 		}
 
-		DataPaths = new string[] { GameDataPath };
+		DataPaths = [GameDataPath];
 	}
 
-	public static bool IsWiiUStructure(string rootPath)
+	public static bool Exists(string rootPath, FileSystem fileSystem)
 	{
-		string gameDataPath = Path.Join(rootPath, ContentName, DataFolderName);
-		return Directory.Exists(gameDataPath);
+		string gameDataPath = fileSystem.Path.Join(rootPath, ContentName, DataFolderName);
+		return fileSystem.Directory.Exists(gameDataPath);
 	}
 
 	private const string ContentName = "content";

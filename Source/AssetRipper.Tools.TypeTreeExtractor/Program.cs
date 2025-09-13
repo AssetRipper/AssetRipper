@@ -37,7 +37,7 @@ internal static class Program
 		Console.WriteLine(fullName);
 		try
 		{
-			FileBase file = SchemeReader.LoadFile(fullName);
+			FileBase file = SchemeReader.LoadFile(fullName, LocalFileSystem.Instance);
 			file.ReadContentsRecursively();
 			SaveTypeTrees(file);
 		}

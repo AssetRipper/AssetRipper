@@ -5,16 +5,16 @@ using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.BundleFiles;
 using AssetRipper.IO.Files.BundleFiles.FileStream;
 using AssetRipper.IO.Files.SerializedFiles;
-using AssetRipper.IO.Files.Streams.MultiFile;
+using AssetRipper.IO.Files.Streams;
 using System.Text.RegularExpressions;
 
 namespace AssetRipper.Import.Structure.Platforms;
 
 public abstract partial class PlatformGameStructure
 {
-	public FileSystem FileSystem { get; protected set; } = LocalFileSystem.Instance;
+	public FileSystem FileSystem { get; }
 	public string? Name { get; protected set; }
-	public string? RootPath { get; protected set; }
+	public string? RootPath { get; }
 	public string? GameDataPath { get; protected set; }
 	public string? StreamingAssetsPath { get; protected set; }
 	public string? ResourcesPath { get; protected set; }
@@ -25,14 +25,12 @@ public abstract partial class PlatformGameStructure
 	public string? UnityPlayerPath { get; protected set; }
 	public UnityVersion? Version { get; protected set; }
 
-	public IReadOnlyList<string> DataPaths { get; protected set; } = Array.Empty<string>();
+	public IReadOnlyList<string> DataPaths { get; protected set; } = [];
 
 	/// <summary>Name : FullName</summary>
 	public List<KeyValuePair<string, string>> Files { get; } = [];
 	/// <summary>AssemblyName : AssemblyPath</summary>
 	public Dictionary<string, string> Assemblies { get; } = [];
-
-	protected DirectoryInfo m_root { get; set; }
 
 	protected static readonly Regex s_levelTemplate = LevelTemplateRegex();
 	protected static readonly Regex s_sharedAssetTemplate = SharedAssetTemplateRegex();
@@ -61,6 +59,22 @@ public abstract partial class PlatformGameStructure
 	protected const string AlternateBundleExtension = ".bundle";
 	protected const string Lz4BundleName = DataName + AssetBundleExtension;
 
+	public PlatformGameStructure(FileSystem fileSystem)
+	{
+		ArgumentNullException.ThrowIfNull(fileSystem);
+		FileSystem = fileSystem;
+	}
+
+	public PlatformGameStructure(string rootPath, FileSystem fileSystem) : this(fileSystem)
+	{
+		ArgumentException.ThrowIfNullOrEmpty(rootPath);
+		if (!FileSystem.Directory.Exists(rootPath))
+		{
+			throw new DirectoryNotFoundException($"Root directory '{rootPath}' doesn't exist");
+		}
+		RootPath = rootPath;
+	}
+
 	public static bool IsPrimaryEngineFile(string fileName)
 	{
 		if (fileName == MainDataName ||
@@ -86,8 +100,8 @@ public abstract partial class PlatformGameStructure
 
 		foreach (string dataPath in DataPaths)
 		{
-			string filePath = Path.Join(dataPath, dependency);
-			if (MultiFileStream.Exists(filePath))
+			string filePath = FileSystem.Path.Join(dataPath, dependency);
+			if (MultiFileStream.Exists(filePath, FileSystem))
 			{
 				return filePath;
 			}
@@ -120,8 +134,8 @@ public abstract partial class PlatformGameStructure
 	{
 		foreach (string dataPath in DataPaths)
 		{
-			string path = Path.Join(dataPath, resource);
-			if (MultiFileStream.Exists(path))
+			string path = FileSystem.Path.Join(dataPath, resource);
+			if (MultiFileStream.Exists(path, FileSystem))
 			{
 				return path;
 			}
@@ -138,8 +152,7 @@ public abstract partial class PlatformGameStructure
 
 		foreach (string dataPath in DataPaths)
 		{
-			DirectoryInfo dataDirectory = new DirectoryInfo(dataPath);
-			CollectGameFiles(dataDirectory, Files);
+			CollectGameFiles(dataPath, Files);
 		}
 		CollectMainAssemblies();
 		if (!skipStreamingAssets)
@@ -148,7 +161,7 @@ public abstract partial class PlatformGameStructure
 		}
 	}
 
-	protected static void CollectGameFiles(DirectoryInfo root, List<KeyValuePair<string, string>> files)
+	protected void CollectGameFiles(string root, List<KeyValuePair<string, string>> files)
 	{
 		Logger.Info(LogCategory.Import, "Collecting game files...");
 		CollectCompressedGameFiles(root, files);
@@ -163,16 +176,16 @@ public abstract partial class PlatformGameStructure
 	/// the datapack asset is only present if Gradle built an AAB with Unity
 	/// data asset pack inside and then bundletool converted AAB into universal APK.
 	/// </summary>
-	protected static void CollectCompressedGameFiles(DirectoryInfo root, List<KeyValuePair<string, string>> files)
+	protected void CollectCompressedGameFiles(string root, List<KeyValuePair<string, string>> files)
 	{
-		string dataBundlePath = Path.Join(root.FullName, DataBundleName);
-		if (MultiFileStream.Exists(dataBundlePath))
+		string dataBundlePath = FileSystem.Path.Join(root, DataBundleName);
+		if (MultiFileStream.Exists(dataBundlePath, FileSystem))
 		{
 			AddAssetBundle(files, DataBundleName, dataBundlePath);
 		}
 
-		string dataPackBundlePath = Path.Join(root.FullName, DataPackBundleName);
-		if (MultiFileStream.Exists(dataPackBundlePath))
+		string dataPackBundlePath = FileSystem.Path.Join(root, DataPackBundleName);
+		if (MultiFileStream.Exists(dataPackBundlePath, FileSystem))
 		{
 			AddAssetBundle(files, DataPackBundleName, dataPackBundlePath);
 		}
@@ -181,28 +194,29 @@ public abstract partial class PlatformGameStructure
 	/// <summary>
 	/// Collects global game managers and all the level files
 	/// </summary>
-	protected static void CollectSerializedGameFiles(DirectoryInfo root, List<KeyValuePair<string, string>> files)
+	protected void CollectSerializedGameFiles(string root, List<KeyValuePair<string, string>> files)
 	{
-		string filePath = Path.Join(root.FullName, GlobalGameManagersName);
-		if (MultiFileStream.Exists(filePath))
+		string filePath = FileSystem.Path.Join(root, GlobalGameManagersName);
+		if (MultiFileStream.Exists(filePath, FileSystem))
 		{
 			AddFile(files, GlobalGameManagersName, filePath);
 		}
 		else
 		{
-			filePath = Path.Join(root.FullName, MainDataName);
-			if (MultiFileStream.Exists(filePath))
+			filePath = FileSystem.Path.Join(root, MainDataName);
+			if (MultiFileStream.Exists(filePath, FileSystem))
 			{
 				AddFile(files, MainDataName, filePath);
 			}
 		}
 
-		foreach (FileInfo levelFile in root.EnumerateFiles())
+		foreach (string levelFile in FileSystem.Directory.EnumerateFiles(root))
 		{
-			if (s_levelTemplate.IsMatch(levelFile.Name))
+			string name = FileSystem.Path.GetFileName(levelFile);
+			if (s_levelTemplate.IsMatch(name))
 			{
-				string levelName = MultiFileStream.GetFileName(levelFile.Name);
-				AddFile(files, levelName, levelFile.FullName);
+				string levelName = MultiFileStream.GetFileName(name);
+				AddFile(files, levelName, levelFile);
 			}
 		}
 	}
@@ -218,25 +232,24 @@ public abstract partial class PlatformGameStructure
 		}
 
 		Logger.Info(LogCategory.Import, "Collecting Streaming Assets...");
-		DirectoryInfo streamingDirectory = new DirectoryInfo(StreamingAssetsPath);
-		if (streamingDirectory.Exists)
+		if (FileSystem.Directory.Exists(StreamingAssetsPath))
 		{
-			CollectAssetBundlesRecursively(streamingDirectory, Files);
+			CollectAssetBundlesRecursively(StreamingAssetsPath, Files);
 		}
 	}
 
 	/// <summary>
 	/// Collect asset bundles only from this directory
 	/// </summary>
-	protected static void CollectAssetBundles(DirectoryInfo root, List<KeyValuePair<string, string>> files)
+	protected void CollectAssetBundles(string root, List<KeyValuePair<string, string>> files)
 	{
-		foreach (FileInfo file in root.EnumerateFiles())
+		foreach (string file in FileSystem.Directory.EnumerateFiles(root))
 		{
 			//if (file.Extension == AssetBundleExtension || file.Extension == AlternateBundleExtension)
-			if (BundleHeader.IsBundleHeader(file.FullName))
+			if (BundleHeader.IsBundleHeader(file, FileSystem))
 			{
-				string name = Path.GetFileNameWithoutExtension(file.Name).ToLowerInvariant();
-				AddAssetBundle(files, name, file.FullName);
+				string name = FileSystem.Path.GetFileNameWithoutExtension(file).ToLowerInvariant();
+				AddAssetBundle(files, name, file);
 			}
 		}
 	}
@@ -244,22 +257,23 @@ public abstract partial class PlatformGameStructure
 	/// <summary>
 	/// Collect asset bundles from this directory and all subdirectories
 	/// </summary>
-	protected static void CollectAssetBundlesRecursively(DirectoryInfo root, List<KeyValuePair<string, string>> files)
+	protected void CollectAssetBundlesRecursively(string root, List<KeyValuePair<string, string>> files)
 	{
 		CollectAssetBundles(root, files);
-		foreach (DirectoryInfo directory in root.EnumerateDirectories())
+		foreach (string directory in FileSystem.Directory.EnumerateDirectories(root))
 		{
 			CollectAssetBundlesRecursively(directory, files);
 		}
 	}
 
-	protected static void CollectAssemblies(DirectoryInfo root, Dictionary<string, string> assemblies)
+	protected void CollectAssemblies(string root, Dictionary<string, string> assemblies)
 	{
-		foreach (FileInfo file in root.EnumerateFiles())
+		foreach (string file in FileSystem.Directory.EnumerateFiles(root))
 		{
-			if (MonoManager.IsMonoAssembly(file.Name))
+			string name = FileSystem.Path.GetFileName(file);
+			if (MonoManager.IsMonoAssembly(name))
 			{
-				assemblies.TryAdd(file.Name, file.FullName);
+				assemblies.TryAdd(name, file);
 			}
 		}
 	}
@@ -270,42 +284,40 @@ public abstract partial class PlatformGameStructure
 		{
 			return;//Only needed for Mono
 		}
-		else if (!string.IsNullOrWhiteSpace(ManagedPath) && Directory.Exists(ManagedPath))
+		else if (!string.IsNullOrWhiteSpace(ManagedPath) && FileSystem.Directory.Exists(ManagedPath))
 		{
-			DirectoryInfo managedDirectory = new DirectoryInfo(ManagedPath);
-			CollectAssemblies(managedDirectory, Assemblies);
+			CollectAssemblies(ManagedPath, Assemblies);
 		}
 		else if (!string.IsNullOrEmpty(GameDataPath))
 		{
-			string libPath = Path.Join(Path.GetFullPath(GameDataPath), LibName);
-			if (Directory.Exists(libPath))
+			string libPath = FileSystem.Path.Join(FileSystem.Path.GetFullPath(GameDataPath), LibName);
+			if (FileSystem.Directory.Exists(libPath))
 			{
-				CollectAssemblies(new DirectoryInfo(GameDataPath), Assemblies);
-				DirectoryInfo libDirectory = new DirectoryInfo(libPath);
-				CollectAssemblies(libDirectory, Assemblies);
+				CollectAssemblies(GameDataPath, Assemblies);
+				CollectAssemblies(libPath, Assemblies);
 			}
 		}
 	}
 
-	private static string? FindEngineDependency(string path, string dependency)
+	private string? FindEngineDependency(string path, string dependency)
 	{
-		string filePath = Path.Join(path, dependency);
-		if (File.Exists(filePath))
+		string filePath = FileSystem.Path.Join(path, dependency);
+		if (FileSystem.File.Exists(filePath))
 		{
 			return filePath;
 		}
 
-		string resourcePath = Path.Join(path, ResourcesName);
-		filePath = Path.Join(resourcePath, dependency);
-		if (File.Exists(filePath))
+		string resourcePath = FileSystem.Path.Join(path, ResourcesName);
+		filePath = FileSystem.Path.Join(resourcePath, dependency);
+		if (FileSystem.File.Exists(filePath))
 		{
 			return filePath;
 		}
 
 		// really old versions contains file in this directory
-		string unityPath = Path.Join(path, UnityName);
-		filePath = Path.Join(unityPath, dependency);
-		if (File.Exists(filePath))
+		string unityPath = FileSystem.Path.Join(path, UnityName);
+		filePath = FileSystem.Path.Join(unityPath, dependency);
+		if (FileSystem.File.Exists(filePath))
 		{
 			return filePath;
 		}
@@ -327,48 +339,48 @@ public abstract partial class PlatformGameStructure
 		Logger.Info(LogCategory.Import, $"Asset bundle '{name}' has been found");
 	}
 
-	protected static UnityVersion GetUnityVersionFromSerializedFile(string filePath)
+	protected UnityVersion GetUnityVersionFromSerializedFile(string filePath)
 	{
-		return SerializedFile.FromFile(filePath).Version;
+		return SerializedFile.FromFile(filePath, FileSystem).Version;
 	}
 
-	protected static UnityVersion GetUnityVersionFromBundleFile(string filePath)
+	protected UnityVersion GetUnityVersionFromBundleFile(string filePath)
 	{
-		string version = new FileStreamBundleFile(filePath).Header.UnityWebMinimumRevision ?? "";
+		string version = new FileStreamBundleFile(filePath, FileSystem).Header.UnityWebMinimumRevision ?? "";
 		return UnityVersion.Parse(version);
 	}
 
-	protected static UnityVersion? GetUnityVersionFromDataDirectory(string dataDirectoryPath)
+	protected UnityVersion? GetUnityVersionFromDataDirectory(string dataDirectoryPath)
 	{
-		string globalGameManagersPath = Path.Join(dataDirectoryPath, GlobalGameManagersName);
-		if (File.Exists(globalGameManagersPath))
+		string globalGameManagersPath = FileSystem.Path.Join(dataDirectoryPath, GlobalGameManagersName);
+		if (FileSystem.File.Exists(globalGameManagersPath))
 		{
 			return GetUnityVersionFromSerializedFile(globalGameManagersPath);
 		}
-		string dataBundlePath = Path.Join(dataDirectoryPath, DataBundleName);
-		if (File.Exists(dataBundlePath))
+		string dataBundlePath = FileSystem.Path.Join(dataDirectoryPath, DataBundleName);
+		if (FileSystem.File.Exists(dataBundlePath))
 		{
 			return GetUnityVersionFromBundleFile(dataBundlePath);
 		}
 		return null;
 	}
 
-	protected static bool HasMonoAssemblies(string managedDirectory)
+	protected bool HasMonoAssemblies(string managedDirectory)
 	{
-		if (string.IsNullOrEmpty(managedDirectory) || !Directory.Exists(managedDirectory))
+		if (string.IsNullOrEmpty(managedDirectory) || !FileSystem.Directory.Exists(managedDirectory))
 		{
 			return false;
 		}
 
-		return Directory.GetFiles(managedDirectory, "*.dll").Length > 0;
+		return FileSystem.Directory.GetFiles(managedDirectory, "*.dll").Length > 0;
 	}
 
 	protected bool HasIl2CppFiles()
 	{
 		return Il2CppGameAssemblyPath != null &&
 			Il2CppMetaDataPath != null &&
-			File.Exists(Il2CppGameAssemblyPath) &&
-			File.Exists(Il2CppMetaDataPath);
+			FileSystem.File.Exists(Il2CppGameAssemblyPath) &&
+			FileSystem.File.Exists(Il2CppMetaDataPath);
 	}
 
 	[GeneratedRegex("^level(0|[1-9][0-9]*)(\\.split0)?$", RegexOptions.Compiled)]

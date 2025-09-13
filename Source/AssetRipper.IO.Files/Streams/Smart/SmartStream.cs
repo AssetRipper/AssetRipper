@@ -1,5 +1,4 @@
-﻿using AssetRipper.IO.Files.Streams.MultiFile;
-using AssetRipper.IO.Files.Utils;
+﻿using AssetRipper.IO.Files.Utils;
 
 namespace AssetRipper.IO.Files.Streams.Smart;
 
@@ -22,9 +21,14 @@ public sealed partial class SmartStream : Stream
 		Assign(copy);
 	}
 
-	public static SmartStream OpenRead(string path)
+	public static SmartStream OpenRead(string path, FileSystem fileSystem)
 	{
-		return new SmartStream(MultiFileStream.OpenRead(path));
+		return new SmartStream(fileSystem.File.OpenRead(path));
+	}
+
+	public static SmartStream OpenReadMulti(string path, FileSystem fileSystem)
+	{
+		return new SmartStream(MultiFileStream.OpenRead(path, fileSystem));
 	}
 
 	public static SmartStream CreateTemp()

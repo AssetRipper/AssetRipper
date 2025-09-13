@@ -1,43 +1,35 @@
-﻿namespace AssetRipper.Import.Structure.Platforms;
+﻿using AssetRipper.IO.Files;
+using System.Diagnostics;
+
+namespace AssetRipper.Import.Structure.Platforms;
 
 internal sealed class MacGameStructure : PlatformGameStructure
 {
-	public MacGameStructure(string rootPath)
+	public MacGameStructure(string rootPath, FileSystem fileSystem) : base(rootPath, fileSystem)
 	{
-		if (string.IsNullOrEmpty(rootPath))
+		string resourcePath = FileSystem.Path.Join(rootPath, ContentsName, ResourcesName);
+		if (!FileSystem.Directory.Exists(resourcePath))
 		{
-			throw new ArgumentNullException(nameof(rootPath));
+			throw new DirectoryNotFoundException("Resources directory wasn't found");
 		}
-		m_root = new DirectoryInfo(rootPath);
-		if (!m_root.Exists)
+		string dataPath = FileSystem.Path.Join(resourcePath, DataFolderName);
+		if (!FileSystem.Directory.Exists(dataPath))
 		{
-			throw new Exception($"Directory '{rootPath}' doesn't exist");
+			throw new DirectoryNotFoundException("Data directory wasn't found");
 		}
+		DataPaths = [dataPath, resourcePath];
 
-		string resourcePath = Path.Join(m_root.FullName, ContentsName, ResourcesName);
-		if (!Directory.Exists(resourcePath))
-		{
-			throw new Exception("Resources directory wasn't found");
-		}
-		string dataPath = Path.Join(resourcePath, DataFolderName);
-		if (!Directory.Exists(dataPath))
-		{
-			throw new Exception("Data directory wasn't found");
-		}
-		DataPaths = new string[] { dataPath, resourcePath };
-
-
-		Name = m_root.Name.Substring(0, m_root.Name.Length - AppExtension.Length);
-		RootPath = rootPath;
+		Debug.Assert(rootPath.EndsWith(AppExtension, StringComparison.Ordinal));
+		Name = FileSystem.Path.GetFileNameWithoutExtension(rootPath);
 		GameDataPath = dataPath;
-		StreamingAssetsPath = Path.Join(GameDataPath, StreamingName);
-		ResourcesPath = Path.Join(GameDataPath, ResourcesName);
-		ManagedPath = Path.Join(GameDataPath, ManagedName);
-		UnityPlayerPath = Path.Join(RootPath, ContentsName, FrameworksName, MacUnityPlayerName);
+		StreamingAssetsPath = FileSystem.Path.Join(GameDataPath, StreamingName);
+		ResourcesPath = FileSystem.Path.Join(GameDataPath, ResourcesName);
+		ManagedPath = FileSystem.Path.Join(GameDataPath, ManagedName);
+		UnityPlayerPath = FileSystem.Path.Join(RootPath, ContentsName, FrameworksName, MacUnityPlayerName);
 		Version = null;
 
-		Il2CppGameAssemblyPath = Path.Join(RootPath, ContentsName, FrameworksName, "GameAssembly.dylib");
-		Il2CppMetaDataPath = Path.Join(GameDataPath, "il2cpp_data", MetadataName, DefaultGlobalMetadataName);
+		Il2CppGameAssemblyPath = FileSystem.Path.Join(RootPath, ContentsName, FrameworksName, "GameAssembly.dylib");
+		Il2CppMetaDataPath = FileSystem.Path.Join(GameDataPath, "il2cpp_data", MetadataName, DefaultGlobalMetadataName);
 
 		if (HasIl2CppFiles())
 		{
@@ -53,25 +45,24 @@ internal sealed class MacGameStructure : PlatformGameStructure
 		}
 	}
 
-	public static bool IsMacStructure(string path)
+	public static bool Exists(string path, FileSystem fileSystem)
 	{
-		DirectoryInfo dinfo = new DirectoryInfo(path);
-		if (!dinfo.Exists)
+		if (!fileSystem.Directory.Exists(path))
 		{
 			return false;
 		}
-		if (!dinfo.Name.EndsWith(AppExtension, StringComparison.Ordinal))
+		if (fileSystem.Path.GetExtension(path) != AppExtension)
 		{
 			return false;
 		}
 
-		string dataPath = Path.Join(dinfo.FullName, ContentsName, ResourcesName, DataFolderName);
-		if (!Directory.Exists(dataPath))
+		string dataPath = fileSystem.Path.Join(path, ContentsName, ResourcesName, DataFolderName);
+		if (!fileSystem.Directory.Exists(dataPath))
 		{
 			return false;
 		}
-		string resourcePath = Path.Join(dinfo.FullName, ContentsName, ResourcesName);
-		if (!Directory.Exists(resourcePath))
+		string resourcePath = fileSystem.Path.Join(path, ContentsName, ResourcesName);
+		if (!fileSystem.Directory.Exists(resourcePath))
 		{
 			return false;
 		}

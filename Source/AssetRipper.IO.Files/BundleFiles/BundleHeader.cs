@@ -52,9 +52,9 @@ public abstract record class BundleHeader : IEndianWritable
 		return false;
 	}
 
-	public static bool IsBundleHeader(string path)
+	public static bool IsBundleHeader(string path, FileSystem fileSystem)
 	{
-		using SmartStream stream = SmartStream.OpenRead(path);
+		using SmartStream stream = SmartStream.OpenRead(path, fileSystem);
 		using EndianReader reader = new EndianReader(stream, EndianType.BigEndian);
 		return FileStreamBundleHeader.IsBundleHeader(reader)
 			|| RawBundleHeader.IsBundleHeader(reader)

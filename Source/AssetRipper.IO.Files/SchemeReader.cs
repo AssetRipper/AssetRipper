@@ -6,7 +6,7 @@ using AssetRipper.IO.Files.CompressedFiles.Brotli;
 using AssetRipper.IO.Files.CompressedFiles.GZip;
 using AssetRipper.IO.Files.ResourceFiles;
 using AssetRipper.IO.Files.SerializedFiles;
-using AssetRipper.IO.Files.Streams.MultiFile;
+using AssetRipper.IO.Files.Streams;
 using AssetRipper.IO.Files.Streams.Smart;
 using AssetRipper.IO.Files.WebFiles;
 
@@ -26,9 +26,9 @@ public static class SchemeReader
 		new FileStreamBundleScheme(),
 	};
 
-	public static FileBase LoadFile(string filePath)
+	public static FileBase LoadFile(string filePath, FileSystem fileSystem)
 	{
-		SmartStream stream = SmartStream.OpenRead(filePath);
+		SmartStream stream = SmartStream.OpenReadMulti(filePath, fileSystem);
 		return ReadFile(stream, MultiFileStream.GetFilePath(filePath), MultiFileStream.GetFileName(filePath));
 	}
 
@@ -56,9 +56,9 @@ public static class SchemeReader
 		return ReadFile(file.Stream.CreateReference(), file.FilePath, file.Name);
 	}
 
-	public static bool IsReadableFile(string filePath)
+	public static bool IsReadableFile(string filePath, FileSystem fileSystem)
 	{
-		using SmartStream stream = SmartStream.OpenRead(filePath);
+		using SmartStream stream = SmartStream.OpenReadMulti(filePath, fileSystem);
 		foreach (IScheme scheme in schemes)
 		{
 			if (scheme.CanRead(stream))

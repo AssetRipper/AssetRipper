@@ -1,79 +1,66 @@
 ﻿using AssetRipper.Import.Structure.Assembly;
+using AssetRipper.IO.Files;
 
 namespace AssetRipper.Import.Structure.Platforms;
 
 internal sealed class WebGLGameStructure : PlatformGameStructure
 {
-	public WebGLGameStructure(string rootPath)
+	public WebGLGameStructure(string rootPath, FileSystem fileSystem) : base(rootPath, fileSystem)
 	{
-		if (string.IsNullOrEmpty(rootPath))
+		string buildPath = FileSystem.Path.Join(rootPath, BuildName);
+		if (FileSystem.Directory.Exists(buildPath))
 		{
-			throw new ArgumentNullException(nameof(rootPath));
-		}
-		m_root = new DirectoryInfo(rootPath);
-		if (!m_root.Exists)
-		{
-			throw new Exception($"Directory '{rootPath}' doesn't exist");
-		}
-
-		string buildPath = Path.Join(m_root.FullName, BuildName);
-		if (Directory.Exists(buildPath))
-		{
-			DirectoryInfo buildDirectory = new DirectoryInfo(buildPath);
-			foreach (FileInfo file in buildDirectory.EnumerateFiles())
+			foreach (string file in FileSystem.Directory.EnumerateFiles(buildPath))
 			{
-				if (file.Name.EndsWith(DataWebExtension, StringComparison.Ordinal))
+				if (file.EndsWith(DataWebExtension, StringComparison.Ordinal))
 				{
-					Name = file.Name.Substring(0, file.Name.Length - DataWebExtension.Length);
-					Files.Add(Name, file.FullName);
+					Name = fileSystem.Path.GetFileName(file)[..^DataWebExtension.Length];
+					Files.Add(Name, file);
 					break;
 				}
 			}
-			DataPaths = new string[] { rootPath, buildPath };
+			DataPaths = [rootPath, buildPath];
 		}
 		else
 		{
-			string developmentPath = Path.Join(m_root.FullName, DevelopmentName);
-			if (Directory.Exists(developmentPath))
+			string developmentPath = FileSystem.Path.Join(rootPath, DevelopmentName);
+			if (FileSystem.Directory.Exists(developmentPath))
 			{
-				DirectoryInfo buildDirectory = new DirectoryInfo(developmentPath);
-				foreach (FileInfo file in buildDirectory.EnumerateFiles())
+				foreach (string file in FileSystem.Directory.EnumerateFiles(developmentPath))
 				{
-					if (file.Extension == DataExtension)
+					if (file.EndsWith(DataExtension, StringComparison.Ordinal))
 					{
-						Name = file.Name.Substring(0, file.Name.Length - DataExtension.Length);
-						Files.Add(Name, file.FullName);
+						Name = fileSystem.Path.GetFileName(file)[..^DataExtension.Length];
+						Files.Add(Name, file);
 						break;
 					}
 				}
-				DataPaths = new string[] { rootPath, developmentPath };
+				DataPaths = [rootPath, developmentPath];
 			}
 			else
 			{
-				string releasePath = Path.Join(m_root.FullName, ReleaseName);
-				if (Directory.Exists(releasePath))
+				string releasePath = FileSystem.Path.Join(rootPath, ReleaseName);
+				if (FileSystem.Directory.Exists(releasePath))
 				{
-					DirectoryInfo buildDirectory = new DirectoryInfo(releasePath);
-					foreach (FileInfo file in buildDirectory.EnumerateFiles())
+					foreach (string file in FileSystem.Directory.EnumerateFiles(releasePath))
 					{
-						if (file.Extension == DataGzExtension)
+						if (file.EndsWith(DataGzExtension, StringComparison.Ordinal))
 						{
-							Name = file.Name.Substring(0, file.Name.Length - DataGzExtension.Length);
-							Files.Add(Name, file.FullName);
+							Name = fileSystem.Path.GetFileName(file)[..^DataGzExtension.Length];
+							Files.Add(Name, file);
 							break;
 						}
 					}
-					DataPaths = new string[] { rootPath, releasePath };
+					DataPaths = [rootPath, releasePath];
 				}
 				else
 				{
-					throw new Exception("Build directory wasn't found");
+					throw new DirectoryNotFoundException("Build directory wasn't found");
 				}
 			}
 		}
 
-		Name = m_root.Name;
-		RootPath = rootPath;
+		Name = FileSystem.Path.GetFileName(rootPath);
 		GameDataPath = rootPath;
 		StreamingAssetsPath = rootPath;
 		ResourcesPath = null;
@@ -90,62 +77,63 @@ internal sealed class WebGLGameStructure : PlatformGameStructure
 		}
 	}
 
-	public static bool IsWebGLStructure(string path)
+	public static bool Exists(string root, FileSystem fileSystem)
 	{
-		DirectoryInfo root = new DirectoryInfo(path);
-		if (!root.Exists)
+		if (!fileSystem.Directory.Exists(root))
 		{
 			return false;
 		}
 
-		foreach (FileInfo fi in root.EnumerateFiles())
+		foreach (string htmlFile in fileSystem.Directory.EnumerateFiles(root))
 		{
-			if (fi.Extension == HtmlExtension)
+			if (!htmlFile.EndsWith(HtmlExtension, StringComparison.Ordinal))
 			{
-				foreach (DirectoryInfo di in root.EnumerateDirectories())
-				{
-					switch (di.Name)
-					{
-						case DevelopmentName:
-							{
-								foreach (FileInfo file in di.EnumerateFiles())
-								{
-									if (file.Extension == DataExtension)
-									{
-										return true;
-									}
-								}
-							}
-							break;
-
-						case ReleaseName:
-							{
-								foreach (FileInfo file in di.EnumerateFiles())
-								{
-									if (file.Extension == DataGzExtension)
-									{
-										return true;
-									}
-								}
-							}
-							break;
-
-						case BuildName:
-							{
-								foreach (FileInfo file in di.EnumerateFiles())
-								{
-									if (file.Name.EndsWith(DataWebExtension, StringComparison.Ordinal))
-									{
-										return true;
-									}
-								}
-							}
-							break;
-					}
-				}
-
-				return false;
+				continue;
 			}
+
+			foreach (string directory in fileSystem.Directory.EnumerateDirectories(root))
+			{
+				switch (fileSystem.Path.GetFileName(directory))
+				{
+					case DevelopmentName:
+						{
+							foreach (string file in fileSystem.Directory.EnumerateFiles(directory))
+							{
+								if (file.EndsWith(DataExtension, StringComparison.Ordinal))
+								{
+									return true;
+								}
+							}
+						}
+						break;
+
+					case ReleaseName:
+						{
+							foreach (string file in fileSystem.Directory.EnumerateFiles(directory))
+							{
+								if (file.EndsWith(DataGzExtension, StringComparison.Ordinal))
+								{
+									return true;
+								}
+							}
+						}
+						break;
+
+					case BuildName:
+						{
+							foreach (string file in fileSystem.Directory.EnumerateFiles(directory))
+							{
+								if (file.EndsWith(DataWebExtension, StringComparison.Ordinal))
+								{
+									return true;
+								}
+							}
+						}
+						break;
+				}
+			}
+
+			return false;
 		}
 		return false;
 	}

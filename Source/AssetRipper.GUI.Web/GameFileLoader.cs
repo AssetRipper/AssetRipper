@@ -43,7 +43,7 @@ public static class GameFileLoader
 	{
 		Reset();
 		Settings.LogConfigurationValues();
-		GameData = ExportHandler.LoadAndProcess(paths);
+		GameData = ExportHandler.LoadAndProcess(paths, LocalFileSystem.Instance);
 	}
 
 	public static void ExportUnityProject(string path)
@@ -56,7 +56,7 @@ public static class GameFileLoader
 			}
 
 			Directory.CreateDirectory(path);
-			ExportHandler.Export(GameData, path);
+			ExportHandler.Export(GameData, path, LocalFileSystem.Instance);
 		}
 	}
 

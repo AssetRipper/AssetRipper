@@ -55,7 +55,7 @@ internal static class Program
 	try
 #endif
 		{
-			FileBase file = SchemeReader.LoadFile(fullName);
+			FileBase file = SchemeReader.LoadFile(fullName, LocalFileSystem.Instance);
 			if (file is SerializedFile serializedFile)
 			{
 				GameBundle bundle = new();

@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Import.Structure.Assembly;
+using AssetRipper.IO.Files;
 
 namespace AssetRipper.Import.Structure.Platforms;
 
@@ -11,34 +12,23 @@ internal sealed class PS4GameStructure : PlatformGameStructure
 
 	private string ModulesPath { get; set; }
 
-	public PS4GameStructure(string rootPath)
+	public PS4GameStructure(string rootPath, FileSystem fileSystem) : base(rootPath, fileSystem)
 	{
-		if (string.IsNullOrEmpty(rootPath))
+		if (!GetDataDirectory(rootPath, fileSystem, out string? dataPath))
 		{
-			throw new ArgumentNullException(nameof(rootPath));
-		}
-		m_root = new DirectoryInfo(rootPath);
-		if (!m_root.Exists)
-		{
-			throw new Exception($"Directory '{rootPath}' doesn't exist");
+			throw new DirectoryNotFoundException($"Data directory wasn't found");
 		}
 
-		if (!GetDataDirectory(m_root, out string? dataPath))
-		{
-			throw new Exception($"Data directory wasn't found");
-		}
-
-		Name = m_root.Name;
-		RootPath = rootPath;
+		Name = FileSystem.Path.GetFileName(rootPath);
 		GameDataPath = dataPath;
-		ResourcesPath = Path.Join(GameDataPath, ResourcesName);
-		ManagedPath = Path.Join(GameDataPath, ManagedName);
-		ModulesPath = Path.Join(GameDataPath, ModulesName);
+		ResourcesPath = FileSystem.Path.Join(GameDataPath, ResourcesName);
+		ManagedPath = FileSystem.Path.Join(GameDataPath, ManagedName);
+		ModulesPath = FileSystem.Path.Join(GameDataPath, ModulesName);
 		UnityPlayerPath = null;
-		string globalGameManagersPath = Path.Join(GameDataPath, GlobalGameManagersName);
+		string globalGameManagersPath = FileSystem.Path.Join(GameDataPath, GlobalGameManagersName);
 		Version = GetUnityVersionFromDataDirectory(globalGameManagersPath);
-		Il2CppGameAssemblyPath = Path.Join(ModulesPath, PS4IL2CppGameAssemblyName);
-		Il2CppMetaDataPath = Path.Join(GameDataPath, MetadataName, DefaultGlobalMetadataName);
+		Il2CppGameAssemblyPath = FileSystem.Path.Join(ModulesPath, PS4IL2CppGameAssemblyName);
+		Il2CppMetaDataPath = FileSystem.Path.Join(GameDataPath, MetadataName, DefaultGlobalMetadataName);
 
 		if (HasIl2CppFiles())
 		{
@@ -53,32 +43,27 @@ internal sealed class PS4GameStructure : PlatformGameStructure
 			Backend = ScriptingBackend.Unknown;
 		}
 
-		DataPaths = new string[] { dataPath };
+		DataPaths = [GameDataPath];
 	}
 
-	public static bool IsPS4Structure(string path)
+	public static bool Exists(string path, FileSystem fileSystem)
 	{
-		DirectoryInfo dinfo = new DirectoryInfo(path);
-		if (!dinfo.Exists)
+		return fileSystem.Directory.Exists(path) && IsRootPS4Directory(path, fileSystem);
+	}
+
+	private static bool IsRootPS4Directory(string rootDirectory, FileSystem fileSystem)
+	{
+		return GetDataDirectory(rootDirectory, fileSystem, out _);
+	}
+
+	private static bool GetDataDirectory(string rootDirectory, FileSystem fileSystem, [NotNullWhen(true)] out string? dataPath)
+	{
+		foreach (string file in fileSystem.Directory.EnumerateFiles(rootDirectory))
 		{
-			return false;
-		}
-		return IsRootPS4Directory(dinfo);
-	}
-
-	private static bool IsRootPS4Directory(DirectoryInfo rootDiectory)
-	{
-		return GetDataDirectory(rootDiectory, out _);
-	}
-
-	private static bool GetDataDirectory(DirectoryInfo rootDiectory, [NotNullWhen(true)] out string? dataPath)
-	{
-		foreach (FileInfo finfo in rootDiectory.EnumerateFiles())
-		{
-			if (finfo.Name == PS4ExecutableName)
+			if (fileSystem.Path.GetFileName(file) == PS4ExecutableName)
 			{
-				dataPath = Path.Join(rootDiectory.FullName, PS4DataFolderName);
-				if (Directory.Exists(dataPath))
+				dataPath = fileSystem.Path.Join(rootDirectory, PS4DataFolderName);
+				if (fileSystem.Directory.Exists(dataPath))
 				{
 					return true;
 				}

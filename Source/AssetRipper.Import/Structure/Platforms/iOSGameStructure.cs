@@ -1,36 +1,26 @@
 ﻿using AssetRipper.Import.Structure.Assembly;
+using AssetRipper.IO.Files;
 
 namespace AssetRipper.Import.Structure.Platforms;
 
 internal sealed class iOSGameStructure : PlatformGameStructure
 {
-	public iOSGameStructure(string rootPath)
+	public iOSGameStructure(string rootPath, FileSystem fileSystem) : base(rootPath, fileSystem)
 	{
-		if (string.IsNullOrEmpty(rootPath))
+		if (!GetDataiOSDirectory(rootPath, FileSystem, out string? dataPath, out string? appPath, out string? name))
 		{
-			throw new ArgumentNullException(nameof(rootPath));
-		}
-		m_root = new DirectoryInfo(rootPath);
-		if (!m_root.Exists)
-		{
-			throw new Exception($"Root directory '{rootPath}' doesn't exist");
-		}
-
-		if (!GetDataiOSDirectory(m_root, out string? dataPath, out string? appPath, out string? name))
-		{
-			throw new Exception($"Data directory wasn't found");
+			throw new DirectoryNotFoundException($"Data directory wasn't found");
 		}
 
 		Name = name;
-		RootPath = rootPath;
 		GameDataPath = dataPath;
-		StreamingAssetsPath = Path.Join(m_root.FullName, iOSStreamingName);
-		ResourcesPath = Path.Join(dataPath, ResourcesName);
-		ManagedPath = Path.Join(dataPath, ManagedName);
+		StreamingAssetsPath = FileSystem.Path.Join(rootPath, iOSStreamingName);
+		ResourcesPath = FileSystem.Path.Join(dataPath, ResourcesName);
+		ManagedPath = FileSystem.Path.Join(dataPath, ManagedName);
 		UnityPlayerPath = null;
 		Version = GetUnityVersionFromDataDirectory(GameDataPath);
-		Il2CppGameAssemblyPath = Path.Join(appPath, name);
-		Il2CppMetaDataPath = Path.Join(ManagedPath, MetadataName, DefaultGlobalMetadataName);
+		Il2CppGameAssemblyPath = FileSystem.Path.Join(appPath, name);
+		Il2CppMetaDataPath = FileSystem.Path.Join(ManagedPath, MetadataName, DefaultGlobalMetadataName);
 
 		if (HasIl2CppFiles())
 		{
@@ -45,25 +35,23 @@ internal sealed class iOSGameStructure : PlatformGameStructure
 			Backend = ScriptingBackend.Unknown;
 		}
 
-		DataPaths = new string[] { dataPath };
+		DataPaths = [GameDataPath];
 	}
 
-	public static bool IsiOSStructure(string path)
+	public static bool Exists(string path, FileSystem fileSystem)
 	{
-		DirectoryInfo root = new DirectoryInfo(path);
-		if (!root.Exists)
+		if (!fileSystem.Directory.Exists(path))
 		{
 			return false;
 		}
 
-		return GetDataiOSDirectory(root, out _, out _, out _);
+		return GetDataiOSDirectory(path, fileSystem, out _, out _, out _);
 	}
 
-	private static bool GetDataiOSDirectory(DirectoryInfo rootDirectory, [NotNullWhen(true)] out string? dataPath, [NotNullWhen(true)] out string? appPath, [NotNullWhen(true)] out string? appName)
+	private static bool GetDataiOSDirectory(string rootDirectory, FileSystem fileSystem, [NotNullWhen(true)] out string? dataPath, [NotNullWhen(true)] out string? appPath, [NotNullWhen(true)] out string? appName)
 	{
-		string payloadPath = Path.Join(rootDirectory.FullName, PayloadName);
-		DirectoryInfo payloadDirectory = new DirectoryInfo(payloadPath);
-		if (!payloadDirectory.Exists)
+		string payloadPath = fileSystem.Path.Join(rootDirectory, PayloadName);
+		if (!fileSystem.Directory.Exists(payloadPath))
 		{
 			dataPath = null;
 			appPath = null;
@@ -71,14 +59,15 @@ internal sealed class iOSGameStructure : PlatformGameStructure
 			return false;
 		}
 
-		foreach (DirectoryInfo dinfo in payloadDirectory.EnumerateDirectories())
+		foreach (string directory in fileSystem.Directory.EnumerateDirectories(payloadPath))
 		{
-			if (dinfo.Name.EndsWith(AppExtension, StringComparison.Ordinal))
+			string name = fileSystem.Path.GetFileName(directory);
+			if (name.EndsWith(AppExtension, StringComparison.Ordinal))
 			{
-				appPath = dinfo.FullName;
-				appName = dinfo.Name[..^AppExtension.Length];
-				dataPath = Path.Join(dinfo.FullName, DataFolderName);
-				if (Directory.Exists(dataPath))
+				appPath = directory;
+				appName = name[..^AppExtension.Length];
+				dataPath = fileSystem.Path.Join(directory, DataFolderName);
+				if (fileSystem.Directory.Exists(dataPath))
 				{
 					return true;
 				}
@@ -91,13 +80,12 @@ internal sealed class iOSGameStructure : PlatformGameStructure
 		return false;
 	}
 
-	private static void CollectiOSStreamingAssets(DirectoryInfo root, List<KeyValuePair<string, string>> files)
+	private void CollectiOSStreamingAssets(string root, List<KeyValuePair<string, string>> files)
 	{
-		string streamingPath = Path.Join(root.FullName, iOSStreamingName);
-		DirectoryInfo streamingDirectory = new DirectoryInfo(streamingPath);
-		if (streamingDirectory.Exists)
+		string streamingPath = FileSystem.Path.Join(root, iOSStreamingName);
+		if (FileSystem.Directory.Exists(streamingPath))
 		{
-			CollectAssetBundlesRecursively(root, files);
+			CollectAssetBundlesRecursively(streamingPath, files);
 		}
 	}
 
