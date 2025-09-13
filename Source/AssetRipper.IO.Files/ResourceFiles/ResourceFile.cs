@@ -18,9 +18,9 @@ public sealed class ResourceFile : FileBase
 		Name = name;
 	}
 
-	public ResourceFile(string filePath, string name)
+	public ResourceFile(string filePath, string name, FileSystem fileSystem)
 	{
-		Stream = SmartStream.OpenRead(filePath);
+		Stream = SmartStream.OpenRead(filePath, fileSystem);
 		FilePath = filePath;
 		Name = name;
 	}

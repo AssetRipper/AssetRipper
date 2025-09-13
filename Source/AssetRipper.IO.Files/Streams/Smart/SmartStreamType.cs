@@ -1,6 +1,4 @@
-﻿using AssetRipper.IO.Files.Streams.MultiFile;
-
-namespace AssetRipper.IO.Files.Streams.Smart;
+﻿namespace AssetRipper.IO.Files.Streams.Smart;
 
 public enum SmartStreamType
 {

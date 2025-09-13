@@ -37,22 +37,25 @@ public partial class BaseManager : IAssemblyManager
 		return ScriptIdentifier.ToUniqueName(assembly, type.FullName);
 	}
 
-	public virtual void Load(string filePath)
+	public virtual void Load(string filePath, FileSystem fileSystem)
 	{
+		Stream stream = fileSystem.File.OpenRead(filePath);
 		AssemblyDefinition assembly;
 		try
 		{
-			assembly = AssemblyDefinition.FromFile(filePath);
+			MemoryStream memoryStream = new();
+			stream.CopyTo(memoryStream);
+			assembly = AssemblyDefinition.FromBytes(memoryStream.ToArray());
+			//assembly = AssemblyDefinition.FromStream(stream);
 		}
 		catch (BadImageFormatException badImageFormatException)
 		{
 			throw new BadImageFormatException($"Could not read {filePath}", badImageFormatException);
 		}
 
-		string fileName = Path.GetFileNameWithoutExtension(filePath);
+		string fileName = fileSystem.Path.GetFileNameWithoutExtension(filePath);
 		m_assemblies.Add(fileName, assembly);
 
-		FileStream stream = File.OpenRead(filePath);
 		m_assemblyStreams.Add(assembly, stream);
 
 		Add(assembly);
@@ -95,7 +98,7 @@ public partial class BaseManager : IAssemblyManager
 		MemoryStream memoryStream = new();
 		stream.CopyTo(memoryStream);
 		AssemblyDefinition assembly = AssemblyDefinition.FromBytes(memoryStream.ToArray());
-		//AssemblyDefinition assembly = AssemblyDefinition.FromImage(stream);//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		//AssemblyDefinition assembly = AssemblyDefinition.FromStream(stream);//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		assembly.InitializeResolvers(this);
 		fileName = Path.GetFileNameWithoutExtension(fileName);
 		string assemblyName = ToAssemblyName(assembly);

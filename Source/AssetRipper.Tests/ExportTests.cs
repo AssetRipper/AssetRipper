@@ -129,7 +129,7 @@ internal class ExportTests
 		MonoManager assemblyManager = CreateAssemblyManager();
 		const string TypeName = "ExampleBehaviour";
 		{
-			assemblyManager.Load(typeof(UnityEngine.Object).Assembly.Location);
+			assemblyManager.Load(typeof(UnityEngine.Object).Assembly.Location, LocalFileSystem.Instance);
 			ModuleDefinition unityEngineModule = assemblyManager.GetAssemblies().Single().ManifestModule!;
 			TypeDefinition monoBehaviourType = unityEngineModule.TopLevelTypes.Single(t => t.Name == "MonoBehaviour");
 			AssemblyDefinition newAssembly = new(assemblyName, new());

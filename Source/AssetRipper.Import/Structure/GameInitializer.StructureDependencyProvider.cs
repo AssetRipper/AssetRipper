@@ -10,13 +10,14 @@ internal sealed partial record class GameInitializer
 {
 	private sealed record class StructureDependencyProvider(
 		PlatformGameStructure? PlatformStructure,
-		PlatformGameStructure? MixedStructure)
+		PlatformGameStructure? MixedStructure,
+		FileSystem FileSystem)
 		: IDependencyProvider
 	{
 		public FileBase? FindDependency(FileIdentifier identifier)
 		{
 			string? systemFilePath = RequestDependency(identifier.PathName);
-			return systemFilePath is null ? null : SchemeReader.LoadFile(systemFilePath);
+			return systemFilePath is null ? null : SchemeReader.LoadFile(systemFilePath, FileSystem);
 		}
 
 		/// <summary>

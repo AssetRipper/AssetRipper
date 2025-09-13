@@ -229,10 +229,10 @@ public sealed class SerializedFile : FileBase
 		}
 	}
 
-	public static SerializedFile FromFile(string filePath)
+	public static SerializedFile FromFile(string filePath, FileSystem fileSystem)
 	{
-		string fileName = Path.GetFileName(filePath);
-		SmartStream stream = SmartStream.OpenRead(filePath);
+		string fileName = fileSystem.Path.GetFileName(filePath);
+		SmartStream stream = SmartStream.OpenRead(filePath, fileSystem);
 		return SerializedFileScheme.Default.Read(stream, filePath, fileName);
 	}
 

@@ -34,11 +34,16 @@ internal static class Program
 				writer.WriteLine($"public abstract partial class {classPropertyName}Implementation(FileSystem fileSystem)");
 				using (new CurlyBrackets(writer))
 				{
+					writer.WriteLine("protected FileSystem Parent { get; } = fileSystem;");
 					foreach (string otherClassPropertyName in apiDictionary.Keys)
 					{
 						if (otherClassPropertyName != classPropertyName)
 						{
-							writer.WriteLine($"protected {otherClassPropertyName}Implementation {otherClassPropertyName} => fileSystem.{otherClassPropertyName};");
+							writer.WriteLine($"protected {otherClassPropertyName}Implementation {otherClassPropertyName} => Parent.{otherClassPropertyName};");
+						}
+						else
+						{
+							writer.WriteLine($"protected {otherClassPropertyName}Implementation {otherClassPropertyName} => this;");
 						}
 					}
 
@@ -138,6 +143,18 @@ internal static class Program
 				writer.WriteLine($"public sealed partial class Virtual{classPropertyName}Implementation(VirtualFileSystem fileSystem) : {classPropertyName}Implementation(fileSystem)");
 				using (new CurlyBrackets(writer))
 				{
+					writer.WriteLine("private new VirtualFileSystem Parent => (VirtualFileSystem)base.Parent;");
+					foreach (string otherClassPropertyName in apiDictionary.Keys)
+					{
+						if (otherClassPropertyName != classPropertyName)
+						{
+							writer.WriteLine($"private new Virtual{otherClassPropertyName}Implementation {otherClassPropertyName} => Parent.{otherClassPropertyName};");
+						}
+						else
+						{
+							writer.WriteLine($"private new Virtual{otherClassPropertyName}Implementation {otherClassPropertyName} => this;");
+						}
+					}
 				}
 				writer.WriteLineNoTabs();
 			}
@@ -173,6 +190,16 @@ internal static class Program
 		{
 			new((Func<string, string, SearchOption, IEnumerable<string>>)Directory.EnumerateDirectories),
 			new((Func<string, string, SearchOption, IEnumerable<string>>)Directory.EnumerateFiles),
+			new((Func<string, string, SearchOption, IEnumerable<string>>)Directory.GetDirectories),
+			new((Func<string, string, SearchOption, IEnumerable<string>>)Directory.GetFiles),
+			new((Func<string, string, IEnumerable<string>>)Directory.EnumerateDirectories),
+			new((Func<string, string, IEnumerable<string>>)Directory.EnumerateFiles),
+			new((Func<string, string, IEnumerable<string>>)Directory.GetDirectories),
+			new((Func<string, string, IEnumerable<string>>)Directory.GetFiles),
+			new((Func<string, IEnumerable<string>>)Directory.EnumerateDirectories),
+			new((Func<string, IEnumerable<string>>)Directory.EnumerateFiles),
+			new((Func<string, IEnumerable<string>>)Directory.GetDirectories),
+			new((Func<string, IEnumerable<string>>)Directory.GetFiles),
 			new(Directory.Exists),
 		},
 		[nameof(Path)] = new()

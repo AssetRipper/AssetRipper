@@ -79,6 +79,56 @@ public sealed partial class LocalFileSystem : FileSystem
 			return global::System.IO.Directory.EnumerateFiles(path, searchPattern, searchOption);
 		}
 
+		public override global::System.String[] GetDirectories(global::System.String path, global::System.String searchPattern, global::System.IO.SearchOption searchOption)
+		{
+			return global::System.IO.Directory.GetDirectories(path, searchPattern, searchOption);
+		}
+
+		public override global::System.String[] GetFiles(global::System.String path, global::System.String searchPattern, global::System.IO.SearchOption searchOption)
+		{
+			return global::System.IO.Directory.GetFiles(path, searchPattern, searchOption);
+		}
+
+		public override global::System.Collections.Generic.IEnumerable<global::System.String> EnumerateDirectories(global::System.String path, global::System.String searchPattern)
+		{
+			return global::System.IO.Directory.EnumerateDirectories(path, searchPattern);
+		}
+
+		public override global::System.Collections.Generic.IEnumerable<global::System.String> EnumerateFiles(global::System.String path, global::System.String searchPattern)
+		{
+			return global::System.IO.Directory.EnumerateFiles(path, searchPattern);
+		}
+
+		public override global::System.String[] GetDirectories(global::System.String path, global::System.String searchPattern)
+		{
+			return global::System.IO.Directory.GetDirectories(path, searchPattern);
+		}
+
+		public override global::System.String[] GetFiles(global::System.String path, global::System.String searchPattern)
+		{
+			return global::System.IO.Directory.GetFiles(path, searchPattern);
+		}
+
+		public override global::System.Collections.Generic.IEnumerable<global::System.String> EnumerateDirectories(global::System.String path)
+		{
+			return global::System.IO.Directory.EnumerateDirectories(path);
+		}
+
+		public override global::System.Collections.Generic.IEnumerable<global::System.String> EnumerateFiles(global::System.String path)
+		{
+			return global::System.IO.Directory.EnumerateFiles(path);
+		}
+
+		public override global::System.String[] GetDirectories(global::System.String path)
+		{
+			return global::System.IO.Directory.GetDirectories(path);
+		}
+
+		public override global::System.String[] GetFiles(global::System.String path)
+		{
+			return global::System.IO.Directory.GetFiles(path);
+		}
+
 		public override global::System.Boolean Exists(global::System.String path)
 		{
 			return global::System.IO.Directory.Exists(path);
