@@ -32,7 +32,6 @@ public sealed class MixedGameStructure : PlatformGameStructure
 
 		DataPaths = dataPaths.ToArray();
 		Name = Files.Count == 0 ? string.Empty : Files.First().Key;
-		RootPath = null;
 		GameDataPath = null;
 		ManagedPath = null;
 		UnityPlayerPath = null;

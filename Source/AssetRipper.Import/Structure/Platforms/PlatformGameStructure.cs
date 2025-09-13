@@ -14,7 +14,7 @@ public abstract partial class PlatformGameStructure
 {
 	public FileSystem FileSystem { get; }
 	public string? Name { get; protected set; }
-	public string? RootPath { get; protected set; }
+	public string? RootPath { get; }
 	public string? GameDataPath { get; protected set; }
 	public string? StreamingAssetsPath { get; protected set; }
 	public string? ResourcesPath { get; protected set; }
