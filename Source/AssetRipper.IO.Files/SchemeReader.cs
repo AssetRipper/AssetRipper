@@ -26,9 +26,9 @@ public static class SchemeReader
 		new FileStreamBundleScheme(),
 	};
 
-	public static FileBase LoadFile(string filePath)
+	public static FileBase LoadFile(string filePath, FileSystem fileSystem)
 	{
-		SmartStream stream = SmartStream.OpenRead(filePath);
+		SmartStream stream = SmartStream.OpenReadMulti(filePath, fileSystem);
 		return ReadFile(stream, MultiFileStream.GetFilePath(filePath), MultiFileStream.GetFileName(filePath));
 	}
 
@@ -56,9 +56,9 @@ public static class SchemeReader
 		return ReadFile(file.Stream.CreateReference(), file.FilePath, file.Name);
 	}
 
-	public static bool IsReadableFile(string filePath)
+	public static bool IsReadableFile(string filePath, FileSystem fileSystem)
 	{
-		using SmartStream stream = SmartStream.OpenRead(filePath);
+		using SmartStream stream = SmartStream.OpenReadMulti(filePath, fileSystem);
 		foreach (IScheme scheme in schemes)
 		{
 			if (scheme.CanRead(stream))

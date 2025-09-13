@@ -38,49 +38,49 @@ public sealed partial class MultiFileStream : Stream
 	/// <returns>True if the path matches the multi file regex</returns>
 	public static bool IsMultiFile(string path)
 	{
-		return SplitFileRegex().IsMatch(path);
+		return SplitFileRegex.IsMatch(path);
 	}
 
-	public static bool Exists(string path)
+	public static bool Exists(string path, FileSystem fileSystem)
 	{
 		if (IsMultiFile(path))
 		{
-			SplitPathWithoutExtension(path, out string directory, out string file);
-			return Exists(directory, file);
+			SplitPathWithoutExtension(path, fileSystem, out string directory, out string file);
+			return Exists(directory, file, fileSystem);
 		}
-		else if (File.Exists(path))
+		else if (fileSystem.File.Exists(path))
 		{
 			return true;
 		}
 		else
 		{
-			SplitPath(path, out string directory, out string file, true);
+			SplitPath(path, fileSystem, out string directory, out string file, true);
 			if (string.IsNullOrEmpty(file))
 			{
 				return false;
 			}
 			else
 			{
-				return Exists(directory, file);
+				return Exists(directory, file, fileSystem);
 			}
 		}
 	}
 
-	public static Stream OpenRead(string path)
+	public static Stream OpenRead(string path, FileSystem fileSystem)
 	{
 		if (IsMultiFile(path))
 		{
-			SplitPathWithoutExtension(path, out string directory, out string file);
-			return OpenRead(directory, file);
+			SplitPathWithoutExtension(path, fileSystem, out string directory, out string file);
+			return OpenRead(directory, file, fileSystem);
 		}
-		else if (File.Exists(path))
+		else if (fileSystem.File.Exists(path))
 		{
-			return File.OpenRead(path);
+			return fileSystem.File.OpenRead(path);
 		}
 		else
 		{
-			SplitPath(path, out string directory, out string file);
-			return OpenRead(directory, file);
+			SplitPath(path, fileSystem, out string directory, out string file);
+			return OpenRead(directory, file, fileSystem);
 		}
 	}
 
@@ -103,19 +103,19 @@ public sealed partial class MultiFileStream : Stream
 		return Path.GetFileName(path);
 	}
 
-	public static string[] GetFiles(string path)
+	public static string[] GetFiles(string path, FileSystem fileSystem)
 	{
 		if (IsMultiFile(path))
 		{
-			SplitPathWithoutExtension(path, out string directory, out string file);
-			return GetFiles(directory, file);
+			SplitPathWithoutExtension(path, fileSystem, out string directory, out string file);
+			return GetFiles(directory, file, fileSystem);
 		}
 
-		if (File.Exists(path))
+		if (fileSystem.File.Exists(path))
 		{
-			return new[] { path };
+			return [path];
 		}
-		return Array.Empty<string>();
+		return [];
 	}
 
 	public static bool IsNameEquals(string fileName, string compare)
@@ -130,12 +130,12 @@ public sealed partial class MultiFileStream : Stream
 	/// <param name="dirPath">The directory containing the multi file</param>
 	/// <param name="fileName">The name of the multi file without the split extension</param>
 	/// <returns>True if a valid multi file exists in that directory with that name</returns>
-	private static bool Exists(string dirPath, string fileName)
+	private static bool Exists(string dirPath, string fileName, FileSystem fileSystem)
 	{
-		string filePath = Path.Join(dirPath, fileName);
+		string filePath = fileSystem.Path.Join(dirPath, fileName);
 		string splitFilePath = filePath + ".split";
 
-		string[] splitFiles = GetFiles(dirPath, fileName);
+		string[] splitFiles = GetFiles(dirPath, fileName, fileSystem);
 		if (splitFiles.Length == 0)
 		{
 			return false;
@@ -152,23 +152,23 @@ public sealed partial class MultiFileStream : Stream
 		return true;
 	}
 
-	private static string[] GetFiles(string dirPath, string fileName)
+	private static string[] GetFiles(string dirPath, string fileName, FileSystem fileSystem)
 	{
-		if (!Directory.Exists(dirPath))
+		if (!fileSystem.Directory.Exists(dirPath))
 		{
-			return Array.Empty<string>();
+			return [];
 		}
 
 		string filePatern = fileName + ".split*";
-		return Directory.GetFiles(dirPath, filePatern);
+		return fileSystem.Directory.GetFiles(dirPath, filePatern);
 	}
 
-	private static Stream OpenRead(string dirPath, string fileName)
+	private static Stream OpenRead(string dirPath, string fileName, FileSystem fileSystem)
 	{
-		string filePath = Path.Join(dirPath, fileName);
+		string filePath = fileSystem.Path.Join(dirPath, fileName);
 		string splitFilePath = filePath + ".split";
 
-		string[] splitFiles = GetFiles(dirPath, fileName);
+		string[] splitFiles = GetFiles(dirPath, fileName, fileSystem);
 		for (int i = 0; i < splitFiles.Length; i++)
 		{
 			string indexFileName = splitFilePath + i;
@@ -184,7 +184,7 @@ public sealed partial class MultiFileStream : Stream
 		{
 			for (int i = 0; i < splitFiles.Length; i++)
 			{
-				Stream stream = File.OpenRead(splitFiles[i]);
+				Stream stream = fileSystem.File.OpenRead(splitFiles[i]);
 				streams[i] = stream;
 			}
 
@@ -204,23 +204,23 @@ public sealed partial class MultiFileStream : Stream
 		}
 	}
 
-	private static void SplitPath(string path, out string directory, out string file) => SplitPath(path, out directory, out file, false);
-	private static void SplitPath(string path, out string directory, out string file, bool allowNullReturn)
+	private static void SplitPath(string path, FileSystem fileSystem, out string directory, out string file) => SplitPath(path, fileSystem, out directory, out file, false);
+	private static void SplitPath(string path, FileSystem fileSystem, out string directory, out string file, bool allowNullReturn)
 	{
-		directory = Path.GetDirectoryName(path) ?? throw new Exception("Could not get directory name");
+		directory = fileSystem.Path.GetDirectoryName(path) ?? throw new Exception("Could not get directory name");
 		directory = string.IsNullOrEmpty(directory) ? "." : directory;
-		file = Path.GetFileName(path);
+		file = fileSystem.Path.GetFileName(path);
 		if (string.IsNullOrEmpty(file) && !allowNullReturn)
 		{
 			throw new Exception($"Can't determine file name for {path}");
 		}
 	}
 
-	private static void SplitPathWithoutExtension(string path, out string directory, out string file)
+	private static void SplitPathWithoutExtension(string path, FileSystem fileSystem, out string directory, out string file)
 	{
-		directory = Path.GetDirectoryName(path) ?? throw new Exception("Could not get directory name");
+		directory = fileSystem.Path.GetDirectoryName(path) ?? throw new Exception("Could not get directory name");
 		directory = string.IsNullOrEmpty(directory) ? "." : directory;
-		file = Path.GetFileNameWithoutExtension(path);
+		file = fileSystem.Path.GetFileNameWithoutExtension(path);
 		if (string.IsNullOrEmpty(file))
 		{
 			throw new Exception($"Can't determine file name for {path}");
@@ -388,6 +388,6 @@ public sealed partial class MultiFileStream : Stream
 	private long m_currentBegin;
 	private long m_currentEnd;
 
-	[GeneratedRegex(@".+\.split[0-9]+$", RegexOptions.Compiled)]
-	private static partial Regex SplitFileRegex();
+	[GeneratedRegex(@".+\.split[0-9]+$")]
+	private static partial Regex SplitFileRegex { get; }
 }

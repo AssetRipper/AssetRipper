@@ -18,21 +18,21 @@ partial class GameBundle
 	/// <param name="dependencyProvider"></param>
 	/// <param name="resourceProvider"></param>
 	/// <param name="defaultVersion">The default version to use if a file does not have a version, ie the version has been stripped.</param>
-	public static GameBundle FromPaths(IEnumerable<string> paths, AssetFactoryBase assetFactory, IGameInitializer? initializer = null)
+	public static GameBundle FromPaths(IEnumerable<string> paths, AssetFactoryBase assetFactory, FileSystem fileSystem, IGameInitializer? initializer = null)
 	{
 		GameBundle gameBundle = new();
 		initializer?.OnCreated(gameBundle, assetFactory);
-		gameBundle.InitializeFromPaths(paths, assetFactory, initializer);
+		gameBundle.InitializeFromPaths(paths, assetFactory, fileSystem, initializer);
 		initializer?.OnPathsLoaded(gameBundle, assetFactory);
 		gameBundle.InitializeAllDependencyLists(initializer?.DependencyProvider);
 		initializer?.OnDependenciesInitialized(gameBundle, assetFactory);
 		return gameBundle;
 	}
 
-	private void InitializeFromPaths(IEnumerable<string> paths, AssetFactoryBase assetFactory, IGameInitializer? initializer)
+	private void InitializeFromPaths(IEnumerable<string> paths, AssetFactoryBase assetFactory, FileSystem fileSystem, IGameInitializer? initializer)
 	{
 		ResourceProvider = initializer?.ResourceProvider;
-		List<FileBase> fileStack = LoadFilesAndDependencies(paths, initializer?.DependencyProvider);
+		List<FileBase> fileStack = LoadFilesAndDependencies(paths, fileSystem, initializer?.DependencyProvider);
 		UnityVersion defaultVersion = initializer is null ? default : initializer.DefaultVersion;
 
 		while (fileStack.Count > 0)
@@ -64,7 +64,7 @@ partial class GameBundle
 		return file;
 	}
 
-	private static List<FileBase> LoadFilesAndDependencies(IEnumerable<string> paths, IDependencyProvider? dependencyProvider)
+	private static List<FileBase> LoadFilesAndDependencies(IEnumerable<string> paths, FileSystem fileSystem, IDependencyProvider? dependencyProvider)
 	{
 		List<FileBase> files = new();
 		HashSet<string> serializedFileNames = new();//Includes missing dependencies
@@ -73,14 +73,14 @@ partial class GameBundle
 			FileBase? file;
 			try
 			{
-				file = SchemeReader.LoadFile(path);
+				file = SchemeReader.LoadFile(path, fileSystem);
 				file.ReadContentsRecursively();
 			}
 			catch (Exception ex)
 			{
 				file = new FailedFile()
 				{
-					Name = Path.GetFileName(path),
+					Name = fileSystem.Path.GetFileName(path),
 					FilePath = path,
 					StackTrace = ex.ToString(),
 				};

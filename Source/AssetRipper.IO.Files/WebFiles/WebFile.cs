@@ -10,9 +10,9 @@ public sealed class WebFile : FileContainer
 {
 	private const string Signature = "UnityWebData1.0";
 
-	public static bool IsWebFile(string webPath)
+	public static bool IsWebFile(string webPath, FileSystem fileSystem)
 	{
-		using Stream stream = MultiFileStream.OpenRead(webPath);
+		using Stream stream = MultiFileStream.OpenRead(webPath, fileSystem);
 		return IsWebFile(stream);
 	}
 

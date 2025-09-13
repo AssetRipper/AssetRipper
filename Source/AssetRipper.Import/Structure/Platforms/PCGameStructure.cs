@@ -1,50 +1,34 @@
 ﻿using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly;
+using AssetRipper.IO.Files;
+using System.Diagnostics;
 
 namespace AssetRipper.Import.Structure.Platforms;
 
 internal sealed class PCGameStructure : PlatformGameStructure
 {
-	public PCGameStructure(string rootPath)
+	public PCGameStructure(string rootPath, FileSystem fileSystem) : base(GetActualRootPath(rootPath, fileSystem), fileSystem)
 	{
-		if (string.IsNullOrEmpty(rootPath))
+		Debug.Assert(RootPath is not null);
+		if (rootPath != RootPath)
 		{
-			throw new ArgumentNullException(nameof(rootPath));
-		}
-		if (IsExecutableFile(rootPath))
-		{
-			Logger.Info(LogCategory.Import, "PC executable found. Setting root to parent directory");
-			m_root = new FileInfo(rootPath).Directory ?? throw new Exception("File has no directory");
-		}
-		else if (IsUnityDataDirectory(rootPath))
-		{
-			Logger.Info(LogCategory.Import, "PC data directory found. Setting root to parent directory");
-			m_root = new DirectoryInfo(rootPath).Parent ?? throw new Exception("Directory has no parent");
-		}
-		else
-		{
-			m_root = new DirectoryInfo(rootPath);
-			if (!m_root.Exists)
-			{
-				throw new Exception($"Directory '{rootPath}' doesn't exist");
-			}
+			Logger.Info(LogCategory.Import, "An executable file or data directory was found, so the parent directory is being used instead.");
 		}
 
-		if (!GetDataPCDirectory(m_root, out string? dataPath, out string? name))
+		if (!GetDataDirectory(RootPath, fileSystem, out string? dataPath, out string? name))
 		{
-			throw new Exception($"Data directory wasn't found");
+			throw new DirectoryNotFoundException($"Data directory wasn't found");
 		}
 
 		Name = name;
-		RootPath = m_root.FullName;
 		GameDataPath = dataPath;
-		StreamingAssetsPath = Path.Join(GameDataPath, StreamingName);
-		ResourcesPath = Path.Join(GameDataPath, ResourcesName);
-		ManagedPath = Path.Join(GameDataPath, ManagedName);
-		UnityPlayerPath = Path.Join(RootPath, DefaultUnityPlayerName);
+		StreamingAssetsPath = FileSystem.Path.Join(GameDataPath, StreamingName);
+		ResourcesPath = FileSystem.Path.Join(GameDataPath, ResourcesName);
+		ManagedPath = FileSystem.Path.Join(GameDataPath, ManagedName);
+		UnityPlayerPath = FileSystem.Path.Join(RootPath, DefaultUnityPlayerName);
 		Version = null;
-		Il2CppGameAssemblyPath = Path.Join(RootPath, DefaultGameAssemblyName);
-		Il2CppMetaDataPath = Path.Join(GameDataPath, "il2cpp_data", MetadataName, DefaultGlobalMetadataName);
+		Il2CppGameAssemblyPath = FileSystem.Path.Join(RootPath, DefaultGameAssemblyName);
+		Il2CppMetaDataPath = FileSystem.Path.Join(GameDataPath, "il2cpp_data", MetadataName, DefaultGlobalMetadataName);
 
 		if (HasIl2CppFiles())
 		{
@@ -59,52 +43,46 @@ internal sealed class PCGameStructure : PlatformGameStructure
 			Backend = ScriptingBackend.Unknown;
 		}
 
-		DataPaths = new string[] { dataPath };
+		DataPaths = [GameDataPath];
 	}
 
-	public static bool IsPCStructure(string path)
+	public static bool IsPCStructure(string path, FileSystem fileSystem)
 	{
-		DirectoryInfo dinfo;
-		if (IsExecutableFile(path))
+		string directory;
+		if (IsExecutableFile(path, fileSystem))
 		{
-			dinfo = new FileInfo(path).Directory ?? throw new Exception("File has no directory");
+			directory = fileSystem.Path.GetDirectoryName(path) ?? throw new Exception("Could not get file directory");
 		}
-		else if (IsUnityDataDirectory(path))
+		else if (IsUnityDataDirectory(path, fileSystem))
 		{
 			return true;
 		}
 		else
 		{
-			dinfo = new DirectoryInfo(path);
+			directory = path;
 		}
 
-		if (!dinfo.Exists)
-		{
-			return false;
-		}
-		else
-		{
-			return IsRootPCDirectory(dinfo);
-		}
+		return fileSystem.Directory.Exists(directory) && IsRootDirectory(directory, fileSystem);
 	}
 
-	private static bool IsUnityDataDirectory(string folderPath)
+	private static bool IsUnityDataDirectory(string folderPath, FileSystem fileSystem)
 	{
-		if (string.IsNullOrEmpty(folderPath) || !folderPath.EndsWith($"_{DataFolderName}"))
+		const string Suffix = $"_{DataFolderName}";
+		if (string.IsNullOrEmpty(folderPath) || !folderPath.EndsWith(Suffix, StringComparison.Ordinal))
 		{
 			return false;
 		}
 
-		DirectoryInfo directoryInfo = new DirectoryInfo(folderPath);
-		if (!directoryInfo.Exists || directoryInfo.Parent == null)
+		if (!fileSystem.Directory.Exists(folderPath))
 		{
 			return false;
 		}
 
-		string folderName = directoryInfo.Name;
-		string gameName = folderName.Substring(0, folderName.IndexOf($"_{DataFolderName}"));
-		string rootPath = directoryInfo.Parent.FullName;
-		if (File.Exists(Path.Join(rootPath, gameName + ExeExtension)))
+		string folderName = fileSystem.Path.GetFileName(folderPath);
+		string gameName = folderName[..^Suffix.Length];
+		string rootPath = fileSystem.Path.GetDirectoryName(folderPath);
+		string exePath = fileSystem.Path.Join(rootPath, gameName + ExeExtension);
+		if (fileSystem.File.Exists(exePath))
 		{
 			return true;
 		}
@@ -114,29 +92,46 @@ internal sealed class PCGameStructure : PlatformGameStructure
 		}
 	}
 
-	private static bool IsExecutableFile(string filePath)
+	private static bool IsExecutableFile(string filePath, FileSystem fileSystem)
 	{
-		return !string.IsNullOrEmpty(filePath) && filePath.EndsWith(ExeExtension) && File.Exists(filePath);
+		return !string.IsNullOrEmpty(filePath) && filePath.EndsWith(ExeExtension, StringComparison.OrdinalIgnoreCase) && fileSystem.File.Exists(filePath);
 	}
 
-	private static bool IsRootPCDirectory(DirectoryInfo rootDirectory)
+	private static string GetActualRootPath(string rootPath, FileSystem fileSystem)
 	{
-		return GetDataPCDirectory(rootDirectory, out string? _, out string? _);
+		ArgumentException.ThrowIfNullOrEmpty(rootPath);
+		if (IsExecutableFile(rootPath, fileSystem))
+		{
+			return fileSystem.Path.GetDirectoryName(rootPath) ?? throw new Exception("Could not get file directory");
+		}
+		else if (IsUnityDataDirectory(rootPath, fileSystem))
+		{
+			return fileSystem.Path.GetDirectoryName(rootPath) ?? throw new Exception("Could not get parent directory");
+		}
+		else
+		{
+			return rootPath;
+		}
 	}
 
-	private static bool GetDataPCDirectory(DirectoryInfo rootDirectory, [NotNullWhen(true)] out string? dataPath, [NotNullWhen(true)] out string? name)
+	private static bool IsRootDirectory(string rootDirectory, FileSystem fileSystem)
+	{
+		return GetDataDirectory(rootDirectory, fileSystem, out string? _, out string? _);
+	}
+
+	private static bool GetDataDirectory(string rootDirectory, FileSystem fileSystem, [NotNullWhen(true)] out string? dataPath, [NotNullWhen(true)] out string? name)
 	{
 		name = "";
 		int exeCount = 0;
-		foreach (FileInfo fileInfo in rootDirectory.EnumerateFiles())
+		foreach (string file in fileSystem.Directory.EnumerateFiles(rootDirectory))
 		{
-			if (fileInfo.Extension == ExeExtension)
+			if (file.EndsWith(ExeExtension, StringComparison.OrdinalIgnoreCase))
 			{
 				exeCount++;
-				name = Path.GetFileNameWithoutExtension(fileInfo.Name);
+				name = fileSystem.Path.GetFileNameWithoutExtension(file);
 				string dataFolder = $"{name}_{DataFolderName}";
-				dataPath = Path.Join(rootDirectory.FullName, dataFolder);
-				if (Directory.Exists(dataPath))
+				dataPath = fileSystem.Path.Join(rootDirectory, dataFolder);
+				if (fileSystem.Directory.Exists(dataPath))
 				{
 					return true;
 				}
@@ -145,9 +140,9 @@ internal sealed class PCGameStructure : PlatformGameStructure
 
 		if (exeCount > 0)
 		{
-			name = exeCount == 1 ? name : rootDirectory.Name;
-			dataPath = Path.Join(rootDirectory.FullName, DataFolderName);
-			if (Directory.Exists(dataPath))
+			name = exeCount == 1 ? name : fileSystem.Path.GetFileName(rootDirectory);
+			dataPath = fileSystem.Path.Join(rootDirectory, DataFolderName);
+			if (fileSystem.Directory.Exists(dataPath))
 			{
 				return true;
 			}

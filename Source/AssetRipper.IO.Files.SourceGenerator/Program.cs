@@ -190,6 +190,16 @@ internal static class Program
 		{
 			new((Func<string, string, SearchOption, IEnumerable<string>>)Directory.EnumerateDirectories),
 			new((Func<string, string, SearchOption, IEnumerable<string>>)Directory.EnumerateFiles),
+			new((Func<string, string, SearchOption, IEnumerable<string>>)Directory.GetDirectories),
+			new((Func<string, string, SearchOption, IEnumerable<string>>)Directory.GetFiles),
+			new((Func<string, string, IEnumerable<string>>)Directory.EnumerateDirectories),
+			new((Func<string, string, IEnumerable<string>>)Directory.EnumerateFiles),
+			new((Func<string, string, IEnumerable<string>>)Directory.GetDirectories),
+			new((Func<string, string, IEnumerable<string>>)Directory.GetFiles),
+			new((Func<string, IEnumerable<string>>)Directory.EnumerateDirectories),
+			new((Func<string, IEnumerable<string>>)Directory.EnumerateFiles),
+			new((Func<string, IEnumerable<string>>)Directory.GetDirectories),
+			new((Func<string, IEnumerable<string>>)Directory.GetFiles),
 			new(Directory.Exists),
 		},
 		[nameof(Path)] = new()

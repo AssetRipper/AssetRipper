@@ -91,6 +91,56 @@ public abstract partial class FileSystem
 			throw new global::System.NotSupportedException();
 		}
 
+		public virtual global::System.String[] GetDirectories(global::System.String path, global::System.String searchPattern, global::System.IO.SearchOption searchOption)
+		{
+			throw new global::System.NotSupportedException();
+		}
+
+		public virtual global::System.String[] GetFiles(global::System.String path, global::System.String searchPattern, global::System.IO.SearchOption searchOption)
+		{
+			throw new global::System.NotSupportedException();
+		}
+
+		public virtual global::System.Collections.Generic.IEnumerable<global::System.String> EnumerateDirectories(global::System.String path, global::System.String searchPattern)
+		{
+			throw new global::System.NotSupportedException();
+		}
+
+		public virtual global::System.Collections.Generic.IEnumerable<global::System.String> EnumerateFiles(global::System.String path, global::System.String searchPattern)
+		{
+			throw new global::System.NotSupportedException();
+		}
+
+		public virtual global::System.String[] GetDirectories(global::System.String path, global::System.String searchPattern)
+		{
+			throw new global::System.NotSupportedException();
+		}
+
+		public virtual global::System.String[] GetFiles(global::System.String path, global::System.String searchPattern)
+		{
+			throw new global::System.NotSupportedException();
+		}
+
+		public virtual global::System.Collections.Generic.IEnumerable<global::System.String> EnumerateDirectories(global::System.String path)
+		{
+			throw new global::System.NotSupportedException();
+		}
+
+		public virtual global::System.Collections.Generic.IEnumerable<global::System.String> EnumerateFiles(global::System.String path)
+		{
+			throw new global::System.NotSupportedException();
+		}
+
+		public virtual global::System.String[] GetDirectories(global::System.String path)
+		{
+			throw new global::System.NotSupportedException();
+		}
+
+		public virtual global::System.String[] GetFiles(global::System.String path)
+		{
+			throw new global::System.NotSupportedException();
+		}
+
 		public virtual global::System.Boolean Exists(global::System.String path)
 		{
 			throw new global::System.NotSupportedException();

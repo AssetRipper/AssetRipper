@@ -7,14 +7,14 @@ namespace AssetRipper.IO.Files;
 
 public partial class VirtualFileSystem : FileSystem
 {
-	private readonly DirectoryEntity root = new("", null);
+	private readonly DirectoryEntry root = new("", null);
 
-	private sealed class DirectoryEntity
+	private sealed class DirectoryEntry
 	{
 		public string Name { get; }
-		public DirectoryEntity? Parent { get; }
-		public Dictionary<string, DirectoryEntity> Children { get; } = [];
-		public Dictionary<string, FileEntity> Files { get; } = [];
+		public DirectoryEntry? Parent { get; }
+		public Dictionary<string, DirectoryEntry> Children { get; } = [];
+		public Dictionary<string, FileEntry> Files { get; } = [];
 
 		[MemberNotNullWhen(false, nameof(Parent))]
 		public bool IsRoot => Parent is null;
@@ -43,7 +43,7 @@ public partial class VirtualFileSystem : FileSystem
 			get
 			{
 				int count = Files.Count;
-				foreach (DirectoryEntity child in Children.Values)
+				foreach (DirectoryEntry child in Children.Values)
 				{
 					count += child.TotalFileCount;
 				}
@@ -56,7 +56,7 @@ public partial class VirtualFileSystem : FileSystem
 			get
 			{
 				int count = Children.Count;
-				foreach (DirectoryEntity child in Children.Values)
+				foreach (DirectoryEntry child in Children.Values)
 				{
 					count += child.TotalDirectoryCount;
 				}
@@ -64,15 +64,15 @@ public partial class VirtualFileSystem : FileSystem
 			}
 		}
 
-		public DirectoryEntity(string name, DirectoryEntity? parent)
+		public DirectoryEntry(string name, DirectoryEntry? parent)
 		{
 			Name = name;
 			Parent = parent;
 		}
 
-		public DirectoryEntity CreateDirectory(string name)
+		public DirectoryEntry CreateDirectory(string name)
 		{
-			if (!Children.TryGetValue(name, out DirectoryEntity? directory))
+			if (!Children.TryGetValue(name, out DirectoryEntry? directory))
 			{
 				directory = new(name, this);
 				Children[name] = directory;
@@ -80,23 +80,23 @@ public partial class VirtualFileSystem : FileSystem
 			return directory;
 		}
 
-		public DirectoryEntity OpenDirectory(string name)
+		public DirectoryEntry OpenDirectory(string name)
 		{
 			return TryOpenDirectory(name) ?? throw new DirectoryNotFoundException($"Directory '{name}' not found.");
 		}
 
-		public DirectoryEntity? TryOpenDirectory(string name)
+		public DirectoryEntry? TryOpenDirectory(string name)
 		{
-			if (!Children.TryGetValue(name, out DirectoryEntity? directory))
+			if (!Children.TryGetValue(name, out DirectoryEntry? directory))
 			{
 				return null;
 			}
 			return directory;
 		}
 
-		public FileEntity CreateFile(string name)
+		public FileEntry CreateFile(string name)
 		{
-			if (Files.TryGetValue(name, out FileEntity? file))
+			if (Files.TryGetValue(name, out FileEntry? file))
 			{
 				file.Stream.SetLength(0);
 			}
@@ -110,14 +110,14 @@ public partial class VirtualFileSystem : FileSystem
 			return file;
 		}
 
-		public FileEntity OpenFile(string name)
+		public FileEntry OpenFile(string name)
 		{
 			return TryOpenFile(name) ?? throw new FileNotFoundException($"File '{name}' not found.");
 		}
 
-		public FileEntity? TryOpenFile(string name)
+		public FileEntry? TryOpenFile(string name)
 		{
-			if (!Files.TryGetValue(name, out FileEntity? file))
+			if (!Files.TryGetValue(name, out FileEntry? file))
 			{
 				return null;
 			}
@@ -125,10 +125,10 @@ public partial class VirtualFileSystem : FileSystem
 		}
 	}
 
-	private sealed class FileEntity
+	private sealed class FileEntry
 	{
 		public string Name { get; }
-		public DirectoryEntity Parent { get; }
+		public DirectoryEntry Parent { get; }
 		public SmartStream Stream { get; }
 		public string FullName
 		{
@@ -144,7 +144,7 @@ public partial class VirtualFileSystem : FileSystem
 				}
 			}
 		}
-		public FileEntity(string name, DirectoryEntity parent, SmartStream stream)
+		public FileEntry(string name, DirectoryEntry parent, SmartStream stream)
 		{
 			Name = name;
 			Parent = parent;
@@ -178,9 +178,9 @@ public partial class VirtualFileSystem : FileSystem
 		root.Files.Clear();
 	}
 
-	private DirectoryEntity OpenDirectory(ReadOnlySpan<string> parts)
+	private DirectoryEntry OpenDirectory(ReadOnlySpan<string> parts)
 	{
-		DirectoryEntity current = root;
+		DirectoryEntry current = root;
 		foreach (string part in parts)
 		{
 			current = current.OpenDirectory(part);
@@ -188,9 +188,9 @@ public partial class VirtualFileSystem : FileSystem
 		return current;
 	}
 
-	private DirectoryEntity? TryOpenDirectory(ReadOnlySpan<string> parts)
+	private DirectoryEntry? TryOpenDirectory(ReadOnlySpan<string> parts)
 	{
-		DirectoryEntity? current = root;
+		DirectoryEntry? current = root;
 		foreach (string part in parts)
 		{
 			current = current.TryOpenDirectory(part);
@@ -214,8 +214,8 @@ public partial class VirtualFileSystem : FileSystem
 
 			ReadOnlySpan<string> directoryParts = pathParts.AsSpan(0, pathParts.Length - 1);
 			string fileName = pathParts[^1];
-			DirectoryEntity directoryEntity = Parent.OpenDirectory(directoryParts);
-			return directoryEntity.CreateFile(fileName).Stream.CreateReference();
+			DirectoryEntry directory = Parent.OpenDirectory(directoryParts);
+			return directory.CreateFile(fileName).Stream.CreateReference();
 		}
 		public SmartStream Open(string path)
 		{
@@ -227,8 +227,8 @@ public partial class VirtualFileSystem : FileSystem
 
 			ReadOnlySpan<string> directoryParts = pathParts.AsSpan(0, pathParts.Length - 1);
 			string fileName = pathParts[^1];
-			DirectoryEntity directoryEntity = Parent.OpenDirectory(directoryParts);
-			return directoryEntity.OpenFile(fileName).Stream.CreateReference();
+			DirectoryEntry directory = Parent.OpenDirectory(directoryParts);
+			return directory.OpenFile(fileName).Stream.CreateReference();
 		}
 		public override SmartStream OpenRead(string path) => Open(path);
 		public override SmartStream OpenWrite(string path) => Open(path);
@@ -242,8 +242,8 @@ public partial class VirtualFileSystem : FileSystem
 
 			ReadOnlySpan<string> directoryParts = pathParts.AsSpan(0, pathParts.Length - 1);
 			string fileName = pathParts[^1];
-			DirectoryEntity directory = Parent.OpenDirectory(directoryParts);
-			if (directory.Files.Remove(fileName, out FileEntity? file))
+			DirectoryEntry directory = Parent.OpenDirectory(directoryParts);
+			if (directory.Files.Remove(fileName, out FileEntry? file))
 			{
 				file.Stream.Dispose();
 			}
@@ -291,7 +291,7 @@ public partial class VirtualFileSystem : FileSystem
 		public override void Create(string? path)
 		{
 			string[] parts = Path.GetPathParts(path);
-			DirectoryEntity current = Parent.root;
+			DirectoryEntry current = Parent.root;
 			foreach (string part in parts)
 			{
 				current = current.CreateDirectory(part);
@@ -306,22 +306,22 @@ public partial class VirtualFileSystem : FileSystem
 			}
 
 			string[] parts = Path.GetPathParts(path);
-			DirectoryEntity directory = Parent.OpenDirectory(parts);
+			DirectoryEntry directory = Parent.OpenDirectory(parts);
 			if (searchOption == SearchOption.TopDirectoryOnly)
 			{
-				foreach (DirectoryEntity child in directory.Children.Values)
+				foreach (DirectoryEntry child in directory.Children.Values)
 				{
 					yield return child.FullName;
 				}
 			}
 			else
 			{
-				Stack<DirectoryEntity> stack = new();
+				Stack<DirectoryEntry> stack = new();
 				stack.Push(directory);
 				while (stack.Count > 0)
 				{
-					DirectoryEntity current = stack.Pop();
-					foreach (DirectoryEntity child in current.Children.Values)
+					DirectoryEntry current = stack.Pop();
+					foreach (DirectoryEntry child in current.Children.Values)
 					{
 						yield return child.FullName;
 						stack.Push(child);
@@ -352,10 +352,10 @@ public partial class VirtualFileSystem : FileSystem
 				throw new NotImplementedException("Only '*' and '*.<extension>' search patterns are supported.");
 			}
 
-			DirectoryEntity directory = Parent.OpenDirectory(pathParts);
+			DirectoryEntry directory = Parent.OpenDirectory(pathParts);
 			if (searchOption == SearchOption.TopDirectoryOnly)
 			{
-				foreach (FileEntity file in directory.Files.Values)
+				foreach (FileEntry file in directory.Files.Values)
 				{
 					if (file.Name.EndsWith(extension, StringComparison.Ordinal))
 					{
@@ -365,19 +365,19 @@ public partial class VirtualFileSystem : FileSystem
 			}
 			else
 			{
-				Stack<DirectoryEntity> stack = new();
+				Stack<DirectoryEntry> stack = new();
 				stack.Push(directory);
 				while (stack.Count > 0)
 				{
-					DirectoryEntity current = stack.Pop();
-					foreach (FileEntity file in current.Files.Values)
+					DirectoryEntry current = stack.Pop();
+					foreach (FileEntry file in current.Files.Values)
 					{
 						if (file.Name.EndsWith(extension, StringComparison.Ordinal))
 						{
 							yield return file.FullName;
 						}
 					}
-					foreach (DirectoryEntity child in current.Children.Values)
+					foreach (DirectoryEntry child in current.Children.Values)
 					{
 						stack.Push(child);
 					}
@@ -385,13 +385,63 @@ public partial class VirtualFileSystem : FileSystem
 			}
 		}
 
+		public override IEnumerable<string> EnumerateDirectories(string path, string searchPattern)
+		{
+			return EnumerateDirectories(path, searchPattern, SearchOption.TopDirectoryOnly);
+		}
+
+		public override IEnumerable<string> EnumerateDirectories(string path)
+		{
+			return EnumerateDirectories(path, "*", SearchOption.TopDirectoryOnly);
+		}
+
+		public override IEnumerable<string> EnumerateFiles(string path, string searchPattern)
+		{
+			return EnumerateFiles(path, searchPattern, SearchOption.TopDirectoryOnly);
+		}
+
+		public override IEnumerable<string> EnumerateFiles(string path)
+		{
+			return EnumerateFiles(path, "*", SearchOption.TopDirectoryOnly);
+		}
+
+		public override string[] GetDirectories(string path, string searchPattern, SearchOption searchOption)
+		{
+			return EnumerateDirectories(path, searchPattern, searchOption).ToArray();
+		}
+
+		public override string[] GetDirectories(string path, string searchPattern)
+		{
+			return EnumerateDirectories(path, searchPattern).ToArray();
+		}
+
+		public override string[] GetDirectories(string path)
+		{
+			return EnumerateDirectories(path).ToArray();
+		}
+
+		public override string[] GetFiles(string path, string searchPattern, SearchOption searchOption)
+		{
+			return EnumerateFiles(path, searchPattern, searchOption).ToArray();
+		}
+
+		public override string[] GetFiles(string path, string searchPattern)
+		{
+			return EnumerateFiles(path, searchPattern).ToArray();
+		}
+
+		public override string[] GetFiles(string path)
+		{
+			return EnumerateFiles(path).ToArray();
+		}
+
 		public override bool Exists(string? path)
 		{
 			string[] parts = Path.GetPathParts(path);
-			DirectoryEntity current = Parent.root;
+			DirectoryEntry current = Parent.root;
 			foreach (string part in parts)
 			{
-				if (!current.Children.TryGetValue(part, out DirectoryEntity? next))
+				if (!current.Children.TryGetValue(part, out DirectoryEntry? next))
 				{
 					return false;
 				}

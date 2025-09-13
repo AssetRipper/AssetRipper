@@ -17,9 +17,9 @@ public sealed class FileStreamBundleFile : FileContainer
 	{
 	}
 
-	public FileStreamBundleFile(string filePath)
+	public FileStreamBundleFile(string filePath, FileSystem fileSystem)
 	{
-		SmartStream stream = SmartStream.OpenRead(filePath);
+		SmartStream stream = SmartStream.OpenRead(filePath, fileSystem);
 		Read(stream);
 	}
 

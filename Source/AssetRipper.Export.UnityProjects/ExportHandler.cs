@@ -27,7 +27,7 @@ public class ExportHandler
 		Settings = settings;
 	}
 
-	public GameData Load(IReadOnlyList<string> paths)
+	public GameData Load(IReadOnlyList<string> paths, FileSystem fileSystem)
 	{
 		if (paths.Count == 1)
 		{
@@ -38,7 +38,7 @@ public class ExportHandler
 			Logger.Info(LogCategory.Import, $"Attempting to read files from {paths.Count} paths...");
 		}
 
-		GameStructure gameStructure = GameStructure.Load(paths, Settings);
+		GameStructure gameStructure = GameStructure.Load(paths, fileSystem, Settings);
 		GameData gameData = GameData.FromGameStructure(gameStructure);
 		Logger.Info(LogCategory.Import, "Finished reading files");
 		return gameData;
@@ -90,7 +90,6 @@ public class ExportHandler
 		yield return new ScriptableObjectProcessor();
 	}
 
-	public void Export(GameData gameData, string outputPath) => Export(gameData, outputPath, LocalFileSystem.Instance);
 	public void Export(GameData gameData, string outputPath, FileSystem fileSystem)
 	{
 		Logger.Info(LogCategory.Export, "Starting export");
@@ -137,17 +136,17 @@ public class ExportHandler
 		yield return new PathIdMapExporter();
 	}
 
-	public GameData LoadAndProcess(IReadOnlyList<string> paths)
+	public GameData LoadAndProcess(IReadOnlyList<string> paths, FileSystem fileSystem)
 	{
-		GameData gameData = Load(paths);
+		GameData gameData = Load(paths, fileSystem);
 		Process(gameData);
 		return gameData;
 	}
 
-	public void LoadProcessAndExport(IReadOnlyList<string> inputPaths, string outputPath)
+	public void LoadProcessAndExport(IReadOnlyList<string> inputPaths, string outputPath, FileSystem fileSystem)
 	{
-		GameData gameData = LoadAndProcess(inputPaths);
-		Export(gameData, outputPath);
+		GameData gameData = LoadAndProcess(inputPaths, fileSystem);
+		Export(gameData, outputPath, fileSystem);
 	}
 
 	public void ThrowIfSettingsDontMatch(LibraryConfiguration settings)

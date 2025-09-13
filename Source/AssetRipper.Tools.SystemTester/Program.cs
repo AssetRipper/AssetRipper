@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Export.UnityProjects;
 using AssetRipper.Export.UnityProjects.Configuration;
 using AssetRipper.Import.Logging;
+using AssetRipper.IO.Files;
 using AssetRipper.Processing;
 
 namespace AssetRipper.Tools.SystemTester;
@@ -106,9 +107,9 @@ static class Program
 		LibraryConfiguration settings = new();
 		settings.LogConfigurationValues();
 		ExportHandler exportHandler = new(settings);
-		GameData gameData = exportHandler.LoadAndProcess(inputPaths);
+		GameData gameData = exportHandler.LoadAndProcess(inputPaths, LocalFileSystem.Instance);
 		PrepareExportDirectory(outputPath);
-		exportHandler.Export(gameData, outputPath);
+		exportHandler.Export(gameData, outputPath, LocalFileSystem.Instance);
 	}
 
 	private static void PrepareExportDirectory(string path)

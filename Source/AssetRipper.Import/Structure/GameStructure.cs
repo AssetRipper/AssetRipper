@@ -5,6 +5,7 @@ using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.Import.Structure.Platforms;
+using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.ResourceFiles;
 
 namespace AssetRipper.Import.Structure;
@@ -16,10 +17,10 @@ public sealed class GameStructure : IDisposable
 	public PlatformGameStructure? MixedStructure { get; private set; }
 	public IAssemblyManager AssemblyManager { get; set; }
 
-	private GameStructure(List<string> paths, CoreConfiguration configuration)
+	private GameStructure(List<string> paths, FileSystem fileSystem, CoreConfiguration configuration)
 	{
 		Logger.SendStatusChange("loading_step_detect_platform");
-		PlatformChecker.CheckPlatform(paths, out PlatformGameStructure? platformStructure, out MixedGameStructure? mixedStructure);
+		PlatformChecker.CheckPlatform(paths, fileSystem, out PlatformGameStructure? platformStructure, out MixedGameStructure? mixedStructure);
 		PlatformStructure = platformStructure;
 		PlatformStructure?.CollectFiles(configuration.ImportSettings.IgnoreStreamingAssets);
 		MixedStructure = mixedStructure;
@@ -33,7 +34,7 @@ public sealed class GameStructure : IDisposable
 
 		Logger.SendStatusChange("loading_step_begin_scheme_processing");
 
-		InitializeGameCollection(configuration.ImportSettings.DefaultVersion, configuration.ImportSettings.TargetVersion);
+		InitializeGameCollection(configuration.ImportSettings.DefaultVersion, configuration.ImportSettings.TargetVersion, fileSystem);
 
 		if (!FileCollection.HasAnyAssetCollections())
 		{
@@ -45,7 +46,7 @@ public sealed class GameStructure : IDisposable
 
 	public string? Name => PlatformStructure?.Name ?? MixedStructure?.Name;
 
-	public static GameStructure Load(IEnumerable<string> paths, CoreConfiguration configuration)
+	public static GameStructure Load(IEnumerable<string> paths, FileSystem fileSystem, CoreConfiguration configuration)
 	{
 		List<string> toProcess = ZipExtractor.Process(paths);
 		if (toProcess.Count == 0)
@@ -53,11 +54,11 @@ public sealed class GameStructure : IDisposable
 			throw new ArgumentException("Game files not found", nameof(paths));
 		}
 
-		return new GameStructure(toProcess, configuration);
+		return new GameStructure(toProcess, fileSystem, configuration);
 	}
 
 	[MemberNotNull(nameof(FileCollection))]
-	private void InitializeGameCollection(UnityVersion defaultVersion, UnityVersion targetVersion)
+	private void InitializeGameCollection(UnityVersion defaultVersion, UnityVersion targetVersion, FileSystem fileSystem)
 	{
 		Logger.SendStatusChange("loading_step_create_file_collection");
 
@@ -76,7 +77,8 @@ public sealed class GameStructure : IDisposable
 		FileCollection = GameBundle.FromPaths(
 			filePaths,
 			assetFactory,
-			new GameInitializer(PlatformStructure, MixedStructure, defaultVersion, targetVersion));
+			fileSystem,
+			new GameInitializer(PlatformStructure, MixedStructure, fileSystem, defaultVersion, targetVersion));
 	}
 
 	[MemberNotNull(nameof(AssemblyManager))]
