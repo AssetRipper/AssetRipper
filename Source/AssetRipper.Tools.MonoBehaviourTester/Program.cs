@@ -109,7 +109,7 @@ internal static class Program
 			return;
 		}
 
-		AssemblyManager.Load(assemblyPath);
+		AssemblyManager.Load(assemblyPath, LocalFileSystem.Instance);
 		Logger.Info(LogCategory.Import, $"Assembly '{assembly}' has been loaded");
 	}
 

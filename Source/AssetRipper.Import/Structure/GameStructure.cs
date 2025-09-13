@@ -16,10 +16,12 @@ public sealed class GameStructure : IDisposable
 	public PlatformGameStructure? PlatformStructure { get; private set; }
 	public PlatformGameStructure? MixedStructure { get; private set; }
 	public IAssemblyManager AssemblyManager { get; set; }
+	public FileSystem FileSystem { get; }
 
 	private GameStructure(List<string> paths, FileSystem fileSystem, CoreConfiguration configuration)
 	{
 		Logger.SendStatusChange("loading_step_detect_platform");
+		FileSystem = fileSystem;
 		PlatformChecker.CheckPlatform(paths, fileSystem, out PlatformGameStructure? platformStructure, out MixedGameStructure? mixedStructure);
 		PlatformStructure = platformStructure;
 		PlatformStructure?.CollectFiles(configuration.ImportSettings.IgnoreStreamingAssets);
@@ -34,7 +36,7 @@ public sealed class GameStructure : IDisposable
 
 		Logger.SendStatusChange("loading_step_begin_scheme_processing");
 
-		InitializeGameCollection(configuration.ImportSettings.DefaultVersion, configuration.ImportSettings.TargetVersion, fileSystem);
+		InitializeGameCollection(configuration.ImportSettings.DefaultVersion, configuration.ImportSettings.TargetVersion);
 
 		if (!FileCollection.HasAnyAssetCollections())
 		{
@@ -58,7 +60,7 @@ public sealed class GameStructure : IDisposable
 	}
 
 	[MemberNotNull(nameof(FileCollection))]
-	private void InitializeGameCollection(UnityVersion defaultVersion, UnityVersion targetVersion, FileSystem fileSystem)
+	private void InitializeGameCollection(UnityVersion defaultVersion, UnityVersion targetVersion)
 	{
 		Logger.SendStatusChange("loading_step_create_file_collection");
 
@@ -77,8 +79,8 @@ public sealed class GameStructure : IDisposable
 		FileCollection = GameBundle.FromPaths(
 			filePaths,
 			assetFactory,
-			fileSystem,
-			new GameInitializer(PlatformStructure, MixedStructure, fileSystem, defaultVersion, targetVersion));
+			FileSystem,
+			new GameInitializer(PlatformStructure, MixedStructure, FileSystem, defaultVersion, targetVersion));
 	}
 
 	[MemberNotNull(nameof(AssemblyManager))]
@@ -152,7 +154,7 @@ public sealed class GameStructure : IDisposable
 				Logger.Log(LogType.Warning, LogCategory.Import, $"Assembly '{assembly}' hasn't been found");
 				return;
 			}
-			AssemblyManager.Load(path);
+			AssemblyManager.Load(path, FileSystem);
 		}
 		Logger.Info(LogCategory.Import, $"Assembly '{assembly}' has been loaded");
 	}

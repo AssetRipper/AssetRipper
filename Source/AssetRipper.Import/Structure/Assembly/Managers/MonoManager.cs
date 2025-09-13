@@ -25,7 +25,7 @@ public sealed class MonoManager : BaseManager
 				}
 				else
 				{
-					Load(assemblyPath);
+					Load(assemblyPath, gameStructure.FileSystem);
 				}
 			}
 			catch (BadImageFormatException)
