@@ -32,7 +32,7 @@ internal sealed class WebPlayerGameStructure : PlatformGameStructure
 		Files.Add(Name, assetBundlePath);
 	}
 
-	public static bool IsWebPlayerStructure(string path, FileSystem fileSystem)
+	public static bool Exists(string path, FileSystem fileSystem)
 	{
 		return fileSystem.Directory.Exists(path) && GetWebPlayerName(path, fileSystem, out _);
 	}

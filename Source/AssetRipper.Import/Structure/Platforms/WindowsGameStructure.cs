@@ -5,9 +5,9 @@ using System.Diagnostics;
 
 namespace AssetRipper.Import.Structure.Platforms;
 
-internal sealed class PCGameStructure : PlatformGameStructure
+internal sealed class WindowsGameStructure : PlatformGameStructure
 {
-	public PCGameStructure(string rootPath, FileSystem fileSystem) : base(GetActualRootPath(rootPath, fileSystem), fileSystem)
+	public WindowsGameStructure(string rootPath, FileSystem fileSystem) : base(GetActualRootPath(rootPath, fileSystem), fileSystem)
 	{
 		Debug.Assert(RootPath is not null);
 		if (rootPath != RootPath)
@@ -46,7 +46,7 @@ internal sealed class PCGameStructure : PlatformGameStructure
 		DataPaths = [GameDataPath];
 	}
 
-	public static bool IsPCStructure(string path, FileSystem fileSystem)
+	public static bool Exists(string path, FileSystem fileSystem)
 	{
 		string directory;
 		if (IsExecutableFile(path, fileSystem))

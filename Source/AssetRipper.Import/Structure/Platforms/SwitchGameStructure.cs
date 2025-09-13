@@ -29,7 +29,7 @@ internal sealed class SwitchGameStructure : PlatformGameStructure
 		DataPaths = [GameDataPath];
 	}
 
-	public static bool IsSwitchStructure(string path, FileSystem fileSystem)
+	public static bool Exists(string path, FileSystem fileSystem)
 	{
 		return fileSystem.Directory.Exists(path)
 			&& fileSystem.Directory.Exists(fileSystem.Path.Join(path, ExefsName))

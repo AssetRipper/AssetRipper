@@ -35,7 +35,7 @@ internal sealed class WiiUGameStructure : PlatformGameStructure
 		DataPaths = [GameDataPath];
 	}
 
-	public static bool IsWiiUStructure(string rootPath, FileSystem fileSystem)
+	public static bool Exists(string rootPath, FileSystem fileSystem)
 	{
 		string gameDataPath = fileSystem.Path.Join(rootPath, ContentName, DataFolderName);
 		return fileSystem.Directory.Exists(gameDataPath);

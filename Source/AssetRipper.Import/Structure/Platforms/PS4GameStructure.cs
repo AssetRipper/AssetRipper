@@ -46,7 +46,7 @@ internal sealed class PS4GameStructure : PlatformGameStructure
 		DataPaths = [GameDataPath];
 	}
 
-	public static bool IsPS4Structure(string path, FileSystem fileSystem)
+	public static bool Exists(string path, FileSystem fileSystem)
 	{
 		return fileSystem.Directory.Exists(path) && IsRootPS4Directory(path, fileSystem);
 	}

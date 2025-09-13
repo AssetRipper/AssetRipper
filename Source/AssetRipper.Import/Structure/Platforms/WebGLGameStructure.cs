@@ -77,27 +77,27 @@ internal sealed class WebGLGameStructure : PlatformGameStructure
 		}
 	}
 
-	public static bool IsWebGLStructure(string root, FileSystem fileSystem)
+	public static bool Exists(string root, FileSystem fileSystem)
 	{
 		if (!fileSystem.Directory.Exists(root))
 		{
 			return false;
 		}
 
-		foreach (string fi in fileSystem.Directory.EnumerateFiles(root))
+		foreach (string htmlFile in fileSystem.Directory.EnumerateFiles(root))
 		{
-			if (!fi.EndsWith(HtmlExtension, StringComparison.Ordinal))
+			if (!htmlFile.EndsWith(HtmlExtension, StringComparison.Ordinal))
 			{
 				continue;
 			}
 
-			foreach (string di in fileSystem.Directory.EnumerateDirectories(root))
+			foreach (string directory in fileSystem.Directory.EnumerateDirectories(root))
 			{
-				switch (fileSystem.Path.GetFileName(di))
+				switch (fileSystem.Path.GetFileName(directory))
 				{
 					case DevelopmentName:
 						{
-							foreach (string file in fileSystem.Directory.EnumerateFiles(di))
+							foreach (string file in fileSystem.Directory.EnumerateFiles(directory))
 							{
 								if (file.EndsWith(DataExtension, StringComparison.Ordinal))
 								{
@@ -109,7 +109,7 @@ internal sealed class WebGLGameStructure : PlatformGameStructure
 
 					case ReleaseName:
 						{
-							foreach (string file in fileSystem.Directory.EnumerateFiles(di))
+							foreach (string file in fileSystem.Directory.EnumerateFiles(directory))
 							{
 								if (file.EndsWith(DataGzExtension, StringComparison.Ordinal))
 								{
@@ -121,7 +121,7 @@ internal sealed class WebGLGameStructure : PlatformGameStructure
 
 					case BuildName:
 						{
-							foreach (string file in fileSystem.Directory.EnumerateFiles(di))
+							foreach (string file in fileSystem.Directory.EnumerateFiles(directory))
 							{
 								if (file.EndsWith(DataWebExtension, StringComparison.Ordinal))
 								{

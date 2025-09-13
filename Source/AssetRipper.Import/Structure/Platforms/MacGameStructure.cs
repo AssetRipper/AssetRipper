@@ -45,7 +45,7 @@ internal sealed class MacGameStructure : PlatformGameStructure
 		}
 	}
 
-	public static bool IsMacStructure(string path, FileSystem fileSystem)
+	public static bool Exists(string path, FileSystem fileSystem)
 	{
 		if (!fileSystem.Directory.Exists(path))
 		{

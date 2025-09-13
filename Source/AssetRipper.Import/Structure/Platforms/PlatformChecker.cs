@@ -10,7 +10,7 @@ public static class PlatformChecker
 		platformStructure = null;
 		mixedStructure = null;
 
-		if (CheckPC(paths, fileSystem, out PCGameStructure? pcGameStructure))
+		if (CheckWindows(paths, fileSystem, out WindowsGameStructure? pcGameStructure))
 		{
 			platformStructure = pcGameStructure;
 		}
@@ -60,15 +60,15 @@ public static class PlatformChecker
 	}
 
 
-	private static bool CheckPC(List<string> paths, FileSystem fileSystem, [NotNullWhen(true)] out PCGameStructure? gameStructure)
+	private static bool CheckWindows(List<string> paths, FileSystem fileSystem, [NotNullWhen(true)] out WindowsGameStructure? gameStructure)
 	{
 		foreach (string path in paths)
 		{
-			if (PCGameStructure.IsPCStructure(path, fileSystem))
+			if (WindowsGameStructure.Exists(path, fileSystem))
 			{
-				gameStructure = new PCGameStructure(path, fileSystem);
+				gameStructure = new WindowsGameStructure(path, fileSystem);
 				paths.Remove(path);
-				Logger.Info(LogCategory.Import, $"PC game structure has been found at '{path}'");
+				Logger.Info(LogCategory.Import, $"Windows game structure has been found at '{path}'");
 				return true;
 			}
 		}
@@ -80,7 +80,7 @@ public static class PlatformChecker
 	{
 		foreach (string path in paths)
 		{
-			if (LinuxGameStructure.IsLinuxStructure(path, fileSystem))
+			if (LinuxGameStructure.Exists(path, fileSystem))
 			{
 				gameStructure = new LinuxGameStructure(path, fileSystem);
 				paths.Remove(path);
@@ -96,7 +96,7 @@ public static class PlatformChecker
 	{
 		foreach (string path in paths)
 		{
-			if (MacGameStructure.IsMacStructure(path, fileSystem))
+			if (MacGameStructure.Exists(path, fileSystem))
 			{
 				gameStructure = new MacGameStructure(path, fileSystem);
 				paths.Remove(path);
@@ -159,7 +159,7 @@ public static class PlatformChecker
 	{
 		foreach (string path in paths)
 		{
-			if (iOSGameStructure.IsiOSStructure(path, fileSystem))
+			if (iOSGameStructure.Exists(path, fileSystem))
 			{
 				gameStructure = new iOSGameStructure(path, fileSystem);
 				paths.Remove(path);
@@ -175,7 +175,7 @@ public static class PlatformChecker
 	{
 		foreach (string path in paths)
 		{
-			if (PS4GameStructure.IsPS4Structure(path, fileSystem))
+			if (PS4GameStructure.Exists(path, fileSystem))
 			{
 				gameStructure = new PS4GameStructure(path, fileSystem);
 				paths.Remove(path);
@@ -191,7 +191,7 @@ public static class PlatformChecker
 	{
 		foreach (string path in paths)
 		{
-			if (SwitchGameStructure.IsSwitchStructure(path, fileSystem))
+			if (SwitchGameStructure.Exists(path, fileSystem))
 			{
 				gameStructure = new SwitchGameStructure(path, fileSystem);
 				paths.Remove(path);
@@ -207,7 +207,7 @@ public static class PlatformChecker
 	{
 		foreach (string path in paths)
 		{
-			if (WebGLGameStructure.IsWebGLStructure(path, fileSystem))
+			if (WebGLGameStructure.Exists(path, fileSystem))
 			{
 				gameStructure = new WebGLGameStructure(path, fileSystem);
 				paths.Remove(path);
@@ -223,7 +223,7 @@ public static class PlatformChecker
 	{
 		foreach (string path in paths)
 		{
-			if (WebPlayerGameStructure.IsWebPlayerStructure(path, fileSystem))
+			if (WebPlayerGameStructure.Exists(path, fileSystem))
 			{
 				gameStructure = new WebPlayerGameStructure(path, fileSystem);
 				paths.Remove(path);
@@ -239,7 +239,7 @@ public static class PlatformChecker
 	{
 		foreach (string path in paths)
 		{
-			if (WiiUGameStructure.IsWiiUStructure(path, fileSystem))
+			if (WiiUGameStructure.Exists(path, fileSystem))
 			{
 				gameStructure = new WiiUGameStructure(path, fileSystem);
 				paths.Remove(path);

@@ -38,7 +38,7 @@ internal sealed class iOSGameStructure : PlatformGameStructure
 		DataPaths = [GameDataPath];
 	}
 
-	public static bool IsiOSStructure(string path, FileSystem fileSystem)
+	public static bool Exists(string path, FileSystem fileSystem)
 	{
 		if (!fileSystem.Directory.Exists(path))
 		{
@@ -59,14 +59,14 @@ internal sealed class iOSGameStructure : PlatformGameStructure
 			return false;
 		}
 
-		foreach (string dinfo in fileSystem.Directory.EnumerateDirectories(payloadPath))
+		foreach (string directory in fileSystem.Directory.EnumerateDirectories(payloadPath))
 		{
-			string name = fileSystem.Path.GetFileName(dinfo);
+			string name = fileSystem.Path.GetFileName(directory);
 			if (name.EndsWith(AppExtension, StringComparison.Ordinal))
 			{
-				appPath = dinfo;
+				appPath = directory;
 				appName = name[..^AppExtension.Length];
-				dataPath = fileSystem.Path.Join(dinfo, DataFolderName);
+				dataPath = fileSystem.Path.Join(directory, DataFolderName);
 				if (fileSystem.Directory.Exists(dataPath))
 				{
 					return true;

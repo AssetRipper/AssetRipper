@@ -46,7 +46,7 @@ internal sealed class LinuxGameStructure : PlatformGameStructure
 		DataPaths = [GameDataPath];
 	}
 
-	public static bool IsLinuxStructure(string path, FileSystem fileSystem)
+	public static bool Exists(string path, FileSystem fileSystem)
 	{
 		string directory;
 		if (IsExecutableFile(path, fileSystem))
