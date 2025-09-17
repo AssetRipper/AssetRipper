@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<IsTrimmable>true</IsTrimmable>
 		<OutputPath>..\0Bins\Other\Smolv\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\0Bins\obj\Smolv\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>

@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<IsTrimmable>true</IsTrimmable>
 		<OutputPath>..\0Bins\Other\AssetRipper.IO.Files\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.IO.Files\$(Configuration)\</IntermediateOutputPath>
 		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>

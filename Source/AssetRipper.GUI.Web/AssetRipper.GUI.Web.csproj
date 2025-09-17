@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<ImplicitUsings>enable</ImplicitUsings>
 		<OutputPath>..\0Bins\Other\AssetRipper.GUI.Web\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.GUI.Web\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>

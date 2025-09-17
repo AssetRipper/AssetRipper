@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<IsTrimmable>true</IsTrimmable>
 		<OutputPath>..\0Bins\Other\AssetRipper.Export.Modules.Audio\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.Export.Modules.Audio\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
