@@ -2,7 +2,7 @@
 
 public static class CommonString
 {
-	public static readonly Dictionary<uint, string> StringBuffer = new Dictionary<uint, string>
+	public static readonly Dictionary<uint, string> StringBuffer = new()
 	{
 		{0, "AABB"},
 		{5, "AnimationClip"},
@@ -115,5 +115,6 @@ public static class CommonString
 		{1161, "Hash128"},
 		{1169, "RenderingLayerMask"},
 		{1188, "fixed_array"},
+		{1200, "EntityId"},
 	};
 }

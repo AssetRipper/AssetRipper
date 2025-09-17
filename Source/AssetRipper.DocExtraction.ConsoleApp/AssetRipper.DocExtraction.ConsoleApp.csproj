@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<OutputPath>..\0Bins\AssetRipper.DocExtraction.ConsoleApp\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.DocExtraction.ConsoleApp\$(Configuration)\</IntermediateOutputPath>
+	</PropertyGroup>
+
+
+	<ItemGroup>
+		<ProjectReference Include="..\AssetRipper.DocExtraction\AssetRipper.DocExtraction.csproj" />
+	</ItemGroup>
+
+</Project>

@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<OutputPath>..\0Bins\AssetRipper.AssemblyDumper\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.AssemblyDumper\$(Configuration)\</IntermediateOutputPath>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AsmResolver.DotNet" Version="6.0.0-beta.4" />
+		<PackageReference Include="AssetRipper.Checksum" Version="1.1.0" />
+		<PackageReference Include="AssetRipper.CIL" Version="1.2.1" />
+		<PackageReference Include="AssetRipper.Tpk.TypeTrees.Json" Version="1.1.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\AssetRipper.AssemblyDumper.Utils\AssetRipper.AssemblyDumper.Utils.csproj" />
+		<ProjectReference Include="..\AssetRipper.Assets\AssetRipper.Assets.csproj" />
+		<ProjectReference Include="..\AssetRipper.DocExtraction\AssetRipper.DocExtraction.csproj" />
+		<ProjectReference Include="..\AssetRipper.IO.Files\AssetRipper.IO.Files.csproj" />
+		<ProjectReference Include="..\AssetRipper.Numerics\AssetRipper.Numerics.csproj" />
+	</ItemGroup>
+
+</Project>

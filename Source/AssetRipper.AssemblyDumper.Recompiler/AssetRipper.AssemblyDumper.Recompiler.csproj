@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<OutputPath>..\0Bins\AssetRipper.AssemblyDumper.Recompiler\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.AssemblyDumper.Recompiler\$(Configuration)\</IntermediateOutputPath>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="ICSharpCode.Decompiler" Version="10.0.0.8079-preview1" />
+	</ItemGroup>
+
+</Project>

@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 		.github\CONTRIBUTING.md = .github\CONTRIBUTING.md
 		Source\Directory.Build.props = Source\Directory.Build.props
+		Source\generate.bat = Source\generate.bat
 		LICENSE.md = LICENSE.md
 		nuget.config = nuget.config
 		README.md = README.md
@@ -164,6 +165,24 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.GUI.Licensing.SourceGenerator", "Source\AssetRipper.GUI.Licensing.SourceGenerator\AssetRipper.GUI.Licensing.SourceGenerator.csproj", "{6B3DD564-FD57-4EAA-8696-A15A5A6FFF29}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.SourceGenerated.Extensions.SourceGenerator", "Source\AssetRipper.SourceGenerated.Extensions.SourceGenerator\AssetRipper.SourceGenerated.Extensions.SourceGenerator.csproj", "{C10F7EBE-4898-44F9-9934-0727A20169BE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.AssemblyDumper.Utils", "Source\AssetRipper.AssemblyDumper.Utils\AssetRipper.AssemblyDumper.Utils.csproj", "{589B71FD-5C3C-4C86-A83E-57929F95A8A2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.AssemblyDumper", "Source\AssetRipper.AssemblyDumper\AssetRipper.AssemblyDumper.csproj", "{76E9A7CA-5A37-B92F-1B4A-F94761C42001}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.DocExtraction", "Source\AssetRipper.DocExtraction\AssetRipper.DocExtraction.csproj", "{D6670250-5E40-C918-0747-48A745EC7431}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.DocExtraction.ConsoleApp", "Source\AssetRipper.DocExtraction.ConsoleApp\AssetRipper.DocExtraction.ConsoleApp.csproj", "{A39A638B-4E59-DE47-714D-5714F1FD1D22}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.AssemblyDumper.Downloader", "Source\AssetRipper.AssemblyDumper.Downloader\AssetRipper.AssemblyDumper.Downloader.csproj", "{77407399-508D-A313-2DDE-50CB6CD38FA7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.AssemblyDumper.Recompiler", "Source\AssetRipper.AssemblyDumper.Recompiler\AssetRipper.AssemblyDumper.Recompiler.csproj", "{A018110D-39E7-D8A6-D4CB-0FD1B86E9D12}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.AssemblyDumper.Tests", "Source\AssetRipper.AssemblyDumper.Tests\AssetRipper.AssemblyDumper.Tests.csproj", "{4671543B-D08A-7E66-880A-CF6EFECE0124}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.AssemblyDumper.NuGetFixer", "Source\AssetRipper.AssemblyDumper.NuGetFixer\AssetRipper.AssemblyDumper.NuGetFixer.csproj", "{504C946E-4DF7-BC74-B275-4098863CDD5C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetRipper.AssemblyDumper.NativeEnumExtractor", "Source\AssetRipper.AssemblyDumper.NativeEnumExtractor\AssetRipper.AssemblyDumper.NativeEnumExtractor.csproj", "{0614FFBA-0470-4BC8-9334-2EFCEDE669D7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -347,6 +366,42 @@ Global
 		{C10F7EBE-4898-44F9-9934-0727A20169BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C10F7EBE-4898-44F9-9934-0727A20169BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C10F7EBE-4898-44F9-9934-0727A20169BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{589B71FD-5C3C-4C86-A83E-57929F95A8A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{589B71FD-5C3C-4C86-A83E-57929F95A8A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{589B71FD-5C3C-4C86-A83E-57929F95A8A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{589B71FD-5C3C-4C86-A83E-57929F95A8A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76E9A7CA-5A37-B92F-1B4A-F94761C42001}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76E9A7CA-5A37-B92F-1B4A-F94761C42001}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76E9A7CA-5A37-B92F-1B4A-F94761C42001}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76E9A7CA-5A37-B92F-1B4A-F94761C42001}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6670250-5E40-C918-0747-48A745EC7431}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6670250-5E40-C918-0747-48A745EC7431}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6670250-5E40-C918-0747-48A745EC7431}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6670250-5E40-C918-0747-48A745EC7431}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A39A638B-4E59-DE47-714D-5714F1FD1D22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A39A638B-4E59-DE47-714D-5714F1FD1D22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A39A638B-4E59-DE47-714D-5714F1FD1D22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A39A638B-4E59-DE47-714D-5714F1FD1D22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77407399-508D-A313-2DDE-50CB6CD38FA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77407399-508D-A313-2DDE-50CB6CD38FA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77407399-508D-A313-2DDE-50CB6CD38FA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77407399-508D-A313-2DDE-50CB6CD38FA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A018110D-39E7-D8A6-D4CB-0FD1B86E9D12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A018110D-39E7-D8A6-D4CB-0FD1B86E9D12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A018110D-39E7-D8A6-D4CB-0FD1B86E9D12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A018110D-39E7-D8A6-D4CB-0FD1B86E9D12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4671543B-D08A-7E66-880A-CF6EFECE0124}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4671543B-D08A-7E66-880A-CF6EFECE0124}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4671543B-D08A-7E66-880A-CF6EFECE0124}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4671543B-D08A-7E66-880A-CF6EFECE0124}.Release|Any CPU.Build.0 = Release|Any CPU
+		{504C946E-4DF7-BC74-B275-4098863CDD5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{504C946E-4DF7-BC74-B275-4098863CDD5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{504C946E-4DF7-BC74-B275-4098863CDD5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{504C946E-4DF7-BC74-B275-4098863CDD5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0614FFBA-0470-4BC8-9334-2EFCEDE669D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0614FFBA-0470-4BC8-9334-2EFCEDE669D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0614FFBA-0470-4BC8-9334-2EFCEDE669D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0614FFBA-0470-4BC8-9334-2EFCEDE669D7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
