@@ -19,7 +19,7 @@
 	<ItemGroup>
 		<!-- Generator dependencies -->
 		<PackageReference Include="AssetRipper.Text.SourceGeneration" Version="1.2.2" PrivateAssets="all" GeneratePathProperty="true" />
-		<PackageReference Include="System.Text.Json" Version="9.0.8" PrivateAssets="all" GeneratePathProperty="true" />
+		<PackageReference Include="System.Text.Json" Version="9.0.9" PrivateAssets="all" GeneratePathProperty="true" />
 	</ItemGroup>
 
 </Project>
