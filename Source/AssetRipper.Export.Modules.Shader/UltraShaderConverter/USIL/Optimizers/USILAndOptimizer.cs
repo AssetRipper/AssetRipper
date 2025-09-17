@@ -42,12 +42,12 @@ public class USILAndOptimizer : IUSILOptimizer
 						new USILOperand()
 						{
 							operandType = USILOperandType.ImmediateFloat,
-							immValueFloat = new float[1] { 1f }
+							immValueFloat = [1f]
 						},
 						new USILOperand()
 						{
 							operandType = USILOperandType.ImmediateFloat,
-							immValueFloat = new float[1] { 0f }
+							immValueFloat = [0f]
 						}
 					};
 
@@ -73,7 +73,7 @@ public class USILAndOptimizer : IUSILOptimizer
 							new USILOperand()
 							{
 								operandType = USILOperandType.ImmediateFloat,
-								immValueFloat = new float[1] { 0f }
+								immValueFloat = [0f]
 							}
 						};
 					}

@@ -95,17 +95,17 @@ public class USILOperand
 	public USILOperand(int value)
 	{
 		operandType = USILOperandType.ImmediateInt;
-		immValueInt = new[] { value };
+		immValueInt = [value];
 		immIsInt = true;
-		mask = new[] { 0 };
+		mask = [0];
 	}
 
 	public USILOperand(float value)
 	{
 		operandType = USILOperandType.ImmediateFloat;
-		immValueFloat = new[] { value };
+		immValueFloat = [value];
 		immIsInt = false;
-		mask = new[] { 0 };
+		mask = [0];
 	}
 
 	public int GetValueCount()

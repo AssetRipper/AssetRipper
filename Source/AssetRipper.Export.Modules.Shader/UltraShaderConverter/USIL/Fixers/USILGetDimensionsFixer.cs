@@ -16,11 +16,11 @@ public class USILGetDimensionsFixer : IUSILOptimizer
 		List<USILInstruction> instructions = shader.instructions;
 		for (int i = 0; i < instructions.Count; i++)
 		{
-			bool matches = USILOptimizerUtil.DoOpcodesMatch(instructions, i, new[]
-			{
+			bool matches = USILOptimizerUtil.DoOpcodesMatch(instructions, i,
+			[
 				USILInstructionType.ResourceDimensionInfo,
 				USILInstructionType.SampleCountInfo
-			});
+			]);
 
 			if (!matches)
 			{

@@ -15,8 +15,8 @@ public static class USILOptimizerApplier
 	/// Order is important. Calling <see cref="IUSILOptimizer.Run(UShaderProgram, ShaderSubProgram)"/> should not modify
 	/// the state of the optimizer.
 	/// </remarks>
-	private static readonly IUSILOptimizer[] OPTIMIZER_TYPES = new IUSILOptimizer[]
-	{
+	private static readonly IUSILOptimizer[] OPTIMIZER_TYPES =
+	[
 		// do metadders first
 		new USILCBufferMetadder(),
 		new USILSamplerMetadder(),
@@ -34,7 +34,7 @@ public static class USILOptimizerApplier
 		new USILAddNegativeOptimizer(),
 		new USILAndOptimizer(),
 		new USILForLoopOptimizer(),
-	};
+	];
 
 	public static void Apply(UShaderProgram shader, ShaderSubProgram shaderData)
 	{

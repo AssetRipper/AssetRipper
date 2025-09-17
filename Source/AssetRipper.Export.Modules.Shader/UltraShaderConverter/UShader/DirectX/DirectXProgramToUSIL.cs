@@ -397,17 +397,17 @@ public class DirectXProgramToUSIL
 					{
 						if (immIsInt)
 						{
-							usilOperand.immValueInt = new int[1]
-							{
+							usilOperand.immValueInt =
+							[
 							ConvertFloatToInt((float)dxOperand.immValues[0])
-							};
+							];
 						}
 						else
 						{
-							usilOperand.immValueFloat = new float[1]
-							{
+							usilOperand.immValueFloat =
+							[
 							(float)dxOperand.immValues[0]
-							};
+							];
 						}
 					}
 					else if (dxOperand.immValues.Length == 4)
@@ -472,7 +472,7 @@ public class DirectXProgramToUSIL
 		else if (destMask.Length == 1)
 		{
 			// with mask size 1, all inputs are also only size 1
-			return new int[] { srcMask[0] };
+			return [srcMask[0]];
 		}
 		else //dest.mask.Length == (2 || 3)
 		{
@@ -1234,7 +1234,7 @@ public class DirectXProgramToUSIL
 		USILOperand usilSrc0 = new();
 		USILOperand usilSrc1 = new();
 
-		int[] mask = new int[] { 0, 1 };
+		int[] mask = [0, 1];
 		FillUSILOperand(dest, usilDest, dest.swizzle, false);
 		FillUSILOperand(src0, usilSrc0, mask, false);
 		FillUSILOperand(src1, usilSrc1, mask, false);
@@ -1264,7 +1264,7 @@ public class DirectXProgramToUSIL
 		USILOperand usilSrc0 = new();
 		USILOperand usilSrc1 = new();
 
-		int[] mask = new int[] { 0, 1, 2 };
+		int[] mask = [0, 1, 2];
 		FillUSILOperand(dest, usilDest, dest.swizzle, false);
 		FillUSILOperand(src0, usilSrc0, mask, false);
 		FillUSILOperand(src1, usilSrc1, mask, false);
@@ -1294,7 +1294,7 @@ public class DirectXProgramToUSIL
 		USILOperand usilSrc0 = new();
 		USILOperand usilSrc1 = new();
 
-		int[] mask = new int[] { 0, 1, 2, 3 };
+		int[] mask = [0, 1, 2, 3];
 		FillUSILOperand(dest, usilDest, dest.swizzle, false);
 		FillUSILOperand(src0, usilSrc0, mask, false);
 		FillUSILOperand(src1, usilSrc1, mask, false);
@@ -1327,7 +1327,7 @@ public class DirectXProgramToUSIL
 		USILOperand usilSrcSampler = new();
 		USILOperand usilSamplerType = new(0); // i.e. unity_ProbeVolumeSH (handled by USILSamplerTypeFixer)
 
-		int[] mask = new int[] { 0, 1, 2, 3 };
+		int[] mask = [0, 1, 2, 3];
 
 		ResourceDimension dimension = _resourceToDimension[srcResource.arraySizes[0]];
 		int[] uvMask = GetSampleLocationMask(dimension);
@@ -1368,7 +1368,7 @@ public class DirectXProgramToUSIL
 		USILOperand usilSrcReferenceValue = new();
 		USILOperand usilSamplerType = new(0); // i.e. unity_ProbeVolumeSH (handled by USILSamplerTypeFixer)
 
-		int[] mask = new int[] { 0, 1, 2, 3 };
+		int[] mask = [0, 1, 2, 3];
 
 		ResourceDimension dimension = _resourceToDimension[srcResource.arraySizes[0]];
 		int[] uvMask = GetSampleLocationMask(dimension);
@@ -1416,7 +1416,7 @@ public class DirectXProgramToUSIL
 		USILOperand usilSrcLOD = new();
 		USILOperand usilSamplerType = new(0); // i.e. unity_ProbeVolumeSH (handled by USILSamplerTypeFixer)
 
-		int[] mask = new int[] { 0, 1, 2, 3 };
+		int[] mask = [0, 1, 2, 3];
 
 		ResourceDimension dimension = _resourceToDimension[srcResource.arraySizes[0]];
 		int[] uvMask = GetSampleLocationMask(dimension);
@@ -1465,7 +1465,7 @@ public class DirectXProgramToUSIL
 		USILOperand usilSrcXDerivatives = new();
 		USILOperand usilSrcYDerivatives = new();
 
-		int[] mask = new int[] { 0, 1, 2, 3 };
+		int[] mask = [0, 1, 2, 3];
 
 		ResourceDimension dimension = _resourceToDimension[srcResource.arraySizes[0]];
 		int[] uvMask = GetSampleLocationMask(dimension);
@@ -1622,12 +1622,12 @@ public class DirectXProgramToUSIL
 			}
 		}
 
-		FillUSILOperand(src1, usilResource, new int[] { 0, 1, 2, 3 }, false);
+		FillUSILOperand(src1, usilResource, [0, 1, 2, 3], false);
 		FillUSILOperand(src0, usilMipLevel, src0.swizzle, false);
 
 		if (hasWidth)
 		{
-			FillUSILOperand(dest, usilWidth, new int[] { 0 }, false);
+			FillUSILOperand(dest, usilWidth, [0], false);
 		}
 		else
 		{
@@ -1636,7 +1636,7 @@ public class DirectXProgramToUSIL
 
 		if (hasHeight)
 		{
-			FillUSILOperand(dest, usilHeight, new int[] { 1 }, false);
+			FillUSILOperand(dest, usilHeight, [1], false);
 		}
 		else
 		{
@@ -1645,7 +1645,7 @@ public class DirectXProgramToUSIL
 
 		if (hasDepth)
 		{
-			FillUSILOperand(dest, usilDepthOrArraySize, new int[] { 2 }, false);
+			FillUSILOperand(dest, usilDepthOrArraySize, [2], false);
 		}
 		else
 		{
@@ -1654,7 +1654,7 @@ public class DirectXProgramToUSIL
 
 		if (hasMipCount)
 		{
-			FillUSILOperand(dest, usilMipCount, new int[] { 3 }, false);
+			FillUSILOperand(dest, usilMipCount, [3], false);
 		}
 		else
 		{
@@ -2154,10 +2154,10 @@ public class DirectXProgramToUSIL
 	public static int[] GetMaskOfSize(int size) => size switch
 	{
 		0 => Array.Empty<int>(),
-		1 => new[] { 0 },
-		2 => new[] { 0, 1 },
-		3 => new[] { 0, 1, 2 },
-		4 => new[] { 0, 1, 2, 3 },
+		1 => [0],
+		2 => [0, 1],
+		3 => [0, 1, 2],
+		4 => [0, 1, 2, 3],
 		_ => throw new ArgumentOutOfRangeException(nameof(size)),
 	};
 

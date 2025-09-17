@@ -39,22 +39,22 @@ public class EngineTypePredicates
 	private const string SerializeFieldAttribute = "SerializeField";
 	private const string SerializeReferenceAttribute = "SerializeReference";
 
-	private static readonly string[] serializableClasses = new[]
-	{
+	private static readonly string[] serializableClasses =
+	[
 		"AnimationCurve",
 		"Gradient",
 		"GUIStyle",
 		"RectOffset"
-	};
+	];
 
-	private static readonly string[] serializableStructs = new[]
-	{
+	private static readonly string[] serializableStructs =
+	[
 		// NOTE: assumes all types here are NOT interfaces
 		"UnityEngine.Color32",
 		"UnityEngine.Matrix4x4",
 		"UnityEngine.Rendering.SphericalHarmonicsL2",
 		"UnityEngine.PropertyName",
-	};
+	];
 
 	public static bool IsMonoBehaviour(ITypeDescriptor type)
 	{

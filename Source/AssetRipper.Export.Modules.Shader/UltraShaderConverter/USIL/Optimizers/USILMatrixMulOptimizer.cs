@@ -15,16 +15,16 @@ namespace AssetRipper.Export.Modules.Shaders.UltraShaderConverter.USIL.Optimizer
 /// </remarks>
 public class USILMatrixMulOptimizer : IUSILOptimizer
 {
-	private static readonly int[] XYZW_MASK = new int[] { 0, 1, 2, 3 };
-	private static readonly int[] XXXX_MASK = new int[] { 0, 0, 0, 0 };
-	private static readonly int[] YYYY_MASK = new int[] { 1, 1, 1, 1 };
-	private static readonly int[] ZZZZ_MASK = new int[] { 2, 2, 2, 2 };
-	private static readonly int[] WWWW_MASK = new int[] { 3, 3, 3, 3 };
+	private static readonly int[] XYZW_MASK = [0, 1, 2, 3];
+	private static readonly int[] XXXX_MASK = [0, 0, 0, 0];
+	private static readonly int[] YYYY_MASK = [1, 1, 1, 1];
+	private static readonly int[] ZZZZ_MASK = [2, 2, 2, 2];
+	private static readonly int[] WWWW_MASK = [3, 3, 3, 3];
 
-	private static readonly int[] XYZ_MASK = new int[] { 0, 1, 2 };
-	private static readonly int[] XXX_MASK = new int[] { 0, 0, 0 };
-	private static readonly int[] YYY_MASK = new int[] { 1, 1, 1 };
-	private static readonly int[] ZZZ_MASK = new int[] { 2, 2, 2 };
+	private static readonly int[] XYZ_MASK = [0, 1, 2];
+	private static readonly int[] XXX_MASK = [0, 0, 0];
+	private static readonly int[] YYY_MASK = [1, 1, 1];
+	private static readonly int[] ZZZ_MASK = [2, 2, 2];
 
 	public bool Run(UShaderProgram shader, ShaderSubProgram shaderData)
 	{
@@ -47,12 +47,12 @@ public class USILMatrixMulOptimizer : IUSILOptimizer
 		{
 			// do detection
 
-			bool opcodesMatch = DoOpcodesMatch(insts, i, new[] {
+			bool opcodesMatch = DoOpcodesMatch(insts, i, [
 				USILInstructionType.Multiply,
 				USILInstructionType.MultiplyAdd,
 				USILInstructionType.MultiplyAdd,
 				USILInstructionType.Add
-			});
+			]);
 
 			if (!opcodesMatch)
 			{
@@ -142,18 +142,18 @@ public class USILMatrixMulOptimizer : IUSILOptimizer
 			USILOperand mulOutputOperand = new USILOperand(inst3.destOperand);
 
 			mulInputMat4x4Operand.displayMask = false;
-			mulInputVec3Operand.mask = new int[] { 0, 1, 2 };
+			mulInputVec3Operand.mask = [0, 1, 2];
 
 			USILOperand mulInput1Operand = new USILOperand()
 			{
 				operandType = USILOperandType.ImmediateFloat,
-				immValueFloat = new[] { 1f },
+				immValueFloat = [1f],
 			};
 
 			USILOperand mulInputVec4Operand = new USILOperand()
 			{
 				operandType = USILOperandType.Multiple,
-				children = new[] { mulInputVec3Operand, mulInput1Operand }
+				children = [mulInputVec3Operand, mulInput1Operand]
 			};
 
 			USILInstruction mulInstruction = new USILInstruction()
@@ -181,12 +181,12 @@ public class USILMatrixMulOptimizer : IUSILOptimizer
 		{
 			// do detection
 
-			bool opcodesMatch = DoOpcodesMatch(insts, i, new[] {
+			bool opcodesMatch = DoOpcodesMatch(insts, i, [
 				USILInstructionType.Multiply,
 				USILInstructionType.MultiplyAdd,
 				USILInstructionType.MultiplyAdd,
 				USILInstructionType.MultiplyAdd
-			});
+			]);
 
 			if (!opcodesMatch)
 			{
@@ -281,7 +281,7 @@ public class USILMatrixMulOptimizer : IUSILOptimizer
 			USILOperand mulOutputOperand = new USILOperand(inst3.destOperand);
 
 			mulInputMat4x4Operand.displayMask = false;
-			mulInputVec4Operand.mask = new int[] { 0, 1, 2, 3 };
+			mulInputVec4Operand.mask = [0, 1, 2, 3];
 
 			USILInstruction mulInstruction = new USILInstruction()
 			{
@@ -309,12 +309,12 @@ public class USILMatrixMulOptimizer : IUSILOptimizer
 		{
 			// do detection
 
-			bool opcodesMatch = DoOpcodesMatch(insts, i, new[] {
+			bool opcodesMatch = DoOpcodesMatch(insts, i, [
 				USILInstructionType.Multiply,
 				USILInstructionType.MultiplyAdd,
 				USILInstructionType.MultiplyAdd,
 				USILInstructionType.Add
-			});
+			]);
 
 			if (!opcodesMatch)
 			{
@@ -404,7 +404,7 @@ public class USILMatrixMulOptimizer : IUSILOptimizer
 			USILOperand mulOutputOperand = new USILOperand(inst3.destOperand);
 
 			mulInputMat3x3Operand.displayMask = false;
-			mulInputVec3Operand.mask = new int[] { 0, 1, 2 };
+			mulInputVec3Operand.mask = [0, 1, 2];
 
 			USILInstruction mulInstruction = new USILInstruction()
 			{

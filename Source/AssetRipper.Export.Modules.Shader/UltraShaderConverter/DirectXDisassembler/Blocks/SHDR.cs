@@ -552,7 +552,7 @@ public class SHDRDeclData
 	public SHDRInstructionOperand[] operands = Array.Empty<SHDRInstructionOperand>();
 
 	private static readonly string[] nameTokens =
-	{
+	[
 		"undefined",
 		"position",
 		"clip_distance",
@@ -576,7 +576,7 @@ public class SHDRDeclData
 		"finalTriInsideTessFactor",
 		"finalLineDetailTessFactor",
 		"finalLineDensityTessFactor"
-	};
+	];
 
 	public SHDRDeclData(BinaryReader reader, SHDRInstruction inst, int instData)
 	{
@@ -591,10 +591,10 @@ public class SHDRDeclData
 			case Opcode.dcl_resource:
 				{
 					resourceDimension = (ResourceDimension)((instData & 0x0000f800) >> 11);
-					operands = new SHDRInstructionOperand[1]
-					{
+					operands =
+					[
 					new SHDRInstructionOperand(reader)
-					};
+					];
 					break;
 				}
 			case Opcode.dcl_indexrange:
@@ -615,10 +615,10 @@ public class SHDRDeclData
 			case Opcode.dcl_constantbuffer:
 				{
 					constantBufferType = (ConstantBufferType)((instData & 0x00fff800) >> 11);
-					operands = new SHDRInstructionOperand[1]
-					{
+					operands =
+					[
 					new SHDRInstructionOperand(reader)
-					};
+					];
 					break;
 				}
 			case Opcode.dcl_sampler:
@@ -660,12 +660,13 @@ public class SHDRDeclData
 				}
 			case Opcode.dcl_thread_group:
 				{
-					workGroupSize = new int[3] //?
-					{
+					workGroupSize =
+					//?
+					[
 					reader.ReadInt32(),
 					reader.ReadInt32(),
 					reader.ReadInt32()
-					};
+					];
 					break;
 				}
 			case Opcode.dcl_input_siv:
@@ -743,13 +744,13 @@ public class SHDRDeclData
 					for (int i = 0; i < customDataOperandCount; i++)
 					{
 						//how do we know which type? using float for now
-						customDataArray[i] = new float[4]
-						{
+						customDataArray[i] =
+						[
 						reader.ReadSingle(),
 						reader.ReadSingle(),
 						reader.ReadSingle(),
 						reader.ReadSingle()
-						};
+						];
 					}
 					break;
 				}

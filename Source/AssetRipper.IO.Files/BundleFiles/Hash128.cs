@@ -54,8 +54,8 @@ public sealed record class Hash128 : IEndianReadable<Hash128>, IEndianWritable
 
 	public byte[] ToArray()
 	{
-		return new byte[16]
-		{
+		return
+		[
 			Byte0,
 			Byte1,
 			Byte2,
@@ -72,7 +72,7 @@ public sealed record class Hash128 : IEndianReadable<Hash128>, IEndianWritable
 			Byte13,
 			Byte14,
 			Byte15,
-		};
+		];
 	}
 
 	public byte Byte0 { get; set; }

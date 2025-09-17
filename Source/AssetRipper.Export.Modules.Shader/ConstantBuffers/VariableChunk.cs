@@ -13,7 +13,7 @@ internal class VariableChunk
 		m_constantBufferIndex = constantBufferIndex;
 		m_programType = programType;
 		majorVersion = programType.GetMajorDXVersion();
-		m_variables = new Variable[] { Variable.CreateResourceBindVariable(programType) };
+		m_variables = [Variable.CreateResourceBindVariable(programType)];
 		BuildVariableHeaders(variableOffset);
 
 	}
