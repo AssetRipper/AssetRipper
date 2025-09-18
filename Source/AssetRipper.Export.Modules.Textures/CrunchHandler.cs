@@ -1,4 +1,6 @@
-﻿using AssetRipper.Import.Logging;
+﻿using AssetRipper.Conversions.Crunch;
+using AssetRipper.Conversions.UnityCrunch;
+using AssetRipper.Import.Logging;
 using AssetRipper.SourceGenerated.Enums;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
@@ -9,14 +11,15 @@ internal static partial class CrunchHandler
 {
 	public static bool DecompressCrunch(TextureFormat textureFormat, UnityVersion unityVersion, ReadOnlySpan<byte> data, [NotNullWhen(true)] out byte[]? uncompressedBytes)
 	{
-		if (OperatingSystem.IsWindows())
+		/*if (OperatingSystem.IsWindows())
 		{
 			return DecompressCrunchWithUtinyDecoder(textureFormat, unityVersion, data, out uncompressedBytes);
 		}
 		else
 		{
 			return DecompressCrunchWithStudioDecoder(textureFormat, unityVersion, data, out uncompressedBytes);
-		}
+		}*/
+		return DecompressCrunchWithNewDecoder(textureFormat, unityVersion, data, out uncompressedBytes);
 	}
 
 	private static bool IsUseUnityCrunch(UnityVersion version, TextureFormat format)
@@ -100,5 +103,12 @@ internal static partial class CrunchHandler
 		Logger.Info("About to unpack unity crunch...");
 		uncompressedBytes = Texture2DDecoder.TextureDecoder.UnpackUnityCrunch(data);
 		return uncompressedBytes is { Length: > 0 };
+	}
+
+	private static bool DecompressCrunchWithNewDecoder(TextureFormat textureFormat, UnityVersion unityVersion, ReadOnlySpan<byte> data, [NotNullWhen(true)] out byte[]? uncompressedBytes)
+	{
+		return IsUseUnityCrunch(unityVersion, textureFormat)
+			? UnityCrunch.TryDecompress(data, out uncompressedBytes)
+			: Crunch.TryDecompress(data, out uncompressedBytes);
 	}
 }
