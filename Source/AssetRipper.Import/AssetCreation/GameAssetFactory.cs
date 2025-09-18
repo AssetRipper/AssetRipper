@@ -137,7 +137,7 @@ public sealed class GameAssetFactory : AssetFactoryBase
 		return unreadable;
 	}
 
-	private static IUnityObjectBase TryReadNormalObject(AssetInfo assetInfo, ReadOnlyArraySegment<byte> assetData, UnityVersion version, out string? error)
+	private static IUnityObjectBase TryReadNormalObject(AssetInfo assetInfo, ReadOnlySpan<byte> assetData, UnityVersion version, out string? error)
 	{
 		IUnityObjectBase? asset = CreateAsset(assetInfo, version);
 		if (asset is null)
@@ -151,9 +151,14 @@ public sealed class GameAssetFactory : AssetFactoryBase
 			asset.Read(ref reader);
 			if (reader.Position != reader.Length)
 			{
-				//Some Chinese Unity versions have extra fields appended to the global type trees.
-				if (reader.Length - reader.Position == 24 && asset is ITexture2D texture)
+				if (IsAllZero(assetData[reader.Position..]))
 				{
+					//Assume padding.
+					error = null;
+				}
+				else if (reader.Length - reader.Position == 24 && asset is ITexture2D texture)
+				{
+					//Some Chinese Unity versions have extra fields appended to the global type trees.
 					ReadExtraTextureFields(texture, ref reader);
 					error = null;
 				}
@@ -172,6 +177,18 @@ public sealed class GameAssetFactory : AssetFactoryBase
 			error = MakeError_ReadException(asset, ex);
 		}
 		return asset;
+
+		static bool IsAllZero(ReadOnlySpan<byte> span)
+		{
+			foreach (byte b in span)
+			{
+				if (b != 0)
+				{
+					return false;
+				}
+			}
+			return true;
+		}
 	}
 
 	private static IUnityObjectBase? CreateAsset(AssetInfo assetInfo, UnityVersion version)
