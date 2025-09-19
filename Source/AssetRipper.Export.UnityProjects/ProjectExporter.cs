@@ -16,9 +16,6 @@ public sealed partial class ProjectExporter
 
 	private readonly ObjectHandlerStack<IAssetExporter> assetExporterStack = new();
 
-	//Exporters
-	private DummyAssetExporter DummyExporter { get; } = new DummyAssetExporter();
-
 	/// <summary>Adds an exporter to the stack of exporters for this asset type.</summary>
 	/// <typeparam name="T">The c sharp type of this asset type. Any inherited types also get this exporter.</typeparam>
 	/// <param name="exporter">The new exporter. If it doesn't work, the next one in the stack is used.</param>
@@ -41,16 +38,14 @@ public sealed partial class ProjectExporter
 	/// Use the <see cref="DummyExporter"/> for the specified class type.
 	/// </summary>
 	/// <typeparam name="T">The base type for assets of that <paramref name="classType"/>.</typeparam>
-	/// <param name="classType">The class id of assets we are using the <see cref="DummyExporter"/> for.</param>
 	/// <param name="isEmptyCollection">
 	/// True: an exception will be thrown if the asset is referenced by another asset.<br/>
 	/// False: any references to this asset will be replaced with a missing reference.
 	/// </param>
 	/// <param name="isMetaType"><see cref="AssetType.Meta"/> or <see cref="AssetType.Serialized"/>?</param>
-	private void OverrideDummyExporter<T>(ClassIDType classType, bool isEmptyCollection, bool isMetaType)
+	private void OverrideDummyExporter<T>(bool isEmptyCollection, bool isMetaType)
 	{
-		DummyExporter.SetUpClassType(classType, isEmptyCollection, isMetaType);
-		OverrideExporter<T>(DummyExporter, true);
+		OverrideExporter<T>(DummyAssetExporter.Get(isEmptyCollection, isMetaType), true);
 	}
 
 	public AssetType ToExportType(Type type)

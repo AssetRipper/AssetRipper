@@ -18,7 +18,6 @@ using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.Mining.PredefinedAssets;
 using AssetRipper.Processing.ScriptableObject;
 using AssetRipper.Processing.Textures;
-using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_1001;
 using AssetRipper.SourceGenerated.Classes.ClassID_1032;
@@ -76,17 +75,26 @@ partial class ProjectExporter
 		OverrideExporter<IComponent>(sceneExporter, true);
 		OverrideExporter<ILevelGameManager>(sceneExporter, true);
 
-		OverrideDummyExporter<IBuildSettings>(ClassIDType.BuildSettings, true, false);
-		OverrideDummyExporter<IPreloadData>(ClassIDType.PreloadData, true, false);
-		OverrideDummyExporter<IAssetBundle>(ClassIDType.AssetBundle, true, false);
-		OverrideDummyExporter<IAssetBundleManifest>(ClassIDType.AssetBundleManifest, true, false);
-		OverrideDummyExporter<IMonoManager>(ClassIDType.MonoManager, true, false);
-		OverrideDummyExporter<IResourceManager>(ClassIDType.ResourceManager, true, false);
-		OverrideDummyExporter<IShaderNameRegistry>(ClassIDType.ShaderNameRegistry, true, false);
+		OverrideDummyExporter<IBuildSettings>(true, false);
+		OverrideDummyExporter<IPreloadData>(true, false);
+		OverrideDummyExporter<IAssetBundle>(true, false);
+		OverrideDummyExporter<IAssetBundleManifest>(true, false);
+		OverrideDummyExporter<IMonoManager>(true, false);
+		OverrideDummyExporter<IResourceManager>(true, false);
+		OverrideDummyExporter<IShaderNameRegistry>(true, false);
 
 		OverrideExporter<ISceneAsset>(new SceneAssetExporter(), true);
-		OverrideExporter<UnknownObject>(new UnknownObjectExporter(), false);
-		OverrideExporter<UnreadableObject>(new UnreadableObjectExporter(), false);
+
+		if (settings.ExportSettings.ExportUnreadableAssets)
+		{
+			OverrideExporter<UnknownObject>(new UnknownObjectExporter(), false);
+			OverrideExporter<UnreadableObject>(new UnreadableObjectExporter(), false);
+		}
+		else
+		{
+			OverrideDummyExporter<UnknownObject>(false, false);
+			OverrideDummyExporter<UnreadableObject>(false, false);
+		}
 
 		//Yaml Exporters
 		YamlStreamedAssetExporter streamedAssetExporter = new();

@@ -1,10 +1,14 @@
 using AssetRipper.Assets;
-using AssetRipper.SourceGenerated;
 
 namespace AssetRipper.Export.UnityProjects;
 
-public class DummyAssetExporter : IAssetExporter
+public abstract class DummyAssetExporter : IAssetExporter
 {
+	private static readonly EmptyDummyAssetExporter instance_empty_serialized = new(AssetType.Serialized);
+	private static readonly SkipDummyAssetExporter instance_skip_serialized = new(AssetType.Serialized);
+	private static readonly EmptyDummyAssetExporter instance_empty_meta = new(AssetType.Meta);
+	private static readonly SkipDummyAssetExporter instance_skip_meta = new(AssetType.Meta);
+
 	/// <summary>
 	/// Setup exporting of the specified class type.
 	/// </summary>
@@ -14,57 +18,53 @@ public class DummyAssetExporter : IAssetExporter
 	/// False: any references to this asset will be replaced with a missing reference.
 	/// </param>
 	/// <param name="isMetaType"><see cref="AssetType.Meta"/> or <see cref="AssetType.Serialized"/>?</param>
-	public void SetUpClassType(ClassIDType classType, bool isEmptyCollection, bool isMetaType)
+	public static DummyAssetExporter Get(bool isEmptyCollection, bool isMetaType)
 	{
-		m_emptyTypes.Add(classType, isEmptyCollection);
-		m_metaTypes.Add(classType, isMetaType);
-	}
-
-	public bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection)
-	{
-		if (m_emptyTypes.TryGetValue((ClassIDType)asset.ClassID, out bool isEmptyCollection))
+		if (isEmptyCollection)
 		{
-			if (isEmptyCollection)
-			{
-				exportCollection = EmptyExportCollection.Instance;
-			}
-			else
-			{
-				exportCollection = new SkipExportCollection(this, asset);
-			}
+			return isMetaType ? instance_empty_meta : instance_empty_serialized;
 		}
 		else
 		{
-			throw new NotSupportedException(asset.ClassID.ToString());
+			return isMetaType ? instance_skip_meta : instance_skip_serialized;
 		}
-		return true;
 	}
+
+	private AssetType ExportType { get; }
+
+	private DummyAssetExporter(AssetType exportType)
+	{
+		ExportType = exportType;
+	}
+
+	public abstract bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection);
 
 	public AssetType ToExportType(IUnityObjectBase asset)
 	{
-		ToUnknownExportType((ClassIDType)asset.ClassID, out AssetType assetType);
-		return assetType;
-	}
-
-	public bool ToUnknownExportType(ClassIDType classID, out AssetType assetType)
-	{
-		if (m_metaTypes.TryGetValue(classID, out bool isMetaType))
-		{
-			assetType = isMetaType ? AssetType.Meta : AssetType.Serialized;
-			return true;
-		}
-		else
-		{
-			throw new NotSupportedException(classID.ToString());
-		}
+		return ExportType;
 	}
 
 	public bool ToUnknownExportType(Type type, out AssetType assetType)
 	{
-		ClassIDType classID = ClassIDTypeMap.Dictionary[type];
-		return ToUnknownExportType(classID, out assetType);
+		assetType = ExportType;
+		return true;
 	}
 
-	private readonly Dictionary<ClassIDType, bool> m_emptyTypes = new();
-	private readonly Dictionary<ClassIDType, bool> m_metaTypes = new();
+	private sealed class EmptyDummyAssetExporter(AssetType exportType) : DummyAssetExporter(exportType)
+	{
+		public override bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection)
+		{
+			exportCollection = EmptyExportCollection.Instance;
+			return true;
+		}
+	}
+
+	private sealed class SkipDummyAssetExporter(AssetType exportType) : DummyAssetExporter(exportType)
+	{
+		public override bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection)
+		{
+			exportCollection = new SkipExportCollection(this, asset);
+			return true;
+		}
+	}
 }

@@ -70,6 +70,7 @@ partial class SettingsPage
 		{ nameof(ProcessingSettings.RemoveNullableAttributes), (value) => { Configuration.ProcessingSettings.RemoveNullableAttributes = value; } },
 		{ nameof(ProcessingSettings.PublicizeAssemblies), (value) => { Configuration.ProcessingSettings.PublicizeAssemblies = value; } },
 		{ nameof(ExportSettings.ScriptTypesFullyQualified), (value) => { Configuration.ExportSettings.ScriptTypesFullyQualified = value; } },
+		{ nameof(ExportSettings.ExportUnreadableAssets), (value) => { Configuration.ExportSettings.ExportUnreadableAssets = value; } },
 		{ nameof(ExportSettings.SaveSettingsToDisk), (value) => { Configuration.ExportSettings.SaveSettingsToDisk = value; } },
 	};
 
@@ -161,6 +162,11 @@ partial class SettingsPage
 	private static void WriteDropDownForTextExportMode(TextWriter writer)
 	{
 		WriteDropDown(writer, TextExportModeDropDownSetting.Instance, Configuration.ExportSettings.TextExportMode, nameof(ExportSettings.TextExportMode));
+	}
+
+	private static void WriteCheckBoxForExportUnreadableAssets(TextWriter writer, string label, bool disabled = false)
+	{
+		WriteCheckBox(writer, label, Configuration.ExportSettings.ExportUnreadableAssets, nameof(ExportSettings.ExportUnreadableAssets), disabled);
 	}
 
 	private static void WriteCheckBoxForSaveSettingsToDisk(TextWriter writer, string label, bool disabled = false)

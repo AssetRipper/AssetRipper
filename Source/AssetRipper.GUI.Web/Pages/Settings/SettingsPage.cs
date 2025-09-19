@@ -174,6 +174,7 @@ public sealed partial class SettingsPage : DefaultPage
 								}
 								using (new Div(writer).WithClass("col").End())
 								{
+									WriteCheckBoxForExportUnreadableAssets(writer, Localization.ExportUnreadableAssets);
 								}
 							}
 						}
