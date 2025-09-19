@@ -1,7 +1,6 @@
-﻿using AssetRipper.Export.Modules.Textures;
-using AssetRipper.Import.Logging;
+﻿using AssetRipper.Import.Logging;
 
-namespace AssetRipper.Export.UnityProjects.Configuration;
+namespace AssetRipper.Export.Configuration;
 
 public sealed record class ExportSettings
 {

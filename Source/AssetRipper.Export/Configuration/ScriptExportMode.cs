@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Export.UnityProjects.Configuration;
+﻿namespace AssetRipper.Export.Configuration;
 
 public enum ScriptExportMode
 {

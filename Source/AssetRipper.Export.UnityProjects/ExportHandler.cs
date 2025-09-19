@@ -1,5 +1,5 @@
 ﻿using AssetRipper.Assets.Bundles;
-using AssetRipper.Export.UnityProjects.Configuration;
+using AssetRipper.Export.Configuration;
 using AssetRipper.Export.UnityProjects.PathIdMapping;
 using AssetRipper.Export.UnityProjects.Project;
 using AssetRipper.Export.UnityProjects.Scripts;

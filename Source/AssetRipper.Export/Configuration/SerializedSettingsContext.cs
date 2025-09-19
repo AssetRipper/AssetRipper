@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using AssetRipper.Export.Configuration;
+using System.Text.Json.Serialization;
 
 namespace AssetRipper.Export.UnityProjects.Configuration;
 

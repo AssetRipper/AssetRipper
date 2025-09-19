@@ -1,8 +1,9 @@
-﻿using AssetRipper.Import.Configuration;
+﻿using AssetRipper.Export.UnityProjects.Configuration;
+using AssetRipper.Import.Configuration;
 using AssetRipper.Mining.PredefinedAssets;
 using AssetRipper.Processing.Configuration;
 
-namespace AssetRipper.Export.UnityProjects.Configuration;
+namespace AssetRipper.Export.Configuration;
 
 public class LibraryConfiguration : CoreConfiguration
 {

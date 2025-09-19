@@ -1,3 +1,5 @@
+using AssetRipper.Export.Configuration;
+
 namespace AssetRipper.Export.Modules.Textures;
 
 public abstract class DirectBitmap

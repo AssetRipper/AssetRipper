@@ -1,4 +1,4 @@
-﻿using AssetRipper.Export.UnityProjects.Configuration;
+﻿using AssetRipper.Export.Configuration;
 using AssetRipper.Processing;
 
 namespace AssetRipper.Export.UnityProjects.Project;

@@ -1,4 +1,4 @@
-﻿using AssetRipper.Export.UnityProjects.Configuration;
+﻿using AssetRipper.Export.Configuration;
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Platforms;
 using AssetRipper.Processing;

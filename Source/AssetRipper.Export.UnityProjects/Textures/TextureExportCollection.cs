@@ -1,6 +1,6 @@
 using AssetRipper.Assets;
 using AssetRipper.Assets.Generics;
-using AssetRipper.Export.Modules.Textures;
+using AssetRipper.Export.Configuration;
 using AssetRipper.Export.UnityProjects.Project;
 using AssetRipper.Processing.Textures;
 using AssetRipper.SourceGenerated;

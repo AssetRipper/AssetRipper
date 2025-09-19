@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.Export.Modules.Textures;
+﻿namespace AssetRipper.Export.Configuration;
 
 public enum ImageExportFormat
 {

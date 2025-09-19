@@ -1,9 +1,10 @@
-﻿using AssetRipper.Import.Configuration;
+﻿using AssetRipper.Export.UnityProjects.Configuration;
+using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Utils;
 using AssetRipper.Processing.Configuration;
 using System.Text.Json;
 
-namespace AssetRipper.Export.UnityProjects.Configuration;
+namespace AssetRipper.Export.Configuration;
 
 public readonly record struct SerializedSettings(ImportSettings Import, ProcessingSettings Processing, ExportSettings Export)
 {

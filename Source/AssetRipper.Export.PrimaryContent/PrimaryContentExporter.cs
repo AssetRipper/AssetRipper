@@ -1,6 +1,6 @@
 using AssetRipper.Assets;
 using AssetRipper.Assets.Bundles;
-using AssetRipper.Export.Modules.Textures;
+using AssetRipper.Export.Configuration;
 using AssetRipper.Export.PrimaryContent.Audio;
 using AssetRipper.Export.PrimaryContent.DeletedAssets;
 using AssetRipper.Export.PrimaryContent.Models;

@@ -1,6 +1,7 @@
-﻿using ICSharpCode.Decompiler.CSharp;
+﻿using AssetRipper.Primitives;
+using ICSharpCode.Decompiler.CSharp;
 
-namespace AssetRipper.Export.UnityProjects.Configuration;
+namespace AssetRipper.Export.Configuration;
 
 public enum ScriptLanguageVersion
 {
@@ -103,6 +104,6 @@ public static class ScriptLanguageVersionExtensions
 	private static bool HasCSharp9Support(UnityVersion unityVersion)
 	{
 		return unityVersion.GreaterThanOrEquals(2022, 1, 0, UnityVersionType.Alpha, 3)
-			|| (unityVersion.GreaterThanOrEquals(2021, 2, 0, UnityVersionType.Beta, 6) && unityVersion.Equals(2021));
+			|| unityVersion.GreaterThanOrEquals(2021, 2, 0, UnityVersionType.Beta, 6) && unityVersion.Equals(2021);
 	}
 }

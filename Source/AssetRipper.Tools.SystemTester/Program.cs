@@ -1,5 +1,5 @@
-﻿using AssetRipper.Export.UnityProjects;
-using AssetRipper.Export.UnityProjects.Configuration;
+﻿using AssetRipper.Export.Configuration;
+using AssetRipper.Export.UnityProjects;
 using AssetRipper.Import.Logging;
 using AssetRipper.IO.Files;
 using AssetRipper.Processing;

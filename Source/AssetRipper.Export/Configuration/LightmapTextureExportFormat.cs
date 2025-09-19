@@ -1,6 +1,4 @@
-﻿using AssetRipper.Export.Modules.Textures;
-
-namespace AssetRipper.Export.UnityProjects.Configuration;
+﻿namespace AssetRipper.Export.Configuration;
 
 public enum LightmapTextureExportFormat
 {

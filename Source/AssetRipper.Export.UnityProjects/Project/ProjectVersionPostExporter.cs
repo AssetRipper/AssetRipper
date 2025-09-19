@@ -1,5 +1,5 @@
-﻿using AssetRipper.Export.Modules.Shaders.IO;
-using AssetRipper.Export.UnityProjects.Configuration;
+﻿using AssetRipper.Export.Configuration;
+using AssetRipper.Export.Modules.Shaders.IO;
 using AssetRipper.Processing;
 using System.Text;
 

@@ -1,4 +1,4 @@
-﻿using AssetRipper.Export.UnityProjects.Configuration;
+﻿using AssetRipper.Export.Configuration;
 using AssetRipper.Import.Configuration;
 using AssetRipper.Processing.Configuration;
 using AssetRipper.Text.SourceGeneration;
@@ -20,8 +20,7 @@ internal static class SettingsPageGenerator
 	{
 		writer.WriteGeneratedCodeWarning();
 		writer.WriteLineNoTabs();
-		writer.WriteUsing("AssetRipper.Export.Modules.Textures");
-		writer.WriteUsing("AssetRipper.Export.UnityProjects.Configuration");
+		writer.WriteUsing("AssetRipper.Export.Configuration");
 		writer.WriteUsing("AssetRipper.GUI.Web.Pages.Settings.DropDown");
 		writer.WriteUsing("AssetRipper.Import.Configuration");
 		writer.WriteUsing("AssetRipper.Processing.Configuration");

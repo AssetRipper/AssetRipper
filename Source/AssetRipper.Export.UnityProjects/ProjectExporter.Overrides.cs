@@ -1,9 +1,8 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Export.Modules.Textures;
+using AssetRipper.Export.Configuration;
 using AssetRipper.Export.UnityProjects.AnimatorControllers;
 using AssetRipper.Export.UnityProjects.Audio;
 using AssetRipper.Export.UnityProjects.AudioMixers;
-using AssetRipper.Export.UnityProjects.Configuration;
 using AssetRipper.Export.UnityProjects.DeletedAssets;
 using AssetRipper.Export.UnityProjects.EngineAssets;
 using AssetRipper.Export.UnityProjects.Miscellaneous;
