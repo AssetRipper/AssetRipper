@@ -7,7 +7,7 @@ namespace AssetRipper.Export.UnityProjects.Miscellaneous;
 public sealed class TextAssetExporter : BinaryAssetExporter
 {
 	public TextExportMode ExportMode { get; }
-	public TextAssetExporter(LibraryConfiguration configuration)
+	public TextAssetExporter(FullConfiguration configuration)
 	{
 		ExportMode = configuration.ExportSettings.TextExportMode;
 	}

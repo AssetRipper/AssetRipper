@@ -5,7 +5,7 @@ using AssetRipper.Processing.Configuration;
 
 namespace AssetRipper.Export.Configuration;
 
-public class LibraryConfiguration : CoreConfiguration
+public class FullConfiguration : CoreConfiguration
 {
 	public ProcessingSettings ProcessingSettings
 	{
@@ -27,7 +27,7 @@ public class LibraryConfiguration : CoreConfiguration
 		set => ExportSettings.LanguageCode = value;
 	}
 
-	public LibraryConfiguration()
+	public FullConfiguration()
 	{
 		SingletonData.Add(nameof(ProcessingSettings), new JsonDataInstance<ProcessingSettings>(SerializedSettingsContext.Default.ProcessingSettings));
 		SingletonData.Add(nameof(ExportSettings), new JsonDataInstance<ExportSettings>(SerializedSettingsContext.Default.ExportSettings));

@@ -10,7 +10,7 @@ public sealed partial class SettingsPage : DefaultPage
 {
 	public static SettingsPage Instance { get; } = new();
 
-	private static LibraryConfiguration Configuration => GameFileLoader.Settings;
+	private static FullConfiguration Configuration => GameFileLoader.Settings;
 
 	public override string GetTitle() => Localization.Settings;
 

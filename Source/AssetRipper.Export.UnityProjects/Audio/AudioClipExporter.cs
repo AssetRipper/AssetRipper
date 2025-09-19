@@ -9,7 +9,7 @@ namespace AssetRipper.Export.UnityProjects.Audio;
 public sealed class AudioClipExporter : BinaryAssetExporter
 {
 	public AudioExportFormat AudioFormat { get; }
-	public AudioClipExporter(LibraryConfiguration configuration) => AudioFormat = configuration.ExportSettings.AudioExportFormat;
+	public AudioClipExporter(FullConfiguration configuration) => AudioFormat = configuration.ExportSettings.AudioExportFormat;
 
 	public static bool IsSupportedExportFormat(AudioExportFormat format) => format switch
 	{

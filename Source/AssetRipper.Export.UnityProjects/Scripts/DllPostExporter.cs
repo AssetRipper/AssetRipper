@@ -8,7 +8,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts;
 
 public class DllPostExporter : IPostExporter
 {
-	public void DoPostExport(GameData gameData, LibraryConfiguration settings, FileSystem fileSystem)
+	public void DoPostExport(GameData gameData, FullConfiguration settings, FileSystem fileSystem)
 	{
 		Logger.Info(LogCategory.Export, "Saving game assemblies...");
 		IAssemblyManager assemblyManager = gameData.AssemblyManager;

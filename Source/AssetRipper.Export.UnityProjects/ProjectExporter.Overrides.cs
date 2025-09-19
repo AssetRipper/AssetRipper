@@ -58,7 +58,7 @@ namespace AssetRipper.Export.UnityProjects;
 
 partial class ProjectExporter
 {
-	public ProjectExporter(LibraryConfiguration settings, IAssemblyManager assemblyManager)
+	public ProjectExporter(FullConfiguration settings, IAssemblyManager assemblyManager)
 	{
 		OverrideExporter<IUnityObjectBase>(new DefaultYamlExporter(), true);
 
@@ -184,7 +184,7 @@ partial class ProjectExporter
 	}
 
 	//These need to be absolutely last
-	public void DoFinalOverrides(LibraryConfiguration settings)
+	public void DoFinalOverrides(FullConfiguration settings)
 	{
 		//Engine assets
 		OverrideExporter<IUnityObjectBase>(settings.SingletonData.TryGetStoredValue(nameof(EngineResourceData), out EngineResourceData? engineResourceData)

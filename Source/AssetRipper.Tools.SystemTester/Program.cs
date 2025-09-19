@@ -104,7 +104,7 @@ static class Program
 
 	private static void Rip(string[] inputPaths, string outputPath)
 	{
-		LibraryConfiguration settings = new();
+		FullConfiguration settings = new();
 		settings.LogConfigurationValues();
 		ExportHandler exportHandler = new(settings);
 		GameData gameData = exportHandler.LoadAndProcess(inputPaths, LocalFileSystem.Instance);

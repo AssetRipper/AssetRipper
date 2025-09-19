@@ -20,9 +20,9 @@ namespace AssetRipper.Export.UnityProjects;
 
 public class ExportHandler
 {
-	protected LibraryConfiguration Settings { get; }
+	protected FullConfiguration Settings { get; }
 
-	public ExportHandler(LibraryConfiguration settings)
+	public ExportHandler(FullConfiguration settings)
 	{
 		Settings = settings;
 	}
@@ -149,7 +149,7 @@ public class ExportHandler
 		Export(gameData, outputPath, fileSystem);
 	}
 
-	public void ThrowIfSettingsDontMatch(LibraryConfiguration settings)
+	public void ThrowIfSettingsDontMatch(FullConfiguration settings)
 	{
 		if (Settings != settings)
 		{

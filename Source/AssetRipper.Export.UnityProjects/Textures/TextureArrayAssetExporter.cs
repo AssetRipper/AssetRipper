@@ -15,7 +15,7 @@ public sealed class TextureArrayAssetExporter : BinaryAssetExporter
 {
 	public ImageExportFormat ImageExportFormat { get; private set; }
 
-	public TextureArrayAssetExporter(LibraryConfiguration configuration)
+	public TextureArrayAssetExporter(FullConfiguration configuration)
 	{
 		ImageExportFormat = configuration.ExportSettings.ImageExportFormat;
 	}

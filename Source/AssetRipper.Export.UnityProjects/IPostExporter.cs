@@ -5,5 +5,5 @@ namespace AssetRipper.Export.UnityProjects;
 
 public interface IPostExporter
 {
-	void DoPostExport(GameData gameData, LibraryConfiguration settings, FileSystem fileSystem);
+	void DoPostExport(GameData gameData, FullConfiguration settings, FileSystem fileSystem);
 }

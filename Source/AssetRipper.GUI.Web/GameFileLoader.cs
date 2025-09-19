@@ -16,7 +16,7 @@ public static class GameFileLoader
 	public static bool IsLoaded => GameData is not null;
 	public static GameBundle GameBundle => GameData!.GameBundle;
 	public static IAssemblyManager AssemblyManager => GameData!.AssemblyManager;
-	public static LibraryConfiguration Settings { get; } = LoadSettings();
+	public static FullConfiguration Settings { get; } = LoadSettings();
 
 	public static ExportHandler ExportHandler
 	{
@@ -78,9 +78,9 @@ public static class GameFileLoader
 		}
 	}
 
-	private static LibraryConfiguration LoadSettings()
+	private static FullConfiguration LoadSettings()
 	{
-		LibraryConfiguration settings = new();
+		FullConfiguration settings = new();
 		settings.LoadFromDefaultPath();
 		return settings;
 	}

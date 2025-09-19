@@ -5,7 +5,7 @@ namespace AssetRipper.Export.UnityProjects.Project;
 
 public class PackageManifestPostExporter : IPostExporter
 {
-	public void DoPostExport(GameData gameData, LibraryConfiguration settings, FileSystem fileSystem)
+	public void DoPostExport(GameData gameData, FullConfiguration settings, FileSystem fileSystem)
 	{
 		string packagesDirectory = fileSystem.Path.Join(settings.ProjectRootPath, "Packages");
 		fileSystem.Directory.Create(packagesDirectory);

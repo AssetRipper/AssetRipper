@@ -7,7 +7,7 @@ namespace AssetRipper.Export.UnityProjects.Project;
 
 public class StreamingAssetsPostExporter : IPostExporter
 {
-	public void DoPostExport(GameData gameData, LibraryConfiguration settings, FileSystem fileSystem)
+	public void DoPostExport(GameData gameData, FullConfiguration settings, FileSystem fileSystem)
 	{
 		PlatformGameStructure? platform = gameData.PlatformStructure;
 		if (platform is null)

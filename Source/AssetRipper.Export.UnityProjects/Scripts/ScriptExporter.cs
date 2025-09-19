@@ -9,7 +9,7 @@ namespace AssetRipper.Export.UnityProjects.Scripts;
 
 public class ScriptExporter : IAssetExporter
 {
-	public ScriptExporter(IAssemblyManager assemblyManager, LibraryConfiguration configuration)
+	public ScriptExporter(IAssemblyManager assemblyManager, FullConfiguration configuration)
 	{
 		AssemblyManager = assemblyManager;
 		Decompiler = new ScriptDecompiler(AssemblyManager)
