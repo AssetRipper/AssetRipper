@@ -2,15 +2,20 @@
 
 public class RelativeDistanceTests
 {
-	private static readonly Random random = new Random(12345);
-	private static readonly float[] randomFloats = MakeFloats(60);
+	private float[] randomFloats;
+
+	[SetUp]
+	public void Setup()
+	{
+		randomFloats = MakeFloats(60);
+	}
 
 	private static float[] MakeFloats(int count)
 	{
 		float[] result = new float[count];
 		for (int i = 0; i < count; i++)
 		{
-			result[i] = 4 * random.NextSingle() - 2;//-2 to 2
+			result[i] = 4 * TestContext.CurrentContext.Random.NextSingle() - 2;//-2 to 2
 		}
 		return result;
 	}

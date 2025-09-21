@@ -12,19 +12,19 @@ public class RangeTests
 	[Test]
 	public void IntersectionTest1()
 	{
-		Assert.That(OneToTen.Equals(ZeroToTen.MakeIntersection(OneToEleven)));
+		Assert.That(OneToTen, Is.EqualTo(ZeroToTen.MakeIntersection(OneToEleven)));
 	}
 
 	[Test]
 	public void IntersectingUnionTest()
 	{
-		Assert.That(ZeroToEleven.Equals(ZeroToTen.MakeUnion(OneToEleven)));
+		Assert.That(ZeroToEleven, Is.EqualTo(ZeroToTen.MakeUnion(OneToEleven)));
 	}
 
 	[Test]
 	public void NonintersectingUnionTest()
 	{
-		Assert.That(ZeroToTwenty.Equals(ZeroToTen.MakeUnion(TenToTwenty)));
+		Assert.That(ZeroToTwenty, Is.EqualTo(ZeroToTen.MakeUnion(TenToTwenty)));
 	}
 
 	[Test]
@@ -78,18 +78,21 @@ public class RangeTests
 	[Test]
 	public void StrictComparisons()
 	{
-		//Correct
-		Assert.That(ZeroToTen.IsStrictlyLess(TenToTwenty));
-		Assert.That(TenToTwenty.IsStrictlyGreater(ZeroToTen));
+		using (Assert.EnterMultipleScope())
+		{
+			//Correct
+			Assert.That(ZeroToTen.IsStrictlyLess(TenToTwenty));
+			Assert.That(TenToTwenty.IsStrictlyGreater(ZeroToTen));
 
-		//Reversed
-		Assert.That(!TenToTwenty.IsStrictlyLess(ZeroToTen));
-		Assert.That(!ZeroToTen.IsStrictlyGreater(TenToTwenty));
+			//Reversed
+			Assert.That(!TenToTwenty.IsStrictlyLess(ZeroToTen));
+			Assert.That(!ZeroToTen.IsStrictlyGreater(TenToTwenty));
 
-		//Overlapping
-		Assert.That(!TenToTwenty.IsStrictlyLess(ZeroToEleven));
-		Assert.That(!ZeroToEleven.IsStrictlyLess(TenToTwenty));
-		Assert.That(!TenToTwenty.IsStrictlyGreater(ZeroToEleven));
-		Assert.That(!ZeroToEleven.IsStrictlyGreater(TenToTwenty));
+			//Overlapping
+			Assert.That(!TenToTwenty.IsStrictlyLess(ZeroToEleven));
+			Assert.That(!ZeroToEleven.IsStrictlyLess(TenToTwenty));
+			Assert.That(!TenToTwenty.IsStrictlyGreater(ZeroToEleven));
+			Assert.That(!ZeroToEleven.IsStrictlyGreater(TenToTwenty));
+		}
 	}
 }

@@ -27,8 +27,7 @@ public class SmartStreamTests
 	public void ToArrayMakesAPerfectCopyForMemorySmartStreams()
 	{
 		const int Length = 87;
-		byte[] randomData = new byte[Length];
-		new Random(32).NextBytes(randomData);
+		byte[] randomData = RandomData.MakeRandomData(Length);
 		SmartStream memoryStream = SmartStream.CreateMemory(randomData);
 		Assert.That(memoryStream.ToArray(), Is.EqualTo(randomData));
 	}

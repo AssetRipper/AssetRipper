@@ -116,5 +116,7 @@ public class PPtrTests
 		}
 	}
 
-	private interface IDerivedUnityObjectInterface : IUnityObjectBase { }
+	private interface IDerivedUnityObjectInterface : IUnityObjectBase
+	{
+	}
 }

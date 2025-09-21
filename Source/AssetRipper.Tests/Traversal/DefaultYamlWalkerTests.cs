@@ -11,7 +11,8 @@ namespace AssetRipper.Tests.Traversal;
 
 internal class DefaultYamlWalkerTests
 {
-	//[TestCaseSource(nameof(GetObjectTypes))]
+	[TestCaseSource(nameof(GetObjectTypes))]
+	[Ignore("Not investigated")]
 	public static void SerializedObjectIsConsistent(Type type, string yamlExpectedHyphen, string? yamlExpectedNoHyphen)
 	{
 		UnityObjectBase asset = AssetCreator.CreateUnsafe(type);
@@ -47,34 +48,32 @@ internal class DefaultYamlWalkerTests
 		return stringWriter.ToString();
 	}
 
-	private static IEnumerable<object?[]> GetObjectTypes()
-	{
-		yield return [typeof(ComponentListObject), ComponentListObject.Yaml, null];
-		yield return [typeof(DictionaryObject), DictionaryObject.Yaml, null];
-		yield return [typeof(GuidDictionaryObject), GuidDictionaryObject.Yaml, GuidDictionaryObject.YamlWithoutHyphens];
-		yield return [typeof(ListObject), ListObject.Yaml, null];
-		yield return [typeof(PairListObject), PairListObject.Yaml, null];
-		yield return [typeof(PairObject), PairObject.Yaml, null];
-		yield return [typeof(ParentObject), ParentObject.Yaml, null];
-		yield return [typeof(PrimitiveListObject), PrimitiveListObject.Yaml, null];
-		yield return [typeof(SerializedVersionObject), SerializedVersionObject.Yaml, null];
-		yield return [typeof(SimpleObject), SimpleObject.Yaml, null];
-		yield return [typeof(StringDictionaryObject), StringDictionaryObject.Yaml, StringDictionaryObject.YamlWithoutHyphens];
-		yield return [typeof(SubclassObject), SubclassObject.Yaml, null];
-		yield return [typeof(StaticSquaredDictionaryObject), StaticSquaredDictionaryObject.Yaml, null];
-	}
+	private static object?[][] GetObjectTypes() =>
+	[
+		[typeof(ComponentListObject), ComponentListObject.Yaml, null],
+		[typeof(DictionaryObject), DictionaryObject.Yaml, null],
+		[typeof(GuidDictionaryObject), GuidDictionaryObject.Yaml, GuidDictionaryObject.YamlWithoutHyphens],
+		[typeof(ListObject), ListObject.Yaml, null],
+		[typeof(PairListObject), PairListObject.Yaml, null],
+		[typeof(PairObject), PairObject.Yaml, null],
+		[typeof(ParentObject), ParentObject.Yaml, null],
+		[typeof(PrimitiveListObject), PrimitiveListObject.Yaml, null],
+		[typeof(SerializedVersionObject), SerializedVersionObject.Yaml, null],
+		[typeof(SimpleObject), SimpleObject.Yaml, null],
+		[typeof(StringDictionaryObject), StringDictionaryObject.Yaml, StringDictionaryObject.YamlWithoutHyphens],
+		[typeof(SubclassObject), SubclassObject.Yaml, null],
+		[typeof(StaticSquaredDictionaryObject), StaticSquaredDictionaryObject.Yaml, null],
+	];
 
 	private class DefaultYamlWalker : YamlWalker
 	{
 		public override YamlNode CreateYamlNodeForPPtr<TAsset>(PPtr<TAsset> pptr)
 		{
-			YamlMappingNode mappingNode = new()
+			return new YamlMappingNode(MappingStyle.Flow)
 			{
-				Style = MappingStyle.Flow,
+				{ "m_FileID", pptr.FileID },
+				{ "m_PathID", pptr.PathID },
 			};
-			mappingNode.Add("m_FileID", pptr.FileID);
-			mappingNode.Add("m_PathID", pptr.PathID);
-			return mappingNode;
 		}
 	}
 

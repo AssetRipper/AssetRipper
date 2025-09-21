@@ -4,13 +4,8 @@ using AssetRipper.IO.Files.Streams.Smart;
 
 namespace AssetRipper.IO.Files.Tests;
 
-public class FileStreamTests
+public static class FileStreamTests
 {
-	[SetUp]
-	public void Setup()
-	{
-	}
-
 	[TestCase(BundleVersion.BF_260_340, "3.4.0")]
 	[TestCase(BundleVersion.BF_350_4x, "4.2.0")]
 	[TestCase(BundleVersion.BF_520a1, "5.2.0a1")]
@@ -20,7 +15,7 @@ public class FileStreamTests
 	[TestCase(BundleVersion.BF_LargeFilesSupport, "2022.1.0f1")]
 	[TestCase(BundleVersion.BF_LargeFilesSupport, "2022.1.10f1")]
 	[TestCase(BundleVersion.BF_2022_2, "2022.2.0f1")]
-	public void ReadIsSymmetricToWriteForEmptyBundle(BundleVersion bundleVersion, string unityVersion)
+	public static void ReadIsSymmetricToWriteForEmptyBundle(BundleVersion bundleVersion, string unityVersion)
 	{
 		FileStreamBundleScheme scheme = new();
 		FileStreamBundleFile bundle = MakeEmptyBundle(bundleVersion, unityVersion);
@@ -45,7 +40,7 @@ public class FileStreamTests
 	}
 
 	[Test]
-	public void CompressTypeWorks()
+	public static void CompressTypeWorks()
 	{
 		FileStreamBundleHeader header = new();
 		header.Flags = BundleFlags.BlockInfoNeedPaddingAtStart | BundleFlags.BlocksInfoAtTheEnd;

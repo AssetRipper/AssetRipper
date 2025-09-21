@@ -1,7 +1,6 @@
 ﻿using AssetRipper.IO.Endian;
 using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Extensions;
-using NUnit.Framework.Constraints;
 using System.Collections;
 using System.Runtime.CompilerServices;
 
@@ -91,19 +90,6 @@ internal class VertexDataBlobTests
 		}
 	}
 
-	private static EquivalenceResolveConstraint IsEquivalentTo(IEnumerable? expected)
-	{
-		return new EquivalenceResolveConstraint(expected);
-	}
-
-	private sealed class EquivalenceResolveConstraint(IEnumerable? enumerable) : IResolveConstraint
-	{
-		public IConstraint Resolve()
-		{
-			return enumerable is null ? Is.Null : Is.Not.Null.And.EquivalentTo(enumerable);
-		}
-	}
-
 	private static void AssertEquivalence(
 		IEnumerable? actual,
 		IEnumerable? expected,
@@ -114,15 +100,10 @@ internal class VertexDataBlobTests
 		{
 			Assert.That(actual, Is.Null, actualExpression: actualExpression);
 		}
-		else if (actual is null)
-		{
-			Assert.That(actual, Is.Not.Null, actualExpression: actualExpression);
-		}
 		else
 		{
-#pragma warning disable NUnit2050 // NUnit 4 no longer supports string.Format specification
+			Assert.That(actual, Is.Not.Null, actualExpression: actualExpression);
 			Assert.That(actual, Is.EquivalentTo(expected), actualExpression: actualExpression, constraintExpression: constraintExpression);
-#pragma warning restore NUnit2050 // NUnit 4 no longer supports string.Format specification
 		}
 	}
 }

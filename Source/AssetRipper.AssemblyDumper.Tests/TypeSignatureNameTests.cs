@@ -4,64 +4,71 @@ using System.Text;
 
 namespace AssetRipper.AssemblyDumper.Tests;
 
-internal static class TypeSignatureNameTests
+internal class TypeSignatureNameTests
 {
-	private static readonly ModuleDefinition module = new ModuleDefinition("test", KnownCorLibs.SystemPrivateCoreLib_v5_0_0_0);
-	private static readonly ReferenceImporter importer = new ReferenceImporter(module);
+	private ModuleDefinition module;
+	private ReferenceImporter importer;
 
-	[Test]
-	public static void AsmByteArrayName()
+	[SetUp]
+	public void Setup()
 	{
-		TypeSignature type = module.CorLibTypeFactory.Byte.MakeSzArrayType();
-		Assert.That("Byte[]" == type.Name);
+		module = new ModuleDefinition("test", KnownCorLibs.SystemPrivateCoreLib_v5_0_0_0);
+		importer = new ReferenceImporter(module);
 	}
 
 	[Test]
-	public static void AsmListTest()
+	public void AsmByteArrayName()
+	{
+		TypeSignature type = module.CorLibTypeFactory.Byte.MakeSzArrayType();
+		Assert.That(type.Name, Is.EqualTo("Byte[]"));
+	}
+
+	[Test]
+	public void AsmListTest()
 	{
 		TypeSignature list = importer.ImportTypeSignature(typeof(List<>));
 		GenericInstanceTypeSignature stringList = list.MakeGenericInstanceType(module.CorLibTypeFactory.String);
-		Assert.That("List`1<System.String>" == stringList.Name);
-		Assert.That("List`1" == list.Name);
+		Assert.That(stringList.Name, Is.EqualTo("List`1<System.String>"));
+		Assert.That(list.Name, Is.EqualTo("List`1"));
 	}
 
 	[Test]
-	public static void ByteArrayTest()
+	public void ByteArrayTest()
 	{
 		TypeSignature type = module.CorLibTypeFactory.Byte.MakeSzArrayType();
-		Assert.That("Byte_Array" == GetName(type));
+		Assert.That(GetName(type), Is.EqualTo("Byte_Array"));
 	}
 
 	[Test]
-	public static void DictionaryTest()
+	public void DictionaryTest()
 	{
 		TypeSignature dictionary = importer.ImportTypeSignature(typeof(Dictionary<,>));
-		Assert.That("Dictionary" == GetName(dictionary));
+		Assert.That(GetName(dictionary), Is.EqualTo("Dictionary"));
 	}
 
 	[Test]
-	public static void DictionaryInstanceTest()
+	public void DictionaryInstanceTest()
 	{
 		TypeSignature dictionary = importer.ImportTypeSignature(typeof(Dictionary<,>));
 		GenericInstanceTypeSignature intStringDictionary = dictionary.MakeGenericInstanceType(module.CorLibTypeFactory.Int32, module.CorLibTypeFactory.String);
-		Assert.That("Dictionary_Int32_String" == GetName(intStringDictionary));
+		Assert.That(GetName(intStringDictionary), Is.EqualTo("Dictionary_Int32_String"));
 	}
 
 	[Test]
-	public static void ListInstanceTest()
+	public void ListInstanceTest()
 	{
 		TypeSignature list = importer.ImportTypeSignature(typeof(List<>));
 		GenericInstanceTypeSignature stringList = list.MakeGenericInstanceType(module.CorLibTypeFactory.String);
-		Assert.That("List_String" == GetName(stringList));
+		Assert.That(GetName(stringList), Is.EqualTo("List_String"));
 	}
 
 	[Test]
-	public static void ListListInstanceTest()
+	public void ListListInstanceTest()
 	{
 		TypeSignature list = importer.ImportTypeSignature(typeof(List<>));
 		GenericInstanceTypeSignature stringList = list.MakeGenericInstanceType(module.CorLibTypeFactory.String);
 		GenericInstanceTypeSignature stringListList = list.MakeGenericInstanceType(stringList);
-		Assert.That("List_List_String" == GetName(stringListList));
+		Assert.That(GetName(stringListList), Is.EqualTo("List_List_String"));
 	}
 
 	private static string GetName(TypeSignature type)

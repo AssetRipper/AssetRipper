@@ -1,6 +1,6 @@
 namespace AssetRipper.IO.Files.Tests;
 
-public static class FileUtilsTests
+public static class GetUniqueNameTests
 {
 	[Test]
 	public static void FilenameTruncationMultibyteCharacter()

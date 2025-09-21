@@ -159,7 +159,7 @@ internal class TransformationTests
 
 	private static bool ApproximatelyEqual(float actual, float expected, float maxDeviation)
 	{
-		return MathF.Abs(actual - expected) > maxDeviation;
+		return float.Abs(actual - expected) > maxDeviation;
 	}
 
 	[Test]

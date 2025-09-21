@@ -15,8 +15,7 @@ internal class AssetEqualityTests
 	{
 		IGameObject gameObject1 = AssetCreator.CreateGameObject(new UnityVersion(2017));
 		IGameObject gameObject2 = AssetCreator.CreateGameObject(new UnityVersion(2017));
-		AssetEqualityComparer comparer = new();
-		Assert.That(comparer.Equals(gameObject1, gameObject2));
+		Assert.That(gameObject1, Is.EqualTo(gameObject2).Using(new AssetEqualityComparer()));
 	}
 
 	[Test]
@@ -24,8 +23,7 @@ internal class AssetEqualityTests
 	{
 		IGameObject gameObject1 = CreateGameObject();
 		IGameObject gameObject2 = CreateGameObject();
-		AssetEqualityComparer comparer = new();
-		Assert.That(comparer.Equals(gameObject1, gameObject2));
+		Assert.That(gameObject1, Is.EqualTo(gameObject2).Using(new AssetEqualityComparer()));
 
 		static IGameObject CreateGameObject()
 		{
@@ -43,8 +41,7 @@ internal class AssetEqualityTests
 	{
 		IGameObject gameObject1 = CreateGameObject(0, 0, 0);
 		IGameObject gameObject2 = CreateGameObject(1, 1, 1);
-		AssetEqualityComparer comparer = new();
-		Assert.That(comparer.Equals(gameObject1, gameObject2), Is.False);
+		Assert.That(gameObject1, Is.Not.EqualTo(gameObject2).Using(new AssetEqualityComparer()));
 
 		static IGameObject CreateGameObject(float x, float y, float z)
 		{
