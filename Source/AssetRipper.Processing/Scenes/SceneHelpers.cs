@@ -11,13 +11,11 @@ using System.Text.RegularExpressions;
 
 namespace AssetRipper.Processing.Scenes;
 
-public static class SceneHelpers
+public static partial class SceneHelpers
 {
 	private const string AssetsName = "Assets/";
 	private const string LevelName = "level";
 	private const string MainSceneName = "maindata";
-
-	private static readonly Regex s_sceneNameFormat = new Regex($"^{LevelName}(0|[1-9][0-9]*)$");
 
 	public static int FileNameToSceneIndex(string name, UnityVersion version)
 	{
@@ -74,7 +72,7 @@ public static class SceneHelpers
 	{
 		if (buildSettings is not null && IsSceneName(collection.Name))
 		{
-			int index = FileNameToSceneIndex(collection.Name, collection.Version);
+			int index = FileNameToSceneIndex(collection.Name, collection.OriginalVersion);
 			if (index >= buildSettings.Scenes.Count)
 			{
 				//This can happen in the following situation:
@@ -139,5 +137,8 @@ public static class SceneHelpers
 		return false;
 	}
 
-	public static bool IsSceneName(string name) => name == MainSceneName || s_sceneNameFormat.IsMatch(name);
+	public static bool IsSceneName(string name) => name == MainSceneName || SceneNameFormat.IsMatch(name);
+
+	[GeneratedRegex("^level(0|([1-9][0-9]*))$")]
+	private static partial Regex SceneNameFormat { get; }
 }

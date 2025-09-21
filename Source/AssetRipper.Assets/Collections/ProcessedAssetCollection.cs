@@ -30,6 +30,7 @@ public sealed class ProcessedAssetCollection : VirtualAssetCollection
 	public void SetLayout(UnityVersion version, BuildTarget platform, TransferInstructionFlags flags)
 	{
 		Version = version;
+		OriginalVersion = version;
 		Platform = platform;
 		Flags = flags;
 	}

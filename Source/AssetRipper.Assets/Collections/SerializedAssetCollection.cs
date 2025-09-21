@@ -52,10 +52,12 @@ public sealed class SerializedAssetCollection : AssetCollection
 	/// <returns>The new collection.</returns>
 	internal static SerializedAssetCollection FromSerializedFile(Bundle bundle, SerializedFile file, AssetFactoryBase factory, UnityVersion defaultVersion = default)
 	{
+		UnityVersion version = file.Version.Equals(0, 0, 0) ? defaultVersion : file.Version;
 		SerializedAssetCollection collection = new SerializedAssetCollection(bundle)
 		{
 			Name = file.NameFixed,
-			Version = file.Version.Equals(0, 0, 0) ? defaultVersion : file.Version,
+			Version = version,
+			OriginalVersion = version,
 			Platform = file.Platform,
 			Flags = file.Flags,
 			EndianType = file.EndianType,

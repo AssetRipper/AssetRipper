@@ -113,7 +113,7 @@ public class SceneExportCollection : ExportCollection, IComparer<IUnityObjectBas
 	{
 		if (SceneHelpers.IsSceneName(File.Name))
 		{
-			int index = SceneHelpers.FileNameToSceneIndex(File.Name, File.Version);
+			int index = SceneHelpers.FileNameToSceneIndex(File.Name, File.OriginalVersion);
 			return container.IsSceneDuplicate(index);
 		}
 		return false;
