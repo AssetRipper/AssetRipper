@@ -36,7 +36,7 @@ public partial class FileSystem
 
 		public virtual void Delete(string path) => throw new NotSupportedException();
 
-		public string CreateTemporaryFolder()
+		public string CreateTemporary()
 		{
 			string path = Path.Join(Parent.TemporaryDirectory, GetRandomString()[0..8]);
 			Directory.Create(path);

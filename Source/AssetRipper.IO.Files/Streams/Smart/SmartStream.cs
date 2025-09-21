@@ -1,6 +1,4 @@
-﻿using AssetRipper.IO.Files.Utils;
-
-namespace AssetRipper.IO.Files.Streams.Smart;
+﻿namespace AssetRipper.IO.Files.Streams.Smart;
 
 public sealed partial class SmartStream : Stream
 {
@@ -33,7 +31,7 @@ public sealed partial class SmartStream : Stream
 
 	public static SmartStream CreateTemp()
 	{
-		string tempFile = TemporaryFileStorage.CreateTemporaryFile();
+		string tempFile = LocalFileSystem.Instance.File.CreateTemporary();
 		return new SmartStream(new FileStream(tempFile, FileMode.Open, FileAccess.ReadWrite, FileShare.None, 4096, FileOptions.DeleteOnClose));
 	}
 
