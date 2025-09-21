@@ -30,6 +30,14 @@ public abstract class YamlNode
 		}
 	}
 
+	public string EmitToString(bool formatKeys = false)
+	{
+		using StringWriter writer = new();
+		Emitter emitter = new(writer, formatKeys);
+		Emit(emitter);
+		return writer.ToString();
+	}
+
 	public abstract YamlNodeType NodeType { get; }
 	public abstract bool IsMultiline { get; }
 	public abstract bool IsIndent { get; }

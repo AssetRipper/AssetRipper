@@ -6,7 +6,8 @@ internal sealed class Emitter
 {
 	public Emitter(TextWriter writer, bool formatKeys)
 	{
-		m_stream = writer ?? throw new ArgumentNullException(nameof(writer));
+		ArgumentNullException.ThrowIfNull(writer);
+		m_stream = writer;
 		IsFormatKeys = formatKeys;
 	}
 
@@ -233,7 +234,7 @@ internal sealed class Emitter
 	}
 
 	public bool IsFormatKeys { get; }
-	public bool IsKey { get; set; }
+	internal bool IsKey { get; set; }
 
 	private readonly TextWriter m_stream;
 
