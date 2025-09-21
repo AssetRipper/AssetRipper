@@ -9,12 +9,12 @@ public static class FileUtilsTests
 		{
 			// A        length 3 cont     cont     cont
 			// 01000001 11100110 10010110 10000111 00001010
-			Assert.That(FileSystem.GetUniqueName("/dir", "A文.ext", 4), Is.EqualTo(".ext"));
-			Assert.That(FileSystem.GetUniqueName("/dir", "A文.ext", 5), Is.EqualTo("A.ext"));
-			Assert.That(FileSystem.GetUniqueName("/dir", "A文.ext", 6), Is.EqualTo("A.ext"));
-			Assert.That(FileSystem.GetUniqueName("/dir", "A文.ext", 7), Is.EqualTo("A.ext"));
-			Assert.That(FileSystem.GetUniqueName("/dir", "A文.ext", 8), Is.EqualTo("A文.ext"));
-			Assert.That(FileSystem.GetUniqueName("/dir", "A文.ext", 9), Is.EqualTo("A文.ext"));
+			Assert.That(new VirtualFileSystem().GetUniqueName("/dir", "A文.ext", 4), Is.EqualTo(".ext"));
+			Assert.That(new VirtualFileSystem().GetUniqueName("/dir", "A文.ext", 5), Is.EqualTo("A.ext"));
+			Assert.That(new VirtualFileSystem().GetUniqueName("/dir", "A文.ext", 6), Is.EqualTo("A.ext"));
+			Assert.That(new VirtualFileSystem().GetUniqueName("/dir", "A文.ext", 7), Is.EqualTo("A.ext"));
+			Assert.That(new VirtualFileSystem().GetUniqueName("/dir", "A文.ext", 8), Is.EqualTo("A文.ext"));
+			Assert.That(new VirtualFileSystem().GetUniqueName("/dir", "A文.ext", 9), Is.EqualTo("A文.ext"));
 		}
 	}
 
@@ -23,11 +23,11 @@ public static class FileUtilsTests
 	{
 		using (Assert.EnterMultipleScope())
 		{
-			Assert.That(FileSystem.GetUniqueName("/dir", "A文.ext", 7), Is.EqualTo("A.ext"));
-			Assert.That(FileSystem.GetUniqueName("/dir", "A文.ext", 8), Is.EqualTo("A文.ext"));
+			Assert.That(new VirtualFileSystem().GetUniqueName("/dir", "A文.ext", 7), Is.EqualTo("A.ext"));
+			Assert.That(new VirtualFileSystem().GetUniqueName("/dir", "A文.ext", 8), Is.EqualTo("A文.ext"));
 
-			Assert.That(FileSystem.GetUniqueName("/dir", "A文.exte", 8), Is.EqualTo("A.exte"));
-			Assert.That(FileSystem.GetUniqueName("/dir", "A文.exte", 9), Is.EqualTo("A文.exte"));
+			Assert.That(new VirtualFileSystem().GetUniqueName("/dir", "A文.exte", 8), Is.EqualTo("A.exte"));
+			Assert.That(new VirtualFileSystem().GetUniqueName("/dir", "A文.exte", 9), Is.EqualTo("A文.exte"));
 		}
 	}
 
@@ -36,8 +36,8 @@ public static class FileUtilsTests
 	{
 		using (Assert.EnterMultipleScope())
 		{
-			Assert.That(FileSystem.GetUniqueName("/dir", "A文", 3), Is.EqualTo("A"));
-			Assert.That(FileSystem.GetUniqueName("/dir", "A文", 4), Is.EqualTo("A文"));
+			Assert.That(new VirtualFileSystem().GetUniqueName("/dir", "A文", 3), Is.EqualTo("A"));
+			Assert.That(new VirtualFileSystem().GetUniqueName("/dir", "A文", 4), Is.EqualTo("A文"));
 		}
 	}
 }

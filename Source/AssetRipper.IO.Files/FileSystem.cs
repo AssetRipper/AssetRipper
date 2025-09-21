@@ -52,41 +52,41 @@ public partial class FileSystem
 		}
 	}
 
-	public static string GetUniqueName(string dirPath, string fileName, int maxNameLength)
+	public string GetUniqueName(string dirPath, string fileName, int maxNameLength)
 	{
 		string? ext = null;
 		string? name = null;
 		string validFileName = fileName;
 		if (Encoding.UTF8.GetByteCount(fileName) > maxNameLength)
 		{
-			ext = System.IO.Path.GetExtension(validFileName);
+			ext = Path.GetExtension(validFileName);
 			name = Utf8Truncation.TruncateToUTF8ByteLength(fileName, maxNameLength - Encoding.UTF8.GetByteCount(ext));
 			validFileName = name + ext;
 		}
 
-		if (!System.IO.Directory.Exists(dirPath))
+		if (!Directory.Exists(dirPath))
 		{
 			return validFileName;
 		}
 
-		name ??= System.IO.Path.GetFileNameWithoutExtension(validFileName);
+		name ??= Path.GetFileNameWithoutExtension(validFileName);
 		if (!IsReservedName(name))
 		{
-			if (!System.IO.File.Exists(System.IO.Path.Join(dirPath, validFileName)))
+			if (!File.Exists(Path.Join(dirPath, validFileName)))
 			{
 				return validFileName;
 			}
 		}
 
-		ext ??= System.IO.Path.GetExtension(validFileName);
+		ext ??= Path.GetExtension(validFileName);
 
-		string key = System.IO.Path.Join(dirPath, $"{name}{ext}");
+		string key = Path.Join(dirPath, $"{name}{ext}");
 		UniqueNamesByInitialPath.TryGetValue(key, out int initial);
 
 		for (int counter = initial; counter < int.MaxValue; counter++)
 		{
 			string proposedName = $"{name}_{counter}{ext}";
-			if (!System.IO.File.Exists(System.IO.Path.Join(dirPath, proposedName)))
+			if (!File.Exists(Path.Join(dirPath, proposedName)))
 			{
 				UniqueNamesByInitialPath[key] = counter;
 				return proposedName;
@@ -95,7 +95,7 @@ public partial class FileSystem
 		throw new Exception($"Can't generate unique name for file {fileName} in directory {dirPath}");
 	}
 
-	private static readonly Dictionary<string, int> UniqueNamesByInitialPath = new();
+	private Dictionary<string, int> UniqueNamesByInitialPath { get; } = [];
 
 	public static string RemoveCloneSuffixes(string path)
 	{
@@ -138,7 +138,7 @@ public partial class FileSystem
 		}
 	}
 
-	private static readonly Regex FileNameRegex = CreateFileNameRegex();
+	private static Regex FileNameRegex { get; } = CreateFileNameRegex();
 
 	public static string FixInvalidPathCharacters(string path)
 	{
@@ -166,14 +166,14 @@ public partial class FileSystem
 		return new Regex($@"[{escapedChars},\[\]\x00-\x1F]", RegexOptions.Compiled);
 	}
 
-	private static readonly Regex PathRegex = CreatePathRegex();
+	private static Regex PathRegex { get; } = CreatePathRegex();
 
 	public static bool IsReservedName(string name)
 	{
 		return OperatingSystem.IsWindows() && name.Length is 3 or 4 && ReservedNames.Contains(name);
 	}
 
-	private static readonly HashSet<string> ReservedNames = new(StringComparer.OrdinalIgnoreCase)
+	private static HashSet<string> ReservedNames { get; } = new(StringComparer.OrdinalIgnoreCase)
 	{
 		"aux", "con", "nul", "prn",
 		"com1", "com2", "com3", "com4", "com5", "com6", "com7", "com8", "com9",

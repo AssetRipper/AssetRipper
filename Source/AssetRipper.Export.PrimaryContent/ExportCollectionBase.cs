@@ -14,7 +14,7 @@ public abstract class ExportCollectionBase
 		}
 
 		string fullName = $"{name}.{ExportExtension}";
-		string uniqueName = FileSystem.GetUniqueName(path, fullName, FileSystem.MaxFileNameLength);
+		string uniqueName = fileSystem.GetUniqueName(path, fullName, FileSystem.MaxFileNameLength);
 		string filePath = fileSystem.Path.Join(path, uniqueName);
 		ContentExtractor.Export(asset, filePath, fileSystem);
 	}
@@ -42,7 +42,7 @@ public abstract class ExportCollectionBase
 
 	protected static string GetUniqueFileName(string directoryPath, string fileName, FileSystem fileSystem)
 	{
-		return FileSystem.GetUniqueName(directoryPath, fileName, FileSystem.MaxFileNameLength);
+		return fileSystem.GetUniqueName(directoryPath, fileName, FileSystem.MaxFileNameLength);
 	}
 
 	public abstract IContentExtractor ContentExtractor { get; }
