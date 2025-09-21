@@ -1,4 +1,4 @@
-﻿using ICSharpCode.SharpZipLib.Zip;
+﻿using SharpCompress.Archives.Zip;
 using System.Net.Http;
 
 namespace AssetRipper.AssemblyDumper.Downloader;
@@ -53,16 +53,12 @@ internal static class Program
 
 	private static byte[] DecompressZipFile(Stream inputStream)
 	{
-		using ZipInputStream zipInputStream = new ZipInputStream(inputStream);
-		ZipEntry entry;
-		while ((entry = zipInputStream.GetNextEntry()) is not null)
+		using ZipArchive archive = ZipArchive.Open(inputStream);
+		foreach (ZipArchiveEntry entry in archive.Entries.Where(entry => !entry.IsDirectory))
 		{
-			if (entry.IsFile)
-			{
-				using MemoryStream outputStream = new();
-				zipInputStream.CopyTo(outputStream);
-				return outputStream.ToArray();
-			}
+			using MemoryStream outputStream = new();
+			entry.OpenEntryStream().CopyTo(outputStream);
+			return outputStream.ToArray();
 		}
 
 		throw new Exception("No file found in zip file");
