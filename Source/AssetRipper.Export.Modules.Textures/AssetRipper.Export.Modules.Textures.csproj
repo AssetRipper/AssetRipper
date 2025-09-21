@@ -11,9 +11,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AssetRipper.Conversions.Crunch" Version="1.0.0" />
+		<PackageReference Include="AssetRipper.Conversions.Crunch" Version="1.0.1" />
 		<PackageReference Include="AssetRipper.Conversions.FastPng" Version="1.1.0" />
-		<PackageReference Include="AssetRipper.Conversions.UnityCrunch" Version="1.0.0" />
+		<PackageReference Include="AssetRipper.Conversions.UnityCrunch" Version="1.0.1" />
 		<PackageReference Include="AssetRipper.TextureDecoder" Version="2.3.0" />
 		<PackageReference Include="AssetRipper.Tpk" Version="1.1.0" />
 		<PackageReference Include="Kyaru.Texture2DDecoder" Version="0.17.0" />
