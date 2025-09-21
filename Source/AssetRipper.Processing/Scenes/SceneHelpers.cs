@@ -17,21 +17,33 @@ public static partial class SceneHelpers
 	private const string LevelName = "level";
 	private const string MainSceneName = "maindata";
 
-	public static int FileNameToSceneIndex(string name, UnityVersion version)
+	public static bool TryGetFileNameToSceneIndex(string name, UnityVersion version, out int index)
 	{
 		if (HasMainData(version))
 		{
 			if (name == MainSceneName)
 			{
-				return 0;
+				index = 0;
+				return true;
 			}
 
-			return int.Parse(name.AsSpan(LevelName.Length)) + 1;
+			if (SceneNameFormat.IsMatch(name))
+			{
+				index = int.Parse(name.AsSpan(LevelName.Length)) + 1;
+				return true;
+			}
 		}
 		else
 		{
-			return int.Parse(name.AsSpan(LevelName.Length));
+			if (SceneNameFormat.IsMatch(name))
+			{
+				index = int.Parse(name.AsSpan(LevelName.Length));
+				return true;
+			}
 		}
+
+		index = -1;
+		return false;
 	}
 
 	/// <summary>
@@ -70,9 +82,8 @@ public static partial class SceneHelpers
 
 	public static bool TryGetScenePath(AssetCollection collection, [NotNullWhen(true)] IBuildSettings? buildSettings, [NotNullWhen(true)] out string? result)
 	{
-		if (buildSettings is not null && IsSceneName(collection.Name))
+		if (buildSettings is not null && TryGetFileNameToSceneIndex(collection.Name, collection.OriginalVersion, out int index))
 		{
-			int index = FileNameToSceneIndex(collection.Name, collection.OriginalVersion);
 			if (index >= buildSettings.Scenes.Count)
 			{
 				//This can happen in the following situation:
@@ -136,8 +147,6 @@ public static partial class SceneHelpers
 		}
 		return false;
 	}
-
-	public static bool IsSceneName(string name) => name == MainSceneName || SceneNameFormat.IsMatch(name);
 
 	[GeneratedRegex("^level(0|([1-9][0-9]*))$")]
 	private static partial Regex SceneNameFormat { get; }

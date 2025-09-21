@@ -111,9 +111,8 @@ public class SceneExportCollection : ExportCollection, IComparer<IUnityObjectBas
 
 	private bool IsSceneDuplicate(IExportContainer container)
 	{
-		if (SceneHelpers.IsSceneName(File.Name))
+		if (SceneHelpers.TryGetFileNameToSceneIndex(File.Name, File.OriginalVersion, out int index))
 		{
-			int index = SceneHelpers.FileNameToSceneIndex(File.Name, File.OriginalVersion);
 			return container.IsSceneDuplicate(index);
 		}
 		return false;
