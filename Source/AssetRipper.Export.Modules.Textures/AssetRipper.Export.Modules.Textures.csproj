@@ -11,27 +11,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AssetRipper.Conversions.Crunch" Version="1.0.1" />
+		<PackageReference Include="AssetRipper.Conversions.Crunch" Version="1.0.3" />
 		<PackageReference Include="AssetRipper.Conversions.FastPng" Version="1.1.0" />
-		<PackageReference Include="AssetRipper.Conversions.UnityCrunch" Version="1.0.1" />
+		<PackageReference Include="AssetRipper.Conversions.UnityCrunch" Version="1.0.3" />
 		<PackageReference Include="AssetRipper.TextureDecoder" Version="2.3.0" />
 		<PackageReference Include="AssetRipper.Tpk" Version="1.1.0" />
-		<PackageReference Include="Kyaru.Texture2DDecoder" Version="0.17.0" />
-		<PackageReference Include="Kyaru.Texture2DDecoder.Windows" Version="0.1.0" />
-		<PackageReference Include="Kyaru.Texture2DDecoder.macOS" Version="0.1.0" />
-		<PackageReference Include="Kyaru.Texture2DDecoder.Linux" Version="0.1.0" />
 		<PackageReference Include="StbImageWriteSharp" Version="1.16.7" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<ContentWithTargetPath Include="Libraries\x64\crunch_x64.dll">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>crunch.dll</TargetPath>
-		</ContentWithTargetPath>
-		<ContentWithTargetPath Include="Libraries\x64\crunchunity_x64.dll">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<TargetPath>crunchunity.dll</TargetPath>
-		</ContentWithTargetPath>
 	</ItemGroup>
 
 </Project>
