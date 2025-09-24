@@ -1,4 +1,5 @@
-﻿using AssetRipper.SourceGenerated.Classes.ClassID_28;
+﻿using System.Drawing;
+using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Enums;
 
 namespace AssetRipper.SourceGenerated.Extensions;
@@ -80,6 +81,7 @@ public static class Texture2DExtensions
 			byte[] data = texture.ImageData_C28;
 
 			bool swapBytes = IsSwapBytes(texture.Collection.Platform, texture.Format_C28E);
+			bool swizzled = IsSwitchSwizzled(texture.PlatformBlob_C28);
 
 			if (data.Length != 0)
 			{
@@ -100,6 +102,12 @@ public static class Texture2DExtensions
 				{
 					(data[i], data[i + 1]) = (data[i + 1], data[i]);
 				}
+			}
+
+			if (swizzled)
+			{
+				SwitchSwizzle unswizzler = new(texture);
+				return unswizzler.PreprocessDeswizzle(data, out _, out _, out _);
 			}
 
 			return data;
@@ -142,5 +150,25 @@ public static class Texture2DExtensions
 			}
 		}
 		return false;
+	}
+	
+	private static bool IsSwitchSwizzled(byte[]? platformBlob)
+	{
+		return platformBlob is { Length: >= 12 };
+	}
+	
+	private static void TextureFormatToBlockSize(TextureFormat format)
+	{
+		switch (format)
+		{ 
+			case TextureFormat.ARGB4444:
+			case TextureFormat.RGB565:
+			case TextureFormat.DXT1:
+			case TextureFormat.DXT1Crunched:
+			case TextureFormat.DXT3:
+			case TextureFormat.DXT5:
+			case TextureFormat.DXT5Crunched:
+				break;
+		}
 	}
 }
