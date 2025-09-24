@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using AssetRipper.SourceGenerated.Classes.ClassID_28;
+﻿using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Enums;
 
 namespace AssetRipper.SourceGenerated.Extensions;
@@ -155,20 +154,5 @@ public static class Texture2DExtensions
 	private static bool IsSwitchSwizzled(byte[]? platformBlob)
 	{
 		return platformBlob is { Length: >= 12 };
-	}
-	
-	private static void TextureFormatToBlockSize(TextureFormat format)
-	{
-		switch (format)
-		{ 
-			case TextureFormat.ARGB4444:
-			case TextureFormat.RGB565:
-			case TextureFormat.DXT1:
-			case TextureFormat.DXT1Crunched:
-			case TextureFormat.DXT3:
-			case TextureFormat.DXT5:
-			case TextureFormat.DXT5Crunched:
-				break;
-		}
 	}
 }
