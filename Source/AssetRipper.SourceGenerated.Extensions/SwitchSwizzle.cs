@@ -33,7 +33,7 @@ public class SwitchSwizzle
 
 	public SwitchSwizzle(ITexture2D texture)
 	{
-		originalSize = new Size(texture.Width_C28, texture.Width_C28);
+		originalSize = new Size(texture.Width_C28, texture.Height_C28);
 		realFormat = GetCorrectedSwitchTextureFormat(texture.Format_C28E);
 		gobsPerBlock = GetBlockHeightByPlatformBlob(texture.PlatformBlob_C28);
 
