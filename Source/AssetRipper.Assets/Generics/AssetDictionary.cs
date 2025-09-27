@@ -239,4 +239,15 @@ public sealed class AssetDictionary<TKey, TValue> : AccessDictionaryBase<TKey, T
 			yield return pairs[i];
 		}
 	}
+
+	/// <summary>
+	/// Converts to KeyValuePair.
+	/// </summary>
+	public IEnumerable<KeyValuePair<TKey, TValue>> AsKeyValuePairs()
+	{
+		foreach (AssetPair<TKey, TValue> pair in this)
+		{
+			yield return new KeyValuePair<TKey, TValue>(pair.Key, pair.Value);
+		}
+	}
 }
