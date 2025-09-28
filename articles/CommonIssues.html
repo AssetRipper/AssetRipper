@@ -1,0 +1,172 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Common Issues </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Common Issues ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="common-issues">Common Issues</h1>
+
+<h2 id="why-doesnt-assetripper-export-mono-scripts-from-my-bundle">Why doesn't AssetRipper export Mono Scripts from my bundle?</h2>
+<p>Except in extremely rare and special cases, there are no mono scripts stored in asset bundles.</p>
+<p>Mono scripts are stored in C# assemblies, ie <code>.dll</code> files. The contents of these assemblies can be viewed in <a href="https://github.com/icsharpcode/ILSpy">ILSpy</a>.</p>
+<blockquote>
+<p>Note: C++ assemblies also use the <code>.dll</code> extension. If C# code can't be viewed after opening a <code>.dll</code> file in ILSpy, then it's not a C# assembly.</p>
+</blockquote>
+<p>In order to export mono scripts with asset bundle assets, the relevant assemblies must be included in the import. You can do this by:</p>
+<ol>
+<li>Place all the assemblies in a folder.</li>
+<li>Select that folder and the assetbundle(s) being ripped.</li>
+<li>Drag those into AssetRipper at the same time.</li>
+</ol>
+<p>If it worked, you'll get this line in the log:</p>
+<pre><code>Import : Files use the 'Mono' scripting backend.
+</code></pre>
+<p>If it didn't work, there will be this line:</p>
+<pre><code>Import : Files use the 'Unknown' scripting backend.
+</code></pre>
+<p>For IL2Cpp games, use <a href="https://github.com/SamboyCoding/Cpp2IL">Cpp2IL</a> to generate assemblies. <a href="https://github.com/BepInEx/Il2CppInterop">Il2CppInterop assemblies</a> used in modding will not work.</p>
+<h2 id="duplicate-assemblies">Duplicate Assemblies</h2>
+<p>This has a signature error in the log file.</p>
+<pre><code>Could not add pe assembly to name dictionary!
+</code></pre>
+<p>It is almost always caused by having two assemblies with the same name in the Managed folder or any subfolders. Note that the &quot;name&quot; in this case is the assembly name shown in a decompiler not the file name.</p>
+<h2 id="modified-assemblies">Modified Assemblies</h2>
+<blockquote>
+<p>This can include publicized assemblies and/or Il2CppInterop assemblies.</p>
+</blockquote>
+<p>Modified assemblies almost always cause read errors when used in AssetRipper. Here are some common changes that are known to cause lots of problems:</p>
+<ul>
+<li>Publicizing an assembly changes field deserialization on Monobehaviours.</li>
+<li>Attribute removal can also change field deserialization.</li>
+<li>Modified method bodies can cause decompiler errors.</li>
+</ul>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/AssetRipper/AssetRipper/blob/master/docs/articles/CommonIssues.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="toggle-mode">
+                <div class="icon">
+                  <i aria-hidden="true">☀</i>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="switch-style">
+                  <span class="slider round"></span>
+                </label>
+                <div class="icon">
+                  <i aria-hidden="true">☾</i>
+                </div>
+              </div>
+          
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <h5>In This Article</h5>
+              <div></div>
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <div class="pull-left">
+              
+              <span>Generated by <strong>DocFX</strong></span>
+            </div>
+            <div class="toggle-mode pull-right visible-sm visible-xs">
+              <div class="icon">
+                <i aria-hidden="true">☀</i>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="switch-style-m">
+                <span class="slider round"></span>
+              </label>
+              <div class="icon">
+                <i aria-hidden="true">☾</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript" src="../styles/toggle-theme.js"></script>
+      </footer>    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
