@@ -53,11 +53,6 @@ public class SwitchSwizzle
 		height = paddedSize.Height;
 		return Unswizzle(rawData, paddedSize, blockSize, gobsPerBlock);
 	}
-
-	public byte[] PostprocessDeswizzle(byte[] rawData)
-	{
-		return CropFromTopLeft(rawData, paddedSize.Width, paddedSize.Height, originalSize.Width, originalSize.Height);
-	}
 	
 	public static byte[] Unswizzle(byte[] data, Size imageSize, Size blockSize, int blockHeight)
 	{
@@ -167,21 +162,5 @@ public class SwitchSwizzle
 			TextureFormat.RGB24 => TextureFormat.RGBA32,
 			_ => format
 		};
-	}
-	
-	private static byte[] CropFromTopLeft(byte[] data, int width, int height, int cropToWidth, int cropToHeight)
-	{
-		if (cropToWidth > width || cropToHeight > height)
-			throw new ArgumentException("Crop size is bigger than the original image size.");
-
-		int cropToSize = cropToWidth * cropToHeight * 4;
-		byte[] cropped = new byte[cropToSize];
-		for (int i = 0; i < cropToHeight; i++)
-		{
-			int srcIndex = i * width * 4;
-			int dstIndex = i * cropToWidth * 4;
-			Array.Copy(data, srcIndex, cropped, dstIndex, cropToWidth * 4);
-		}
-		return cropped;
 	}
 }
