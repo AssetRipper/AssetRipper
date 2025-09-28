@@ -12,24 +12,39 @@ internal static class CollectionAPI
 		public const string Base = "/Collections";
 		public const string View = Base + "/View";
 		public const string Count = Base + "/Count";
+		public const string Class = "Class";
 	}
 
 	private const string Path = "Path";
 
-	public static string GetViewUrl(CollectionPath path) => $"{Urls.View}?{GetPathQuery(path)}";
+	public static string GetViewUrl(CollectionPath path, string? classFilter = null)
+	{
+		string url = $"{Urls.View}?{GetPathQuery(path)}";
+		if (!string.IsNullOrEmpty(classFilter))
+		{
+			url += $"&{Urls.Class}={classFilter.ToUrl()}";
+		}
+		return url;
+	}
+
 	public static Task GetView(HttpContext context)
 	{
 		context.Response.DisableCaching();
 		if (TryGetCollectionFromQuery(context, out AssetCollection? collection, out CollectionPath path, out Task? failureTask))
 		{
-			return new ViewPage() { Collection = collection, Path = path }.WriteToResponse(context.Response);
+			string? classFilter = context.Request.Query[Urls.Class];
+			return new ViewPage()
+			{
+				Collection = collection,
+				Path = path,
+				ClassFilter = string.IsNullOrWhiteSpace(classFilter) ? null : classFilter
+			}.WriteToResponse(context.Response);
 		}
 		else
 		{
 			return failureTask;
 		}
 	}
-
 	public static string GetCountUrl(CollectionPath path) => $"/Collections/Count?{GetPathQuery(path)}";
 	public static Task GetCount(HttpContext context)
 	{

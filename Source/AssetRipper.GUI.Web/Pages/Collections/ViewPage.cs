@@ -9,6 +9,7 @@ public sealed class ViewPage : DefaultPage
 	public required AssetCollection Collection { get; init; }
 	public required CollectionPath Path { get; init; }
 
+	public string? ClassFilter { get; init; }
 	public override string GetTitle() => Collection.Name;
 
 	public override void WriteInnerContent(TextWriter writer)
@@ -27,6 +28,48 @@ public sealed class ViewPage : DefaultPage
 		if (Collection.Count > 0)
 		{
 			new H2(writer).Close(Localization.Assets);
+			string[] classNames = Collection
+			.Select(a => a.ClassName)
+			.Where(s => !string.IsNullOrEmpty(s))
+			.Distinct()
+			.OrderBy(s => s)
+			.ToArray();
+
+			using (new Form(writer).WithAction(CollectionAPI.Urls.View).WithMethod("get").End())
+			{
+				new Input(writer)
+					.WithType("hidden")
+					.WithName("Path")
+					.WithValue(Path.ToJson().ToHtml())
+					.Close();
+
+				new Label(writer).WithFor("classFilter").WithClass("me-2").Close(Localization.Class ?? "Class");
+
+				using (new Select(writer)
+					.WithId("classFilter")
+					.WithName(CollectionAPI.Urls.Class)
+					.End())
+				{
+					new Option(writer)
+						.WithValue(string.Empty)
+						.MaybeWithSelected(string.IsNullOrEmpty(ClassFilter))
+						.Close("All");
+
+					foreach (string cn in Collection
+						.Select(a => a.ClassName)
+						.Where(s => !string.IsNullOrEmpty(s))
+						.Distinct()
+						.OrderBy(s => s))
+					{
+						new Option(writer)
+							.WithValue(cn)
+							.MaybeWithSelected(string.Equals(cn, ClassFilter, StringComparison.Ordinal))
+							.Close(cn);
+					}
+				}
+
+				new Button(writer).WithType("submit").WithClass("btn").Close("Apply");
+			}
 			using (new Table(writer).WithClass("table").End())
 			{
 				using (new Thead(writer).End())
@@ -42,6 +85,12 @@ public sealed class ViewPage : DefaultPage
 				{
 					foreach (IUnityObjectBase asset in Collection)
 					{
+						if (!string.IsNullOrEmpty(ClassFilter) &&
+							!string.Equals(asset.ClassName, ClassFilter, StringComparison.Ordinal))
+						{
+							continue;
+						}
+
 						using (new Tr(writer).End())
 						{
 							new Td(writer).Close(asset.PathID.ToString());
