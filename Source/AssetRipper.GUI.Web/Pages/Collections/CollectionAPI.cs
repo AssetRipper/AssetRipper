@@ -45,6 +45,7 @@ internal static class CollectionAPI
 			return failureTask;
 		}
 	}
+
 	public static string GetCountUrl(CollectionPath path) => $"/Collections/Count?{GetPathQuery(path)}";
 	public static Task GetCount(HttpContext context)
 	{
