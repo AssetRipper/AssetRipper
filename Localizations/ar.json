@@ -116,5 +116,6 @@
     "loading_step_locate_key_functions": "جارٍ مسح الملف الثنائي IL2Cpp للوظائف المكتبية",
     "export_primary_content": "تصدير المحتوى الأساسي",
     "export_unity_project": "تصدير مشروع Unity",
-    "c_sharp_langage_version_config_2": "C# 2"
+    "c_sharp_langage_version_config_2": "C# 2",
+    "filter": "تصفية"
 }

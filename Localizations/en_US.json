@@ -243,5 +243,6 @@
     "warning_this_directory_is_not_empty_all_content_will_be_deleted": "Warning: this directory is not empty. All content will be deleted.",
     "welcome": "Welcome",
     "width": "Width",
-    "yaml": "Yaml"
+    "yaml": "Yaml",
+    "filter": "Filter"
 }

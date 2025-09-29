@@ -29,25 +29,24 @@ public sealed class ViewPage : DefaultPage
 		{
 			new H2(writer).Close(Localization.Assets);
 			string[] classNames = Collection
-			.Select(a => a.ClassName)
-			.Where(s => !string.IsNullOrEmpty(s))
-			.Distinct()
-			.OrderBy(s => s)
-			.ToArray();
+				.Select(a => a.ClassName)
+				.Distinct()
+				.Order()
+				.ToArray();
 
 			using (new Form(writer).WithAction(CollectionAPI.Urls.View).WithMethod("get").End())
 			{
 				new Input(writer)
 					.WithType("hidden")
-					.WithName("Path")
+					.WithName(CollectionAPI.Path)
 					.WithValue(Path.ToJson().ToHtml())
 					.Close();
 
-				new Label(writer).WithFor("classFilter").WithClass("me-2").Close(Localization.Class ?? "Class");
+				new Label(writer).WithFor("classFilter").WithClass("me-2").Close(Localization.Class);
 
 				using (new Select(writer)
 					.WithId("classFilter")
-					.WithName(CollectionAPI.Urls.Class)
+					.WithName(CollectionAPI.Class)
 					.End())
 				{
 					new Option(writer)
@@ -57,9 +56,8 @@ public sealed class ViewPage : DefaultPage
 
 					foreach (string cn in Collection
 						.Select(a => a.ClassName)
-						.Where(s => !string.IsNullOrEmpty(s))
 						.Distinct()
-						.OrderBy(s => s))
+						.Order())
 					{
 						new Option(writer)
 							.WithValue(cn)
@@ -68,7 +66,7 @@ public sealed class ViewPage : DefaultPage
 					}
 				}
 
-				new Button(writer).WithType("submit").WithClass("btn").Close("Apply");
+				new Button(writer).WithType("submit").WithClass("btn").Close(Localization.Filter);
 			}
 			using (new Table(writer).WithClass("table").End())
 			{
