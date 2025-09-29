@@ -10,7 +10,9 @@ public class SwitchSwizzle
 	private const int GOB_Y_TEXEL_COUNT = 8;
 	private const int TEXEL_BYTE_SIZE = 16;
 	
-	// referring to block here as a compressed texture block, not a gob one
+	/// <summary>
+	/// In this case, "block" refers to a compressed texture block, not a gob one.
+	/// </summary>
 	private const int BLOCKS_IN_GOB = GOB_X_TEXEL_COUNT * GOB_Y_TEXEL_COUNT;
 	
 	private static readonly int[] GOB_X_POSES = new int[]
