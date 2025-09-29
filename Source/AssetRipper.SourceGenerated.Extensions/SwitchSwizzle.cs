@@ -4,8 +4,6 @@ using System.Drawing;
 
 namespace AssetRipper.SourceGenerated.Extensions;
 
-
-// Heavily reused from AssetTools.NET: https://github.com/nesrak1/AssetsTools.NET/blob/main/AssetsTools.NET.Texture/Swizzle/SwitchSwizzle.cs
 public class SwitchSwizzle
 {
 	private const int GOB_X_TEXEL_COUNT = 4;
