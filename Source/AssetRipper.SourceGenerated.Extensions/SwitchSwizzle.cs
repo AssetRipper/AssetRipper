@@ -4,68 +4,47 @@ using System.Drawing;
 
 namespace AssetRipper.SourceGenerated.Extensions;
 
-public class SwitchSwizzle
+public static class SwitchSwizzle
 {
-	private const int GOB_X_TEXEL_COUNT = 4;
-	private const int GOB_Y_TEXEL_COUNT = 8;
-	private const int TEXEL_BYTE_SIZE = 16;
+	private const int GobXTexelCount = 4;
+	private const int GobYTexelCount = 8;
+	private const int TexelByteSize = 16;
 	
 	/// <summary>
 	/// In this case, "block" refers to a compressed texture block, not a gob one.
 	/// </summary>
-	private const int BLOCKS_IN_GOB = GOB_X_TEXEL_COUNT * GOB_Y_TEXEL_COUNT;
+	private const int BlocksInGob = GobXTexelCount * GobYTexelCount;
 	
-	private static readonly int[] GOB_X_POSES = new int[]
-	{
+	private static readonly int[] GobXPoses =
+	[
 		0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 2, 2, 3, 3, 2, 2, 3, 3, 2, 2, 3, 3, 2, 2, 3, 3
-	};
+	];
 	
-	private static readonly int[] GOB_Y_POSES = new int[]
-	{
+	private static readonly int[] GobYPoses =
+	[
 		0, 1, 0, 1, 2, 3, 2, 3, 4, 5, 4, 5, 6, 7, 6, 7, 0, 1, 0, 1, 2, 3, 2, 3, 4, 5, 4, 5, 6, 7, 6, 7
-	};
-	
-	private readonly Size originalSize;
-	private readonly Size paddedSize;
-	private readonly Size blockSize;
-	private readonly int gobsPerBlock;
-	private readonly TextureFormat realFormat;
-
-	public SwitchSwizzle(ITexture2D texture)
-	{
-		originalSize = new Size(texture.Width_C28, texture.Height_C28);
-		realFormat = GetCorrectedSwitchTextureFormat(texture.Format_C28E);
-		gobsPerBlock = GetBlockHeightByPlatformBlob(texture.PlatformBlob_C28);
-
-		blockSize = GetTextureFormatBlockSize(realFormat);
-		paddedSize = GetPaddedTextureSize(originalSize.Width, originalSize.Height, blockSize.Width, blockSize.Height, gobsPerBlock);
-	}
+	];
 	
 	private static int CeilDivide(int a, int b)
 	{
 		return (a + b - 1) / b;
 	}
 	
-	public byte[] PreprocessDeswizzle(byte[] rawData, out TextureFormat format, out int width, out int height)
-	{
-		format = realFormat;
-		width = paddedSize.Width;
-		height = paddedSize.Height;
-		return Unswizzle(rawData, paddedSize, blockSize, gobsPerBlock);
-	}
-	
-	public static byte[] Unswizzle(byte[] data, Size imageSize, Size blockSize, int blockHeight)
+	public static byte[] Unswizzle(ITexture2D texture, byte[] data)
 	{
 		byte[] newData = new byte[data.Length];
 
-		int width = imageSize.Width;
-		int height = imageSize.Height;
+		TextureFormat realFormat = GetCorrectedSwitchTextureFormat(texture.Format_C28E);
+		Size blockSize = GetTextureFormatBlockSize(realFormat);
+		int blockHeight = GetBlockHeightByPlatformBlob(texture.PlatformBlob_C28);
+		
+		Size paddedSize = GetPaddedTextureSize(texture.Width_C28, texture.Height_C28, blockSize.Width, blockSize.Height, blockHeight);
 
-		int blockCountX = CeilDivide(width, blockSize.Width);
-		int blockCountY = CeilDivide(height, blockSize.Height);
+		int blockCountX = CeilDivide(paddedSize.Width, blockSize.Width);
+		int blockCountY = CeilDivide(paddedSize.Height, blockSize.Height);
 
-		int gobCountX = blockCountX / GOB_X_TEXEL_COUNT;
-		int gobCountY = blockCountY / GOB_Y_TEXEL_COUNT;
+		int gobCountX = blockCountX / GobXTexelCount;
+		int gobCountY = blockCountY / GobYTexelCount;
 
 		int srcPos = 0;
 		for (int i = 0; i < gobCountY / blockHeight; i++)
@@ -74,17 +53,17 @@ public class SwitchSwizzle
 			{
 				for (int k = 0; k < blockHeight; k++)
 				{
-					for (int l = 0; l < BLOCKS_IN_GOB; l++)
+					for (int l = 0; l < BlocksInGob; l++)
 					{
-						int gobX = GOB_X_POSES[l];
-						int gobY = GOB_Y_POSES[l];
-						int gobDstX = j * GOB_X_TEXEL_COUNT + gobX;
-						int gobDstY = (i * blockHeight + k) * GOB_Y_TEXEL_COUNT + gobY;
-						int gobDstLinPos = gobDstY * blockCountX * TEXEL_BYTE_SIZE + gobDstX * TEXEL_BYTE_SIZE;
+						int gobX = GobXPoses[l];
+						int gobY = GobYPoses[l];
+						int gobDstX = j * GobXTexelCount + gobX;
+						int gobDstY = (i * blockHeight + k) * GobYTexelCount + gobY;
+						int gobDstLinPos = gobDstY * blockCountX * TexelByteSize + gobDstX * TexelByteSize;
 
-						Array.Copy(data, srcPos, newData, gobDstLinPos, TEXEL_BYTE_SIZE);
+						Array.Copy(data, srcPos, newData, gobDstLinPos, TexelByteSize);
 
-						srcPos += TEXEL_BYTE_SIZE;
+						srcPos += TexelByteSize;
 					}
 				}
 			}
@@ -128,26 +107,11 @@ public class SwitchSwizzle
 		};
 	}
 	
-	public static Size GetPaddedTextureSize(int width, int height, int blockWidth, int blockHeight, int gobsPerBlock)
+	private static Size GetPaddedTextureSize(int width, int height, int blockWidth, int blockHeight, int gobsPerBlock)
 	{
-		width = CeilDivide(width, blockWidth * GOB_X_TEXEL_COUNT) * blockWidth * GOB_X_TEXEL_COUNT;
-		height = CeilDivide(height, blockHeight * GOB_Y_TEXEL_COUNT * gobsPerBlock) * blockHeight * GOB_Y_TEXEL_COUNT * gobsPerBlock;
+		width = CeilDivide(width, blockWidth * GobXTexelCount) * blockWidth * GobXTexelCount;
+		height = CeilDivide(height, blockHeight * GobYTexelCount * gobsPerBlock) * blockHeight * GobYTexelCount * gobsPerBlock;
 		return new Size(width, height);
-	}
-	
-	public static int GetBlockHeightByBlockSize(Size blockSize, int imageHeight)
-	{
-		int blockHeight = CeilDivide(imageHeight, blockSize.Height);
-		int heightAndHalf = blockHeight + blockHeight / 2;
-		
-		return heightAndHalf switch
-		{
-			>= 128 => 16,
-			>= 64 => 8,
-			>= 32 => 4,
-			>= 16 => 2,
-			_ => 1
-		};
 	}
 
 	private static int GetBlockHeightByPlatformBlob(byte[] platformBlob)
