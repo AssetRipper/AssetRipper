@@ -81,7 +81,7 @@ public static class Texture2DExtensions
 			byte[] data = texture.ImageData_C28;
 
 			bool swapBytes = IsSwapBytes(texture.Collection.Platform, texture.Format_C28E);
-			bool swizzled = IsSwitchSwizzled(texture.PlatformBlob_C28) && texture.Collection.Platform == BuildTarget.Switch;
+			bool swizzled = texture is { PlatformBlob_C28: { Length: >= 12 }, Collection.Platform: BuildTarget.Switch };
 
 			if (data.Length != 0)
 			{
@@ -150,10 +150,5 @@ public static class Texture2DExtensions
 			}
 		}
 		return false;
-	}
-	
-	private static bool IsSwitchSwizzled(byte[]? platformBlob)
-	{
-		return platformBlob is { Length: >= 12 };
 	}
 }
