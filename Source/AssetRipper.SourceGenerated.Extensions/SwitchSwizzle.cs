@@ -33,10 +33,10 @@ public static class SwitchSwizzle
 	public static byte[] Unswizzle(ITexture2D texture, byte[] data)
 	{
 		TextureFormat realFormat = GetCorrectedSwitchTextureFormat(texture.Format_C28E);
-		Size? blockSize = GetTextureFormatBlockSize(realFormat);
+		
 		
 		// Format is unsupported, we back out
-		if (blockSize == null)
+		if (GetTextureFormatBlockSize(realFormat) is not { } blockSize)
 		{
 			return data;
 		}
@@ -45,10 +45,10 @@ public static class SwitchSwizzle
 		
 		int blockHeight = GetBlockHeightByPlatformBlob(texture.PlatformBlob_C28);
 		
-		Size paddedSize = GetPaddedTextureSize(texture.Width_C28, texture.Height_C28, blockSize.Value.Width, blockSize.Value.Height, blockHeight);
+		Size paddedSize = GetPaddedTextureSize(texture.Width_C28, texture.Height_C28, blockSize.Width, blockSize.Height, blockHeight);
 
-		int blockCountX = CeilDivide(paddedSize.Width, blockSize.Value.Width);
-		int blockCountY = CeilDivide(paddedSize.Height, blockSize.Value.Height);
+		int blockCountX = CeilDivide(paddedSize.Width, blockSize.Width);
+		int blockCountY = CeilDivide(paddedSize.Height, blockSize.Height);
 
 		int gobCountX = blockCountX / GobXTexelCount;
 		int gobCountY = blockCountY / GobYTexelCount;
