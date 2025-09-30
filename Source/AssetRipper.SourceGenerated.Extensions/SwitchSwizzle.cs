@@ -45,10 +45,10 @@ public static class SwitchSwizzle
 		
 		int blockHeight = GetBlockHeightByPlatformBlob(texture.PlatformBlob_C28);
 		
-		Size paddedSize = GetPaddedTextureSize(texture.Width_C28, texture.Height_C28, blockSize.Width, blockSize.Height, blockHeight);
+		Size paddedSize = GetPaddedTextureSize(texture.Width_C28, texture.Height_C28, blockSize.Value.Width, blockSize.Value.Height, blockHeight);
 
-		int blockCountX = CeilDivide(paddedSize.Width, blockSize.Width);
-		int blockCountY = CeilDivide(paddedSize.Height, blockSize.Height);
+		int blockCountX = CeilDivide(paddedSize.Width, blockSize.Value.Width);
+		int blockCountY = CeilDivide(paddedSize.Height, blockSize.Value.Height);
 
 		int gobCountX = blockCountX / GobXTexelCount;
 		int gobCountY = blockCountY / GobYTexelCount;
