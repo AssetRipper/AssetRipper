@@ -32,10 +32,17 @@ public static class SwitchSwizzle
 	
 	public static byte[] Unswizzle(ITexture2D texture, byte[] data)
 	{
-		byte[] newData = new byte[data.Length];
-
 		TextureFormat realFormat = GetCorrectedSwitchTextureFormat(texture.Format_C28E);
-		Size blockSize = GetTextureFormatBlockSize(realFormat);
+		Size? blockSize = GetTextureFormatBlockSize(realFormat);
+		
+		// Format is unsupported, we back out
+		if (blockSize == null)
+		{
+			return data;
+		}
+
+		byte[] newData = new byte[data.Length];
+		
 		int blockHeight = GetBlockHeightByPlatformBlob(texture.PlatformBlob_C28);
 		
 		Size paddedSize = GetPaddedTextureSize(texture.Width_C28, texture.Height_C28, blockSize.Width, blockSize.Height, blockHeight);
@@ -72,7 +79,7 @@ public static class SwitchSwizzle
 		return newData;
 	}
 
-	private static Size GetTextureFormatBlockSize(TextureFormat textureFormat)
+	private static Size? GetTextureFormatBlockSize(TextureFormat textureFormat) 
 	{
 		return textureFormat switch
 		{
@@ -103,7 +110,7 @@ public static class SwitchSwizzle
 			TextureFormat.ASTC_RGBA_12x12 => new Size(12, 12),
 			TextureFormat.RG16 => new Size(8, 1),
 			TextureFormat.R8 => new Size(16, 1),
-			_ => throw new NotImplementedException(),
+			_ => null,
 		};
 	}
 	
