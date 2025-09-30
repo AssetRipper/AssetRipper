@@ -1,5 +1,6 @@
 ﻿using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Enums;
+using BuildTarget = AssetRipper.IO.Files.BuildTarget;
 
 namespace AssetRipper.SourceGenerated.Extensions;
 
@@ -80,6 +81,7 @@ public static class Texture2DExtensions
 			byte[] data = texture.ImageData_C28;
 
 			bool swapBytes = IsSwapBytes(texture.Collection.Platform, texture.Format_C28E);
+			bool switchSwizzled = texture is { PlatformBlob_C28: { Length: >= 12 }, Collection.Platform: BuildTarget.Switch };
 
 			if (data.Length != 0)
 			{
@@ -100,6 +102,11 @@ public static class Texture2DExtensions
 				{
 					(data[i], data[i + 1]) = (data[i + 1], data[i]);
 				}
+			}
+
+			if (switchSwizzled)
+			{
+				return SwitchSwizzle.Unswizzle(texture, data);
 			}
 
 			return data;
