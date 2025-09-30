@@ -34,7 +34,6 @@ public static class SwitchSwizzle
 	{
 		TextureFormat realFormat = GetCorrectedSwitchTextureFormat(texture.Format_C28E);
 		
-		
 		// Format is unsupported, we back out
 		if (GetTextureFormatBlockSize(realFormat) is not { } blockSize)
 		{
