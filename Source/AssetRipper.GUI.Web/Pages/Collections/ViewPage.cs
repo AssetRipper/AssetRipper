@@ -28,12 +28,6 @@ public sealed class ViewPage : DefaultPage
 		if (Collection.Count > 0)
 		{
 			new H2(writer).Close(Localization.Assets);
-			string[] classNames = Collection
-				.Select(a => a.ClassName)
-				.Distinct()
-				.Order()
-				.ToArray();
-
 			using (new Form(writer).WithAction(CollectionAPI.Urls.View).WithMethod("get").End())
 			{
 				new Input(writer)
