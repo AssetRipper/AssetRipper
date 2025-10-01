@@ -46,7 +46,7 @@ public sealed class ViewPage : DefaultPage
 					new Option(writer)
 						.WithValue(string.Empty)
 						.MaybeWithSelected(string.IsNullOrEmpty(ClassFilter))
-						.Close("All");
+						.Close(Localization.All);
 
 					foreach (string cn in Collection
 						.Select(a => a.ClassName)
