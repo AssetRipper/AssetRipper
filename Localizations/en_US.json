@@ -1,4 +1,5 @@
 {
+    "all": "All",
     "an_error_occured_during_decompilation": "An error occurred during decompilation.",
     "appreciation_message": "Thank you for supporting AssetRipper!",
     "assembly_name": "Assembly Name",
@@ -96,6 +97,7 @@
     "file_id": "File ID",
     "format": "Format",
     "frequency": "Frequency",
+    "filter": "Filter",
     "game_object": "GameObject",
     "guid": "GUID",
     "height": "Height",
