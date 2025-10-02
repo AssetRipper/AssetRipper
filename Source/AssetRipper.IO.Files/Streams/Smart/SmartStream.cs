@@ -95,6 +95,16 @@ public sealed partial class SmartStream : Stream
 		return new SmartStream(this);
 	}
 
+	[MemberNotNull(nameof(Stream))]
+	public SmartStream CreateLogicalFile(long offset, long size)
+	{
+		ThrowIfNull();
+		return new SmartStream(this)
+		{
+			Stream = new RandomAccessStream(Stream, offset, size),
+		};
+	}
+
 	public override void Flush()
 	{
 		Stream?.Flush();
