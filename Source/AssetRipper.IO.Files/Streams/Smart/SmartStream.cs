@@ -103,17 +103,27 @@ public sealed partial class SmartStream : Stream
 		// Create a partial stream if the base stream is compatible with RandomAccessStream.
 		RandomAccessStream? partialStream = Stream switch
 		{
-			RandomAccessStream randomAccessStream => new RandomAccessStream(randomAccessStream.Handle, randomAccessStream.BaseOffset + offset, size),
-			FileStream fileStream => new RandomAccessStream(fileStream.SafeFileHandle, offset, size),
+			// root case
+			FileStream fileStream => new RandomAccessStream(CreateReference(), fileStream.SafeFileHandle, offset, size),
+
+			// branch case
+			RandomAccessStream parentPartial => new RandomAccessStream(
+				parentPartial.HandleOwnerRef.CreateReference(),
+				parentPartial.Handle,
+				parentPartial.BaseOffset + offset,
+				size),
+
+			// incompatible
 			_ => null
 		};
 
 		if (partialStream is not null)
 		{
-			return new SmartStream(this)
-			{
-				Stream = partialStream,
-			};
+			// Partials themselves can be disposed independently of eachother.
+			// The partial owns a counted reference to the root FileStream's SmartStream, so we don't need to share counters at the SmartStream level.
+			// The counter is still useful if multiple things want to share the same partial.
+			// Thus the new RefCounter is for the partial, not the original FileStream.
+			return new SmartStream(partialStream);
 		}
 
 		// Copy otherwise.

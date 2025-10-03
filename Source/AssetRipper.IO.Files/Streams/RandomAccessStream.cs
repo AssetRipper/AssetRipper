@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32.SafeHandles;
+﻿using AssetRipper.IO.Files.Streams.Smart;
+using Microsoft.Win32.SafeHandles;
 
 namespace AssetRipper.IO.Files.Streams;
 
@@ -10,6 +11,13 @@ namespace AssetRipper.IO.Files.Streams;
 internal sealed class RandomAccessStream : Stream
 {
 	public SafeFileHandle Handle { get; }
+
+	/// <summary>
+	/// A coutned reference to the stream that owns Handle.
+	/// This keeps the FileStream open in case this stream is the last thing alive.
+	/// </summary>
+	public SmartStream HandleOwnerRef { get; }
+
 	public long BaseOffset { get; }
 
 	/// <summary>
@@ -32,8 +40,9 @@ internal sealed class RandomAccessStream : Stream
 		set => position = value + BaseOffset;
 	}
 
-	public RandomAccessStream(SafeFileHandle handle, long offset, long length)
+	public RandomAccessStream(SmartStream handleOwner, SafeFileHandle handle, long offset, long length)
 	{
+		HandleOwnerRef = handleOwner;
 		Handle = handle;
 		BaseOffset = offset;
 		Length = length;
@@ -101,5 +110,21 @@ internal sealed class RandomAccessStream : Stream
 	public override void Write(byte[] buffer, int offset, int count)
 	{
 		throw new NotSupportedException();
+	}
+
+	protected override void Dispose(bool disposing)
+	{
+		HandleOwnerRef.Dispose();
+		base.Dispose(disposing);
+	}
+
+	public override void Close()
+	{
+		Dispose(true);
+	}
+
+	~RandomAccessStream()
+	{
+		Dispose(false);
 	}
 }
