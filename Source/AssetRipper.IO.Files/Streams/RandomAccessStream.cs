@@ -126,5 +126,6 @@ internal sealed class RandomAccessStream : Stream
 	~RandomAccessStream()
 	{
 		Dispose(false);
+		GC.KeepAlive(HandleOwnerRef);
 	}
 }
