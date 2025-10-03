@@ -58,10 +58,7 @@ public sealed class AccessDictionary<TKey, TValue, TKeyBase, TValueBase> : Acces
 
 	public override bool TryGetSinglePairForKey(TKeyBase key, [NotNullWhen(true)] out AccessPairBase<TKeyBase, TValueBase>? pair)
 	{
-		if (key is null)
-		{
-			throw new ArgumentNullException(nameof(key));
-		}
+		ArgumentNullException.ThrowIfNull(key);
 
 		int hash = key.GetHashCode();
 		bool found = false;
@@ -73,7 +70,37 @@ public sealed class AccessDictionary<TKey, TValue, TKeyBase, TValueBase> : Acces
 			{
 				if (found)
 				{
-					throw new Exception("Found more than one matching key");
+					// Multiple entries found
+					pair = null;
+					return false;
+				}
+				else
+				{
+					found = true;
+					pair = new AccessPair<TKey, TValue, TKeyBase, TValueBase>(p);
+				}
+			}
+		}
+		return found;
+	}
+
+	public override bool TryGetSinglePairForValue(TValueBase value, [NotNullWhen(true)] out AccessPairBase<TKeyBase, TValueBase>? pair)
+	{
+		ArgumentNullException.ThrowIfNull(value);
+
+		int hash = value.GetHashCode();
+		bool found = false;
+		pair = null;
+		for (int i = Count - 1; i > -1; i--)
+		{
+			AccessPairBase<TKey, TValue> p = referenceDictionary.GetPair(i);
+			if (p.Value.GetHashCode() == hash && value.Equals(p.Value))
+			{
+				if (found)
+				{
+					// Multiple entries found
+					pair = null;
+					return false;
 				}
 				else
 				{

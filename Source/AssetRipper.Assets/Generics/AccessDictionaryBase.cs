@@ -120,6 +120,8 @@ public abstract class AccessDictionaryBase<TKey, TValue> : IReadOnlyCollection<A
 
 	public abstract bool TryGetSinglePairForKey(TKey key, [NotNullWhen(true)] out AccessPairBase<TKey, TValue>? pair);
 
+	public abstract bool TryGetSinglePairForValue(TValue value, [NotNullWhen(true)] out AccessPairBase<TKey, TValue>? pair);
+
 	/// <summary>
 	/// Access a value in the dictionary
 	/// </summary>
@@ -143,6 +145,26 @@ public abstract class AccessDictionaryBase<TKey, TValue> : IReadOnlyCollection<A
 				Add(key, value);
 			}
 		}
+	}
+
+	public bool TryGetKey(TValue value, [NotNullWhen(true)] out TKey? key)
+	{
+		if (TryGetSinglePairForValue(value, out AccessPairBase<TKey, TValue>? pair))
+		{
+			key = pair.Key;
+			return key is not null;
+		}
+		else
+		{
+			key = default;
+			return false;
+		}
+	}
+
+	public TKey? TryGetKey(TValue value)
+	{
+		TryGetKey(value, out TKey? key);
+		return key;
 	}
 
 	public bool TryGetValue(TKey key, [NotNullWhen(true)] out TValue? value)
@@ -189,7 +211,9 @@ public abstract class AccessDictionaryBase<TKey, TValue> : IReadOnlyCollection<A
 	public bool TryAdd(TKey key, TValue value)
 	{
 		if (ContainsKey(key))
+		{
 			return false;
+		}
 
 		Add(key, value);
 		return true;

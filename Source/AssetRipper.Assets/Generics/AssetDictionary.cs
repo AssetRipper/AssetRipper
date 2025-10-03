@@ -165,10 +165,7 @@ public sealed class AssetDictionary<TKey, TValue> : AccessDictionaryBase<TKey, T
 
 	public override bool TryGetSinglePairForKey(TKey key, [NotNullWhen(true)] out AccessPairBase<TKey, TValue>? pair)
 	{
-		if (key is null)
-		{
-			throw new ArgumentNullException(nameof(key));
-		}
+		ArgumentNullException.ThrowIfNull(key);
 
 		int hash = key.GetHashCode();
 		bool found = false;
@@ -180,7 +177,35 @@ public sealed class AssetDictionary<TKey, TValue> : AccessDictionaryBase<TKey, T
 			{
 				if (found)
 				{
-					throw new Exception("Found more than one matching key");
+					// We found more than one matching key
+					return false;
+				}
+				else
+				{
+					found = true;
+					pair = p;
+				}
+			}
+		}
+		return found;
+	}
+
+	public override bool TryGetSinglePairForValue(TValue value, [NotNullWhen(true)] out AccessPairBase<TKey, TValue>? pair)
+	{
+		ArgumentNullException.ThrowIfNull(value);
+
+		int hash = value.GetHashCode();
+		bool found = false;
+		pair = null;
+		for (int i = Count - 1; i > -1; i--)
+		{
+			AssetPair<TKey, TValue> p = pairs[i];
+			if (p.Value.GetHashCode() == hash && value.Equals(p.Value))
+			{
+				if (found)
+				{
+					// We found more than one matching value
+					return false;
 				}
 				else
 				{
