@@ -10,13 +10,9 @@ namespace AssetRipper.IO.Files.Streams;
 /// </summary>
 internal sealed class RandomAccessStream : Stream
 {
-	public SafeFileHandle Handle { get; }
+	public SafeFileHandle Handle => Parent.SafeFileHandle;
 
-	/// <summary>
-	/// A coutned reference to the stream that owns Handle.
-	/// This keeps the FileStream open in case this stream is the last thing alive.
-	/// </summary>
-	public SmartStream HandleOwnerRef { get; }
+	public FileStream Parent { get; }
 
 	public long BaseOffset { get; }
 
@@ -40,10 +36,9 @@ internal sealed class RandomAccessStream : Stream
 		set => position = value + BaseOffset;
 	}
 
-	public RandomAccessStream(SmartStream handleOwner, SafeFileHandle handle, long offset, long length)
+	public RandomAccessStream(FileStream parent, long offset, long length)
 	{
-		HandleOwnerRef = handleOwner;
-		Handle = handle;
+		Parent = parent;
 		BaseOffset = offset;
 		Length = length;
 		position = BaseOffset;
@@ -51,7 +46,7 @@ internal sealed class RandomAccessStream : Stream
 
 	public override void Flush()
 	{
-		RandomAccess.FlushToDisk(Handle);
+		// Read-only streams shouldn't flush.
 	}
 
 	public override int Read(byte[] buffer, int offset, int count)
@@ -112,20 +107,9 @@ internal sealed class RandomAccessStream : Stream
 		throw new NotSupportedException();
 	}
 
-	protected override void Dispose(bool disposing)
-	{
-		HandleOwnerRef.Dispose();
-		base.Dispose(disposing);
-	}
-
-	public override void Close()
-	{
-		Dispose(true);
-	}
 
 	~RandomAccessStream()
 	{
-		Dispose(false);
-		GC.KeepAlive(HandleOwnerRef);
+		GC.KeepAlive(Parent);
 	}
 }
