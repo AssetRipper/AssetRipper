@@ -247,5 +247,6 @@
     "publicize_assemblies": "公开化私有的程序集（Publicize Assemblies）",
     "scripts_use_fully_qualified_type_names": "在脚本中使用完整的（fully-qualified）类型名",
     "select_files": "选择多个文件",
-    "remove_nullable_attributes": "移除可为空的属性（Attribute）"
+    "remove_nullable_attributes": "移除可为空的属性（Attribute）",
+    "file_id": "文件 ID"
 }
