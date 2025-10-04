@@ -107,7 +107,7 @@ public static class Commands
 			{
 				bool createSubfolder = TryGetCreateSubfolder(form);
 				path = MaybeAppendTimestampedSubfolder(path, createSubfolder);
-				GameFileLoader.ExportUnityProject(path);
+				await GameFileLoader.ExportUnityProject(path);
 			}
 			return null;
 		}
@@ -133,7 +133,7 @@ public static class Commands
 			{
 				bool createSubfolder = TryGetCreateSubfolder(form);
 				path = MaybeAppendTimestampedSubfolder(path, createSubfolder);
-				GameFileLoader.ExportPrimaryContent(path);
+				await GameFileLoader.ExportPrimaryContent(path);
 			}
 			return null;
 		}

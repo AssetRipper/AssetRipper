@@ -87,6 +87,7 @@
     "experimental": "Experimental",
     "export_complete": "Export Complete!",
     "export_deleting_old_files": "Clearing out existing files...",
+    "export_directory_delete_user_confirmation": "The selected export directory already exists and everything it contains will be deleted. Are you sure you want to continue?",
     "export_in_progress": "Exporting Asset Files\n{0}%\n{1}/{2}",
     "export_in_progress_no_file_count_yet": "Exporting Asset Files\n0.0%\n?/?",
     "export_preparing": "Preparing for Export...\nThis might take a minute.",

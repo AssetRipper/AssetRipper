@@ -5,6 +5,7 @@ using AssetRipper.Export.UnityProjects;
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.IO.Files;
+using AssetRipper.NativeDialogs;
 using AssetRipper.Processing;
 
 namespace AssetRipper.GUI.Web;
@@ -46,12 +47,17 @@ public static class GameFileLoader
 		GameData = ExportHandler.LoadAndProcess(paths, LocalFileSystem.Instance);
 	}
 
-	public static void ExportUnityProject(string path)
+	public static async Task ExportUnityProject(string path)
 	{
 		if (IsLoaded && IsValidExportDirectory(path))
 		{
-			if (Directory.Exists(path))
+			if (IsNonEmptyDirectory(path))
 			{
+				if (!await UserConsentsToDeletion())
+				{
+					Logger.Info(LogCategory.Export, "User declined to delete existing export directory. Aborting export.");
+					return;
+				}
 				Directory.Delete(path, true);
 			}
 
@@ -60,12 +66,17 @@ public static class GameFileLoader
 		}
 	}
 
-	public static void ExportPrimaryContent(string path)
+	public static async Task ExportPrimaryContent(string path)
 	{
 		if (IsLoaded && IsValidExportDirectory(path))
 		{
-			if (Directory.Exists(path))
+			if (IsNonEmptyDirectory(path))
 			{
+				if (!await UserConsentsToDeletion())
+				{
+					Logger.Info(LogCategory.Export, "User declined to delete existing export directory. Aborting export.");
+					return;
+				}
 				Directory.Delete(path, true);
 			}
 
@@ -99,5 +110,21 @@ public static class GameFileLoader
 			return false;
 		}
 		return true;
+	}
+
+	private static bool IsNonEmptyDirectory(string path)
+	{
+		return Directory.Exists(path) && Directory.EnumerateFileSystemEntries(path).Any();
+	}
+
+	private static async Task<bool> UserConsentsToDeletion()
+	{
+		ConfirmationDialog.Options options = new()
+		{
+			Message = Localization.ExportDirectoryDeleteUserConfirmation,
+			Type = ConfirmationDialog.Type.YesNo,
+		};
+		bool? result = await ConfirmationDialog.Confirm(options);
+		return result ?? false;
 	}
 }
