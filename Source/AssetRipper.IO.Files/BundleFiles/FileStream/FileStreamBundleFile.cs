@@ -136,7 +136,7 @@ public sealed class FileStreamBundleFile : FileContainer
 		}
 	}
 
-	private void ReadFileStreamData(Stream stream, long basePosition, long headerSize)
+	private void ReadFileStreamData(SmartStream stream, long basePosition, long headerSize)
 	{
 		if (Header.Flags.GetBlocksInfoAtTheEnd())
 		{

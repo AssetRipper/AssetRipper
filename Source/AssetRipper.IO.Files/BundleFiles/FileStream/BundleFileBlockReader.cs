@@ -8,7 +8,7 @@ namespace AssetRipper.IO.Files.BundleFiles.FileStream;
 
 internal sealed class BundleFileBlockReader : IDisposable
 {
-	public BundleFileBlockReader(Stream stream, BlocksInfo blocksInfo)
+	public BundleFileBlockReader(SmartStream stream, BlocksInfo blocksInfo)
 	{
 		m_stream = stream;
 		m_blocksInfo = blocksInfo;
@@ -29,6 +29,12 @@ internal sealed class BundleFileBlockReader : IDisposable
 	public SmartStream ReadEntry(FileStreamNode entry)
 	{
 		ObjectDisposedException.ThrowIf(m_isDisposed, typeof(BundleFileBlockReader));
+
+		// Avoid storing entire non-compresed entries in memory by mapping a stream to the block location.
+		if (m_blocksInfo.StorageBlocks.Length == 1 && m_blocksInfo.StorageBlocks[0].CompressionType == CompressionType.None)
+		{
+			return m_stream.CreatePartial(m_dataOffset + entry.Offset, entry.Size);
+		}
 
 		// find block offsets
 		int blockIndex;
@@ -191,7 +197,7 @@ internal sealed class BundleFileBlockReader : IDisposable
 	/// This number can be set to any integer value less than <see cref="MaxMemoryStreamLength"/>.
 	/// </remarks>
 	private const int MaxPreAllocatedMemoryStreamLength = 100 * 1024 * 1024;
-	private readonly Stream m_stream;
+	private readonly SmartStream m_stream;
 	private readonly BlocksInfo m_blocksInfo = new();
 	private readonly long m_dataOffset;
 

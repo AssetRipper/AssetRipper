@@ -95,6 +95,41 @@ public sealed partial class SmartStream : Stream
 		return new SmartStream(this);
 	}
 
+	[MemberNotNull(nameof(Stream))]
+	public SmartStream CreatePartial(long offset, long size)
+	{
+		ThrowIfNull();
+
+		// Create a partial stream if the base stream is compatible with RandomAccessStream.
+		RandomAccessStream? partialStream = Stream switch
+		{
+			// root case
+			FileStream fileStream => new RandomAccessStream(fileStream, offset, size),
+
+			// branch case
+			RandomAccessStream parentPartial => new RandomAccessStream(
+				parentPartial.Parent,
+				parentPartial.BaseOffset + offset,
+				size),
+
+			// incompatible
+			_ => null
+		};
+
+		if (partialStream is not null)
+		{
+			return new SmartStream(this) { Stream = partialStream };
+		}
+
+		// Copy otherwise.
+		byte[] buffer = new byte[(int)size];
+		long initialPosition = Stream.Position;
+		Stream.Position = offset;
+		Stream.ReadExactly(buffer);
+		Stream.Position = initialPosition;
+		return SmartStream.CreateMemory(buffer);
+	}
+
 	public override void Flush()
 	{
 		Stream?.Flush();
