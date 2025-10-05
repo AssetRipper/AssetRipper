@@ -77,8 +77,13 @@ public sealed class SerializedFileMetadata
 		if (HasSignature(reader.Generation))
 		{
 			string signature = reader.ReadStringZeroTerm();
-			UnityVersion = UnityVersion.Parse(signature);
-			reader.Version = UnityVersion;
+			if (!UnityVersion.TryParse(signature, out UnityVersion version, out _))
+			{
+				// Assume version is stripped if it can't be parsed.
+				version = default;
+			}
+			UnityVersion = version;
+			reader.Version = version;
 		}
 		if (HasPlatform(reader.Generation))
 		{
