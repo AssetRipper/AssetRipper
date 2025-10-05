@@ -10,7 +10,7 @@ namespace AssetRipper.IO.Files.Streams;
 /// </summary>
 internal sealed class RandomAccessStream : Stream
 {
-	public SafeFileHandle Handle => Parent.SafeFileHandle;
+	public SafeFileHandle Handle { get; }
 
 	public FileStream Parent { get; }
 
@@ -39,6 +39,7 @@ internal sealed class RandomAccessStream : Stream
 	public RandomAccessStream(FileStream parent, long offset, long length)
 	{
 		Parent = parent;
+		Handle = parent.SafeFileHandle;
 		BaseOffset = offset;
 		Length = length;
 		position = BaseOffset;
