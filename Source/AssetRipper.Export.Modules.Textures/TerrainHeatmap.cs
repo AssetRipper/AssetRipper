@@ -9,25 +9,25 @@ public static class TerrainHeatmap
 {
 	public static DirectBitmap GetBitmap(ITerrainData terrain)
 	{
-		DirectBitmap bitmap = new DirectBitmap<ColorBGRA32, byte>(
+		DirectBitmap bitmap = new DirectBitmap<ColorRGBA<byte>, byte>(
 			Math.Max(terrain.Heightmap.Width, terrain.Heightmap.Resolution),
 			Math.Max(terrain.Heightmap.Height, terrain.Heightmap.Resolution),
 			1,
-			GetBGRA32Data(terrain));
+			GetRGBA32Data(terrain));
 		bitmap.FlipY();
 		return bitmap;
 	}
 
-	public static byte[] GetBGRA32Data(ITerrainData terrain)
+	public static byte[] GetRGBA32Data(ITerrainData terrain)
 	{
 		AssetList<short> heights = terrain.Heightmap.Heights;
 		byte[] result = new byte[heights.Count * 4];
 		for (int y = 0; y < heights.Count; y++)
 		{
 			Color32 color = (Color32)ConvertToColor((float)heights[y] / short.MaxValue);
-			result[4 * y] = color.B;
+			result[4 * y] = color.R;
 			result[4 * y + 1] = color.G;
-			result[4 * y + 2] = color.R;
+			result[4 * y + 2] = color.B;
 			result[4 * y + 3] = byte.MaxValue; //small optimization
 		}
 		return result;

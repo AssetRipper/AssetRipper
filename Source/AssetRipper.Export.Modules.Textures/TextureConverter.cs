@@ -224,7 +224,7 @@ public static class TextureConverter
 			TextureFormat.RG32_SIGNED => TryConvertToBitmap<ColorRG<short>, short>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
 			TextureFormat.RGB48_SIGNED => TryConvertToBitmap<ColorRGB<short>, short>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
 			TextureFormat.RGBA64_SIGNED => TryConvertToBitmap<ColorRGBA<short>, short>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
-			_ => TryConvertToBitmap<ColorBGRA32, byte>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
+			_ => TryConvertToBitmap<ColorRGBA<byte>, byte>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
 		};
 	}
 
@@ -289,141 +289,13 @@ public static class TextureConverter
 			ReadOnlySpan<byte> inputSpan = uncompressedSpan.Slice(i * bytesPerLayer, bytesPerLayer);
 			Span<byte> outputSpan = bitmap.Bits.Slice(i * outputSize, outputSize);
 
-			if (typeof(TColor) == typeof(ColorBGRA32))
+			if (!TryDecodeTexture<TColor, TChannelValue>(textureFormat, width, height, inputSpan, outputSpan))
 			{
-				if (!TryDecodeTexture(textureFormat, width, height, inputSpan, outputSpan))
-				{
-					bitmap = DirectBitmap.Empty;
-					return false;
-				}
-			}
-			else
-			{
-				if (!TryDecodeTexture<TColor, TChannelValue>(textureFormat, width, height, inputSpan, outputSpan))
-				{
-					bitmap = DirectBitmap.Empty;
-					return false;
-				}
+				bitmap = DirectBitmap.Empty;
+				return false;
 			}
 		}
 		return true;
-	}
-
-	private static bool TryDecodeTexture(TextureFormat textureFormat, int width, int height, ReadOnlySpan<byte> inputSpan, Span<byte> outputSpan)
-	{
-		switch (textureFormat)
-		{
-			//ASTC
-			case TextureFormat.ASTC_RGB_4x4:
-			case TextureFormat.ASTC_RGBA_4x4:
-				AstcDecoder.DecodeASTC(inputSpan, width, height, 4, 4, outputSpan);
-				return true;
-
-			case TextureFormat.ASTC_RGB_5x5:
-			case TextureFormat.ASTC_RGBA_5x5:
-				AstcDecoder.DecodeASTC(inputSpan, width, height, 5, 5, outputSpan);
-				return true;
-
-			case TextureFormat.ASTC_RGB_6x6:
-			case TextureFormat.ASTC_RGBA_6x6:
-				AstcDecoder.DecodeASTC(inputSpan, width, height, 6, 6, outputSpan);
-				return true;
-
-			case TextureFormat.ASTC_RGB_8x8:
-			case TextureFormat.ASTC_RGBA_8x8:
-				AstcDecoder.DecodeASTC(inputSpan, width, height, 8, 8, outputSpan);
-				return true;
-
-			case TextureFormat.ASTC_RGB_10x10:
-			case TextureFormat.ASTC_RGBA_10x10:
-				AstcDecoder.DecodeASTC(inputSpan, width, height, 10, 10, outputSpan);
-				return true;
-
-			case TextureFormat.ASTC_RGB_12x12:
-			case TextureFormat.ASTC_RGBA_12x12:
-				AstcDecoder.DecodeASTC(inputSpan, width, height, 12, 12, outputSpan);
-				return true;
-
-			//ATC
-			case TextureFormat.ATC_RGB4:
-				AtcDecoder.DecompressAtcRgb4(inputSpan, width, height, outputSpan);
-				return true;
-
-			case TextureFormat.ATC_RGBA8:
-				AtcDecoder.DecompressAtcRgba8(inputSpan, width, height, outputSpan);
-				return true;
-
-			//BC
-			case TextureFormat.BC4:
-				Bc4.Decompress(inputSpan, width, height, outputSpan);
-				return true;
-			case TextureFormat.BC5:
-				Bc5.Decompress(inputSpan, width, height, outputSpan);
-				return true;
-			case TextureFormat.BC6H:
-				Bc6h.Decompress(inputSpan, width, height, false, outputSpan);
-				return true;
-			case TextureFormat.BC7:
-				Bc7.Decompress(inputSpan, width, height, outputSpan);
-				return true;
-
-			//ETC
-			case TextureFormat.ETC_RGB4:
-			case TextureFormat.ETC_RGB4_3DS:
-			case TextureFormat.ETC_RGB4Crunched:
-				EtcDecoder.DecompressETC(inputSpan, width, height, outputSpan);
-				return true;
-
-			case TextureFormat.EAC_R:
-				EtcDecoder.DecompressEACRUnsigned(inputSpan, width, height, outputSpan);
-				return true;
-
-			case TextureFormat.EAC_R_SIGNED:
-				EtcDecoder.DecompressEACRSigned(inputSpan, width, height, outputSpan);
-				return true;
-
-			case TextureFormat.EAC_RG:
-				EtcDecoder.DecompressEACRGUnsigned(inputSpan, width, height, outputSpan);
-				return true;
-
-			case TextureFormat.EAC_RG_SIGNED:
-				EtcDecoder.DecompressEACRGSigned(inputSpan, width, height, outputSpan);
-				return true;
-
-			case TextureFormat.ETC2_RGB:
-				EtcDecoder.DecompressETC2(inputSpan, width, height, outputSpan);
-				return true;
-
-			case TextureFormat.ETC2_RGBA1:
-				EtcDecoder.DecompressETC2A1(inputSpan, width, height, outputSpan);
-				return true;
-
-			case TextureFormat.ETC2_RGBA8:
-			case TextureFormat.ETC_RGBA8_3DS:
-			case TextureFormat.ETC2_RGBA8Crunched:
-				EtcDecoder.DecompressETC2A8(inputSpan, width, height, outputSpan);
-				return true;
-
-			//PVRTC
-			case TextureFormat.PVRTC_RGB2:
-			case TextureFormat.PVRTC_RGBA2:
-				PvrtcDecoder.DecompressPVRTC(inputSpan, width, height, true, outputSpan);
-				return true;
-
-			case TextureFormat.PVRTC_RGB4:
-			case TextureFormat.PVRTC_RGBA4:
-				PvrtcDecoder.DecompressPVRTC(inputSpan, width, height, false, outputSpan);
-				return true;
-
-			case TextureFormat.BGRA32_14:
-			case TextureFormat.BGRA32_37:
-				//This needs sliced because the inputSpan can have mips.
-				inputSpan[..outputSpan.Length].CopyTo(outputSpan);
-				return true;
-
-			default:
-				return TryDecodeTexture<ColorBGRA32, byte>(textureFormat, width, height, inputSpan, outputSpan);
-		}
 	}
 
 	private static bool TryDecodeTexture<TColor, TChannelValue>(TextureFormat textureFormat, int width, int height, ReadOnlySpan<byte> inputSpan, Span<byte> outputSpan)
@@ -432,6 +304,60 @@ public static class TextureConverter
 	{
 		switch (textureFormat)
 		{
+			//ASTC
+			case TextureFormat.ASTC_RGB_4x4:
+			case TextureFormat.ASTC_RGBA_4x4:
+				AstcDecoder.DecodeASTC<TColor, TChannelValue>(inputSpan, width, height, 4, 4, outputSpan);
+				return true;
+
+			case TextureFormat.ASTC_RGB_5x5:
+			case TextureFormat.ASTC_RGBA_5x5:
+				AstcDecoder.DecodeASTC<TColor, TChannelValue>(inputSpan, width, height, 5, 5, outputSpan);
+				return true;
+
+			case TextureFormat.ASTC_RGB_6x6:
+			case TextureFormat.ASTC_RGBA_6x6:
+				AstcDecoder.DecodeASTC<TColor, TChannelValue>(inputSpan, width, height, 6, 6, outputSpan);
+				return true;
+
+			case TextureFormat.ASTC_RGB_8x8:
+			case TextureFormat.ASTC_RGBA_8x8:
+				AstcDecoder.DecodeASTC<TColor, TChannelValue>(inputSpan, width, height, 8, 8, outputSpan);
+				return true;
+
+			case TextureFormat.ASTC_RGB_10x10:
+			case TextureFormat.ASTC_RGBA_10x10:
+				AstcDecoder.DecodeASTC<TColor, TChannelValue>(inputSpan, width, height, 10, 10, outputSpan);
+				return true;
+
+			case TextureFormat.ASTC_RGB_12x12:
+			case TextureFormat.ASTC_RGBA_12x12:
+				AstcDecoder.DecodeASTC<TColor, TChannelValue>(inputSpan, width, height, 12, 12, outputSpan);
+				return true;
+
+			//ATC
+			case TextureFormat.ATC_RGB4:
+				AtcDecoder.DecompressAtcRgb4<TColor, TChannelValue>(inputSpan, width, height, outputSpan);
+				return true;
+
+			case TextureFormat.ATC_RGBA8:
+				AtcDecoder.DecompressAtcRgba8<TColor, TChannelValue>(inputSpan, width, height, outputSpan);
+				return true;
+
+			//BC
+			case TextureFormat.BC4:
+				Bc4.Decompress<TColor, TChannelValue>(inputSpan, width, height, outputSpan);
+				return true;
+			case TextureFormat.BC5:
+				Bc5.Decompress<TColor, TChannelValue>(inputSpan, width, height, outputSpan);
+				return true;
+			case TextureFormat.BC6H:
+				Bc6h.Decompress<TColor, TChannelValue>(inputSpan, width, height, false, outputSpan);
+				return true;
+			case TextureFormat.BC7:
+				Bc7.Decompress<TColor, TChannelValue>(inputSpan, width, height, outputSpan);
+				return true;
+
 			//DXT
 			case TextureFormat.DXT1:
 			case TextureFormat.DXT1Crunched:
@@ -445,6 +371,54 @@ public static class TextureConverter
 			case TextureFormat.DXT5:
 			case TextureFormat.DXT5Crunched:
 				DxtDecoder.DecompressDXT5<TColor, TChannelValue>(inputSpan, width, height, outputSpan);
+				return true;
+
+			//ETC
+			case TextureFormat.ETC_RGB4:
+			case TextureFormat.ETC_RGB4_3DS:
+			case TextureFormat.ETC_RGB4Crunched:
+				EtcDecoder.DecompressETC<TColor, TChannelValue>(inputSpan, width, height, outputSpan);
+				return true;
+
+			case TextureFormat.EAC_R:
+				EtcDecoder.DecompressEACRUnsigned<TColor, TChannelValue>(inputSpan, width, height, outputSpan);
+				return true;
+
+			case TextureFormat.EAC_R_SIGNED:
+				EtcDecoder.DecompressEACRSigned<TColor, TChannelValue>(inputSpan, width, height, outputSpan);
+				return true;
+
+			case TextureFormat.EAC_RG:
+				EtcDecoder.DecompressEACRGUnsigned<TColor, TChannelValue>(inputSpan, width, height, outputSpan);
+				return true;
+
+			case TextureFormat.EAC_RG_SIGNED:
+				EtcDecoder.DecompressEACRGSigned<TColor, TChannelValue>(inputSpan, width, height, outputSpan);
+				return true;
+
+			case TextureFormat.ETC2_RGB:
+				EtcDecoder.DecompressETC2<TColor, TChannelValue>(inputSpan, width, height, outputSpan);
+				return true;
+
+			case TextureFormat.ETC2_RGBA1:
+				EtcDecoder.DecompressETC2A1<TColor, TChannelValue>(inputSpan, width, height, outputSpan);
+				return true;
+
+			case TextureFormat.ETC2_RGBA8:
+			case TextureFormat.ETC_RGBA8_3DS:
+			case TextureFormat.ETC2_RGBA8Crunched:
+				EtcDecoder.DecompressETC2A8<TColor, TChannelValue>(inputSpan, width, height, outputSpan);
+				return true;
+
+			//PVRTC
+			case TextureFormat.PVRTC_RGB2:
+			case TextureFormat.PVRTC_RGBA2:
+				PvrtcDecoder.DecompressPVRTC<TColor, TChannelValue>(inputSpan, width, height, true, outputSpan);
+				return true;
+
+			case TextureFormat.PVRTC_RGB4:
+			case TextureFormat.PVRTC_RGBA4:
+				PvrtcDecoder.DecompressPVRTC<TColor, TChannelValue>(inputSpan, width, height, false, outputSpan);
 				return true;
 
 			//YUY2

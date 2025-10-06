@@ -3,7 +3,6 @@
 	<PropertyGroup>
 		<OutputPath>..\0Bins\Other\AssetRipper.Export.Modules.Textures\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.Export.Modules.Textures\$(Configuration)\</IntermediateOutputPath>
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -14,7 +13,7 @@
 		<PackageReference Include="AssetRipper.Conversions.Crunch" Version="1.0.3" />
 		<PackageReference Include="AssetRipper.Conversions.FastPng" Version="1.1.0" />
 		<PackageReference Include="AssetRipper.Conversions.UnityCrunch" Version="1.0.3" />
-		<PackageReference Include="AssetRipper.TextureDecoder" Version="2.3.0" />
+		<PackageReference Include="AssetRipper.TextureDecoder" Version="2.4.0" />
 		<PackageReference Include="AssetRipper.Tpk" Version="1.1.0" />
 		<PackageReference Include="StbImageWriteSharp" Version="1.16.7" />
 	</ItemGroup>
