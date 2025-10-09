@@ -1,5 +1,7 @@
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Enums;
+using System.Buffers.Binary;
+using System.Diagnostics;
 using System.Drawing;
 
 namespace AssetRipper.SourceGenerated.Extensions;
@@ -41,7 +43,8 @@ public static class SwitchSwizzle
 		}
 
 		byte[] newData = new byte[data.Length];
-		
+
+		Debug.Assert(texture.PlatformBlob_C28 is not null && texture.PlatformBlob_C28.Length >= 12);
 		int blockHeight = GetBlockHeightByPlatformBlob(texture.PlatformBlob_C28);
 		
 		Size paddedSize = GetPaddedTextureSize(texture.Width_C28, texture.Height_C28, blockSize.Width, blockSize.Height, blockHeight);
@@ -122,7 +125,7 @@ public static class SwitchSwizzle
 
 	private static int GetBlockHeightByPlatformBlob(byte[] platformBlob)
 	{
-		return 1 << BitConverter.ToInt32(platformBlob, 8);
+		return 1 << BinaryPrimitives.ReadInt32LittleEndian(platformBlob.AsSpan(8));
 	}
 
 	private static TextureFormat GetCorrectedSwitchTextureFormat(TextureFormat format)

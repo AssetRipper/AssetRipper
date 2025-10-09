@@ -186,7 +186,7 @@ public static partial class MeshExtensions
 			}
 			else
 			{
-				return mesh.VertexData?.Data ?? [];
+				return mesh.VertexData.Data;
 			}
 		}
 

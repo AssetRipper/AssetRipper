@@ -330,9 +330,9 @@ public static class SpriteMetaDataExtensions
 		Vector3i[] triangles = new Vector3i[submesh.IndexCount / 3];
 		for (int o = (int)submesh.FirstByte, ti = 0; ti < triangles.Length; o += 3 * sizeof(ushort), ti++)
 		{
-			ushort x = BitConverter.ToUInt16(indexBuffer[o..]);
-			ushort y = BitConverter.ToUInt16(indexBuffer[(o + sizeof(ushort))..]);
-			ushort z = BitConverter.ToUInt16(indexBuffer[(o + 2 * sizeof(ushort))..]);
+			ushort x = BinaryPrimitives.ReadUInt16LittleEndian(indexBuffer[o..]);
+			ushort y = BinaryPrimitives.ReadUInt16LittleEndian(indexBuffer[(o + sizeof(ushort))..]);
+			ushort z = BinaryPrimitives.ReadUInt16LittleEndian(indexBuffer[(o + 2 * sizeof(ushort))..]);
 			triangles[ti] = new Vector3i(x, y, z);
 		}
 
