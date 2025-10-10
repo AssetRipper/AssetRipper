@@ -247,16 +247,15 @@ public static class SpriteMetaDataExtensions
 	/// <param name="rotation"></param>
 	private static void GetPacking(ISprite sprite, ISpriteAtlas? atlas, out bool isPacked, out SpritePackingRotation rotation)
 	{
-		if (atlas is not null && sprite.Has_RenderDataKey())
+		if (atlas is not null && sprite.Has_RenderDataKey() && atlas.RenderDataMap.TryGetValue(sprite.RenderDataKey, out ISpriteAtlasData? atlasData))
 		{
-			ISpriteAtlasData atlasData = atlas.RenderDataMap[sprite.RenderDataKey];
-			isPacked = atlasData.IsPacked();
-			rotation = atlasData.GetPackingRotation();
+			isPacked = atlasData.IsPacked;
+			rotation = atlasData.PackingRotation;
 		}
 		else
 		{
-			isPacked = sprite.RD.IsPacked();
-			rotation = sprite.RD.GetPackingRotation();
+			isPacked = sprite.RD.IsPacked;
+			rotation = sprite.RD.PackingRotation;
 		}
 	}
 

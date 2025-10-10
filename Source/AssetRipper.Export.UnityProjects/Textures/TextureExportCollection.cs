@@ -97,7 +97,7 @@ public class TextureExportCollection : AssetsExportCollection<ITexture2D>
 				importer.TextureTypeE = TextureImporterType.Sprite;
 			}
 			importer.SpriteExtrude = sprite.Extrude;
-			importer.SpriteMeshType = (int)sprite.RD.GetMeshType();
+			importer.SpriteMeshType = (int)sprite.RD.MeshType;
 			importer.Alignment = (int)SpriteAlignment.Custom;
 			if (importer.Has_SpritePivot() && sprite.Has_Pivot())
 			{
@@ -121,7 +121,7 @@ public class TextureExportCollection : AssetsExportCollection<ITexture2D>
 			importer.TextureTypeE = TextureImporterType.Sprite;
 			importer.SpriteModeE = SpriteImportMode.Multiple;
 			importer.SpriteExtrude = sprite.Extrude;
-			importer.SpriteMeshType = (int)sprite.RD.GetMeshType();
+			importer.SpriteMeshType = (int)sprite.RD.MeshType;
 			importer.Alignment = (int)SpriteAlignment.Center;
 			if (importer.Has_SpritePivot())
 			{

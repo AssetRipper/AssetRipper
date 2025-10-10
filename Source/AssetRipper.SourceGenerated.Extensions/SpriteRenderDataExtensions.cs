@@ -5,20 +5,14 @@ namespace AssetRipper.SourceGenerated.Extensions;
 
 public static class SpriteRenderDataExtensions
 {
-	public static bool IsPacked(this ISpriteRenderData spriteRenderData) => (spriteRenderData.SettingsRaw & 1) != 0;
-
-	public static SpritePackingMode GetPackingMode(this ISpriteRenderData spriteRenderData)
+	extension(ISpriteRenderData data)
 	{
-		return (SpritePackingMode)(spriteRenderData.SettingsRaw >> 1 & 1);
-	}
+		public bool IsPacked => (data.SettingsRaw & 1) != 0;
 
-	public static SpritePackingRotation GetPackingRotation(this ISpriteRenderData spriteRenderData)
-	{
-		return (SpritePackingRotation)(spriteRenderData.SettingsRaw >> 2 & 0xF);
-	}
+		public SpritePackingMode PackingMode => (SpritePackingMode)(data.SettingsRaw >> 1 & 1);
 
-	public static SpriteMeshType GetMeshType(this ISpriteRenderData spriteRenderData)
-	{
-		return (SpriteMeshType)(spriteRenderData.SettingsRaw >> 6 & 0x1);
+		public SpritePackingRotation PackingRotation => (SpritePackingRotation)(data.SettingsRaw >> 2 & 0xF);
+
+		public SpriteMeshType MeshType => (SpriteMeshType)(data.SettingsRaw >> 6 & 0x1);
 	}
 }
