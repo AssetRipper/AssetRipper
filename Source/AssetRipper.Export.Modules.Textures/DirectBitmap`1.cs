@@ -70,6 +70,10 @@ public sealed class DirectBitmap<TColor, TChannel> : DirectBitmap
 
 	public override void Transpose()
 	{
+		if (Width != Height)
+		{
+			throw new InvalidOperationException("Only square images can be transposed.");
+		}
 		int layerSize = Width * Height;
 		Span<TColor> pixels = Pixels;
 		for (int depthIndex = 0; depthIndex < Depth; depthIndex++)
@@ -84,6 +88,35 @@ public sealed class DirectBitmap<TColor, TChannel> : DirectBitmap
 				(pixels[first], pixels[second]) = (pixels[second], pixels[first]);
 			}
 		}
+	}
+
+	public new DirectBitmap<TColor, TChannel> Crop(Range xRange, Range yRange)
+	{
+		return (DirectBitmap<TColor, TChannel>)base.Crop(xRange, yRange);
+	}
+
+	public override DirectBitmap<TColor, TChannel> Crop(Range xRange, Range yRange, Range zRange)
+	{
+		(int xOffset, int xLength) = xRange.GetOffsetAndLength(Width);
+		(int yOffset, int yLength) = yRange.GetOffsetAndLength(Height);
+		(int zOffset, int zLength) = zRange.GetOffsetAndLength(Depth);
+		if (xLength == Width && yLength == Height && zLength == Depth)
+		{
+			return DeepClone();
+		}
+		byte[] croppedData = new byte[xLength * yLength * zLength * PixelSize];
+		int layerSize = Width * Height;
+		int croppedLayerSize = xLength * yLength;
+		for (int z = 0; z < zLength; z++)
+		{
+			for (int y = 0; y < yLength; y++)
+			{
+				int sourceIndex = (z + zOffset) * layerSize + (y + yOffset) * Width + xOffset;
+				int destinationIndex = z * croppedLayerSize + y * xLength;
+				Buffer.BlockCopy(Data, sourceIndex * PixelSize, croppedData, destinationIndex * PixelSize, xLength * PixelSize);
+			}
+		}
+		return new DirectBitmap<TColor, TChannel>(xLength, yLength, zLength, croppedData);
 	}
 
 	public override DirectBitmap<TColor, TChannel> DeepClone()

@@ -75,6 +75,13 @@ public abstract class DirectBitmap
 		Transpose();
 	}
 
+	public DirectBitmap Crop(Range xRange, Range yRange)
+	{
+		return Crop(xRange, yRange, 0..Depth);
+	}
+
+	public abstract DirectBitmap Crop(Range xRange, Range yRange, Range zRange);
+
 	public abstract DirectBitmap DeepClone();
 
 	public void Save(Stream stream, ImageExportFormat format)
