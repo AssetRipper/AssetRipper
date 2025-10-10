@@ -186,7 +186,7 @@ public sealed class TypeTree : ISerializedReadable, ISerializedWritable
 			}
 			else
 			{
-				throw new Exception($"Unsupported asset class type name '{offset}''");
+				throw new Exception($"Unsupported asset class type name '{offset}'");
 			}
 		}
 	}
