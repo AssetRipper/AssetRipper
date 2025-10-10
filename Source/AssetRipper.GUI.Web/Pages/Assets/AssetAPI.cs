@@ -108,7 +108,7 @@ internal static class AssetAPI
 	{
 		IImageTexture texture => texture.CheckAssetIntegrity(),
 		SpriteInformationObject spriteInformationObject => spriteInformationObject.Texture.CheckAssetIntegrity(),
-		ISprite sprite => sprite.TryGetTexture()?.CheckAssetIntegrity() ?? false,
+		ISprite sprite => SpriteConverter.Supported(sprite),
 		ITerrainData terrainData => terrainData.Heightmap.Heights.Count > 0,
 		_ => false,
 	};
@@ -131,7 +131,7 @@ internal static class AssetAPI
 
 		static DirectBitmap SpriteToBitmap(ISprite sprite)
 		{
-			return sprite.TryGetTexture() is { } spriteTexture ? TextureToBitmap(spriteTexture) : DirectBitmap.Empty;
+			return SpriteConverter.TryConvertToBitmap(sprite, out DirectBitmap bitmap) ? bitmap : DirectBitmap.Empty;
 		}
 	}
 
