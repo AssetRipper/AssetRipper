@@ -12,9 +12,9 @@ public sealed class SkipExportCollection : IExportCollection
 		m_asset = asset ?? throw new ArgumentNullException(nameof(asset));
 	}
 
-	public bool Export(IExportContainer container, string projectDirectory, FileSystem fileSystem)
+	bool IExportCollection.Export(IExportContainer container, string projectDirectory, FileSystem fileSystem)
 	{
-		return false;
+		throw new NotSupportedException();
 	}
 
 	public bool Contains(IUnityObjectBase asset)
@@ -42,6 +42,8 @@ public sealed class SkipExportCollection : IExportCollection
 		AssetType type = AssetExporter.ToExportType(asset);
 		return new MetaPtr(exportId, UnityGuid.MissingReference, type);
 	}
+
+	bool IExportCollection.Exportable => false;
 
 	public IAssetExporter AssetExporter { get; }
 	public AssetCollection File => m_asset.Collection;
