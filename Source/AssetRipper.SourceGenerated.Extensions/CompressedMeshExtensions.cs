@@ -507,7 +507,7 @@ public static class CompressedMeshExtensions
 		uvInfo.GetChannelInfo(channelIndex, out bool exists, out int uvDim);
 		if (exists)
 		{
-			Vector2[] m_UV = MeshHelper.FloatArrayToVector2(packedVector.Unpack(uvDim, uvDim, currentOffset, vertexCount));
+			Vector2[] m_UV = MeshHelper.FloatArrayToVector2(packedVector.Unpack(uvDim, uvDim, currentOffset, vertexCount), uvDim);
 			currentOffset += uvDim * vertexCount;
 			return m_UV;
 		}
