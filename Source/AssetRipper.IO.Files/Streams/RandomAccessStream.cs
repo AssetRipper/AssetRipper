@@ -38,6 +38,10 @@ internal sealed class RandomAccessStream : Stream
 
 	public RandomAccessStream(FileStream parent, long offset, long length)
 	{
+		if (parent.Length < offset + length)
+		{
+			throw new ArgumentException("The parent stream is not long enough for the given offset and length.");
+		}
 		Parent = parent;
 		Handle = parent.SafeFileHandle;
 		BaseOffset = offset;

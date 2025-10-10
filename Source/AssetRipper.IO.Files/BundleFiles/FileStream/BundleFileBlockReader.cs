@@ -33,7 +33,7 @@ internal sealed class BundleFileBlockReader : IDisposable
 		// Avoid storing entire non-compresed entries in memory by mapping a stream to the block location.
 		if (m_blocksInfo.StorageBlocks.Length == 1 && m_blocksInfo.StorageBlocks[0].CompressionType == CompressionType.None)
 		{
-			return m_stream.CreatePartial(m_dataOffset + entry.Offset, entry.Size);
+			//return m_stream.CreatePartial(m_dataOffset + entry.Offset, entry.Size);
 		}
 
 		// find block offsets
