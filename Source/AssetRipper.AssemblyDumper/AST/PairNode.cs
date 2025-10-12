@@ -6,10 +6,10 @@ namespace AssetRipper.AssemblyDumper.AST;
 internal sealed class PairNode : Node
 {
 	private static readonly Lazy<IMethodDefOrRef> defaultConstructor = new(() => SharedState.Instance.Importer.ImportDefaultConstructor(typeof(AssetPair<,>)));
-	private static readonly Lazy<IMethodDefOrRef> getKey = new(() => ImportMethod(typeof(AssetPair<,>), "get_" + nameof(AssetPair<object, object>.Key)));
-	private static readonly Lazy<IMethodDefOrRef> setKey = new(() => ImportMethod(typeof(AssetPair<,>), "set_" + nameof(AssetPair<object, object>.Key)));
-	private static readonly Lazy<IMethodDefOrRef> getValue = new(() => ImportMethod(typeof(AssetPair<,>), "get_" + nameof(AssetPair<object, object>.Value)));
-	private static readonly Lazy<IMethodDefOrRef> setValue = new(() => ImportMethod(typeof(AssetPair<,>), "set_" + nameof(AssetPair<object, object>.Value)));
+	private static readonly Lazy<IMethodDefOrRef> getKey = new(() => ImportMethod(typeof(AssetPair<,>), "get_" + nameof(AssetPair<,>.Key)));
+	private static readonly Lazy<IMethodDefOrRef> setKey = new(() => ImportMethod(typeof(AssetPair<,>), "set_" + nameof(AssetPair<,>.Key)));
+	private static readonly Lazy<IMethodDefOrRef> getValue = new(() => ImportMethod(typeof(AssetPair<,>), "get_" + nameof(AssetPair<,>.Value)));
+	private static readonly Lazy<IMethodDefOrRef> setValue = new(() => ImportMethod(typeof(AssetPair<,>), "set_" + nameof(AssetPair<,>.Value)));
 	private static readonly Lazy<IMethodDefOrRef> implicitConversion = new(() => ImportMethod(typeof(AssetPair<,>), "op_Implicit"));
 
 	public PairNode(GenericInstanceTypeSignature typeSignature, Node? parent = null) : base(parent)

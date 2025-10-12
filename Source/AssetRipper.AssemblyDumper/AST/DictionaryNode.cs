@@ -6,11 +6,11 @@ namespace AssetRipper.AssemblyDumper.AST;
 internal sealed class DictionaryNode : SingleNode<PairNode>
 {
 	private static readonly Lazy<IMethodDefOrRef> defaultConstructor = new(() => SharedState.Instance.Importer.ImportDefaultConstructor(typeof(AssetDictionary<,>)));
-	private static readonly Lazy<IMethodDefOrRef> getCount = new(() => ImportMethod(typeof(AssetDictionary<,>), "get_" + nameof(AssetDictionary<object, object>.Count)));
-	private static readonly Lazy<IMethodDefOrRef> setCapacity = new(() => ImportMethod(typeof(AssetDictionary<,>), "set_" + nameof(AssetDictionary<object, object>.Capacity)));
-	private static readonly Lazy<IMethodDefOrRef> clear = new(() => ImportMethod(typeof(AssetDictionary<,>), nameof(AssetDictionary<object, object>.Clear)));
-	private static readonly Lazy<IMethodDefOrRef> addNew = new(() => ImportMethod(typeof(AssetDictionary<,>), nameof(AssetDictionary<object, object>.AddNew)));
-	private static readonly Lazy<IMethodDefOrRef> getPair = new(() => ImportMethod(typeof(AssetDictionary<,>), nameof(AssetDictionary<object, object>.GetPair)));
+	private static readonly Lazy<IMethodDefOrRef> getCount = new(() => ImportMethod(typeof(AssetDictionary<,>), "get_" + nameof(AssetDictionary<,>.Count)));
+	private static readonly Lazy<IMethodDefOrRef> setCapacity = new(() => ImportMethod(typeof(AssetDictionary<,>), "set_" + nameof(AssetDictionary<,>.Capacity)));
+	private static readonly Lazy<IMethodDefOrRef> clear = new(() => ImportMethod(typeof(AssetDictionary<,>), nameof(AssetDictionary<,>.Clear)));
+	private static readonly Lazy<IMethodDefOrRef> addNew = new(() => ImportMethod(typeof(AssetDictionary<,>), nameof(AssetDictionary<,>.AddNew)));
+	private static readonly Lazy<IMethodDefOrRef> getPair = new(() => ImportMethod(typeof(AssetDictionary<,>), nameof(AssetDictionary<,>.GetPair)));
 	public DictionaryNode(GenericInstanceTypeSignature typeSignature, Node? parent = null) : base(parent)
 	{
 		TypeSignature = typeSignature;

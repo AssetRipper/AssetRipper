@@ -17,7 +17,7 @@ internal static class Pass081_CreatePPtrProperties
 		});
 		IMethodDefOrRef pptrAccessListEmptyMethod = SharedState.Instance.Importer.ImportMethod(typeof(PPtrAccessList<,>), method =>
 		{
-			return method.Name == $"get_{nameof(PPtrAccessList<IPPtr<IUnityObjectBase>, IUnityObjectBase>.Empty)}";
+			return method.Name == $"get_{nameof(PPtrAccessList<,>.Empty)}";
 		});
 		IMethodDefOrRef getCollectionMethod = SharedState.Instance.Importer.ImportMethod(typeof(UnityObjectBase), method =>
 		{
@@ -181,7 +181,7 @@ internal static class Pass081_CreatePPtrProperties
 
 	private static bool NameIsAssetListOrAccessListBase(GenericInstanceTypeSignature genericInstanceTypeSignature)
 	{
-		return genericInstanceTypeSignature.GenericType.Name == $"{nameof(AssetList<int>)}`1"
-			|| genericInstanceTypeSignature.GenericType.Name == $"{nameof(AccessListBase<int>)}`1";
+		return genericInstanceTypeSignature.GenericType.Name == $"{nameof(AssetList<>)}`1"
+			|| genericInstanceTypeSignature.GenericType.Name == $"{nameof(AccessListBase<>)}`1";
 	}
 }

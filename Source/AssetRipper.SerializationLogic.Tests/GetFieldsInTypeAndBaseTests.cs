@@ -12,13 +12,13 @@ public class GetFieldsInTypeAndBaseTests
 		{
 			Assert.That(enumerator.MoveNext());
 			(FieldDefinition field, TypeSignature fieldType) = enumerator.Current;
-			Assert.That(field.Name?.ToString(), Is.EqualTo(nameof(Alpha<int>.alphaField)));
+			Assert.That(field.Name?.ToString(), Is.EqualTo(nameof(Alpha<>.alphaField)));
 			Assert.That(fieldType is CorLibTypeSignature { ElementType: ElementType.String });
 		}
 		{
 			Assert.That(enumerator.MoveNext());
 			(FieldDefinition field, TypeSignature fieldType) = enumerator.Current;
-			Assert.That(field.Name?.ToString(), Is.EqualTo(nameof(Beta<long, long>.betaField)));
+			Assert.That(field.Name?.ToString(), Is.EqualTo(nameof(Beta<,>.betaField)));
 			Assert.That(fieldType is CorLibTypeSignature { ElementType: ElementType.I4 });
 		}
 		{

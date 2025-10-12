@@ -65,21 +65,21 @@ internal static class Pass104_ResetMethods
 				else
 				{
 					GenericInstanceTypeSignature genericSignature = (GenericInstanceTypeSignature)fieldTypeSignature;
-					if (genericSignature.GenericType.Name == $"{nameof(AssetDictionary<int, int>)}`2")
+					if (genericSignature.GenericType.Name == $"{nameof(AssetDictionary<,>)}`2")
 					{
 						IMethodDefOrRef clearMethod = MakeDictionaryClearMethod(genericSignature);
 						instructions.Add(CilOpCodes.Ldarg_0);
 						instructions.Add(CilOpCodes.Ldfld, field);
 						instructions.Add(CilOpCodes.Call, clearMethod);
 					}
-					else if (genericSignature.GenericType.Name == $"{nameof(AssetList<int>)}`1")
+					else if (genericSignature.GenericType.Name == $"{nameof(AssetList<>)}`1")
 					{
 						IMethodDefOrRef clearMethod = MakeListClearMethod(genericSignature);
 						instructions.Add(CilOpCodes.Ldarg_0);
 						instructions.Add(CilOpCodes.Ldfld, field);
 						instructions.Add(CilOpCodes.Call, clearMethod);
 					}
-					else if (genericSignature.GenericType.Name == $"{nameof(AssetPair<int, int>)}`2")
+					else if (genericSignature.GenericType.Name == $"{nameof(AssetPair<,>)}`2")
 					{
 						TypeSignature keySignature = genericSignature.TypeArguments[0];
 						if (keySignature is CorLibTypeSignature keyCorLibTypeSignature)
@@ -147,7 +147,7 @@ internal static class Pass104_ResetMethods
 			SharedState.Instance.Importer,
 			genericSignature,
 			SharedState.Instance.Importer.ImportMethod(typeof(AssetDictionary<,>),
-				m => m.Name == nameof(AssetDictionary<int, int>.Clear)));
+				m => m.Name == nameof(AssetDictionary<,>.Clear)));
 	}
 
 	private static IMethodDefOrRef MakeListClearMethod(GenericInstanceTypeSignature genericSignature)
@@ -156,7 +156,7 @@ internal static class Pass104_ResetMethods
 			SharedState.Instance.Importer,
 			genericSignature,
 			SharedState.Instance.Importer.ImportMethod(typeof(AssetList<>),
-				m => m.Name == nameof(AssetList<int>.Clear)));
+				m => m.Name == nameof(AssetList<>.Clear)));
 	}
 
 	private static IMethodDefOrRef MakeGetKeyMethod(GenericInstanceTypeSignature genericSignature)
@@ -165,7 +165,7 @@ internal static class Pass104_ResetMethods
 			SharedState.Instance.Importer,
 			genericSignature,
 			SharedState.Instance.Importer.ImportMethod(typeof(AssetPair<,>),
-				m => m.Name == $"get_{nameof(AssetPair<int, int>.Key)}"));
+				m => m.Name == $"get_{nameof(AssetPair<,>.Key)}"));
 	}
 
 	private static IMethodDefOrRef MakeSetKeyMethod(GenericInstanceTypeSignature genericSignature)
@@ -174,7 +174,7 @@ internal static class Pass104_ResetMethods
 			SharedState.Instance.Importer,
 			genericSignature,
 			SharedState.Instance.Importer.ImportMethod(typeof(AssetPair<,>),
-				m => m.Name == $"set_{nameof(AssetPair<int, int>.Key)}"));
+				m => m.Name == $"set_{nameof(AssetPair<,>.Key)}"));
 	}
 
 	private static IMethodDefOrRef MakeGetValueMethod(GenericInstanceTypeSignature genericSignature)
@@ -183,7 +183,7 @@ internal static class Pass104_ResetMethods
 			SharedState.Instance.Importer,
 			genericSignature,
 			SharedState.Instance.Importer.ImportMethod(typeof(AssetPair<,>),
-				m => m.Name == $"get_{nameof(AssetPair<int, int>.Value)}"));
+				m => m.Name == $"get_{nameof(AssetPair<,>.Value)}"));
 	}
 
 	private static IMethodDefOrRef MakeSetValueMethod(GenericInstanceTypeSignature genericSignature)
@@ -192,7 +192,7 @@ internal static class Pass104_ResetMethods
 			SharedState.Instance.Importer,
 			genericSignature,
 			SharedState.Instance.Importer.ImportMethod(typeof(AssetPair<,>),
-				m => m.Name == $"set_{nameof(AssetPair<int, int>.Value)}"));
+				m => m.Name == $"set_{nameof(AssetPair<,>.Value)}"));
 	}
 
 	private static MethodSpecification MakeEmptyArrayMethod(SzArrayTypeSignature arrayTypeSignature)

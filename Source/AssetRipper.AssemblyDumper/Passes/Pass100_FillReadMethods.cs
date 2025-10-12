@@ -210,7 +210,7 @@ public static class Pass100_FillReadMethods
 					bool align = node.AlignBytes || arrayNode.AlignBytes;
 					if (type is GenericInstanceTypeSignature genericSignature)
 					{
-						Debug.Assert(genericSignature.GenericType.Name == $"{nameof(AssetList<int>)}`1");
+						Debug.Assert(genericSignature.GenericType.Name == $"{nameof(AssetList<>)}`1");
 						Debug.Assert(genericSignature.TypeArguments.Count == 1);
 						method = MakeListMethod(uniqueName, elementTypeNode, genericSignature.TypeArguments[0], version, align);
 					}
@@ -228,7 +228,7 @@ public static class Pass100_FillReadMethods
 					UniversalNode pairNode = arrayNode.SubNodes[1];
 					bool align = node.AlignBytes || arrayNode.AlignBytes;
 					GenericInstanceTypeSignature genericSignature = (GenericInstanceTypeSignature)type;
-					Debug.Assert(genericSignature.GenericType.Name == $"{nameof(AssetDictionary<int, int>)}`2");
+					Debug.Assert(genericSignature.GenericType.Name == $"{nameof(AssetDictionary<,>)}`2");
 					Debug.Assert(genericSignature.TypeArguments.Count == 2);
 					GenericInstanceTypeSignature pairSignature = assetPairReference.MakeGenericInstanceType(genericSignature.TypeArguments[0], genericSignature.TypeArguments[1]);
 					method = MakeDictionaryMethod(uniqueName, pairNode, pairSignature, version, align);
@@ -240,7 +240,7 @@ public static class Pass100_FillReadMethods
 					UniversalNode secondTypeNode = node.SubNodes[1];
 					bool align = node.AlignBytes;
 					GenericInstanceTypeSignature genericSignature = (GenericInstanceTypeSignature)type;
-					Debug.Assert(genericSignature.GenericType.Name == $"{nameof(AssetPair<int, int>)}`2");
+					Debug.Assert(genericSignature.GenericType.Name == $"{nameof(AssetPair<,>)}`2");
 					Debug.Assert(genericSignature.TypeArguments.Count == 2);
 					method = MakePairMethod(uniqueName, firstTypeNode, genericSignature.TypeArguments[0], secondTypeNode, genericSignature.TypeArguments[1], version, align);
 				}
@@ -256,7 +256,7 @@ public static class Pass100_FillReadMethods
 					bool align = node.AlignBytes;
 					if (type is GenericInstanceTypeSignature genericSignature)
 					{
-						Debug.Assert(genericSignature.GenericType.Name == $"{nameof(AssetList<int>)}`1");
+						Debug.Assert(genericSignature.GenericType.Name == $"{nameof(AssetList<>)}`1");
 						Debug.Assert(genericSignature.TypeArguments.Count == 1);
 						method = MakeListMethod(uniqueName, elementTypeNode, genericSignature.TypeArguments[0], version, align);
 					}
@@ -342,7 +342,7 @@ public static class Pass100_FillReadMethods
 	{
 		GenericInstanceTypeSignature genericDictionaryType = assetDictionaryReference.MakeGenericInstanceType(keySignature, valueSignature);
 
-		MethodDefinition clearMethodDefinition = SharedState.Instance.Importer.LookupMethod(typeof(AssetDictionary<,>), m => m.Name == nameof(AssetDictionary<int, int>.Clear));
+		MethodDefinition clearMethodDefinition = SharedState.Instance.Importer.LookupMethod(typeof(AssetDictionary<,>), m => m.Name == nameof(AssetDictionary<,>.Clear));
 		IMethodDefOrRef clearMethodReference = MethodUtils.MakeMethodOnGenericType(SharedState.Instance.Importer, genericDictionaryType, clearMethodDefinition);
 
 		MethodDefinition method = NewMethod(uniqueName, genericDictionaryType);
@@ -371,7 +371,7 @@ public static class Pass100_FillReadMethods
 		//Now we just read pair, increment i, compare against count, and jump back to here if it's less
 		ICilLabel jumpTargetList = instructions.Add(CilOpCodes.Nop).CreateLabel(); //Create a dummy instruction to jump back to
 
-		MethodDefinition addNewMethodDefinition = SharedState.Instance.Importer.LookupMethod(typeof(AssetDictionary<,>), m => m.Name == nameof(AssetDictionary<int, int>.AddNew));
+		MethodDefinition addNewMethodDefinition = SharedState.Instance.Importer.LookupMethod(typeof(AssetDictionary<,>), m => m.Name == nameof(AssetDictionary<,>.AddNew));
 		IMethodDefOrRef addNewMethodReference = MethodUtils.MakeMethodOnGenericType(SharedState.Instance.Importer, genericDictionaryType, addNewMethodDefinition);
 
 		//Add new and read pair
@@ -449,7 +449,7 @@ public static class Pass100_FillReadMethods
 			IMethodDefOrRef setKeyMethod = MethodUtils.MakeMethodOnGenericType(
 				SharedState.Instance.Importer,
 				genericPairType,
-				assetPairDefinition.Methods.Single(m => m.Name == $"set_{nameof(AssetPair<int, int>.Key)}"));
+				assetPairDefinition.Methods.Single(m => m.Name == $"set_{nameof(AssetPair<,>.Key)}"));
 
 			instructions.Add(CilOpCodes.Ldarg_0);//pair
 			instructions.Add(CilOpCodes.Ldarg_1);//reader
@@ -461,7 +461,7 @@ public static class Pass100_FillReadMethods
 			IMethodDefOrRef getKeyMethod = MethodUtils.MakeMethodOnGenericType(
 				SharedState.Instance.Importer,
 				genericPairType,
-				assetPairDefinition.Methods.Single(m => m.Name == $"get_{nameof(AssetPair<int, int>.Key)}"));
+				assetPairDefinition.Methods.Single(m => m.Name == $"get_{nameof(AssetPair<,>.Key)}"));
 
 			instructions.Add(CilOpCodes.Ldarg_0);//pair
 			instructions.AddCall(getKeyMethod);
@@ -474,7 +474,7 @@ public static class Pass100_FillReadMethods
 			IMethodDefOrRef setValueMethod = MethodUtils.MakeMethodOnGenericType(
 				SharedState.Instance.Importer,
 				genericPairType,
-				assetPairDefinition.Methods.Single(m => m.Name == $"set_{nameof(AssetPair<int, int>.Value)}"));
+				assetPairDefinition.Methods.Single(m => m.Name == $"set_{nameof(AssetPair<,>.Value)}"));
 
 			instructions.Add(CilOpCodes.Ldarg_0);//pair
 			instructions.Add(CilOpCodes.Ldarg_1);//reader
@@ -486,7 +486,7 @@ public static class Pass100_FillReadMethods
 			IMethodDefOrRef getValueMethod = MethodUtils.MakeMethodOnGenericType(
 				SharedState.Instance.Importer,
 				genericPairType,
-				assetPairDefinition.Methods.Single(m => m.Name == $"get_{nameof(AssetPair<int, int>.Value)}"));
+				assetPairDefinition.Methods.Single(m => m.Name == $"get_{nameof(AssetPair<,>.Value)}"));
 
 			instructions.Add(CilOpCodes.Ldarg_0);//pair
 			instructions.AddCall(getValueMethod);
@@ -569,7 +569,7 @@ public static class Pass100_FillReadMethods
 	{
 		GenericInstanceTypeSignature genericListType = assetListReference.MakeGenericInstanceType(elementType);
 
-		MethodDefinition clearMethodDefinition = SharedState.Instance.Importer.LookupMethod(typeof(AssetList<>), m => m.Name == nameof(AssetList<int>.Clear));
+		MethodDefinition clearMethodDefinition = SharedState.Instance.Importer.LookupMethod(typeof(AssetList<>), m => m.Name == nameof(AssetList<>.Clear));
 		IMethodDefOrRef clearMethodReference = MethodUtils.MakeMethodOnGenericType(SharedState.Instance.Importer, genericListType, clearMethodDefinition);
 
 		MethodDefinition method = NewMethod(uniqueName, genericListType);
@@ -601,7 +601,7 @@ public static class Pass100_FillReadMethods
 		//Read and add to list
 		if (elementType.IsArrayOrPrimitive())
 		{
-			MethodDefinition addMethodDefinition = SharedState.Instance.Importer.LookupMethod(typeof(AssetList<>), m => m.Name == nameof(AssetList<int>.Add));
+			MethodDefinition addMethodDefinition = SharedState.Instance.Importer.LookupMethod(typeof(AssetList<>), m => m.Name == nameof(AssetList<>.Add));
 			IMethodDefOrRef addMethodReference = MethodUtils.MakeMethodOnGenericType(SharedState.Instance.Importer, genericListType, addMethodDefinition);
 			instructions.Add(CilOpCodes.Ldarg_0);
 			instructions.Add(CilOpCodes.Ldarg_1);
@@ -610,7 +610,7 @@ public static class Pass100_FillReadMethods
 		}
 		else
 		{
-			MethodDefinition addNewMethodDefinition = SharedState.Instance.Importer.LookupMethod(typeof(AssetList<>), m => m.Name == nameof(AssetList<int>.AddNew));
+			MethodDefinition addNewMethodDefinition = SharedState.Instance.Importer.LookupMethod(typeof(AssetList<>), m => m.Name == nameof(AssetList<>.AddNew));
 			IMethodDefOrRef addNewMethodReference = MethodUtils.MakeMethodOnGenericType(SharedState.Instance.Importer, genericListType, addNewMethodDefinition);
 			instructions.Add(CilOpCodes.Ldarg_0);
 			instructions.AddCall(addNewMethodReference);
@@ -725,9 +725,9 @@ public static class Pass100_FillReadMethods
 				&& corLibTypeSignature.ElementType == ElementType.I4;
 		});
 		IMethodDefOrRef listConstructorReference = MethodUtils.MakeMethodOnGenericType(SharedState.Instance.Importer, listType, listConstructorDefinition);
-		MethodDefinition addMethodDefinition = SharedState.Instance.Importer.LookupMethod(typeof(List<>), m => m.Name == nameof(List<int>.Add));
+		MethodDefinition addMethodDefinition = SharedState.Instance.Importer.LookupMethod(typeof(List<>), m => m.Name == nameof(List<>.Add));
 		IMethodDefOrRef addMethodReference = MethodUtils.MakeMethodOnGenericType(SharedState.Instance.Importer, listType, addMethodDefinition);
-		MethodDefinition toArrayMethodDefinition = SharedState.Instance.Importer.LookupMethod(typeof(List<>), m => m.Name == nameof(List<int>.ToArray));
+		MethodDefinition toArrayMethodDefinition = SharedState.Instance.Importer.LookupMethod(typeof(List<>), m => m.Name == nameof(List<>.ToArray));
 		IMethodDefOrRef toArrayMethodReference = MethodUtils.MakeMethodOnGenericType(SharedState.Instance.Importer, listType, toArrayMethodDefinition);
 
 		readAsListInstruction.Instruction = instructions.Add(CilOpCodes.Ldc_I4, MaxArraySize);

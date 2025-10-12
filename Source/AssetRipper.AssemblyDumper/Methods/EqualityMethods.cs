@@ -19,8 +19,8 @@ public static class EqualityMethods
 		out IMethodDefOrRef equalsReference)
 	{
 		GenericInstanceTypeSignature genericSignature = importer.ImportType(typeof(EqualityComparer<>)).MakeGenericInstanceType(typeParameter);
-		MethodDefinition defaultDefinition = importer.LookupMethod(typeof(EqualityComparer<>), m => m.Name == $"get_{nameof(EqualityComparer<int>.Default)}");
-		MethodDefinition equalsDefinition = importer.LookupMethod(typeof(EqualityComparer<>), m => m.Name == nameof(EqualityComparer<int>.Equals));
+		MethodDefinition defaultDefinition = importer.LookupMethod(typeof(EqualityComparer<>), m => m.Name == $"get_{nameof(EqualityComparer<>.Default)}");
+		MethodDefinition equalsDefinition = importer.LookupMethod(typeof(EqualityComparer<>), m => m.Name == nameof(EqualityComparer<>.Equals));
 		defaultReference = MethodUtils.MakeMethodOnGenericType(importer, genericSignature, defaultDefinition);
 		equalsReference = MethodUtils.MakeMethodOnGenericType(importer, genericSignature, equalsDefinition);
 	}

@@ -44,11 +44,11 @@ internal static class Pass080_PPtrConversions
 
 		IMethodDefOrRef pptrTryGetAssetMethod = SharedState.Instance.Importer.ImportMethod(typeof(IPPtr<>), method =>
 		{
-			return method.Name == nameof(IPPtr<IUnityObjectBase>.TryGetAsset) && method.Parameters.Count == 2;
+			return method.Name == nameof(IPPtr<>.TryGetAsset) && method.Parameters.Count == 2;
 		});
 		IMethodDefOrRef pptrSetAssetMethod = SharedState.Instance.Importer.ImportMethod(typeof(IPPtr<>), method =>
 		{
-			return method.Name == nameof(IPPtr<IUnityObjectBase>.SetAsset) && method.Parameters.Count == 2;
+			return method.Name == nameof(IPPtr<>.SetAsset) && method.Parameters.Count == 2;
 		});
 
 		foreach (SubclassGroup group in SharedState.Instance.SubclassGroups.Values.Where(g => g.IsPPtr))
@@ -155,7 +155,7 @@ internal static class Pass080_PPtrConversions
 
 		MethodDefinition mainMethod;
 		{
-			MethodDefinition method = mainMethod = pptrType.AddMethod(nameof(IPPtr<IUnityObjectBase>.SetAsset), InterfaceUtils.InterfaceMethodImplementation, SharedState.Instance.Importer.Void);
+			MethodDefinition method = mainMethod = pptrType.AddMethod(nameof(IPPtr<>.SetAsset), InterfaceUtils.InterfaceMethodImplementation, SharedState.Instance.Importer.Void);
 			method.AddParameter(SharedState.Instance.Importer.ImportType<AssetCollection>().ToTypeSignature(), "collection");
 			method.AddParameter(parameterType, "asset").Definition!.AddNullableAttribute(NullableAnnotation.MaybeNull);
 			CilInstructionCollection instructions = method.CilMethodBody!.Instructions;
@@ -193,7 +193,7 @@ internal static class Pass080_PPtrConversions
 		//Secondary Method
 		if (instanceParameterType is not null)
 		{
-			MethodDefinition method = pptrType.AddMethod(nameof(IPPtr<IUnityObjectBase>.SetAsset), InterfaceUtils.InterfaceMethodImplementation, SharedState.Instance.Importer.Void);
+			MethodDefinition method = pptrType.AddMethod(nameof(IPPtr<>.SetAsset), InterfaceUtils.InterfaceMethodImplementation, SharedState.Instance.Importer.Void);
 			method.AddParameter(SharedState.Instance.Importer.ImportType<AssetCollection>().ToTypeSignature(), "collection");
 			method.AddParameter(groupParameterType, "asset").Definition!.AddNullableAttribute(NullableAnnotation.MaybeNull);
 			CilInstructionCollection instructions = method.CilMethodBody!.Instructions;
@@ -227,7 +227,7 @@ internal static class Pass080_PPtrConversions
 
 	private static MethodDefinition ImplementTryGetAssetMethod(this TypeDefinition pptrType, TypeSignature parameterType)
 	{
-		MethodDefinition method = pptrType.AddMethod(nameof(IPPtr<IUnityObjectBase>.TryGetAsset), InterfaceUtils.InterfaceMethodImplementation, SharedState.Instance.Importer.Boolean);
+		MethodDefinition method = pptrType.AddMethod(nameof(IPPtr<>.TryGetAsset), InterfaceUtils.InterfaceMethodImplementation, SharedState.Instance.Importer.Boolean);
 		method.AddParameter(SharedState.Instance.Importer.ImportType<AssetCollection>().ToTypeSignature(), "collection");
 		ParameterDefinition outParameter = method.AddParameter(parameterType.MakeByReferenceType(), "asset").Definition!;
 		outParameter.IsOut = true;

@@ -6,12 +6,12 @@ namespace AssetRipper.AssemblyDumper.AST;
 internal sealed class ListNode : SingleNode<Node>
 {
 	private static readonly Lazy<IMethodDefOrRef> defaultConstructor = new(() => SharedState.Instance.Importer.ImportDefaultConstructor(typeof(AssetList<>)));
-	private static readonly Lazy<IMethodDefOrRef> getCount = new(() => ImportMethod(typeof(AssetList<>), "get_" + nameof(AssetList<object>.Count)));
-	private static readonly Lazy<IMethodDefOrRef> setCapacity = new(() => ImportMethod(typeof(AssetList<>), "set_" + nameof(AssetList<object>.Capacity)));
+	private static readonly Lazy<IMethodDefOrRef> getCount = new(() => ImportMethod(typeof(AssetList<>), "get_" + nameof(AssetList<>.Count)));
+	private static readonly Lazy<IMethodDefOrRef> setCapacity = new(() => ImportMethod(typeof(AssetList<>), "set_" + nameof(AssetList<>.Capacity)));
 	private static readonly Lazy<IMethodDefOrRef> getItem = new(() => ImportMethod(typeof(AssetList<>), "get_Item"));
-	private static readonly Lazy<IMethodDefOrRef> clear = new(() => ImportMethod(typeof(AssetList<>), nameof(AssetList<object>.Clear)));
-	private static readonly Lazy<IMethodDefOrRef> add = new(() => ImportMethod(typeof(AssetList<>), nameof(AssetList<object>.Add)));
-	private static readonly Lazy<IMethodDefOrRef> addNew = new(() => ImportMethod(typeof(AssetList<>), nameof(AssetList<object>.AddNew)));
+	private static readonly Lazy<IMethodDefOrRef> clear = new(() => ImportMethod(typeof(AssetList<>), nameof(AssetList<>.Clear)));
+	private static readonly Lazy<IMethodDefOrRef> add = new(() => ImportMethod(typeof(AssetList<>), nameof(AssetList<>.Add)));
+	private static readonly Lazy<IMethodDefOrRef> addNew = new(() => ImportMethod(typeof(AssetList<>), nameof(AssetList<>.AddNew)));
 
 	public ListNode(GenericInstanceTypeSignature typeSignature, Node? parent = null) : base(parent)
 	{

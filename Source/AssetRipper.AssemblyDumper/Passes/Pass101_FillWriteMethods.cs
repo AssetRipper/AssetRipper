@@ -185,7 +185,7 @@ public static class Pass101_FillWriteMethods
 					bool align = node.AlignBytes || arrayNode.AlignBytes;
 					if (type is GenericInstanceTypeSignature genericSignature)
 					{
-						Debug.Assert(genericSignature.GenericType.Name == $"{nameof(AssetList<int>)}`1");
+						Debug.Assert(genericSignature.GenericType.Name == $"{nameof(AssetList<>)}`1");
 						Debug.Assert(genericSignature.TypeArguments.Count == 1);
 						method = MakeListMethod(uniqueName, elementTypeNode, genericSignature.TypeArguments[0], version, align);
 					}
@@ -205,7 +205,7 @@ public static class Pass101_FillWriteMethods
 					UniversalNode secondTypeNode = pairNode.SubNodes[1];
 					bool align = node.AlignBytes || arrayNode.AlignBytes;
 					GenericInstanceTypeSignature genericSignature = (GenericInstanceTypeSignature)type;
-					Debug.Assert(genericSignature.GenericType.Name == $"{nameof(AssetDictionary<int, int>)}`2");
+					Debug.Assert(genericSignature.GenericType.Name == $"{nameof(AssetDictionary<,>)}`2");
 					Debug.Assert(genericSignature.TypeArguments.Count == 2);
 					method = MakeDictionaryMethod(uniqueName, firstTypeNode, genericSignature.TypeArguments[0], secondTypeNode, genericSignature.TypeArguments[1], version, align);
 				}
@@ -216,7 +216,7 @@ public static class Pass101_FillWriteMethods
 					UniversalNode secondTypeNode = node.SubNodes[1];
 					bool align = node.AlignBytes;
 					GenericInstanceTypeSignature genericSignature = (GenericInstanceTypeSignature)type;
-					Debug.Assert(genericSignature.GenericType.Name == $"{nameof(AssetPair<int, int>)}`2");
+					Debug.Assert(genericSignature.GenericType.Name == $"{nameof(AssetPair<,>)}`2");
 					Debug.Assert(genericSignature.TypeArguments.Count == 2);
 					method = MakePairMethod(uniqueName, firstTypeNode, genericSignature.TypeArguments[0], secondTypeNode, genericSignature.TypeArguments[1], version, align);
 				}
@@ -232,7 +232,7 @@ public static class Pass101_FillWriteMethods
 					bool align = node.AlignBytes;
 					if (type is GenericInstanceTypeSignature genericSignature)
 					{
-						Debug.Assert(genericSignature.GenericType.Name == $"{nameof(AssetList<int>)}`1");
+						Debug.Assert(genericSignature.GenericType.Name == $"{nameof(AssetList<>)}`1");
 						Debug.Assert(genericSignature.TypeArguments.Count == 1);
 						method = MakeListMethod(uniqueName, elementTypeNode, genericSignature.TypeArguments[0], version, align);
 					}
@@ -338,12 +338,12 @@ public static class Pass101_FillWriteMethods
 		IMethodDefOrRef keyMethod = MethodUtils.MakeMethodOnGenericType(
 			SharedState.Instance.Importer,
 			genericPairType,
-			keyValuePairDefinition!.Methods.Single(m => m.Name == $"get_{nameof(AssetPair<int, int>.Key)}"));
+			keyValuePairDefinition!.Methods.Single(m => m.Name == $"get_{nameof(AssetPair<,>.Key)}"));
 
 		IMethodDefOrRef valueMethod = MethodUtils.MakeMethodOnGenericType(
 			SharedState.Instance.Importer,
 			genericPairType,
-			keyValuePairDefinition!.Methods.Single(m => m.Name == $"get_{nameof(AssetPair<int, int>.Value)}"));
+			keyValuePairDefinition!.Methods.Single(m => m.Name == $"get_{nameof(AssetPair<,>.Value)}"));
 
 		MethodDefinition method = NewWriteMethod(uniqueName, genericPairType);
 		CilInstructionCollection instructions = method.GetInstructions();
@@ -463,7 +463,7 @@ public static class Pass101_FillWriteMethods
 		IMethodDefOrRef countMethod = MethodUtils.MakeMethodOnGenericType(
 			SharedState.Instance.Importer,
 			genericListType,
-			assetListDefinition!.Methods.Single(m => m.Name == $"get_{nameof(AssetList<int>.Count)}"));
+			assetListDefinition!.Methods.Single(m => m.Name == $"get_{nameof(AssetList<>.Count)}"));
 
 		IMethodDefOrRef getElementMethod = MethodUtils.MakeMethodOnGenericType(
 			SharedState.Instance.Importer,
@@ -535,24 +535,24 @@ public static class Pass101_FillWriteMethods
 		IMethodDefOrRef keyMethod = MethodUtils.MakeMethodOnGenericType(
 			SharedState.Instance.Importer,
 			genericPairType,
-			keyValuePairDefinition!.Methods.Single(m => m.Name == $"get_{nameof(AssetPair<int, int>.Key)}"));
+			keyValuePairDefinition!.Methods.Single(m => m.Name == $"get_{nameof(AssetPair<,>.Key)}"));
 
 		IMethodDefOrRef valueMethod = MethodUtils.MakeMethodOnGenericType(
 			SharedState.Instance.Importer,
 			genericPairType,
-			keyValuePairDefinition!.Methods.Single(m => m.Name == $"get_{nameof(AssetPair<int, int>.Value)}"));
+			keyValuePairDefinition!.Methods.Single(m => m.Name == $"get_{nameof(AssetPair<,>.Value)}"));
 
 		GenericInstanceTypeSignature genericDictionaryType = assetDictionaryReference!.MakeGenericInstanceType(typeSignature1, typeSignature2);
 
 		IMethodDefOrRef countMethod = MethodUtils.MakeMethodOnGenericType(
 			SharedState.Instance.Importer,
 			genericDictionaryType,
-			assetDictionaryDefinition!.Methods.Single(m => m.Name == $"get_{nameof(AssetDictionary<int, int>.Count)}"));
+			assetDictionaryDefinition!.Methods.Single(m => m.Name == $"get_{nameof(AssetDictionary<,>.Count)}"));
 
 		IMethodDefOrRef getPairMethod = MethodUtils.MakeMethodOnGenericType(
 			SharedState.Instance.Importer,
 			genericDictionaryType,
-			assetDictionaryDefinition!.Methods.Single(m => m.Name == nameof(AssetDictionary<int, int>.GetPair)));
+			assetDictionaryDefinition!.Methods.Single(m => m.Name == nameof(AssetDictionary<,>.GetPair)));
 
 		MethodDefinition method = NewWriteMethod(uniqueName, genericDictionaryType);
 		CilInstructionCollection instructions = method.GetInstructions();

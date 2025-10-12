@@ -44,9 +44,9 @@ internal abstract class Node
 			case GenericInstanceTypeSignature genericInstanceTypeSignature:
 				return (genericInstanceTypeSignature.GenericType.Name?.ToString()) switch
 				{
-					$"{nameof(AssetDictionary<int, int>)}`2" => new DictionaryNode(genericInstanceTypeSignature, parent),
-					$"{nameof(AssetList<int>)}`1" => new ListNode(genericInstanceTypeSignature, parent),
-					$"{nameof(AssetPair<int, int>)}`2" => new PairNode(genericInstanceTypeSignature, parent),
+					$"{nameof(AssetDictionary<,>)}`2" => new DictionaryNode(genericInstanceTypeSignature, parent),
+					$"{nameof(AssetList<>)}`1" => new ListNode(genericInstanceTypeSignature, parent),
+					$"{nameof(AssetPair<,>)}`2" => new PairNode(genericInstanceTypeSignature, parent),
 					_ => throw new NotSupportedException(),
 				};
 			default:

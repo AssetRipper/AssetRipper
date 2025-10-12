@@ -56,7 +56,7 @@ internal static class Pass557_CreateSourceTpkClass
 		IMethodDefOrRef addMethod = MethodUtils.MakeMethodOnGenericType(
 			SharedState.Instance.Importer,
 			unityVersionHashSet,
-			SharedState.Instance.Importer.LookupMethod(typeof(HashSet<>), m => m.Name == nameof(HashSet<int>.Add)));
+			SharedState.Instance.Importer.LookupMethod(typeof(HashSet<>), m => m.Name == nameof(HashSet<>.Add)));
 
 		IMethodDefOrRef unityVersionConstructor = SharedState.Instance.Importer.ImportConstructor<UnityVersion>(5);
 

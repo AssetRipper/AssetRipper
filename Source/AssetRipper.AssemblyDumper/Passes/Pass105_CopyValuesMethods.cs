@@ -77,29 +77,29 @@ internal static partial class Pass105_CopyValuesMethods
 		helperType = InjectHelper();
 
 		accessPairBase = SharedState.Instance.Importer.ImportType(typeof(AccessPairBase<,>));
-		accessPairBaseGetKey = SharedState.Instance.Importer.ImportMethod(typeof(AccessPairBase<,>), m => m.Name == $"get_{nameof(AccessPairBase<int, int>.Key)}");
-		accessPairBaseSetKey = SharedState.Instance.Importer.ImportMethod(typeof(AccessPairBase<,>), m => m.Name == $"set_{nameof(AccessPairBase<int, int>.Key)}");
-		accessPairBaseGetValue = SharedState.Instance.Importer.ImportMethod(typeof(AccessPairBase<,>), m => m.Name == $"get_{nameof(AccessPairBase<int, int>.Value)}");
-		accessPairBaseSetValue = SharedState.Instance.Importer.ImportMethod(typeof(AccessPairBase<,>), m => m.Name == $"set_{nameof(AccessPairBase<int, int>.Value)}");
+		accessPairBaseGetKey = SharedState.Instance.Importer.ImportMethod(typeof(AccessPairBase<,>), m => m.Name == $"get_{nameof(AccessPairBase<,>.Key)}");
+		accessPairBaseSetKey = SharedState.Instance.Importer.ImportMethod(typeof(AccessPairBase<,>), m => m.Name == $"set_{nameof(AccessPairBase<,>.Key)}");
+		accessPairBaseGetValue = SharedState.Instance.Importer.ImportMethod(typeof(AccessPairBase<,>), m => m.Name == $"get_{nameof(AccessPairBase<,>.Value)}");
+		accessPairBaseSetValue = SharedState.Instance.Importer.ImportMethod(typeof(AccessPairBase<,>), m => m.Name == $"set_{nameof(AccessPairBase<,>.Value)}");
 
 		accessListBase = SharedState.Instance.Importer.ImportType(typeof(AccessListBase<>));
-		accessListBaseGetCount = SharedState.Instance.Importer.ImportMethod(typeof(AccessListBase<>), m => m.Name == $"get_{nameof(AccessListBase<int>.Count)}");
-		accessListBaseSetCapacity = SharedState.Instance.Importer.ImportMethod(typeof(AccessListBase<>), m => m.Name == $"set_{nameof(AccessListBase<int>.Capacity)}");
+		accessListBaseGetCount = SharedState.Instance.Importer.ImportMethod(typeof(AccessListBase<>), m => m.Name == $"get_{nameof(AccessListBase<>.Count)}");
+		accessListBaseSetCapacity = SharedState.Instance.Importer.ImportMethod(typeof(AccessListBase<>), m => m.Name == $"set_{nameof(AccessListBase<>.Capacity)}");
 		accessListBaseGetItem = SharedState.Instance.Importer.ImportMethod(typeof(AccessListBase<>), m => m.Name == "get_Item");
 
 		accessDictionaryBase = SharedState.Instance.Importer.ImportType(typeof(AccessDictionaryBase<,>));
-		accessDictionaryBaseGetCount = SharedState.Instance.Importer.ImportMethod(typeof(AccessDictionaryBase<,>), m => m.Name == $"get_{nameof(AccessDictionaryBase<int, int>.Count)}");
-		accessDictionaryBaseSetCapacity = SharedState.Instance.Importer.ImportMethod(typeof(AccessDictionaryBase<,>), m => m.Name == $"set_{nameof(AccessDictionaryBase<int, int>.Capacity)}");
-		accessDictionaryBaseGetPair = SharedState.Instance.Importer.ImportMethod(typeof(AccessDictionaryBase<,>), m => m.Name == nameof(AccessDictionaryBase<int, int>.GetPair));
+		accessDictionaryBaseGetCount = SharedState.Instance.Importer.ImportMethod(typeof(AccessDictionaryBase<,>), m => m.Name == $"get_{nameof(AccessDictionaryBase<,>.Count)}");
+		accessDictionaryBaseSetCapacity = SharedState.Instance.Importer.ImportMethod(typeof(AccessDictionaryBase<,>), m => m.Name == $"set_{nameof(AccessDictionaryBase<,>.Capacity)}");
+		accessDictionaryBaseGetPair = SharedState.Instance.Importer.ImportMethod(typeof(AccessDictionaryBase<,>), m => m.Name == nameof(AccessDictionaryBase<,>.GetPair));
 
 		assetList = SharedState.Instance.Importer.ImportType(typeof(AssetList<>));
-		assetListAdd = SharedState.Instance.Importer.ImportMethod(typeof(AssetList<>), m => m.Name == nameof(AssetList<int>.Add));
-		assetListAddNew = SharedState.Instance.Importer.ImportMethod(typeof(AssetList<>), m => m.Name == nameof(AssetList<int>.AddNew));
-		assetListClear = SharedState.Instance.Importer.ImportMethod(typeof(AssetList<>), m => m.Name == nameof(AssetList<int>.Clear));
+		assetListAdd = SharedState.Instance.Importer.ImportMethod(typeof(AssetList<>), m => m.Name == nameof(AssetList<>.Add));
+		assetListAddNew = SharedState.Instance.Importer.ImportMethod(typeof(AssetList<>), m => m.Name == nameof(AssetList<>.AddNew));
+		assetListClear = SharedState.Instance.Importer.ImportMethod(typeof(AssetList<>), m => m.Name == nameof(AssetList<>.Clear));
 
 		assetDictionary = SharedState.Instance.Importer.ImportType(typeof(AssetDictionary<,>));
-		assetDictionaryAddNew = SharedState.Instance.Importer.ImportMethod(typeof(AssetDictionary<,>), m => m.Name == nameof(AssetDictionary<int, int>.AddNew));
-		assetDictionaryClear = SharedState.Instance.Importer.ImportMethod(typeof(AssetDictionary<,>), m => m.Name == nameof(AssetDictionary<int, int>.Clear));
+		assetDictionaryAddNew = SharedState.Instance.Importer.ImportMethod(typeof(AssetDictionary<,>), m => m.Name == nameof(AssetDictionary<,>.AddNew));
+		assetDictionaryClear = SharedState.Instance.Importer.ImportMethod(typeof(AssetDictionary<,>), m => m.Name == nameof(AssetDictionary<,>.Clear));
 
 		assetPair = SharedState.Instance.Importer.ImportType(typeof(AssetPair<,>));
 
@@ -519,7 +519,7 @@ internal static partial class Pass105_CopyValuesMethods
 					CilInstructionCollection instructions = method.GetInstructions();
 					switch (targetGenericSignature.GenericType.Name?.ToString())
 					{
-						case $"{nameof(AssetDictionary<int, int>)}`2":
+						case $"{nameof(AssetDictionary<,>)}`2":
 							{
 								//Argument 0 (target) is AssetDictionary`2. Argument 1 (source) is AccessDictionaryBase`2.
 
@@ -594,7 +594,7 @@ internal static partial class Pass105_CopyValuesMethods
 								returnLabel.Instruction = instructions.Add(CilOpCodes.Ret);
 							}
 							break;
-						case $"{nameof(AssetList<int>)}`1":
+						case $"{nameof(AssetList<>)}`1":
 							{
 								//Argument 0 (target) is AssetList`1. Argument 1 (source) is AccessListBase`1.
 
@@ -681,7 +681,7 @@ internal static partial class Pass105_CopyValuesMethods
 								returnLabel.Instruction = instructions.Add(CilOpCodes.Ret);
 							}
 							break;
-						case $"{nameof(AssetPair<int, int>)}`2" or $"{nameof(AccessPairBase<int, int>)}`2":
+						case $"{nameof(AssetPair<,>)}`2" or $"{nameof(AccessPairBase<,>)}`2":
 							{
 								TypeSignature targetKeyTypeSignature = targetGenericSignature.TypeArguments[0];
 								TypeSignature sourceKeyTypeSignature = sourceGenericSignature.TypeArguments[0];
@@ -935,7 +935,7 @@ internal static partial class Pass105_CopyValuesMethods
 		{
 			if (implem.Interface is TypeSpecification specification
 				&& specification.Signature is GenericInstanceTypeSignature genericInstanceTypeSignature
-				&& genericInstanceTypeSignature.GenericType.Name == $"{nameof(IPPtr<IUnityObjectBase>)}`1")
+				&& genericInstanceTypeSignature.GenericType.Name == $"{nameof(IPPtr<>)}`1")
 			{
 				return genericInstanceTypeSignature.TypeArguments[0];
 			}
