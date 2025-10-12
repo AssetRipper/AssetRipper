@@ -29,9 +29,13 @@ internal static partial class Pass105_CopyValuesMethods
 	private static IMethodDefOrRef pptrConverterGetSourceCollectionMethod;
 	private static IMethodDefOrRef pptrConverterGetTargetCollectionMethod;
 
+	private static IMethodDefOrRef utf8StringGetEmpty;
+
 	private static TypeDefinition helperType;
 	private static MethodDefinition duplicateArrayMethod;
 	private static MethodDefinition duplicateArrayArrayMethod;
+	private static MethodDefinition copyCapacityFromDictionary;
+	private static MethodDefinition copyCapacityFromList;
 	private static IMethodDefOrRef pptrConvertMethod;
 
 	private static ITypeDefOrRef accessPairBase;
@@ -42,22 +46,18 @@ internal static partial class Pass105_CopyValuesMethods
 
 	private static ITypeDefOrRef accessListBase;
 	private static IMethodDefOrRef accessListBaseGetCount;
-	private static IMethodDefOrRef accessListBaseSetCapacity;
 	private static IMethodDefOrRef accessListBaseGetItem;
+	private static IMethodDefOrRef accessListBaseSetItem;
 
 	private static ITypeDefOrRef accessDictionaryBase;
 	private static IMethodDefOrRef accessDictionaryBaseGetCount;
-	private static IMethodDefOrRef accessDictionaryBaseSetCapacity;
 	private static IMethodDefOrRef accessDictionaryBaseGetPair;
 
 	private static ITypeDefOrRef assetList;
-	private static IMethodDefOrRef assetListAdd;
-	private static IMethodDefOrRef assetListAddNew;
-	private static IMethodDefOrRef assetListClear;
+	private static IMethodDefOrRef assetListSetItem;
 
 	private static ITypeDefOrRef assetDictionary;
-	private static IMethodDefOrRef assetDictionaryAddNew;
-	private static IMethodDefOrRef assetDictionaryClear;
+	private static IMethodDefOrRef assetDictionaryGetPair;
 
 	private static ITypeDefOrRef assetPair;
 #nullable enable
@@ -70,6 +70,8 @@ internal static partial class Pass105_CopyValuesMethods
 
 		ipptrGetFileIDMethod = SharedState.Instance.Importer.ImportMethod<IPPtr>(m => m.Name == $"get_{nameof(IPPtr.FileID)}");
 		ipptrGetPathIDMethod = SharedState.Instance.Importer.ImportMethod<IPPtr>(m => m.Name == $"get_{nameof(IPPtr.PathID)}");
+
+		utf8StringGetEmpty = SharedState.Instance.Importer.ImportMethod<Utf8String>(m => m.Name == "get_" + nameof(Utf8String.Empty));
 
 		pptrConverterType = SharedState.Instance.Importer.ImportType<PPtrConverter>();
 		pptrConverterGetSourceCollectionMethod = SharedState.Instance.Importer.ImportMethod<PPtrConverter>(m => m.Name == "get_" + nameof(PPtrConverter.SourceCollection));
@@ -84,22 +86,17 @@ internal static partial class Pass105_CopyValuesMethods
 
 		accessListBase = SharedState.Instance.Importer.ImportType(typeof(AccessListBase<>));
 		accessListBaseGetCount = SharedState.Instance.Importer.ImportMethod(typeof(AccessListBase<>), m => m.Name == $"get_{nameof(AccessListBase<>.Count)}");
-		accessListBaseSetCapacity = SharedState.Instance.Importer.ImportMethod(typeof(AccessListBase<>), m => m.Name == $"set_{nameof(AccessListBase<>.Capacity)}");
 		accessListBaseGetItem = SharedState.Instance.Importer.ImportMethod(typeof(AccessListBase<>), m => m.Name == "get_Item");
 
 		accessDictionaryBase = SharedState.Instance.Importer.ImportType(typeof(AccessDictionaryBase<,>));
 		accessDictionaryBaseGetCount = SharedState.Instance.Importer.ImportMethod(typeof(AccessDictionaryBase<,>), m => m.Name == $"get_{nameof(AccessDictionaryBase<,>.Count)}");
-		accessDictionaryBaseSetCapacity = SharedState.Instance.Importer.ImportMethod(typeof(AccessDictionaryBase<,>), m => m.Name == $"set_{nameof(AccessDictionaryBase<,>.Capacity)}");
 		accessDictionaryBaseGetPair = SharedState.Instance.Importer.ImportMethod(typeof(AccessDictionaryBase<,>), m => m.Name == nameof(AccessDictionaryBase<,>.GetPair));
 
 		assetList = SharedState.Instance.Importer.ImportType(typeof(AssetList<>));
-		assetListAdd = SharedState.Instance.Importer.ImportMethod(typeof(AssetList<>), m => m.Name == nameof(AssetList<>.Add));
-		assetListAddNew = SharedState.Instance.Importer.ImportMethod(typeof(AssetList<>), m => m.Name == nameof(AssetList<>.AddNew));
-		assetListClear = SharedState.Instance.Importer.ImportMethod(typeof(AssetList<>), m => m.Name == nameof(AssetList<>.Clear));
+		assetListSetItem = SharedState.Instance.Importer.ImportMethod(typeof(AssetList<>), m => m.Name == "set_Item");
 
 		assetDictionary = SharedState.Instance.Importer.ImportType(typeof(AssetDictionary<,>));
-		assetDictionaryAddNew = SharedState.Instance.Importer.ImportMethod(typeof(AssetDictionary<,>), m => m.Name == nameof(AssetDictionary<,>.AddNew));
-		assetDictionaryClear = SharedState.Instance.Importer.ImportMethod(typeof(AssetDictionary<,>), m => m.Name == nameof(AssetDictionary<,>.Clear));
+		assetDictionaryGetPair = SharedState.Instance.Importer.ImportMethod(typeof(AssetDictionary<,>), m => m.Name == nameof(AssetDictionary<,>.GetPair));
 
 		assetPair = SharedState.Instance.Importer.ImportType(typeof(AssetPair<,>));
 
@@ -256,15 +253,14 @@ internal static partial class Pass105_CopyValuesMethods
 		overridenMethods.Clear();
 	}
 
-	[MemberNotNull(nameof(duplicateArrayMethod))]
-	[MemberNotNull(nameof(duplicateArrayArrayMethod))]
-	[MemberNotNull(nameof(pptrConvertMethod))]
 	private static TypeDefinition InjectHelper()
 	{
 		TypeDefinition clonedType = SharedState.Instance.InjectHelperType(typeof(CopyValuesHelper));
 		duplicateArrayMethod = clonedType.GetMethodByName(nameof(CopyValuesHelper.DuplicateArray));
 		duplicateArrayArrayMethod = clonedType.GetMethodByName(nameof(CopyValuesHelper.DuplicateArrayArray));
 		pptrConvertMethod = clonedType.GetMethodByName(nameof(CopyValuesHelper.ConvertPPtr));
+		copyCapacityFromDictionary = clonedType.GetMethodByName(nameof(CopyValuesHelper.CopyCapacityFrom_Dictionary));
+		copyCapacityFromList = clonedType.GetMethodByName(nameof(CopyValuesHelper.CopyCapacityFrom_List));
 		return clonedType;
 	}
 
@@ -293,23 +289,12 @@ internal static partial class Pass105_CopyValuesMethods
 				CilInstructionCollection instructions = method.GetInstructions();
 				CilInstructionLabel returnLabel = new();
 				CilInstructionLabel isNullLabel = new();
-				CilInstructionLabel isSameCollectionLabel = new();
 
 				//If other is null
 				instructions.Add(CilOpCodes.Ldarg_1);
-				instructions.Add(CilOpCodes.Ldnull);
-				instructions.Add(CilOpCodes.Cgt_Un);
 				instructions.Add(CilOpCodes.Brfalse, isNullLabel);
 
-				//If source collection == target collection
-				instructions.Add(CilOpCodes.Ldarga, converterParam);
-				instructions.Add(CilOpCodes.Call, pptrConverterGetSourceCollectionMethod);
-				instructions.Add(CilOpCodes.Ldarga, converterParam);
-				instructions.Add(CilOpCodes.Call, pptrConverterGetTargetCollectionMethod);
-				instructions.Add(CilOpCodes.Ceq);
-				instructions.Add(CilOpCodes.Brtrue, isSameCollectionLabel);
-
-				//Not same collection
+				//Not null
 				{
 					//Convert PPtr
 					CilLocalVariable convertedPPtr = instructions.AddLocalVariable(pptrCommonType);
@@ -328,30 +313,6 @@ internal static partial class Pass105_CopyValuesMethods
 					instructions.Add(CilOpCodes.Ldarg_0);
 					instructions.Add(CilOpCodes.Ldloca, convertedPPtr);
 					instructions.Add(CilOpCodes.Call, pptrCommonGetPathIDMethod);
-					FieldDefinition pathIDField = type.GetFieldByName("m_PathID_");
-					if (pathIDField.Signature!.FieldType is CorLibTypeSignature { ElementType: ElementType.I4 })
-					{
-						instructions.Add(CilOpCodes.Conv_Ovf_I4);//Convert I8 to I4
-					}
-					instructions.Add(CilOpCodes.Stfld, pathIDField);
-
-					instructions.Add(CilOpCodes.Br, returnLabel);
-				}
-
-				//Same collection
-				{
-					isSameCollectionLabel.Instruction = instructions.Add(CilOpCodes.Nop);
-
-					//Store FileID
-					instructions.Add(CilOpCodes.Ldarg_0);
-					instructions.Add(CilOpCodes.Ldarg_1);
-					instructions.Add(CilOpCodes.Callvirt, ipptrGetFileIDMethod);
-					instructions.Add(CilOpCodes.Stfld, type.GetFieldByName("m_FileID_"));
-
-					//Store PathID
-					instructions.Add(CilOpCodes.Ldarg_0);
-					instructions.Add(CilOpCodes.Ldarg_1);
-					instructions.Add(CilOpCodes.Callvirt, ipptrGetPathIDMethod);
 					FieldDefinition pathIDField = type.GetFieldByName("m_PathID_");
 					if (pathIDField.Signature!.FieldType is CorLibTypeSignature { ElementType: ElementType.I4 })
 					{
@@ -530,25 +491,9 @@ internal static partial class Pass105_CopyValuesMethods
 								TypeSignature sourceValueTypeSignature = sourceGenericSignature.TypeArguments[1];
 								TypeSignature sourcePairTypeSignature = accessPairBase.MakeGenericInstanceType(sourceKeyTypeSignature, sourceValueTypeSignature);
 
-								CilInstructionLabel returnLabel = new();
-								CilInstructionLabel isNullLabel = new();
-
 								instructions.Add(CilOpCodes.Ldarg_0);
-								instructions.Add(CilOpCodes.Callvirt, MakeAssetDictionaryClearMethod(targetKeyTypeSignature, targetValueTypeSignature));
-
 								instructions.Add(CilOpCodes.Ldarg_1);
-								instructions.Add(CilOpCodes.Ldnull);
-								instructions.Add(CilOpCodes.Cgt_Un);
-								instructions.Add(CilOpCodes.Brfalse, isNullLabel);
-
-								CilLocalVariable countLocal = instructions.AddLocalVariable(SharedState.Instance.Importer.Int32);
-								instructions.Add(CilOpCodes.Ldarg_1);
-								instructions.Add(CilOpCodes.Callvirt, MakeDictionaryGetCountMethod(sourceKeyTypeSignature, sourceValueTypeSignature));
-								instructions.Add(CilOpCodes.Stloc, countLocal);
-
-								instructions.Add(CilOpCodes.Ldarg_0);
-								instructions.Add(CilOpCodes.Ldloc, countLocal);
-								instructions.Add(CilOpCodes.Callvirt, MakeDictionarySetCapacityMethod(targetKeyTypeSignature, targetValueTypeSignature));
+								instructions.Add(CilOpCodes.Call, copyCapacityFromDictionary.MakeGenericInstanceMethod(targetKeyTypeSignature, targetValueTypeSignature, sourceKeyTypeSignature, sourceValueTypeSignature));
 
 								CilLocalVariable iLocal = instructions.AddLocalVariable(SharedState.Instance.Importer.Int32);
 								instructions.Add(CilOpCodes.Ldc_I4_0);
@@ -562,7 +507,8 @@ internal static partial class Pass105_CopyValuesMethods
 
 								(IMethodDescriptor copyMethod, CopyMethodType copyMethodType) = GetOrMakeMethod(targetPairTypeSignature, sourcePairTypeSignature);
 								instructions.Add(CilOpCodes.Ldarg_0);
-								instructions.Add(CilOpCodes.Callvirt, MakeAssetDictionaryAddNewMethod(targetKeyTypeSignature, targetValueTypeSignature));
+								instructions.Add(CilOpCodes.Ldloc, iLocal);
+								instructions.Add(CilOpCodes.Callvirt, MakeAssetDictionaryGetPairMethod(targetKeyTypeSignature, targetValueTypeSignature));
 								instructions.Add(CilOpCodes.Ldarg_1);
 								instructions.Add(CilOpCodes.Ldloc, iLocal);
 								instructions.Add(CilOpCodes.Callvirt, MakeDictionaryGetPairMethod(sourceKeyTypeSignature, sourceValueTypeSignature));
@@ -580,18 +526,12 @@ internal static partial class Pass105_CopyValuesMethods
 
 								conditionLabel.Instruction = instructions.Add(CilOpCodes.Nop);
 								instructions.Add(CilOpCodes.Ldloc, iLocal);
-								instructions.Add(CilOpCodes.Ldloc, countLocal);
+								instructions.Add(CilOpCodes.Ldarg_0);
+								instructions.Add(CilOpCodes.Callvirt, MakeDictionaryGetCountMethod(targetKeyTypeSignature, targetValueTypeSignature));
 								instructions.Add(CilOpCodes.Clt);
 								instructions.Add(CilOpCodes.Brtrue, forStartLabel);
 
-								instructions.Add(CilOpCodes.Br, returnLabel);
-
-								isNullLabel.Instruction = instructions.Add(CilOpCodes.Nop);
-								instructions.Add(CilOpCodes.Ldarg_0);
-								instructions.Add(CilOpCodes.Ldc_I4_0);
-								instructions.Add(CilOpCodes.Callvirt, MakeDictionarySetCapacityMethod(targetKeyTypeSignature, targetValueTypeSignature));
-
-								returnLabel.Instruction = instructions.Add(CilOpCodes.Ret);
+								instructions.Add(CilOpCodes.Ret);
 							}
 							break;
 						case $"{nameof(AssetList<>)}`1":
@@ -601,25 +541,9 @@ internal static partial class Pass105_CopyValuesMethods
 								TypeSignature targetElementTypeSignature = targetGenericSignature.TypeArguments[0];
 								TypeSignature sourceElementTypeSignature = sourceGenericSignature.TypeArguments[0];
 
-								CilInstructionLabel returnLabel = new();
-								CilInstructionLabel isNullLabel = new();
-
 								instructions.Add(CilOpCodes.Ldarg_0);
-								instructions.Add(CilOpCodes.Callvirt, MakeAssetListClearMethod(targetElementTypeSignature));
-
 								instructions.Add(CilOpCodes.Ldarg_1);
-								instructions.Add(CilOpCodes.Ldnull);
-								instructions.Add(CilOpCodes.Cgt_Un);
-								instructions.Add(CilOpCodes.Brfalse, isNullLabel);
-
-								CilLocalVariable countLocal = instructions.AddLocalVariable(SharedState.Instance.Importer.Int32);
-								instructions.Add(CilOpCodes.Ldarg_1);
-								instructions.Add(CilOpCodes.Callvirt, MakeListGetCountMethod(sourceElementTypeSignature));
-								instructions.Add(CilOpCodes.Stloc, countLocal);
-
-								instructions.Add(CilOpCodes.Ldarg_0);
-								instructions.Add(CilOpCodes.Ldloc, countLocal);
-								instructions.Add(CilOpCodes.Callvirt, MakeListSetCapacityMethod(targetElementTypeSignature));
+								instructions.Add(CilOpCodes.Call, copyCapacityFromList.MakeGenericInstanceMethod(targetElementTypeSignature, sourceElementTypeSignature));
 
 								CilLocalVariable iLocal = instructions.AddLocalVariable(SharedState.Instance.Importer.Int32);
 								instructions.Add(CilOpCodes.Ldc_I4_0);
@@ -634,10 +558,11 @@ internal static partial class Pass105_CopyValuesMethods
 								if (targetElementTypeSignature is CorLibTypeSignature or TypeDefOrRefSignature { Namespace: "AssetRipper.Primitives", Name: nameof(Utf8String) })
 								{
 									instructions.Add(CilOpCodes.Ldarg_0);
+									instructions.Add(CilOpCodes.Ldloc, iLocal);
 									instructions.Add(CilOpCodes.Ldarg_1);
 									instructions.Add(CilOpCodes.Ldloc, iLocal);
 									instructions.Add(CilOpCodes.Callvirt, MakeListGetItemMethod(sourceElementTypeSignature));
-									instructions.Add(CilOpCodes.Callvirt, MakeAssetListAddMethod(targetElementTypeSignature));
+									instructions.Add(CilOpCodes.Callvirt, MakeAssetListSetItemMethod(targetElementTypeSignature));
 								}
 								else if (targetElementTypeSignature is SzArrayTypeSignature keyArrayTypeSignature)
 								{
@@ -648,7 +573,8 @@ internal static partial class Pass105_CopyValuesMethods
 									(IMethodDescriptor copyMethod, CopyMethodType copyMethodType) = GetOrMakeMethod(targetElementTypeSignature, sourceElementTypeSignature);
 
 									instructions.Add(CilOpCodes.Ldarg_0);
-									instructions.Add(CilOpCodes.Callvirt, MakeAssetListAddNewMethod(targetElementTypeSignature));
+									instructions.Add(CilOpCodes.Ldloc, iLocal);
+									instructions.Add(CilOpCodes.Callvirt, MakeListGetItemMethod(targetElementTypeSignature));
 									instructions.Add(CilOpCodes.Ldarg_1);
 									instructions.Add(CilOpCodes.Ldloc, iLocal);
 									instructions.Add(CilOpCodes.Callvirt, MakeListGetItemMethod(sourceElementTypeSignature));
@@ -667,18 +593,12 @@ internal static partial class Pass105_CopyValuesMethods
 
 								conditionLabel.Instruction = instructions.Add(CilOpCodes.Nop);
 								instructions.Add(CilOpCodes.Ldloc, iLocal);
-								instructions.Add(CilOpCodes.Ldloc, countLocal);
+								instructions.Add(CilOpCodes.Ldarg_0);
+								instructions.Add(CilOpCodes.Callvirt, MakeListGetCountMethod(targetElementTypeSignature));
 								instructions.Add(CilOpCodes.Clt);
 								instructions.Add(CilOpCodes.Brtrue, forStartLabel);
 
-								instructions.Add(CilOpCodes.Br, returnLabel);
-
-								isNullLabel.Instruction = instructions.Add(CilOpCodes.Nop);
-								instructions.Add(CilOpCodes.Ldarg_0);
-								instructions.Add(CilOpCodes.Ldc_I4_0);
-								instructions.Add(CilOpCodes.Callvirt, MakeListSetCapacityMethod(targetElementTypeSignature));
-
-								returnLabel.Instruction = instructions.Add(CilOpCodes.Ret);
+								instructions.Add(CilOpCodes.Ret);
 							}
 							break;
 						case $"{nameof(AssetPair<,>)}`2" or $"{nameof(AccessPairBase<,>)}`2":
@@ -688,72 +608,141 @@ internal static partial class Pass105_CopyValuesMethods
 								TypeSignature targetValueTypeSignature = targetGenericSignature.TypeArguments[1];
 								TypeSignature sourceValueTypeSignature = sourceGenericSignature.TypeArguments[1];
 
-								CilInstructionLabel returnLabel = new();
-								instructions.Add(CilOpCodes.Ldarg_1);
-								instructions.Add(CilOpCodes.Ldnull);
-								instructions.Add(CilOpCodes.Cgt_Un);
-								instructions.Add(CilOpCodes.Brfalse, returnLabel);
-
-								if (targetKeyTypeSignature is CorLibTypeSignature or TypeDefOrRefSignature { Namespace: "AssetRipper.Primitives", Name: nameof(Utf8String) })
+								if (targetKeyTypeSignature is CorLibTypeSignature)
 								{
+									CilInstructionLabel notNullLabel = new();
+									CilInstructionLabel finishLabel = new();
+
 									instructions.Add(CilOpCodes.Ldarg_0);
 									instructions.Add(CilOpCodes.Ldarg_1);
+									instructions.Add(CilOpCodes.Brtrue, notNullLabel);
+									instructions.AddDefaultValue(sourceKeyTypeSignature);
+									instructions.Add(CilOpCodes.Br, finishLabel);
+									notNullLabel.Instruction = instructions.Add(CilOpCodes.Ldarg_1);
 									instructions.Add(CilOpCodes.Callvirt, MakePairGetKeyMethod(sourceKeyTypeSignature, sourceValueTypeSignature));
-									instructions.Add(CilOpCodes.Callvirt, MakePairSetKeyMethod(targetKeyTypeSignature, targetValueTypeSignature));
+									finishLabel.Instruction = instructions.Add(CilOpCodes.Callvirt, MakePairSetKeyMethod(targetKeyTypeSignature, targetValueTypeSignature));
+								}
+								else if (targetKeyTypeSignature is TypeDefOrRefSignature { Namespace: "AssetRipper.Primitives", Name: nameof(Utf8String) })
+								{
+									CilInstructionLabel notNullLabel = new();
+									CilInstructionLabel finishLabel = new();
+
+									instructions.Add(CilOpCodes.Ldarg_0);
+									instructions.Add(CilOpCodes.Ldarg_1);
+									instructions.Add(CilOpCodes.Brtrue, notNullLabel);
+									instructions.Add(CilOpCodes.Call, utf8StringGetEmpty);
+									instructions.Add(CilOpCodes.Br, finishLabel);
+									notNullLabel.Instruction = instructions.Add(CilOpCodes.Ldarg_1);
+									instructions.Add(CilOpCodes.Callvirt, MakePairGetKeyMethod(sourceKeyTypeSignature, sourceValueTypeSignature));
+									finishLabel.Instruction = instructions.Add(CilOpCodes.Callvirt, MakePairSetKeyMethod(targetKeyTypeSignature, targetValueTypeSignature));
 								}
 								else if (targetKeyTypeSignature is SzArrayTypeSignature keyArrayTypeSignature)
 								{
+									CilInstructionLabel notNullLabel = new();
+									CilInstructionLabel finishLabel = new();
+
 									instructions.Add(CilOpCodes.Ldarg_0);
 									instructions.Add(CilOpCodes.Ldarg_1);
+									instructions.Add(CilOpCodes.Brtrue, notNullLabel);
+									instructions.Add(CilOpCodes.Ldnull);
+									instructions.Add(CilOpCodes.Br, finishLabel);
+									notNullLabel.Instruction = instructions.Add(CilOpCodes.Ldarg_1);
 									instructions.Add(CilOpCodes.Callvirt, MakePairGetKeyMethod(sourceKeyTypeSignature, sourceValueTypeSignature));
-									instructions.Add(CilOpCodes.Call, MakeDuplicateArrayMethod(keyArrayTypeSignature));
+									finishLabel.Instruction = instructions.Add(CilOpCodes.Call, MakeDuplicateArrayMethod(keyArrayTypeSignature));
 									instructions.Add(CilOpCodes.Callvirt, MakePairSetKeyMethod(targetKeyTypeSignature, targetValueTypeSignature));
 								}
 								else
 								{
+									CilInstructionLabel notNullLabel = new();
+									CilInstructionLabel finishLabel = new();
+
 									(IMethodDescriptor keyCopyMethod, CopyMethodType keyCopyMethodType) = GetOrMakeMethod(targetKeyTypeSignature, sourceKeyTypeSignature);
 									instructions.Add(CilOpCodes.Ldarg_0);
 									instructions.Add(CilOpCodes.Callvirt, MakePairGetKeyMethod(targetKeyTypeSignature, targetValueTypeSignature));
 									instructions.Add(CilOpCodes.Ldarg_1);
+									instructions.Add(CilOpCodes.Brtrue, notNullLabel);
+									instructions.Add(CilOpCodes.Ldnull);
+									instructions.Add(CilOpCodes.Br, finishLabel);
+									notNullLabel.Instruction = instructions.Add(CilOpCodes.Ldarg_1);
 									instructions.Add(CilOpCodes.Callvirt, MakePairGetKeyMethod(sourceKeyTypeSignature, sourceValueTypeSignature));
+									int finishIndex = instructions.Count;
 									if (HasConverter(keyCopyMethodType))
 									{
 										instructions.Add(CilOpCodes.Ldarg_2);
 										needsConverter = true;
 									}
 									instructions.Add(GetCallOpCode(keyCopyMethodType), keyCopyMethod);
+									finishLabel.Instruction = instructions[finishIndex];
 								}
 
-								if (targetValueTypeSignature is CorLibTypeSignature or TypeDefOrRefSignature { Namespace: "AssetRipper.Primitives", Name: nameof(Utf8String) })
+								if (targetValueTypeSignature is CorLibTypeSignature)
 								{
+									CilInstructionLabel notNullLabel = new();
+									CilInstructionLabel finishLabel = new();
+
 									instructions.Add(CilOpCodes.Ldarg_0);
 									instructions.Add(CilOpCodes.Ldarg_1);
+									instructions.Add(CilOpCodes.Brtrue, notNullLabel);
+									instructions.AddDefaultValue(sourceValueTypeSignature);
+									instructions.Add(CilOpCodes.Br, finishLabel);
+									notNullLabel.Instruction = instructions.Add(CilOpCodes.Ldarg_1);
 									instructions.Add(CilOpCodes.Callvirt, MakePairGetValueMethod(sourceKeyTypeSignature, sourceValueTypeSignature));
-									instructions.Add(CilOpCodes.Callvirt, MakePairSetValueMethod(targetKeyTypeSignature, targetValueTypeSignature));
+									finishLabel.Instruction = instructions.Add(CilOpCodes.Callvirt, MakePairSetValueMethod(targetKeyTypeSignature, targetValueTypeSignature));
+								}
+								else if (targetValueTypeSignature is TypeDefOrRefSignature { Namespace: "AssetRipper.Primitives", Name: nameof(Utf8String) })
+								{
+									CilInstructionLabel notNullLabel = new();
+									CilInstructionLabel finishLabel = new();
+
+									instructions.Add(CilOpCodes.Ldarg_0);
+									instructions.Add(CilOpCodes.Ldarg_1);
+									instructions.Add(CilOpCodes.Brtrue, notNullLabel);
+									instructions.Add(CilOpCodes.Call, utf8StringGetEmpty);
+									instructions.Add(CilOpCodes.Br, finishLabel);
+									notNullLabel.Instruction = instructions.Add(CilOpCodes.Ldarg_1);
+									instructions.Add(CilOpCodes.Callvirt, MakePairGetValueMethod(sourceKeyTypeSignature, sourceValueTypeSignature));
+									finishLabel.Instruction = instructions.Add(CilOpCodes.Callvirt, MakePairSetValueMethod(targetKeyTypeSignature, targetValueTypeSignature));
 								}
 								else if (targetValueTypeSignature is SzArrayTypeSignature valueArrayTypeSignature)
 								{
+									CilInstructionLabel notNullLabel = new();
+									CilInstructionLabel finishLabel = new();
+
 									instructions.Add(CilOpCodes.Ldarg_0);
 									instructions.Add(CilOpCodes.Ldarg_1);
+									instructions.Add(CilOpCodes.Brtrue, notNullLabel);
+									instructions.Add(CilOpCodes.Ldnull);
+									instructions.Add(CilOpCodes.Br, finishLabel);
+									notNullLabel.Instruction = instructions.Add(CilOpCodes.Ldarg_1);
 									instructions.Add(CilOpCodes.Callvirt, MakePairGetValueMethod(sourceKeyTypeSignature, sourceValueTypeSignature));
-									instructions.Add(CilOpCodes.Call, MakeDuplicateArrayMethod(valueArrayTypeSignature));
+									finishLabel.Instruction = instructions.Add(CilOpCodes.Call, MakeDuplicateArrayMethod(valueArrayTypeSignature));
 									instructions.Add(CilOpCodes.Callvirt, MakePairSetValueMethod(targetKeyTypeSignature, targetValueTypeSignature));
 								}
 								else
 								{
+									CilInstructionLabel notNullLabel = new();
+									CilInstructionLabel finishLabel = new();
+
 									(IMethodDescriptor valueCopyMethod, CopyMethodType valueCopyMethodType) = GetOrMakeMethod(targetValueTypeSignature, sourceValueTypeSignature);
 									instructions.Add(CilOpCodes.Ldarg_0);
 									instructions.Add(CilOpCodes.Callvirt, MakePairGetValueMethod(targetKeyTypeSignature, targetValueTypeSignature));
 									instructions.Add(CilOpCodes.Ldarg_1);
+									instructions.Add(CilOpCodes.Brtrue, notNullLabel);
+									instructions.Add(CilOpCodes.Ldnull);
+									instructions.Add(CilOpCodes.Br, finishLabel);
+									notNullLabel.Instruction = instructions.Add(CilOpCodes.Ldarg_1);
 									instructions.Add(CilOpCodes.Callvirt, MakePairGetValueMethod(sourceKeyTypeSignature, sourceValueTypeSignature));
+									int finishIndex = instructions.Count;
 									if (HasConverter(valueCopyMethodType))
 									{
 										instructions.Add(CilOpCodes.Ldarg_2);
 										needsConverter = true;
 									}
 									instructions.Add(GetCallOpCode(valueCopyMethodType), valueCopyMethod);
+									finishLabel.Instruction = instructions[finishIndex];
 								}
-								returnLabel.Instruction = instructions.Add(CilOpCodes.Ret);
+
+								instructions.Add(CilOpCodes.Ret);
 							}
 							break;
 						default:
@@ -790,14 +779,6 @@ internal static partial class Pass105_CopyValuesMethods
 			accessDictionaryBaseGetCount);
 	}
 
-	private static IMethodDefOrRef MakeDictionarySetCapacityMethod(TypeSignature keyTypeSignature, TypeSignature valueTypeSignature)
-	{
-		return MethodUtils.MakeMethodOnGenericType(
-			SharedState.Instance.Importer,
-			accessDictionaryBase.MakeGenericInstanceType(keyTypeSignature, valueTypeSignature),
-			accessDictionaryBaseSetCapacity);
-	}
-
 	private static IMethodDefOrRef MakeDictionaryGetPairMethod(TypeSignature keyTypeSignature, TypeSignature valueTypeSignature)
 	{
 		return MethodUtils.MakeMethodOnGenericType(
@@ -806,20 +787,12 @@ internal static partial class Pass105_CopyValuesMethods
 			accessDictionaryBaseGetPair);
 	}
 
-	private static IMethodDefOrRef MakeAssetDictionaryAddNewMethod(TypeSignature keyTypeSignature, TypeSignature valueTypeSignature)
+	private static IMethodDefOrRef MakeAssetDictionaryGetPairMethod(TypeSignature keyTypeSignature, TypeSignature valueTypeSignature)
 	{
 		return MethodUtils.MakeMethodOnGenericType(
 			SharedState.Instance.Importer,
 			assetDictionary.MakeGenericInstanceType(keyTypeSignature, valueTypeSignature),
-			assetDictionaryAddNew);
-	}
-
-	private static IMethodDefOrRef MakeAssetDictionaryClearMethod(TypeSignature keyTypeSignature, TypeSignature valueTypeSignature)
-	{
-		return MethodUtils.MakeMethodOnGenericType(
-			SharedState.Instance.Importer,
-			assetDictionary.MakeGenericInstanceType(keyTypeSignature, valueTypeSignature),
-			assetDictionaryClear);
+			assetDictionaryGetPair);
 	}
 
 	private static IMethodDefOrRef MakeListGetCountMethod(TypeSignature elementTypeSignature)
@@ -830,14 +803,6 @@ internal static partial class Pass105_CopyValuesMethods
 			accessListBaseGetCount);
 	}
 
-	private static IMethodDefOrRef MakeListSetCapacityMethod(TypeSignature elementTypeSignature)
-	{
-		return MethodUtils.MakeMethodOnGenericType(
-			SharedState.Instance.Importer,
-			accessListBase.MakeGenericInstanceType(elementTypeSignature),
-			accessListBaseSetCapacity);
-	}
-
 	private static IMethodDefOrRef MakeListGetItemMethod(TypeSignature elementTypeSignature)
 	{
 		return MethodUtils.MakeMethodOnGenericType(
@@ -846,28 +811,12 @@ internal static partial class Pass105_CopyValuesMethods
 			accessListBaseGetItem);
 	}
 
-	private static IMethodDefOrRef MakeAssetListAddNewMethod(TypeSignature elementTypeSignature)
+	private static IMethodDefOrRef MakeAssetListSetItemMethod(TypeSignature elementTypeSignature)
 	{
 		return MethodUtils.MakeMethodOnGenericType(
 			SharedState.Instance.Importer,
 			assetList.MakeGenericInstanceType(elementTypeSignature),
-			assetListAddNew);
-	}
-
-	private static IMethodDefOrRef MakeAssetListAddMethod(TypeSignature elementTypeSignature)
-	{
-		return MethodUtils.MakeMethodOnGenericType(
-			SharedState.Instance.Importer,
-			assetList.MakeGenericInstanceType(elementTypeSignature),
-			assetListAdd);
-	}
-
-	private static IMethodDefOrRef MakeAssetListClearMethod(TypeSignature elementTypeSignature)
-	{
-		return MethodUtils.MakeMethodOnGenericType(
-			SharedState.Instance.Importer,
-			assetList.MakeGenericInstanceType(elementTypeSignature),
-			assetListClear);
+			assetListSetItem);
 	}
 
 	private static IMethodDefOrRef MakePairGetKeyMethod(TypeSignature keyTypeSignature, TypeSignature valueTypeSignature)
@@ -931,7 +880,7 @@ internal static partial class Pass105_CopyValuesMethods
 
 	private static TypeSignature? TryGetPPtrTypeArgument(TypeDefinition type)
 	{
-		foreach (var implem in type.Interfaces)
+		foreach (InterfaceImplementation implem in type.Interfaces)
 		{
 			if (implem.Interface is TypeSpecification specification
 				&& specification.Signature is GenericInstanceTypeSignature genericInstanceTypeSignature
