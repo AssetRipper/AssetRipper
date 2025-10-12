@@ -52,7 +52,7 @@ public static class AnimatorControllerExtensions
 				return GetStateBehaviours(controller.StateMachineBehaviourVectorDescription, controller.StateMachineBehavioursP, range);
 			}
 		}
-		return Array.Empty<IMonoBehaviour>();
+		return [];
 	}
 
 	private static IMonoBehaviour?[] GetStateBehaviours(
@@ -65,10 +65,7 @@ public static class AnimatorControllerExtensions
 		{
 			int index = (int)controllerStateMachineBehaviourVectorDescription.StateMachineBehaviourIndices[(int)range.StartIndex + i];
 			IMonoBehaviour? stateMachineBehaviour = controllerStateMachineBehaviours[index];
-			if (stateMachineBehaviour != null)
-			{
-				stateMachineBehaviour.HideFlagsE = HideFlags.HideInHierarchy;
-			}
+			stateMachineBehaviour?.HideFlagsE = HideFlags.HideInHierarchy;
 			stateMachineBehaviours[i] = stateMachineBehaviour;
 		}
 		return stateMachineBehaviours;
