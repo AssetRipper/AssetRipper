@@ -249,7 +249,7 @@ internal sealed class AnimatorStateMachineContext
 			// assuming SelectorStateConstantArray follows the sequence: [Entry1, Exit1, Entry2, Exit2, ...]
 			// just in case, next code can handle StateMachines missing Entry or Exit SelectorStateConstant
 			int stateMachineIndex = 0;
-			uint lastFullPathID = 0;
+			uint? lastFullPathID = null;
 			foreach (SelectorStateConstant ssc in StateMachineConstant.SelectorStateConstantArray)
 			{
 				SelectorTransitionConstant[]? transitions = ssc.TransitionConstantArray.Count == 0 ? null :

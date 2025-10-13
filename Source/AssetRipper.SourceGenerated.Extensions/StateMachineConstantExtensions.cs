@@ -17,7 +17,7 @@ public static class StateMachineConstantExtensions
 		// SelectorStateConstantArray = [Entry1, Exit1, Entry2, Exit2, ...]
 		// just in case, next code handles StateMachine missing Entry or Exit SelectorStateConstant
 		int stateMachineCount = 0;
-		uint lastFullPathID = 0;
+		uint? lastFullPathID = null;
 		foreach (SelectorStateConstant ssc in stateMachineConstant.SelectorStateConstantArray)
 		{
 			if (lastFullPathID != ssc.FullPathID)
