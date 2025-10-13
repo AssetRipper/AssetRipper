@@ -7,8 +7,7 @@
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
 
-		<Version>1.3.4</Version>
-		<AssemblyVersion>$(Version)</AssemblyVersion>
+		<VersionPrefix>1.3.5</VersionPrefix>
 		<Copyright>Copyright © ds5678</Copyright>
 		<Authors>ds5678</Authors>
 	</PropertyGroup>
