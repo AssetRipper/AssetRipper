@@ -33,7 +33,11 @@ internal sealed class BundleFileBlockReader : IDisposable
 		// Avoid storing entire non-compresed entries in memory by mapping a stream to the block location.
 		if (m_blocksInfo.StorageBlocks.Length == 1 && m_blocksInfo.StorageBlocks[0].CompressionType == CompressionType.None)
 		{
-			//return m_stream.CreatePartial(m_dataOffset + entry.Offset, entry.Size);
+			if (m_dataOffset + entry.Offset + entry.Size > m_stream.Length)
+			{
+				throw new InvalidFormatException("Entry extends beyond the end of the stream.");
+			}
+			return m_stream.CreatePartial(m_dataOffset + entry.Offset, entry.Size);
 		}
 
 		// find block offsets
@@ -133,6 +137,10 @@ internal sealed class BundleFileBlockReader : IDisposable
 			entryOffsetInsideBlock = 0;
 
 			long size = Math.Min(blockSize, left);
+			if (blockStream.Position + size > blockStream.Length)
+			{
+				throw new InvalidFormatException("Block extends beyond the end of the stream.");
+			}
 			using PartialStream partialStream = new(blockStream, blockStream.Position, size);
 			partialStream.CopyTo(entryStream);
 			blockIndex++;

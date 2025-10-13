@@ -9,6 +9,10 @@ public sealed class PartialStream : Stream
 
 	public PartialStream(Stream baseStream, long offset, long length, bool leaveOpen)
 	{
+		if (offset + length > baseStream.Length)
+		{
+			throw new ArgumentException("The base stream is not long enough for the given offset and length.");
+		}
 		m_stream = baseStream ?? throw new ArgumentNullException(nameof(baseStream));
 		m_baseOffset = offset;
 		Length = length;
@@ -89,7 +93,7 @@ public sealed class PartialStream : Stream
 		}
 		else
 		{
-			m_stream.Dispose();
+			m_stream?.Dispose();
 		}
 		base.Dispose(disposing);
 	}
