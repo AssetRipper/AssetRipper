@@ -94,7 +94,7 @@ public class ExportHandler
 	{
 		Logger.Info(LogCategory.Export, "Starting export");
 		Logger.Info(LogCategory.Export, $"Attempting to export assets to {outputPath}...");
-		Logger.Info(LogCategory.Export, $"Game files have these Unity versions:{GetListOfVersions(gameData.GameBundle)}");
+		Logger.Info(LogCategory.Export, $"Game files have these Unity versions: {GetListOfVersions(gameData.GameBundle)}");
 		Logger.Info(LogCategory.Export, $"Exporting to Unity version {gameData.ProjectVersion}");
 
 		Settings.ExportRootPath = outputPath;

@@ -3,6 +3,7 @@ using AssetRipper.Assets;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using ICSharpCode.Decompiler;
+using ICSharpCode.Decompiler.CSharp;
 using ICSharpCode.Decompiler.CSharp.ProjectDecompiler;
 using ICSharpCode.Decompiler.Metadata;
 
@@ -10,12 +11,15 @@ namespace AssetRipper.Export.PrimaryContent.Scripts;
 
 public sealed class ScriptExportCollection : ExportCollectionBase
 {
-	public ScriptExportCollection(ScriptContentExtractor contentExtractor)
+	public ScriptExportCollection(ScriptContentExtractor contentExtractor, LanguageVersion languageVersion = LanguageVersion.Latest)
 	{
 		ContentExtractor = contentExtractor;
+		LanguageVersion = languageVersion;
 	}
 
 	public override IContentExtractor ContentExtractor { get; }
+
+	public LanguageVersion LanguageVersion { get; }
 
 	public override IEnumerable<IUnityObjectBase> Assets => [];
 
@@ -56,6 +60,8 @@ public sealed class ScriptExportCollection : ExportCollectionBase
 			fileSystem.Directory.Create(outputDirectory);
 
 			DecompilerSettings settings = new();
+
+			settings.SetLanguageVersion(LanguageVersion);
 
 			settings.AlwaysShowEnumMemberValues = true;
 			settings.ShowXmlDocumentation = true;

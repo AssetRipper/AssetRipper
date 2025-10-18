@@ -29,6 +29,13 @@ public static class GameFileLoader
 			field = value;
 		}
 	} = new(Settings);
+
+	/// <summary>
+	/// Is this the premium edition?
+	/// </summary>
+	/// <remarks>
+	/// This is purely for UI functionality and has no direct effect on the presense of features.
+	/// </remarks>
 	public static bool Premium => ExportHandler.GetType() != typeof(ExportHandler);
 
 	public static void Reset()
@@ -84,7 +91,7 @@ public static class GameFileLoader
 			Logger.Info(LogCategory.Export, "Starting primary content export");
 			Logger.Info(LogCategory.Export, $"Attempting to export assets to {path}...");
 			Settings.ExportRootPath = path;
-			PrimaryContentExporter.CreateDefault(GameData).Export(GameBundle, Settings, LocalFileSystem.Instance);
+			PrimaryContentExporter.CreateDefault(GameData, Settings).Export(GameBundle, Settings, LocalFileSystem.Instance);
 			Logger.Info(LogCategory.Export, "Finished exporting primary content.");
 		}
 	}
