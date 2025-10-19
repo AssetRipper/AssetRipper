@@ -1,5 +1,4 @@
 using AssetRipper.Assets;
-using AssetRipper.Export.Modules.Shaders.IO;
 using AssetRipper.Yaml;
 using System.Text;
 

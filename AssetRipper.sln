@@ -133,8 +133,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Export.Modules.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Import", "Source\AssetRipper.Import\AssetRipper.Import.csproj", "{A1ACC369-4E2E-4E58-8BA6-034609B54E6A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Export.Modules.Shaders", "Source\AssetRipper.Export.Modules.Shader\AssetRipper.Export.Modules.Shaders.csproj", "{680FA140-1836-45D8-BE5C-1885BB657864}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.Export.UnityProjects", "Source\AssetRipper.Export.UnityProjects\AssetRipper.Export.UnityProjects.csproj", "{65C9ACC0-4B34-4289-9F8C-A3619D48AB3D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetRipper.GUI.Localizations", "Source\AssetRipper.GUI.Localizations\AssetRipper.GUI.Localizations.csproj", "{1EF29A1D-A170-4167-830B-17DCC679CA59}"
@@ -314,10 +312,6 @@ Global
 		{A1ACC369-4E2E-4E58-8BA6-034609B54E6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1ACC369-4E2E-4E58-8BA6-034609B54E6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A1ACC369-4E2E-4E58-8BA6-034609B54E6A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{680FA140-1836-45D8-BE5C-1885BB657864}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{680FA140-1836-45D8-BE5C-1885BB657864}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{680FA140-1836-45D8-BE5C-1885BB657864}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{680FA140-1836-45D8-BE5C-1885BB657864}.Release|Any CPU.Build.0 = Release|Any CPU
 		{65C9ACC0-4B34-4289-9F8C-A3619D48AB3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{65C9ACC0-4B34-4289-9F8C-A3619D48AB3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{65C9ACC0-4B34-4289-9F8C-A3619D48AB3D}.Release|Any CPU.ActiveCfg = Release|Any CPU

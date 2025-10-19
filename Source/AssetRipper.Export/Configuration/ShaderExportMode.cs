@@ -11,11 +11,7 @@ public enum ShaderExportMode
 	/// </summary>
 	Yaml,
 	/// <summary>
-	/// Export as disassembly which does not compile in the editor
-	/// </summary>
-	Disassembly,
-	/// <summary>
-	/// Export as decompiled hlsl (unstable!)
+	/// Export as decompiled HLSL
 	/// </summary>
 	Decompile
 }

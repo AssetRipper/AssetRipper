@@ -2,7 +2,6 @@
 using AssetRipper.Export.Configuration;
 using AssetRipper.Export.Modules.Audio;
 using AssetRipper.Export.Modules.Models;
-using AssetRipper.Export.Modules.Shaders.IO;
 using AssetRipper.Export.Modules.Textures;
 using AssetRipper.Export.PrimaryContent;
 using AssetRipper.Export.UnityProjects;
@@ -573,5 +572,10 @@ internal static class AssetAPI
 	public static RouteHandlerBuilder WithImageExtensionParameter(this RouteHandlerBuilder builder)
 	{
 		return builder.WithQueryStringParameter(Extension, "Extension for decoding the image.", true);
+	}
+
+	private sealed class InvariantStringWriter : StringWriter
+	{
+		public override IFormatProvider FormatProvider => CultureInfo.InvariantCulture;
 	}
 }

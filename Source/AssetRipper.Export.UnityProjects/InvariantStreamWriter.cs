@@ -1,9 +1,9 @@
 ﻿using System.Globalization;
 using System.Text;
 
-namespace AssetRipper.Export.Modules.Shaders.IO;
+namespace AssetRipper.Export.UnityProjects;
 
-public class InvariantStreamWriter : StreamWriter
+internal sealed class InvariantStreamWriter : StreamWriter
 {
 	public InvariantStreamWriter(Stream stream) : base(stream) { }
 
