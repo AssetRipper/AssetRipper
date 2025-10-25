@@ -50,7 +50,7 @@ public sealed class GameStructure : IDisposable
 
 	public static GameStructure Load(IEnumerable<string> paths, FileSystem fileSystem, CoreConfiguration configuration)
 	{
-		List<string> toProcess = ZipExtractor.Process(paths);
+		List<string> toProcess = ZipExtractor.Process(paths, fileSystem);
 		if (toProcess.Count == 0)
 		{
 			throw new ArgumentException("Game files not found", nameof(paths));

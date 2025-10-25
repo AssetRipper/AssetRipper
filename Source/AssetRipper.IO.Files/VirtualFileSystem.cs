@@ -481,5 +481,25 @@ public partial class VirtualFileSystem : FileSystem
 			string fullPath = GetFullPath(path);
 			return fullPath.Split('/', StringSplitOptions.RemoveEmptyEntries);
 		}
+
+		public override string Join(string path1, string path2)
+		{
+			return GetFullPath(base.Join(path1, path2));
+		}
+
+		public override string Join(string path1, string path2, string path3)
+		{
+			return GetFullPath(base.Join(path1, path2, path3));
+		}
+
+		public override string Join(string path1, string path2, string path3, string path4)
+		{
+			return GetFullPath(base.Join(path1, path2, path3, path4));
+		}
+
+		public override string Join(params ReadOnlySpan<string> paths)
+		{
+			return GetFullPath(base.Join(paths));
+		}
 	}
 }
