@@ -160,6 +160,7 @@ public static class WebApplicationLauncher
 		app.MapGet("/Commands", CommandsPage.Instance.ToResult).ProducesHtmlPage();
 		app.MapGet("/Privacy", PrivacyPage.Instance.ToResult).ProducesHtmlPage();
 		app.MapGet("/Licenses", LicensesPage.Instance.ToResult).ProducesHtmlPage();
+		app.MapGet("/PremiumFeatures", PremiumFeaturesPage.Instance.ToResult).ProducesHtmlPage();
 
 		app.MapGet("/ConfigurationFiles", (context) =>
 		{
