@@ -5,8 +5,16 @@ using AssetRipper.Yaml;
 
 namespace AssetRipper.Export.UnityProjects.Project;
 
-public sealed class ProjectYamlWalker(IExportContainer container) : YamlWalker
+public sealed class ProjectYamlWalker : YamlWalker
 {
+	private readonly IExportContainer container;
+
+	public ProjectYamlWalker(IExportContainer container)
+	{
+		this.container = container;
+		WithUnityVersion(container.ExportVersion);
+	}
+
 	public IUnityObjectBase CurrentAsset { get; set; } = null!;
 
 	public YamlDocument ExportYamlDocument(IUnityObjectBase asset)
