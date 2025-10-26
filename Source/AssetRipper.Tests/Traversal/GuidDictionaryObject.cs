@@ -14,17 +14,6 @@ internal sealed class GuidDictionaryObject : CustomInjectedObjectBase
 		--- !u!0 &1
 		GuidDictionaryObject:
 		  guidDictionary:
-		  - 00000000000000000000000000000000: 0
-		  - 00000000000000000000000000000000: 1
-
-		""";
-
-	public const string YamlWithoutHyphens = """
-		%YAML 1.1
-		%TAG !u! tag:unity3d.com,2011:
-		--- !u!0 &1
-		GuidDictionaryObject:
-		  guidDictionary:
 		    00000000000000000000000000000000: 0
 		    00000000000000000000000000000000: 1
 

@@ -14,10 +14,8 @@ internal sealed class PairListObject : CustomInjectedObjectBase
 		--- !u!0 &1
 		PairListObject:
 		  list:
-		  - first: 
-		    second: 
-		  - first: _key
-		    second: _value
+		  - :
+		  - _key: _value
 
 		""";
 

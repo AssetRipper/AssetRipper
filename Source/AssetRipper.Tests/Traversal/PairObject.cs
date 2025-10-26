@@ -18,8 +18,7 @@ internal sealed class PairObject : CustomInjectedObjectBase
 		--- !u!0 &1
 		PairObject:
 		  pair:
-		    first: _key
-		    second: _value
+		    _key: _value
 
 		""";
 

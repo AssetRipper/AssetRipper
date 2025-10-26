@@ -48,13 +48,21 @@ public class YamlWalker : AssetWalker
 		"m_PrefabInstance",
 	};
 
+	private const string Data = "data";
 	private const string First = "first";
 	private const string Second = "second";
 	private Stack<YamlContext> ContextStack { get; } = new();
 	public bool ExportingAssetImporter { private get; set; }
+	public bool UseHyphensInDictionaries { get; set; } = true;
 	private YamlMappingNode? CurrentMappingNode => ContextStack.Peek().MappingNode;
 	private YamlSequenceNode? CurrentSequenceNode => ContextStack.Peek().SequenceNode;
 	private string? CurrentFieldName => ContextStack.Peek().FieldName;
+
+	public YamlWalker WithUnityVersion(UnityVersion version)
+	{
+		UseHyphensInDictionaries = version.GreaterThanOrEquals(5, 4);
+		return this;
+	}
 
 	public YamlDocument ExportYamlDocument(IUnityObjectBase asset, long exportID)
 	{
@@ -223,7 +231,7 @@ public class YamlWalker : AssetWalker
 
 	public override bool EnterDictionary<TKey, TValue>(IReadOnlyCollection<KeyValuePair<TKey, TValue>> dictionary)
 	{
-		if (IsValidDictionaryKey<TKey>())
+		if (IsValidDictionaryKey<TKey>() || !UseHyphensInDictionaries)
 		{
 			return EnterMap();
 		}
@@ -235,7 +243,7 @@ public class YamlWalker : AssetWalker
 
 	public override void ExitDictionary<TKey, TValue>(IReadOnlyCollection<KeyValuePair<TKey, TValue>> dictionary)
 	{
-		if (IsValidDictionaryKey<TKey>())
+		if (IsValidDictionaryKey<TKey>() || !UseHyphensInDictionaries)
 		{
 			ExitMap();
 		}
@@ -252,6 +260,16 @@ public class YamlWalker : AssetWalker
 			Debug.Assert(CurrentMappingNode is not null);
 			Debug.Assert(CurrentSequenceNode is null);
 			Debug.Assert(CurrentFieldName is null);
+		}
+		else if (!UseHyphensInDictionaries)
+		{
+			Debug.Assert(CurrentMappingNode is not null);
+			Debug.Assert(CurrentSequenceNode is null);
+			Debug.Assert(CurrentFieldName is null);
+			YamlMappingNode node = new();
+			CurrentMappingNode.Add(Data, node);
+			ContextStack.Push(new(node));
+			ContextStack.Push(new(node, First));
 		}
 		else
 		{

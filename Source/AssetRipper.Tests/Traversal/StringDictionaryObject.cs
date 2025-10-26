@@ -17,26 +17,6 @@ internal sealed class StringDictionaryObject : CustomInjectedObjectBase
 		--- !u!0 &1
 		StringDictionaryObject:
 		  stringDictionary:
-		  - key1: value1
-		  - key2: value2
-		  normalDictionary:
-		  - _BumpMap:
-		      m_Texture: {m_FileID: 0, m_PathID: 0}
-		      m_Scale: {x: 1, y: 1}
-		      m_Offset: {x: 0, y: 0}
-		  - _DetailAlbedoMap:
-		      m_Texture: {m_FileID: 0, m_PathID: 0}
-		      m_Scale: {x: 1, y: 1}
-		      m_Offset: {x: 0, y: 0}
-
-		""";
-
-	public const string YamlWithoutHyphens = """
-		%YAML 1.1
-		%TAG !u! tag:unity3d.com,2011:
-		--- !u!0 &1
-		StringDictionaryObject:
-		  stringDictionary:
 		    key1: value1
 		    key2: value2
 		  normalDictionary:

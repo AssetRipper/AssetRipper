@@ -13,13 +13,8 @@ internal sealed class PrimitiveListObject : CustomInjectedObjectBase
 		%TAG !u! tag:unity3d.com,2011:
 		--- !u!0 &1
 		PrimitiveListObject:
-		  emptyList: []
-		  list:
-		  - 1
-		  - 1
-		  - 2
-		  - 3
-		  - 5
+		  emptyList:
+		  list: 0100000001000000020000000300000005000000
 
 		""";
 

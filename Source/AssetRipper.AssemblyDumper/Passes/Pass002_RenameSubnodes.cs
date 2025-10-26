@@ -359,7 +359,17 @@ public static class Pass002_RenameSubnodes
 		}
 		else if (node.TypeName == "ExposedReferenceTable")
 		{
-			node.TryRenameSubNode("m_References", isEditor ? "m_References_Editor" : "m_References_Release");
+			if (isEditor)
+			{
+				// Ensure yaml is emitted as a sequence, rather than a mapping.
+				// There does not seem to be any indication in the type trees about this,
+				// but nonetheless it is required for correct serialization.
+				// https://github.com/Unity-Technologies/Timeline-MessageMarker/blob/711db46387de66c746e9027090c2de786fe99855/Assets/TestScene.unity#L228
+				// https://github.com/AssetRipper/AssetRipper/issues/1667#issuecomment-2646056403
+				// This appears to be a unique case.
+				node.GetSubNodeByName("m_References").TypeName = "vector";
+			}
+			node.RenameSubNode("m_References", isEditor ? "m_References_Editor" : "m_References_Release");
 		}
 		else if (node.TypeName == "ExtensionPropertyValue")
 		{
