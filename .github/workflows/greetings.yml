@@ -11,6 +11,6 @@ jobs:
     steps:
       - uses: actions/first-interaction@v3
         with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          issue-message: "Thank you for submitting your first issue here. Please be sure you have uploaded your `AssetRipper.log` file. It is in the same folder as the exe file. :)"
-          pr-message: "Thank you for making your first pull request! We greatly appreciate your enthusiam to contribute and will look at this as soon as we can."
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          issue_message: "Thank you for submitting your first issue here. Please be sure you have uploaded your `AssetRipper.log` file. It is in the same folder as the exe file. :)"
+          pr_message: "Thank you for making your first pull request! We greatly appreciate your enthusiam to contribute and will look at this as soon as we can."
