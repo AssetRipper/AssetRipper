@@ -83,6 +83,6 @@ public static class GPUPlatformExtensions
 {
 	public static bool IsDirectX(this GPUPlatform platform)
 	{
-		return platform is GPUPlatform.d3d9 or GPUPlatform.d3d11 or GPUPlatform.d3d11_9x or GPUPlatform.xboxone_d3d12;
+		return platform is GPUPlatform.d3d9 or GPUPlatform.d3d11 or GPUPlatform.d3d11_9x;
 	}
 }
