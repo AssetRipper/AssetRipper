@@ -37,7 +37,7 @@ jobs:
         run: ls -R ./Source/0Bins/obj/AssetRipper.GUI.Free/Release/
 
       - name: Upload
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: Analysis
           path: |
