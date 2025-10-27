@@ -20,7 +20,7 @@ public sealed class ResourceFile : FileBase
 
 	public ResourceFile(string filePath, string name, FileSystem fileSystem)
 	{
-		Stream = SmartStream.OpenRead(filePath, fileSystem);
+		Stream = SmartStream.OpenReadMulti(filePath, fileSystem);
 		FilePath = filePath;
 		Name = name;
 	}
