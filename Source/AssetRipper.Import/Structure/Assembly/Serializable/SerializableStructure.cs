@@ -198,18 +198,16 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 
 	public override void CopyValues(IUnityAssetBase? source, PPtrConverter converter)
 	{
+		CopyValues((SerializableStructure?)source, converter);
+	}
+
+	public void CopyValues(SerializableStructure? source, PPtrConverter converter)
+	{
 		if (source is null)
 		{
 			Reset();
+			return;
 		}
-		else
-		{
-			CopyValues((SerializableStructure)source, converter);
-		}
-	}
-
-	public void CopyValues(SerializableStructure source, PPtrConverter converter)
-	{
 		if (source.Depth != Depth)
 		{
 			throw new ArgumentException($"Depth {source.Depth} doesn't match with {Depth}", nameof(source));
