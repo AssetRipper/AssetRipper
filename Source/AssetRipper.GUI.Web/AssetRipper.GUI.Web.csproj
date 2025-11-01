@@ -33,7 +33,7 @@
 		<PackageReference Include="Microsoft.OpenApi" Version="1.6.24" />
 		<PackageReference Include="Ookii.CommandLine" Version="5.0.0" />
 		<PackageReference Include="oqo0.SwaggerThemes" Version="1.4.3" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.3" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
 	</ItemGroup>
 
 </Project>
