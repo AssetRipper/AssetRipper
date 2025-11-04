@@ -343,4 +343,18 @@ public static class ShaderGpuProgramTypeExtensions
 
 		throw new NotSupportedException($"Unsupported gpu program type {_this} [{platform}, {type}]");
 	}
+
+	public static int ToShaderModelVersion(this ShaderGpuProgramType _this)
+	{
+		return _this switch
+		{
+			ShaderGpuProgramType.DX9VertexSM20 or ShaderGpuProgramType.DX9PixelSM20 => 20,
+			ShaderGpuProgramType.DX9VertexSM30 or ShaderGpuProgramType.DX9PixelSM30 => 30,
+			ShaderGpuProgramType.DX10Level9Vertex or ShaderGpuProgramType.DX10Level9Pixel => 40,
+			ShaderGpuProgramType.DX11VertexSM40 or ShaderGpuProgramType.DX11PixelSM40 or ShaderGpuProgramType.DX11GeometrySM40 => 40,
+			ShaderGpuProgramType.DX11VertexSM50 or ShaderGpuProgramType.DX11PixelSM50 or ShaderGpuProgramType.DX11GeometrySM50 or
+			ShaderGpuProgramType.DX11HullSM50 or ShaderGpuProgramType.DX11DomainSM50 => 50,
+			_ => default,
+		};
+	}
 }
