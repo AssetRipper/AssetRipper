@@ -1,6 +1,7 @@
 ﻿using SharpCompress.Archives;
 using SharpCompress.Archives.Zip;
 using SharpCompress.Readers;
+using SharpCompress.Readers.Zip;
 using System.Xml.Linq;
 
 namespace AssetRipper.AssemblyDumper.NuGetFixer;
@@ -69,8 +70,8 @@ internal static class Program
 
 	private static void ExtractZip(string zipFilePath, string targetDirectory)
 	{
-		using ZipArchive archive = ZipArchive.Open(zipFilePath);
-		using IReader reader = archive.ExtractAllEntries();
+		using FileStream stream = File.OpenRead(zipFilePath);
+		using ZipReader reader = ZipReader.Open(stream);
 		reader.WriteAllToDirectory(targetDirectory, new SharpCompress.Common.ExtractionOptions()
 		{
 			ExtractFullPath = true,

@@ -54,13 +54,9 @@ internal static class Program
 	private static byte[] DecompressZipFile(Stream inputStream)
 	{
 		using ZipArchive archive = ZipArchive.Open(inputStream);
-		foreach (ZipArchiveEntry entry in archive.Entries.Where(entry => !entry.IsDirectory))
-		{
-			using MemoryStream outputStream = new();
-			entry.OpenEntryStream().CopyTo(outputStream);
-			return outputStream.ToArray();
-		}
-
-		throw new Exception("No file found in zip file");
+		ZipArchiveEntry entry = archive.Entries.Where(entry => !entry.IsDirectory).Single();
+		using MemoryStream outputStream = new();
+		entry.OpenEntryStream().CopyTo(outputStream);
+		return outputStream.ToArray();
 	}
 }
