@@ -1,4 +1,5 @@
-﻿using AssetRipper.SourceGenerated.Subclasses.SerializedPlayerSubProgram;
+﻿using AssetRipper.SourceGenerated.Extensions.Enums.Shader.GpuProgramType;
+using AssetRipper.SourceGenerated.Subclasses.SerializedPlayerSubProgram;
 using AssetRipper.SourceGenerated.Subclasses.SerializedProgram;
 
 namespace AssetRipper.SourceGenerated.Extensions;
@@ -64,4 +65,15 @@ public static class SerializedProgramExtensions
 		return [];
 	}
 
+	public static int MaxShaderModelVersion(this ISerializedProgram program, UnityVersion version)
+	{
+		if (program.Has_PlayerSubPrograms())
+		{
+			return program.GetPlayerSubPrograms().Max(p => p.GetProgramType(version).ToShaderModelVersion());
+		}
+		else
+		{
+			return program.SubPrograms.Max(p => p.GetProgramType(version).ToShaderModelVersion());
+		}
+	}
 }
