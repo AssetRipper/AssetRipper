@@ -30,7 +30,7 @@
 		<PackageReference Include="AssetRipper.NativeDialogs" Version="1.0.1" />
 		<PackageReference Include="AssetRipper.Text.Html" Version="2.1.0" />
 		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.9" />
-		<PackageReference Include="Microsoft.OpenApi" Version="1.6.24" />
+		<PackageReference Include="Microsoft.OpenApi" Version="2.3.9" />
 		<PackageReference Include="Ookii.CommandLine" Version="5.0.0" />
 		<PackageReference Include="oqo0.SwaggerThemes" Version="1.4.3" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.3" />
