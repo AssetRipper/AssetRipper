@@ -144,5 +144,14 @@
     "text_asset_format_text": "純文字",
     "text_asset_format_text_description": "匯出為純文字檔案 (.txt)",
     "welcome_title": "歡迎來到 AssetRipper",
-    "asset_tab_font": "字型"
+    "asset_tab_font": "字型",
+    "asset_ripper_free": "AssetRipper 免費版",
+    "asset_bundle_name": "資源包名（Asset Bundle Name）",
+    "asset_tab_hex": "十六進制（Hex）",
+    "an_error_occured_during_decompilation": "在反編譯期間發生錯誤。",
+    "appreciation_message": "感謝您對 AssetRipper 的支持！",
+    "asset_tab_video": "影檔",
+    "asset_tab_information": "資訊",
+    "asset_tab_model": "模型",
+    "all": "全部"
 }
