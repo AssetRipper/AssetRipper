@@ -8,6 +8,15 @@ For performance, mscorlib and any assemblies whose names start with System or Un
 
 From a quick glance, the success rate seems to be currently between 10 and 20 percent of methods on x86 games. Other platforms have lower rates of recovery. Improvements are ongoing.
 
+## Shader Decompilation
+
+This is an experimental shader decompiler that strives to support all variants and preserve perfect semantics. However, it's not yet polished, so expect it to throw errors while ripping some shaders and for there to be compilation errors in Unity Editor. Please report any issues on [GitHub](https://github.com/AssetRipper/AssetRipper/issues).
+
+**Platform Support:**
+
+* Vulkan shaders can be decompiled on any platform.
+* DirectX shaders can only be decompiled on Windows computers.
+
 ## Static Mesh Separation
 
 Objects marked as static in a scene get merged when the game is compiled. This is an optimization Unity uses to reduce draw calls. Unfortunately, it also makes game recovery more difficult. This feature reverses that process to the best of its ability.
