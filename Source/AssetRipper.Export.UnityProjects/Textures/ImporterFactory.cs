@@ -101,7 +101,7 @@ public static class ImporterFactory
 			{
 				case ITexture2D texture2D:
 					{
-						EnableMipMap = texture2D.Has_MipCount_C28() && texture2D.MipCount_C28 > 1 || texture2D.Has_MipMap_C28() && texture2D.MipMap_C28;
+						EnableMipMap = texture2D.Mips;
 						SRGBTexture = texture2D.ColorSpace_C28E == ColorSpace.Linear;
 						StreamingMipmaps = texture2D.StreamingMipmaps_C28;
 						StreamingMipmapsPriority = texture2D.StreamingMipmapsPriority_C28;
