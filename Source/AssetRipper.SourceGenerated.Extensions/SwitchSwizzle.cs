@@ -76,7 +76,7 @@ public static class SwitchSwizzle
 						int gobDstY = (i * blockHeight + k) * GobYTexelCount + gobY;
 						int gobDstLinPos = gobDstY * blockCountX * TexelByteSize + gobDstX * TexelByteSize;
 
-						Array.Copy(data, srcPos, newData, gobDstLinPos, TexelByteSize);
+						data.AsSpan(srcPos, TexelByteSize).CopyTo(newData.AsSpan(gobDstLinPos, TexelByteSize));
 
 						srcPos += TexelByteSize;
 					}
@@ -84,8 +84,24 @@ public static class SwitchSwizzle
 			}
 		}
 
+		// We need to remove padding from the data now, so that it matches the expected layout for later decoding.
+		// The resulting arrays will have extra unused data at the end, but we need to leave it there
+		// because TextureConverter expects the data to be at least texture.CompleteImageSize bytes long.
+
 		if (blockSize.Height > 1)
 		{
+			int dstBlockCountX = CeilDivide(texture.Width_C28, blockSize.Width);
+			if (dstBlockCountX != blockCountX)
+			{
+				byte[] croppedImageData = new byte[newData.Length];
+				int dstBlockCountY = CeilDivide(texture.Height_C28, blockSize.Height);
+				for (int y = 0; y < dstBlockCountY; y++)
+				{
+					newData.AsSpan(y * blockCountX * TexelByteSize, dstBlockCountX * TexelByteSize).CopyTo(croppedImageData.AsSpan(y * dstBlockCountX * TexelByteSize));
+				}
+				return croppedImageData;
+			}
+
 			return newData;
 		}
 
@@ -95,15 +111,35 @@ public static class SwitchSwizzle
 			return newData;
 		}
 
-		// This will have extra unused data at the end, but we need to leave it there
-		// because TextureConverter expects the data to be at least texture.CompleteImageSize bytes long.
 		byte[] croppedData = new byte[newData.Length];
+		int rowBytesSrc = paddedSize.Width * pixelSize;
+		int rowBytesDst = texture.Width_C28 * pixelSize;
 		for (int y = 0; y < texture.Height_C28; y++)
 		{
-			Array.Copy(newData, y * paddedSize.Width * pixelSize, croppedData, y * texture.Width_C28 * pixelSize, texture.Width_C28 * pixelSize);
+			newData.AsSpan(y * rowBytesSrc, rowBytesDst).CopyTo(croppedData.AsSpan(y * rowBytesDst, rowBytesDst));
 		}
 
-		return croppedData;
+		if (realFormat == texture.Format_C28E)
+		{
+			return croppedData;
+		}
+
+		// Convert RGBA to RGB
+		Debug.Assert(pixelSize % 4 == 0);
+		int actualPixelSize = pixelSize / 4 * 3;
+		byte[] finalData = new byte[croppedData.Length];
+		for (int y = 0; y < texture.Height_C28; y++)
+		{
+			int srcOffset = y * texture.Width_C28 * pixelSize;
+			int dstOffset = y * texture.Width_C28 * actualPixelSize;
+			for (int x = 0; x < texture.Width_C28; x++)
+			{
+				int srcIndex = srcOffset + x * pixelSize;
+				int dstIndex = dstOffset + x * actualPixelSize;
+				croppedData.AsSpan(srcIndex, actualPixelSize).CopyTo(finalData.AsSpan(dstIndex, actualPixelSize));
+			}
+		}
+		return finalData;
 	}
 
 	/// <remarks>
@@ -153,15 +189,12 @@ public static class SwitchSwizzle
 		return 1 << new EndianSpanReader(platformBlob.AsSpan(8), endianType).ReadInt32();
 	}
 
-	private static TextureFormat GetCorrectedSwitchTextureFormat(TextureFormat format)
+	private static TextureFormat GetCorrectedSwitchTextureFormat(TextureFormat format) => format switch
 	{
-		// This is suspicious. I didn't encounter any RGB24 textures in the files I have available.
-		// Assuming it's correct, we likely need additional code in this file to convert RGBA pixels to RGB.
-		// Also, RGB48 might need similar treatment.
-		return format switch
-		{
-			TextureFormat.RGB24 => TextureFormat.RGBA32,
-			_ => format
-		};
-	}
+		TextureFormat.RGB24 => TextureFormat.RGBA32,
+		TextureFormat.RGB48 => TextureFormat.RGBA64,
+		TextureFormat.RGB24_SIGNED => TextureFormat.RGBA32_SIGNED,
+		TextureFormat.RGB48_SIGNED => TextureFormat.RGBA64_SIGNED,
+		_ => format
+	};
 }
