@@ -34,8 +34,7 @@ public static class SwitchSwizzle
 
 	public static byte[] Unswizzle(ITexture2D texture, byte[] data)
 	{
-		// Just in case
-		if (texture.Mips || texture.ImageCount_C28 != 1)
+		if (texture.ImageCount_C28 != 1)
 		{
 			return data;
 		}
