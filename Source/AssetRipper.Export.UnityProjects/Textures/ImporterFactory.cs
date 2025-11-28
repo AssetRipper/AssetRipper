@@ -27,7 +27,11 @@ public static class ImporterFactory
 		instance.MipMaps.MipMapFadeDistanceStart = 1;
 		instance.MipMaps.MipMapFadeDistanceEnd = 3;
 		instance.BumpMap.HeightScale = .25f;
-		instance.GenerateCubemapE = TextureImporterGenerateCubemap.AutoCubemap;
+		instance.GenerateCubemapE = origin is ICubemap
+			? TextureImporterGenerateCubemap.FullCubemap
+			: instance.Has_TextureShape()
+				? TextureImporterGenerateCubemap.AutoCubemap
+				: TextureImporterGenerateCubemap.None;
 		instance.StreamingMipmaps = data.StreamingMipmaps ? 1 : 0;
 		instance.StreamingMipmapsPriority = data.StreamingMipmapsPriority;
 		instance.IsReadable = data.IsReadable ? 1 : 0;
@@ -52,7 +56,9 @@ public static class ImporterFactory
 		instance.AlphaUsageE = TextureImporterAlphaSource.FromInput;
 		instance.AlphaIsTransparency = 1;
 		instance.SpriteTessellationDetail = -1;
-		instance.TextureTypeE = data.TextureType;
+		instance.TextureTypeE = instance.Has_TextureShape() || origin is not ICubemap
+			? data.TextureType
+			: TextureImporterType.Advanced;
 		instance.TextureShapeE = data.TextureShape;
 
 		ITextureImporterPlatformSettings platformSettings = instance.PlatformSettings.AddNew();
