@@ -130,13 +130,13 @@ public sealed class DirectBitmap<TColor, TChannel> : DirectBitmap
 	{
 		if (UseFastBmp)
 		{
-			if (typeof(TColor) == typeof(ColorBGRA32))
+			if (typeof(TColor) == typeof(ColorBGRA<byte>))
 			{
 				BmpWriter.WriteBmp(Data, Width, Height * Depth, stream);
 			}
 			else
 			{
-				RgbConverter.Convert<TColor, TChannel, ColorBGRA32, byte>(Bits, Width, Height * Depth, out byte[] data);
+				RgbConverter.Convert<TColor, TChannel, ColorBGRA<byte>, byte>(Bits, Width, Height * Depth, out byte[] data);
 				BmpWriter.WriteBmp(data, Width, Height * Depth, stream);
 			}
 		}

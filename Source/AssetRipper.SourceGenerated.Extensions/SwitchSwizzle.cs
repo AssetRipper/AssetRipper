@@ -173,6 +173,7 @@ public static class SwitchSwizzle
 		TextureFormat.RFloat => new Size(4, 1),
 		TextureFormat.RGFloat => new Size(2, 1),
 		TextureFormat.RGBAFloat => new Size(1, 1),
+		TextureFormat.ARGBFloat => new Size(1, 1),
 		_ => null,
 	};
 
@@ -194,6 +195,7 @@ public static class SwitchSwizzle
 		TextureFormat.RGB48 => TextureFormat.RGBA64,
 		TextureFormat.RGB24_SIGNED => TextureFormat.RGBA32_SIGNED,
 		TextureFormat.RGB48_SIGNED => TextureFormat.RGBA64_SIGNED,
+		TextureFormat.BGR24 => TextureFormat.BGRA32_14,
 		_ => format
 	};
 }

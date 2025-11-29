@@ -199,11 +199,13 @@ public static class TextureConverter
 			TextureFormat.ARGB4444 => TryConvertToBitmap<ColorARGB16, byte>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
 			TextureFormat.RGB24 => TryConvertToBitmap<ColorRGB<byte>, byte>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
 			TextureFormat.RGBA32 => TryConvertToBitmap<ColorRGBA<byte>, byte>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
-			TextureFormat.ARGB32 => TryConvertToBitmap<ColorARGB32, byte>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
+			TextureFormat.ARGB32 => TryConvertToBitmap<ColorARGB<byte>, byte>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
+			TextureFormat.ARGBFloat => TryConvertToBitmap<ColorARGB<float>, float>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
 			TextureFormat.RGB565 => TryConvertToBitmap<ColorRGB16, byte>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
+			TextureFormat.BGR24 => TryConvertToBitmap<ColorBGR<byte>, byte>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
 			TextureFormat.R16 => TryConvertToBitmap<ColorR<ushort>, ushort>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
 			TextureFormat.RGBA4444 => TryConvertToBitmap<ColorRGBA16, byte>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
-			TextureFormat.BGRA32_14 or TextureFormat.BGRA32_37 => TryConvertToBitmap<ColorBGRA32, byte>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
+			TextureFormat.BGRA32_14 or TextureFormat.BGRA32_37 => TryConvertToBitmap<ColorBGRA<byte>, byte>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
 			TextureFormat.RHalf => TryConvertToBitmap<ColorR<Half>, Half>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
 			TextureFormat.RGHalf => TryConvertToBitmap<ColorRG<Half>, Half>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
 			TextureFormat.RGBAHalf => TryConvertToBitmap<ColorRGBA<Half>, Half>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
@@ -442,11 +444,17 @@ public static class TextureConverter
 				return RgbConverter.Convert<ColorRGBA<byte>, byte, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
 
 			case TextureFormat.ARGB32:
-				return RgbConverter.Convert<ColorARGB32, byte, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
+				return RgbConverter.Convert<ColorARGB<byte>, byte, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
+
+			case TextureFormat.ARGBFloat:
+				return RgbConverter.Convert<ColorARGB<float>, float, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
+
+			case TextureFormat.BGR24:
+				return RgbConverter.Convert<ColorBGR<byte>, byte, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
 
 			case TextureFormat.BGRA32_14:
 			case TextureFormat.BGRA32_37:
-				return RgbConverter.Convert<ColorBGRA32, byte, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
+				return RgbConverter.Convert<ColorBGRA<byte>, byte, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
 
 			case TextureFormat.R16:
 				return RgbConverter.Convert<ColorR<ushort>, ushort, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
