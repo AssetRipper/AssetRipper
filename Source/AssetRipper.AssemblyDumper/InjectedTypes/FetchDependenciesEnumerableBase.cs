@@ -1,12 +1,11 @@
 ﻿#nullable disable
 
-using AssetRipper.Assets;
 using AssetRipper.Assets.Metadata;
 using System.Collections;
 
 namespace AssetRipper.AssemblyDumper.InjectedTypes;
 
-internal abstract class FetchDependenciesEnumerableBase<T> : IEnumerable<(string, PPtr)>, IEnumerator<(string, PPtr)> where T : IUnityAssetBase
+internal abstract class FetchDependenciesEnumerableBase : IEnumerable<(string, PPtr)>, IEnumerator<(string, PPtr)>
 {
 	private bool _hasBeenUsed;
 
@@ -14,11 +13,8 @@ internal abstract class FetchDependenciesEnumerableBase<T> : IEnumerable<(string
 
 	private readonly int _initialThreadId;
 
-	protected readonly T _this;
-
-	public FetchDependenciesEnumerableBase(T @this)
+	protected FetchDependenciesEnumerableBase()
 	{
-		_this = @this;
 		_initialThreadId = Environment.CurrentManagedThreadId;
 	}
 
@@ -32,7 +28,7 @@ internal abstract class FetchDependenciesEnumerableBase<T> : IEnumerable<(string
 
 	public IEnumerator<(string, PPtr)> GetEnumerator()
 	{
-		FetchDependenciesEnumerableBase<T> result;
+		FetchDependenciesEnumerableBase result;
 		if (!_hasBeenUsed && _initialThreadId == Environment.CurrentManagedThreadId)
 		{
 			result = this;
@@ -51,7 +47,7 @@ internal abstract class FetchDependenciesEnumerableBase<T> : IEnumerable<(string
 
 	void IEnumerator.Reset() => throw new NotSupportedException();
 
-	private protected abstract FetchDependenciesEnumerableBase<T> CreateNew();
+	private protected abstract FetchDependenciesEnumerableBase CreateNew();
 }
 
 #nullable enable

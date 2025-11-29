@@ -26,7 +26,7 @@ internal static class WalkingHelper
 		{
 			walker.VisitPrimitive(pair.Key);
 			walker.DividePair(pair);
-			component.WalkRelease(walker);
+			component.WalkEditor(walker);
 			walker.ExitPair(pair);
 		}
 	}
@@ -38,7 +38,7 @@ internal static class WalkingHelper
 		{
 			walker.VisitPrimitive(pair.Key);
 			walker.DividePair(pair);
-			component.WalkRelease(walker);
+			component.WalkStandard(walker);
 			walker.ExitPair(pair);
 		}
 	}

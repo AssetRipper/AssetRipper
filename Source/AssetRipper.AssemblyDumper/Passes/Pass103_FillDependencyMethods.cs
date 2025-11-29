@@ -11,9 +11,9 @@ public static partial class Pass103_FillDependencyMethods
 {
 	public static void DoPass()
 	{
-		TypeDefinition injectedBaseType = SharedState.Instance.InjectHelperType(typeof(FetchDependenciesEnumerableBase<>));
+		TypeDefinition injectedBaseType = SharedState.Instance.InjectHelperType(typeof(FetchDependenciesEnumerableBase));
 		FieldDefinition currentField = injectedBaseType.Fields.First(t => t.Name == "_current");
-		FieldDefinition thisField = injectedBaseType.Fields.First(t => t.Name == "_this");
+		MethodDefinition baseConstructor = injectedBaseType.GetDefaultConstructor();
 
 		ITypeDefOrRef commonPPtrTypeRef = SharedState.Instance.Importer.ImportType(typeof(PPtr));
 		ITypeDefOrRef ienumerableRef = SharedState.Instance.Importer.ImportType(typeof(IEnumerable<>));
@@ -39,7 +39,7 @@ public static partial class Pass103_FillDependencyMethods
 				CilInstructionCollection instructions = method.GetInstructions();
 				if (anyPPtrs)
 				{
-					MethodDefinition enumerableConstructor = MakeEnumerableType(injectedBaseType, currentField, thisField, instance, rootNode);
+					MethodDefinition enumerableConstructor = MakeEnumerableType(injectedBaseType, currentField, baseConstructor, instance, rootNode);
 					instructions.Add(CilOpCodes.Ldarg_0);
 					instructions.Add(CilOpCodes.Newobj, enumerableConstructor);
 					instructions.Add(CilOpCodes.Ret);
@@ -53,24 +53,26 @@ public static partial class Pass103_FillDependencyMethods
 		}
 	}
 
-	private static MethodDefinition MakeEnumerableType(TypeDefinition injectedBaseType, FieldDefinition currentField, FieldDefinition thisField, GeneratedClassInstance instance, TypeNode rootNode)
+	private static MethodDefinition MakeEnumerableType(TypeDefinition injectedBaseType, FieldDefinition currentField, MethodDefinition baseConstructor, GeneratedClassInstance instance, TypeNode rootNode)
 	{
-		ITypeDefOrRef baseType = injectedBaseType.MakeGenericInstanceType(instance.Type.ToTypeSignature()).ToTypeDefOrRef();
 		TypeDefinition enumerableType = new(
 			null,
 			"FetchDependenciesEnumerable",
 			TypeAttributes.NestedPrivate | TypeAttributes.Sealed,
-			baseType);
+			injectedBaseType);
 		instance.Type.NestedTypes.Add(enumerableType);
+
+		FieldDefinition thisField = enumerableType.AddField("_this", instance.Type.ToTypeSignature(), false, Visibility.Private);
 
 		MethodDefinition enumerableConstructor = enumerableType.AddEmptyConstructor();
 		enumerableConstructor.AddParameter(instance.Type.ToTypeSignature(), "_this");
 		{
 			CilInstructionCollection instructions = enumerableConstructor.GetInstructions();
 			instructions.Add(CilOpCodes.Ldarg_0);
-			instructions.Add(CilOpCodes.Ldarg_1);
-			IMethodDefOrRef baseConstructor = new MemberReference(baseType, ".ctor", injectedBaseType.GetConstructor(1).Signature);
 			instructions.Add(CilOpCodes.Call, baseConstructor);
+			instructions.Add(CilOpCodes.Ldarg_0);
+			instructions.Add(CilOpCodes.Ldarg_1);
+			instructions.Add(CilOpCodes.Stfld, thisField);
 			instructions.Add(CilOpCodes.Ret);
 		}
 
@@ -80,7 +82,7 @@ public static partial class Pass103_FillDependencyMethods
 			{
 				CilInstructionCollection instructions = createNewMethod.GetInstructions();
 				instructions.Add(CilOpCodes.Ldarg_0);
-				instructions.Add(CilOpCodes.Ldfld, new MemberReference(baseType, thisField.Name, thisField.Signature));
+				instructions.Add(CilOpCodes.Ldfld, thisField);
 				instructions.Add(CilOpCodes.Newobj, enumerableConstructor);
 				instructions.Add(CilOpCodes.Ret);
 			}
@@ -93,8 +95,8 @@ public static partial class Pass103_FillDependencyMethods
 			{
 				Processor = moveNextMethod.GetInstructions(),
 				Type = enumerableType,
-				CurrentField = new MemberReference(baseType, currentField.Name, currentField.Signature),
-				ThisField = new MemberReference(baseType, thisField.Name, thisField.Signature),
+				CurrentField = currentField,
+				ThisField = thisField,
 			};
 			TypeNodeHelper.ApplyAsRoot(rootNode, context);
 			context.Processor.OptimizeMacros();
