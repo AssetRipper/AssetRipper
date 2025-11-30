@@ -3,11 +3,15 @@
 	<PropertyGroup>
 		<ServerGarbageCollection>true</ServerGarbageCollection>
 		<OptimizationPreference>Size</OptimizationPreference>
-		<_UseClassicLinker>true</_UseClassicLinker>
 		<PublishAot>true</PublishAot>
 		<TrimmerSingleWarn>false</TrimmerSingleWarn>
 		<OutputPath>..\0Bins\AssetRipper.GUI.Free\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.GUI.Free\$(Configuration)\</IntermediateOutputPath>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<_UseClassicLinker>true</_UseClassicLinker>
+		<LinkerArg Condition="$([MSBuild]::IsOSPlatform('OSX'))" Include="-Wl,-ld_classic" />
 	</PropertyGroup>
 
 	<ItemGroup>
