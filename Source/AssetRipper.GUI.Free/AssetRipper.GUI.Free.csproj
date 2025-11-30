@@ -11,7 +11,10 @@
 
 	<PropertyGroup>
 		<_UseClassicLinker>true</_UseClassicLinker>
-		<LinkerArg Condition="$([MSBuild]::IsOSPlatform('OSX'))" Include="-Wl,-ld_classic" />
+	</PropertyGroup>
+
+	<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+		<LinkerArg Include="-Wl,-ld_classic" />
 	</PropertyGroup>
 
 	<ItemGroup>
