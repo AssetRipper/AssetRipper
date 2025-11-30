@@ -366,16 +366,27 @@ internal static partial class Pass105_CopyValuesMethods
 						}
 						else if (fieldTypeSignature is TypeDefOrRefSignature { Namespace: "AssetRipper.Primitives", Name: nameof(Utf8String) })
 						{
-							// m_Field = source.Property ?? Utf8String.Empty;
-							CilInstructionLabel stfldLabel = new();
-							instructions.Add(CilOpCodes.Ldarg_0);
-							instructions.Add(CilOpCodes.Ldarg_1);
-							instructions.Add(CilOpCodes.Callvirt, classProperty.Base.Definition.GetMethod!);
-							instructions.Add(CilOpCodes.Dup);
-							instructions.Add(CilOpCodes.Brtrue, stfldLabel);
-							instructions.Add(CilOpCodes.Pop);
-							instructions.Add(CilOpCodes.Call, new MemberReference(fieldTypeSignature.ToTypeDefOrRef(), "get_Empty", MethodSignature.CreateStatic(fieldTypeSignature)));
-							stfldLabel.Instruction = instructions.Add(CilOpCodes.Stfld, classProperty.BackingField);
+							if (classProperty.Base.AbsentRange.IsEmpty())
+							{
+								// m_Field = source.Property;
+								instructions.Add(CilOpCodes.Ldarg_0);
+								instructions.Add(CilOpCodes.Ldarg_1);
+								instructions.Add(CilOpCodes.Callvirt, classProperty.Base.Definition.GetMethod!);
+								instructions.Add(CilOpCodes.Stfld, classProperty.BackingField);
+							}
+							else
+							{
+								// m_Field = source.Property ?? Utf8String.Empty;
+								CilInstructionLabel stfldLabel = new();
+								instructions.Add(CilOpCodes.Ldarg_0);
+								instructions.Add(CilOpCodes.Ldarg_1);
+								instructions.Add(CilOpCodes.Callvirt, classProperty.Base.Definition.GetMethod!);
+								instructions.Add(CilOpCodes.Dup);
+								instructions.Add(CilOpCodes.Brtrue, stfldLabel);
+								instructions.Add(CilOpCodes.Pop);
+								instructions.Add(CilOpCodes.Call, utf8StringGetEmpty);
+								stfldLabel.Instruction = instructions.Add(CilOpCodes.Stfld, classProperty.BackingField);
+							}
 						}
 						else if (fieldTypeSignature is SzArrayTypeSignature arrayTypeSignature)
 						{
