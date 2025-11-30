@@ -47,6 +47,11 @@ public static class SerializedPassExtensions
 
 	public static int MaxShaderModelVersion(this ISerializedPass pass, UnityVersion version)
 	{
-		return pass.GetPrograms().Max(program => program.MaxShaderModelVersion(version));
+		int maxVersion = 0;
+		foreach (ISerializedProgram program in pass.GetPrograms())
+		{
+			maxVersion = int.Max(maxVersion, program.MaxShaderModelVersion(version));
+		}
+		return maxVersion;
 	}
 }
