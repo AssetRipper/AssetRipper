@@ -1,4 +1,6 @@
-﻿using SharpCompress.Archives.Zip;
+﻿using SharpCompress.Archives;
+using SharpCompress.Archives.Zip;
+using System.Diagnostics;
 using System.Net.Http;
 
 namespace AssetRipper.AssemblyDumper.Downloader;
@@ -26,6 +28,7 @@ internal static class Program
 			MemoryStream stream = await Download(url);
 			Console.WriteLine($"Decompressing {fileName}...");
 			byte[] data = DecompressZipFile(stream);
+			Debug.Assert(data.Length > 0, "Decompressed data is empty.");
 			foreach (string outputFolder in outputFolders)
 			{
 				Directory.CreateDirectory(outputFolder);
@@ -56,7 +59,7 @@ internal static class Program
 		using ZipArchive archive = ZipArchive.Open(inputStream);
 		ZipArchiveEntry entry = archive.Entries.Where(entry => !entry.IsDirectory).Single();
 		using MemoryStream outputStream = new();
-		entry.OpenEntryStream().CopyTo(outputStream);
+		entry.WriteTo(outputStream);
 		return outputStream.ToArray();
 	}
 }

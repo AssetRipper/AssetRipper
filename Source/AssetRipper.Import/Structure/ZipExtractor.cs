@@ -1,8 +1,8 @@
 ﻿using AssetRipper.Import.Logging;
 using AssetRipper.IO.Files;
+using SharpCompress.Archives;
+using SharpCompress.Archives.Zip;
 using SharpCompress.Common;
-using SharpCompress.Common.Zip;
-using SharpCompress.Readers.Zip;
 
 namespace AssetRipper.Import.Structure;
 
@@ -83,16 +83,15 @@ internal static class ZipExtractor
 	{
 		Logger.Info(LogCategory.Import, $"Decompressing files...{Environment.NewLine}\tFrom: {zipFilePath}{Environment.NewLine}\tTo: {outputDirectory}");
 		using Stream stream = fileSystem.File.OpenRead(zipFilePath);
-		using ZipReader reader = ZipReader.Open(stream);
-		while (reader.MoveToNextEntry())
+		using ZipArchive archive = ZipArchive.Open(stream);
+		foreach (ZipArchiveEntry entry in archive.Entries)
 		{
-			WriteEntryToDirectory(reader, outputDirectory, fileSystem);
+			WriteEntryToDirectory(entry, outputDirectory, fileSystem);
 		}
 	}
 
-	private static void WriteEntryToDirectory(ZipReader reader, string outputDirectory, FileSystem fileSystem)
+	private static void WriteEntryToDirectory(ZipArchiveEntry entry, string outputDirectory, FileSystem fileSystem)
 	{
-		ZipEntry entry = reader.Entry;
 		string filePath;
 		string fullOutputDirectory = fileSystem.Path.GetFullPath(outputDirectory);
 
@@ -128,7 +127,7 @@ internal static class ZipExtractor
 			}
 
 			using Stream stream = fileSystem.File.Create(filePath);
-			reader.WriteEntryTo(stream);
+			entry.WriteTo(stream);
 		}
 		else if (!fileSystem.Directory.Exists(filePath))
 		{
