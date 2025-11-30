@@ -14,7 +14,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
-		<_AllLinkerFlags Include="-Wl,-ld_classic" />
+		<AppBundleExtraOptions>$(AppBundleExtraOptions) --gcc_flags '-Wl,-ld_classic'</AppBundleExtraOptions>
 	</PropertyGroup>
 
 	<ItemGroup>
