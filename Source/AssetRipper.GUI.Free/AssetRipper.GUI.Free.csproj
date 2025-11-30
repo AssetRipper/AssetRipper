@@ -3,6 +3,7 @@
 	<PropertyGroup>
 		<ServerGarbageCollection>true</ServerGarbageCollection>
 		<OptimizationPreference>Size</OptimizationPreference>
+		<_UseClassicLinker>true</_UseClassicLinker>
 		<PublishAot>true</PublishAot>
 		<TrimmerSingleWarn>false</TrimmerSingleWarn>
 		<OutputPath>..\0Bins\AssetRipper.GUI.Free\$(Configuration)\</OutputPath>
