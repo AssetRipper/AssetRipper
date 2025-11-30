@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.OpenApi;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 
 namespace AssetRipper.GUI.Web.Documentation;
 
@@ -9,7 +9,7 @@ internal class SortDocumentPathsTransformer : IOpenApiDocumentTransformer
 	{
 		OpenApiPaths newPaths = new();
 		newPaths.Extensions = document.Paths.Extensions;
-		foreach ((string key, OpenApiPathItem value) in document.Paths.OrderBy(pair => pair.Key))
+		foreach ((string key, IOpenApiPathItem value) in document.Paths.OrderBy(pair => pair.Key))
 		{
 			newPaths.Add(key, value);
 		}

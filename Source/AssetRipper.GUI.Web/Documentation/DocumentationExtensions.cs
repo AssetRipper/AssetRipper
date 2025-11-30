@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 
 namespace AssetRipper.GUI.Web.Documentation;
 
@@ -21,7 +21,7 @@ internal static class DocumentationExtensions
 			Required = required,
 			Schema = new OpenApiSchema
 			{
-				Type = "string",
+				Type = JsonSchemaType.String,
 			},
 		});
 	}
