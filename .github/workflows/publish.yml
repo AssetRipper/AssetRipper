@@ -18,8 +18,8 @@ jobs:
           - { name: win_arm64, os: windows-latest, runtime: win-arm64, executable: AssetRipper.GUI.Free.exe }
           - { name: linux_x64, os: ubuntu-22.04, runtime: linux-x64, executable: AssetRipper.GUI.Free }
           - { name: linux_arm64, os: ubuntu-22.04-arm, runtime: linux-arm64, executable: AssetRipper.GUI.Free }
-          - { name: mac_x64, os: macos-latest, runtime: osx-x64, executable: AssetRipper.GUI.Free }
-          - { name: mac_arm64, os: macos-latest, runtime: osx-arm64, executable: AssetRipper.GUI.Free }
+          - { name: mac_x64, os: macos-14, runtime: osx-x64, executable: AssetRipper.GUI.Free }
+          - { name: mac_arm64, os: macos-14, runtime: osx-arm64, executable: AssetRipper.GUI.Free }
 
     steps:
       - uses: actions/checkout@v5
