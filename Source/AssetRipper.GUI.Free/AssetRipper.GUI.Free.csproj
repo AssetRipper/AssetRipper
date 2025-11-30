@@ -10,6 +10,15 @@
 		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.GUI.Free\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 
+	<ItemGroup>
+		<_MachLinkerArg Include="-ld_classic" />
+	</ItemGroup>
+
+	<PropertyGroup>
+		<!-- Xcode 16 warns on -ld_classic -->
+		<_IgnoreLinkerWarnings>true</_IgnoreLinkerWarnings>
+	</PropertyGroup>
+
 	<PropertyGroup>
 		<!-- https://learn.microsoft.com/en-us/dotnet/core/deploying/trimming/trimming-options#trim-framework-library-features -->
 		<EnableUnsafeBinaryFormatterSerialization>false</EnableUnsafeBinaryFormatterSerialization>
