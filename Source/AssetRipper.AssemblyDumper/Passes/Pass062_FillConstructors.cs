@@ -94,12 +94,15 @@ public static class Pass062_FillConstructors
 
 			if (field.Signature.FieldType is GenericInstanceTypeSignature generic)
 			{
+				// List, Dictionary, or pair
+				field.IsInitOnly = true;
 				instructions.Add(CilOpCodes.Ldarg_0);
 				instructions.Add(CilOpCodes.Newobj, GetDefaultConstructor(generic));
 				instructions.Add(CilOpCodes.Stfld, field);
 			}
 			else if (field.Signature.FieldType is SzArrayTypeSignature array)
 			{
+				// Array
 				instructions.Add(CilOpCodes.Ldarg_0);
 				MethodSpecification method = emptyArray.MakeGenericInstanceMethod(array.BaseType);
 				instructions.Add(CilOpCodes.Call, method);
@@ -107,12 +110,15 @@ public static class Pass062_FillConstructors
 			}
 			else if (field.Signature.FieldType.ToTypeDefOrRef() is TypeDefinition typeDef)
 			{
+				// Regular class type
+				field.IsInitOnly = true;
 				instructions.Add(CilOpCodes.Ldarg_0);
 				instructions.Add(CilOpCodes.Newobj, typeDef.GetDefaultConstructor());
 				instructions.Add(CilOpCodes.Stfld, field);
 			}
 			else if (field.Signature.FieldType is TypeDefOrRefSignature { Namespace: "AssetRipper.Primitives", Name: nameof(Utf8String) })
 			{
+				// Utf8String
 				instructions.Add(CilOpCodes.Ldarg_0);
 				instructions.Add(CilOpCodes.Call, emptyString);
 				instructions.Add(CilOpCodes.Stfld, field);
