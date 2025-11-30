@@ -63,6 +63,7 @@ public static partial class Pass103_FillDependencyMethods
 		instance.Type.NestedTypes.Add(enumerableType);
 
 		FieldDefinition thisField = enumerableType.AddField("_this", instance.Type.ToTypeSignature(), false, Visibility.Private);
+		thisField.IsInitOnly = true;
 
 		MethodDefinition enumerableConstructor = enumerableType.AddEmptyConstructor();
 		enumerableConstructor.AddParameter(instance.Type.ToTypeSignature(), "_this");
