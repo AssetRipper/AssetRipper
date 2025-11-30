@@ -10,23 +10,6 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<_UseClassicLinker>true</_UseClassicLinker>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
-		<AppBundleExtraOptions>$(AppBundleExtraOptions) -ld_classic</AppBundleExtraOptions>
-	</PropertyGroup>
-
-	<ItemGroup>
-		<_MachLinkerArg Include="-ld_classic" />
-	</ItemGroup>
-
-	<PropertyGroup>
-		<!-- Xcode 16 warns on -ld_classic -->
-		<_IgnoreLinkerWarnings>true</_IgnoreLinkerWarnings>
-	</PropertyGroup>
-
-	<PropertyGroup>
 		<!-- https://learn.microsoft.com/en-us/dotnet/core/deploying/trimming/trimming-options#trim-framework-library-features -->
 		<EnableUnsafeBinaryFormatterSerialization>false</EnableUnsafeBinaryFormatterSerialization>
 		<EnableUnsafeUTF7Encoding>false</EnableUnsafeUTF7Encoding>
