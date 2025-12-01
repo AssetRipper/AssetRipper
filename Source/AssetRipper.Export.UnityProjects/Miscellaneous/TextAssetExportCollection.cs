@@ -1,4 +1,4 @@
-﻿using AssetRipper.Assets;
+using AssetRipper.Assets;
 using AssetRipper.Export.Configuration;
 using AssetRipper.SourceGenerated.Classes.ClassID_1031;
 using AssetRipper.SourceGenerated.Classes.ClassID_49;
@@ -12,6 +12,11 @@ public sealed class TextAssetExportCollection : AssetExportCollection<ITextAsset
 	private const string TxtExtension = "txt";
 	private const string BytesExtension = "bytes";
 
+	private static readonly HashSet<string> DangerousExtensions = new(StringComparer.OrdinalIgnoreCase)
+	{
+		"cs", "dll", "exe", "bat", "cmd", "ps1", "vbs", "js", "msi", "scr", "com"
+	};
+
 	public TextAssetExportCollection(TextAssetExporter assetExporter, ITextAsset asset) : base(assetExporter, asset)
 	{
 	}
@@ -21,6 +26,10 @@ public sealed class TextAssetExportCollection : AssetExportCollection<ITextAsset
 		string? extension = asset.GetBestExtension();
 		if (extension is not null)
 		{
+			if (DangerousExtensions.Contains(extension))
+			{
+				return TxtExtension;
+			}
 			return extension;
 		}
 		return ((TextAssetExporter)AssetExporter).ExportMode switch
