@@ -24,6 +24,6 @@ internal sealed partial class Arguments
 	public string[]? LocalWebFiles { get; set; }
 
 	[CommandLineArgument(DefaultValue = false)]
-	[Description("If true, existing export directories will be automatically overwritten without confirmation.")]
+	[Description("If true, a browser window will not be launched automatically.")]
 	public bool Headless { get; set; }
 }

@@ -64,10 +64,10 @@ public static class WebApplicationLauncher
 			}
 		}
 
-		Launch(arguments.Port, arguments.Log, arguments.LogPath, arguments.Headless);
+		Launch(arguments.Port, arguments.Headless, arguments.Log, arguments.LogPath);
 	}
 
-	public static void Launch(int port = Defaults.Port, bool log = Defaults.Log, string? logPath = Defaults.LogPath, bool headless = Defaults.Headless)
+	public static void Launch(int port = Defaults.Port, bool headless = Defaults.Headless, bool log = Defaults.Log, string? logPath = Defaults.LogPath)
 	{
 		GameFileLoader.Headless = headless;
 

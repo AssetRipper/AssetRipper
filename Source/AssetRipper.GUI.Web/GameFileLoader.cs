@@ -129,7 +129,6 @@ public static class GameFileLoader
 	{
 		if (Headless)
 		{
-			Logger.Info(LogCategory.Export, "Allowing export directory overwrite due to headless mode argument.");
 			return true;
 		}
 		ConfirmationDialog.Options options = new()
