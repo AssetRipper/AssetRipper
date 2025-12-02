@@ -34,6 +34,7 @@ public static class WebApplicationLauncher
 		public const bool LaunchBrowser = true;
 		public const bool Log = true;
 		public const string? LogPath = null;
+		public const bool AllowExportOverwrite = false;
 	}
 
 	public static void Launch(string[] args)
@@ -64,11 +65,13 @@ public static class WebApplicationLauncher
 			}
 		}
 
-		Launch(arguments.Port, arguments.LaunchBrowser, arguments.Log, arguments.LogPath);
+		Launch(arguments.Port, arguments.LaunchBrowser, arguments.Log, arguments.LogPath, arguments.AllowExportOverwrite);
 	}
 
-	public static void Launch(int port = Defaults.Port, bool launchBrowser = Defaults.LaunchBrowser, bool log = Defaults.Log, string? logPath = Defaults.LogPath)
+	public static void Launch(int port = Defaults.Port, bool launchBrowser = Defaults.LaunchBrowser, bool log = Defaults.Log, string? logPath = Defaults.LogPath, bool allowExportOverwrite = Defaults.AllowExportOverwrite)
 	{
+		GameFileLoader.AllowExportOverwrite = allowExportOverwrite;
+
 		WelcomeMessage.Print();
 
 		if (log)

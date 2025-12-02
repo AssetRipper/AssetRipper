@@ -26,4 +26,8 @@ internal sealed partial class Arguments
 	[CommandLineArgument("local-web-file")]
 	[Description("Files provided with this option will replace online sources.")]
 	public string[]? LocalWebFiles { get; set; }
+
+	[CommandLineArgument(DefaultValue = false)]
+	[Description("If true, existing export directories will be automatically overwritten without confirmation.")]
+	public bool AllowExportOverwrite { get; set; }
 }
