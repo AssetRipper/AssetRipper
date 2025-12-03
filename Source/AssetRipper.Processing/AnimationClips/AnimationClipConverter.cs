@@ -191,7 +191,7 @@ public readonly partial struct AnimationClipConverter
 		ArrayPool<float>.Shared.Return(rentedArray);
 	}
 
-	private void ProcessConstant(IConstantClip constant, int preConstantCurves, float lastFrame)
+	private void ProcessConstant(ConstantClip constant, int preConstantCurves, float lastFrame)
 	{
 		float[] rentedArray = ArrayPool<float>.Shared.Rent(constant.Data.Count);
 		constant.Data.CopyTo(rentedArray);
@@ -528,7 +528,7 @@ public readonly partial struct AnimationClipConverter
 			m_pptrs.Add(curveData, curve);
 		}
 
-		IPPtr_Object value = ClipBindingConstant.PptrCurveMapping[index];
+		IPPtr_Object? value = index < 0 ? null : ClipBindingConstant.PptrCurveMapping[index];
 		IPPtrKeyframe key = curve.Curve.AddNew();
 		key.Time = time;
 		key.Value.CopyValues(value, new PPtrConverter(m_clip));
