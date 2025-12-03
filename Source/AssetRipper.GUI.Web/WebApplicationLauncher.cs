@@ -31,9 +31,9 @@ public static class WebApplicationLauncher
 	internal static class Defaults
 	{
 		public const int Port = 0;
-		public const bool LaunchBrowser = true;
 		public const bool Log = true;
 		public const string? LogPath = null;
+		public const bool Headless = false;
 	}
 
 	public static void Launch(string[] args)
@@ -64,11 +64,13 @@ public static class WebApplicationLauncher
 			}
 		}
 
-		Launch(arguments.Port, arguments.LaunchBrowser, arguments.Log, arguments.LogPath);
+		Launch(arguments.Port, arguments.Headless, arguments.Log, arguments.LogPath);
 	}
 
-	public static void Launch(int port = Defaults.Port, bool launchBrowser = Defaults.LaunchBrowser, bool log = Defaults.Log, string? logPath = Defaults.LogPath)
+	public static void Launch(int port = Defaults.Port, bool headless = Defaults.Headless, bool log = Defaults.Log, string? logPath = Defaults.LogPath)
 	{
+		GameFileLoader.Headless = headless;
+
 		WelcomeMessage.Print();
 
 		if (log)
@@ -122,7 +124,7 @@ public static class WebApplicationLauncher
 #if !DEBUG
 		app.UseMiddleware<ErrorHandlingMiddleware>();
 #endif
-		if (launchBrowser)
+		if (!headless)
 		{
 			app.Lifetime.ApplicationStarted.Register(() =>
 			{

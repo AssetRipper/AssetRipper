@@ -18,6 +18,7 @@ public static class GameFileLoader
 	public static GameBundle GameBundle => GameData!.GameBundle;
 	public static IAssemblyManager AssemblyManager => GameData!.AssemblyManager;
 	public static FullConfiguration Settings { get; } = LoadSettings();
+	public static bool Headless { get; set; }
 
 	public static ExportHandler ExportHandler
 	{
@@ -126,6 +127,10 @@ public static class GameFileLoader
 
 	private static async Task<bool> UserConsentsToDeletion()
 	{
+		if (Headless)
+		{
+			return true;
+		}
 		ConfirmationDialog.Options options = new()
 		{
 			Message = Localization.ExportDirectoryDeleteUserConfirmation,
