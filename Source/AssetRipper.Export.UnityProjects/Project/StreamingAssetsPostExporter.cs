@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Export.Configuration;
+using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Platforms;
 using AssetRipper.Processing;
@@ -11,6 +12,11 @@ public class StreamingAssetsPostExporter : IPostExporter
 	{
 		PlatformGameStructure? platform = gameData.PlatformStructure;
 		if (platform is null)
+		{
+			return;
+		}
+
+		if (settings.ImportSettings.StreamingAssetsMode == StreamingAssetsMode.Ignore)
 		{
 			return;
 		}
