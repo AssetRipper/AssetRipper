@@ -7,7 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AsmResolver.DotNet" Version="6.0.0-beta.4" />
+		<PackageReference Include="AsmResolver.DotNet" Version="6.0.0-beta.5" />
 		<PackageReference Include="AssetRipper.Gee.External.Capstone" Version="2.3.2" />
 		<PackageReference Include="AssetRipper.Mining.PredefinedAssets" Version="1.5.0" />
 		<PackageReference Include="AssetRipper.Primitives" Version="3.2.0" />
@@ -16,6 +16,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+  	<PackageReference Include="AssetRipper.CIL" Version="1.2.2" />
 		<ProjectReference Include="..\AssetRipper.Assets\AssetRipper.Assets.csproj" />
 		<ProjectReference Include="..\AssetRipper.Numerics\AssetRipper.Numerics.csproj" />
 		<ProjectReference Include="..\AssetRipper.SerializationLogic\AssetRipper.SerializationLogic.csproj" />
