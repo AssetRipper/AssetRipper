@@ -1,4 +1,4 @@
-﻿using AssetRipper.Assets;
+using AssetRipper.Assets;
 using AssetRipper.Assets.Cloning;
 using AssetRipper.IO.Files;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
@@ -32,15 +32,14 @@ public sealed partial class SpriteProcessor : IAssetProcessor
 			}
 			else if (asset is ISprite sprite)
 			{
+				ISpriteAtlas? atlas = sprite.SpriteAtlasP;
+				ProcessSprite(sprite);
 				ITexture2D? spriteTexture = sprite.TryGetTexture();
 				if (spriteTexture is not null)
 				{
 					SpriteInformationObject spriteInformationObject = factory.GetOrCreate(spriteTexture);
-					ISpriteAtlas? atlas = sprite.SpriteAtlasP;
 					spriteInformationObject.AddToDictionary(sprite, atlas);
 				}
-
-				ProcessSprite(sprite);
 			}
 			else if (asset is ISpriteAtlas atlas && atlas.RenderDataMap.Count > 0)
 			{

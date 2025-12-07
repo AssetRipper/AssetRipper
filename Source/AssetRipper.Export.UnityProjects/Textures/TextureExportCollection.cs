@@ -27,7 +27,10 @@ public class TextureExportCollection : AssetsExportCollection<ITexture2D>
 			foreach ((ISprite? sprite, ISpriteAtlas? _) in spriteInformationObject.Sprites)
 			{
 				Debug.Assert(sprite.TryGetTexture() == Asset);
-				AddAsset(sprite);
+				if (sprite.TryGetTexture() == Asset)
+				{
+					AddAsset(sprite);
+				}
 			}
 		}
 		AddAsset(spriteInformationObject);
@@ -39,7 +42,7 @@ public class TextureExportCollection : AssetsExportCollection<ITexture2D>
 		if (m_convert)
 		{
 			ITextureImporter importer = ImporterFactory.GenerateTextureImporter(container, texture);
-			AddSprites(container, importer, ((SpriteInformationObject?)Asset.MainAsset)!.Sprites);
+			AddSprites(container, importer, GetFilteredSpriteInfo());
 			return importer;
 		}
 		else
@@ -135,6 +138,24 @@ public class TextureExportCollection : AssetsExportCollection<ITexture2D>
 				AddIDToName(container, importer, textureSpriteInformation);
 			}
 		}
+	}
+
+	private IReadOnlyDictionary<ISprite, ISpriteAtlas?>? GetFilteredSpriteInfo()
+	{
+		SpriteInformationObject? group = (SpriteInformationObject?)Asset.MainAsset;
+		if (group is null)
+		{
+			return null;
+		}
+		var dict = new Dictionary<ISprite, ISpriteAtlas?>();
+		foreach (var kvp in group.Sprites)
+		{
+			if (kvp.Key.TryGetTexture() == Asset)
+			{
+				dict[kvp.Key] = kvp.Value;
+			}
+		}
+		return dict;
 	}
 
 	private static void AddSpriteSheet(ITextureImporter importer, IReadOnlyDictionary<ISprite, ISpriteAtlas?> textureSpriteInformation)
