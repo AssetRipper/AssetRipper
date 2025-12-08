@@ -22,7 +22,7 @@ jobs:
           - { name: mac_arm64, os: macos-14, runtime: osx-arm64, executable: AssetRipper.GUI.Free }
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
         with:
