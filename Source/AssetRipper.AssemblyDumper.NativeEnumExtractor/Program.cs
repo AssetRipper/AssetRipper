@@ -50,7 +50,7 @@ internal class Program
 		HashSet<EnumTypeRecord> records = new();
 		foreach (ICodeViewSymbol symbol in symbols)
 		{
-			if (symbol is ConstantSymbol constantSymbol && constantSymbol.Type is EnumTypeRecord enumRecord)
+			if (symbol is ConstantSymbol constantSymbol && constantSymbol.ConstantType is EnumTypeRecord enumRecord)
 			{
 				records.Add(enumRecord);
 			}
@@ -64,7 +64,7 @@ internal class Program
 		foreach (ICodeViewSymbol symbol in symbols)
 		{
 			if (symbol is ConstantSymbol constantSymbol
-				&& constantSymbol.Type is not null and not EnumTypeRecord
+				&& constantSymbol.ConstantType is not null and not EnumTypeRecord
 				&& IsValidName(constantSymbol.Name.ToString().Trim()))
 			{
 				records.Add(constantSymbol);
@@ -79,7 +79,7 @@ internal class Program
 		foreach (ICodeViewSymbol symbol in symbols)
 		{
 			if (symbol is UserDefinedTypeSymbol constantSymbol
-				&& constantSymbol.Type is ClassTypeRecord)
+				&& constantSymbol.SymbolType is ClassTypeRecord)
 			{
 				records.Add(constantSymbol);
 			}
@@ -129,7 +129,7 @@ internal class Program
 			switch (symbol)
 			{
 				case ConstantSymbol constantSymbol:
-					writer.WriteLine($"Constant, Value: {constantSymbol.Value} Type: {constantSymbol.Type?.LeafKind} Name: {constantSymbol.Name}");
+					writer.WriteLine($"Constant, Value: {constantSymbol.Value} Type: {constantSymbol.ConstantType?.LeafKind} Name: {constantSymbol.Name}");
 					break;
 				case PublicSymbol publicSymbol:
 					if (publicSymbol.IsCode)
@@ -139,7 +139,7 @@ internal class Program
 					writer.WriteLine($"Public, Function: {publicSymbol.IsFunction} Name: {publicSymbol.Name}");
 					break;
 				case UserDefinedTypeSymbol userDefinedTypeSymbol:
-					writer.WriteLine($"User Defined Type, {userDefinedTypeSymbol.Type?.LeafKind} Name: {userDefinedTypeSymbol.Name}");
+					writer.WriteLine($"User Defined Type, {userDefinedTypeSymbol.SymbolType?.LeafKind} Name: {userDefinedTypeSymbol.Name}");
 					break;
 				case UnknownSymbol unknownSymbol:
 					writer.WriteLine($"Unknown, Type: {unknownSymbol.CodeViewSymbolType} Size: {unknownSymbol.Data.Length}");
