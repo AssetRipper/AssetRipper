@@ -2,7 +2,7 @@ using AssetRipper.SerializationLogic.Extensions;
 
 namespace AssetRipper.SerializationLogic;
 
-public class EngineTypePredicates
+internal static class EngineTypePredicates
 {
 	private static readonly HashSet<string> TypesThatShouldHaveHadSerializableAttribute = new HashSet<string>
 	{
@@ -25,15 +25,15 @@ public class EngineTypePredicates
 	private const string Gradient = "UnityEngine.Gradient";
 	private const string GUIStyle = "UnityEngine.GUIStyle";
 	private const string RectOffset = "UnityEngine.RectOffset";
-	protected const string UnityEngineObject = "UnityEngine.Object";
+	private const string UnityEngineObject = "UnityEngine.Object";
 
 	public const string MonoBehaviour = "MonoBehaviour";
 	public const string ScriptableObject = "ScriptableObject";
 
 	public const string MonoBehaviourFullName = $"{UnityEngineNamespace}.{MonoBehaviour}";
 	public const string ScriptableObjectFullName = $"{UnityEngineNamespace}.{ScriptableObject}";
-	protected const string Matrix4x4 = "UnityEngine.Matrix4x4";
-	protected const string Color32 = "UnityEngine.Color32";
+	private const string Matrix4x4 = "UnityEngine.Matrix4x4";
+	private const string Color32 = "UnityEngine.Color32";
 
 	public const string UnityEngineNamespace = "UnityEngine";
 	private const string SerializeFieldAttribute = "SerializeField";

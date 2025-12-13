@@ -2,7 +2,7 @@ using AssetRipper.SerializationLogic.Extensions;
 
 namespace AssetRipper.SerializationLogic;
 
-public static class AsmUtils
+internal static class AsmUtils
 {
 	public static IEnumerable<TypeDefinition> AllInterfacesImplementedBy(TypeDefinition typeDefinition)
 	{

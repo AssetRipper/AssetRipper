@@ -1,6 +1,6 @@
 namespace AssetRipper.SerializationLogic.Extensions;
 
-static class MethodDefinitionExtensions
+internal static class MethodDefinitionExtensions
 {
 	public static bool SameAs(this MethodDefinition self, MethodDefinition other)
 	{

@@ -1,6 +1,6 @@
 namespace AssetRipper.SerializationLogic.Extensions;
 
-public static class TypeDescriptorExtensions
+internal static class TypeDescriptorExtensions
 {
 	public static string? SafeNamespace(this ITypeDescriptor type)
 	{

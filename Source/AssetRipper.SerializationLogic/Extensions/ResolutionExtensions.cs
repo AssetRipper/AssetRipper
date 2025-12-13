@@ -1,6 +1,6 @@
 namespace AssetRipper.SerializationLogic.Extensions;
 
-public static class ResolutionExtensions
+internal static class ResolutionExtensions
 {
 	public static TypeDefinition CheckedResolve(this ITypeDescriptor reference)
 	{
