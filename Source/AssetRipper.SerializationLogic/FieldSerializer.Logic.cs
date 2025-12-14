@@ -6,8 +6,6 @@ namespace AssetRipper.SerializationLogic;
 
 public readonly partial struct FieldSerializer(UnityVersion version)
 {
-	private static readonly SignatureComparer signatureComparer = new(SignatureComparisonFlags.VersionAgnostic);
-
 	/// <summary>
 	/// Not sure about the exact version boundary, structs are supposedly only serializable on 4.5.0 and greater.
 	/// </summary>
@@ -34,12 +32,7 @@ public readonly partial struct FieldSerializer(UnityVersion version)
 	/// </summary>
 	private bool IsGenericInstanceSerializable => true;
 
-	public bool WillUnitySerialize(FieldDefinition fieldDefinition)
-	{
-		return WillUnitySerialize(fieldDefinition, fieldDefinition.Signature!.FieldType);
-	}
-
-	public bool WillUnitySerialize(FieldDefinition fieldDefinition, TypeSignature fieldType)
+	private bool WillUnitySerialize(FieldDefinition fieldDefinition, TypeSignature fieldType)
 	{
 		if (fieldDefinition == null)
 		{
@@ -120,62 +113,6 @@ public readonly partial struct FieldSerializer(UnityVersion version)
 		return typeReference.IsAssignableTo("System", "Delegate");
 	}
 
-	public bool ShouldFieldBePPtrRemapped(FieldDefinition fieldDefinition)
-	{
-		if (!WillUnitySerialize(fieldDefinition))
-		{
-			return false;
-		}
-
-		return CanTypeContainUnityEngineObjectReference(fieldDefinition.Signature!.FieldType);
-	}
-
-	private bool CanTypeContainUnityEngineObjectReference(ITypeDescriptor typeReference)
-	{
-		if (IsUnityEngineObject(typeReference))
-		{
-			return true;
-		}
-
-		if (typeReference.IsEnum())
-		{
-			return false;
-		}
-
-		if (typeReference.ToTypeSignature() is CorLibTypeSignature corLibTypeSignature && IsSerializablePrimitive(corLibTypeSignature))
-		{
-			return false;
-		}
-
-		if (IsSupportedCollection(typeReference.ToTypeSignature()))
-		{
-			return CanTypeContainUnityEngineObjectReference(AsmUtils.ElementTypeOfCollection(typeReference.ToTypeSignature()));
-		}
-
-		TypeDefinition? definition = typeReference.Resolve();
-		return definition switch
-		{
-			null => false,
-			_ => HasFieldsThatCanContainUnityEngineObjectReferences(definition)
-		};
-	}
-
-	private bool HasFieldsThatCanContainUnityEngineObjectReferences(TypeDefinition definition)
-	{
-		foreach (FieldDefinition field in AllFieldsFor(definition))
-		{
-			if (signatureComparer.Equals(field.Signature?.FieldType.Resolve(), definition))
-			{
-				continue;
-			}
-			if (CanFieldContainUnityEngineObjectReference(definition, field))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-
 	private static IEnumerable<FieldDefinition> AllFieldsFor(TypeDefinition definition)
 	{
 		TypeDefinition? baseType = definition.BaseType?.Resolve();
@@ -194,27 +131,7 @@ public readonly partial struct FieldSerializer(UnityVersion version)
 		}
 	}
 
-	private bool CanFieldContainUnityEngineObjectReference(ITypeDescriptor typeReference, FieldDefinition t)
-	{
-		if (signatureComparer.Equals(t.Signature!.FieldType, typeReference.ToTypeSignature()))
-		{
-			return false;
-		}
-
-		if (!WillUnitySerialize(t))
-		{
-			return false;
-		}
-
-		if (EngineTypePredicates.IsUnityEngineValueType(typeReference))
-		{
-			return false;
-		}
-
-		return true;
-	}
-
-	public static bool ShouldNotTryToResolve(ITypeDescriptor typeReference)
+	private static bool ShouldNotTryToResolve(ITypeDescriptor typeReference)
 	{
 		if (typeReference is TypeDefinition)
 		{
@@ -276,12 +193,12 @@ public readonly partial struct FieldSerializer(UnityVersion version)
 			return IsSerializablePrimitive(corLibTypeSignature);
 		}
 
-		if (IsGenericDictionary(typeReference))
+		if (AsmUtils.IsGenericDictionary(typeReference))
 		{
 			return false;
 		}
 
-		if (IsUnityEngineObject(typeReference) ||
+		if (EngineTypePredicates.IsUnityEngineObject(typeReference) ||
 			EngineTypePredicates.IsSerializableUnityClass(typeReference) ||
 			ShouldImplementIDeserializable(typeReference))
 		{
@@ -291,9 +208,9 @@ public readonly partial struct FieldSerializer(UnityVersion version)
 		return false;
 	}
 
-	public bool IsTypeSerializable(ITypeDescriptor typeReference)
+	private bool IsTypeSerializable(ITypeDescriptor typeReference)
 	{
-		if (typeReference.ToTypeSignature() is CorLibTypeSignature corLibTypeSignature && corLibTypeSignature.ElementType == ElementType.String)
+		if (typeReference.ToTypeSignature() is CorLibTypeSignature { ElementType: ElementType.String } corLibTypeSignature)
 		{
 			return true;
 		}
@@ -304,20 +221,6 @@ public readonly partial struct FieldSerializer(UnityVersion version)
 		}
 
 		return IsReferenceTypeSerializable(typeReference);
-	}
-
-	private static bool IsGenericDictionary(ITypeDescriptor typeReference) => AsmUtils.IsGenericDictionary(typeReference);
-
-	public static int PrimitiveTypeSize(CorLibTypeSignature type)
-	{
-		return type.ElementType switch
-		{
-			ElementType.Boolean or ElementType.U1 or ElementType.I1 => 1,
-			ElementType.Char or ElementType.I2 or ElementType.U2 => 2,
-			ElementType.I4 or ElementType.U4 or ElementType.R4 => 4,
-			ElementType.I8 or ElementType.U8 or ElementType.R8 => 8,
-			_ => throw new ArgumentException($"Unsupported {type.ElementType}"),
-		};
 	}
 
 	private bool IsSerializablePrimitive(CorLibTypeSignature typeReference)
@@ -334,7 +237,7 @@ public readonly partial struct FieldSerializer(UnityVersion version)
 		};
 	}
 
-	public bool IsSupportedCollection(TypeSignature typeReference)
+	private bool IsSupportedCollection(TypeSignature typeReference)
 	{
 		if (typeReference is SzArrayTypeSignature || AsmUtils.IsGenericList(typeReference))
 		{
@@ -349,12 +252,7 @@ public readonly partial struct FieldSerializer(UnityVersion version)
 		return field.DeclaringType is not null && EngineTypePredicates.IsUnityEngineValueType(field.DeclaringType);
 	}
 
-	private static bool IsUnityEngineObject(ITypeDescriptor typeReference)
-	{
-		return EngineTypePredicates.IsUnityEngineObject(typeReference);
-	}
-
-	public static bool IsNonSerialized([NotNullWhen(false)] ITypeDescriptor? typeDeclaration)
+	private static bool IsNonSerialized([NotNullWhen(false)] ITypeDescriptor? typeDeclaration)
 	{
 		if (typeDeclaration == null)
 		{
@@ -392,7 +290,7 @@ public readonly partial struct FieldSerializer(UnityVersion version)
 		return typeDeclaration.Namespace == "System" || (typeDeclaration.Namespace?.StartsWith("System.", StringComparison.Ordinal) ?? false);
 	}
 
-	public bool ShouldImplementIDeserializable([NotNullWhen(true)] ITypeDescriptor? typeDeclaration)
+	private bool ShouldImplementIDeserializable([NotNullWhen(true)] ITypeDescriptor? typeDeclaration)
 	{
 		if (typeDeclaration is { Namespace: EngineTypePredicates.UnityEngineNamespace, Name: "ExposedReference`1" })
 		{
