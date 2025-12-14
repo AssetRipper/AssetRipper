@@ -53,10 +53,10 @@ public static class SwitchSwizzle
 			return data;
 		}
 
-		int blockSize = GetBlockSize(realFormat);
+		int blockByteSize = GetBlockSize(realFormat);
 
-		Debug.Assert(TexelByteSize % blockSize == 0, "Texel size should be a multiple of block size.");
-		int blocksPerTexel = TexelByteSize / blockSize;
+		Debug.Assert(TexelByteSize % blockByteSize == 0, "Texel size should be a multiple of block size.");
+		int blocksPerTexel = TexelByteSize / blockByteSize;
 
 		Debug.Assert(blocksPerTexel > 0);
 		Debug.Assert(texelDimensions.Width % blocksPerTexel == 0, "Texel width should be a multiple of blocks per texel.");
@@ -112,7 +112,7 @@ public static class SwitchSwizzle
 			int dstBlockCountY = CeilDivide(texture.Height_C28, blockDimensions.Height);
 			for (int y = 0; y < dstBlockCountY; y++)
 			{
-				newData.AsSpan(y * srcBlockCountX * blockSize, dstBlockCountX * blockSize).CopyTo(croppedData.AsSpan(y * dstBlockCountX * blockSize));
+				newData.AsSpan(y * srcBlockCountX * blockByteSize, dstBlockCountX * blockByteSize).CopyTo(croppedData.AsSpan(y * dstBlockCountX * blockByteSize));
 			}
 
 			result = croppedData;
@@ -121,21 +121,28 @@ public static class SwitchSwizzle
 		if (realFormat != texture.Format_C28E)
 		{
 			// Convert RGBA to RGB
-			Debug.Assert(blockSize % 4 == 0);
-			int actualPixelSize = blockSize / 4 * 3;
-			byte[] finalData = new byte[result.Length];
+			Debug.Assert(blockByteSize % 4 == 0);
+			Debug.Assert(blockDimensions.Height == 1);
+			int actualBlockByteSize = blockByteSize / 4 * 3;
 			for (int y = 0; y < texture.Height_C28; y++)
 			{
-				int srcOffset = y * texture.Width_C28 * blockSize;
-				int dstOffset = y * texture.Width_C28 * actualPixelSize;
+				int srcOffset = y * texture.Width_C28 * blockByteSize;
+				int dstOffset = y * texture.Width_C28 * actualBlockByteSize;
 				for (int x = 0; x < texture.Width_C28; x++)
 				{
-					int srcIndex = srcOffset + x * blockSize;
-					int dstIndex = dstOffset + x * actualPixelSize;
-					result.AsSpan(srcIndex, actualPixelSize).CopyTo(finalData.AsSpan(dstIndex, actualPixelSize));
+					int srcIndex = srcOffset + x * blockByteSize;
+					int dstIndex = dstOffset + x * actualBlockByteSize;
+
+					// Because we're removing data, srcIndex should always be greater than or equal to dstIndex.
+					// This allows us to safely copy in-place.
+					Debug.Assert(srcIndex >= dstIndex);
+					result.AsSpan(srcIndex, actualBlockByteSize).CopyTo(result.AsSpan(dstIndex, actualBlockByteSize));
 				}
 			}
-			result = finalData;
+
+			// Clear out the unused data at the end
+			int newSize = texture.Width_C28 * texture.Height_C28 * actualBlockByteSize;
+			result.AsSpan(newSize).Clear();
 		}
 
 		return result;
