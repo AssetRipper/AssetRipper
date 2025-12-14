@@ -29,6 +29,7 @@ using AssetRipper.SourceGenerated.Subclasses.PropertyName;
 using AssetRipper.SourceGenerated.Subclasses.Quaternionf;
 using AssetRipper.SourceGenerated.Subclasses.Rectf;
 using AssetRipper.SourceGenerated.Subclasses.RectOffset;
+using AssetRipper.SourceGenerated.Subclasses.SphericalHarmonicsL2;
 using AssetRipper.SourceGenerated.Subclasses.Vector2f;
 using AssetRipper.SourceGenerated.Subclasses.Vector2Int;
 using AssetRipper.SourceGenerated.Subclasses.Vector3f;
@@ -263,6 +264,7 @@ public sealed class GameAssetFactory : AssetFactoryBase
 			MonoUtils.RectOffsetName => RectOffset.Create(),
 			MonoUtils.GUIStyleName => GUIStyle.Create(version),
 			MonoUtils.PropertyNameName => PropertyName.Create(version),
+			MonoUtils.SphericalHarmonicsL2Name => SphericalHarmonicsL2.Create(version),
 			_ => throw new NotSupportedException(name),
 		};
 	}

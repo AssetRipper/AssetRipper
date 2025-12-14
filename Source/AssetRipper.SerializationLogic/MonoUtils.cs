@@ -41,6 +41,7 @@ public static class MonoUtils
 	public const string SystemNamespace = "System";
 	public const string SystemCollectionGenericNamespace = "System.Collections.Generic";
 	public const string UnityEngineNamespace = "UnityEngine";
+	public const string UnityEngineRenderingNamespace = "UnityEngine.Rendering";
 	public const string CompilerServicesNamespace = "System.Runtime.CompilerServices";
 
 	public const string CompilerGeneratedName = "CompilerGeneratedAttribute";
@@ -71,6 +72,7 @@ public static class MonoUtils
 	public const string RectOffsetName = "RectOffset";
 	public const string GUIStyleName = "GUIStyle";
 	public const string PropertyNameName = "PropertyName";
+	public const string SphericalHarmonicsL2Name = "SphericalHarmonicsL2";
 
 	private const string MulticastDelegateName = "MulticastDelegate";
 	private const string ListName = "List`1";
@@ -196,6 +198,10 @@ public static class MonoUtils
 				case PropertyNameName:
 					return true;
 			}
+		}
+		else if (@namespace == UnityEngineRenderingNamespace)
+		{
+			return name == SphericalHarmonicsL2Name;
 		}
 		return false;
 	}
