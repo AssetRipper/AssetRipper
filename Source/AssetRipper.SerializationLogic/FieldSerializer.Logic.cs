@@ -413,6 +413,12 @@ public readonly partial struct FieldSerializer(UnityVersion version)
 
 		bool isSerializable = resolvedTypeDeclaration.IsSerializable;
 
+		//If serializable, also check we're not abstract
+		isSerializable &= !resolvedTypeDeclaration.IsAbstract;
+
+		//If serializable, also check we're not an interface
+		isSerializable &= !resolvedTypeDeclaration.IsInterface;
+
 		//If serializable, also check we're not compiler generated
 		isSerializable &= !resolvedTypeDeclaration.IsCompilerGenerated();
 

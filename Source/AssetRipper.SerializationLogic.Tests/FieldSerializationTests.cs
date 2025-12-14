@@ -306,4 +306,36 @@ public class FieldSerializationTests
 			Assert.That(field.ArrayDepth, Is.Zero);
 		}
 	}
+
+	[Serializable]
+	private abstract class AbstractSerializableClass
+	{
+		public int value;
+	}
+
+	[Serializable]
+	private class ClassWithAbstractField
+	{
+		public AbstractSerializableClass? value;
+	}
+
+	[Test]
+	public void FieldsWithAbstractTypesShouldNotBeSerialized()
+	{
+		SerializableType serializableType = SerializableTypes.Create<ClassWithAbstractField>();
+		Assert.That(serializableType.Fields, Has.Count.EqualTo(0));
+	}
+
+	[Serializable]
+	private class ClassWithAbstractListField
+	{
+		public AbstractSerializableClass? value;
+	}
+
+	[Test]
+	public void ListFieldsWithAbstractTypesShouldNotBeSerialized()
+	{
+		SerializableType serializableType = SerializableTypes.Create<ClassWithAbstractListField>();
+		Assert.That(serializableType.Fields, Has.Count.EqualTo(0));
+	}
 }
