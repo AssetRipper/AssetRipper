@@ -28,9 +28,9 @@ public readonly partial struct FieldSerializer(UnityVersion version)
 	/// </remarks>
 	private bool IsInt64Serializable { get; } = version.GreaterThanOrEquals(2017);
 	/// <summary>
-	/// Prior to some unknown version, System.Collections.Generic.List`1 and UnityEngine.ExposedReference`1 were the only supported generic types.
+	/// Prior to the first alpha of 2020, System.Collections.Generic.List`1 and UnityEngine.ExposedReference`1 were the only supported generic types.
 	/// </summary>
-	private bool IsGenericInstanceSerializable => true;
+	private bool IsGenericInstanceSerializable => version.GreaterThanOrEquals(2020);
 
 	private bool WillUnitySerialize(FieldDefinition fieldDefinition, TypeSignature fieldType)
 	{
@@ -319,6 +319,9 @@ public readonly partial struct FieldSerializer(UnityVersion version)
 
 		//If serializable, also check we're not compiler generated
 		isSerializable &= !resolvedTypeDeclaration.IsCompilerGenerated();
+
+		//If serializable, also check we're not a generic instance
+		isSerializable &= IsGenericInstanceSerializable || typeDeclaration.ToTypeSignature() is not GenericInstanceTypeSignature;
 
 		if (typeDeclaration.IsValueType)
 		{

@@ -92,6 +92,29 @@ public class FieldSerializationTests
 		}
 	}
 
+	[TestCase("2019.4", false)]
+	[TestCase("2020.1.0a3", true)]
+	public void GenericInstanceSerializationStartedWithUnity2020(string version, bool serialize)
+	{
+		// https://github.com/AssetRipper/AssetRipper/issues/1792
+		SerializableType serializableType = SerializableTypes.Create<CustomMonoBehaviourWithGenericField>(UnityVersion.Parse(version));
+		if (serialize)
+		{
+			Assert.That(serializableType.Fields, Has.Count.EqualTo(1));
+			SerializableType.Field field = serializableType.Fields[0];
+			using (Assert.EnterMultipleScope())
+			{
+				Assert.That(field.Name, Is.EqualTo(nameof(CustomMonoBehaviourWithGenericField.testGenericClass)));
+				Assert.That(field.Type.Type, Is.EqualTo(PrimitiveType.Complex));
+				Assert.That(field.ArrayDepth, Is.Zero);
+			}
+		}
+		else
+		{
+			Assert.That(serializableType.Fields, Has.Count.EqualTo(0));
+		}
+	}
+
 	private class CustomMonoBehaviourWithObjectField : UnityEngine.MonoBehaviour
 	{
 		public UnityEngine.Object? pptr;
