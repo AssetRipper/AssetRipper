@@ -7,6 +7,7 @@
 		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.SerializationLogic.Tests\$(Configuration)\</IntermediateOutputPath>
 		<NoWarn>CS0169</NoWarn><!--Unused field-->
 		<NoWarn>CS0649</NoWarn><!--Field is never assigned to-->
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 
 	<ItemGroup>

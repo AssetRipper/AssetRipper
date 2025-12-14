@@ -30,14 +30,9 @@ internal static class EngineTypePredicates
 	public const string MonoBehaviour = "MonoBehaviour";
 	public const string ScriptableObject = "ScriptableObject";
 
-	public const string MonoBehaviourFullName = $"{UnityEngineNamespace}.{MonoBehaviour}";
-	public const string ScriptableObjectFullName = $"{UnityEngineNamespace}.{ScriptableObject}";
-	private const string Matrix4x4 = "UnityEngine.Matrix4x4";
-	private const string Color32 = "UnityEngine.Color32";
-
 	public const string UnityEngineNamespace = "UnityEngine";
-	private const string SerializeFieldAttribute = "SerializeField";
-	private const string SerializeReferenceAttribute = "SerializeReference";
+	public const string SerializeFieldAttribute = "SerializeField";
+	public const string SerializeReferenceAttribute = "SerializeReference";
 
 	private static readonly string[] serializableClasses =
 	[
@@ -55,52 +50,6 @@ internal static class EngineTypePredicates
 		"UnityEngine.Rendering.SphericalHarmonicsL2",
 		"UnityEngine.PropertyName",
 	];
-
-	public static bool IsMonoBehaviour(ITypeDescriptor type)
-	{
-		return IsMonoBehaviour(type.CheckedResolve());
-	}
-
-	private static bool IsMonoBehaviour(TypeDefinition typeDefinition)
-	{
-		return typeDefinition.IsSubclassOf(MonoBehaviourFullName);
-	}
-
-	public static bool IsScriptableObject(ITypeDescriptor type)
-	{
-		return IsScriptableObject(type.CheckedResolve());
-	}
-
-	private static bool IsScriptableObject(TypeDefinition temp)
-	{
-		return temp.IsSubclassOf(ScriptableObjectFullName);
-	}
-
-	public static bool IsColor32(ITypeDescriptor type)
-	{
-		return type.IsAssignableTo(Color32);
-	}
-
-	//Do NOT remove these, cil2as still depends on these in 4.x
-	public static bool IsMatrix4x4(ITypeDescriptor type)
-	{
-		return type.IsAssignableTo(Matrix4x4);
-	}
-
-	public static bool IsGradient(ITypeDescriptor type)
-	{
-		return type.IsAssignableTo(Gradient);
-	}
-
-	public static bool IsGUIStyle(ITypeDescriptor type)
-	{
-		return type.IsAssignableTo(GUIStyle);
-	}
-
-	public static bool IsRectOffset(ITypeDescriptor type)
-	{
-		return type.IsAssignableTo(RectOffset);
-	}
 
 	public static bool IsSerializableUnityClass(ITypeDescriptor type)
 	{
@@ -165,15 +114,5 @@ internal static class EngineTypePredicates
 	public static bool IsUnityEngineValueType(ITypeDescriptor type)
 	{
 		return type.SafeNamespace() == "UnityEngine" && TypesThatShouldHaveHadSerializableAttribute.Contains(type.Name ?? "");
-	}
-
-	public static bool IsSerializeFieldAttribute(ITypeDescriptor attributeType)
-	{
-		return attributeType is { Namespace: UnityEngineNamespace, Name: SerializeFieldAttribute };
-	}
-
-	public static bool IsSerializeReferenceAttribute(ITypeDescriptor attributeType)
-	{
-		return attributeType is { Namespace: UnityEngineNamespace, Name: SerializeReferenceAttribute };
 	}
 }

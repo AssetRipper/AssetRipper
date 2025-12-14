@@ -39,39 +39,19 @@ internal static class TypeDefinitionExtensions
 		return baseTypeDef.IsSubclassOf(baseTypeName);
 	}
 
-	public static bool IsSubclassOfAny(this TypeDefinition type, params string[] baseTypeNames)
-	{
-		ITypeDefOrRef? baseType = type.BaseType;
-		if (baseType == null)
-		{
-			return false;
-		}
-
-		for (int i = 0; i < baseTypeNames.Length; i++)
-		{
-			if (baseType.FullName == baseTypeNames[i])
-			{
-				return true;
-			}
-		}
-
-		TypeDefinition? baseTypeDef = baseType.Resolve();
-		if (baseTypeDef == null)
-		{
-			return false;
-		}
-
-		return baseTypeDef.IsSubclassOfAny(baseTypeNames);
-	}
-
 	public static bool InheritsFromMonoBehaviour(this TypeDefinition type)
 	{
-		return type.InheritsFrom("UnityEngine", "MonoBehaviour");
+		return type.InheritsFrom(EngineTypePredicates.UnityEngineNamespace, EngineTypePredicates.MonoBehaviour);
+	}
+
+	public static bool InheritsFromScriptableObject(this TypeDefinition type)
+	{
+		return type.InheritsFrom(EngineTypePredicates.UnityEngineNamespace, EngineTypePredicates.ScriptableObject);
 	}
 
 	public static bool InheritsFromObject(this TypeDefinition type)
 	{
-		return type.InheritsFrom("UnityEngine", "Object");
+		return type.InheritsFrom(EngineTypePredicates.UnityEngineNamespace, "Object");
 	}
 
 	public static TypeDefinition? TryGetBaseClass(this TypeDefinition current)

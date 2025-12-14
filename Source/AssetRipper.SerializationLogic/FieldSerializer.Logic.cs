@@ -1,18 +1,45 @@
 using AsmResolver.PE.DotNet.Metadata.Tables;
+using AssetRipper.Primitives;
 using AssetRipper.SerializationLogic.Extensions;
 
 namespace AssetRipper.SerializationLogic;
 
-public static class FieldSerializationLogic
+public readonly partial struct FieldSerializer(UnityVersion version)
 {
-	private static readonly SignatureComparer signatureComparer = new();
+	private static readonly SignatureComparer signatureComparer = new(SignatureComparisonFlags.VersionAgnostic);
 
-	public static bool WillUnitySerialize(FieldDefinition fieldDefinition)
+	/// <summary>
+	/// Not sure about the exact version boundary, structs are supposedly only serializable on 4.5.0 and greater.
+	/// </summary>
+	private bool IsStructSerializable { get; } = version.GreaterThanOrEquals(4, 5);
+	private bool IsInt8Serializable => IsInt16Serializable;
+	/// <summary>
+	/// Not sure about the exact version boundary, but int8, int16, uint16, and uint32 were added around 5.0.0.
+	/// </summary>
+	/// <remarks>
+	/// <see href="https://github.com/AssetRipper/AssetRipper/issues/1851"/>
+	/// </remarks>
+	private bool IsInt16Serializable { get; } = version.GreaterThanOrEquals(5);
+	private bool IsUInt32Serializable => IsInt16Serializable;
+	private bool IsCharSerializable => IsInt64Serializable;
+	/// <summary>
+	/// Not sure about the exact version boundary, but online references suggest that 2017 was the first version to support this.
+	/// </summary>
+	/// <remarks>
+	/// <see href="https://github.com/AssetRipper/AssetRipper/issues/647"/>
+	/// </remarks>
+	private bool IsInt64Serializable { get; } = version.GreaterThanOrEquals(2017);
+	/// <summary>
+	/// Prior to some unknown version, System.Collections.Generic.List`1 and UnityEngine.ExposedReference`1 were the only supported generic types.
+	/// </summary>
+	private bool IsGenericInstanceSerializable => true;
+
+	public bool WillUnitySerialize(FieldDefinition fieldDefinition)
 	{
 		return WillUnitySerialize(fieldDefinition, fieldDefinition.Signature!.FieldType);
 	}
 
-	public static bool WillUnitySerialize(FieldDefinition fieldDefinition, TypeSignature fieldType)
+	public bool WillUnitySerialize(FieldDefinition fieldDefinition, TypeSignature fieldType)
 	{
 		if (fieldDefinition == null)
 		{
@@ -20,7 +47,7 @@ public static class FieldSerializationLogic
 		}
 
 		//skip static, const and NotSerialized fields before even checking the type
-		if (fieldDefinition.IsStatic || IsConst(fieldDefinition) || fieldDefinition.IsNotSerialized || fieldDefinition.IsInitOnly)
+		if (fieldDefinition.IsStatic || fieldDefinition.IsConst() || fieldDefinition.IsNotSerialized || fieldDefinition.IsInitOnly)
 		{
 			return false;
 		}
@@ -28,8 +55,8 @@ public static class FieldSerializationLogic
 		// The field must have correct visibility/decoration to be serialized.
 		if (!fieldDefinition.IsPublic &&
 			!ShouldHaveHadAllFieldsPublic(fieldDefinition) &&
-			!HasSerializeFieldAttribute(fieldDefinition) &&
-			!HasSerializeReferenceAttribute(fieldDefinition))
+			!fieldDefinition.HasSerializeFieldAttribute() &&
+			!fieldDefinition.HasSerializeReferenceAttribute())
 		{
 			return false;
 		}
@@ -41,7 +68,7 @@ public static class FieldSerializationLogic
 			return false;
 		}
 
-		if (IsFixedBuffer(fieldDefinition))
+		if (fieldDefinition.HasFixedBufferAttribute())
 		{
 			return true;
 		}
@@ -50,6 +77,11 @@ public static class FieldSerializationLogic
 		// thus keep those checks below
 
 		//the type of the field must be serializable in the first place.
+
+		if (fieldType is CustomModifierTypeSignature customModifierType)
+		{
+			fieldType = customModifierType.BaseType;
+		}
 
 		if (fieldType is CorLibTypeSignature corLibTypeSignature && corLibTypeSignature.ElementType == ElementType.String)
 		{
@@ -63,14 +95,14 @@ public static class FieldSerializationLogic
 
 		if (fieldType is SzArrayTypeSignature || AsmUtils.IsGenericList(fieldType))
 		{
-			if (!HasSerializeReferenceAttribute(fieldDefinition))
+			if (!fieldDefinition.HasSerializeReferenceAttribute())
 			{
 				return IsSupportedCollection(fieldType);
 			}
 		}
 
 
-		if (!IsReferenceTypeSerializable(fieldType) && !HasSerializeReferenceAttribute(fieldDefinition))
+		if (!IsReferenceTypeSerializable(fieldType) && !fieldDefinition.HasSerializeReferenceAttribute())
 		{
 			return false;
 		}
@@ -88,7 +120,7 @@ public static class FieldSerializationLogic
 		return typeReference.IsAssignableTo("System", "Delegate");
 	}
 
-	public static bool ShouldFieldBePPtrRemapped(FieldDefinition fieldDefinition)
+	public bool ShouldFieldBePPtrRemapped(FieldDefinition fieldDefinition)
 	{
 		if (!WillUnitySerialize(fieldDefinition))
 		{
@@ -98,7 +130,7 @@ public static class FieldSerializationLogic
 		return CanTypeContainUnityEngineObjectReference(fieldDefinition.Signature!.FieldType);
 	}
 
-	private static bool CanTypeContainUnityEngineObjectReference(ITypeDescriptor typeReference)
+	private bool CanTypeContainUnityEngineObjectReference(ITypeDescriptor typeReference)
 	{
 		if (IsUnityEngineObject(typeReference))
 		{
@@ -128,9 +160,20 @@ public static class FieldSerializationLogic
 		};
 	}
 
-	private static bool HasFieldsThatCanContainUnityEngineObjectReferences(TypeDefinition definition)
+	private bool HasFieldsThatCanContainUnityEngineObjectReferences(TypeDefinition definition)
 	{
-		return AllFieldsFor(definition).Where(kv => !signatureComparer.Equals(kv.Signature?.FieldType.Resolve(), definition)).Any(kv => CanFieldContainUnityEngineObjectReference(definition, kv));
+		foreach (FieldDefinition field in AllFieldsFor(definition))
+		{
+			if (signatureComparer.Equals(field.Signature?.FieldType.Resolve(), definition))
+			{
+				continue;
+			}
+			if (CanFieldContainUnityEngineObjectReference(definition, field))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private static IEnumerable<FieldDefinition> AllFieldsFor(TypeDefinition definition)
@@ -151,7 +194,7 @@ public static class FieldSerializationLogic
 		}
 	}
 
-	private static bool CanFieldContainUnityEngineObjectReference(ITypeDescriptor typeReference, FieldDefinition t)
+	private bool CanFieldContainUnityEngineObjectReference(ITypeDescriptor typeReference, FieldDefinition t)
 	{
 		if (signatureComparer.Equals(t.Signature!.FieldType, typeReference.ToTypeSignature()))
 		{
@@ -169,39 +212,6 @@ public static class FieldSerializationLogic
 		}
 
 		return true;
-	}
-
-	private static bool IsConst(FieldDefinition fieldDefinition)
-	{
-		return fieldDefinition.IsLiteral && !fieldDefinition.IsInitOnly;
-	}
-
-	public static bool HasSerializeFieldAttribute(FieldDefinition field)
-	{
-		foreach (CustomAttribute ca in field.CustomAttributes)
-		{
-			ITypeDefOrRef type = ca.Constructor!.DeclaringType!;
-			if (EngineTypePredicates.IsSerializeFieldAttribute(type))
-			{
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	public static bool HasSerializeReferenceAttribute(FieldDefinition field)
-	{
-		foreach (CustomAttribute ca in field.CustomAttributes)
-		{
-			ITypeDefOrRef type = ca.Constructor!.DeclaringType!;
-			if (EngineTypePredicates.IsSerializeReferenceAttribute(type))
-			{
-				return true;
-			}
-		}
-
-		return false;
 	}
 
 	public static bool ShouldNotTryToResolve(ITypeDescriptor typeReference)
@@ -239,26 +249,29 @@ public static class FieldSerializationLogic
 		return false;
 	}
 
-	private static bool IsFieldTypeSerializable(ITypeDescriptor typeReference, FieldDefinition fieldDefinition)
-	{
-		return IsTypeSerializable(typeReference) || IsSupportedCollection(typeReference.ToTypeSignature()) || IsFixedBuffer(fieldDefinition);
-	}
-
-	private static bool IsValueTypeSerializable(TypeSignature typeReference)
+	private bool IsValueTypeSerializable(TypeSignature typeReference)
 	{
 		if (typeReference.IsPrimitive())
 		{
 			return IsSerializablePrimitive((CorLibTypeSignature)typeReference);
 		}
 
-		return typeReference.IsEnum() ||
-			ShouldImplementIDeserializable(typeReference) ||
-			EngineTypePredicates.IsSerializableUnityStruct(typeReference);
+		if (typeReference.IsEnum())
+		{
+			// Enums are serializable as long as their underlying type is serializable
+			TypeDefinition typeDefinition = typeReference.CheckedResolve();
+			CorLibTypeSignature underlyingType = (CorLibTypeSignature)typeDefinition.GetEnumUnderlyingType()!;
+			return IsSerializablePrimitive(underlyingType);
+		}
+		else
+		{
+			return EngineTypePredicates.IsSerializableUnityStruct(typeReference) || ShouldImplementIDeserializable(typeReference);
+		}
 	}
 
-	private static bool IsReferenceTypeSerializable(ITypeDescriptor typeReference)
+	private bool IsReferenceTypeSerializable(ITypeDescriptor typeReference)
 	{
-		if (typeReference.ToTypeSignature() is CorLibTypeSignature corLibTypeSignature && corLibTypeSignature.ElementType == ElementType.String)
+		if (typeReference.ToTypeSignature() is CorLibTypeSignature { ElementType: ElementType.String } corLibTypeSignature)
 		{
 			return IsSerializablePrimitive(corLibTypeSignature);
 		}
@@ -278,7 +291,7 @@ public static class FieldSerializationLogic
 		return false;
 	}
 
-	public static bool IsTypeSerializable(ITypeDescriptor typeReference)
+	public bool IsTypeSerializable(ITypeDescriptor typeReference)
 	{
 		if (typeReference.ToTypeSignature() is CorLibTypeSignature corLibTypeSignature && corLibTypeSignature.ElementType == ElementType.String)
 		{
@@ -295,36 +308,6 @@ public static class FieldSerializationLogic
 
 	private static bool IsGenericDictionary(ITypeDescriptor typeReference) => AsmUtils.IsGenericDictionary(typeReference);
 
-	public static bool IsFixedBuffer(FieldDefinition fieldDefinition)
-	{
-		return GetFixedBufferAttribute(fieldDefinition) != null;
-	}
-
-	public static CustomAttribute? GetFixedBufferAttribute(FieldDefinition fieldDefinition)
-	{
-		IList<CustomAttribute> attrs = fieldDefinition.CustomAttributes;
-		foreach (CustomAttribute ca in attrs)
-		{
-			ITypeDefOrRef type = ca.Constructor!.DeclaringType!;
-			if (type is { Namespace.Value: "System.Runtime.CompilerServices", Name.Value: "FixedBufferAttribute" })
-			{
-				return ca;
-			}
-		}
-
-		return null;
-	}
-
-	public static int GetFixedBufferLength(FieldDefinition fieldDefinition)
-	{
-		CustomAttribute fixedBufferAttribute = GetFixedBufferAttribute(fieldDefinition)
-			?? throw new ArgumentException($"Field '{fieldDefinition.FullName}' is not a fixed buffer field.");
-
-		int size = (int)(fixedBufferAttribute.Signature?.FixedArguments[1].Element ?? 0);
-
-		return size;
-	}
-
 	public static int PrimitiveTypeSize(CorLibTypeSignature type)
 	{
 		return type.ElementType switch
@@ -333,48 +316,32 @@ public static class FieldSerializationLogic
 			ElementType.Char or ElementType.I2 or ElementType.U2 => 2,
 			ElementType.I4 or ElementType.U4 or ElementType.R4 => 4,
 			ElementType.I8 or ElementType.U8 or ElementType.R8 => 8,
-			_ => throw new ArgumentException(string.Format("Unsupported {0}", type.ElementType)),
+			_ => throw new ArgumentException($"Unsupported {type.ElementType}"),
 		};
 	}
 
-	private static bool IsSerializablePrimitive(CorLibTypeSignature typeReference)
+	private bool IsSerializablePrimitive(CorLibTypeSignature typeReference)
 	{
-		switch (typeReference.ElementType)
+		return typeReference.ElementType switch
 		{
-			case ElementType.Boolean:
-			case ElementType.I1:
-			case ElementType.U1:
-			case ElementType.Char:
-			case ElementType.I2:
-			case ElementType.U2:
-			case ElementType.I4:
-			case ElementType.U4:
-			case ElementType.I8:
-			case ElementType.U8:
-			case ElementType.R4:
-			case ElementType.R8:
-			case ElementType.String:
-				return true;
-			default:
-				return false;
-		}
+			ElementType.I1 => IsInt8Serializable,
+			ElementType.I2 or ElementType.U2 => IsInt16Serializable,
+			ElementType.U4 => IsUInt32Serializable,
+			ElementType.I8 or ElementType.U8 => IsInt64Serializable,
+			ElementType.Char => IsCharSerializable,
+			ElementType.Boolean or ElementType.U1 or ElementType.I4 or ElementType.R4 or ElementType.R8 or ElementType.String => true,
+			_ => false,
+		};
 	}
 
-	public static bool IsSupportedCollection(TypeSignature typeReference)
+	public bool IsSupportedCollection(TypeSignature typeReference)
 	{
-		// We don't support arrays like byte[,] etc
-		//if (typeReference is ArrayTypeSignature arrayType && arrayType.Dimensions.Count != 1)
-		//{
-		//	return false;
-		//}
-		//Redundant
-
-		if (typeReference is not SzArrayTypeSignature && !AsmUtils.IsGenericList(typeReference))
+		if (typeReference is SzArrayTypeSignature || AsmUtils.IsGenericList(typeReference))
 		{
-			return false;
+			return IsTypeSerializable(AsmUtils.ElementTypeOfCollection(typeReference));
 		}
 
-		return IsTypeSerializable(AsmUtils.ElementTypeOfCollection(typeReference));
+		return false;
 	}
 
 	private static bool ShouldHaveHadAllFieldsPublic(FieldDefinition field)
@@ -421,11 +388,11 @@ public static class FieldSerializationLogic
 			return true;
 		}
 
-		//Fullname is slow, do it last
-		return typeDeclaration.FullName.StartsWith("System."); //can this be done better?
+		//Check namespace
+		return typeDeclaration.Namespace == "System" || (typeDeclaration.Namespace?.StartsWith("System.", StringComparison.Ordinal) ?? false);
 	}
 
-	public static bool ShouldImplementIDeserializable([NotNullWhen(true)] ITypeDescriptor? typeDeclaration)
+	public bool ShouldImplementIDeserializable([NotNullWhen(true)] ITypeDescriptor? typeDeclaration)
 	{
 		if (typeDeclaration is { Namespace: EngineTypePredicates.UnityEngineNamespace, Name: "ExposedReference`1" })
 		{
@@ -447,14 +414,14 @@ public static class FieldSerializationLogic
 		bool isSerializable = resolvedTypeDeclaration.IsSerializable;
 
 		//If serializable, also check we're not compiler generated
-		isSerializable &= resolvedTypeDeclaration.CustomAttributes.All(a => a.Constructor?.DeclaringType is not { } type || type.Namespace != "System.Runtime.CompilerServices" || !type.Name!.Value.StartsWith("CompilerGenerated"));
+		isSerializable &= !resolvedTypeDeclaration.IsCompilerGenerated();
 
 		if (typeDeclaration.IsValueType)
 		{
-			return isSerializable;
+			return isSerializable && IsStructSerializable;
 		}
 
 		//Reference types can be serializable, or they can be MB/SO.
-		return isSerializable || resolvedTypeDeclaration.IsSubclassOfAny(EngineTypePredicates.MonoBehaviourFullName, EngineTypePredicates.ScriptableObjectFullName);
+		return isSerializable || resolvedTypeDeclaration.InheritsFromMonoBehaviour() || resolvedTypeDeclaration.InheritsFromScriptableObject();
 	}
 }
