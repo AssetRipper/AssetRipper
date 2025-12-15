@@ -13,6 +13,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable;
 
 public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 {
+	private UnityVersion Version { get; set; }
 	public override int SerializedVersion => Type.Version;
 	public override bool FlowMappedInYaml => Type.FlowMappedInYaml;
 
@@ -25,6 +26,7 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 
 	public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags)
 	{
+		Version = version;
 		for (int i = 0; i < Fields.Length; i++)
 		{
 			SerializableType.Field etalon = Type.Fields[i];
@@ -100,7 +102,7 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 
 	private bool IsAvailable(in SerializableType.Field field)
 	{
-		if (Depth < GetMaxDepthLevel())
+		if (Depth <= GetMaxDepthLevel(Version))
 		{
 			return true;
 		}
@@ -212,6 +214,7 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 		{
 			throw new ArgumentException($"Depth {source.Depth} doesn't match with {Depth}", nameof(source));
 		}
+		Version = source.Version;
 		if (source.Type == Type)
 		{
 			for (int i = 0; i < Fields.Length; i++)
@@ -265,6 +268,7 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 
 	public void InitializeFields(UnityVersion version)
 	{
+		Version = version;
 		for (int i = 0; i < Fields.Length; i++)
 		{
 			SerializableType.Field etalon = Type.Fields[i];
@@ -276,14 +280,13 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 	}
 
 	/// <summary>
-	/// 8 might have been an arbitrarily chosen number, but I think it's because the limit was supposedly 7 when mafaca made uTinyRipper.
-	/// An official source is required, but forum posts suggest 7 and later 10 as the limits.
-	/// It may be desirable to increase this number or do a Unity version check.
+	/// Unity has a maximum serialization depth to prevent infinite recursion in cyclic references.
+	/// In Unity versions prior to 2020.2.0a21, this limit is 7. From 2020.2.0a21 onwards, the limit was increased to 10.
 	/// </summary>
 	/// <remarks>
 	/// <see href="https://forum.unity.com/threads/serialization-depth-limit-and-recursive-serialization.1263599/"/><br/>
 	/// <see href="https://forum.unity.com/threads/getting-a-serialization-depth-limit-7-error-for-no-reason.529850/"/><br/>
 	/// <see href="https://forum.unity.com/threads/4-5-serialization-depth.248321/"/>
 	/// </remarks>
-	private static int GetMaxDepthLevel() => 8;
+	private static int GetMaxDepthLevel(UnityVersion version) => version.GreaterThanOrEquals(2020, 2, 0, UnityVersionType.Alpha, 21) ? 10 : 7;
 }

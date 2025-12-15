@@ -159,7 +159,7 @@ public partial class BaseManager : IAssemblyManager
 			return false;
 		}
 
-		return FieldSerializationLogic.IsTypeSerializable(type);
+		return true;
 	}
 
 	public virtual TypeDefinition GetTypeDefinition(ScriptIdentifier scriptID)
