@@ -187,11 +187,11 @@ public static class SwitchSwizzle
 	private static int GetBlockSize(TextureFormat textureFormat) => textureFormat switch
 	{
 		TextureFormat.Alpha8 => 1,
-		TextureFormat.ARGB4444 => 1,
-		TextureFormat.RGBA4444 => 1,
+		TextureFormat.ARGB4444 => 2,
+		TextureFormat.RGBA4444 => 2,
 		TextureFormat.ARGB32 => 4,
 		TextureFormat.BGRA32_14 or TextureFormat.BGRA32_37 => 4,
-		TextureFormat.RGB565 => 1,
+		TextureFormat.RGB565 => 2,
 		TextureFormat.DXT1 => 8,
 		TextureFormat.DXT5 => 16,
 		TextureFormat.BC4 => 8,
