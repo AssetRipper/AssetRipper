@@ -7,39 +7,17 @@ namespace AssetRipper.DocExtraction.ConsoleApp;
 
 internal static class Program
 {
-	private static readonly UnityVersion MinimumUnityVersion = new UnityVersion(3, 5);
+	private static readonly UnityVersion MinimumUnityVersion = new(3, 5);
 	static void Main(string[] args)
 	{
 		Stopwatch stopwatch = Stopwatch.StartNew();
 
-		//ExtractAndSaveIndividually(@"G:\TypeTreeDumps\UnityInstallations", @"E:\UnityDocumentation");
-		ExtractAndSaveConsolidated(@"G:\TypeTreeDumps\UnityInstallations", @"consolidated.json");
+		string unityInstallationsPath = args[0];
+		string outputPath = args.Length > 1 ? args[1] : "consolidated.json";
+		ExtractAndSaveConsolidated(unityInstallationsPath, outputPath);
 
 		stopwatch.Stop();
 		Console.WriteLine($"Finished in {stopwatch.ElapsedMilliseconds} ms");
-	}
-
-	private static void ExtractDocumentation2020()
-	{
-		string engineXmlPath = @"C:\Users\jrpri\Documents\UnityInstallations\2020.2.0f1\Editor\Data\Managed\UnityEngine.xml";
-		string editorXmlPath = @"C:\Users\jrpri\Documents\UnityInstallations\2020.2.0f1\Editor\Data\Managed\UnityEditor.xml";
-		string engineDllPath = @"C:\Users\jrpri\Documents\UnityInstallations\2020.2.0f1\Editor\Data\Managed\UnityEngine.dll";
-		string editorDllPath = @"C:\Users\jrpri\Documents\UnityInstallations\2020.2.0f1\Editor\Data\Managed\UnityEditor.dll";
-		UnityVersion unityVersion = new UnityVersion(2020, 2, 0, UnityVersionType.Final, 1);
-		string outputDirectory = Environment.CurrentDirectory;
-		string versionString = unityVersion.LessThan(5) ? unityVersion.ToStringWithoutType() : unityVersion.ToString();
-		DocumentationFile documentationFile = DocumentationExtractor.ExtractDocumentation(versionString, engineXmlPath, editorXmlPath, engineDllPath, editorDllPath);
-		documentationFile.SaveAsJson(Path.Combine(outputDirectory, $"{versionString}.json"));
-	}
-
-	private static void ExtractAndSaveIndividually(string inputDirectory, string outputDirectory)
-	{
-		Directory.CreateDirectory(outputDirectory);
-		foreach (DocumentationFile documentationFile in ExtractAllDocumentation(inputDirectory))
-		{
-			documentationFile.SaveAsJson(Path.Combine(outputDirectory, $"{documentationFile.UnityVersion}.json"));
-			Console.WriteLine(documentationFile.UnityVersion);
-		}
 	}
 
 	private static void ExtractAndSaveConsolidated(string inputDirectory, string outputPath)

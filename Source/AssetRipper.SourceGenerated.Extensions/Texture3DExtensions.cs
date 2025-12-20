@@ -17,7 +17,7 @@ public static class Texture3DExtensions
 		}
 		else
 		{
-			return Array.Empty<byte>();
+			return [];
 		}
 	}
 

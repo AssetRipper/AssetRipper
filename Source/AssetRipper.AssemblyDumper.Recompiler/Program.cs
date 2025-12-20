@@ -14,7 +14,7 @@ internal static class Program
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
+		<TargetFramework>net10.0</TargetFramework>
 		<DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
 		<Nullable>enable</Nullable>
 		<AotCompatible>true</AotCompatible>
@@ -60,7 +60,7 @@ internal static class Program
 		string outputDirectory = args[1];
 		Version = args[2];
 		ClearOrCreateDirectory(outputDirectory);
-		UniversalAssemblyResolver resolver = new UniversalAssemblyResolver(assemblyPath, true, ".NETCoreApp, Version=9.0");
+		UniversalAssemblyResolver resolver = new UniversalAssemblyResolver(assemblyPath, true, ".NETCoreApp, Version=10.0");
 		WholeProjectDecompiler decompiler = new WholeProjectDecompiler(resolver);
 		decompiler.Settings.SetLanguageVersion(LanguageVersion.Latest);
 		decompiler.Settings.UseSdkStyleProjectFormat = true;

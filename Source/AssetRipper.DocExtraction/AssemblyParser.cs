@@ -52,17 +52,17 @@ public static class AssemblyParser
 		else if (type.IsEnum)
 		{
 			EnumDocumentation enumDocumentation = AddEnumDocumentation(typeSummaries, fieldSummaries, type, typeFullName);
-			enumDictionary.Add(typeFullName, enumDocumentation);
+			enumDictionary.TryAdd(typeFullName, enumDocumentation);
 		}
 		else if (type.IsValueType)
 		{
 			StructDocumentation structDocumentation = AddStructDocumentation(typeSummaries, fieldSummaries, propertySummaries, type, typeFullName);
-			structDictionary.Add(typeFullName, structDocumentation);
+			structDictionary.TryAdd(typeFullName, structDocumentation);
 		}
 		else if (!type.IsInterface && !type.IsStatic())
 		{
 			ClassDocumentation classDocumentation = AddClassDocumetation(typeSummaries, fieldSummaries, propertySummaries, type, typeFullName);
-			classDictionary.Add(typeFullName, classDocumentation);
+			classDictionary.TryAdd(typeFullName, classDocumentation);
 		}
 
 		foreach (TypeDefinition nestedType in type.NestedTypes)
