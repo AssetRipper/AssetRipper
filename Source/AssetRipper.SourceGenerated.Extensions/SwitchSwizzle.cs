@@ -48,7 +48,7 @@ public static class SwitchSwizzle
 		TextureFormat realFormat = GetCorrectedSwitchTextureFormat(texture.Format_C28E);
 
 		// Format is unsupported, we back out
-		if (GetTexelDimensions(realFormat) is not { } texelDimensions)
+		if (GetBlockDimensions(realFormat) is not { } blockDimensions)
 		{
 			return data;
 		}
@@ -59,8 +59,7 @@ public static class SwitchSwizzle
 		int blocksPerTexel = TexelByteSize / blockByteSize;
 
 		Debug.Assert(blocksPerTexel > 0);
-		Debug.Assert(texelDimensions.Width % blocksPerTexel == 0, "Texel width should be a multiple of blocks per texel.");
-		Size blockDimensions = new(texelDimensions.Width / blocksPerTexel, texelDimensions.Height);
+		Size texelDimensions = new(blockDimensions.Width * blocksPerTexel, blockDimensions.Height);
 
 		byte[] newData = new byte[data.Length];
 
@@ -148,20 +147,17 @@ public static class SwitchSwizzle
 		return result;
 	}
 
-	/// <remarks>
-	/// Some of these are educated guesses. Guesses are based on known values for others and the fact that texels are always 16 bytes in size.
-	/// </remarks>
-	private static Size? GetTexelDimensions(TextureFormat textureFormat) => textureFormat switch
+	private static Size? GetBlockDimensions(TextureFormat textureFormat) => textureFormat switch
 	{
-		TextureFormat.Alpha8 => new Size(16, 1),
-		TextureFormat.ARGB4444 => new Size(8, 1),
-		TextureFormat.RGBA4444 => new Size(8, 1),
-		TextureFormat.ARGB32 => new Size(4, 1),
-		TextureFormat.BGRA32_14 or TextureFormat.BGRA32_37 => new Size(4, 1),
-		TextureFormat.RGB565 => new Size(8, 1),
-		TextureFormat.DXT1 => new Size(8, 4),
+		TextureFormat.Alpha8 => new Size(1, 1),
+		TextureFormat.ARGB4444 => new Size(1, 1),
+		TextureFormat.RGBA4444 => new Size(1, 1),
+		TextureFormat.ARGB32 => new Size(1, 1),
+		TextureFormat.BGRA32_14 or TextureFormat.BGRA32_37 => new Size(1, 1),
+		TextureFormat.RGB565 => new Size(1, 1),
+		TextureFormat.DXT1 => new Size(4, 4),
 		TextureFormat.DXT5 => new Size(4, 4),
-		TextureFormat.BC4 => new Size(8, 4),
+		TextureFormat.BC4 => new Size(4, 4),
 		TextureFormat.BC5 => new Size(4, 4),
 		TextureFormat.BC6H => new Size(4, 4),
 		TextureFormat.BC7 => new Size(4, 4),
@@ -171,14 +167,14 @@ public static class SwitchSwizzle
 		TextureFormat.ASTC_RGB_8x8 or TextureFormat.ASTC_RGBA_8x8 or TextureFormat.ASTC_HDR_8x8 => new Size(8, 8),
 		TextureFormat.ASTC_RGB_10x10 or TextureFormat.ASTC_RGBA_10x10 or TextureFormat.ASTC_HDR_10x10 => new Size(10, 10),
 		TextureFormat.ASTC_RGB_12x12 or TextureFormat.ASTC_RGBA_12x12 or TextureFormat.ASTC_HDR_12x12 => new Size(12, 12),
-		TextureFormat.R8 or TextureFormat.R8_SIGNED => new Size(16, 1),
-		TextureFormat.RG16 or TextureFormat.RG16_SIGNED => new Size(8, 1),
-		TextureFormat.RGBA32 or TextureFormat.RGBA32_SIGNED => new Size(4, 1),
-		TextureFormat.R16 or TextureFormat.R16_SIGNED or TextureFormat.RHalf => new Size(8, 1),
-		TextureFormat.RG32 or TextureFormat.RG32_SIGNED or TextureFormat.RGHalf => new Size(4, 1),
-		TextureFormat.RGBA64 or TextureFormat.RGBA64_SIGNED or TextureFormat.RGBAHalf => new Size(2, 1),
-		TextureFormat.RFloat => new Size(4, 1),
-		TextureFormat.RGFloat => new Size(2, 1),
+		TextureFormat.R8 or TextureFormat.R8_SIGNED => new Size(1, 1),
+		TextureFormat.RG16 or TextureFormat.RG16_SIGNED => new Size(1, 1),
+		TextureFormat.RGBA32 or TextureFormat.RGBA32_SIGNED => new Size(1, 1),
+		TextureFormat.R16 or TextureFormat.R16_SIGNED or TextureFormat.RHalf => new Size(1, 1),
+		TextureFormat.RG32 or TextureFormat.RG32_SIGNED or TextureFormat.RGHalf => new Size(1, 1),
+		TextureFormat.RGBA64 or TextureFormat.RGBA64_SIGNED or TextureFormat.RGBAHalf => new Size(1, 1),
+		TextureFormat.RFloat => new Size(1, 1),
+		TextureFormat.RGFloat => new Size(1, 1),
 		TextureFormat.RGBAFloat => new Size(1, 1),
 		TextureFormat.ARGBFloat => new Size(1, 1),
 		_ => null,
