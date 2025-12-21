@@ -1,3 +1,4 @@
+using AssetRipper.IO.Files.CompressedFiles;
 using AssetRipper.IO.Files.ResourceFiles;
 using AssetRipper.IO.Files.SerializedFiles;
 
@@ -20,7 +21,7 @@ public abstract class FileContainer : FileBase
 		}
 	}
 
-	public void AddFile(FileBase file)
+	public void AddFile(FileBase? file)
 	{
 		switch (file)
 		{
@@ -33,8 +34,13 @@ public abstract class FileContainer : FileBase
 			case FileContainer fileList:
 				AddFileContainer(fileList);
 				return;
+			case CompressedFile compressedFile:
+				AddFile(compressedFile.UncompressedFile);
+				return;
 			case FailedFile failedFile:
 				AddFailedFile(failedFile);
+				return;
+			case null:
 				return;
 			default:
 				throw new NotSupportedException(file.GetType().ToString());
