@@ -6,7 +6,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AssetRipper.ICSharpCode.Decompiler" Version="10.0.0.8188-preview2" />
+		<PackageReference Include="AssetRipper.ICSharpCode.Decompiler" Version="10.0.0.8273-preview2" />
 	</ItemGroup>
 
 	<ItemGroup>
