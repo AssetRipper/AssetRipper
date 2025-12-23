@@ -60,7 +60,23 @@ public readonly struct Meta
 
 	private const long UnityEpoch = 0x089f7ff5f7b58000;
 
-	private static long CurrentTick => (DateTime.Now.Ticks - UnityEpoch) / 10000000;
+	private static long? _deterministicTimestamp;
+
+	private static long CurrentTick
+	{
+		get
+		{
+			//If this is the first time we're writing out a timestamp, check whether `SOURCE_DATE_EPOCH` is set and cache it.
+			//This should be a Unix timestamp as a decimal string. For more details on how tools can use this to improve build reproducibility, see: https://reproducible-builds.org/docs/source-date-epoch/#setting-the-variable
+			_deterministicTimestamp ??= long.TryParse(Environment.GetEnvironmentVariable("SOURCE_DATE_EPOCH"), out long l)
+				? SystemTimeToUnityTime(DateTimeOffset.FromUnixTimeSeconds(l))
+				: -1;
+			return _deterministicTimestamp is < 0
+				? SystemTimeToUnityTime(DateTimeOffset.Now)
+				: _deterministicTimestamp.Value;
+			static long SystemTimeToUnityTime(DateTimeOffset time) => (time.UtcTicks - UnityEpoch) / 10000000;
+		}
+	}
 
 	public const string FileFormatVersionName = "fileFormatVersion";
 	public const string GuidName = "guid";
