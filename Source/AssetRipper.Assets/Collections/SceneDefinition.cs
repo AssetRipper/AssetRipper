@@ -1,4 +1,6 @@
-﻿namespace AssetRipper.Assets.Collections;
+using AssetRipper.IO.Files;
+﻿
+namespace AssetRipper.Assets.Collections;
 
 public sealed class SceneDefinition
 {
@@ -20,7 +22,7 @@ public sealed class SceneDefinition
 		{
 			Name = name,
 			Path = $"Assets/Scenes/{name}",
-			GUID = guid.IsZero ? UnityGuid.NewGuid() : guid,
+			GUID = guid.IsZero ? new(FileSystem.GetRandomGuid()) : guid,
 		};
 	}
 
@@ -36,7 +38,7 @@ public sealed class SceneDefinition
 		{
 			Name = System.IO.Path.GetFileName(path),
 			Path = path,
-			GUID = guid.IsZero ? UnityGuid.NewGuid() : guid,
+			GUID = guid.IsZero ? new(FileSystem.GetRandomGuid()) : guid,
 		};
 	}
 

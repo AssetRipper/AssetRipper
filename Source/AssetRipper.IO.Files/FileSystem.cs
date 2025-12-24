@@ -1,4 +1,5 @@
 ﻿using System.Buffers;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -180,5 +181,17 @@ public partial class FileSystem
 		"lpt1", "lpt2", "lpt3", "lpt4", "lpt5", "lpt6", "lpt7", "lpt8", "lpt9",
 	};
 
-	private protected static string GetRandomString() => Guid.NewGuid().ToString();
+	private static Random _rng = new(Seed: 0x4);
+
+	[ThreadStatic]
+	private static byte[]? _rngBuf = null;
+
+	public static Guid GetRandomGuid()
+	{
+		_rngBuf ??= new byte[/*sizeof(Guid)*/16];
+		_rng.NextBytes(_rngBuf);
+		return MemoryMarshal.Read<Guid>(_rngBuf);
+	}
+
+	private protected static string GetRandomString() => GetRandomGuid().ToString();
 }
