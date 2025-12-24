@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Assets.Collections;
-
+using AssetRipper.IO.Files;
+﻿
 namespace AssetRipper.Assets.Bundles;
 
 /// <summary>
@@ -27,7 +28,7 @@ public sealed class ProcessedBundle : VirtualBundle<ProcessedAssetCollection>
 		Name = string.IsNullOrEmpty(name) ? GenerateRandomName() : name;
 	}
 
-	private static string GenerateRandomName() => $"{nameof(ProcessedBundle)}_{UnityGuid.NewGuid()}";
+	private static string GenerateRandomName() => $"{nameof(ProcessedBundle)}_{new UnityGuid(FileSystem.GetRandomGuid())}";
 
 	/// <summary>
 	/// Adds a new processed asset collection to this bundle.
