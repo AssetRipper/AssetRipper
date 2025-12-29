@@ -93,10 +93,7 @@ public static class ExportIdHandler
 	/// Generate a random internal id.
 	/// </summary>
 	/// <returns>A random <see cref="long"/> between <see cref="long.MinValue"/> and <see cref="long.MaxValue"/>.</returns>
-	public static long GetInternalId()
-	{
-		Span<byte> buffer = stackalloc byte[8];
-		Random.Shared.NextBytes(buffer);
-		return BitConverter.ToInt64(buffer);
-	}
+	public static long GetInternalId() => _rng.NextInt64();
+
+	private static readonly Random _rng = new(Seed: 0x4);
 }
