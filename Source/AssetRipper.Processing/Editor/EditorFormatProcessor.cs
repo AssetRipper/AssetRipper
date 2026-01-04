@@ -79,8 +79,19 @@ public class EditorFormatProcessor : IAssetProcessor
 			Convert(asset);
 		}
 
-		//Parallel processing
-		Parallel.ForEach(GetReleaseAssets(gameData), ConvertAsync);
+		if (Environment.GetEnvironmentVariable("SOURCE_DATE_EPOCH") is null)
+		{
+			//Parallel processing
+			Parallel.ForEach(GetReleaseAssets(gameData), ConvertAsync);
+		}
+		else
+		{
+			//the user wants determinism, run in series
+			foreach (var asset in GetReleaseAssets(gameData))
+			{
+				ConvertAsync(asset);
+			}
+		}
 
 		checksumCache = null;
 		assemblyManager = null;
