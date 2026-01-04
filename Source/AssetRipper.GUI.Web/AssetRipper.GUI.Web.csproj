@@ -27,7 +27,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="AssetRipper.GUI.Web.Dependencies" Version="1.0.0" />
-		<PackageReference Include="AssetRipper.NativeDialogs" Version="1.0.1" />
+		<PackageReference Include="AssetRipper.NativeDialogs" Version="1.1.0" />
 		<PackageReference Include="AssetRipper.Text.Html" Version="2.1.0" />
 		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.1" />
 		<PackageReference Include="Microsoft.OpenApi" Version="2.4.1" />
