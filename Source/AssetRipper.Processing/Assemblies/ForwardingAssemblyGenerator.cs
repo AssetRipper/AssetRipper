@@ -26,6 +26,7 @@ public sealed class ForwardingAssemblyGenerator : IAssetProcessor
 		{
 			AssemblyReference corLibReference = new(mscorlib);
 			AssemblyDefinition assembly = new(UnsafeAssemblyName, (Version)mscorlib.Version.Clone());
+			using (Stream writeStream = File.Create(Path.GetTempFileName())) manager.SaveAssembly(assembly, writeStream);
 			ModuleDefinition module = new(UnsafeAssemblyName, corLibReference);
 			module.AssemblyReferences.Add(corLibReference);
 			assembly.Modules.Add(module);
@@ -40,6 +41,7 @@ public sealed class ForwardingAssemblyGenerator : IAssetProcessor
 		{
 			AssemblyReference corLibReference = new(mscorlib);
 			AssemblyDefinition assembly = new(InteropServicesAssemblyName, (Version)mscorlib.Version.Clone());
+			using (Stream writeStream = File.Create(Path.GetTempFileName())) manager.SaveAssembly(assembly, writeStream);
 			ModuleDefinition module = new(InteropServicesAssemblyName, corLibReference);
 			module.AssemblyReferences.Add(corLibReference);
 			assembly.Modules.Add(module);
