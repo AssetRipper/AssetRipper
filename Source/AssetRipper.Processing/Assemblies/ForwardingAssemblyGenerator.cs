@@ -1,4 +1,5 @@
 ﻿using AsmResolver.DotNet;
+using AssetRipper.Assets;
 using AssetRipper.Import.Structure.Assembly.Managers;
 
 namespace AssetRipper.Processing.Assemblies;
@@ -26,7 +27,7 @@ public sealed class ForwardingAssemblyGenerator : IAssetProcessor
 		{
 			AssemblyReference corLibReference = new(mscorlib);
 			AssemblyDefinition assembly = new(UnsafeAssemblyName, (Version)mscorlib.Version.Clone());
-			ModuleDefinition module = new(UnsafeAssemblyName, corLibReference);
+			ModuleDefinition module = new(UnsafeAssemblyName, corLibReference) { Mvid = RandomGuid.Next() };
 			module.AssemblyReferences.Add(corLibReference);
 			assembly.Modules.Add(module);
 
@@ -40,7 +41,7 @@ public sealed class ForwardingAssemblyGenerator : IAssetProcessor
 		{
 			AssemblyReference corLibReference = new(mscorlib);
 			AssemblyDefinition assembly = new(InteropServicesAssemblyName, (Version)mscorlib.Version.Clone());
-			ModuleDefinition module = new(InteropServicesAssemblyName, corLibReference);
+			ModuleDefinition module = new(InteropServicesAssemblyName, corLibReference) { Mvid = RandomGuid.Next() };
 			module.AssemblyReferences.Add(corLibReference);
 			assembly.Modules.Add(module);
 

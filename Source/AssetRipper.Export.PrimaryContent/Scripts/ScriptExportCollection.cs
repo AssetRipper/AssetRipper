@@ -69,7 +69,7 @@ public sealed class ScriptExportCollection : ExportCollectionBase
 			settings.UseSdkStyleProjectFormat = false;//sdk style can throw
 			settings.UseNestedDirectoriesForNamespaces = true;
 
-			WholeProjectDecompiler decompiler = new(settings, new UniversalAssemblyResolver(assemblyPath, false, null), null, null, null);
+			DeterministicWholeProjectDecompiler decompiler = new(settings, new UniversalAssemblyResolver(assemblyPath, false, null));
 			PEFile file = new(assemblyPath);
 			decompiler.DecompileProject(file, outputDirectory);
 		}
