@@ -263,6 +263,15 @@ public static class Pass002_RenameSubnodes
 				node.TryRenameSubNode($"m_Bytes_{i}_", $"m_Bytes_{i}");
 			}
 		}
+		else if (node.TypeName == "AudioSource")
+		{
+			if (node.TryGetSubNodeByName("m_Resource", out UniversalNode? resourceNode))
+			{
+				// https://github.com/AssetRipper/AssetRipper/issues/1881
+				resourceNode.TypeName = "PPtr_Object";
+				resourceNode.OriginalTypeName = "PPtr<Object>";// Need to ensure correct merging
+			}
+		}
 		else if (node.IsAssetServerCache(out UniversalNode? modifiedItemTypeNode))
 		{
 			modifiedItemTypeNode.TypeName = "ModifiedItem";
