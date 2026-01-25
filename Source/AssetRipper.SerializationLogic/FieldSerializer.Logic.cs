@@ -94,7 +94,6 @@ public readonly partial struct FieldSerializer(UnityVersion version)
 			}
 		}
 
-
 		if (!IsReferenceTypeSerializable(fieldType) && !fieldDefinition.HasSerializeReferenceAttribute())
 		{
 			return false;
@@ -186,21 +185,19 @@ public readonly partial struct FieldSerializer(UnityVersion version)
 		}
 	}
 
-	private bool IsReferenceTypeSerializable(ITypeDescriptor typeReference)
+	private bool IsReferenceTypeSerializable(TypeSignature fieldType)
 	{
-		if (typeReference.ToTypeSignature() is CorLibTypeSignature { ElementType: ElementType.String } corLibTypeSignature)
+		if (fieldType is CorLibTypeSignature { ElementType: ElementType.String } corLibTypeSignature)
 		{
 			return IsSerializablePrimitive(corLibTypeSignature);
 		}
 
-		if (AsmUtils.IsGenericDictionary(typeReference))
+		if (AsmUtils.IsGenericDictionary(fieldType))
 		{
 			return false;
 		}
 
-		if (EngineTypePredicates.IsUnityEngineObject(typeReference) ||
-			EngineTypePredicates.IsSerializableUnityClass(typeReference) ||
-			ShouldImplementIDeserializable(typeReference))
+		if (EngineTypePredicates.IsUnityEngineObject(fieldType) || EngineTypePredicates.IsSerializableUnityClass(fieldType) || ShouldImplementIDeserializable(fieldType))
 		{
 			return true;
 		}
@@ -208,19 +205,19 @@ public readonly partial struct FieldSerializer(UnityVersion version)
 		return false;
 	}
 
-	private bool IsTypeSerializable(ITypeDescriptor typeReference)
+	private bool IsTypeSerializable(TypeSignature fieldType)
 	{
-		if (typeReference.ToTypeSignature() is CorLibTypeSignature { ElementType: ElementType.String } corLibTypeSignature)
+		if (fieldType is CorLibTypeSignature { ElementType: ElementType.String })
 		{
 			return true;
 		}
 
-		if (typeReference.IsValueType)
+		if (fieldType.IsValueType)
 		{
-			return IsValueTypeSerializable(typeReference.ToTypeSignature());
+			return IsValueTypeSerializable(fieldType);
 		}
 
-		return IsReferenceTypeSerializable(typeReference);
+		return IsReferenceTypeSerializable(fieldType);
 	}
 
 	private bool IsSerializablePrimitive(CorLibTypeSignature typeReference)
@@ -237,11 +234,11 @@ public readonly partial struct FieldSerializer(UnityVersion version)
 		};
 	}
 
-	private bool IsSupportedCollection(TypeSignature typeReference)
+	private bool IsSupportedCollection(TypeSignature fieldType)
 	{
-		if (typeReference is SzArrayTypeSignature || AsmUtils.IsGenericList(typeReference))
+		if (fieldType is SzArrayTypeSignature || AsmUtils.IsGenericList(fieldType))
 		{
-			return IsTypeSerializable(AsmUtils.ElementTypeOfCollection(typeReference));
+			return IsTypeSerializable(AsmUtils.ElementTypeOfCollection(fieldType));
 		}
 
 		return false;

@@ -115,9 +115,18 @@ public class FieldSerializationTests
 		}
 	}
 
+	private class DerivedObject : UnityEngine.Object
+	{
+	}
+
 	private class CustomMonoBehaviourWithObjectField : UnityEngine.MonoBehaviour
 	{
 		public UnityEngine.Object? pptr;
+	}
+
+	private class CustomMonoBehaviourWithDerivedObjectField : UnityEngine.MonoBehaviour
+	{
+		public DerivedObject? pptr;
 	}
 
 	private class CustomMonoBehaviourWithMonoBehaviourField : UnityEngine.MonoBehaviour
@@ -144,6 +153,7 @@ public class FieldSerializationTests
 	}
 
 	[TestCase(typeof(CustomMonoBehaviourWithObjectField))]
+	[TestCase(typeof(CustomMonoBehaviourWithDerivedObjectField))]
 	[TestCase(typeof(CustomMonoBehaviourWithMonoBehaviourField))]
 	[TestCase(typeof(CustomMonoBehaviourWithNonGenericDerivedMonoBehaviourField))]
 	[TestCase(typeof(CustomMonoBehaviourWithGenericAbstractMonoBehaviourField))]
@@ -360,5 +370,43 @@ public class FieldSerializationTests
 	{
 		SerializableType serializableType = SerializableTypes.Create<ClassWithAbstractListField>();
 		Assert.That(serializableType.Fields, Has.Count.EqualTo(0));
+	}
+
+	[Serializable]
+	private class BaseClassWithSelfField
+	{
+		public int baseField;
+		public BaseClassWithSelfField? nonSerializedField;
+	}
+
+	[Serializable]
+	private class DerivedClassWithBaseClassField : BaseClassWithSelfField
+	{
+		public BaseClassWithSelfField? serializedField;
+	}
+
+	[Test]
+	public void FieldWhoseTypeIsBaseShouldBeSerialized()
+	{
+		SerializableType serializableType = SerializableTypes.Create<DerivedClassWithBaseClassField>();
+		Assert.That(serializableType.Fields, Has.Count.EqualTo(2));
+	}
+
+	private class BaseClassWithoutSerializableAttribute
+	{
+		public int baseField;
+	}
+
+	[Serializable]
+	private class DerivedClassWithSerializableAttribute : BaseClassWithoutSerializableAttribute
+	{
+		public int derivedField;
+	}
+
+	[Test]
+	public void FieldsFromBaseTypesAreStillSerializedEvenWithoutSerializableAttributeOnBaseType()
+	{
+		SerializableType serializableType = SerializableTypes.Create<DerivedClassWithSerializableAttribute>();
+		Assert.That(serializableType.Fields, Has.Count.EqualTo(2));
 	}
 }

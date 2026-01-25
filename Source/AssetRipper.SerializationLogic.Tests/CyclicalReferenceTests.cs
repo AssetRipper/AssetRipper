@@ -206,4 +206,28 @@ public class CyclicalReferenceTests
 			}
 		}
 	}
+
+	[Serializable]
+	public class BaseClass<T>
+	{
+		public string? field1;
+		public T? field2;
+	}
+	[Serializable]
+	public class DerivedClass1 : BaseClass<string>
+	{
+	}
+	[Serializable]
+	public class DerivedClass2 : BaseClass<DerivedClass2>
+	{
+	}
+
+	[Test]
+	public void CyclicalReferenceGenericClassIsHandled()
+	{
+		SerializableType serializableType1 = SerializableTypes.Create<DerivedClass1>();
+		Assert.That(serializableType1.Fields, Has.Count.EqualTo(2)); // No cycles, both fields are serialized
+		SerializableType serializableType2 = SerializableTypes.Create<DerivedClass2>();
+		Assert.That(serializableType2.Fields, Has.Count.EqualTo(1)); // One cycle, only field1 is serialized
+	}
 }
