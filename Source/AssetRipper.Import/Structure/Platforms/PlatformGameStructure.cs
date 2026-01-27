@@ -245,7 +245,6 @@ public abstract partial class PlatformGameStructure
 	{
 		foreach (string file in FileSystem.Directory.EnumerateFiles(root))
 		{
-			//if (file.Extension == AssetBundleExtension || file.Extension == AlternateBundleExtension)
 			if (BundleHeader.IsBundleHeader(file, FileSystem))
 			{
 				string name = FileSystem.Path.GetFileNameWithoutExtension(file).ToLowerInvariant();
