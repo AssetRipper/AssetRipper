@@ -74,7 +74,7 @@ public static class TextureConverter
 		// despite the name, this packing works for different formats
 		if (texture.LightmapFormatE == TextureUsageMode.NormalmapDXT5nm)
 		{
-			UnpackNormal(bitmap.Bits);
+			UnpackNormal(bitmap);
 		}
 
 		return true;
@@ -177,7 +177,7 @@ public static class TextureConverter
 		// despite the name, this packing works for different formats
 		if (texture.LightmapFormat_C28E == TextureUsageMode.NormalmapDXT5nm)
 		{
-			UnpackNormal(bitmap.Bits);
+			UnpackNormal(bitmap);
 		}
 
 		return true;
@@ -539,23 +539,35 @@ public static class TextureConverter
 		}
 	}
 
-	private static void UnpackNormal(Span<byte> data)
+	private static void UnpackNormal(DirectBitmap bitmap)
 	{
-		for (int i = 0; i < data.Length; i += 4)
+		if (bitmap is DirectBitmap<ColorRGBA<byte>, byte> rgbaBitmap)
 		{
-			Span<byte> pixelSpan = data.Slice(i, 4);
-			byte r = pixelSpan[3];
-			byte g = pixelSpan[1];
-			byte a = pixelSpan[2];
-			pixelSpan[2] = r;
-			pixelSpan[3] = a;
+			UnpackNormal(rgbaBitmap.Pixels);
+		}
+		else
+		{
+			Logger.Log(LogType.Warning, LogCategory.Export, "UnpackNormal called on unsupported bitmap format. Only RGBA 32 is supported.");
+		}
+	}
+
+	private static void UnpackNormal<T>(Span<T> pixels) where T : unmanaged, IColor<byte>
+	{
+		for (int i = 0; i < pixels.Length; i++)
+		{
+			// Alpha and red are swapped
+			// Blue needs calculated
+			pixels[i].GetChannels(out byte a, out byte g, out _, out byte r);
 
 			const double MagnitudeSqr = 255 * 255;
 			double vr = r * 2.0 - 255.0;
 			double vg = g * 2.0 - 255.0;
-			double hypotenuseSqr = Math.Min(vr * vr + vg * vg, MagnitudeSqr);
-			double b = (Math.Sqrt(MagnitudeSqr - hypotenuseSqr) + 255.0) / 2.0;
-			pixelSpan[0] = (byte)b;
+			double hypotenuseSqr = double.Min(vr * vr + vg * vg, MagnitudeSqr);
+			double vb = double.Sqrt(MagnitudeSqr - hypotenuseSqr);
+			double bExact = (vb + 255.0) / 2.0;
+			byte b = NumericConversion.Convert<double, byte>(bExact / 255.0);
+
+			pixels[i].SetChannels(r, g, b, a);
 		}
 	}
 }
