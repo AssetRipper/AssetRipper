@@ -1,11 +1,12 @@
-﻿using AsmResolver.DotNet;
-using AssetRipper.Assets;
+﻿using AssetRipper.Assets;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using ICSharpCode.Decompiler;
 using ICSharpCode.Decompiler.CSharp;
 using ICSharpCode.Decompiler.CSharp.ProjectDecompiler;
 using ICSharpCode.Decompiler.Metadata;
+using System.Runtime.InteropServices;
+using AssemblyDefinition = AsmResolver.DotNet.AssemblyDefinition;
 
 namespace AssetRipper.Export.PrimaryContent.Scripts;
 
@@ -69,11 +70,33 @@ public sealed class ScriptExportCollection : ExportCollectionBase
 			settings.UseSdkStyleProjectFormat = false;//sdk style can throw
 			settings.UseNestedDirectoriesForNamespaces = true;
 
-			WholeProjectDecompiler decompiler = new(settings, new UniversalAssemblyResolver(assemblyPath, false, null), null, null, null);
+			DeterministicWholeProjectDecompiler decompiler = new(settings, new UniversalAssemblyResolver(assemblyPath, false, null));
 			PEFile file = new(assemblyPath);
 			decompiler.DecompileProject(file, outputDirectory);
 		}
 
 		return true;
+	}
+
+	private sealed class DeterministicWholeProjectDecompiler(DecompilerSettings settings, IAssemblyResolver assemblyResolver)
+		: WholeProjectDecompiler(settings, NextRandomGuid(), assemblyResolver, null, null, null)
+	{
+		/// <remarks>
+		/// If the user has set <c>SOURCE_DATE_EPOCH</c>, they must want deterministic output,
+		/// which we can provide by using their timestamp (base-10 s64 string) as the PRNG seed.
+		/// <br/>For more details on how tools can use <c>SOURCE_DATE_EPOCH</c> to improve build reproducibility,
+		/// see <see href="https://reproducible-builds.org/docs/source-date-epoch/#setting-the-variable">reproducible-builds.org</see>.
+		/// </remarks>
+		private static readonly Random rng = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("SOURCE_DATE_EPOCH"))
+			&& long.TryParse(Environment.GetEnvironmentVariable("SOURCE_DATE_EPOCH"), out long l)
+				? new(Seed: unchecked((int)l))
+				: Random.Shared;
+
+		public static Guid NextRandomGuid()
+		{
+			Span<byte> buf = stackalloc byte[/*sizeof(Guid)*/16];
+			rng.NextBytes(buf);
+			return MemoryMarshal.Read<Guid>(buf);
+		}
 	}
 }
