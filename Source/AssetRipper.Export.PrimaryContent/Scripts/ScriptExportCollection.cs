@@ -87,13 +87,14 @@ public sealed class ScriptExportCollection : ExportCollectionBase
 		/// <br/>For more details on how tools can use <c>SOURCE_DATE_EPOCH</c> to improve build reproducibility,
 		/// see <see href="https://reproducible-builds.org/docs/source-date-epoch/#setting-the-variable">reproducible-builds.org</see>.
 		/// </remarks>
-		private static readonly Random rng = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("SOURCE_DATE_EPOCH"))
+		private static readonly Random? rng = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("SOURCE_DATE_EPOCH"))
 			&& long.TryParse(Environment.GetEnvironmentVariable("SOURCE_DATE_EPOCH"), out long l)
 				? new(Seed: unchecked((int)l))
-				: Random.Shared;
+				: null;
 
 		public static Guid NextRandomGuid()
 		{
+			if (rng is null) return Guid.Empty;
 			Span<byte> buf = stackalloc byte[/*sizeof(Guid)*/16];
 			rng.NextBytes(buf);
 			return MemoryMarshal.Read<Guid>(buf);
