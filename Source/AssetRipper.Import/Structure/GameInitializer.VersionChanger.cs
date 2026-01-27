@@ -9,6 +9,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Classes.ClassID_2;
 using AssetRipper.SourceGenerated.Classes.ClassID_25;
+using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Subclasses.ComponentPair;
 using System.Runtime.CompilerServices;
 
@@ -123,6 +124,51 @@ internal sealed partial record class GameInitializer
 						{
 							pair.ClassID = (int)ClassIDType.Component;
 						}
+					}
+				}
+			}
+			else if (original is ITexture2D texture)
+			{
+				ITexture2D newTexture = (ITexture2D)replacement;
+				if (newTexture.TextureSettings_C28.Has_WrapU() && texture.TextureSettings_C28.Has_WrapMode())
+				{
+					newTexture.TextureSettings_C28.WrapU = texture.TextureSettings_C28.WrapMode;
+				}
+				else if (newTexture.TextureSettings_C28.Has_WrapMode() && texture.TextureSettings_C28.Has_WrapU())
+				{
+					newTexture.TextureSettings_C28.WrapMode = texture.TextureSettings_C28.WrapU;
+				}
+
+				if (newTexture.Has_CompleteImageSize_C28_UInt32() && texture.Has_CompleteImageSize_C28_Int32() && texture.CompleteImageSize_C28_Int32 > 0)
+				{
+					newTexture.CompleteImageSize_C28_UInt32 = (uint)texture.CompleteImageSize_C28_Int32;
+				}
+				else if (newTexture.Has_CompleteImageSize_C28_Int32() && texture.Has_CompleteImageSize_C28_UInt32() && texture.CompleteImageSize_C28_UInt32 < int.MaxValue)
+				{
+					newTexture.CompleteImageSize_C28_Int32 = (int)texture.CompleteImageSize_C28_UInt32;
+				}
+
+				if (newTexture.Has_MipMap_C28() && texture.Has_MipCount_C28())
+				{
+					newTexture.MipMap_C28 = texture.MipCount_C28 > 1;
+				}
+				else if (newTexture.Has_MipCount_C28() && texture.Has_MipMap_C28())
+				{
+					if (texture.MipMap_C28)
+					{
+						// Calculate mip count from max dimension
+						int size = int.Max(texture.Width_C28, texture.Height_C28);
+						int mipCount = 1;
+						while (size > 1)
+						{
+							mipCount++;
+							size >>= 1;
+						}
+						newTexture.MipCount_C28 = mipCount;
+					}
+					else
+					{
+						newTexture.MipCount_C28 = 1;
 					}
 				}
 			}
