@@ -33,7 +33,6 @@ internal class ScriptDecompiler
 		settings.AlwaysShowEnumMemberValues = true;
 		settings.ShowXmlDocumentation = true;
 
-		settings.UseSdkStyleProjectFormat = false;//sdk style can throw and we don't use the csproj file at all
 		settings.UseNestedDirectoriesForNamespaces = true;
 
 		if (FullyQualifiedTypeNames)

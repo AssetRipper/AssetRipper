@@ -66,7 +66,6 @@ public sealed class ScriptExportCollection : ExportCollectionBase
 			settings.AlwaysShowEnumMemberValues = true;
 			settings.ShowXmlDocumentation = true;
 
-			settings.UseSdkStyleProjectFormat = false;//sdk style can throw
 			settings.UseNestedDirectoriesForNamespaces = true;
 
 			WholeProjectDecompiler decompiler = new(settings, new UniversalAssemblyResolver(assemblyPath, false, null), null, null, null);
