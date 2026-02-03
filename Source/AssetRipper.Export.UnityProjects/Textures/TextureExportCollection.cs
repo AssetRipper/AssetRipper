@@ -152,13 +152,14 @@ public class TextureExportCollection : AssetsExportCollection<ITexture2D>
 		else
 		{
 			AccessListBase<ISpriteMetaData> spriteSheetSprites = importer.SpriteSheet.Sprites;
+			int index = 0;
 			foreach (KeyValuePair<ISprite, ISpriteAtlas?> kvp in textureSpriteInformation)
 			{
 				ISpriteMetaData smeta = spriteSheetSprites.AddNew();
 				smeta.FillSpriteMetaData(kvp.Key, kvp.Value);
 				if (smeta.Has_InternalID())
 				{
-					smeta.InternalID = ExportIdHandler.GetInternalId();
+					smeta.InternalID = ExportIdHandler.GetPseudoRandomValue(index++);
 				}
 			}
 		}

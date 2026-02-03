@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Assets;
 using System.Diagnostics;
+using System.IO.Hashing;
 
 namespace AssetRipper.Export.UnityProjects;
 
@@ -54,49 +55,42 @@ public static class ExportIdHandler
 	/// <param name="asset"></param>
 	/// <param name="duplicateChecker"></param>
 	/// <returns></returns>
-	public static long GetRandomExportId(IUnityObjectBase asset, Func<long, bool> duplicateChecker)
+	public static long GetPseudoRandomExportId(IUnityObjectBase asset, long seed)
 	{
 		ArgumentNullException.ThrowIfNull(asset);
-		ArgumentNullException.ThrowIfNull(duplicateChecker);
 
-#warning TODO: depending on the export version exportID should has random or ordered value
+		// Depending on the export version, exportID should has random or ordered value.
+		// However, I don't have any idea where the version threshold is, and it has never seemed to matter.
+
+		// We don't bother checking for duplicates here, as the probability of a collision is extremely low.
 
 		long exportID;
 		if (asset.ClassID > MaxPrefixedClassId)
 		{
-			do
-			{
-				//Checked for StreamingController on 2018.2.5f1
-				//Small class id's use the below format
-				//Whereas this uses random id's
-				exportID = GetInternalId();
-			}
-			while (duplicateChecker(exportID));
+			//Checked for StreamingController on 2018.2.5f1
+			//Small class id's use the below format
+			//Whereas this uses random id's
+			exportID = GetPseudoRandomValue(seed);
 		}
 		else
 		{
 			long prefix = asset.ClassID * TenToTheFifthteenth;
-			ulong persistentValue = 0;
-			do
-			{
-				ulong value = unchecked((ulong)GetInternalId());
-				persistentValue = unchecked(persistentValue + value);
-				exportID = prefix + (long)(persistentValue % TenToTheFifthteenth);
-			}
-			while (duplicateChecker(exportID));
+			ulong value = unchecked((ulong)GetPseudoRandomValue(seed));
+			exportID = prefix + (long)(value % TenToTheFifthteenth);
 		}
 
 		return exportID;
 	}
 
 	/// <summary>
-	/// Generate a random internal id.
+	/// Generate a pseudo random internal id.
 	/// </summary>
-	/// <returns>A random <see cref="long"/> between <see cref="long.MinValue"/> and <see cref="long.MaxValue"/>.</returns>
-	public static long GetInternalId()
+	/// <remarks>
+	/// This uses the XxHash64 algorithm to generate a random-looking <see cref="long"/> from a <see cref="long"/> seed.
+	/// </remarks>
+	/// <returns>A random-looking <see cref="long"/> between <see cref="long.MinValue"/> and <see cref="long.MaxValue"/>.</returns>
+	public static long GetPseudoRandomValue(long seed)
 	{
-		Span<byte> buffer = stackalloc byte[8];
-		Random.Shared.NextBytes(buffer);
-		return BitConverter.ToInt64(buffer);
+		return unchecked((long)XxHash64.HashToUInt64([], seed));
 	}
 }

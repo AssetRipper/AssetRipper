@@ -52,7 +52,7 @@ public abstract class AssetsExportCollection<T> : AssetExportCollection<T> where
 
 	protected virtual long GenerateExportID(IUnityObjectBase asset)
 	{
-		return ExportIdHandler.GetRandomExportId(asset, ContainsID);
+		return ExportIdHandler.GetPseudoRandomExportId(asset, m_exportIDs.Count);
 	}
 
 	/// <summary>
@@ -68,15 +68,7 @@ public abstract class AssetsExportCollection<T> : AssetExportCollection<T> where
 		}
 
 		long exportID = GenerateExportID(asset);
-		if (m_exportIDs.TryAdd(asset, exportID))
-		{
-			m_exportAssetIds.Add(exportID);
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return m_exportIDs.TryAdd(asset, exportID);
 	}
 
 	protected void AddAssets(IEnumerable<IUnityObjectBase?> assets)
@@ -87,11 +79,6 @@ public abstract class AssetsExportCollection<T> : AssetExportCollection<T> where
 		}
 	}
 
-	private bool ContainsID(long id)
-	{
-		return m_exportAssetIds.Contains(id);
-	}
-
 	public override AssetCollection File => m_file;
 	protected AssetCollection m_file;
 
@@ -99,6 +86,4 @@ public abstract class AssetsExportCollection<T> : AssetExportCollection<T> where
 	/// A one-to-one dictionary of export id's
 	/// </summary>
 	private readonly Dictionary<IUnityObjectBase, long> m_exportIDs = new();
-
-	private readonly HashSet<long> m_exportAssetIds = new();
 }
