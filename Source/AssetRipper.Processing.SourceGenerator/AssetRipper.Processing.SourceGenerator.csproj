@@ -23,7 +23,7 @@
 
 	<ItemGroup>
 		<!-- Generator dependencies -->
-		<PackageReference Include="AssetRipper.Text.SourceGeneration" Version="1.2.2" PrivateAssets="all" GeneratePathProperty="true" />
+		<PackageReference Include="AssetRipper.Text.SourceGeneration" Version="1.2.3" PrivateAssets="all" GeneratePathProperty="true" />
 	</ItemGroup>
 
 </Project>
