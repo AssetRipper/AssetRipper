@@ -235,8 +235,6 @@ public static class WebApplicationLauncher
 
 		//Search
 		app.MapGet(SearchAPI.Urls.View, SearchAPI.GetView).ProducesHtmlPage();
-		app.MapGet(ResourceAPI.Urls.Data, ResourceAPI.GetData)
-			.Produces<byte[]>(contentType: "application/octet-stream");
 
 		//Scenes
 		app.MapGet(SceneAPI.Urls.View, SceneAPI.GetView).ProducesHtmlPage();

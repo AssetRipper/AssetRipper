@@ -25,7 +25,7 @@ public sealed class ViewPage : DefaultPage
 				.WithValue(SearchQuery.ToHtml())
 				.WithPlaceholder(Localization.SearchPlaceholder)
 				.WithClass("form-control me-2")
-				.WithStyle("max-width: 400px;")
+				.WithStyle("max-width: 50%;")
 				.Close();
 
 			new Button(writer).WithType("submit").WithClass("btn btn-primary").Close(Localization.Search);
