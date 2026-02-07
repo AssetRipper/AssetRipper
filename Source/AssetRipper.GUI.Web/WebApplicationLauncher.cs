@@ -6,6 +6,7 @@ using AssetRipper.GUI.Web.Pages.Collections;
 using AssetRipper.GUI.Web.Pages.FailedFiles;
 using AssetRipper.GUI.Web.Pages.Resources;
 using AssetRipper.GUI.Web.Pages.Scenes;
+using AssetRipper.GUI.Web.Pages.Search;
 using AssetRipper.GUI.Web.Pages.Settings;
 using AssetRipper.GUI.Web.Paths;
 using AssetRipper.Import.Logging;
@@ -229,6 +230,9 @@ public static class WebApplicationLauncher
 
 		//Resources
 		app.MapGet(ResourceAPI.Urls.View, ResourceAPI.GetView).ProducesHtmlPage();
+
+		//Search
+		app.MapGet(SearchAPI.Urls.View, SearchAPI.GetView).ProducesHtmlPage();
 		app.MapGet(ResourceAPI.Urls.Data, ResourceAPI.GetData)
 			.Produces<byte[]>(contentType: "application/octet-stream");
 
