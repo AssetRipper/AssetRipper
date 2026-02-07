@@ -18,8 +18,6 @@ public sealed class ViewPage : DefaultPage
 		// Search form
 		using (new Form(writer).WithAction(SearchAPI.Urls.View).WithMethod("get").WithClass("d-flex align-items-center mb-3").End())
 		{
-			new Label(writer).WithFor("searchQuery").WithClass("me-2").Close(Localization.Search);
-			
 			new Input(writer)
 				.WithType("text")
 				.WithId("searchQuery")
@@ -81,24 +79,24 @@ public sealed class ViewPage : DefaultPage
 			{
 				using (new Tr(writer).End())
 				{
-					new Th(writer).Close(Localization.Name);
-					new Th(writer).Close(Localization.Class);
 					new Th(writer).Close(Localization.PathId);
+					new Th(writer).Close(Localization.Class);
+					new Th(writer).Close(Localization.Name);
 					new Th(writer).Close(Localization.Collection);
 				}
 			}
 			using (new Tbody(writer).WithId("resultsTable").End())
 			{
-				foreach (var result in results)
+				foreach (SearchResult result in results)
 				{
 					using (new Tr(writer).WithCustomAttribute("data-class", result.Asset.ClassName).End())
 					{
+						new Td(writer).Close(result.Asset.PathID.ToString());
+						new Td(writer).Close(result.Asset.ClassName);
 						using (new Td(writer).End())
 						{
 							PathLinking.WriteLink(writer, result.Path, result.Asset.GetBestName());
 						}
-						new Td(writer).Close(result.Asset.ClassName);
-						new Td(writer).Close(result.Asset.PathID.ToString());
 						using (new Td(writer).End())
 						{
 							PathLinking.WriteLink(writer, result.CollectionPath, result.Collection.Name);
@@ -116,32 +114,32 @@ public sealed class ViewPage : DefaultPage
 		// Add client-side filtering script
 		using (new Script(writer).End())
 		{
-			writer.Write(@"
-document.addEventListener('DOMContentLoaded', function() {
-	const classFilter = document.getElementById('classFilter');
-	if (classFilter) {
-		classFilter.addEventListener('change', function() {
-			const selectedClass = this.value;
-			const rows = document.querySelectorAll('#resultsTable tr');
-			
-			rows.forEach(function(row) {
-				const rowClass = row.getAttribute('data-class');
-				if (selectedClass === '' || rowClass === selectedClass) {
-					row.style.display = '';
-				} else {
-					row.style.display = 'none';
-				}
-			});
-		});
-	}
-});
-");
+			writer.Write("""
+				document.addEventListener('DOMContentLoaded', function() {
+					const classFilter = document.getElementById('classFilter');
+					if (classFilter) {
+						classFilter.addEventListener('change', function() {
+							const selectedClass = this.value;
+							const rows = document.querySelectorAll('#resultsTable tr');
+							
+							rows.forEach(function(row) {
+								const rowClass = row.getAttribute('data-class');
+								if (selectedClass === '' || rowClass === selectedClass) {
+									row.style.display = '';
+								} else {
+									row.style.display = 'none';
+								}
+							});
+						});
+					}
+				});
+				""");
 		}
 	}
 
 	private List<SearchResult> PerformSearch(string query)
 	{
-		var results = new List<SearchResult>();
+		List<SearchResult> results = [];
 		GameBundle bundle = GameFileLoader.GameBundle;
 
 		foreach (AssetCollection collection in bundle.FetchAssetCollections())
@@ -150,22 +148,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 			foreach (IUnityObjectBase asset in collection)
 			{
-				// Search in asset name
-				string assetName = asset.GetBestName();
-				if (assetName.Contains(query, StringComparison.OrdinalIgnoreCase))
-				{
-					results.Add(new SearchResult
-					{
-						Asset = asset,
-						Collection = collection,
-						CollectionPath = collectionPath,
-						Path = collectionPath.GetAsset(asset.PathID)
-					});
-					continue;
-				}
-
-				// Search in class name
-				if (asset.ClassName.Contains(query, StringComparison.OrdinalIgnoreCase))
+				if (Match(asset, query))
 				{
 					results.Add(new SearchResult
 					{
@@ -181,7 +164,25 @@ document.addEventListener('DOMContentLoaded', function() {
 		return results;
 	}
 
-	private class SearchResult
+	private static bool Match(IUnityObjectBase asset, string query)
+	{
+		// Search in asset name
+		string assetName = asset.GetBestName();
+		if (assetName.Contains(query, StringComparison.OrdinalIgnoreCase))
+		{
+			return true;
+		}
+
+		// Search in class name
+		if (asset.ClassName.Contains(query, StringComparison.OrdinalIgnoreCase))
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	private struct SearchResult
 	{
 		public required IUnityObjectBase Asset { get; init; }
 		public required AssetCollection Collection { get; init; }

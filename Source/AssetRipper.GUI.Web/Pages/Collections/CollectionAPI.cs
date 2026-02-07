@@ -15,16 +15,10 @@ internal static class CollectionAPI
 	}
 
 	public const string Path = "Path";
-	public const string Class = "Class";
 
-	public static string GetViewUrl(CollectionPath path, string? classFilter = null)
+	public static string GetViewUrl(CollectionPath path)
 	{
-		string url = $"{Urls.View}?{GetPathQuery(path)}";
-		if (!string.IsNullOrEmpty(classFilter))
-		{
-			url += $"&{Class}={classFilter.ToUrl()}";
-		}
-		return url;
+		return $"{Urls.View}?{GetPathQuery(path)}";
 	}
 
 	public static Task GetView(HttpContext context)
@@ -32,12 +26,10 @@ internal static class CollectionAPI
 		context.Response.DisableCaching();
 		if (TryGetCollectionFromQuery(context, out AssetCollection? collection, out CollectionPath path, out Task? failureTask))
 		{
-			string? classFilter = context.Request.Query[Class];
 			return new ViewPage()
 			{
 				Collection = collection,
-				Path = path,
-				ClassFilter = string.IsNullOrWhiteSpace(classFilter) ? null : classFilter
+				Path = path
 			}.WriteToResponse(context.Response);
 		}
 		else

@@ -30,15 +30,11 @@ internal static class SearchAPI
 			return context.Response.NotFound("No files loaded.");
 		}
 
-		string? searchQuery = context.Request.Query[Query];
-		if (string.IsNullOrWhiteSpace(searchQuery))
-		{
-			searchQuery = string.Empty;
-		}
+		string searchQuery = context.Request.Query[Query].ToString();
 
 		return new ViewPage()
 		{
-			SearchQuery = searchQuery
+			SearchQuery = searchQuery.Trim()
 		}.WriteToResponse(context.Response);
 	}
 }

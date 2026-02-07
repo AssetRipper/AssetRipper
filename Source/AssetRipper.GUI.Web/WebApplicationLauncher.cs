@@ -230,6 +230,8 @@ public static class WebApplicationLauncher
 
 		//Resources
 		app.MapGet(ResourceAPI.Urls.View, ResourceAPI.GetView).ProducesHtmlPage();
+		app.MapGet(ResourceAPI.Urls.Data, ResourceAPI.GetData)
+			.Produces<byte[]>(contentType: "application/octet-stream");
 
 		//Search
 		app.MapGet(SearchAPI.Urls.View, SearchAPI.GetView).ProducesHtmlPage();
