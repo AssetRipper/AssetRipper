@@ -9,7 +9,6 @@ public sealed class ViewPage : DefaultPage
 	public required AssetCollection Collection { get; init; }
 	public required CollectionPath Path { get; init; }
 
-	public string? ClassFilter { get; init; }
 	public override string GetTitle() => Collection.Name;
 
 	public override void WriteInnerContent(TextWriter writer)
@@ -28,40 +27,30 @@ public sealed class ViewPage : DefaultPage
 		if (Collection.Count > 0)
 		{
 			new H2(writer).Close(Localization.Assets);
-			using (new Form(writer).WithAction(CollectionAPI.Urls.View).WithMethod("get").End())
+			
+			var availableClasses = Collection.Select(a => a.ClassName).Distinct().Order().ToList();
+			if (availableClasses.Count > 1)
 			{
-				new Input(writer)
-					.WithType("hidden")
-					.WithName(CollectionAPI.Path)
-					.WithValue(Path.ToJson().ToHtml())
-					.Close();
-
 				new Label(writer).WithFor("classFilter").WithClass("me-2").Close(Localization.Class);
 
 				using (new Select(writer)
 					.WithId("classFilter")
-					.WithName(CollectionAPI.Class)
+					.WithClass("me-2")
 					.End())
 				{
 					new Option(writer)
 						.WithValue(string.Empty)
-						.MaybeWithSelected(string.IsNullOrEmpty(ClassFilter))
 						.Close(Localization.All);
 
-					foreach (string cn in Collection
-						.Select(a => a.ClassName)
-						.Distinct()
-						.Order())
+					foreach (string cn in availableClasses)
 					{
 						new Option(writer)
 							.WithValue(cn)
-							.MaybeWithSelected(string.Equals(cn, ClassFilter, StringComparison.Ordinal))
 							.Close(cn);
 					}
 				}
-
-				new Button(writer).WithType("submit").WithClass("btn").Close(Localization.Filter);
 			}
+			
 			using (new Table(writer).WithClass("table").End())
 			{
 				using (new Thead(writer).End())
@@ -73,17 +62,11 @@ public sealed class ViewPage : DefaultPage
 						new Th(writer).Close(Localization.Name);
 					}
 				}
-				using (new Tbody(writer).End())
+				using (new Tbody(writer).WithId("assetsTable").End())
 				{
 					foreach (IUnityObjectBase asset in Collection)
 					{
-						if (!string.IsNullOrEmpty(ClassFilter) &&
-							!string.Equals(asset.ClassName, ClassFilter, StringComparison.Ordinal))
-						{
-							continue;
-						}
-
-						using (new Tr(writer).End())
+						using (new Tr(writer).WithCustomAttribute("data-class", asset.ClassName).End())
 						{
 							new Td(writer).Close(asset.PathID.ToString());
 							new Td(writer).Close(asset.ClassName);
@@ -131,6 +114,36 @@ public sealed class ViewPage : DefaultPage
 					}
 				}
 			}
+		}
+	}
+
+	protected override void WriteScriptReferences(TextWriter writer)
+	{
+		base.WriteScriptReferences(writer);
+		
+		// Add client-side filtering script
+		using (new Script(writer).End())
+		{
+			writer.Write("""
+				document.addEventListener('DOMContentLoaded', function() {
+					const classFilter = document.getElementById('classFilter');
+					if (classFilter) {
+						classFilter.addEventListener('change', function() {
+							const selectedClass = this.value;
+							const rows = document.querySelectorAll('#assetsTable tr');
+							
+							rows.forEach(function(row) {
+								const rowClass = row.getAttribute('data-class');
+								if (selectedClass === '' || rowClass === selectedClass) {
+									row.style.display = '';
+								} else {
+									row.style.display = 'none';
+								}
+							});
+						});
+					}
+				});
+				""");
 		}
 	}
 }
