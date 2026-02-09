@@ -13,10 +13,9 @@ internal class AssetEqualityTests
 	[Test]
 	public void DefaultGameObjectEqualityTest()
 	{
-		IGameObject gameObject1 = AssetCreator.Create<IGameObject>(ClassIDType.GameObject, new UnityVersion(2017));
-		IGameObject gameObject2 = AssetCreator.Create<IGameObject>(ClassIDType.GameObject, new UnityVersion(2017));
-		AssetEqualityComparer comparer = new();
-		Assert.That(comparer.Equals(gameObject1, gameObject2));
+		IGameObject gameObject1 = AssetCreator.CreateGameObject(new UnityVersion(2017));
+		IGameObject gameObject2 = AssetCreator.CreateGameObject(new UnityVersion(2017));
+		Assert.That(gameObject1, Is.EqualTo(gameObject2).Using(new AssetEqualityComparer()));
 	}
 
 	[Test]
@@ -24,14 +23,13 @@ internal class AssetEqualityTests
 	{
 		IGameObject gameObject1 = CreateGameObject();
 		IGameObject gameObject2 = CreateGameObject();
-		AssetEqualityComparer comparer = new();
-		Assert.That(comparer.Equals(gameObject1, gameObject2));
+		Assert.That(gameObject1, Is.EqualTo(gameObject2).Using(new AssetEqualityComparer()));
 
 		static IGameObject CreateGameObject()
 		{
 			ProcessedAssetCollection collection = AssetCreator.CreateCollection(new UnityVersion(2017));
-			IGameObject gameObject = collection.CreateAsset<IGameObject>(ClassIDType.GameObject);
-			ITransform transform = collection.CreateAsset<ITransform>(ClassIDType.Transform);
+			IGameObject gameObject = collection.CreateGameObject();
+			ITransform transform = collection.CreateTransform();
 			gameObject.AddComponent(ClassIDType.Transform, transform);
 			transform.GameObject_C4P = gameObject;
 			return gameObject;
@@ -43,14 +41,13 @@ internal class AssetEqualityTests
 	{
 		IGameObject gameObject1 = CreateGameObject(0, 0, 0);
 		IGameObject gameObject2 = CreateGameObject(1, 1, 1);
-		AssetEqualityComparer comparer = new();
-		Assert.That(comparer.Equals(gameObject1, gameObject2), Is.False);
+		Assert.That(gameObject1, Is.Not.EqualTo(gameObject2).Using(new AssetEqualityComparer()));
 
 		static IGameObject CreateGameObject(float x, float y, float z)
 		{
 			ProcessedAssetCollection collection = AssetCreator.CreateCollection(new UnityVersion(2017));
-			IGameObject gameObject = collection.CreateAsset<IGameObject>(ClassIDType.GameObject);
-			ITransform transform = collection.CreateAsset<ITransform>(ClassIDType.Transform);
+			IGameObject gameObject = collection.CreateGameObject();
+			ITransform transform = collection.CreateTransform();
 			transform.LocalPosition_C4.SetValues(x, y, z);
 			gameObject.AddComponent(ClassIDType.Transform, transform);
 			transform.GameObject_C4P = gameObject;

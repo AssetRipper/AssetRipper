@@ -27,7 +27,7 @@ The loaded assets are converted into:
 - The native Unity engine format for easy use in Unity Editor.
 - Standard formats that traditional software, like Blender, can read.
 
-AssetRipper supports Unity versions from `3.5.0` to `6000.2.X`. However, support quality may vary slightly for different Unity versions.
+AssetRipper supports Unity versions from `3.5.0` to `6000.5.X`. However, support quality may vary slightly for different Unity versions.
 
 # Getting Started
 

@@ -1,4 +1,4 @@
-﻿using AssetRipper.Export.UnityProjects.Configuration;
+﻿using AssetRipper.Export.Configuration;
 using AssetRipper.GUI.Web.Pages.Settings.DropDown;
 using AssetRipper.GUI.Web.Paths;
 using AssetRipper.Primitives;
@@ -10,7 +10,7 @@ public sealed partial class SettingsPage : DefaultPage
 {
 	public static SettingsPage Instance { get; } = new();
 
-	private static LibraryConfiguration Configuration => GameFileLoader.Settings;
+	private static FullConfiguration Configuration => GameFileLoader.Settings;
 
 	public override string GetTitle() => Localization.Settings;
 
@@ -174,6 +174,7 @@ public sealed partial class SettingsPage : DefaultPage
 								}
 								using (new Div(writer).WithClass("col").End())
 								{
+									WriteCheckBoxForExportUnreadableAssets(writer, Localization.ExportUnreadableAssets);
 								}
 							}
 						}

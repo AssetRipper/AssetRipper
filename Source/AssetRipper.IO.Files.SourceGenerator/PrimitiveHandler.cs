@@ -70,7 +70,6 @@ internal static class PrimitiveHandler
 		{
 			throw new NotSupportedException();
 		}
-		
 	}
 
 	public static bool IsInteger(string type) => IsSignedInteger(type) || IsUnsignedInteger(type);

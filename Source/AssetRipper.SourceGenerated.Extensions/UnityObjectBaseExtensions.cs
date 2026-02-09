@@ -1,37 +1,36 @@
 ﻿using AssetRipper.Assets;
 
-namespace AssetRipper.SourceGenerated.Extensions
+namespace AssetRipper.SourceGenerated.Extensions;
+
+public static class UnityObjectBaseExtensions
 {
-	public static class UnityObjectBaseExtensions
+	public static string GetOriginalName(this IUnityObjectBase _this)
 	{
-		public static string GetOriginalName(this IUnityObjectBase _this)
+		if (_this is INamed named)
 		{
-			if (_this is INamed named)
-			{
-				return named.Name;
-			}
-			else
-			{
-				throw new Exception($"Unable to get name for {_this.ClassID}");
-			}
+			return named.Name;
 		}
-
-		public static string? TryGetName(this IUnityObjectBase _this)
+		else
 		{
-			return (_this as INamed)?.Name;
+			throw new Exception($"Unable to get name for {_this.ClassID}");
 		}
+	}
 
-		public static string GetLogString(this IUnityObjectBase asset)
+	public static string? TryGetName(this IUnityObjectBase _this)
+	{
+		return (_this as INamed)?.Name;
+	}
+
+	public static string GetLogString(this IUnityObjectBase asset)
+	{
+		string? name = asset.TryGetName();
+		if (name == null)
 		{
-			string? name = asset.TryGetName();
-			if (name == null)
-			{
-				return $"{asset.ClassID}_{asset.PathID}";
-			}
-			else
-			{
-				return $"{asset.ClassID}_{asset.PathID}({name})";
-			}
+			return $"{asset.ClassID}_{asset.PathID}";
+		}
+		else
+		{
+			return $"{asset.ClassID}_{asset.PathID}({name})";
 		}
 	}
 }

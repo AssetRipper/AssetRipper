@@ -26,7 +26,10 @@ public sealed class ForwardingAssemblyGenerator : IAssetProcessor
 		{
 			AssemblyReference corLibReference = new(mscorlib);
 			AssemblyDefinition assembly = new(UnsafeAssemblyName, (Version)mscorlib.Version.Clone());
-			ModuleDefinition module = new(UnsafeAssemblyName, corLibReference);
+			ModuleDefinition module = new(UnsafeAssemblyName, corLibReference)
+			{
+				Mvid = (Guid)UnityGuid.Md5Hash(UnsafeAssemblyName),
+			};
 			module.AssemblyReferences.Add(corLibReference);
 			assembly.Modules.Add(module);
 
@@ -40,7 +43,10 @@ public sealed class ForwardingAssemblyGenerator : IAssetProcessor
 		{
 			AssemblyReference corLibReference = new(mscorlib);
 			AssemblyDefinition assembly = new(InteropServicesAssemblyName, (Version)mscorlib.Version.Clone());
-			ModuleDefinition module = new(InteropServicesAssemblyName, corLibReference);
+			ModuleDefinition module = new(InteropServicesAssemblyName, corLibReference)
+			{
+				Mvid = (Guid)UnityGuid.Md5Hash(InteropServicesAssemblyName),
+			};
 			module.AssemblyReferences.Add(corLibReference);
 			assembly.Modules.Add(module);
 

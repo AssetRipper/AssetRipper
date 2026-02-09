@@ -2,7 +2,6 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<OutputPath>..\0Bins\AssetRipper.Tools.SystemTester\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.Tools.SystemTester\$(Configuration)\</IntermediateOutputPath>
 		<ServerGarbageCollection>true</ServerGarbageCollection>

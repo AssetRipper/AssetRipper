@@ -1,5 +1,4 @@
-﻿using AssetRipper.Assets.Generics;
-using AssetRipper.Assets.Metadata;
+﻿using AssetRipper.Assets.Metadata;
 
 namespace AssetRipper.Assets.Traversal;
 

@@ -144,7 +144,7 @@ partial class CustomInjectedObjectBase
 				object? list = value;
 				if (EnterList(walker, elementType, list))
 				{
-					int count = (int)(type.GetProperty(nameof(AssetList<int>.Count))?.GetValue(list) ?? throw new NullReferenceException());
+					int count = (int)(type.GetProperty(nameof(AssetList<>.Count))?.GetValue(list) ?? throw new NullReferenceException());
 					if (count > 0)
 					{
 						MethodInfo divideListMethod = GetFirstMethod(nameof(AssetWalker.DivideList)).MakeGenericMethod(elementType);
@@ -173,7 +173,7 @@ partial class CustomInjectedObjectBase
 
 				if (EnterDictionary(walker, keyType, valueType, value))
 				{
-					int count = (int)type.GetProperty(nameof(AssetDictionary<int, int>.Count))?.GetValue(value)!;
+					int count = (int)type.GetProperty(nameof(AssetDictionary<,>.Count))?.GetValue(value)!;
 					if (count > 0)
 					{
 						MethodInfo divideDictionaryMethod = GetFirstMethod(nameof(AssetWalker.DivideDictionary)).MakeGenericMethod(keyType, valueType);
@@ -189,9 +189,9 @@ partial class CustomInjectedObjectBase
 							object keyValuePair = implicitConversion.Invoke(null, [pair])!;
 							if (EnterDictionaryPair(walker, keyType, valueType, keyValuePair))
 							{
-								VisitValue(walker, walkType, keyType, pair.GetType().GetProperty(nameof(AssetPair<int, int>.Key))?.GetValue(pair)!);
+								VisitValue(walker, walkType, keyType, pair.GetType().GetProperty(nameof(AssetPair<,>.Key))?.GetValue(pair)!);
 								DivideDictionaryPair(walker, keyType, valueType, keyValuePair);
-								VisitValue(walker, walkType, valueType, pair.GetType().GetProperty(nameof(AssetPair<int, int>.Value))?.GetValue(pair)!);
+								VisitValue(walker, walkType, valueType, pair.GetType().GetProperty(nameof(AssetPair<,>.Value))?.GetValue(pair)!);
 								ExitDictionaryPair(walker, keyType, valueType, keyValuePair);
 							}
 							i++;
@@ -213,9 +213,9 @@ partial class CustomInjectedObjectBase
 				object? keyValuePair = type.GetMethod("op_Implicit")?.Invoke(null, [value])!;
 				if (EnterPair(walker, keyType, valueType, keyValuePair))
 				{
-					VisitValue(walker, walkType, keyType, type.GetProperty(nameof(AssetPair<int, int>.Key))?.GetValue(value)!);
+					VisitValue(walker, walkType, keyType, type.GetProperty(nameof(AssetPair<,>.Key))?.GetValue(value)!);
 					DividePair(walker, keyType, valueType, keyValuePair);
-					VisitValue(walker, walkType, valueType, type.GetProperty(nameof(AssetPair<int, int>.Value))?.GetValue(value)!);
+					VisitValue(walker, walkType, valueType, type.GetProperty(nameof(AssetPair<,>.Value))?.GetValue(value)!);
 					ExitPair(walker, keyType, valueType, keyValuePair);
 				}
 			}

@@ -1,14 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<IsTrimmable>true</IsTrimmable>
 		<OutputPath>..\0Bins\Other\AssetRipper.Assets\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.Assets\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
-
-	<ItemGroup>
-		<PackageReference Include="SharpZipLib" Version="1.4.2" />
-	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\AssetRipper.IO.Files\AssetRipper.IO.Files.csproj" />

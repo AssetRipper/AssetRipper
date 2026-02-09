@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using AssetRipper.NativeDialogs;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
 
@@ -41,9 +42,9 @@ public static class Commands
 			{
 				paths = values;
 			}
-			else if (Dialogs.Supported)
+			else if (NativeDialog.Supported)
 			{
-				paths = Dialogs.OpenFiles.GetUserInput();
+				paths = await OpenFileDialog.OpenFiles();
 			}
 			else
 			{
@@ -69,9 +70,9 @@ public static class Commands
 			{
 				paths = values;
 			}
-			else if (Dialogs.Supported)
+			else if (NativeDialog.Supported)
 			{
-				paths = Dialogs.OpenFolders.GetUserInput();
+				paths = await OpenFolderDialog.OpenFolders();
 			}
 			else
 			{
@@ -106,7 +107,7 @@ public static class Commands
 			{
 				bool createSubfolder = TryGetCreateSubfolder(form);
 				path = MaybeAppendTimestampedSubfolder(path, createSubfolder);
-				GameFileLoader.ExportUnityProject(path);
+				await GameFileLoader.ExportUnityProject(path);
 			}
 			return null;
 		}
@@ -132,7 +133,7 @@ public static class Commands
 			{
 				bool createSubfolder = TryGetCreateSubfolder(form);
 				path = MaybeAppendTimestampedSubfolder(path, createSubfolder);
-				GameFileLoader.ExportPrimaryContent(path);
+				await GameFileLoader.ExportPrimaryContent(path);
 			}
 			return null;
 		}

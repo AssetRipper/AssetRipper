@@ -22,26 +22,11 @@ jobs:
           #- { name: mac_arm64, os: macos-latest, runtime: osx-arm64, executable: AssetRipper.GUI.Free }
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: 9.0.x
-
-      # https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/cross-compile#linux
-      - name: Install Arm64 Dependencies
-        if: matrix.config.runtime == 'linux-arm64'
-        run: |
-          sudo dpkg --add-architecture arm64
-          sudo bash -c 'cat > /etc/apt/sources.list.d/arm64.list <<EOF
-          deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ jammy main restricted
-          deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ jammy-updates main restricted
-          deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ jammy-backports main restricted universe multiverse
-          EOF'
-          sudo sed -i -e 's/deb http/deb [arch=amd64] http/g' /etc/apt/sources.list
-          sudo sed -i -e 's/deb mirror/deb [arch=amd64] mirror/g' /etc/apt/sources.list
-          sudo apt update
-          sudo apt install -y clang llvm binutils-aarch64-linux-gnu gcc-aarch64-linux-gnu zlib1g-dev:arm64
+          dotnet-version: 10.0.x
 
       - name: Publish
         run: dotnet publish -c Release -r ${{ matrix.config.runtime }}
@@ -56,7 +41,7 @@ jobs:
         run: date -u > ./Source/0Bins/AssetRipper.GUI.Free/Release/${{ matrix.config.runtime }}/publish/compile_time.txt
 
       - name: Upload
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: AssetRipper_${{ matrix.config.name }}
           path: |

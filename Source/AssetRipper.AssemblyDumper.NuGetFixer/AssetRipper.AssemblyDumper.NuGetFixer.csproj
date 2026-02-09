@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<OutputPath>..\0Bins\AssetRipper.AssemblyDumper.NuGetFixer\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.AssemblyDumper.NuGetFixer\$(Configuration)\</IntermediateOutputPath>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="SharpCompress" Version="0.44.4" />
+	</ItemGroup>
+
+</Project>

@@ -9,9 +9,9 @@ public abstract partial class YamlScalarNode
 		private protected override void EmitCore(Emitter emitter)
 		{
 			Span<char> buffer = stackalloc char[ReverseHexString.GetHexStringLength<ushort>()];
-			foreach (char value in list)
+			for (int i = 0; i < list.Count; i++)
 			{
-				ReverseHexString.WriteReverseHexString((ushort)value, buffer);
+				ReverseHexString.WriteReverseHexString((ushort)list[i], buffer);
 				emitter.Write(buffer);
 			}
 		}

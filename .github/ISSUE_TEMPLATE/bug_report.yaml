@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for submitting a bug report, please fill out as much detail as possible.
+        Thank you for submitting a bug report; please fill in with as much detail as possible.
   - type: dropdown
     id: assetripper_version
     attributes:
@@ -16,7 +16,7 @@ body:
         - No, I need to download a newer version and try again.
         - Yes, I'm on the latest release of AssetRipper.
         - Yes, I'm on the latest pre-release of AssetRipper.
-        - Yes, I'm on the latest alpha-build of AssetRipper.
+        - Yes, I'm on the latest nightly build of AssetRipper.
     validations:
       required: true
   - type: dropdown
@@ -51,12 +51,12 @@ body:
   - type: dropdown
     id: game_backend
     attributes:
-      label: Is the game Mono or IL2Cpp?
-      description: Desktop IL2Cpp games have a GameAssembly.dll in the same directory as the game executable file. Android IL2Cpp games have a libil2cpp.so file in the lib directory (or one of its subdirectories).
+      label: Is the game Mono or Il2Cpp?
+      description: Desktop Il2Cpp games have a GameAssembly.dll in the same directory as the game executable file. Android Il2Cpp games have a libil2cpp.so file in the lib directory (or one of its subdirectories).
       options:
         - Unknown
         - Mono
-        - IL2Cpp
+        - Il2Cpp
         - Not Applicable
     validations:
       required: true
@@ -73,6 +73,6 @@ body:
     attributes:
       label: Relevant log output
       description: |
-        Please drag and drop your relevant `AssetRipper.log` here. It is located in the same folder as the `exe` file. A screenshot is not normally sufficient because it is often hard to read and search.
+        Please drag and drop your relevant `AssetRipper.log` here. It is located in the same folder as the `exe` file. A screenshot is not normally sufficient because they are often hard to read and search.
     validations:
       required: false

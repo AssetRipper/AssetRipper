@@ -22,6 +22,7 @@ internal sealed partial record class GameInitializer
 			{
 				Name = name;
 				Version = version;
+				OriginalVersion = version;
 				Platform = BuildTarget.NoTarget;
 				Flags = TransferInstructionFlags.SerializeGameRelease | TransferInstructionFlags.IsBuiltinResourcesFile;
 			}

@@ -15,11 +15,11 @@ public class PPtrTests
 		PPtr pptr = new PPtr(fileID, pathID);
 
 		// Assert
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(pptr.FileID, Is.EqualTo(fileID));
 			Assert.That(pptr.PathID, Is.EqualTo(pathID));
-		});
+		}
 	}
 
 	[Test]
@@ -34,11 +34,11 @@ public class PPtrTests
 		PPtr convertedPptr = pptr;
 
 		// Assert
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(convertedPptr.FileID, Is.EqualTo(fileID));
 			Assert.That(convertedPptr.PathID, Is.EqualTo(pathID));
-		});
+		}
 	}
 
 	[Test]
@@ -52,11 +52,11 @@ public class PPtrTests
 		PPtr<IDerivedUnityObjectInterface> pptr = new PPtr<IDerivedUnityObjectInterface>(fileID, pathID);
 
 		// Assert
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(pptr.FileID, Is.EqualTo(fileID));
 			Assert.That(pptr.PathID, Is.EqualTo(pathID));
-		});
+		}
 	}
 
 	[Test]
@@ -71,11 +71,11 @@ public class PPtrTests
 		PPtr<IDerivedUnityObjectInterface> convertedPptr = (PPtr<IDerivedUnityObjectInterface>)pptr;
 
 		// Assert
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(convertedPptr.FileID, Is.EqualTo(fileID));
 			Assert.That(convertedPptr.PathID, Is.EqualTo(pathID));
-		});
+		}
 	}
 
 	[Test]
@@ -90,11 +90,11 @@ public class PPtrTests
 		PPtr<IUnityObjectBase> convertedPptr = pptr;
 
 		// Assert
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(convertedPptr.FileID, Is.EqualTo(fileID));
 			Assert.That(convertedPptr.PathID, Is.EqualTo(pathID));
-		});
+		}
 	}
 
 	[Test]
@@ -109,12 +109,14 @@ public class PPtrTests
 		PPtr<IDerivedUnityObjectInterface> convertedPptr = (PPtr<IDerivedUnityObjectInterface>)pptr;
 
 		// Assert
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(convertedPptr.FileID, Is.EqualTo(fileID));
 			Assert.That(convertedPptr.PathID, Is.EqualTo(pathID));
-		});
+		}
 	}
 
-	private interface IDerivedUnityObjectInterface : IUnityObjectBase { }
+	private interface IDerivedUnityObjectInterface : IUnityObjectBase
+	{
+	}
 }

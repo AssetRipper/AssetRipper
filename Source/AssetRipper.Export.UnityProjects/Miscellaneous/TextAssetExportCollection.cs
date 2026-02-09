@@ -1,76 +1,84 @@
-﻿using AssetRipper.Assets;
-using AssetRipper.Export.UnityProjects.Configuration;
+using AssetRipper.Assets;
+using AssetRipper.Export.Configuration;
 using AssetRipper.SourceGenerated.Classes.ClassID_1031;
 using AssetRipper.SourceGenerated.Classes.ClassID_49;
 using System.Text.Json;
 
-namespace AssetRipper.Export.UnityProjects.Miscellaneous
+namespace AssetRipper.Export.UnityProjects.Miscellaneous;
+
+public sealed class TextAssetExportCollection : AssetExportCollection<ITextAsset>
 {
-	public sealed class TextAssetExportCollection : AssetExportCollection<ITextAsset>
+	private const string JsonExtension = "json";
+	private const string TxtExtension = "txt";
+	private const string BytesExtension = "bytes";
+
+	private static readonly HashSet<string> DangerousExtensions = new(StringComparer.OrdinalIgnoreCase)
 	{
-		private const string JsonExtension = "json";
-		private const string TxtExtension = "txt";
-		private const string BytesExtension = "bytes";
+		"cs", "dll", "exe", "bat", "cmd", "ps1", "vbs", "js", "msi", "scr", "com"
+	};
 
-		public TextAssetExportCollection(TextAssetExporter assetExporter, ITextAsset asset) : base(assetExporter, asset)
-		{
-		}
+	public TextAssetExportCollection(TextAssetExporter assetExporter, ITextAsset asset) : base(assetExporter, asset)
+	{
+	}
 
-		protected override string GetExportExtension(IUnityObjectBase asset)
+	protected override string GetExportExtension(IUnityObjectBase asset)
+	{
+		string? extension = asset.GetBestExtension();
+		if (extension is not null)
 		{
-			string? extension = asset.GetBestExtension();
-			if (extension is not null)
-			{
-				return extension;
-			}
-			return ((TextAssetExporter)AssetExporter).ExportMode switch
-			{
-				TextExportMode.Txt => TxtExtension,
-				TextExportMode.Parse => GetExtension((ITextAsset)asset),
-				_ => BytesExtension,
-			};
-		}
-
-		private static string GetExtension(ITextAsset asset)
-		{
-			string text = asset.Script_C49.String;
-			if (IsValidJson(text))
-			{
-				return JsonExtension;
-			}
-			else if (IsPlainText(text))
+			if (DangerousExtensions.Contains(extension))
 			{
 				return TxtExtension;
 			}
-			else
-			{
-				return BytesExtension;
-			}
+			return extension;
 		}
-
-		private static bool IsValidJson(string text)
+		return ((TextAssetExporter)AssetExporter).ExportMode switch
 		{
-			try
-			{
-				using JsonDocument? parsed = JsonDocument.Parse(text);
-				return parsed != null;
-			}
-			catch
-			{
-				return false;
-			}
-		}
+			TextExportMode.Txt => TxtExtension,
+			TextExportMode.Parse => GetExtension((ITextAsset)asset),
+			_ => BytesExtension,
+		};
+	}
 
-		private static bool IsPlainText(string text) => text.All(c => !char.IsControl(c) || char.IsWhiteSpace(c));
-
-		protected override ITextScriptImporter CreateImporter(IExportContainer container)
+	private static string GetExtension(ITextAsset asset)
+	{
+		string text = asset.Script_C49.String;
+		if (IsValidJson(text))
 		{
-			ITextScriptImporter importer = TextScriptImporter.Create(container.File, container.ExportVersion);
-			if (importer.Has_AssetBundleName_R() && Asset.AssetBundleName is not null)
-			{
-				importer.AssetBundleName_R = Asset.AssetBundleName;
-			}
-			return importer;
+			return JsonExtension;
 		}
+		else if (IsPlainText(text))
+		{
+			return TxtExtension;
+		}
+		else
+		{
+			return BytesExtension;
+		}
+	}
+
+	private static bool IsValidJson(string text)
+	{
+		try
+		{
+			using JsonDocument? parsed = JsonDocument.Parse(text);
+			return parsed != null;
+		}
+		catch
+		{
+			return false;
+		}
+	}
+
+	private static bool IsPlainText(string text) => text.All(c => !char.IsControl(c) || char.IsWhiteSpace(c));
+
+	protected override ITextScriptImporter CreateImporter(IExportContainer container)
+	{
+		ITextScriptImporter importer = TextScriptImporter.Create(container.File, container.ExportVersion);
+		if (importer.Has_AssetBundleName_R() && Asset.AssetBundleName is not null)
+		{
+			importer.AssetBundleName_R = Asset.AssetBundleName;
+		}
+		return importer;
 	}
 }

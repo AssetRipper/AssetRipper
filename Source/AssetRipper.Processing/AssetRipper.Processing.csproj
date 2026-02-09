@@ -1,14 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<IsTrimmable>true</IsTrimmable>
 		<OutputPath>..\0Bins\Other\AssetRipper.Processing\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.Processing\$(Configuration)\</IntermediateOutputPath>
 		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AssetRipper.CIL" Version="1.1.6" />
+		<PackageReference Include="AssetRipper.CIL" Version="1.2.2" />
 	</ItemGroup>
 
 	<ItemGroup>

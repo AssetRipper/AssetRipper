@@ -105,11 +105,11 @@ public class VirtualFileSystemTests
 	{
 		VirtualFileSystem fs = new();
 		fs.Directory.Create("/test/");
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(fs.Directory.Exists("/test"), Is.True);
 			Assert.That(fs.Count, Is.EqualTo(2));// root and test
-		});
+		}
 	}
 
 	[Test]
@@ -191,5 +191,27 @@ public class VirtualFileSystemTests
 		fs.File.WriteAllBytes(path, bytes);
 		byte[] readBytes = fs.File.ReadAllBytes(path);
 		Assert.That(readBytes, Is.EqualTo(bytes));
+	}
+
+	[Test]
+	public void EnumerateFilesTopLevelDoesNotFindDeepResults()
+	{
+		VirtualFileSystem fs = new();
+		fs.Directory.Create("/dir");
+		fs.File.Create("/dir/deep");
+		fs.File.Create("/test");
+		IEnumerable<string> files = fs.Directory.EnumerateFiles("/", "*", SearchOption.TopDirectoryOnly);
+		Assert.That(files, Is.EquivalentTo(["/test"]));
+	}
+
+	[Test]
+	public void EnumerateFilesRecursiveDoesFindDeepResults()
+	{
+		VirtualFileSystem fs = new();
+		fs.Directory.Create("/dir");
+		fs.File.Create("/dir/deep");
+		fs.File.Create("/test");
+		IEnumerable<string> files = fs.Directory.EnumerateFiles("/", "*", SearchOption.AllDirectories);
+		Assert.That(files, Is.EquivalentTo(["/dir/deep", "/test"]));
 	}
 }

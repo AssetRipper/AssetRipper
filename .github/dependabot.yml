@@ -9,6 +9,19 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
+    ignore:
+      - dependency-name: "Microsoft.NET.ILLink.Tasks"
+      - dependency-name: "Microsoft.DotNet.ILCompiler"
+      - dependency-name: "Samboy063.Cpp2IL.Core"
+    groups:
+      nunit:
+        patterns:
+          - "NUnit*"
+          - "Microsoft.NET.Test.Sdk"
+          - "coverlet.collector"
+      asmresolver:
+        patterns:
+          - "AsmResolver.*"
 
   - package-ecosystem: "github-actions"
     # Workflow files stored in the

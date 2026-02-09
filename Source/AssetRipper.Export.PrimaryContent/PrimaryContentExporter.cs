@@ -1,6 +1,6 @@
 using AssetRipper.Assets;
 using AssetRipper.Assets.Bundles;
-using AssetRipper.Export.Modules.Textures;
+using AssetRipper.Export.Configuration;
 using AssetRipper.Export.PrimaryContent.Audio;
 using AssetRipper.Export.PrimaryContent.DeletedAssets;
 using AssetRipper.Export.PrimaryContent.Models;
@@ -65,14 +65,14 @@ public sealed class PrimaryContentExporter
 		exporters.OverrideHandler(type, handler, allowInheritance);
 	}
 
-	public static PrimaryContentExporter CreateDefault(GameData gameData)
+	public static PrimaryContentExporter CreateDefault(GameData gameData, FullConfiguration settings)
 	{
 		PrimaryContentExporter exporter = new(gameData);
-		exporter.RegisterDefaultHandlers();
+		exporter.RegisterDefaultHandlers(settings);
 		return exporter;
 	}
 
-	private void RegisterDefaultHandlers()
+	private void RegisterDefaultHandlers(FullConfiguration settings)
 	{
 		RegisterHandler<IUnityObjectBase>(new JsonContentExtractor());
 
@@ -115,16 +115,16 @@ public sealed class PrimaryContentExporter
 
 		RegisterHandler<IAudioClip>(new AudioContentExtractor());
 
-		RegisterHandler<IImageTexture>(new TextureExporter(ImageExportFormat.Png));
+		RegisterHandler<IImageTexture>(new TextureExporter(settings.ExportSettings.ImageExportFormat));
 
-		RegisterHandler<IMonoScript>(new ScriptContentExtractor(gameData.AssemblyManager));
+		RegisterHandler<IMonoScript>(new ScriptContentExtractor(gameData.AssemblyManager, settings.ExportSettings.ScriptLanguageVersion.ToCSharpLanguageVersion(gameData.ProjectVersion)));
 
 		// Deleted assets
 		// This must be the last handler
 		RegisterHandler<IUnityObjectBase>(DeletedAssetsExporter.Instance);
 	}
 
-	public void Export(GameBundle fileCollection, CoreConfiguration options, FileSystem fileSystem)
+	public void Export(GameBundle fileCollection, FullConfiguration settings, FileSystem fileSystem)
 	{
 		List<ExportCollectionBase> collections = CreateCollections(fileCollection);
 
@@ -134,7 +134,7 @@ public sealed class PrimaryContentExporter
 			if (collection.Exportable)
 			{
 				Logger.Info(LogCategory.ExportProgress, $"({i + 1}/{collections.Count}) Exporting '{collection.Name}'");
-				bool exportedSuccessfully = collection.Export(options.ExportRootPath, fileSystem);
+				bool exportedSuccessfully = collection.Export(settings.ExportRootPath, fileSystem);
 				if (!exportedSuccessfully)
 				{
 					Logger.Warning(LogCategory.ExportProgress, $"Failed to export '{collection.Name}'");

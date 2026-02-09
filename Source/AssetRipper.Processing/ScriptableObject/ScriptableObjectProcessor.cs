@@ -14,21 +14,80 @@ public class ScriptableObjectProcessor : IAssetProcessor
 	{
 		Logger.Info(LogCategory.Processing, "Processing Scriptable Object Groups");
 		ProcessedAssetCollection collection = gameData.AddNewProcessedCollection("Generated Scriptable Object Groups");
+
+		// Assets that can be a child of a group
+		HashSet<IMonoBehaviour> uniqueAssets = new();
+
+		// Assets that cannot be a child of a group
+		HashSet<IMonoBehaviour> nonuniqueAssets = new();
+
+		List<IMonoBehaviour> timelineAssets = new();
+		List<IMonoBehaviour> postProcessProfiles = new();
+
 		foreach (IMonoBehaviour monoBehaviour in gameData.GameBundle.FetchAssets().OfType<IMonoBehaviour>())
 		{
-			if (monoBehaviour.IsTimelineAsset())
+			if (monoBehaviour.MainAsset is not null)
 			{
-				ScriptableObjectGroup group = CreateGroup(collection, monoBehaviour);
-				group.FileExtension = "playable";
-				group.Children.AddRange(FindTimelineAssetChildren(monoBehaviour));
-				group.SetMainAsset();
+			}
+			else if (monoBehaviour.IsTimelineAsset())
+			{
+				nonuniqueAssets.Add(monoBehaviour);
+				timelineAssets.Add(monoBehaviour);
 			}
 			else if (monoBehaviour.IsPostProcessProfile())
 			{
-				ScriptableObjectGroup group = CreateGroup(collection, monoBehaviour);
-				group.Children.AddRange(FindPostProcessProfileChildren(monoBehaviour));
-				group.SetMainAsset();
+				nonuniqueAssets.Add(monoBehaviour);
+				postProcessProfiles.Add(monoBehaviour);
 			}
+		}
+
+		foreach (IMonoBehaviour timelineAsset in timelineAssets)
+		{
+			foreach (IMonoBehaviour child in FindTimelineAssetChildren(timelineAsset))
+			{
+				AddChild(uniqueAssets, nonuniqueAssets, child);
+			}
+		}
+		foreach (IMonoBehaviour postProcessProfile in postProcessProfiles)
+		{
+			foreach (IMonoBehaviour child in FindPostProcessProfileChildren(postProcessProfile))
+			{
+				AddChild(uniqueAssets, nonuniqueAssets, child);
+			}
+		}
+
+		nonuniqueAssets.Clear();
+
+		foreach (IMonoBehaviour timelineAsset in timelineAssets)
+		{
+			ScriptableObjectGroup group = CreateGroup(collection, timelineAsset);
+			group.FileExtension = "playable";
+			group.Children.AddRange(FindTimelineAssetChildren(timelineAsset).Where(uniqueAssets.Contains));
+			group.SetMainAsset();
+		}
+		foreach (IMonoBehaviour postProcessProfile in postProcessProfiles)
+		{
+			ScriptableObjectGroup group = CreateGroup(collection, postProcessProfile);
+			group.Children.AddRange(FindPostProcessProfileChildren(postProcessProfile).Where(uniqueAssets.Contains));
+			group.SetMainAsset();
+		}
+	}
+
+	private static void AddChild(HashSet<IMonoBehaviour> uniqueAssets, HashSet<IMonoBehaviour> nonuniqueAssets, IMonoBehaviour child)
+	{
+		if (child.MainAsset is not null)
+		{
+		}
+		else if (nonuniqueAssets.Contains(child))
+		{
+		}
+		else if (uniqueAssets.Add(child))
+		{
+		}
+		else
+		{
+			uniqueAssets.Remove(child);
+			nonuniqueAssets.Add(child);
 		}
 	}
 
@@ -55,13 +114,23 @@ public class ScriptableObjectProcessor : IAssetProcessor
 					continue;
 				}
 
-				children.Add(child);
-
 				SerializableStructure? childStructure = child.LoadStructure();
 				if (childStructure is null)
 				{
 					continue;
 				}
+
+				if (!childStructure.TryGetField("m_Parent", out SerializableValue parent))
+				{
+					continue;
+				}
+
+				if (root.Collection.TryGetAsset(parent.AsPPtr.FileID, parent.AsPPtr.PathID) != root)
+				{
+					continue;
+				}
+
+				children.Add(child);
 
 				if (childStructure.TryGetField("m_Clips", out SerializableValue clips))
 				{

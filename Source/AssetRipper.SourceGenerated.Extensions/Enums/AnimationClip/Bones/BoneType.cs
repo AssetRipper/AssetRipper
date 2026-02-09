@@ -1,62 +1,61 @@
-﻿namespace AssetRipper.SourceGenerated.Extensions.Enums.AnimationClip.Bones
-{
-	public enum BoneType
-	{
-		Hips = 0,
-		LeftUpperLeg = 1,
-		RightUpperLeg = 2,
-		LeftLowerLeg = 3,
-		RightLowerLeg = 4,
-		LeftFoot = 5,
-		RightFoot = 6,
-		Spine = 7,
-		Chest = 8,
-		UpperChest = 9,
-		Neck = 10,
-		Head = 11,
-		LeftShoulder = 12,
-		RightShoulder = 13,
-		LeftUpperArm = 14,
-		RightUpperArm = 15,
-		LeftLowerArm = 16,
-		RightLowerArm = 17,
-		LeftHand = 18,
-		RightHand = 19,
-		LeftToes = 20,
-		RightToes = 21,
-		LeftEye = 22,
-		RightEye = 23,
-		Jaw = 24,
+﻿namespace AssetRipper.SourceGenerated.Extensions.Enums.AnimationClip.Bones;
 
-		Last,
+public enum BoneType
+{
+	Hips = 0,
+	LeftUpperLeg = 1,
+	RightUpperLeg = 2,
+	LeftLowerLeg = 3,
+	RightLowerLeg = 4,
+	LeftFoot = 5,
+	RightFoot = 6,
+	Spine = 7,
+	Chest = 8,
+	UpperChest = 9,
+	Neck = 10,
+	Head = 11,
+	LeftShoulder = 12,
+	RightShoulder = 13,
+	LeftUpperArm = 14,
+	RightUpperArm = 15,
+	LeftLowerArm = 16,
+	RightLowerArm = 17,
+	LeftHand = 18,
+	RightHand = 19,
+	LeftToes = 20,
+	RightToes = 21,
+	LeftEye = 22,
+	RightEye = 23,
+	Jaw = 24,
+
+	Last,
+}
+
+public static class BoneTypeExtensions
+{
+	/// <summary>
+	/// 5.6.0 and greater
+	/// </summary>
+	public static bool IsIncludeUpperChest(UnityVersion version) => version.GreaterThanOrEquals(5, 6);
+
+	public static BoneType Update(this BoneType _this, UnityVersion version)
+	{
+		if (!IsIncludeUpperChest(version))
+		{
+			if (_this >= BoneType.UpperChest)
+			{
+				_this++;
+			}
+		}
+		return _this;
 	}
 
-	public static class BoneTypeExtensions
+	public static string ToAttributeString(this BoneType _this)
 	{
-		/// <summary>
-		/// 5.6.0 and greater
-		/// </summary>
-		public static bool IsIncludeUpperChest(UnityVersion version) => version.GreaterThanOrEquals(5, 6);
-
-		public static BoneType Update(this BoneType _this, UnityVersion version)
+		if (_this < BoneType.Last)
 		{
-			if (!IsIncludeUpperChest(version))
-			{
-				if (_this >= BoneType.UpperChest)
-				{
-					_this++;
-				}
-			}
-			return _this;
+			return _this.ToString();
 		}
-
-		public static string ToAttributeString(this BoneType _this)
-		{
-			if (_this < BoneType.Last)
-			{
-				return _this.ToString();
-			}
-			throw new ArgumentException(_this.ToString());
-		}
+		throw new ArgumentException(_this.ToString());
 	}
 }

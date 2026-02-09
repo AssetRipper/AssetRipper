@@ -1,10 +1,9 @@
-namespace AssetRipper.Import.Structure.Assembly
-{
-	public enum ScriptingBackend
-	{
-		Unknown,
+namespace AssetRipper.Import.Structure.Assembly;
 
-		Mono,
-		IL2Cpp
-	}
+public enum ScriptingBackend
+{
+	Unknown,
+
+	Mono,
+	IL2Cpp
 }

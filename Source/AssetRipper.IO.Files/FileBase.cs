@@ -1,48 +1,47 @@
 using AssetRipper.IO.Files.Streams.Smart;
 
-namespace AssetRipper.IO.Files
+namespace AssetRipper.IO.Files;
+
+/// <summary>
+/// The base class for files.
+/// </summary>
+public abstract class FileBase : IDisposable
 {
-	/// <summary>
-	/// The base class for files.
-	/// </summary>
-	public abstract class FileBase : IDisposable
+	public override string? ToString()
 	{
-		public override string? ToString()
-		{
-			return string.IsNullOrEmpty(NameFixed) ? NameFixed : base.ToString();
-		}
+		return string.IsNullOrEmpty(NameFixed) ? NameFixed : base.ToString();
+	}
 
-		public string FilePath { get; set; } = string.Empty;
-		public string Name
+	public string FilePath { get; set; } = string.Empty;
+	public string Name
+	{
+		get;
+		set
 		{
-			get => name;
-			set
-			{
-				name = value;
-				NameFixed = SpecialFileNames.FixFileIdentifier(value);
-			}
+			field = value;
+			NameFixed = SpecialFileNames.FixFileIdentifier(value);
 		}
-		public string NameFixed { get; private set; } = string.Empty;
-		private string name = string.Empty;
-		public abstract void Read(SmartStream stream);
-		public abstract void Write(Stream stream);
-		public virtual void ReadContents() { }
-		public virtual void ReadContentsRecursively() => ReadContents();
-		public virtual byte[] ToByteArray()
-		{
-			MemoryStream memoryStream = new();
-			Write(memoryStream);
-			return memoryStream.ToArray();
-		}
+	} = string.Empty;
+	public string NameFixed { get; private set; } = string.Empty;
 
-		~FileBase() => Dispose(false);
+	public abstract void Read(SmartStream stream);
+	public abstract void Write(Stream stream);
+	public virtual void ReadContents() { }
+	public virtual void ReadContentsRecursively() => ReadContents();
+	public virtual byte[] ToByteArray()
+	{
+		MemoryStream memoryStream = new();
+		Write(memoryStream);
+		return memoryStream.ToArray();
+	}
 
-		protected virtual void Dispose(bool disposing) { }
+	~FileBase() => Dispose(false);
 
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
+	protected virtual void Dispose(bool disposing) { }
+
+	public void Dispose()
+	{
+		Dispose(true);
+		GC.SuppressFinalize(this);
 	}
 }

@@ -1,23 +1,22 @@
-﻿namespace AssetRipper.SourceGenerated.Extensions.Enums.AnimationClip.Bones
+﻿namespace AssetRipper.SourceGenerated.Extensions.Enums.AnimationClip.Bones;
+
+public enum ArmType
 {
-	public enum ArmType
-	{
-		LeftHand = 0,
-		RightHand = 1,
+	LeftHand = 0,
+	RightHand = 1,
 
-		Last,
-	}
+	Last,
+}
 
-	public static class ArmTypeExtensions
+public static class ArmTypeExtensions
+{
+	public static BoneType ToBoneType(this ArmType _this)
 	{
-		public static BoneType ToBoneType(this ArmType _this)
+		return _this switch
 		{
-			return _this switch
-			{
-				ArmType.LeftHand => BoneType.LeftHand,
-				ArmType.RightHand => BoneType.RightHand,
-				_ => throw new ArgumentException(_this.ToString()),
-			};
-		}
+			ArmType.LeftHand => BoneType.LeftHand,
+			ArmType.RightHand => BoneType.RightHand,
+			_ => throw new ArgumentException(_this.ToString()),
+		};
 	}
 }

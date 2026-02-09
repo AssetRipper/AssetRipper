@@ -5,7 +5,8 @@ namespace AssetRipper.GUI.Web.Pages.Assets;
 
 internal sealed class AudioTab : AssetHtmlTab
 {
-	public string Source { get; }
+	public string PlaybackSource { get; }
+	public string SaveSource { get; }
 
 	public override string DisplayName => Localization.AssetTabAudio;
 
@@ -15,7 +16,8 @@ internal sealed class AudioTab : AssetHtmlTab
 
 	public AudioTab(IUnityObjectBase asset, AssetPath path) : base(asset)
 	{
-		Source = AssetAPI.GetAudioUrl(path);
+		PlaybackSource = AssetAPI.GetAudioUrl(path, "wav");
+		SaveSource = AssetAPI.GetAudioUrl(path);
 	}
 
 	public override void Write(TextWriter writer)
@@ -28,7 +30,14 @@ internal sealed class AudioTab : AssetHtmlTab
 				{
 					using (new Td(writer).WithAlign("center").WithCustomAttribute("valign", "middle").End())
 					{
-						new Audio(writer).WithControls("").WithClass("mt-4").WithSrc(Source).Close();
+						new Audio(writer).WithControls("").WithPreload("auto").WithClass("mt-4").WithSrc(PlaybackSource).Close();
+					}
+				}
+				using (new Tr(writer).End())
+				{
+					using (new Td(writer).WithAlign("center").WithCustomAttribute("valign", "middle").End())
+					{
+						SaveButton.Write(writer, SaveSource, Asset.GetBestName());
 					}
 				}
 			}

@@ -1,13 +1,12 @@
 ﻿using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files.Streams.Smart;
 
-namespace AssetRipper.IO.Files.BundleFiles.RawWeb.Raw
+namespace AssetRipper.IO.Files.BundleFiles.RawWeb.Raw;
+
+public sealed class RawBundleScheme : Scheme<RawBundleFile>
 {
-	public sealed class RawBundleScheme : Scheme<RawBundleFile>
+	public override bool CanRead(SmartStream stream)
 	{
-		public override bool CanRead(SmartStream stream)
-		{
-			return RawBundleHeader.IsBundleHeader(new EndianReader(stream, EndianType.BigEndian));
-		}
+		return RawBundleHeader.IsBundleHeader(new EndianReader(stream, EndianType.BigEndian));
 	}
 }

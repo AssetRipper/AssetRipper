@@ -2,13 +2,12 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<ImplicitUsings>enable</ImplicitUsings>
 		<OutputPath>..\0Bins\AssetRipper.Tools.CabMapGenerator\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.Tools.CabMapGenerator\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
+		<PackageReference Include="Ookii.CommandLine" Version="5.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>

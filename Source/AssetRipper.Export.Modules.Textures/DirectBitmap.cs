@@ -1,3 +1,5 @@
+using AssetRipper.Export.Configuration;
+
 namespace AssetRipper.Export.Modules.Textures;
 
 public abstract class DirectBitmap
@@ -72,6 +74,13 @@ public abstract class DirectBitmap
 		FlipX();
 		Transpose();
 	}
+
+	public DirectBitmap Crop(Range xRange, Range yRange)
+	{
+		return Crop(xRange, yRange, 0..Depth);
+	}
+
+	public abstract DirectBitmap Crop(Range xRange, Range yRange, Range zRange);
 
 	public abstract DirectBitmap DeepClone();
 

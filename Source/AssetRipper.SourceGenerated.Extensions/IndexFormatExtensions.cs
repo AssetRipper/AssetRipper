@@ -4,8 +4,8 @@ namespace AssetRipper.SourceGenerated.Extensions;
 
 public static class IndexFormatExtensions
 {
-	public static int ToSize(this IndexFormat instance)
+	extension(IndexFormat format)
 	{
-		return instance is IndexFormat.UInt16 ? sizeof(ushort) : sizeof(uint);
+		public int Size => format is IndexFormat.UInt16 ? sizeof(ushort) : sizeof(uint);
 	}
 }

@@ -1,23 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-		<IsTrimmable>true</IsTrimmable>
 		<OutputPath>..\0Bins\Other\AssetRipper.Export.UnityProjects\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.Export.UnityProjects\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="AssetRipper.HashAlgorithms" Version="1.0.0" />
-		<PackageReference Include="AssetRipper.ICSharpCode.Decompiler" Version="9.0.0.7977" />
-		<PackageReference Include="AssetRipper.Mining.PredefinedAssets" Version="1.4.0" />
+		<PackageReference Include="AssetRipper.Mining.PredefinedAssets" Version="1.5.0" />
 		<PackageReference Include="AssetRipper.Tpk" Version="1.1.0" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\AssetRipper.Export.Modules.Audio\AssetRipper.Export.Modules.Audio.csproj" />
 		<ProjectReference Include="..\AssetRipper.Export.Modules.Models\AssetRipper.Export.Modules.Models.csproj" />
-		<ProjectReference Include="..\AssetRipper.Export.Modules.Shader\AssetRipper.Export.Modules.Shaders.csproj" />
 		<ProjectReference Include="..\AssetRipper.Export.Modules.Textures\AssetRipper.Export.Modules.Textures.csproj" />
 		<ProjectReference Include="..\AssetRipper.Import\AssetRipper.Import.csproj" />
 		<ProjectReference Include="..\AssetRipper.Processing\AssetRipper.Processing.csproj" />

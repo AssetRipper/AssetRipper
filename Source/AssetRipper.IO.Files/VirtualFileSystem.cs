@@ -7,80 +7,255 @@ namespace AssetRipper.IO.Files;
 
 public partial class VirtualFileSystem : FileSystem
 {
-	private readonly HashSet<string> directories = ["/"];
-	private readonly Dictionary<string, SmartStream> files = new();
+	private readonly DirectoryEntry root = new("", null);
+
+	private sealed class DirectoryEntry
+	{
+		public string Name { get; }
+		public DirectoryEntry? Parent { get; }
+		public Dictionary<string, DirectoryEntry> Children { get; } = [];
+		public Dictionary<string, FileEntry> Files { get; } = [];
+
+		[MemberNotNullWhen(false, nameof(Parent))]
+		public bool IsRoot => Parent is null;
+
+		public string FullName
+		{
+			get
+			{
+				if (IsRoot)
+				{
+					return "/";
+				}
+				else if (Parent.IsRoot)
+				{
+					return $"/{Name}";
+				}
+				else
+				{
+					return $"{Parent.FullName}/{Name}";
+				}
+			}
+		}
+
+		public int TotalFileCount
+		{
+			get
+			{
+				int count = Files.Count;
+				foreach (DirectoryEntry child in Children.Values)
+				{
+					count += child.TotalFileCount;
+				}
+				return count;
+			}
+		}
+
+		public int TotalDirectoryCount
+		{
+			get
+			{
+				int count = Children.Count;
+				foreach (DirectoryEntry child in Children.Values)
+				{
+					count += child.TotalDirectoryCount;
+				}
+				return count;
+			}
+		}
+
+		public DirectoryEntry(string name, DirectoryEntry? parent)
+		{
+			Name = name;
+			Parent = parent;
+		}
+
+		public DirectoryEntry CreateDirectory(string name)
+		{
+			if (!Children.TryGetValue(name, out DirectoryEntry? directory))
+			{
+				directory = new(name, this);
+				Children[name] = directory;
+			}
+			return directory;
+		}
+
+		public DirectoryEntry OpenDirectory(string name)
+		{
+			return TryOpenDirectory(name) ?? throw new DirectoryNotFoundException($"Directory '{name}' not found.");
+		}
+
+		public DirectoryEntry? TryOpenDirectory(string name)
+		{
+			if (!Children.TryGetValue(name, out DirectoryEntry? directory))
+			{
+				return null;
+			}
+			return directory;
+		}
+
+		public FileEntry CreateFile(string name)
+		{
+			if (Files.TryGetValue(name, out FileEntry? file))
+			{
+				file.Stream.SetLength(0);
+			}
+			else
+			{
+				SmartStream stream = SmartStream.CreateMemory();
+				file = new(name, this, stream);
+				Files[name] = file;
+			}
+
+			return file;
+		}
+
+		public FileEntry OpenFile(string name)
+		{
+			return TryOpenFile(name) ?? throw new FileNotFoundException($"File '{name}' not found.");
+		}
+
+		public FileEntry? TryOpenFile(string name)
+		{
+			if (!Files.TryGetValue(name, out FileEntry? file))
+			{
+				return null;
+			}
+			return file;
+		}
+	}
+
+	private sealed class FileEntry
+	{
+		public string Name { get; }
+		public DirectoryEntry Parent { get; }
+		public SmartStream Stream { get; }
+		public string FullName
+		{
+			get
+			{
+				if (Parent.IsRoot)
+				{
+					return $"/{Name}";
+				}
+				else
+				{
+					return $"{Parent.FullName}/{Name}";
+				}
+			}
+		}
+		public FileEntry(string name, DirectoryEntry parent, SmartStream stream)
+		{
+			Name = name;
+			Parent = parent;
+			Stream = stream;
+		}
+	}
 
 	/// <summary>
 	/// The number of virtual files and directories.
 	/// </summary>
-	public int Count => files.Count + directories.Count;
+	public int Count => root.TotalFileCount + root.TotalDirectoryCount + 1;
+
+	public override string TemporaryDirectory
+	{
+		get;
+		set
+		{
+			if (!string.IsNullOrWhiteSpace(value))
+			{
+				field = Path.GetFullPath(value);
+			}
+		}
+	} = "/temp";
 
 	/// <summary>
 	/// Clears the virtual file system.
 	/// </summary>
 	public void Clear()
 	{
-		directories.Clear();
-		files.Clear();
+		root.Children.Clear();
+		root.Files.Clear();
 	}
 
-	private string GetFullDirectoryName(string path)
+	private DirectoryEntry OpenDirectory(ReadOnlySpan<string> parts)
 	{
-		string directory = Path.GetDirectoryName(path);
-		return Path.GetFullPath(directory);
+		DirectoryEntry current = root;
+		foreach (string part in parts)
+		{
+			current = current.OpenDirectory(part);
+		}
+		return current;
+	}
+
+	private DirectoryEntry? TryOpenDirectory(ReadOnlySpan<string> parts)
+	{
+		DirectoryEntry? current = root;
+		foreach (string part in parts)
+		{
+			current = current.TryOpenDirectory(part);
+			if (current is null)
+			{
+				return null;
+			}
+		}
+		return current;
 	}
 
 	public partial class VirtualFileImplementation
 	{
 		public override SmartStream Create(string path)
 		{
-			string directory = fileSystem.GetFullDirectoryName(path);
-			string fullPath = Path.GetFullPath(path);
-			if (!fileSystem.directories.Contains(directory))
+			string[] pathParts = Path.GetPathParts(path);
+			if (pathParts.Length == 0)
 			{
-				throw new DirectoryNotFoundException($"Directory '{directory}' not found.");
+				throw new ArgumentException("Path cannot be empty.", nameof(path));
 			}
-			if (!fileSystem.files.TryGetValue(fullPath, out SmartStream? stream))
-			{
-				stream = SmartStream.CreateMemory();
-				fileSystem.files.Add(fullPath, stream);
-			}
-			else
-			{
-				stream.SetLength(0);
-			}
-			return stream.CreateReference();
+
+			ReadOnlySpan<string> directoryParts = pathParts.AsSpan(0, pathParts.Length - 1);
+			string fileName = pathParts[^1];
+			DirectoryEntry directory = Parent.OpenDirectory(directoryParts);
+			return directory.CreateFile(fileName).Stream.CreateReference();
 		}
 		public SmartStream Open(string path)
 		{
-			string directory = fileSystem.GetFullDirectoryName(path);
-			string fullPath = Path.GetFullPath(path);
-			if (!fileSystem.directories.Contains(directory))
+			string[] pathParts = Path.GetPathParts(path);
+			if (pathParts.Length == 0)
 			{
-				throw new DirectoryNotFoundException($"Directory '{directory}' not found.");
+				throw new ArgumentException("Path cannot be empty.", nameof(path));
 			}
-			if (!fileSystem.files.TryGetValue(fullPath, out SmartStream? stream))
-			{
-				throw new FileNotFoundException($"File '{path}' not found.");
-			}
-			return stream.CreateReference();
+
+			ReadOnlySpan<string> directoryParts = pathParts.AsSpan(0, pathParts.Length - 1);
+			string fileName = pathParts[^1];
+			DirectoryEntry directory = Parent.OpenDirectory(directoryParts);
+			return directory.OpenFile(fileName).Stream.CreateReference();
 		}
 		public override SmartStream OpenRead(string path) => Open(path);
 		public override SmartStream OpenWrite(string path) => Open(path);
 		public override void Delete(string path)
 		{
-			string directory = fileSystem.GetFullDirectoryName(path);
-			string fullPath = Path.GetFullPath(path);
-			if (!fileSystem.directories.Contains(directory))
+			string[] pathParts = Path.GetPathParts(path);
+			if (pathParts.Length == 0)
 			{
-				throw new DirectoryNotFoundException($"Directory '{directory}' not found.");
+				throw new ArgumentException("Path cannot be empty.", nameof(path));
 			}
-			if (fileSystem.files.Remove(fullPath, out SmartStream? stream))
+
+			ReadOnlySpan<string> directoryParts = pathParts.AsSpan(0, pathParts.Length - 1);
+			string fileName = pathParts[^1];
+			DirectoryEntry directory = Parent.OpenDirectory(directoryParts);
+			if (directory.Files.Remove(fileName, out FileEntry? file))
 			{
-				stream.Dispose();
+				file.Stream.Dispose();
 			}
 		}
-		public override bool Exists(string path) => fileSystem.files.ContainsKey(path);
+		public override bool Exists(string? path)
+		{
+			string[] pathParts = Path.GetPathParts(path);
+			ReadOnlySpan<string> directoryParts = pathParts.AsSpan(0, pathParts.Length - 1);
+			string fileName = pathParts[^1];
+
+			return Parent.TryOpenDirectory(directoryParts)?.TryOpenFile(fileName) is not null;
+		}
 		public override string ReadAllText(string path) => ReadAllText(path, Encoding.UTF8);
 		public override string ReadAllText(string path, Encoding encoding) => encoding.GetString(ReadAllBytes(path));
 		public override void WriteAllText(string path, ReadOnlySpan<char> contents) => WriteAllText(path, contents, Encoding.UTF8);
@@ -113,36 +288,167 @@ public partial class VirtualFileSystem : FileSystem
 
 	public partial class VirtualDirectoryImplementation
 	{
-		public override void Create(string path)
+		public override void Create(string? path)
 		{
-			string fullPath = GetFullPath(path);
-			while (fileSystem.directories.Add(fullPath))
+			string[] parts = Path.GetPathParts(path);
+			DirectoryEntry current = Parent.root;
+			foreach (string part in parts)
 			{
-				int index = fullPath.LastIndexOf('/');
-				if (index > 0)
+				current = current.CreateDirectory(part);
+			}
+		}
+
+		public override IEnumerable<string> EnumerateDirectories(string? path, string searchPattern, SearchOption searchOption)
+		{
+			if (searchPattern != "*")
+			{
+				throw new NotImplementedException("Only '*' search pattern is supported.");
+			}
+
+			string[] parts = Path.GetPathParts(path);
+			DirectoryEntry directory = Parent.OpenDirectory(parts);
+			if (searchOption == SearchOption.TopDirectoryOnly)
+			{
+				foreach (DirectoryEntry child in directory.Children.Values)
 				{
-					fullPath = fullPath[..index];
+					yield return child.FullName;
 				}
-				else
+			}
+			else
+			{
+				Stack<DirectoryEntry> stack = new();
+				stack.Push(directory);
+				while (stack.Count > 0)
 				{
-					break;
+					DirectoryEntry current = stack.Pop();
+					foreach (DirectoryEntry child in current.Children.Values)
+					{
+						yield return child.FullName;
+						stack.Push(child);
+					}
 				}
 			}
 		}
 
-		public override IEnumerable<string> EnumerateDirectories(string path, string searchPattern, SearchOption searchOption)
+		public override IEnumerable<string> EnumerateFiles(string? path, string searchPattern, SearchOption searchOption)
 		{
-			throw new NotImplementedException();
+			string[] pathParts = Path.GetPathParts(path);
+
+			string extension;
+			if (searchPattern == "*")
+			{
+				extension = string.Empty;
+			}
+			else if (searchPattern.StartsWith("*.") && searchPattern.Length > 2)
+			{
+				extension = searchPattern[1..];
+				if (extension.Contains('*') || extension.Contains('?'))
+				{
+					throw new NotImplementedException("Only '*' and '*.<extension>' search patterns are supported.");
+				}
+			}
+			else
+			{
+				throw new NotImplementedException("Only '*' and '*.<extension>' search patterns are supported.");
+			}
+
+			DirectoryEntry directory = Parent.OpenDirectory(pathParts);
+			if (searchOption == SearchOption.TopDirectoryOnly)
+			{
+				foreach (FileEntry file in directory.Files.Values)
+				{
+					if (file.Name.EndsWith(extension, StringComparison.Ordinal))
+					{
+						yield return file.FullName;
+					}
+				}
+			}
+			else
+			{
+				Stack<DirectoryEntry> stack = new();
+				stack.Push(directory);
+				while (stack.Count > 0)
+				{
+					DirectoryEntry current = stack.Pop();
+					foreach (FileEntry file in current.Files.Values)
+					{
+						if (file.Name.EndsWith(extension, StringComparison.Ordinal))
+						{
+							yield return file.FullName;
+						}
+					}
+					foreach (DirectoryEntry child in current.Children.Values)
+					{
+						stack.Push(child);
+					}
+				}
+			}
 		}
 
-		public override IEnumerable<string> EnumerateFiles(string path, string searchPattern, SearchOption searchOption)
+		public override IEnumerable<string> EnumerateDirectories(string path, string searchPattern)
 		{
-			throw new NotImplementedException();
+			return EnumerateDirectories(path, searchPattern, SearchOption.TopDirectoryOnly);
 		}
 
-		public override bool Exists(string? path) => fileSystem.directories.Contains(GetFullPath(path));
+		public override IEnumerable<string> EnumerateDirectories(string path)
+		{
+			return EnumerateDirectories(path, "*", SearchOption.TopDirectoryOnly);
+		}
 
-		private string GetFullPath(string? path) => Path.GetFullPath(path);
+		public override IEnumerable<string> EnumerateFiles(string path, string searchPattern)
+		{
+			return EnumerateFiles(path, searchPattern, SearchOption.TopDirectoryOnly);
+		}
+
+		public override IEnumerable<string> EnumerateFiles(string path)
+		{
+			return EnumerateFiles(path, "*", SearchOption.TopDirectoryOnly);
+		}
+
+		public override string[] GetDirectories(string path, string searchPattern, SearchOption searchOption)
+		{
+			return EnumerateDirectories(path, searchPattern, searchOption).ToArray();
+		}
+
+		public override string[] GetDirectories(string path, string searchPattern)
+		{
+			return EnumerateDirectories(path, searchPattern).ToArray();
+		}
+
+		public override string[] GetDirectories(string path)
+		{
+			return EnumerateDirectories(path).ToArray();
+		}
+
+		public override string[] GetFiles(string path, string searchPattern, SearchOption searchOption)
+		{
+			return EnumerateFiles(path, searchPattern, searchOption).ToArray();
+		}
+
+		public override string[] GetFiles(string path, string searchPattern)
+		{
+			return EnumerateFiles(path, searchPattern).ToArray();
+		}
+
+		public override string[] GetFiles(string path)
+		{
+			return EnumerateFiles(path).ToArray();
+		}
+
+		public override bool Exists(string? path)
+		{
+			string[] parts = Path.GetPathParts(path);
+			DirectoryEntry current = Parent.root;
+			foreach (string part in parts)
+			{
+				if (!current.Children.TryGetValue(part, out DirectoryEntry? next))
+				{
+					return false;
+				}
+				current = next;
+			}
+			return true;
+		}
 	}
 
 	public partial class VirtualPathImplementation
@@ -168,6 +474,32 @@ public partial class VirtualFileSystem : FileSystem
 		public override bool IsPathRooted(ReadOnlySpan<char> path)
 		{
 			return path.Length > 0 && path[0] is '/' or '\\';
+		}
+
+		internal string[] GetPathParts(string? path)
+		{
+			string fullPath = GetFullPath(path);
+			return fullPath.Split('/', StringSplitOptions.RemoveEmptyEntries);
+		}
+
+		public override string Join(string path1, string path2)
+		{
+			return GetFullPath(base.Join(path1, path2));
+		}
+
+		public override string Join(string path1, string path2, string path3)
+		{
+			return GetFullPath(base.Join(path1, path2, path3));
+		}
+
+		public override string Join(string path1, string path2, string path3, string path4)
+		{
+			return GetFullPath(base.Join(path1, path2, path3, path4));
+		}
+
+		public override string Join(params ReadOnlySpan<string> paths)
+		{
+			return GetFullPath(base.Join(paths));
 		}
 	}
 }

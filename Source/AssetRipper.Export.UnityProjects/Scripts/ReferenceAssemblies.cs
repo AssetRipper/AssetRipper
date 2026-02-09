@@ -1,79 +1,59 @@
-﻿using System.Text.RegularExpressions;
+﻿using AssetRipper.Import.Structure.Assembly.Managers;
+using System.Diagnostics;
 
 namespace AssetRipper.Export.UnityProjects.Scripts;
 
-public static partial class ReferenceAssemblies
+public static class ReferenceAssemblies
 {
-	[GeneratedRegex(@"^Unity(\.[0-9a-zA-Z]+)*(\.dll)?$")]
-	private static partial Regex UnityRegex { get; }
-
-	[GeneratedRegex(@"^UnityEngine(\.[0-9a-zA-Z]+)*(\.dll)?$")]
-	private static partial Regex UnityEngineRegex { get; }
-
-	[GeneratedRegex(@"^UnityEditor(\.[0-9a-zA-Z]+)*(\.dll)?$")]
-	private static partial Regex UnityEditorRegex { get; }
-
-	[GeneratedRegex(@"^System(\.[0-9a-zA-Z]+)*(\.dll)?$")]
-	private static partial Regex SystemRegex { get; }
-
-	private static HashSet<string> WhitelistAssemblies { get; } =
-	[
-		"UnityEngine.UI.dll",
-		"UnityEngine.UI",
-	];
-
-	private static HashSet<string> BlacklistAssemblies { get; } =
-	[
-		"mscorlib.dll",
-		"mscorlib",
-		"netstandard.dll",
-		"netstandard",
-		"Mono.Security.dll",
-		"Mono.Security"
-	];
-
-	private static HashSet<string> PredefinedAssemblies { get; } =
-	[
-		"Assembly-CSharp.dll",
-		"Assembly-CSharp",
-		"Assembly-CSharp-firstpass.dll",
-		"Assembly-CSharp-firstpass",
-		"Assembly-CSharp-Editor.dll",
-		"Assembly-CSharp-Editor",
-		"Assembly-CSharp-Editor-firstpass.dll",
-		"Assembly-CSharp-Editor-firstpass",
-		"Assembly-UnityScript.dll",
-		"Assembly-UnityScript",
-		"Assembly-UnityScript-firstpass.dll",
-		"Assembly-UnityScript-firstpass"
-	];
+	private static readonly AssemblyDataFile assemblyDataFile = AssemblyDataFile.Load();
+	private static UnityGuid UnityEngineGUID => new UnityGuid(0x1F55507F, 0xA1948D44, 0x4080F528, 0xC176C90E);
 
 	public static bool IsPredefinedAssembly(string assemblyName)
 	{
-		ArgumentNullException.ThrowIfNull(assemblyName);
-		return PredefinedAssemblies.Contains(assemblyName);
+		return assemblyName
+			is "Assembly-CSharp"
+			or "Assembly-CSharp-firstpass"
+			or "Assembly-CSharp-Editor"
+			or "Assembly-CSharp-Editor-firstpass"
+			or "Assembly-UnityScript"
+			or "Assembly-UnityScript-firstpass";
 	}
 
-	public static bool IsReferenceAssembly(string assemblyName)
+	public static Dictionary<string, UnityGuid> GetReferenceAssemblies(IAssemblyManager assemblyManager, UnityVersion version)
 	{
-		ArgumentNullException.ThrowIfNull(assemblyName);
+		Debug.Assert(assemblyDataFile.Assemblies.Count > 0);
 
-		if (IsWhiteListAssembly(assemblyName))
+		AssemblyData assemblyData = assemblyDataFile.Get(version);
+
+		Dictionary<string, UnityGuid> referenceAssemblies = [];
+		foreach ((string assembly, UnityGuid guid) in assemblyData.UnityExtensions)
 		{
-			return false;
+			referenceAssemblies.Add(assembly, guid);
+		}
+		foreach (string assembly in GetMonoAssemblies(assemblyManager, assemblyData))
+		{
+			referenceAssemblies.TryAdd(assembly, UnityEngineGUID);
+		}
+		foreach (string assembly in assemblyData.Unity)
+		{
+			referenceAssemblies.TryAdd(assembly, UnityEngineGUID);
 		}
 
-		return IsBlackListAssembly(assemblyName)
-			|| IsUnityEngineAssembly(assemblyName)
-			//|| IsUnityAssembly(assemblyName)
-			|| IsSystemAssembly(assemblyName)
-			|| IsUnityEditorAssembly(assemblyName);
-	}
+		// Todo: investigate why 5.4.0a0 does not have UnityEngine
+		referenceAssemblies.TryAdd("UnityEngine", UnityEngineGUID);
 
-	private static bool IsUnityAssembly(string assemblyName) => UnityRegex.IsMatch(assemblyName);
-	public static bool IsUnityEngineAssembly(string assemblyName) => UnityEngineRegex.IsMatch(assemblyName);
-	private static bool IsUnityEditorAssembly(string assemblyName) => UnityEditorRegex.IsMatch(assemblyName);
-	private static bool IsSystemAssembly(string assemblyName) => SystemRegex.IsMatch(assemblyName);
-	private static bool IsWhiteListAssembly(string assemblyName) => WhitelistAssemblies.Contains(assemblyName);
-	private static bool IsBlackListAssembly(string assemblyName) => BlacklistAssemblies.Contains(assemblyName);
+		return referenceAssemblies;
+
+		static IReadOnlyList<string> GetMonoAssemblies(IAssemblyManager assemblyManager, AssemblyData assemblyData)
+		{
+			if (assemblyManager.HasMscorlib2)
+			{
+				return assemblyData.Mono2.Count > 0 ? assemblyData.Mono2 : assemblyData.Mono4;
+			}
+			else
+			{
+				return assemblyData.Mono4.Count > 0 ? assemblyData.Mono4 : assemblyData.Mono2;
+			}
+		}
+	}
 }

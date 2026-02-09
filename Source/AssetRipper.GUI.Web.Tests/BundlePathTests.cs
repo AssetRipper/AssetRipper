@@ -21,7 +21,7 @@ public class BundlePathTests
 	[Test]
 	public void BundlePathParentWithDepthTwoIsNotRoot()
 	{
-		BundlePath path = new([0,0]);
+		BundlePath path = new([0, 0]);
 		Assert.That(path.Parent.IsRoot, Is.False);
 	}
 

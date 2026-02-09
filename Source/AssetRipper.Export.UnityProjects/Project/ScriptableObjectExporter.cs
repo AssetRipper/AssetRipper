@@ -2,52 +2,50 @@
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Extensions;
 
-namespace AssetRipper.Export.UnityProjects.Project
+namespace AssetRipper.Export.UnityProjects.Project;
+
+public class ScriptableObjectExporter : YamlExporterBase
 {
-	public class ScriptableObjectExporter : YamlExporterBase
+	private IExportCollection CreateCollection(IMonoBehaviour monoBehaviour)
 	{
-		private IExportCollection CreateCollection(IMonoBehaviour monoBehaviour)
+		if (monoBehaviour.IsComponentOnGameObject())
 		{
-			if (monoBehaviour.IsScriptableObject())
-			{
-				return new ScriptableObjectExportCollection(this, monoBehaviour);
-			}
-			else
-			{
-				// such MonoBehaviours as StateMachineBehaviour in AnimatorController
-				return EmptyExportCollection.Instance;
-			}
+			return EmptyExportCollection.Instance;
+		}
+		else
+		{
+			return new ScriptableObjectExportCollection(this, monoBehaviour);
+		}
+	}
+
+	public override bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection)
+	{
+		exportCollection = asset switch
+		{
+			IMonoBehaviour monoBehaviour => CreateCollection(monoBehaviour),
+			_ => null,
+		};
+		return exportCollection is not null;
+	}
+
+	private sealed class ScriptableObjectExportCollection : AssetExportCollection<IMonoBehaviour>
+	{
+		public ScriptableObjectExportCollection(ScriptableObjectExporter exporter, IMonoBehaviour asset) : base(exporter, asset)
+		{
 		}
 
-		public override bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection)
+		protected override string GetExportExtension(IUnityObjectBase asset)
 		{
-			exportCollection = asset switch
+			IMonoBehaviour monoBehaviour = (IMonoBehaviour)asset;
+			if (monoBehaviour.IsGuiSkin())
 			{
-				IMonoBehaviour monoBehaviour => CreateCollection(monoBehaviour),
-				_ => null,
-			};
-			return exportCollection is not null;
-		}
-
-		private sealed class ScriptableObjectExportCollection : AssetExportCollection<IMonoBehaviour>
-		{
-			public ScriptableObjectExportCollection(ScriptableObjectExporter exporter, IMonoBehaviour asset) : base(exporter, asset)
-			{
+				return "guiskin";
 			}
-
-			protected override string GetExportExtension(IUnityObjectBase asset)
+			else if (monoBehaviour.IsBrush())
 			{
-				IMonoBehaviour monoBehaviour = (IMonoBehaviour)asset;
-				if (monoBehaviour.IsGuiSkin())
-				{
-					return "guiskin";
-				}
-				else if (monoBehaviour.IsBrush())
-				{
-					return "brush";
-				}
-				return base.GetExportExtension(asset);
+				return "brush";
 			}
+			return base.GetExportExtension(asset);
 		}
 	}
 }

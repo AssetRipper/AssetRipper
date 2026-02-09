@@ -1,7 +1,7 @@
 ﻿using AssetRipper.Assets;
+using AssetRipper.Export.Configuration;
 using AssetRipper.Export.Modules.Audio;
 using AssetRipper.Export.Modules.Models;
-using AssetRipper.Export.Modules.Shaders.IO;
 using AssetRipper.Export.Modules.Textures;
 using AssetRipper.Export.PrimaryContent;
 using AssetRipper.Export.UnityProjects;
@@ -31,7 +31,6 @@ using AssetRipper.Yaml;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using SharpGLTF.Scenes;
-using SharpGLTF.Schema2;
 using System.Globalization;
 using System.Runtime.InteropServices;
 
@@ -108,7 +107,7 @@ internal static class AssetAPI
 	{
 		IImageTexture texture => texture.CheckAssetIntegrity(),
 		SpriteInformationObject spriteInformationObject => spriteInformationObject.Texture.CheckAssetIntegrity(),
-		ISprite sprite => sprite.TryGetTexture()?.CheckAssetIntegrity() ?? false,
+		ISprite sprite => SpriteConverter.Supported(sprite),
 		ITerrainData terrainData => terrainData.Heightmap.Heights.Count > 0,
 		_ => false,
 	};
@@ -131,7 +130,7 @@ internal static class AssetAPI
 
 		static DirectBitmap SpriteToBitmap(ISprite sprite)
 		{
-			return sprite.TryGetTexture() is { } spriteTexture ? TextureToBitmap(spriteTexture) : DirectBitmap.Empty;
+			return SpriteConverter.TryConvertToBitmap(sprite, out DirectBitmap bitmap) ? bitmap : DirectBitmap.Empty;
 		}
 	}
 
@@ -164,7 +163,7 @@ internal static class AssetAPI
 	#region Audio
 	public static string GetAudioUrl(AssetPath path, string? extension = null)
 	{
-		return $"{Urls.Audio}?{GetPathQuery(path)}";
+		return $"{Urls.Audio}?{GetPathQuery(path)}{GetExtensionQuerySuffix(extension)}";
 	}
 
 	public static Task GetAudioData(HttpContext context)
@@ -181,6 +180,19 @@ internal static class AssetAPI
 		}
 		else if (AudioClipDecoder.TryDecode(clip, out byte[]? decodedAudioData, out string? extension, out _))
 		{
+			if (context.Request.Query.TryGetValue(Extension, out string? desiredExtension))
+			{
+				if (extension is "ogg" && desiredExtension is "wav")
+				{
+					byte[] wavData = AudioConverter.OggToWav(decodedAudioData);
+					if (wavData.Length > 0)
+					{
+						decodedAudioData = wavData;
+						extension = "wav";
+					}
+				}
+			}
+
 			return Results.Bytes(decodedAudioData, $"audio/{extension}").ExecuteAsync(context);
 		}
 		else
@@ -216,17 +228,26 @@ internal static class AssetAPI
 		else
 		{
 			MemoryStream stream = new();
+			SceneBuilder sceneBuilder;
 			try
 			{
-				SceneBuilder sceneBuilder = GlbMeshBuilder.Build(mesh);
-				sceneBuilder.ToGltf2().WriteGLB(stream, new WriteSettings() { MergeBuffers = false });
+				sceneBuilder = GlbMeshBuilder.Build(mesh);
 			}
 			catch (Exception ex)
 			{
 				Logger.Error(ex);
 				return context.Response.NotFound("Model data could not be decoded.");
 			}
-			return Results.Bytes(stream.ToArray(), "model/gltf-binary", "model.glb").ExecuteAsync(context);
+
+			if (GlbWriter.TryWrite(sceneBuilder, stream, out string? errorMessage))
+			{
+				return Results.Bytes(stream.ToArray(), "model/gltf-binary", "model.glb").ExecuteAsync(context);
+			}
+			else
+			{
+				Logger.Error(errorMessage);
+				return context.Response.NotFound("Model data could not be decoded.");
+			}
 		}
 	}
 
@@ -551,5 +572,10 @@ internal static class AssetAPI
 	public static RouteHandlerBuilder WithImageExtensionParameter(this RouteHandlerBuilder builder)
 	{
 		return builder.WithQueryStringParameter(Extension, "Extension for decoding the image.", true);
+	}
+
+	private sealed class InvariantStringWriter : StringWriter
+	{
+		public override IFormatProvider FormatProvider => CultureInfo.InvariantCulture;
 	}
 }

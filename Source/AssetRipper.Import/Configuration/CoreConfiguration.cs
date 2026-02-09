@@ -1,7 +1,5 @@
 ﻿using AssetRipper.Import.Logging;
 using AssetRipper.Import.Utils;
-using AssetRipper.IO.Files;
-using AssetRipper.IO.Files.SerializedFiles;
 using System.Diagnostics;
 
 namespace AssetRipper.Import.Configuration;
@@ -38,8 +36,6 @@ public class CoreConfiguration
 
 	#region Project Settings
 	public UnityVersion Version { get; private set; }
-	public BuildTarget Platform { get; private set; }
-	public TransferInstructionFlags Flags { get; private set; }
 	#endregion
 
 	public SingletonDataStorage SingletonData { get; } = new();
@@ -52,11 +48,9 @@ public class CoreConfiguration
 		SingletonData.Add(nameof(ImportSettings), new JsonDataInstance<ImportSettings>(ImportSettingsContext.Default.ImportSettings));
 	}
 
-	public void SetProjectSettings(UnityVersion version, BuildTarget platform, TransferInstructionFlags flags)
+	public void SetProjectSettings(UnityVersion version)
 	{
 		Version = version;
-		Platform = platform;
-		Flags = flags;
 	}
 
 	public virtual void ResetToDefaultValues()

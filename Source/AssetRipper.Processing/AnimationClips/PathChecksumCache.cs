@@ -4,7 +4,7 @@ using AssetRipper.Assets.Metadata;
 using AssetRipper.Checksum;
 using AssetRipper.Import.Structure.Assembly;
 using AssetRipper.Import.Structure.Assembly.Managers;
-using AssetRipper.Import.Structure.Assembly.Serializable;
+using AssetRipper.SerializationLogic;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_111;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
@@ -33,16 +33,16 @@ public readonly struct PathChecksumCache
 	private readonly Dictionary<uint, string> cachedChecksums = new() { { 0, string.Empty } };
 	private readonly HashSet<AssetInfo> processedAssets = new();
 	private readonly IAssemblyManager assemblyManager;
-	
+
 	private void AddAnimatorPathsToCache(IAnimator animator)
 	{
 		IAvatar? avatar = animator.AvatarP;
 		if (avatar != null)
 		{
-			 AddAvatarTOS(avatar);
-			 return;
+			AddAvatarTOS(avatar);
+			return;
 		}
-		
+
 		if (animator.Has_HasTransformHierarchy() && !animator.HasTransformHierarchy)
 		{
 			return;
@@ -78,7 +78,7 @@ public readonly struct PathChecksumCache
 			AddGameObjectPathsToCacheRecursive(child, path);
 		}
 	}
-	
+
 	private void AddAnimationPathsToCache(IAnimation animation)
 	{
 		IGameObject? go = animation.GameObjectP;
@@ -88,7 +88,7 @@ public readonly struct PathChecksumCache
 		}
 		AddGameObjectPathsToCacheRecursive(go, string.Empty);
 	}
-	
+
 	private void AddAvatarTOS(IAvatar avatar)
 	{
 		foreach ((uint key, Utf8String value) in avatar.TOS)
@@ -115,7 +115,7 @@ public readonly struct PathChecksumCache
 			}
 		}
 	}
-	
+
 	public uint Add(string path)
 	{
 		if (cachedPropertyNames.TryGetValue(path, out uint value))
@@ -157,7 +157,7 @@ public readonly struct PathChecksumCache
 		{
 			return;
 		}
-		
+
 		if (field.Type.IsPrimitive())
 		{
 			// Only primitive fields can be animated.

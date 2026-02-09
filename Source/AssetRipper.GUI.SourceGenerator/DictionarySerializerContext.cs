@@ -8,12 +8,12 @@ namespace AssetRipper.GUI.SourceGenerator;
 [JsonSerializable(typeof(Dictionary<string, string>))]
 internal sealed partial class DictionarySerializerContext : JsonSerializerContext
 {
-	private static DictionarySerializerContext? _actualDefault;
+	[field: MaybeNull]
 	private static DictionarySerializerContext ActualDefault
 	{
 		get
 		{
-			return _actualDefault ??= new(new JsonSerializerOptions(s_defaultOptions!)
+			return field ??= new(new JsonSerializerOptions(s_defaultOptions!)
 			{
 				Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
 			});

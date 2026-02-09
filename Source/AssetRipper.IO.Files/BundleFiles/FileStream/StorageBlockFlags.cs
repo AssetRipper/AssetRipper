@@ -1,45 +1,35 @@
-﻿using AssetRipper.SmartEnums;
+﻿namespace AssetRipper.IO.Files.BundleFiles.FileStream;
 
-namespace AssetRipper.IO.Files.BundleFiles.FileStream;
-
-[SmartEnum]
-public readonly partial record struct StorageBlockFlags
+[Flags]
+public enum StorageBlockFlags
 {
-	private enum Internal
-	{
-		CompressionTypeMask = 0x3F,
+	CompressionTypeMask = 0x3F,
 
-		Streamed = 0x40,
-	}
-
-	public CompressionType CompressionType
+	Streamed = 0x40,
+}
+public static class StorageBlockFlagsExtensions
+{
+	extension(StorageBlockFlags flags)
 	{
-		get
+		public CompressionType CompressionType
 		{
-			return (CompressionType)(this & CompressionTypeMask);
+			get
+			{
+				return (CompressionType)(flags & StorageBlockFlags.CompressionTypeMask);
+			}
 		}
-	}
 
-	public bool IsStreamed
-	{
-		get
+		public bool IsStreamed
 		{
-			return (this & Streamed) != 0;
+			get
+			{
+				return (flags & StorageBlockFlags.Streamed) != 0;
+			}
 		}
-	}
 
-	public StorageBlockFlags WithCompressionType(CompressionType compressionType)
-	{
-		return (this & ~CompressionTypeMask) | (StorageBlockFlags)compressionType;
-	}
-
-	public static explicit operator StorageBlockFlags(CompressionType compressionType)
-	{
-		return (StorageBlockFlags)(int)compressionType;
-	}
-
-	public static explicit operator CompressionType(StorageBlockFlags flags)
-	{
-		return (CompressionType)(int)(flags);
+		public StorageBlockFlags WithCompressionType(CompressionType compressionType)
+		{
+			return (flags & ~StorageBlockFlags.CompressionTypeMask) | (StorageBlockFlags)compressionType;
+		}
 	}
 }

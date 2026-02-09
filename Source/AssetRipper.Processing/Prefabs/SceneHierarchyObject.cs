@@ -87,7 +87,7 @@ public sealed class SceneHierarchyObject : GameObjectHierarchyObject, INamed
 					sceneHierarchy.GameObjects.Add(gameObject);
 					break;
 				case IMonoBehaviour monoBehaviour:
-					if (monoBehaviour.IsSceneObject())
+					if (monoBehaviour.IsComponentOnGameObject())
 					{
 						sceneHierarchy.Components.Add(monoBehaviour);
 					}

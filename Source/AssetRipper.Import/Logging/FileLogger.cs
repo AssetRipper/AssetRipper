@@ -1,43 +1,42 @@
 ﻿using System.Text;
 
-namespace AssetRipper.Import.Logging
+namespace AssetRipper.Import.Logging;
+
+public class FileLogger : FileLoggerBase
 {
-	public class FileLogger : FileLoggerBase
+	private readonly StringBuilder stringBuilder = new();
+
+	public FileLogger() : base() { }
+
+	/// <param name="filePath">The absolute path to the log file</param>
+	public FileLogger(string filePath) : base(filePath) { }
+
+	public sealed override void Log(LogType type, LogCategory category, string message)
 	{
-		private readonly StringBuilder stringBuilder = new();
+		stringBuilder.Clear();
 
-		public FileLogger() : base() { }
-
-		/// <param name="filePath">The absolute path to the log file</param>
-		public FileLogger(string filePath) : base(filePath) { }
-
-		public sealed override void Log(LogType type, LogCategory category, string message)
+		if (category != LogCategory.None)
 		{
-			stringBuilder.Clear();
+			stringBuilder.Append($"{category.ToString()} ");
+		}
 
-			if (category != LogCategory.None)
-			{
-				stringBuilder.Append($"{category.ToString()} ");
-			}
-
-			switch (type)
-			{
-				case LogType.Warning:
-				case LogType.Error:
-					stringBuilder.Append($"[{type.ToString()}] ");
-					break;
-			}
-			stringBuilder.Append(": ");
-			stringBuilder.Append(message);
-			stringBuilder.Append(Environment.NewLine);
-			try
-			{
-				File.AppendAllText(filePath, stringBuilder.ToString());
-			}
-			catch (IOException)
-			{
-				//Could not log to file
-			}
+		switch (type)
+		{
+			case LogType.Warning:
+			case LogType.Error:
+				stringBuilder.Append($"[{type.ToString()}] ");
+				break;
+		}
+		stringBuilder.Append(": ");
+		stringBuilder.Append(message);
+		stringBuilder.Append(Environment.NewLine);
+		try
+		{
+			File.AppendAllText(filePath, stringBuilder.ToString());
+		}
+		catch (IOException)
+		{
+			//Could not log to file
 		}
 	}
 }

@@ -1,8 +1,7 @@
-﻿namespace AssetRipper.Import.Configuration
+﻿namespace AssetRipper.Import.Configuration;
+
+public enum StreamingAssetsMode
 {
-	public enum StreamingAssetsMode
-	{
-		Ignore,
-		Extract,
-	}
+	Ignore,
+	Extract,
 }

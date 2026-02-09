@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace AssetRipper.IO.Files.SourceGenerator;
@@ -17,6 +16,7 @@ internal static class Program
 		WriteVirtualFileSystemClass();
 	}
 
+	/// <inheritdoc cref="File.WriteAllBytesAsync(string, byte[], CancellationToken)"/>
 	private static void WriteFileSystemClass()
 	{
 		using IndentedTextWriter writer = IndentedTextWriterFactory.Create(OutputDirectory, "FileSystem");
@@ -34,19 +34,26 @@ internal static class Program
 				writer.WriteLine($"public abstract partial class {classPropertyName}Implementation(FileSystem fileSystem)");
 				using (new CurlyBrackets(writer))
 				{
+					writer.WriteLine("protected FileSystem Parent { get; } = fileSystem;");
 					foreach (string otherClassPropertyName in apiDictionary.Keys)
 					{
 						if (otherClassPropertyName != classPropertyName)
 						{
-							writer.WriteLine($"protected {otherClassPropertyName}Implementation {otherClassPropertyName} => fileSystem.{otherClassPropertyName};");
+							writer.WriteLine($"protected {otherClassPropertyName}Implementation {otherClassPropertyName} => Parent.{otherClassPropertyName};");
+						}
+						else
+						{
+							writer.WriteLine($"protected {otherClassPropertyName}Implementation {otherClassPropertyName} => this;");
 						}
 					}
 
 					foreach (FileSystemApi api in classApiList)
 					{
+						// Inherit documentation from System.IO
+						writer.WriteLine($"/// <inheritdoc cref=\"{api.FullName}({api.ParametersWithoutNames})\"/>");
+
 						string virtualKeyword = api.Type is FileSystemApiType.Sealed ? "" : "virtual ";
-						string parametersWithTypes = string.Join(", ", api.Parameters.Select(parameter => $"{parameter.Item1} {parameter.Item2}"));
-						writer.WriteLine($"public {virtualKeyword}{api.BaseReturnType} {api.Name}({parametersWithTypes})");
+						writer.WriteLine($"public {virtualKeyword}{api.BaseReturnType} {api.Name}({api.ParametersWithTypes})");
 						using (new CurlyBrackets(writer))
 						{
 							if (api.Type is FileSystemApiType.Throw)
@@ -56,8 +63,7 @@ internal static class Program
 							else
 							{
 								string returnKeyword = api.VoidReturn ? "" : "return ";
-								string parametersWithoutTypes = string.Join(", ", api.Parameters.Select(parameter => parameter.Item2));
-								writer.WriteLine($"{returnKeyword}{api.FullName}({parametersWithoutTypes});");
+								writer.WriteLine($"{returnKeyword}{api.FullName}({api.ParametersWithoutTypes});");
 							}
 						}
 						writer.WriteLineNoTabs();
@@ -96,13 +102,11 @@ internal static class Program
 							continue;
 						}
 
-						string parametersWithTypes = string.Join(", ", api.Parameters.Select(parameter => $"{parameter.Item1} {parameter.Item2}"));
-						writer.WriteLine($"public override {api.DerivedReturnType} {api.Name}({parametersWithTypes})");
+						writer.WriteLine($"public override {api.DerivedReturnType} {api.Name}({api.ParametersWithTypes})");
 						using (new CurlyBrackets(writer))
 						{
 							string returnKeyword = api.VoidReturn ? "" : "return ";
-							string parametersWithoutTypes = string.Join(", ", api.Parameters.Select(parameter => parameter.Item2));
-							writer.WriteLine($"{returnKeyword}{api.FullName}({parametersWithoutTypes});");
+							writer.WriteLine($"{returnKeyword}{api.FullName}({api.ParametersWithoutTypes});");
 						}
 						writer.WriteLineNoTabs();
 					}
@@ -138,6 +142,18 @@ internal static class Program
 				writer.WriteLine($"public sealed partial class Virtual{classPropertyName}Implementation(VirtualFileSystem fileSystem) : {classPropertyName}Implementation(fileSystem)");
 				using (new CurlyBrackets(writer))
 				{
+					writer.WriteLine("private new VirtualFileSystem Parent => (VirtualFileSystem)base.Parent;");
+					foreach (string otherClassPropertyName in apiDictionary.Keys)
+					{
+						if (otherClassPropertyName != classPropertyName)
+						{
+							writer.WriteLine($"private new Virtual{otherClassPropertyName}Implementation {otherClassPropertyName} => Parent.{otherClassPropertyName};");
+						}
+						else
+						{
+							writer.WriteLine($"private new Virtual{otherClassPropertyName}Implementation {otherClassPropertyName} => this;");
+						}
+					}
 				}
 				writer.WriteLineNoTabs();
 			}
@@ -153,10 +169,10 @@ internal static class Program
 		}
 	}
 
-	private static Dictionary<string, List<FileSystemApi>> apiDictionary = new()
+	private static readonly Dictionary<string, List<FileSystemApi>> apiDictionary = new()
 	{
-		[nameof(File)] = new()
-		{
+		[nameof(File)] =
+		[
 			new((Func<string, FileStream>)File.Create),
 			new(File.Delete),
 			new(File.Exists),
@@ -168,15 +184,25 @@ internal static class Program
 			new((Action<string, ReadOnlySpan<byte>>)File.WriteAllBytes),
 			new((Action<string, ReadOnlySpan<char>>)File.WriteAllText),
 			new((Action<string, ReadOnlySpan<char>, Encoding>)File.WriteAllText),
-		},
-		[nameof(Directory)] = new()
-		{
+		],
+		[nameof(Directory)] =
+		[
 			new((Func<string, string, SearchOption, IEnumerable<string>>)Directory.EnumerateDirectories),
 			new((Func<string, string, SearchOption, IEnumerable<string>>)Directory.EnumerateFiles),
+			new((Func<string, string, SearchOption, IEnumerable<string>>)Directory.GetDirectories),
+			new((Func<string, string, SearchOption, IEnumerable<string>>)Directory.GetFiles),
+			new((Func<string, string, IEnumerable<string>>)Directory.EnumerateDirectories),
+			new((Func<string, string, IEnumerable<string>>)Directory.EnumerateFiles),
+			new((Func<string, string, IEnumerable<string>>)Directory.GetDirectories),
+			new((Func<string, string, IEnumerable<string>>)Directory.GetFiles),
+			new((Func<string, IEnumerable<string>>)Directory.EnumerateDirectories),
+			new((Func<string, IEnumerable<string>>)Directory.EnumerateFiles),
+			new((Func<string, IEnumerable<string>>)Directory.GetDirectories),
+			new((Func<string, IEnumerable<string>>)Directory.GetFiles),
 			new(Directory.Exists),
-		},
-		[nameof(Path)] = new()
-		{
+		],
+		[nameof(Path)] =
+		[
 			new((Func<string, string, string>)Path.Join) { Type = FileSystemApiType.Virtual },
 			new((Func<string, string, string, string>)Path.Join) { Type = FileSystemApiType.Virtual },
 			new((Func<string, string, string, string, string>)Path.Join) { Type = FileSystemApiType.Virtual },
@@ -192,7 +218,7 @@ internal static class Program
 			new((Func<string, string>)Path.GetFullPath),
 			new(Path.GetRelativePath) { Type = FileSystemApiType.Sealed },
 			new((Func<ReadOnlySpan<char>, bool>)Path.IsPathRooted),
-		},
+		],
 	};
 
 	private enum FileSystemApiType
@@ -201,6 +227,7 @@ internal static class Program
 		Virtual,
 		Sealed,
 	}
+
 	private sealed record class FileSystemApi
 	{
 		public required Delegate Delegate { get; init; }
@@ -223,6 +250,7 @@ internal static class Program
 			.Select(parameter => (parameter.GetParamsPrefix() + parameter.ParameterType.GetGlobalQualifiedName(), parameter.Name!));
 		public string ParametersWithTypes => string.Join(", ", Parameters.Select(parameter => $"{parameter.Item1} {parameter.Item2}"));
 		public string ParametersWithoutTypes => string.Join(", ", Parameters.Select(parameter => parameter.Item2));
+		public string ParametersWithoutNames => string.Join(", ", Parameters.Select(parameter => parameter.Item1));
 
 		public FileSystemApi()
 		{
@@ -232,45 +260,6 @@ internal static class Program
 		public FileSystemApi(Delegate @delegate)
 		{
 			Delegate = @delegate;
-		}
-	}
-}
-internal static class ParameterExtensions
-{
-	public static bool IsParams(this ParameterInfo parameter)
-	{
-		return parameter.GetCustomAttribute<ParamCollectionAttribute>() is not null;
-	}
-
-	public static string GetParamsPrefix(this ParameterInfo parameter)
-	{
-		return parameter.IsParams() ? "params " : "";
-	}
-}
-internal static class TypeExtensions
-{
-	public static string GetGlobalQualifiedName(this Type type)
-	{
-		if (type == typeof(void))
-		{
-			return "void";
-		}
-		else if (type.IsGenericType)
-		{
-			// Handle generic types by appending generic arguments
-			string genericTypeDefinition = type.GetGenericTypeDefinition().FullName!;
-			string genericArguments = string.Join(", ", type.GetGenericArguments()
-															 .Select(t => t.GetGlobalQualifiedName()));
-			return $"global::{genericTypeDefinition[..genericTypeDefinition.IndexOf('`')]}<{genericArguments}>";
-		}
-		else if (type.IsArray)
-		{
-			// Handle arrays
-			return $"{type.GetElementType()!.GetGlobalQualifiedName()}[{new string(',', type.GetArrayRank() - 1)}]";
-		}
-		else
-		{
-			return $"global::{type.FullName}";
 		}
 	}
 }

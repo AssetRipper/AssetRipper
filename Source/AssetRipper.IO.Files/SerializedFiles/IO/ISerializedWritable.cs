@@ -1,7 +1,6 @@
-﻿namespace AssetRipper.IO.Files.SerializedFiles.IO
+﻿namespace AssetRipper.IO.Files.SerializedFiles.IO;
+
+public interface ISerializedWritable
 {
-	public interface ISerializedWritable
-	{
-		void Write(SerializedWriter writer);
-	}
+	void Write(SerializedWriter writer);
 }

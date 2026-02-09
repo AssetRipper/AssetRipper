@@ -6,7 +6,9 @@ namespace AssetRipper.Tests.Traversal;
 
 internal sealed class VectorXY : UnityAssetBase
 {
+#pragma warning disable CS0649
 	private readonly ulong xy;
+#pragma warning restore CS0649
 
 	public override int SerializedVersion => 2;
 

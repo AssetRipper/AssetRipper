@@ -1,6 +1,6 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
-using AssetRipper.Export.UnityProjects.Configuration;
+using AssetRipper.Export.Configuration;
 using AssetRipper.Processing;
 using AssetRipper.SourceGenerated.Classes.ClassID_27;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
@@ -12,7 +12,7 @@ namespace AssetRipper.Export.UnityProjects.PathIdMapping;
 
 public sealed class PathIdMapExporter : IPostExporter
 {
-	public void DoPostExport(GameData gameData, LibraryConfiguration settings, FileSystem fileSystem)
+	public void DoPostExport(GameData gameData, FullConfiguration settings, FileSystem fileSystem)
 	{
 		SerializedGameInfo gameInfo = new();
 		foreach (SerializedAssetCollection collection in gameData.GameBundle.FetchAssetCollections().OfType<SerializedAssetCollection>())

@@ -1,47 +1,46 @@
 ﻿using AssetRipper.SourceGenerated.Subclasses.ControllerConstant;
 using AssetRipper.SourceGenerated.Subclasses.LayerConstant;
 
-namespace AssetRipper.SourceGenerated.Extensions
+namespace AssetRipper.SourceGenerated.Extensions;
+
+public static class ControllerConstantExtensions
 {
-	public static class ControllerConstantExtensions
+	public static ILayerConstant GetLayerByStateMachineIndex(this IControllerConstant controllerConstant, int index)
 	{
-		public static ILayerConstant GetLayerByStateMachineIndex(this IControllerConstant controllerConstant, int index)
+		for (int i = 0; i < controllerConstant.LayerArray.Count; i++)
 		{
-			for (int i = 0; i < controllerConstant.LayerArray.Count; i++)
+			ILayerConstant layer = controllerConstant.LayerArray[i].Data;
+			if (layer.StateMachineIndex == index && layer.StateMachineSynchronizedLayerIndex == 0)
 			{
-				ILayerConstant layer = controllerConstant.LayerArray[i].Data;
-				if (layer.StateMachineIndex == index && layer.StateMachineSynchronizedLayerIndex == 0)
-				{
-					return layer;
-				}
+				return layer;
 			}
-			throw new ArgumentOutOfRangeException(nameof(index));
 		}
+		throw new ArgumentOutOfRangeException(nameof(index));
+	}
 
-		public static int GetLayerIndexByStateMachineIndex(this IControllerConstant controllerConstant, int index, out ILayerConstant layer)
+	public static int GetLayerIndexByStateMachineIndex(this IControllerConstant controllerConstant, int index, out ILayerConstant layer)
+	{
+		for (int i = 0; i < controllerConstant.LayerArray.Count; i++)
 		{
-			for (int i = 0; i < controllerConstant.LayerArray.Count; i++)
+			layer = controllerConstant.LayerArray[i].Data;
+			if (layer.StateMachineIndex == index && layer.StateMachineSynchronizedLayerIndex == 0)
 			{
-				layer = controllerConstant.LayerArray[i].Data;
-				if (layer.StateMachineIndex == index && layer.StateMachineSynchronizedLayerIndex == 0)
-				{
-					return i;
-				}
+				return i;
 			}
-			throw new ArgumentOutOfRangeException(nameof(index));
 		}
+		throw new ArgumentOutOfRangeException(nameof(index));
+	}
 
-		public static int GetLayerIndex(this IControllerConstant controllerConstant, ILayerConstant layer)
+	public static int GetLayerIndex(this IControllerConstant controllerConstant, ILayerConstant layer)
+	{
+		for (int i = 0; i < controllerConstant.LayerArray.Count; i++)
 		{
-			for (int i = 0; i < controllerConstant.LayerArray.Count; i++)
+			ILayerConstant checkLayer = controllerConstant.LayerArray[i].Data;
+			if (checkLayer.StateMachineIndex == layer.StateMachineIndex && checkLayer.StateMachineSynchronizedLayerIndex == layer.StateMachineSynchronizedLayerIndex)
 			{
-				ILayerConstant checkLayer = controllerConstant.LayerArray[i].Data;
-				if (checkLayer.StateMachineIndex == layer.StateMachineIndex && checkLayer.StateMachineSynchronizedLayerIndex == layer.StateMachineSynchronizedLayerIndex)
-				{
-					return i;
-				}
+				return i;
 			}
-			throw new ArgumentException("Layer hasn't been found", nameof(layer));
 		}
+		throw new ArgumentException("Layer hasn't been found", nameof(layer));
 	}
 }

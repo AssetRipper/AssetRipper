@@ -1,9 +1,8 @@
-﻿namespace AssetRipper.Import.Logging
-{
-	public interface ILogger
-	{
-		void Log(LogType type, LogCategory category, string message);
+﻿namespace AssetRipper.Import.Logging;
 
-		void BlankLine(int numLines);
-	}
+public interface ILogger
+{
+	void Log(LogType type, LogCategory category, string message);
+
+	void BlankLine(int numLines);
 }

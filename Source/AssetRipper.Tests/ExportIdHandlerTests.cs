@@ -83,4 +83,31 @@ public class ExportIdHandlerTests
 		// Assert
 		Assert.That(actualResult, Is.EqualTo(expectedResult));
 	}
+
+	[Test]
+	public void GetPseudoRandomValue_NoConflictsInFirstMillionValues()
+	{
+		const int Count = 1_000_000;
+		HashSet<long> generatedIds = new(Count);
+		for (int i = 0; i < Count; i++)
+		{
+			long exportId = ExportIdHandler.GetPseudoRandomValue(i);
+			Assert.That(generatedIds.Add(exportId), Is.True, $"Duplicate export ID generated: {exportId}");
+		}
+	}
+
+	[Test]
+	public void GetPseudoRandomExportID_NoConflictsInFirstMillionValues()
+	{
+		const int classID = 42;
+		_assetMock.SetupGet(a => a.ClassID).Returns(classID);
+
+		const int Count = 1_000_000;
+		HashSet<long> generatedIds = new(Count);
+		for (int i = 0; i < Count; i++)
+		{
+			long exportId = ExportIdHandler.GetPseudoRandomExportId(_assetMock.Object, i);
+			Assert.That(generatedIds.Add(exportId), Is.True, $"Duplicate export ID generated: {exportId}");
+		}
+	}
 }

@@ -10,7 +10,8 @@ internal sealed partial record class GameInitializer
 {
 	private sealed record class CustomResourceProvider(
 		PlatformGameStructure? PlatformStructure,
-		PlatformGameStructure? MixedStructure)
+		PlatformGameStructure? MixedStructure,
+		FileSystem FileSystem)
 		: IResourceProvider
 	{
 		public ResourceFile? FindResource(string resName)
@@ -23,7 +24,7 @@ internal sealed partial record class GameInitializer
 				return null;
 			}
 
-			ResourceFile resourceFile = new ResourceFile(resPath, fixedName);
+			ResourceFile resourceFile = new ResourceFile(resPath, fixedName, FileSystem);
 			Logger.Info(LogCategory.Import, $"Resource file '{resName}' has been loaded");
 			return resourceFile;
 		}

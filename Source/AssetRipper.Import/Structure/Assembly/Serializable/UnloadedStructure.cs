@@ -125,7 +125,22 @@ public sealed class UnloadedStructure : UnityAssetBase, IDeepCloneable
 
 	public override void WriteRelease(AssetWriter writer) => LoadStructure()?.WriteRelease(writer);
 
-	public override void CopyValues(IUnityAssetBase? source, PPtrConverter converter) => LoadStructure()?.CopyValues(source, converter);
+	public override void CopyValues(IUnityAssetBase? source, PPtrConverter converter)
+	{
+		SerializableStructure? loadedStructure = LoadStructure();
+		if (source is not UnloadedStructure unloadedSource)
+		{
+			loadedStructure?.CopyValues(source, converter);
+		}
+		else if (ReferenceEquals(this, unloadedSource))
+		{
+			loadedStructure?.CopyValues(loadedStructure, converter);
+		}
+		else
+		{
+			loadedStructure?.CopyValues(unloadedSource.LoadStructure(), converter);
+		}
+	}
 
 	public override void Reset() => LoadStructure()?.Reset();
 

@@ -16,7 +16,16 @@ namespace AssetRipper.Processing.Assemblies;
 /// </remarks>
 public sealed class AttributePolyfillGenerator : IAssetProcessor
 {
+	/// <summary>
+	/// Injects generated attribute polyfills into the loaded game data.
+	/// </summary>
+	/// <param name="gameData">The loaded game data.</param>
 	public void Process(GameData gameData) => Process(gameData.AssemblyManager);
+
+	/// <summary>
+	/// Generates attribute polyfills for the given assembly manager.
+	/// </summary>
+	/// <param name="manager">The assembly manager to modify.</param>
 	private static void Process(IAssemblyManager manager)
 	{
 		ModuleDefinition? mscorlib = manager.Mscorlib?.ManifestModule;
@@ -39,12 +48,20 @@ public sealed class AttributePolyfillGenerator : IAssetProcessor
 		}
 	}
 
+	/// <summary>
+	/// Custom reference importer for cloning. It handles redirects references from the source module to the target module.
+	/// </summary>
 	private sealed class CustomCloneReferenceImporter : CloneContextAwareReferenceImporter
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CustomCloneReferenceImporter"/> class.
+		/// </summary>
+		/// <param name="context">The cloning context.</param>
 		public CustomCloneReferenceImporter(MemberCloneContext context) : base(context)
 		{
 		}
 
+		/// <inheritdoc/>
 		protected override ITypeDefOrRef ImportType(TypeDefinition type)
 		{
 			if (type.DeclaringType is null && TargetModule.TryGetTopLevelType(type.Namespace, type.Name, out TypeDefinition? typeDefinition))
@@ -54,6 +71,7 @@ public sealed class AttributePolyfillGenerator : IAssetProcessor
 			return base.ImportType(type);
 		}
 
+		/// <inheritdoc/>
 		protected override ITypeDefOrRef ImportType(TypeReference type)
 		{
 			if (SignatureComparer.Default.Equals(type.Scope, TargetModule) &&

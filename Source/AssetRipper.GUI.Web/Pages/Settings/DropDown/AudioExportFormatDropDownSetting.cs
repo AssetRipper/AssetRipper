@@ -1,4 +1,4 @@
-﻿using AssetRipper.Export.UnityProjects.Configuration;
+﻿using AssetRipper.Export.Configuration;
 
 namespace AssetRipper.GUI.Web.Pages.Settings.DropDown;
 

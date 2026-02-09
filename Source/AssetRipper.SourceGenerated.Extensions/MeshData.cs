@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
+using AssetRipper.SourceGenerated.Enums;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 
@@ -19,9 +20,11 @@ public readonly record struct MeshData(
 	Vector2[]? UV6,
 	Vector2[]? UV7,
 	BoneWeight4[]? Skin,
-	uint[] ProcessedIndexBuffer)
+	Matrix4x4[]? BindPose,
+	uint[] ProcessedIndexBuffer,
+	SubMeshData[] SubMeshes)
 {
-	public static MeshData Empty => new([], null, null, null, null, null, null, null, null, null, null, null, null, []);
+	public static MeshData Empty => new([], null, null, null, null, null, null, null, null, null, null, null, null, [], [], []);
 
 	[MemberNotNullWhen(true, nameof(Normals))]
 	public bool HasNormals => Normals != null && Normals.Length == Vertices.Length;
@@ -102,6 +105,8 @@ public readonly record struct MeshData(
 		}
 	}
 
+	public IndexFormat IndexFormat => Vertices.Length > ushort.MaxValue ? IndexFormat.UInt32 : IndexFormat.UInt16;
+
 	public Vector3 TryGetVertexAtIndex(uint index) => Vertices[index];
 	public Vector3 TryGetNormalAtIndex(uint index) => TryGetAtIndex(Normals, index);
 	public Vector4 TryGetTangentAtIndex(uint index)
@@ -151,7 +156,6 @@ public readonly record struct MeshData(
 			out Vector3[]? normals,
 			out Vector4[]? tangents,
 			out ColorFloat[]? colors,
-			out BoneWeight4[]? skin,
 			out Vector2[]? uv0,
 			out Vector2[]? uv1,
 			out Vector2[]? uv2,
@@ -160,8 +164,11 @@ public readonly record struct MeshData(
 			out Vector2[]? uv5,
 			out Vector2[]? uv6,
 			out Vector2[]? uv7,
-			out _, //bindpose
+			out BoneWeight4[]? skin,
+			out Matrix4x4[]? bindpose,
 			out uint[] processedIndexBuffer);
+
+		SubMeshData[] subMeshes = SubMeshData.Create(mesh);
 
 		if (vertices is null)
 		{
@@ -170,7 +177,7 @@ public readonly record struct MeshData(
 		}
 		else
 		{
-			meshData = new MeshData(vertices, normals, tangents, colors, uv0, uv1, uv2, uv3, uv4, uv5, uv6, uv7, skin, processedIndexBuffer);
+			meshData = new MeshData(vertices, normals, tangents, colors, uv0, uv1, uv2, uv3, uv4, uv5, uv6, uv7, skin, bindpose, processedIndexBuffer, subMeshes);
 			return true;
 		}
 	}
@@ -178,6 +185,6 @@ public readonly record struct MeshData(
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 	private static T TryGetAtIndex<T>(T[]? array, uint index) where T : struct
 	{
-		return array is null ? default : array[index];
+		return array is null or { Length: 0 } ? default : array[index];
 	}
 }

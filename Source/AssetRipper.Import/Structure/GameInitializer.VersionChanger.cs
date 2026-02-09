@@ -9,9 +9,9 @@ using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Classes.ClassID_2;
 using AssetRipper.SourceGenerated.Classes.ClassID_25;
+using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Subclasses.ComponentPair;
-using AssetRipper.SourceGenerated.Subclasses.PPtr_Component;
-using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace AssetRipper.Import.Structure;
 
@@ -50,6 +50,8 @@ internal sealed partial record class GameInitializer
 					HandleDifferingFields(original, replacement);
 					collection.ReplaceAsset(replacement);
 				}
+
+				Version(collection) = targetVersion;
 			}
 		}
 
@@ -112,7 +114,7 @@ internal sealed partial record class GameInitializer
 				PPtrConverter converter = new(gameObject, newGameObject);
 				if (newGameObject.Components.Count > 0 && newGameObject.Components[0].Has_ClassID() && !gameObject.Components[0].Has_ClassID())
 				{
-					foreach (IComponentPair pair in  newGameObject.Components)
+					foreach (IComponentPair pair in newGameObject.Components)
 					{
 						if (pair.Component.TryGetAsset(newGameObject.Collection, out IComponent? component))
 						{
@@ -125,6 +127,55 @@ internal sealed partial record class GameInitializer
 					}
 				}
 			}
+			else if (original is ITexture2D texture)
+			{
+				ITexture2D newTexture = (ITexture2D)replacement;
+				if (newTexture.TextureSettings_C28.Has_WrapU() && texture.TextureSettings_C28.Has_WrapMode())
+				{
+					newTexture.TextureSettings_C28.WrapU = texture.TextureSettings_C28.WrapMode;
+				}
+				else if (newTexture.TextureSettings_C28.Has_WrapMode() && texture.TextureSettings_C28.Has_WrapU())
+				{
+					newTexture.TextureSettings_C28.WrapMode = texture.TextureSettings_C28.WrapU;
+				}
+
+				if (newTexture.Has_CompleteImageSize_C28_UInt32() && texture.Has_CompleteImageSize_C28_Int32() && texture.CompleteImageSize_C28_Int32 > 0)
+				{
+					newTexture.CompleteImageSize_C28_UInt32 = (uint)texture.CompleteImageSize_C28_Int32;
+				}
+				else if (newTexture.Has_CompleteImageSize_C28_Int32() && texture.Has_CompleteImageSize_C28_UInt32() && texture.CompleteImageSize_C28_UInt32 < int.MaxValue)
+				{
+					newTexture.CompleteImageSize_C28_Int32 = (int)texture.CompleteImageSize_C28_UInt32;
+				}
+
+				if (newTexture.Has_MipMap_C28() && texture.Has_MipCount_C28())
+				{
+					newTexture.MipMap_C28 = texture.MipCount_C28 > 1;
+				}
+				else if (newTexture.Has_MipCount_C28() && texture.Has_MipMap_C28())
+				{
+					if (texture.MipMap_C28)
+					{
+						// Calculate mip count from max dimension
+						int size = int.Max(texture.Width_C28, texture.Height_C28);
+						int mipCount = 1;
+						while (size > 1)
+						{
+							mipCount++;
+							size >>= 1;
+						}
+						newTexture.MipCount_C28 = mipCount;
+					}
+					else
+					{
+						newTexture.MipCount_C28 = 1;
+					}
+				}
+			}
 		}
+
+		// We use an unsafe accessor to avoid the need for public access to the property backing field.
+		[UnsafeAccessor(UnsafeAccessorKind.Field, Name = $"<{nameof(AssetCollection.Version)}>k__BackingField")]
+		private static extern ref UnityVersion Version(AssetCollection collection);
 	}
 }

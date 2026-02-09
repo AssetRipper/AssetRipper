@@ -4,6 +4,7 @@
 		<ServerGarbageCollection>true</ServerGarbageCollection>
 		<OptimizationPreference>Size</OptimizationPreference>
 		<PublishAot>true</PublishAot>
+		<CETCompat>false</CETCompat>
 		<TrimmerSingleWarn>false</TrimmerSingleWarn>
 		<OutputPath>..\0Bins\AssetRipper.GUI.Free\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.GUI.Free\$(Configuration)\</IntermediateOutputPath>

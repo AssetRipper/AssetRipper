@@ -1,21 +1,20 @@
-﻿namespace AssetRipper.SourceGenerated.Extensions.Enums.Shader.SerializedShader
+﻿namespace AssetRipper.SourceGenerated.Extensions.Enums.Shader.SerializedShader;
+
+public enum ZClip
 {
-	public enum ZClip
+	Off = 0,
+	On = 1,
+}
+
+public static class ZClipExtensions
+{
+	public static bool IsOn(this ZClip _this)
 	{
-		Off = 0,
-		On = 1,
+		return _this == ZClip.On;
 	}
 
-	public static class ZClipExtensions
+	public static bool IsOff(this ZClip _this)
 	{
-		public static bool IsOn(this ZClip _this)
-		{
-			return _this == ZClip.On;
-		}
-
-		public static bool IsOff(this ZClip _this)
-		{
-			return _this == ZClip.Off;
-		}
+		return _this == ZClip.Off;
 	}
 }

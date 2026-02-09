@@ -1,6 +1,6 @@
 ﻿using AssetRipper.Assets;
+using AssetRipper.Export.Configuration;
 using AssetRipper.Export.Modules.Textures;
-using AssetRipper.Export.UnityProjects.Configuration;
 using AssetRipper.Import.Logging;
 using AssetRipper.SourceGenerated.Classes.ClassID_117;
 using AssetRipper.SourceGenerated.Classes.ClassID_187;
@@ -15,7 +15,7 @@ public sealed class TextureArrayAssetExporter : BinaryAssetExporter
 {
 	public ImageExportFormat ImageExportFormat { get; private set; }
 
-	public TextureArrayAssetExporter(LibraryConfiguration configuration)
+	public TextureArrayAssetExporter(FullConfiguration configuration)
 	{
 		ImageExportFormat = configuration.ExportSettings.ImageExportFormat;
 	}

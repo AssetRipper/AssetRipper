@@ -3,7 +3,6 @@ using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
 using AssetRipper.IO.Files;
 using AssetRipper.IO.Files.SerializedFiles;
-using System.Text.Json;
 using System.Text.Json.Nodes;
 
 namespace AssetRipper.Tools.JsonSerializer;
@@ -43,7 +42,7 @@ internal static class Program
 		try
 #endif
 		{
-			FileBase file = SchemeReader.LoadFile(fullName);
+			FileBase file = SchemeReader.LoadFile(fullName, LocalFileSystem.Instance);
 			if (file is SerializedFile serializedFile)
 			{
 				ExtractJson(serializedFile);

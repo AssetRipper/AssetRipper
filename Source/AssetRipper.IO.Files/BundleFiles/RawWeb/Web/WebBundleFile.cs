@@ -1,4 +1,3 @@
-﻿namespace AssetRipper.IO.Files.BundleFiles.RawWeb.Web
-{
-	public sealed class WebBundleFile : RawWebBundleFile<WebBundleHeader> { }
-}
+﻿namespace AssetRipper.IO.Files.BundleFiles.RawWeb.Web;
+
+public sealed class WebBundleFile : RawWebBundleFile<WebBundleHeader> { }

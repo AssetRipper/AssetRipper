@@ -1,5 +1,7 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Generics;
+using AssetRipper.Export.Modules.Models;
+using AssetRipper.Import.Logging;
 using AssetRipper.SourceGenerated.Classes.ClassID_238;
 using AssetRipper.SourceGenerated.Subclasses.HeightMeshData;
 using AssetRipper.SourceGenerated.Subclasses.Vector3f;
@@ -7,7 +9,6 @@ using SharpGLTF.Geometry;
 using SharpGLTF.Geometry.VertexTypes;
 using SharpGLTF.Materials;
 using SharpGLTF.Scenes;
-using SharpGLTF.Schema2;
 using System.Diagnostics;
 using System.Numerics;
 
@@ -31,11 +32,18 @@ public sealed class GlbNavMeshExporter : IContentExtractor
 
 	public bool Export(IUnityObjectBase asset, string path, FileSystem fileSystem)
 	{
-		SceneBuilder sceneBuilder = new SceneBuilder();
+		SceneBuilder sceneBuilder = new();
 		AddAssetToSceneBuilder(sceneBuilder, (INavMeshData)asset);
 		using Stream fileStream = fileSystem.File.Create(path);
-		sceneBuilder.ToGltf2().WriteGLB(fileStream, new WriteSettings() { MergeBuffers = false });
-		return true;
+		if (GlbWriter.TryWrite(sceneBuilder, fileStream, out string? errorMessage))
+		{
+			return true;
+		}
+		else
+		{
+			Logger.Error(LogCategory.Export, errorMessage);
+			return false;
+		}
 	}
 
 	private static void AddAssetToSceneBuilder(SceneBuilder sceneBuilder, INavMeshData asset)

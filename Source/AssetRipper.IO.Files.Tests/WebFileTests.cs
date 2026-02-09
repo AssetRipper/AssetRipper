@@ -16,18 +16,18 @@ public class WebFileTests
 		bundle.Write(stream);
 		long positionAfterWrite = stream.Position;
 		stream.Position = 0;
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(positionAfterWrite, Is.GreaterThan(0));
 			Assert.That(scheme.CanRead(stream));
-		});
+		}
 
 		WebFile readBundle = scheme.Read(stream, bundle.FilePath, bundle.Name);
 		long positionAfterRead = stream.Position;
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(positionAfterRead, Is.EqualTo(positionAfterWrite));
-		});
+		}
 	}
 
 	[Test]
@@ -45,19 +45,19 @@ public class WebFileTests
 		bundle.Write(stream);
 		long positionAfterWrite = stream.Position;
 		stream.Position = 0;
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(positionAfterWrite, Is.GreaterThan(0));
 			Assert.That(scheme.CanRead(stream));
-		});
+		}
 
 		WebFile readBundle = scheme.Read(stream, bundle.FilePath, bundle.Name);
 		long positionAfterRead = stream.Position;
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(positionAfterRead, Is.EqualTo(positionAfterWrite), () => "Incorrect end position");
 			Assert.That(readBundle.ResourceFiles, Has.Count.EqualTo(1), () => "Incorrect count");
-		});
+		}
 		Assert.That(readBundle.ResourceFiles[0].Stream, Has.Length.EqualTo(ResourceFileSize));
 	}
 }

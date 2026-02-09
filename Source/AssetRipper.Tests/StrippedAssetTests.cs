@@ -4,10 +4,10 @@ using AssetRipper.Assets.Collections;
 using AssetRipper.Export.UnityProjects;
 using AssetRipper.Primitives;
 using AssetRipper.Processing.Prefabs;
-using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_1001;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
+using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.Yaml;
 using NUnit.Framework.Internal;
 
@@ -19,8 +19,8 @@ public class StrippedAssetTests
 	public void IsStrippedReturnsTrueForStrippedAsset()
 	{
 		ProcessedAssetCollection collection = CreateCollection(new UnityVersion(2020, 1));
-		IGameObject root = collection.CreateAsset((int)ClassIDType.GameObject, GameObject.Create);
-		IPrefabInstance prefab = collection.CreateAsset((int)ClassIDType.PrefabInstance, PrefabInstance.Create);
+		IGameObject root = collection.CreateGameObject();
+		IPrefabInstance prefab = collection.CreatePrefabInstance();
 		PrefabHierarchyObject hierarchy = collection.CreateAsset(-1, (assetInfo) => new PrefabHierarchyObject(assetInfo, root, prefab));
 		hierarchy.GameObjects.Add(root);
 		hierarchy.SetMainAsset();
@@ -36,7 +36,7 @@ public class StrippedAssetTests
 		ProcessedAssetCollection collection = CreateCollection(new UnityVersion(2020, 1));
 		SceneDefinition scene = SceneDefinition.FromName("TestScene");
 		scene.AddCollection(collection);
-		IGameObject gameObject = collection.CreateAsset((int)ClassIDType.GameObject, GameObject.Create);
+		IGameObject gameObject = collection.CreateGameObject();
 		SceneHierarchyObject hierarchy = collection.CreateAsset(-1, (assetInfo) => new SceneHierarchyObject(assetInfo, scene));
 		hierarchy.GameObjects.Add(gameObject);
 		hierarchy.SetMainAsset();
@@ -64,7 +64,7 @@ public class StrippedAssetTests
 		ProcessedAssetCollection collection = CreateCollection(new UnityVersion(2020, 1));
 		SceneDefinition scene = SceneDefinition.FromName("TestScene");
 		scene.AddCollection(collection);
-		IMonoBehaviour monoBehaviour = collection.CreateAsset((int)ClassIDType.MonoBehaviour, MonoBehaviour.Create);
+		IMonoBehaviour monoBehaviour = collection.CreateMonoBehaviour();
 		SceneHierarchyObject hierarchy = collection.CreateAsset(-1, (assetInfo) => new SceneHierarchyObject(assetInfo, scene));
 		hierarchy.Components.Add(monoBehaviour);
 		hierarchy.SetMainAsset();

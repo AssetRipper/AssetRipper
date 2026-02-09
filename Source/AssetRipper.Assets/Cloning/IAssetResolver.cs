@@ -1,7 +1,6 @@
-﻿namespace AssetRipper.Assets.Cloning
+﻿namespace AssetRipper.Assets.Cloning;
+
+public interface IAssetResolver
 {
-	public interface IAssetResolver
-	{
-		T? Resolve<T>(IUnityObjectBase? asset) where T : IUnityObjectBase;
-	}
+	T? Resolve<T>(IUnityObjectBase? asset) where T : IUnityObjectBase;
 }

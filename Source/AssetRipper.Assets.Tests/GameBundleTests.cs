@@ -19,11 +19,11 @@ public class GameBundleTests
 		string name = "testName";
 		UnityVersion version = UnityVersion.Parse("10.3.1f1");
 		Collections.ProcessedAssetCollection processedCollection = gameBundle.AddNewProcessedCollection(name, version);
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(processedCollection.Name, Is.EqualTo(name));
 			Assert.That(processedCollection.Version, Is.EqualTo(version));
-		});
+		}
 		Assert.That(gameBundle.FetchAssetCollections(), Contains.Item(processedCollection));
 	}
 

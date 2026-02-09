@@ -1,13 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<IsTrimmable>true</IsTrimmable>
 		<OutputPath>..\0Bins\Other\AssetRipper.Yaml\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.Yaml\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AssetRipper.Primitives" Version="3.1.6" />
+		<PackageReference Include="AssetRipper.Primitives" Version="3.2.0" />
 	</ItemGroup>
 
 </Project>

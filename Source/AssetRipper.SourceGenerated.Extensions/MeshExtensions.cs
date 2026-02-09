@@ -1,29 +1,33 @@
-﻿using AssetRipper.IO.Endian;
+﻿using AssetRipper.Assets.Generics;
+using AssetRipper.IO.Endian;
 using AssetRipper.Numerics;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Enums;
-using AssetRipper.SourceGenerated.Subclasses.ColorRGBA32;
+using AssetRipper.SourceGenerated.Subclasses.CompressedMesh;
 using AssetRipper.SourceGenerated.Subclasses.MeshBlendShape;
+using AssetRipper.SourceGenerated.Subclasses.SubMesh;
 using System.Buffers;
 using System.Buffers.Binary;
 using System.Numerics;
 using System.Text.RegularExpressions;
 
-namespace AssetRipper.SourceGenerated.Extensions
+namespace AssetRipper.SourceGenerated.Extensions;
+
+public static partial class MeshExtensions
 {
-	public static partial class MeshExtensions
+	[GeneratedRegex("^Combined Mesh \\(root scene\\)( [0-9]+)?$", RegexOptions.Compiled)]
+	private static partial Regex CombinedMeshRegex();
+
+	extension(IMesh mesh)
 	{
-		[GeneratedRegex("^Combined Mesh \\(root scene\\)( [0-9]+)?$", RegexOptions.Compiled)]
-		private static partial Regex CombinedMeshRegex();
+		public bool IsCombinedMesh() => CombinedMeshRegex().IsMatch(mesh.Name);
 
-		public static bool IsCombinedMesh(this IMesh mesh) => CombinedMeshRegex().IsMatch(mesh.Name);
-
-		public static bool IsSet(this IMesh mesh)
+		public bool IsSet()
 		{
-			return mesh.CompressedMesh.IsSet() || mesh.VertexData.IsSet(mesh.StreamData);
+			return mesh.CompressedMesh.IsSet || mesh.VertexData.IsSet(mesh.StreamData);
 		}
 
-		public static bool CheckAssetIntegrity(this IMesh mesh)
+		public bool CheckAssetIntegrity()
 		{
 			if (mesh.Has_StreamData() && mesh.VertexData.IsSet(mesh.StreamData))
 			{
@@ -32,18 +36,16 @@ namespace AssetRipper.SourceGenerated.Extensions
 			return true;
 		}
 
-		public static bool HasAnyVertices(this IMesh mesh)
+		public bool HasAnyVertices()
 		{
 			return mesh.CompressedMesh.Vertices.NumItems > 0 || mesh.VertexData.VertexCount > 0;
 		}
 
-		public static void ReadData(
-			this IMesh mesh,
+		public void ReadData(
 			out Vector3[]? vertices,
 			out Vector3[]? normals,
 			out Vector4[]? tangents,
 			out ColorFloat[]? colors,
-			out BoneWeight4[]? skin,
 			out Vector2[]? uv0,
 			out Vector2[]? uv1,
 			out Vector2[]? uv2,
@@ -52,6 +54,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			out Vector2[]? uv5,
 			out Vector2[]? uv6,
 			out Vector2[]? uv7,
+			out BoneWeight4[]? skin,
 			out Matrix4x4[]? bindPose,
 			out uint[] processedIndexBuffer)
 		{
@@ -74,7 +77,6 @@ namespace AssetRipper.SourceGenerated.Extensions
 				out normals,
 				out tangents,
 				out colors,
-				out skin,
 				out uv0,
 				out uv1,
 				out uv2,
@@ -82,14 +84,13 @@ namespace AssetRipper.SourceGenerated.Extensions
 				out uv4,
 				out uv5,
 				out uv6,
-				out uv7);
+				out uv7,
+				out skin);
 
-			mesh.CompressedMesh.DecompressCompressedMesh(mesh.Collection.Version,
-				out Vector3[]? compressed_vertices,
+			mesh.CompressedMesh.Decompress(out Vector3[]? compressed_vertices,
 				out Vector3[]? compressed_normals,
 				out Vector4[]? compressed_tangents,
 				out ColorFloat[]? compressed_colors,
-				out BoneWeight4[]? compressed_skin,
 				out Vector2[]? compressed_uv0,
 				out Vector2[]? compressed_uv1,
 				out Vector2[]? compressed_uv2,
@@ -98,6 +99,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 				out Vector2[]? compressed_uv5,
 				out Vector2[]? compressed_uv6,
 				out Vector2[]? compressed_uv7,
+				out BoneWeight4[]? compressed_skin,
 				out Matrix4x4[]? compressed_bindPose,
 				out uint[]? compressed_processedIndexBuffer);
 
@@ -114,16 +116,69 @@ namespace AssetRipper.SourceGenerated.Extensions
 			uv5 ??= compressed_uv5;
 			uv6 ??= compressed_uv6;
 			uv7 ??= compressed_uv7;
-			bindPose = compressed_bindPose;
+			bindPose = compressed_bindPose ?? mesh.BindPose.Select(Matrix4x4fExtensions.CastToStruct).ToArray();
 			processedIndexBuffer = compressed_processedIndexBuffer ?? mesh.GetProcessedIndexBuffer();
 		}
 
-		private static ColorFloat ConvertToColorFloat(this ColorRGBA32 c)
+		/// <summary>
+		/// Fill with compressed mesh data
+		/// </summary>
+		/// <remarks>
+		/// This method assumes the mesh does not already contain data.
+		/// </remarks>
+		/// <param name="meshData"></param>
+		public void FillWithCompressedMeshData(MeshData meshData)
 		{
-			return (ColorFloat)Color32.FromRgba(c.Rgba);
+			mesh.SetIndexFormat(meshData.IndexFormat);
+
+			ICompressedMesh compressedMesh = mesh.CompressedMesh;
+			compressedMesh.SetVertices(meshData.Vertices);
+			compressedMesh.SetNormals(meshData.Normals);
+			compressedMesh.SetTangents(meshData.Tangents);
+			compressedMesh.SetFloatColors(meshData.Colors);
+			compressedMesh.SetWeights(meshData.Skin);
+			compressedMesh.SetUV(
+				meshData.UV0,
+				meshData.UV1,
+				meshData.UV2,
+				meshData.UV3,
+				meshData.UV4,
+				meshData.UV5,
+				meshData.UV6,
+				meshData.UV7);
+			if (compressedMesh.Has_BindPoses())
+			{
+				compressedMesh.SetBindPoses(meshData.BindPose);
+			}
+			else if (meshData.BindPose is not null)
+			{
+				foreach (Matrix4x4 matrix in meshData.BindPose)
+				{
+					mesh.BindPose.AddNew().CopyValues(matrix);
+				}
+			}
+			compressedMesh.SetTriangles(meshData.ProcessedIndexBuffer);
+
+			mesh.KeepIndices = true;//Not sure about this. Seems to be for animated meshes
+			mesh.KeepVertices = true;//Not sure about this. Seems to be for animated meshes
+			mesh.MeshMetrics_0_ = CalculateMeshMetric(meshData.Vertices, meshData.UV0, meshData.ProcessedIndexBuffer, meshData.SubMeshes, 0);
+			mesh.MeshMetrics_1_ = CalculateMeshMetric(meshData.Vertices, meshData.UV1, meshData.ProcessedIndexBuffer, meshData.SubMeshes, 1);
+			mesh.MeshUsageFlags = (int)SourceGenerated.NativeEnums.Global.MeshUsageFlags.MeshUsageFlagNone;
+			mesh.CookingOptions = (int)SourceGenerated.NativeEnums.Global.MeshColliderCookingOptions.DefaultCookingFlags;
+			//I copied 30 from a vanilla compressed mesh (with MeshCompression.Low), and it aligned with this enum.
+			mesh.SetMeshOptimizationFlags(MeshOptimizationFlags.Everything);
+			mesh.SetMeshCompression(ModelImporterMeshCompression.Low);
+
+			AccessListBase<ISubMesh> subMeshList = mesh.SubMeshes;
+			foreach (SubMeshData subMesh in meshData.SubMeshes)
+			{
+				subMesh.CopyTo(subMeshList.AddNew(), mesh.GetIndexFormat());
+			}
+
+			mesh.LocalAABB.CalculateFromVertexArray(meshData.Vertices);
 		}
 
-		public static byte[] GetChannelsData(this IMesh mesh)
+		public byte[] GetChannelsData()
 		{
 			if (mesh.Has_StreamData() && mesh.StreamData.IsSet())
 			{
@@ -131,11 +186,11 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 			else
 			{
-				return mesh.VertexData?.Data ?? Array.Empty<byte>();
+				return mesh.VertexData.Data;
 			}
 		}
 
-		public static string? FindBlendShapeNameByCRC(this IMesh mesh, uint crc)
+		public string? FindBlendShapeNameByCRC(uint crc)
 		{
 			if (mesh.Has_Shapes())
 			{
@@ -154,12 +209,12 @@ namespace AssetRipper.SourceGenerated.Extensions
 			return null;
 		}
 
-		public static bool Is16BitIndices(this IMesh mesh)
+		public bool Is16BitIndices()
 		{
 			return mesh.GetIndexFormat() == IndexFormat.UInt16;
 		}
 
-		public static IndexFormat GetIndexFormat(this IMesh mesh)
+		public IndexFormat GetIndexFormat()
 		{
 			if (mesh.Has_IndexFormat())
 			{
@@ -171,7 +226,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 		}
 
-		public static void SetIndexFormat(this IMesh mesh, IndexFormat indexFormat)
+		public void SetIndexFormat(IndexFormat indexFormat)
 		{
 			if (mesh.Has_IndexFormat())
 			{
@@ -184,7 +239,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 		}
 
-		public static MeshOptimizationFlags GetMeshOptimizationFlags(this IMesh mesh)
+		public MeshOptimizationFlags GetMeshOptimizationFlags()
 		{
 			if (mesh.Has_MeshOptimizationFlags())
 			{
@@ -200,7 +255,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 		}
 
-		public static void SetMeshOptimizationFlags(this IMesh mesh, MeshOptimizationFlags value)
+		public void SetMeshOptimizationFlags(MeshOptimizationFlags value)
 		{
 			if (mesh.Has_MeshOptimizationFlags())
 			{
@@ -212,17 +267,17 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 		}
 
-		public static ModelImporterMeshCompression GetMeshCompression(this IMesh mesh)
+		public ModelImporterMeshCompression GetMeshCompression()
 		{
 			return (ModelImporterMeshCompression)mesh.MeshCompression;
 		}
 
-		public static void SetMeshCompression(this IMesh mesh, ModelImporterMeshCompression meshCompression)
+		public void SetMeshCompression(ModelImporterMeshCompression meshCompression)
 		{
 			mesh.MeshCompression = (byte)meshCompression;
 		}
 
-		public static byte[] GetVertexDataBytes(this IMesh mesh)
+		public byte[] GetVertexDataBytes()
 		{
 			return mesh.VertexData.Data.Length switch
 			{
@@ -231,7 +286,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			};
 		}
 
-		public static uint[] GetProcessedIndexBuffer(this IMesh mesh)
+		public uint[] GetProcessedIndexBuffer()
 		{
 			uint[] result;
 			if (mesh.Is16BitIndices())
@@ -290,7 +345,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			return result;
 		}
 
-		public static void SetProcessedIndexBuffer(this IMesh mesh, uint[] indices)
+		public void SetProcessedIndexBuffer(uint[] indices)
 		{
 			if (mesh.Is16BitIndices())
 			{
@@ -347,31 +402,83 @@ namespace AssetRipper.SourceGenerated.Extensions
 				}
 			}
 		}
+	}
 
-		private static void UShortToUInt(ushort[] sourceArray, uint[] destinationArray, int indexCount)
+	private static float CalculateMeshMetric(ReadOnlySpan<Vector3> vertexBuffer, ReadOnlySpan<Vector2> uvBuffer, uint[] indexBuffer, SubMeshData[] subMeshList, int uvSetIndex, float uvAreaThreshold = 1e-9f)
+	{
+		//https://docs.unity3d.com/ScriptReference/Mesh.GetUVDistributionMetric.html
+		//https://docs.unity3d.com/ScriptReference/Mesh.RecalculateUVDistributionMetric.html
+		//https://docs.unity3d.com/ScriptReference/Mesh.RecalculateUVDistributionMetrics.html
+
+		const float DefaultMetric = 1.0f;
+		if (vertexBuffer.Length == 0 || uvBuffer.Length == 0 || uvSetIndex >= subMeshList.Length)
 		{
-			if (sourceArray.Length < indexCount || destinationArray.Length < indexCount)
-			{
-				throw new ArgumentOutOfRangeException(nameof(indexCount));
-			}
-
-			for (int i = 0; i < indexCount; i++)
-			{
-				destinationArray[i] = sourceArray[i];
-			}
+			return DefaultMetric;
 		}
 
-		private static void UIntToUShort(uint[] sourceArray, ushort[] destinationArray, int indexCount)
+		int n = 0;
+		float vertexAreaSum = 0.0f;
+		float uvAreaSum = 0.0f;
+		foreach ((uint ia, uint ib, uint ic) in new TriangleEnumerable(subMeshList[uvSetIndex], indexBuffer))
 		{
-			if (sourceArray.Length < indexCount || destinationArray.Length < indexCount)
+			(Vector2 uva, Vector2 uvb, Vector2 uvc) = (uvBuffer[(int)ia], uvBuffer[(int)ib], uvBuffer[(int)ic]);
+			float uvArea = TriangleArea(uva, uvb, uvc);
+			if (uvArea < uvAreaThreshold)
 			{
-				throw new ArgumentOutOfRangeException(nameof(indexCount));
+				continue;
 			}
 
-			for (int i = 0; i < indexCount; i++)
-			{
-				destinationArray[i] = (ushort)sourceArray[i];
-			}
+			(Vector3 va, Vector3 vb, Vector3 vc) = (vertexBuffer[(int)ia], vertexBuffer[(int)ib], vertexBuffer[(int)ic]);
+			float vertexArea = TriangleArea(va, vb, vc);
+			vertexAreaSum += vertexArea;
+			uvAreaSum += uvArea;
+			n++;
+		}
+
+		if (n is 0 || uvAreaSum == 0.0f)
+		{
+			return DefaultMetric;
+		}
+		else
+		{
+			//Average of triangle area divided by uv area.
+			return vertexAreaSum / n / uvAreaSum;
+		}
+	}
+
+	private static float TriangleArea(Vector2 a, Vector2 b, Vector2 c)
+	{
+		return TriangleArea(a.AsVector3(), b.AsVector3(), c.AsVector3());
+	}
+
+	private static float TriangleArea(Vector3 a, Vector3 b, Vector3 c)
+	{
+		return Vector3.Cross(b - a, c - a).Length() * 0.5f;
+	}
+
+	private static void UShortToUInt(ushort[] sourceArray, uint[] destinationArray, int indexCount)
+	{
+		if (sourceArray.Length < indexCount || destinationArray.Length < indexCount)
+		{
+			throw new ArgumentOutOfRangeException(nameof(indexCount));
+		}
+
+		for (int i = 0; i < indexCount; i++)
+		{
+			destinationArray[i] = sourceArray[i];
+		}
+	}
+
+	private static void UIntToUShort(uint[] sourceArray, ushort[] destinationArray, int indexCount)
+	{
+		if (sourceArray.Length < indexCount || destinationArray.Length < indexCount)
+		{
+			throw new ArgumentOutOfRangeException(nameof(indexCount));
+		}
+
+		for (int i = 0; i < indexCount; i++)
+		{
+			destinationArray[i] = (ushort)sourceArray[i];
 		}
 	}
 }

@@ -13,8 +13,8 @@ namespace AssetRipper.Export.UnityProjects.EngineAssets;
 
 public class EngineAssetsExporter : IAssetExporter
 {
-	private static Utf8String FontMaterialName { get; } = "Font Material"u8;
-	private static Utf8String FontTextureName { get; } = "Font Texture"u8;
+	private static Utf8String FontMaterialName { get; } = (Utf8String)"Font Material"u8;
+	private static Utf8String FontTextureName { get; } = (Utf8String)"Font Texture"u8;
 
 	private PredefinedAssetCache Cache { get; }
 

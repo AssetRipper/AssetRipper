@@ -1,73 +1,59 @@
 using AssetRipper.Import.Structure.Assembly;
+using AssetRipper.IO.Files;
+using System.Diagnostics;
 
-namespace AssetRipper.Import.Structure.Platforms
+namespace AssetRipper.Import.Structure.Platforms;
+
+internal sealed class WebPlayerGameStructure : PlatformGameStructure
 {
-	internal sealed class WebPlayerGameStructure : PlatformGameStructure
+	public WebPlayerGameStructure(string rootPath, FileSystem fileSystem) : base(rootPath, fileSystem)
 	{
-		public WebPlayerGameStructure(string rootPath)
+		Debug.Assert(RootPath is not null);
+
+		if (!GetWebPlayerName(RootPath, FileSystem, out string? name))
 		{
-			if (string.IsNullOrEmpty(rootPath))
-			{
-				throw new ArgumentNullException(nameof(rootPath));
-			}
-			m_root = new DirectoryInfo(rootPath);
-			if (!m_root.Exists)
-			{
-				throw new Exception($"Directory '{rootPath}' doesn't exist");
-			}
-
-			if (!GetWebPlayerName(m_root, out string? name))
-			{
-				throw new Exception($"Web player asset bundle data wasn't found");
-			}
-
-			Name = name;
-			RootPath = rootPath;
-			GameDataPath = null;
-			StreamingAssetsPath = null;
-			ResourcesPath = null;
-			ManagedPath = null;
-			UnityPlayerPath = null;
-			Il2CppGameAssemblyPath = null;
-			Il2CppMetaDataPath = null;
-			Version = null;
-			Backend = ScriptingBackend.Unknown;
-
-			DataPaths = new string[] { rootPath };
-
-			string abPath = Path.Join(m_root.FullName, Name + AssetBundleExtension);
-			Files.Add(Name, abPath);
+			throw new Exception($"Web player asset bundle data wasn't found");
 		}
 
-		public static bool IsWebPlayerStructure(string path)
-		{
-			DirectoryInfo dinfo = new DirectoryInfo(path);
-			if (!dinfo.Exists)
-			{
-				return false;
-			}
+		Name = name;
+		GameDataPath = null;
+		StreamingAssetsPath = null;
+		ResourcesPath = null;
+		ManagedPath = null;
+		UnityPlayerPath = null;
+		Il2CppGameAssemblyPath = null;
+		Il2CppMetaDataPath = null;
+		Version = null;
+		Backend = ScriptingBackend.Unknown;
 
-			return GetWebPlayerName(dinfo, out _);
-		}
+		DataPaths = [RootPath];
 
-		public static bool GetWebPlayerName(DirectoryInfo root, [NotNullWhen(true)] out string? name)
+		string assetBundlePath = fileSystem.Path.Join(RootPath, Name + AssetBundleExtension);
+		Files.Add(Name, assetBundlePath);
+	}
+
+	public static bool Exists(string path, FileSystem fileSystem)
+	{
+		return fileSystem.Directory.Exists(path) && GetWebPlayerName(path, fileSystem, out _);
+	}
+
+	public static bool GetWebPlayerName(string root, FileSystem fileSystem, [NotNullWhen(true)] out string? name)
+	{
+		foreach (string file in fileSystem.Directory.EnumerateFiles(root))
 		{
-			foreach (FileInfo fi in root.EnumerateFiles())
+			if (fileSystem.Path.GetExtension(file) == HtmlExtension)
 			{
-				if (fi.Extension == HtmlExtension)
+				name = fileSystem.Path.GetFileNameWithoutExtension(file);
+				string assetBundlePath = fileSystem.Path.Join(root, name + AssetBundleExtension);
+				if (fileSystem.File.Exists(assetBundlePath))
 				{
-					name = fi.Name[..^HtmlExtension.Length];
-					string abPath = Path.Join(root.FullName, name + AssetBundleExtension);
-					if (File.Exists(abPath))
-					{
-						return true;
-					}
+					return true;
 				}
 			}
-			name = null;
-			return false;
 		}
-
-		private const string HtmlExtension = ".html";
+		name = null;
+		return false;
 	}
+
+	private const string HtmlExtension = ".html";
 }

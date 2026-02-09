@@ -62,7 +62,7 @@ public sealed class BidirectionalDictionary<T1, T2> : IDictionary<T1, T2>
 		backward.Add(item2, item1);
 	}
 
-	public void Add(KeyValuePair<T1,T2> item1_item2)
+	public void Add(KeyValuePair<T1, T2> item1_item2)
 	{
 		Add(item1_item2.Key, item1_item2.Value);
 	}

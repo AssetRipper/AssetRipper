@@ -1,14 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<IsTrimmable>true</IsTrimmable>
 		<OutputPath>..\0Bins\Other\AssetRipper.Export.PrimaryContent\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.Export.PrimaryContent\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
-
-	<ItemGroup>
-		<PackageReference Include="AssetRipper.ICSharpCode.Decompiler" Version="9.0.0.7977" />
-	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\AssetRipper.Export.Modules.Audio\AssetRipper.Export.Modules.Audio.csproj" />

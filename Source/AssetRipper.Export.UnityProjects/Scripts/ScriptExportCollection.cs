@@ -79,7 +79,7 @@ public sealed class ScriptExportCollection : ScriptExportCollectionBase
 				Logger.Info(LogCategory.Export, $"Saving {assemblyName}");
 				fileSystem.Directory.Create(pluginsFolder);
 				string outputPath = fileSystem.Path.Join(pluginsFolder, SpecialFileNames.AddAssemblyFileExtension(assemblyName));
-				AssetExporter.AssemblyManager.SaveAssembly(assembly, outputPath);
+				AssetExporter.AssemblyManager.SaveAssembly(assembly, outputPath, fileSystem);
 				OnAssemblyExported(container, outputPath, fileSystem);
 			}
 		}
@@ -123,7 +123,7 @@ public sealed class ScriptExportCollection : ScriptExportCollectionBase
 				//    see: https://docs.unity3d.com/2017.3/Documentation/Manual/ScriptCompilationAssemblyDefinitionFiles.html
 				if (!ReferenceAssemblies.IsPredefinedAssembly(details.AssemblyName))
 				{
-					AssemblyDefinitionExporter.Export(details, fileSystem);
+					AssemblyDefinitionExporter.Export(details, fileSystem, AssetExporter.ReferenceAssemblyDictionary);
 				}
 			}
 		}
@@ -144,7 +144,7 @@ public sealed class ScriptExportCollection : ScriptExportCollectionBase
 			editorPlatformSettings.Enabled = false;
 			editorPlatformSettings.Settings.Add("DefaultValueInitialized", "true");
 		}
-		
+
 		Meta meta = new Meta(guid, importer);
 		ExportMeta(container, meta, path, fileSystem);
 

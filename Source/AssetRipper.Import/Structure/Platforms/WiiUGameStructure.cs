@@ -1,56 +1,45 @@
 ﻿using AssetRipper.Import.Structure.Assembly;
+using AssetRipper.IO.Files;
 
-namespace AssetRipper.Import.Structure.Platforms
+namespace AssetRipper.Import.Structure.Platforms;
+
+internal sealed class WiiUGameStructure : PlatformGameStructure
 {
-	internal sealed class WiiUGameStructure : PlatformGameStructure
+	public WiiUGameStructure(string rootPath, FileSystem fileSystem) : base(rootPath, fileSystem)
 	{
-		public WiiUGameStructure(string rootPath)
+		Name = fileSystem.Path.GetFileName(rootPath);
+		GameDataPath = fileSystem.Path.Join(RootPath, ContentName, DataFolderName);
+		if (!fileSystem.Directory.Exists(GameDataPath))
 		{
-			if (string.IsNullOrEmpty(rootPath))
-			{
-				throw new ArgumentNullException(nameof(rootPath));
-			}
-			m_root = new DirectoryInfo(rootPath);
-			if (!m_root.Exists)
-			{
-				throw new Exception($"Directory '{rootPath}' doesn't exist");
-			}
+			throw new DirectoryNotFoundException($"Data directory wasn't found");
+		}
+		StreamingAssetsPath = fileSystem.Path.Join(GameDataPath, StreamingName);
+		ResourcesPath = fileSystem.Path.Join(GameDataPath, ResourcesName);
+		ManagedPath = fileSystem.Path.Join(GameDataPath, ManagedName);
+		UnityPlayerPath = null;
+		Version = null;
+		Il2CppGameAssemblyPath = null;
+		Il2CppMetaDataPath = null;
+		//WiiU doesn't support IL2Cpp
+		//See https://docs.unity3d.com/2017.4/Documentation/Manual/ScriptingRestrictions.html
 
-			Name = m_root.Name;
-			RootPath = m_root.FullName;
-			GameDataPath = Path.Join(RootPath, ContentName, DataFolderName);
-			if (!Directory.Exists(GameDataPath))
-			{
-				throw new Exception($"Data directory wasn't found");
-			}
-			StreamingAssetsPath = Path.Join(GameDataPath, StreamingName);
-			ResourcesPath = Path.Join(GameDataPath, ResourcesName);
-			ManagedPath = Path.Join(GameDataPath, ManagedName);
-			UnityPlayerPath = null;
-			Version = null;
-			Il2CppGameAssemblyPath = null;
-			Il2CppMetaDataPath = null;
-			//WiiU doesn't support IL2Cpp
-			//See https://docs.unity3d.com/2017.4/Documentation/Manual/ScriptingRestrictions.html
-
-			if (HasMonoAssemblies(ManagedPath))
-			{
-				Backend = ScriptingBackend.Mono;
-			}
-			else
-			{
-				Backend = ScriptingBackend.Unknown;
-			}
-
-			DataPaths = new string[] { GameDataPath };
+		if (HasMonoAssemblies(ManagedPath))
+		{
+			Backend = ScriptingBackend.Mono;
+		}
+		else
+		{
+			Backend = ScriptingBackend.Unknown;
 		}
 
-		public static bool IsWiiUStructure(string rootPath)
-		{
-			string gameDataPath = Path.Join(rootPath, ContentName, DataFolderName);
-			return Directory.Exists(gameDataPath);
-		}
-
-		private const string ContentName = "content";
+		DataPaths = [GameDataPath];
 	}
+
+	public static bool Exists(string rootPath, FileSystem fileSystem)
+	{
+		string gameDataPath = fileSystem.Path.Join(rootPath, ContentName, DataFolderName);
+		return fileSystem.Directory.Exists(gameDataPath);
+	}
+
+	private const string ContentName = "content";
 }

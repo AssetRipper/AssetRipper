@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<ImplicitUsings>enable</ImplicitUsings>
 		<OutputPath>..\0Bins\Other\AssetRipper.GUI.Web\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.GUI.Web\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
@@ -27,14 +26,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AssetRipper.GUI.Web.Dependencies" Version="1.0.0" />
+		<PackageReference Include="AssetRipper.GUI.Web.Dependencies" Version="1.1.0" />
+		<PackageReference Include="AssetRipper.NativeDialogs" Version="1.1.1" />
 		<PackageReference Include="AssetRipper.Text.Html" Version="2.1.0" />
-		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
-		<PackageReference Include="Microsoft.OpenApi" Version="1.6.24" />
+		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.2" />
+		<PackageReference Include="Microsoft.OpenApi" Version="2.6.1" />
+		<PackageReference Include="Ookii.CommandLine" Version="5.0.0" />
 		<PackageReference Include="oqo0.SwaggerThemes" Version="1.4.3" />
-		<PackageReference Include="Photino.NET" Version="4.0.16" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.0" />
-		<PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.0" />
 	</ItemGroup>
 
 </Project>

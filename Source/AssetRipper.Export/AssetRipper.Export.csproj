@@ -1,10 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<IsTrimmable>true</IsTrimmable>
 		<OutputPath>..\0Bins\Other\AssetRipper.Export\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.Export\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AssetRipper.ICSharpCode.Decompiler" Version="10.0.0.8284-preview3" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\AssetRipper.Processing\AssetRipper.Processing.csproj" />

@@ -1,4 +1,4 @@
-﻿using AssetRipper.Export.Modules.Textures;
+﻿using AssetRipper.Export.Configuration;
 
 namespace AssetRipper.GUI.Web.Pages.Settings.DropDown;
 

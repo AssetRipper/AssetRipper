@@ -24,6 +24,8 @@ internal sealed class EmptyDirectBitmap : DirectBitmap
 	{
 	}
 
+	public override EmptyDirectBitmap Crop(Range xRange, Range yRange, Range zRange) => this;
+
 	public override EmptyDirectBitmap DeepClone() => this;
 
 	public override void SaveAsBmp(Stream stream)

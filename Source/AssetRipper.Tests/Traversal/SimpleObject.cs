@@ -5,10 +5,16 @@ namespace AssetRipper.Tests.Traversal;
 
 internal sealed class SimpleObject : CustomInjectedObjectBase
 {
+#pragma warning disable CS0414
+#pragma warning disable CS0169
+#pragma warning disable CS0649
 	private readonly bool boolean = true;
 	private readonly string name = nameof(SimpleObject);
 	private readonly int integer = 42;
 	private readonly IMesh? mesh;
+#pragma warning restore CS0414
+#pragma warning restore CS0169
+#pragma warning restore CS0649
 
 	public const string Yaml = """
 		%YAML 1.1

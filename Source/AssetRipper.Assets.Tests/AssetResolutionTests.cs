@@ -13,7 +13,7 @@ public class AssetResolutionTests
 		ProcessedAssetCollection collection = Create();
 		SealedNullObject asset = collection.CreateAsset(-1, (assetInfo) => new SealedNullObject(assetInfo));
 
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			//NullObject is not a real asset, so we should not be able to get it under normal conditions.
 			Assert.That(collection.TryGetAsset(asset.PathID), Is.Null);
@@ -26,7 +26,7 @@ public class AssetResolutionTests
 			Assert.That(collection.TryGetAsset<NullObject>(0, asset.PathID), Is.EqualTo(asset));
 			Assert.That(collection.TryGetAsset<SealedNullObject>(asset.PathID), Is.EqualTo(asset));
 			Assert.That(collection.TryGetAsset<SealedNullObject>(0, asset.PathID), Is.EqualTo(asset));
-		});
+		}
 	}
 
 	private static ProcessedAssetCollection Create()

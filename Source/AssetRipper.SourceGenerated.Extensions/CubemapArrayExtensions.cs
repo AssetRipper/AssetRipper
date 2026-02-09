@@ -26,7 +26,7 @@ public static class CubemapArrayExtensions
 		}
 		else
 		{
-			return Array.Empty<byte>();
+			return [];
 		}
 	}
 

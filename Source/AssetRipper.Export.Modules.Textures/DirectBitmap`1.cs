@@ -1,3 +1,4 @@
+using AssetRipper.Conversions.FastPng;
 using AssetRipper.TextureDecoder.Exr;
 using AssetRipper.TextureDecoder.Rgb;
 using AssetRipper.TextureDecoder.Rgb.Formats;
@@ -69,6 +70,10 @@ public sealed class DirectBitmap<TColor, TChannel> : DirectBitmap
 
 	public override void Transpose()
 	{
+		if (Width != Height)
+		{
+			throw new InvalidOperationException("Only square images can be transposed.");
+		}
 		int layerSize = Width * Height;
 		Span<TColor> pixels = Pixels;
 		for (int depthIndex = 0; depthIndex < Depth; depthIndex++)
@@ -85,6 +90,35 @@ public sealed class DirectBitmap<TColor, TChannel> : DirectBitmap
 		}
 	}
 
+	public new DirectBitmap<TColor, TChannel> Crop(Range xRange, Range yRange)
+	{
+		return (DirectBitmap<TColor, TChannel>)base.Crop(xRange, yRange);
+	}
+
+	public override DirectBitmap<TColor, TChannel> Crop(Range xRange, Range yRange, Range zRange)
+	{
+		(int xOffset, int xLength) = xRange.GetOffsetAndLength(Width);
+		(int yOffset, int yLength) = yRange.GetOffsetAndLength(Height);
+		(int zOffset, int zLength) = zRange.GetOffsetAndLength(Depth);
+		if (xLength == Width && yLength == Height && zLength == Depth)
+		{
+			return DeepClone();
+		}
+		byte[] croppedData = new byte[xLength * yLength * zLength * PixelSize];
+		int layerSize = Width * Height;
+		int croppedLayerSize = xLength * yLength;
+		for (int z = 0; z < zLength; z++)
+		{
+			for (int y = 0; y < yLength; y++)
+			{
+				int sourceIndex = (z + zOffset) * layerSize + (y + yOffset) * Width + xOffset;
+				int destinationIndex = z * croppedLayerSize + y * xLength;
+				Buffer.BlockCopy(Data, sourceIndex * PixelSize, croppedData, destinationIndex * PixelSize, xLength * PixelSize);
+			}
+		}
+		return new DirectBitmap<TColor, TChannel>(xLength, yLength, zLength, croppedData);
+	}
+
 	public override DirectBitmap<TColor, TChannel> DeepClone()
 	{
 		byte[] data = new byte[Data.Length];
@@ -96,7 +130,15 @@ public sealed class DirectBitmap<TColor, TChannel> : DirectBitmap
 	{
 		if (UseFastBmp)
 		{
-			BmpWriter.WriteBmp(Data, Width, Height * Depth, stream);
+			if (typeof(TColor) == typeof(ColorBGRA<byte>))
+			{
+				BmpWriter.WriteBmp(Data, Width, Height * Depth, stream);
+			}
+			else
+			{
+				RgbConverter.Convert<TColor, TChannel, ColorBGRA<byte>, byte>(Bits, Width, Height * Depth, out byte[] data);
+				BmpWriter.WriteBmp(data, Width, Height * Depth, stream);
+			}
 		}
 		else
 		{
@@ -133,10 +175,33 @@ public sealed class DirectBitmap<TColor, TChannel> : DirectBitmap
 
 	public override void SaveAsPng(Stream stream)
 	{
-		GetDataAndComponentsForSaving(out byte[] data, out ColorComponents components);
-		lock (imageWriter)
+		if (Width > ushort.MaxValue || Height * Depth > ushort.MaxValue)
 		{
-			imageWriter.WritePng(data, Width, Height * Depth, components, stream);
+			// https://github.com/richgel999/fpng/issues/31
+			GetDataAndComponentsForSaving(out byte[] data, out ColorComponents components);
+			lock (imageWriter)
+			{
+				imageWriter.WritePng(data, Width, Height * Depth, components, stream);
+			}
+		}
+		else
+		{
+			byte[] data;
+
+			if (typeof(TColor) == typeof(ColorRGBA<byte>) || typeof(TColor) == typeof(ColorRGB<byte>))
+			{
+				data = Data;
+			}
+			else if (TColor.HasAlphaChannel)
+			{
+				RgbConverter.Convert<TColor, TChannel, ColorRGBA<byte>, byte>(Bits, Width, Height * Depth, out data);
+			}
+			else
+			{
+				RgbConverter.Convert<TColor, TChannel, ColorRGB<byte>, byte>(Bits, Width, Height * Depth, out data);
+			}
+			byte[] result = FPng.EncodeImageToMemory(data, Width, Height * Depth);
+			new MemoryStream(result).CopyTo(stream);
 		}
 	}
 

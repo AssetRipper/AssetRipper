@@ -70,7 +70,7 @@ public sealed class SerializablePrimitive : SerializableEntry
 		primitive = typeName switch
 		{
 			"bool" => new SerializablePrimitive(PrimitiveType.Boolean),
-			"char" => node.ByteSize == 2 
+			"char" => node.ByteSize == 2
 				? new SerializablePrimitive(PrimitiveType.Character) //I don't think this can happen, but just to be safe.
 				: new SerializablePrimitive(PrimitiveType.U1),
 			"SInt8" => new SerializablePrimitive(PrimitiveType.I1),

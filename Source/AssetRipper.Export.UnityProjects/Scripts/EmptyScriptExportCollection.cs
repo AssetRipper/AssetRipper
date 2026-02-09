@@ -32,6 +32,11 @@ public sealed class EmptyScriptExportCollection : ScriptExportCollectionBase
 
 		foreach ((MonoScriptInfo info, IMonoScript script) in UniqueScripts)
 		{
+			if (info.IsInjected())
+			{
+				continue;
+			}
+
 			GetExportSubPath(info, out string subFolderPath, out string fileName);
 			string folderPath = fileSystem.Path.Join(assetsDirectoryPath, subFolderPath);
 			string filePath = fileSystem.Path.Join(folderPath, fileName);
@@ -58,7 +63,7 @@ public sealed class EmptyScriptExportCollection : ScriptExportCollectionBase
 				//    see: https://docs.unity3d.com/2017.3/Documentation/Manual/ScriptCompilationAssemblyDefinitionFiles.html
 				if (!ReferenceAssemblies.IsPredefinedAssembly(details.AssemblyName))
 				{
-					AssemblyDefinitionExporter.Export(details, fileSystem);
+					AssemblyDefinitionExporter.Export(details, fileSystem, AssetExporter.ReferenceAssemblyDictionary);
 				}
 			}
 		}

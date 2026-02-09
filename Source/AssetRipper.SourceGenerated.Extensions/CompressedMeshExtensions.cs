@@ -5,19 +5,18 @@ using System.Buffers;
 using System.Numerics;
 using System.Runtime.InteropServices;
 
-namespace AssetRipper.SourceGenerated.Extensions
-{
-	public static class CompressedMeshExtensions
-	{
-		public static bool IsSet(this ICompressedMesh compressedMesh) => compressedMesh.Vertices.NumItems > 0;
+namespace AssetRipper.SourceGenerated.Extensions;
 
-		public static void DecompressCompressedMesh(this ICompressedMesh compressedMesh,
-			UnityVersion version,
-			out Vector3[]? vertices,
+public static class CompressedMeshExtensions
+{
+	extension(ICompressedMesh compressedMesh)
+	{
+		public bool IsSet => compressedMesh.Vertices.NumItems > 0;
+
+		public void Decompress(out Vector3[]? vertices,
 			out Vector3[]? normals,
 			out Vector4[]? tangents,
 			out ColorFloat[]? colors,
-			out BoneWeight4[]? skin,
 			out Vector2[]? uv0,
 			out Vector2[]? uv1,
 			out Vector2[]? uv2,
@@ -26,6 +25,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			out Vector2[]? uv5,
 			out Vector2[]? uv6,
 			out Vector2[]? uv7,
+			out BoneWeight4[]? skin,
 			out Matrix4x4[]? bindPose,
 			out uint[]? processedIndexBuffer)
 		{
@@ -77,14 +77,14 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 		}
 
-		private static int GetVertexCount(ICompressedMesh compressedMesh)
+		private int GetVertexCount()
 		{
 			return (int)compressedMesh.Vertices.NumItems / 3;//3 floats in a Vector3
 		}
 
-		public static void GetUV(this ICompressedMesh compressedMesh, out Vector2[]? uv0, out Vector2[]? uv1, out Vector2[]? uv2, out Vector2[]? uv3, out Vector2[]? uv4, out Vector2[]? uv5, out Vector2[]? uv6, out Vector2[]? uv7)
+		public void GetUV(out Vector2[]? uv0, out Vector2[]? uv1, out Vector2[]? uv2, out Vector2[]? uv3, out Vector2[]? uv4, out Vector2[]? uv5, out Vector2[]? uv6, out Vector2[]? uv7)
 		{
-			int vertexCount = GetVertexCount(compressedMesh);
+			int vertexCount = compressedMesh.GetVertexCount();
 			if (compressedMesh.UV.NumItems > 0)
 			{
 				UVInfo m_UVInfo = compressedMesh.UVInfo;
@@ -102,10 +102,10 @@ namespace AssetRipper.SourceGenerated.Extensions
 				}
 				else
 				{
-					uv0 = MeshHelper.FloatArrayToVector2(compressedMesh.UV.UnpackFloats(2, 2 * sizeof(float), 0, vertexCount));
+					uv0 = MeshHelper.FloatArrayToVector2(compressedMesh.UV.Unpack(2, 2, 0, vertexCount));
 					if (compressedMesh.UV.NumItems >= vertexCount * sizeof(float))
 					{
-						uv1 = MeshHelper.FloatArrayToVector2(compressedMesh.UV.UnpackFloats(2, 2 * sizeof(float), vertexCount * 2, vertexCount));
+						uv1 = MeshHelper.FloatArrayToVector2(compressedMesh.UV.Unpack(2, 2, vertexCount * 2, vertexCount));
 					}
 					else
 					{
@@ -132,29 +132,14 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 		}
 
-		private static Vector2[]? ReadChannel(PackedBitVector_Single packedVector, UVInfo uvInfo, int channelIndex, int vertexCount, ref int currentOffset)
-		{
-			uvInfo.GetChannelInfo(channelIndex, out bool exists, out int uvDim);
-			if (exists)
-			{
-				Vector2[] m_UV = MeshHelper.FloatArrayToVector2(packedVector.UnpackFloats(uvDim, uvDim * sizeof(float), currentOffset, vertexCount));
-				currentOffset += uvDim * vertexCount;
-				return m_UV;
-			}
-			else
-			{
-				return null;
-			}
-		}
-
-		public static void SetUV(this ICompressedMesh compressedMesh, ReadOnlySpan<Vector2> uv0, ReadOnlySpan<Vector2> uv1, ReadOnlySpan<Vector2> uv2, ReadOnlySpan<Vector2> uv3, ReadOnlySpan<Vector2> uv4, ReadOnlySpan<Vector2> uv5, ReadOnlySpan<Vector2> uv6, ReadOnlySpan<Vector2> uv7)
+		public void SetUV(ReadOnlySpan<Vector2> uv0, ReadOnlySpan<Vector2> uv1, ReadOnlySpan<Vector2> uv2, ReadOnlySpan<Vector2> uv3, ReadOnlySpan<Vector2> uv4, ReadOnlySpan<Vector2> uv5, ReadOnlySpan<Vector2> uv6, ReadOnlySpan<Vector2> uv7)
 		{
 			if (!compressedMesh.Has_UVInfo() || AllEmpty(uv2, uv3, uv4, uv5, uv6, uv7))
 			{
 				compressedMesh.UVInfo = 0;
 				if (uv0.Length == 0)
 				{
-					compressedMesh.UV.PackFloats(default);
+					compressedMesh.UV.Pack(default);
 				}
 				else if (uv1.Length == 0)
 				{
@@ -195,19 +180,22 @@ namespace AssetRipper.SourceGenerated.Extensions
 			{
 				return uv2.Length == 0 && uv3.Length == 0 && uv4.Length == 0 && uv5.Length == 0 && uv6.Length == 0 && uv7.Length == 0;
 			}
+		}
 
-			static void UpdateBuffer(ReadOnlySpan<Vector2> uv, int uvIndex, Span<Vector2> buffer, ref int currentOffset, ref UVInfo uvInfo)
+		// To do: convert back to local function
+		// https://github.com/dotnet/roslyn/issues/78913
+		// https://github.com/dotnet/roslyn/issues/78915
+		private static void UpdateBuffer(ReadOnlySpan<Vector2> uv, int uvIndex, Span<Vector2> buffer, ref int currentOffset, ref UVInfo uvInfo)
+		{
+			if (uv.Length > 0)
 			{
-				if (uv.Length > 0)
-				{
-					uvInfo = uvInfo.AddChannelInfo(uvIndex, true, 2);
-					uv.CopyTo(buffer[currentOffset..]);
-					currentOffset += uv.Length;
-				}
+				uvInfo = uvInfo.AddChannelInfo(uvIndex, true, 2);
+				uv.CopyTo(buffer[currentOffset..]);
+				currentOffset += uv.Length;
 			}
 		}
 
-		public static BoneWeight4[] GetWeights(this ICompressedMesh compressedMesh)
+		public BoneWeight4[] GetWeights()
 		{
 			int[] weights = compressedMesh.Weights.UnpackInts();
 			int[] boneIndices = compressedMesh.BoneIndices.UnpackInts();
@@ -265,7 +253,7 @@ namespace AssetRipper.SourceGenerated.Extensions
 			return result;
 		}
 
-		public static void SetWeights(this ICompressedMesh compressedMesh, ReadOnlySpan<BoneWeight4> skin)
+		public void SetWeights(ReadOnlySpan<BoneWeight4> skin)
 		{
 			if (skin.Length > 0)
 			{
@@ -311,9 +299,9 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 		}
 
-		public static Vector3[] GetNormals(this ICompressedMesh compressedMesh)
+		public Vector3[] GetNormals()
 		{
-			float[] normalData = compressedMesh.Normals.UnpackFloats(2, 2 * sizeof(float));
+			float[] normalData = compressedMesh.Normals.Unpack(2, 2);
 			int[] signs = compressedMesh.NormalSigns.UnpackInts();
 			Vector3[] normals = new Vector3[compressedMesh.Normals.NumItems / 2];
 			for (int i = 0; i < compressedMesh.Normals.NumItems / 2; ++i)
@@ -345,30 +333,16 @@ namespace AssetRipper.SourceGenerated.Extensions
 			return normals;
 		}
 
-		public static void SetNormals(this ICompressedMesh compressedMesh, ReadOnlySpan<Vector3> normals)
+		public void SetNormals(ReadOnlySpan<Vector3> normals)
 		{
 			MakeFloatAndSignArrays(normals, out float[] floats, out uint[] signs);
-			compressedMesh.Normals.PackFloats(floats);
+			compressedMesh.Normals.Pack(floats);
 			compressedMesh.NormalSigns.PackUInts(signs);
 		}
 
-		private static void MakeFloatAndSignArrays(ReadOnlySpan<Vector3> normals, out float[] floats, out uint[] signs)
+		public Vector4[] GetTangents()
 		{
-			floats = new float[normals.Length * 2];
-			signs = new uint[normals.Length];
-			for (int i = 0; i < normals.Length; i++)
-			{
-				//Normals should already be normalized, but it's better to be safe.
-				Vector3 vector = Vector3.Normalize(normals[i]);
-				floats[2 * i] = vector.X;
-				floats[2 * i + 1] = vector.Y;
-				signs[i] = vector.Z < 0 ? 0u : 1u;
-			}
-		}
-
-		public static Vector4[] GetTangents(this ICompressedMesh compressedMesh)
-		{
-			float[] tangentData = compressedMesh.Tangents.UnpackFloats(2, 2 * sizeof(float));
+			float[] tangentData = compressedMesh.Tangents.Unpack(2, 2);
 			int[] signs = compressedMesh.TangentSigns.UnpackInts();
 			Vector4[] tangents = new Vector4[compressedMesh.Tangents.NumItems / 2];
 			for (int i = 0; i < compressedMesh.Tangents.NumItems / 2; ++i)
@@ -401,26 +375,11 @@ namespace AssetRipper.SourceGenerated.Extensions
 			return tangents;
 		}
 
-		public static void SetTangents(this ICompressedMesh compressedMesh, ReadOnlySpan<Vector4> tangents)
+		public void SetTangents(ReadOnlySpan<Vector4> tangents)
 		{
 			MakeFloatAndSignArrays(tangents, out float[] floats, out uint[] signs);
-			compressedMesh.Tangents.PackFloats(floats);
+			compressedMesh.Tangents.Pack(floats);
 			compressedMesh.TangentSigns.PackUInts(signs);
-		}
-
-		private static void MakeFloatAndSignArrays(ReadOnlySpan<Vector4> tangents, out float[] floats, out uint[] signs)
-		{
-			floats = new float[tangents.Length * 2];
-			signs = new uint[tangents.Length * 2];
-			for (int i = 0; i < tangents.Length; i++)
-			{
-				//Tangents should already be normalized, but it's better to be safe.
-				Vector3 vector = Vector3.Normalize(tangents[i].AsVector3());
-				floats[2 * i] = vector.X;
-				floats[2 * i + 1] = vector.Y;
-				signs[2 * i] = vector.Z < 0 ? 0u : 1u;
-				signs[2 * i + 1] = tangents[i].W < 0 ? 0u : 1u;
-			}
 		}
 
 		/// <summary>
@@ -428,19 +387,26 @@ namespace AssetRipper.SourceGenerated.Extensions
 		/// </summary>
 		/// <param name="compressedMesh"></param>
 		/// <returns></returns>
-		public static Matrix4x4[] GetBindPoses(this ICompressedMesh compressedMesh)
+		public Matrix4x4[] GetBindPoses()
 		{
 			if (compressedMesh.Has_BindPoses())
 			{
 				const int MatrixFloats = 16;
 				Matrix4x4[] bindPose = new Matrix4x4[compressedMesh.BindPoses.NumItems / MatrixFloats];
-				float[] m_BindPoses_Unpacked = compressedMesh.BindPoses.UnpackFloats(MatrixFloats, MatrixFloats * sizeof(float));
+				float[] m_BindPoses_Unpacked = compressedMesh.BindPoses.Unpack(MatrixFloats, MatrixFloats);
 				MemoryMarshal.Cast<float, Matrix4x4>(m_BindPoses_Unpacked).CopyTo(bindPose);
+
+				// The Unity memory layout is transposed from the .NET Core memory layout.
+				for (int i = 0; i < bindPose.Length; i++)
+				{
+					bindPose[i] = Matrix4x4.Transpose(bindPose[i]);
+				}
+
 				return bindPose;
 			}
 			else
 			{
-				return Array.Empty<Matrix4x4>();
+				return [];
 			}
 		}
 
@@ -449,27 +415,43 @@ namespace AssetRipper.SourceGenerated.Extensions
 		/// </summary>
 		/// <param name="compressedMesh"></param>
 		/// <param name="bindPoses"></param>
-		public static void SetBindPoses(this ICompressedMesh compressedMesh, ReadOnlySpan<Matrix4x4> bindPoses)
+		public void SetBindPoses(ReadOnlySpan<Matrix4x4> bindPoses)
 		{
-			compressedMesh.BindPoses?.PackFloats(MemoryMarshal.Cast<Matrix4x4, float>(bindPoses));
+			if (!compressedMesh.Has_BindPoses())
+			{
+			}
+			else if (bindPoses.Length == 0)
+			{
+				compressedMesh.BindPoses.Pack([]);
+			}
+			else
+			{
+				// The Unity memory layout is transposed from the .NET Core memory layout.
+				using RentedArray<Matrix4x4> temp = new(bindPoses.Length);
+				for (int i = 0; i < temp.Length; i++)
+				{
+					temp[i] = Matrix4x4.Transpose(bindPoses[i]);
+				}
+				compressedMesh.BindPoses.Pack(MemoryMarshal.Cast<Matrix4x4, float>(temp));
+			}
 		}
 
-		public static Vector3[] GetVertices(this ICompressedMesh compressedMesh)
+		public Vector3[] GetVertices()
 		{
-			float[] verticesData = compressedMesh.Vertices.UnpackFloats(3, 3 * sizeof(float));
+			float[] verticesData = compressedMesh.Vertices.Unpack(3, 3);
 			return MeshHelper.FloatArrayToVector3(verticesData);
 		}
 
-		public static void SetVertices(this ICompressedMesh compressedMesh, ReadOnlySpan<Vector3> vertices)
+		public void SetVertices(ReadOnlySpan<Vector3> vertices)
 		{
-			compressedMesh.Vertices.PackFloats(MemoryMarshal.Cast<Vector3, float>(vertices));
+			compressedMesh.Vertices.Pack(MemoryMarshal.Cast<Vector3, float>(vertices));
 		}
 
-		public static ColorFloat[] GetFloatColors(this ICompressedMesh compressedMesh)
+		public ColorFloat[] GetFloatColors()
 		{
 			if (compressedMesh.Has_FloatColors())
 			{
-				return MeshHelper.FloatArrayToColorFloat(compressedMesh.FloatColors.UnpackFloats(1, 4));
+				return MeshHelper.FloatArrayToColorFloat(compressedMesh.FloatColors.Unpack(1, 1));
 			}
 			else if (compressedMesh.Has_Colors())
 			{
@@ -487,11 +469,11 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 			else
 			{
-				return Array.Empty<ColorFloat>();
+				return [];
 			}
 		}
 
-		public static void SetFloatColors(this ICompressedMesh compressedMesh, ReadOnlySpan<ColorFloat> colors)
+		public void SetFloatColors(ReadOnlySpan<ColorFloat> colors)
 		{
 			if (compressedMesh.Has_FloatColors())
 			{
@@ -509,42 +491,89 @@ namespace AssetRipper.SourceGenerated.Extensions
 			}
 		}
 
-		public static uint[] GetTriangles(this ICompressedMesh compressedMesh)
+		public uint[] GetTriangles()
 		{
 			return compressedMesh.Triangles.UnpackUInts();
 		}
 
-		public static void SetTriangles(this ICompressedMesh compressedMesh, ReadOnlySpan<uint> triangles)
+		public void SetTriangles(ReadOnlySpan<uint> triangles)
 		{
 			compressedMesh.Triangles.PackUInts(triangles);
 		}
+	}
 
-		private readonly ref struct RentedArray<T>
+	private static Vector2[]? ReadChannel(PackedBitVector_Single packedVector, UVInfo uvInfo, int channelIndex, int vertexCount, ref int currentOffset)
+	{
+		uvInfo.GetChannelInfo(channelIndex, out bool exists, out int uvDim);
+		if (exists)
 		{
-			private readonly int length;
-			private readonly T[]? array;
-
-			public RentedArray(int length)
-			{
-				this.length = length;
-				array = ArrayPool<T>.Shared.Rent(length);
-			}
-
-			public void Dispose()
-			{
-				if (array != null)
-				{
-					ArrayPool<T>.Shared.Return(array);
-				}
-			}
-
-			public Span<T> AsSpan() => new Span<T>(array, 0, length);
-
-			public Span<T> Slice(int start) => new Span<T>(array, start, length - start);
-
-			//Implicit conversions to Span<T> and ReadOnlySpan<T>
-			public static implicit operator Span<T>(RentedArray<T> rentedArray) => rentedArray.AsSpan();
-			public static implicit operator ReadOnlySpan<T>(RentedArray<T> rentedArray) => rentedArray.AsSpan();
+			Vector2[] m_UV = MeshHelper.FloatArrayToVector2(packedVector.Unpack(uvDim, uvDim, currentOffset, vertexCount), uvDim);
+			currentOffset += uvDim * vertexCount;
+			return m_UV;
 		}
+		else
+		{
+			return null;
+		}
+	}
+
+	private static void MakeFloatAndSignArrays(ReadOnlySpan<Vector3> normals, out float[] floats, out uint[] signs)
+	{
+		floats = new float[normals.Length * 2];
+		signs = new uint[normals.Length];
+		for (int i = 0; i < normals.Length; i++)
+		{
+			//Normals should already be normalized, but it's better to be safe.
+			Vector3 vector = Vector3.Normalize(normals[i]);
+			floats[2 * i] = vector.X;
+			floats[2 * i + 1] = vector.Y;
+			signs[i] = vector.Z < 0 ? 0u : 1u;
+		}
+	}
+
+	private static void MakeFloatAndSignArrays(ReadOnlySpan<Vector4> tangents, out float[] floats, out uint[] signs)
+	{
+		floats = new float[tangents.Length * 2];
+		signs = new uint[tangents.Length * 2];
+		for (int i = 0; i < tangents.Length; i++)
+		{
+			//Tangents should already be normalized, but it's better to be safe.
+			Vector3 vector = Vector3.Normalize(tangents[i].AsVector3());
+			floats[2 * i] = vector.X;
+			floats[2 * i + 1] = vector.Y;
+			signs[2 * i] = vector.Z < 0 ? 0u : 1u;
+			signs[2 * i + 1] = tangents[i].W < 0 ? 0u : 1u;
+		}
+	}
+
+	private readonly ref struct RentedArray<T>
+	{
+		private readonly T[]? array;
+
+		public int Length { get; }
+
+		public RentedArray(int length)
+		{
+			Length = length;
+			array = ArrayPool<T>.Shared.Rent(length);
+		}
+
+		public ref T this[int index] => ref AsSpan()[index];
+
+		public void Dispose()
+		{
+			if (array != null)
+			{
+				ArrayPool<T>.Shared.Return(array);
+			}
+		}
+
+		public Span<T> AsSpan() => new Span<T>(array, 0, Length);
+
+		public Span<T> Slice(int start) => new Span<T>(array, start, Length - start);
+
+		//Implicit conversions to Span<T> and ReadOnlySpan<T>
+		public static implicit operator Span<T>(RentedArray<T> rentedArray) => rentedArray.AsSpan();
+		public static implicit operator ReadOnlySpan<T>(RentedArray<T> rentedArray) => rentedArray.AsSpan();
 	}
 }

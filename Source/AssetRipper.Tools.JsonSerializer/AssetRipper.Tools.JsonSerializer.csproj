@@ -2,7 +2,6 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<OutputPath>..\0Bins\AssetRipper.Tools.JsonSerializer\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.Tools.JsonSerializer\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>

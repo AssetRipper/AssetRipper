@@ -2,17 +2,19 @@
 
 	<PropertyGroup>
 		<IsPackable>false</IsPackable>
+		<IsAotCompatible>false</IsAotCompatible>
 		<OutputPath>..\0Bins\Other\AssetRipper.SerializationLogic.Tests\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.SerializationLogic.Tests\$(Configuration)\</IntermediateOutputPath>
 		<NoWarn>CS0169</NoWarn><!--Unused field-->
 		<NoWarn>CS0649</NoWarn><!--Field is never assigned to-->
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
-		<PackageReference Include="NUnit" Version="4.3.2" />
-		<PackageReference Include="NUnit3TestAdapter" Version="5.0.0" />
-		<PackageReference Include="NUnit.Analyzers" Version="4.7.0">
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+		<PackageReference Include="NUnit" Version="4.4.0" />
+		<PackageReference Include="NUnit3TestAdapter" Version="6.1.0" />
+		<PackageReference Include="NUnit.Analyzers" Version="4.11.2">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>

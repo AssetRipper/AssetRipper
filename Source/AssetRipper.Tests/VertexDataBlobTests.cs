@@ -1,61 +1,22 @@
 ﻿using AssetRipper.IO.Endian;
-using AssetRipper.Numerics;
 using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Extensions;
-using NUnit.Framework.Constraints;
 using System.Collections;
-using System.Numerics;
 using System.Runtime.CompilerServices;
 
 namespace AssetRipper.Tests;
 
 internal class VertexDataBlobTests
 {
-	private static MeshData CreateTriangleMesh()
-	{
-		Vector3[] vertices =
-		[
-			new Vector3(0.0f, 0.0f, 0.0f),
-			new Vector3(1.0f, 0.0f, 0.0f),
-			new Vector3(0.0f, 1.0f, 0.0f),
-		];
-		Vector3[] normals =
-		[
-			new Vector3(0.0f, 0.0f, 1.0f),
-			new Vector3(0.0f, 0.0f, 1.0f),
-			new Vector3(0.0f, 0.0f, 1.0f),
-		];
-		Vector4[] tangents =
-		[
-			new Vector4(1.0f, 0.0f, 0.0f, 1.0f),
-			new Vector4(1.0f, 0.0f, 0.0f, 1.0f),
-			new Vector4(1.0f, 0.0f, 0.0f, 1.0f),
-		];
-		ColorFloat[] colors =
-		[
-			new ColorFloat(1.0f, 0.0f, 0.0f, 1.0f),
-			new ColorFloat(0.0f, 1.0f, 0.0f, 1.0f),
-			new ColorFloat(0.0f, 0.0f, 1.0f, 1.0f),
-		];
-		Vector2[] uv =
-		[
-			new Vector2(0.0f, 0.0f),
-			new Vector2(1.0f, 0.0f),
-			new Vector2(0.0f, 1.0f),
-		];
-		uint[] processedIndexBuffer = [ 0, 1, 2 ];
-		return new MeshData(vertices, normals, tangents, colors, uv, uv, uv, uv, uv, uv, uv, uv, null, processedIndexBuffer);
-	}
-
 	[Theory]
 	public void TriangleMeshIsPreserved([Values("3.5", "4", "5", "2017", "2018", "2018.4")] string versionString, EndianType endianType)
 	{
-		MeshData meshData = CreateTriangleMesh();
+		MeshData meshData = MeshData.CreateTriangleMesh();
 		UnityVersion version = UnityVersion.Parse(versionString);
 		VertexDataBlob vertexDataBlob = VertexDataBlob.Create(meshData, version, endianType);
 		MeshData meshData2 = vertexDataBlob.ToMeshData();
 
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			AssertEquivalence(meshData2.Vertices, meshData.Vertices);
 			AssertEquivalence(meshData2.Normals, meshData.Normals);
@@ -126,19 +87,6 @@ internal class VertexDataBlobTests
 			{
 				Assert.That(meshData2.Skin, Is.Null);
 			}
-		});
-	}
-
-	private static EquivalenceResolveConstraint IsEquivalentTo(IEnumerable? expected)
-	{
-		return new EquivalenceResolveConstraint(expected);
-	}
-
-	private sealed class EquivalenceResolveConstraint(IEnumerable? enumerable) : IResolveConstraint
-	{
-		public IConstraint Resolve()
-		{
-			return enumerable is null ? Is.Null : Is.Not.Null.And.EquivalentTo(enumerable);
 		}
 	}
 
@@ -152,15 +100,10 @@ internal class VertexDataBlobTests
 		{
 			Assert.That(actual, Is.Null, actualExpression: actualExpression);
 		}
-		else if (actual is null)
-		{
-			Assert.That(actual, Is.Not.Null, actualExpression: actualExpression);
-		}
 		else
 		{
-#pragma warning disable NUnit2050 // NUnit 4 no longer supports string.Format specification
+			Assert.That(actual, Is.Not.Null, actualExpression: actualExpression);
 			Assert.That(actual, Is.EquivalentTo(expected), actualExpression: actualExpression, constraintExpression: constraintExpression);
-#pragma warning restore NUnit2050 // NUnit 4 no longer supports string.Format specification
 		}
 	}
 }

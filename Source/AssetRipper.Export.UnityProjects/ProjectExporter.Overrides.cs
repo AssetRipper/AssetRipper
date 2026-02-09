@@ -1,9 +1,8 @@
 ﻿using AssetRipper.Assets;
-using AssetRipper.Export.Modules.Textures;
+using AssetRipper.Export.Configuration;
 using AssetRipper.Export.UnityProjects.AnimatorControllers;
 using AssetRipper.Export.UnityProjects.Audio;
 using AssetRipper.Export.UnityProjects.AudioMixers;
-using AssetRipper.Export.UnityProjects.Configuration;
 using AssetRipper.Export.UnityProjects.DeletedAssets;
 using AssetRipper.Export.UnityProjects.EngineAssets;
 using AssetRipper.Export.UnityProjects.Miscellaneous;
@@ -18,7 +17,6 @@ using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.Mining.PredefinedAssets;
 using AssetRipper.Processing.ScriptableObject;
 using AssetRipper.Processing.Textures;
-using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_1001;
 using AssetRipper.SourceGenerated.Classes.ClassID_1032;
@@ -60,7 +58,7 @@ namespace AssetRipper.Export.UnityProjects;
 
 partial class ProjectExporter
 {
-	public ProjectExporter(LibraryConfiguration settings, IAssemblyManager assemblyManager)
+	public ProjectExporter(FullConfiguration settings, IAssemblyManager assemblyManager)
 	{
 		OverrideExporter<IUnityObjectBase>(new DefaultYamlExporter(), true);
 
@@ -76,17 +74,26 @@ partial class ProjectExporter
 		OverrideExporter<IComponent>(sceneExporter, true);
 		OverrideExporter<ILevelGameManager>(sceneExporter, true);
 
-		OverrideDummyExporter<IBuildSettings>(ClassIDType.BuildSettings, true, false);
-		OverrideDummyExporter<IPreloadData>(ClassIDType.PreloadData, true, false);
-		OverrideDummyExporter<IAssetBundle>(ClassIDType.AssetBundle, true, false);
-		OverrideDummyExporter<IAssetBundleManifest>(ClassIDType.AssetBundleManifest, true, false);
-		OverrideDummyExporter<IMonoManager>(ClassIDType.MonoManager, true, false);
-		OverrideDummyExporter<IResourceManager>(ClassIDType.ResourceManager, true, false);
-		OverrideDummyExporter<IShaderNameRegistry>(ClassIDType.ShaderNameRegistry, true, false);
+		OverrideDummyExporter<IBuildSettings>(true, false);
+		OverrideDummyExporter<IPreloadData>(true, false);
+		OverrideDummyExporter<IAssetBundle>(true, false);
+		OverrideDummyExporter<IAssetBundleManifest>(true, false);
+		OverrideDummyExporter<IMonoManager>(true, false);
+		OverrideDummyExporter<IResourceManager>(true, false);
+		OverrideDummyExporter<IShaderNameRegistry>(true, false);
 
 		OverrideExporter<ISceneAsset>(new SceneAssetExporter(), true);
-		OverrideExporter<UnknownObject>(new UnknownObjectExporter(), false);
-		OverrideExporter<UnreadableObject>(new UnreadableObjectExporter(), false);
+
+		if (settings.ExportSettings.ExportUnreadableAssets)
+		{
+			OverrideExporter<UnknownObject>(new UnknownObjectExporter(), false);
+			OverrideExporter<UnreadableObject>(new UnreadableObjectExporter(), false);
+		}
+		else
+		{
+			OverrideDummyExporter<UnknownObject>(false, false);
+			OverrideDummyExporter<UnreadableObject>(false, false);
+		}
 
 		//Yaml Exporters
 		YamlStreamedAssetExporter streamedAssetExporter = new();
@@ -135,8 +142,6 @@ partial class ProjectExporter
 		OverrideExporter<IShader>(settings.ExportSettings.ShaderExportMode switch
 		{
 			ShaderExportMode.Yaml => new YamlShaderExporter(),
-			ShaderExportMode.Disassembly => new ShaderDisassemblyExporter(),
-			ShaderExportMode.Decompile => new USCShaderExporter(),
 			_ => new DummyShaderTextExporter(),
 		});
 		OverrideExporter<IShader>(new SimpleShaderExporter());
@@ -177,7 +182,7 @@ partial class ProjectExporter
 	}
 
 	//These need to be absolutely last
-	public void DoFinalOverrides(LibraryConfiguration settings)
+	public void DoFinalOverrides(FullConfiguration settings)
 	{
 		//Engine assets
 		OverrideExporter<IUnityObjectBase>(settings.SingletonData.TryGetStoredValue(nameof(EngineResourceData), out EngineResourceData? engineResourceData)

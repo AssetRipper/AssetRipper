@@ -2,7 +2,6 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<ImplicitUsings>enable</ImplicitUsings>
 		<OutputPath>..\0Bins\AssetRipper.Tools.MonoBehaviourTester\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.Tools.MonoBehaviourTester\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>

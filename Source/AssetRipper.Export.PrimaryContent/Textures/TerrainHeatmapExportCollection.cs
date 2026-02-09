@@ -1,4 +1,4 @@
-﻿using AssetRipper.Export.Modules.Textures;
+﻿using AssetRipper.Export.Configuration;
 using AssetRipper.SourceGenerated.Classes.ClassID_156;
 
 namespace AssetRipper.Export.PrimaryContent.Textures;

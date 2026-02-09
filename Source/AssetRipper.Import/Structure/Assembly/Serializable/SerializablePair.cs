@@ -3,6 +3,7 @@ using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Traversal;
 using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files.SerializedFiles;
+using AssetRipper.SerializationLogic;
 
 namespace AssetRipper.Import.Structure.Assembly.Serializable;
 

@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Debugging;
 using AssetRipper.Assets.Metadata;
 using System.Diagnostics;
 
@@ -7,6 +8,7 @@ namespace AssetRipper.Assets;
 /// <summary>
 /// The artificial base class for all generated Unity classes which inherit from Object.
 /// </summary>
+[DebuggerTypeProxy(typeof(UnityObjectBaseProxy))]
 public abstract partial class UnityObjectBase : UnityAssetBase, IUnityObjectBase
 {
 	protected UnityObjectBase(AssetInfo assetInfo)

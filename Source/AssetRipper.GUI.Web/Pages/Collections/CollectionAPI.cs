@@ -14,15 +14,23 @@ internal static class CollectionAPI
 		public const string Count = Base + "/Count";
 	}
 
-	private const string Path = "Path";
+	public const string Path = "Path";
 
-	public static string GetViewUrl(CollectionPath path) => $"{Urls.View}?{GetPathQuery(path)}";
+	public static string GetViewUrl(CollectionPath path)
+	{
+		return $"{Urls.View}?{GetPathQuery(path)}";
+	}
+
 	public static Task GetView(HttpContext context)
 	{
 		context.Response.DisableCaching();
 		if (TryGetCollectionFromQuery(context, out AssetCollection? collection, out CollectionPath path, out Task? failureTask))
 		{
-			return new ViewPage() { Collection = collection, Path = path }.WriteToResponse(context.Response);
+			return new ViewPage()
+			{
+				Collection = collection,
+				Path = path
+			}.WriteToResponse(context.Response);
 		}
 		else
 		{
