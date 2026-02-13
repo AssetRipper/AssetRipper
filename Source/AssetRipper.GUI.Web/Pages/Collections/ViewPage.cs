@@ -11,7 +11,7 @@ public sealed class ViewPage : DefaultPage
 
 	public override string GetTitle() => Collection.Name;
 
-	private readonly List<int> assetsPerPage = new() {500, 1000, 2000, 3000, 5000};// Max 5k per page?
+	private readonly List<int> assetsPerPage = new() {500, 1000, 2000, 3000, 5000};
 
 	public override void WriteInnerContent(TextWriter writer)
 	{
@@ -33,7 +33,6 @@ public sealed class ViewPage : DefaultPage
 			var availableClasses = Collection.Select(a => a.ClassName).Distinct().Order().ToList();
 			if (availableClasses.Count > 1)
 			{
-				//i: set the filter items and UI? (since this doesn't change for a collection
 				new Label(writer).WithFor("classFilter").WithClass("me-2").Close(Localization.Class);
 
 				using (new Select(writer)
@@ -129,8 +128,6 @@ public sealed class ViewPage : DefaultPage
 		// Add client-side filtering script
 		using (new Script(writer).End())
 		{
-			//Todo: add page selection filter
-			//Todo: add page reseting code after filtering
 			writer.Write("""
 				document.addEventListener('DOMContentLoaded', function() {
 					const classFilter = document.getElementById('classFilter');
@@ -282,9 +279,6 @@ public sealed class ViewPage : DefaultPage
 		/// prev
 		/// next
 		/// Assets Per Page
-		/// Todo: Un Naive the method---add in 
-		/// Filters
-		/// Page updates on Asset Per page changes
 		new Label(writer).WithFor("pageCollection").WithClass("me-2").Close("Page");
 		new Button(writer)
 				.WithId("prevBtn")
