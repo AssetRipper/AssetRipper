@@ -147,29 +147,75 @@ public sealed class ViewPage : DefaultPage
 									row.style.display = 'none';
 								}
 							});
+
+							//const pageFilter = document.getElementById('assetPerPage');
+							if (pageFilter) {
+								var event = new Event('change');
+								pageFilter.dispatchEvent(event);
+							}
 						});
 					}
 
 					const pageFilter = document.getElementById('assetPerPage');
+					const prevButton = document.getElementById('prevBtn');
+					const nextButton = document.getElementById('nextBtn');
 					if (pageFilter) {
 						pageFilter.addEventListener('change', function() {
-							const selectedCount = parseInt(this.value);
-							const pageNo = parseInt(document.getElementById('pageNo').innerHTML);
-							const rows = document.querySelectorAll('#assetsTable tr');
-							
-							const start = selectedCount * (pageNo - 1);
-							for(var i = 0; i < rows.length; ++i){
-								if(i >= start && i < selectedCount * pageNo){
+							var selectedClass = "";
+							var query = '#assetsTable tr';
+							if(classFilter && classFilter.value != ''){
+								selectedClass = classFilter.value;
+								query +=  '[data-class=\"' + selectedClass + '\"]';
+							}
+
+							var pageNo = parseInt(document.getElementById('pageNo').innerHTML);
+							const rows = document.querySelectorAll(query);
+
+							const selected = this.value;
+							if(selected == ''){
+								console.log("Hi from");
+								for(var i = 0; i < rows.length; ++i){
 									rows[i].style.display = '';
-								}else {
-									rows[i].style.display = 'none';
+								}
+
+								if(prevButton){
+									prevButton.disabled = true;
+								}
+
+								if(nextButton){
+									nextButton.disabled = true;
+								}
+
+								document.getElementById('pageNo').innerHTML = '1';
+							}else {
+								const selectedCount = parseInt(this.value);
+
+								if(rows.length < selectedCount * pageNo){
+									pageNo = Math.ceil(rows.length / selectedCount);
+									document.getElementById('pageNo').innerHTML = '' + pageNo;
+
+									if(nextButton){
+										nextButton.disabled = true;
+									}
+								}else if(rows.length >= selectedCount * pageNo){
+									if(nextButton){
+										nextButton.disabled = false;
+									}
+								}
+
+								const start = selectedCount * (pageNo - 1);
+								for(var i = 0; i < rows.length; ++i){
+									if(i >= start && i < selectedCount * pageNo){
+										rows[i].style.display = '';
+									}else {
+										rows[i].style.display = 'none';
+									}
 								}
 							}
 						});
 					}
 
-					const prevButton = document.getElementById('prevBtn');
-					const nextButton = document.getElementById('nextBtn');
+					
 					if(prevButton){
 						prevButton.addEventListener('click', function() {
 							var pageNo = parseInt(document.getElementById('pageNo').innerHTML);
@@ -202,9 +248,14 @@ public sealed class ViewPage : DefaultPage
 							}
 
 							if (pageFilter) {
-								const rows = document.querySelectorAll('#assetsTable tr');
+								var query = '#assetsTable tr';
+								if(classFilter && classFilter.value != ''){
+									selectedClass = classFilter.value;
+									query +=  '[data-class=\"' + selectedClass + '\"]';
+								}
+								const rows = document.querySelectorAll(query);
 								const selectedCount = parseInt(pageFilter.value);
-								if(rows.length <= selectedCount * pageNo){
+								if(rows.length < selectedCount * pageNo){
 									this.disabled = true;
 								}
 
@@ -237,20 +288,15 @@ public sealed class ViewPage : DefaultPage
 				.WithCustomAttribute("disabled")
 				.Close("prev");
 
-		new Label(writer).WithId("pageNo").WithClass("ms-2").Close("1");// dropdown also
+		new Label(writer).WithId("pageNo").WithClass("ms-2").Close("1");
 
-		Button b = new Button(writer)
+		new Button(writer)
 				.WithId("nextBtn")
 				.WithType("button")
 				.WithClass("ms-2")
-				.WithCustomAttribute("v-else");
-
-		if (Collection.Count <= assetsPerPage[0])
-		{
-			b.WithCustomAttribute("disabled");
-		}
-
-		b.Close("next");
+				.WithCustomAttribute("v-else")
+				.WithCustomAttribute("disabled")
+				.Close("next");
 
 		new Label(writer).WithClass("ms-2").Close("Assets Per Page");
 
@@ -259,12 +305,12 @@ public sealed class ViewPage : DefaultPage
 			.WithClass("ms-2")
 			.End())
 		{
-			foreach (int count in assetsPerPage)
-			{
-				new Option(writer)
+			new Option(writer)
 					.WithValue(string.Empty)
 					.Close(Localization.All);
 
+			foreach (int count in assetsPerPage)
+			{
 				if (collectionCount >= count)
 				{
 
