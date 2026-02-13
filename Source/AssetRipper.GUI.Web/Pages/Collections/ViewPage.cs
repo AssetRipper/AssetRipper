@@ -54,7 +54,7 @@ public sealed class ViewPage : DefaultPage
 				}
 			}
 
-			CreatePageOption(writer, Collection.Count);
+			CreatePageOption(writer);
 				
 			using (new Table(writer).WithClass("table").End())
 			{
@@ -197,6 +197,12 @@ public sealed class ViewPage : DefaultPage
 									if(nextButton){
 										nextButton.disabled = true;
 									}
+
+									if(pageNo == 1){
+										if(prevButton){
+											prevButton.disabled = true;
+										}
+									}
 								}else if(rows.length >= selectedCount * pageNo){
 									if(nextButton){
 										nextButton.disabled = false;
@@ -269,7 +275,7 @@ public sealed class ViewPage : DefaultPage
 		}
 	}
 
-	private void CreatePageOption(TextWriter writer, int collectionCount)
+	private void CreatePageOption(TextWriter writer)
 	{
 		//Todo: add page UI, add localization:
 		/// page
@@ -311,13 +317,10 @@ public sealed class ViewPage : DefaultPage
 
 			foreach (int count in assetsPerPage)
 			{
-				if (collectionCount >= count)
-				{
-
-					new Option(writer)
-					.WithValue("" + count)
-					.Close("" + count);
-				}
+				new Option(writer)
+				.WithValue("" + count)
+				.Close("" + count);
+				
 			}
 		}
 	}
