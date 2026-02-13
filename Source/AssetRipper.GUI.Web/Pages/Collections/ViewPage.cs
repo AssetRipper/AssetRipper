@@ -11,6 +11,8 @@ public sealed class ViewPage : DefaultPage
 
 	public override string GetTitle() => Collection.Name;
 
+	private readonly List<int> assetsPerPage = new() {500, 1000, 2000, 3000, 5000};
+
 	public override void WriteInnerContent(TextWriter writer)
 	{
 		new H1(writer).Close(GetTitle());
@@ -50,7 +52,9 @@ public sealed class ViewPage : DefaultPage
 					}
 				}
 			}
-			
+
+			CreatePageOption(writer);
+				
 			using (new Table(writer).WithClass("table").End())
 			{
 				using (new Thead(writer).End())
@@ -131,7 +135,7 @@ public sealed class ViewPage : DefaultPage
 						classFilter.addEventListener('change', function() {
 							const selectedClass = this.value;
 							const rows = document.querySelectorAll('#assetsTable tr');
-							
+
 							rows.forEach(function(row) {
 								const rowClass = row.getAttribute('data-class');
 								if (selectedClass === '' || rowClass === selectedClass) {
@@ -140,10 +144,178 @@ public sealed class ViewPage : DefaultPage
 									row.style.display = 'none';
 								}
 							});
+
+							//const pageFilter = document.getElementById('assetPerPage');
+							if (pageFilter) {
+								var event = new Event('change');
+								pageFilter.dispatchEvent(event);
+							}
+						});
+					}
+
+					const pageFilter = document.getElementById('assetPerPage');
+					const prevButton = document.getElementById('prevBtn');
+					const nextButton = document.getElementById('nextBtn');
+					if (pageFilter) {
+						pageFilter.addEventListener('change', function() {
+							var selectedClass = "";
+							var query = '#assetsTable tr';
+							if(classFilter && classFilter.value != ''){
+								selectedClass = classFilter.value;
+								query +=  '[data-class=\"' + selectedClass + '\"]';
+							}
+
+							var pageNo = parseInt(document.getElementById('pageNo').innerHTML);
+							const rows = document.querySelectorAll(query);
+
+							const selected = this.value;
+							if(selected == ''){
+								console.log("Hi from");
+								for(var i = 0; i < rows.length; ++i){
+									rows[i].style.display = '';
+								}
+
+								if(prevButton){
+									prevButton.disabled = true;
+								}
+
+								if(nextButton){
+									nextButton.disabled = true;
+								}
+
+								document.getElementById('pageNo').innerHTML = '1';
+							}else {
+								const selectedCount = parseInt(this.value);
+
+								if(rows.length < selectedCount * pageNo){
+									pageNo = Math.ceil(rows.length / selectedCount);
+									document.getElementById('pageNo').innerHTML = '' + pageNo;
+
+									if(nextButton){
+										nextButton.disabled = true;
+									}
+
+									if(pageNo == 1){
+										if(prevButton){
+											prevButton.disabled = true;
+										}
+									}
+								}else if(rows.length >= selectedCount * pageNo){
+									if(nextButton){
+										nextButton.disabled = false;
+									}
+								}
+
+								const start = selectedCount * (pageNo - 1);
+								for(var i = 0; i < rows.length; ++i){
+									if(i >= start && i < selectedCount * pageNo){
+										rows[i].style.display = '';
+									}else {
+										rows[i].style.display = 'none';
+									}
+								}
+							}
+						});
+					}
+
+					
+					if(prevButton){
+						prevButton.addEventListener('click', function() {
+							var pageNo = parseInt(document.getElementById('pageNo').innerHTML);
+							--pageNo;
+							document.getElementById('pageNo').innerHTML = "" + pageNo;
+
+							if(pageNo == 1){
+								this.disabled = true;
+							}
+
+							if(nextButton){
+								nextButton.disabled = false;
+							}
+
+							if (pageFilter) {
+								var event = new Event('change');
+								pageFilter.dispatchEvent(event);
+							}
+						});
+					}
+
+					if(nextButton){
+						nextButton.addEventListener('click', function() {
+							var pageNo = parseInt(document.getElementById('pageNo').innerHTML);
+							++pageNo;
+							document.getElementById('pageNo').innerHTML = "" + pageNo;
+				
+							if(prevButton){
+								prevButton.disabled = false;
+							}
+
+							if (pageFilter) {
+								var query = '#assetsTable tr';
+								if(classFilter && classFilter.value != ''){
+									selectedClass = classFilter.value;
+									query +=  '[data-class=\"' + selectedClass + '\"]';
+								}
+								const rows = document.querySelectorAll(query);
+								const selectedCount = parseInt(pageFilter.value);
+								if(rows.length < selectedCount * pageNo){
+									this.disabled = true;
+								}
+
+								var event = new Event('change');
+								pageFilter.dispatchEvent(event);
+							}
 						});
 					}
 				});
 				""");
+		}
+	}
+
+	private void CreatePageOption(TextWriter writer)
+	{
+		//Todo: add page UI, add localization:
+		/// page
+		/// prev
+		/// next
+		/// Assets Per Page
+		new Label(writer).WithFor("pageCollection").WithClass("me-2").Close("Page");
+		new Button(writer)
+				.WithId("prevBtn")
+				.WithClass("ms-2")
+				.WithType("button")
+				.WithCustomAttribute("v-else")
+				.WithCustomAttribute("disabled")
+				.Close("prev");
+
+		new Label(writer).WithId("pageNo").WithClass("ms-2").Close("1");
+
+		new Button(writer)
+				.WithId("nextBtn")
+				.WithType("button")
+				.WithClass("ms-2")
+				.WithCustomAttribute("v-else")
+				.WithCustomAttribute("disabled")
+				.Close("next");
+
+		new Label(writer).WithClass("ms-2").Close("Assets Per Page");
+
+		using (new Select(writer)
+			.WithId("assetPerPage")
+			.WithClass("ms-2")
+			.End())
+		{
+			new Option(writer)
+					.WithValue(string.Empty)
+					.Close(Localization.All);
+
+			foreach (int count in assetsPerPage)
+			{
+				new Option(writer)
+				.WithValue("" + count)
+				.Close("" + count);
+				
+			}
 		}
 	}
 }
