@@ -12,7 +12,7 @@ public class CyclicalReferenceTests
 	public void CyclicalReferenceClassIsHandled_D1()
 	{
 		SerializableType serializableType = SerializableTypes.Create<SelfReferencingClass>();
-		Assert.That(serializableType.Fields, Has.Count.EqualTo(0)); // Infinite recursion disqualifies a field from serialization
+		Assert.That(serializableType.Fields, Has.Count.EqualTo(1));
 	}
 
 	[Serializable]
@@ -33,10 +33,10 @@ public class CyclicalReferenceTests
 		List<SerializableType> serializableType = SerializableTypes.CreateMultiple<CyclicalReferenceClass_C1_D2>();
 		using (Assert.EnterMultipleScope())
 		{
-			foreach (SerializableType type in serializableType)
-			{
-				Assert.That(type.Fields, Has.Count.EqualTo(0), $"{type.Name} should have no fields.");
-			}
+			SerializableType c1 = GetTypeByName(serializableType, nameof(CyclicalReferenceClass_C1_D2));
+			SerializableType c2 = GetTypeByName(serializableType, nameof(CyclicalReferenceClass_C2_D2));
+			Assert.That(c1.Fields, Has.Count.EqualTo(1));
+			Assert.That(c2.Fields, Has.Count.EqualTo(1));
 		}
 	}
 
@@ -64,10 +64,12 @@ public class CyclicalReferenceTests
 		List<SerializableType> serializableType = SerializableTypes.CreateMultiple<CyclicalReferenceClass_C1_D3>();
 		using (Assert.EnterMultipleScope())
 		{
-			foreach (SerializableType type in serializableType)
-			{
-				Assert.That(type.Fields, Has.Count.EqualTo(0), $"{type.Name} should have no fields.");
-			}
+			SerializableType c1 = GetTypeByName(serializableType, nameof(CyclicalReferenceClass_C1_D3));
+			SerializableType c2 = GetTypeByName(serializableType, nameof(CyclicalReferenceClass_C2_D3));
+			SerializableType c3 = GetTypeByName(serializableType, nameof(CyclicalReferenceClass_C3_D3));
+			Assert.That(c1.Fields, Has.Count.EqualTo(1));
+			Assert.That(c2.Fields, Has.Count.EqualTo(1));
+			Assert.That(c3.Fields, Has.Count.EqualTo(1));
 		}
 	}
 
@@ -101,10 +103,14 @@ public class CyclicalReferenceTests
 		List<SerializableType> serializableType = SerializableTypes.CreateMultiple<CyclicalReferenceClass_C1_D4>();
 		using (Assert.EnterMultipleScope())
 		{
-			foreach (SerializableType type in serializableType)
-			{
-				Assert.That(type.Fields, Has.Count.EqualTo(0), $"{type.Name} should have no fields.");
-			}
+			SerializableType c1 = GetTypeByName(serializableType, nameof(CyclicalReferenceClass_C1_D4));
+			SerializableType c2 = GetTypeByName(serializableType, nameof(CyclicalReferenceClass_C2_D4));
+			SerializableType c3 = GetTypeByName(serializableType, nameof(CyclicalReferenceClass_C3_D4));
+			SerializableType c4 = GetTypeByName(serializableType, nameof(CyclicalReferenceClass_C4_D4));
+			Assert.That(c1.Fields, Has.Count.EqualTo(1));
+			Assert.That(c2.Fields, Has.Count.EqualTo(1));
+			Assert.That(c3.Fields, Has.Count.EqualTo(1));
+			Assert.That(c4.Fields, Has.Count.EqualTo(1));
 		}
 	}
 
@@ -134,10 +140,12 @@ public class CyclicalReferenceTests
 		List<SerializableType> serializableType = SerializableTypes.CreateMultiple<CyclicalReferenceClass_C1_D3_V1>();
 		using (Assert.EnterMultipleScope())
 		{
-			foreach (SerializableType type in serializableType)
-			{
-				Assert.That(type.Fields, Has.Count.EqualTo(0), $"{type.Name} should have no fields.");
-			}
+			SerializableType c1 = GetTypeByName(serializableType, nameof(CyclicalReferenceClass_C1_D3_V1));
+			SerializableType c2 = GetTypeByName(serializableType, nameof(CyclicalReferenceClass_C2_D3_V1));
+			SerializableType c3 = GetTypeByName(serializableType, nameof(CyclicalReferenceClass_C3_D3_V1));
+			Assert.That(c1.Fields, Has.Count.EqualTo(1));
+			Assert.That(c2.Fields, Has.Count.EqualTo(2));
+			Assert.That(c3.Fields, Has.Count.EqualTo(1));
 		}
 	}
 
@@ -167,10 +175,12 @@ public class CyclicalReferenceTests
 		List<SerializableType> serializableType = SerializableTypes.CreateMultiple<CyclicalReferenceClass_C1_D3_V2>();
 		using (Assert.EnterMultipleScope())
 		{
-			foreach (SerializableType type in serializableType)
-			{
-				Assert.That(type.Fields, Has.Count.EqualTo(0), $"{type.Name} should have no fields.");
-			}
+			SerializableType c1 = GetTypeByName(serializableType, nameof(CyclicalReferenceClass_C1_D3_V2));
+			SerializableType c2 = GetTypeByName(serializableType, nameof(CyclicalReferenceClass_C2_D3_V2));
+			SerializableType c3 = GetTypeByName(serializableType, nameof(CyclicalReferenceClass_C3_D3_V2));
+			Assert.That(c1.Fields, Has.Count.EqualTo(1));
+			Assert.That(c2.Fields, Has.Count.EqualTo(2));
+			Assert.That(c3.Fields, Has.Count.EqualTo(1));
 		}
 	}
 
@@ -200,10 +210,12 @@ public class CyclicalReferenceTests
 		List<SerializableType> serializableType = SerializableTypes.CreateMultiple<CyclicalReferenceClass_C1_D3_V3>();
 		using (Assert.EnterMultipleScope())
 		{
-			foreach (SerializableType type in serializableType)
-			{
-				Assert.That(type.Fields, Has.Count.EqualTo(0), $"{type.Name} should have no fields.");
-			}
+			SerializableType c1 = GetTypeByName(serializableType, nameof(CyclicalReferenceClass_C1_D3_V3));
+			SerializableType c2 = GetTypeByName(serializableType, nameof(CyclicalReferenceClass_C2_D3_V3));
+			SerializableType c3 = GetTypeByName(serializableType, nameof(CyclicalReferenceClass_C3_D3_V3));
+			Assert.That(c1.Fields, Has.Count.EqualTo(1));
+			Assert.That(c2.Fields, Has.Count.EqualTo(2));
+			Assert.That(c3.Fields, Has.Count.EqualTo(1));
 		}
 	}
 
@@ -228,6 +240,19 @@ public class CyclicalReferenceTests
 		SerializableType serializableType1 = SerializableTypes.Create<DerivedClass1>();
 		Assert.That(serializableType1.Fields, Has.Count.EqualTo(2)); // No cycles, both fields are serialized
 		SerializableType serializableType2 = SerializableTypes.Create<DerivedClass2>();
-		Assert.That(serializableType2.Fields, Has.Count.EqualTo(1)); // One cycle, only field1 is serialized
+		Assert.That(serializableType2.Fields, Has.Count.EqualTo(2)); // One cycle, both fields are serialized
+	}
+
+	private static SerializableType GetTypeByName(IEnumerable<SerializableType> types, string typeName)
+	{
+		foreach (SerializableType type in types)
+		{
+			if (type.Name == typeName)
+			{
+				return type;
+			}
+		}
+		Assert.Fail($"Type {typeName} was not found.");
+		return default!;
 	}
 }
