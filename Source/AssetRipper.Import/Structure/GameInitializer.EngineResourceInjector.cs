@@ -48,6 +48,11 @@ internal sealed partial record class GameInitializer
 
 		public static void InjectEngineFilesIfNecessary(GameBundle gameBundle, UnityVersion targetVersion)
 		{
+			if (!gameBundle.HasAnyAssetCollections())
+			{
+				// If there are no asset collections, then the game bundle is empty and we should skip injecting engine resources.
+				return;
+			}
 			bool injectDefaultResources = gameBundle.ResolveCollection(SpecialFileNames.DefaultResourceName1) is null;
 			bool injectExtraResources = gameBundle.ResolveCollection(SpecialFileNames.BuiltinExtraName2) is null;
 			if (!injectDefaultResources && !injectExtraResources)

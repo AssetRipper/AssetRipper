@@ -139,7 +139,10 @@ public class ExportHandler
 	public GameData LoadAndProcess(IReadOnlyList<string> paths, FileSystem fileSystem)
 	{
 		GameData gameData = Load(paths, fileSystem);
-		Process(gameData);
+		if (gameData.GameBundle.HasAnyAssetCollections())
+		{
+			Process(gameData);
+		}
 		return gameData;
 	}
 
