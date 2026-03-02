@@ -44,6 +44,7 @@ public static class GameFileLoader
 		if (GameData is not null)
 		{
 			GameData = null;
+			GC.Collect();
 			Logger.Info(LogCategory.General, "Data was reset.");
 		}
 	}
