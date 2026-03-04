@@ -5,9 +5,9 @@ using System.Text;
 
 namespace AssetRipper.IO.Files.SerializedFiles.Parser.TypeTrees;
 
-public sealed class TypeTree : ISerializedReadable, ISerializedWritable
+public sealed class TypeTree
 {
-	public void Read(SerializedReader reader)
+	internal void Read(SerializedReader reader)
 	{
 		if (TypeTreeNode.IsFormat5(reader.Generation))
 		{
@@ -35,7 +35,7 @@ public sealed class TypeTree : ISerializedReadable, ISerializedWritable
 			}
 			if (stringBufferSize == 0)
 			{
-				StringBuffer = Array.Empty<byte>();
+				StringBuffer = [];
 			}
 			else
 			{
@@ -52,7 +52,7 @@ public sealed class TypeTree : ISerializedReadable, ISerializedWritable
 		}
 	}
 
-	public void Write(SerializedWriter writer)
+	internal void Write(SerializedWriter writer)
 	{
 		if (TypeTreeNode.IsFormat5(writer.Generation))
 		{

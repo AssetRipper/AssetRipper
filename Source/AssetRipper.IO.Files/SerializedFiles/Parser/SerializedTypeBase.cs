@@ -46,7 +46,7 @@ public abstract class SerializedTypeBase
 	public byte[] ScriptID { get; set; } = [];
 	public byte[] OldTypeHash { get; set; } = [];
 
-	public void Read(SerializedReader reader, bool hasTypeTree)
+	internal void Read(SerializedReader reader, bool hasTypeTree)
 	{
 		RawTypeID = reader.ReadInt32();
 		int typeIdLocal;
@@ -93,13 +93,13 @@ public abstract class SerializedTypeBase
 		}
 	}
 
-	protected abstract void ReadTypeDependencies(SerializedReader reader);
+	private protected abstract void ReadTypeDependencies(SerializedReader reader);
 
 	protected abstract bool IgnoreScriptTypeForHash(FormatVersion formatVersion, UnityVersion unityVersion);
 
-	protected abstract void WriteTypeDependencies(SerializedWriter writer);
+	private protected abstract void WriteTypeDependencies(SerializedWriter writer);
 
-	public void Write(SerializedWriter writer, bool hasTypeTree)
+	internal void Write(SerializedWriter writer, bool hasTypeTree)
 	{
 		writer.Write(RawTypeID);
 		if (HasIsStrippedType(writer.Generation))

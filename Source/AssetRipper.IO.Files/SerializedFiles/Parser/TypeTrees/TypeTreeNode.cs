@@ -3,7 +3,7 @@ using System.Text;
 
 namespace AssetRipper.IO.Files.SerializedFiles.Parser.TypeTrees;
 
-public class TypeTreeNode : ISerializedReadable, ISerializedWritable
+public class TypeTreeNode
 {
 	/// <summary>
 	/// 5.0.0a1 and greater<br/>
@@ -38,7 +38,7 @@ public class TypeTreeNode : ISerializedReadable, ISerializedWritable
 		MetaFlag = metaFlag;
 	}
 
-	public void Read(SerializedReader reader)
+	internal void Read(SerializedReader reader)
 	{
 		if (IsFormat5(reader.Generation))
 		{
@@ -67,7 +67,7 @@ public class TypeTreeNode : ISerializedReadable, ISerializedWritable
 		}
 	}
 
-	public void Write(SerializedWriter writer)
+	internal void Write(SerializedWriter writer)
 	{
 		if (IsFormat5(writer.Generation))
 		{

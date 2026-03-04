@@ -29,14 +29,14 @@ public sealed class SerializedTypeReference : SerializedTypeBase
 		return false;
 	}
 
-	protected override void ReadTypeDependencies(SerializedReader reader)
+	private protected override void ReadTypeDependencies(SerializedReader reader)
 	{
 		ClassName = reader.ReadStringZeroTerm();
 		Namespace = reader.ReadStringZeroTerm();
 		AsmName = reader.ReadStringZeroTerm();
 	}
 
-	protected override void WriteTypeDependencies(SerializedWriter writer)
+	private protected override void WriteTypeDependencies(SerializedWriter writer)
 	{
 		writer.WriteStringZeroTerm(ClassName);
 		writer.WriteStringZeroTerm(Namespace);

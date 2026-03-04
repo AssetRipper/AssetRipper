@@ -2,9 +2,9 @@
 
 namespace AssetRipper.IO.Files.SerializedFiles.Parser;
 
-public struct LocalSerializedObjectIdentifier : ISerializedReadable, ISerializedWritable
+public struct LocalSerializedObjectIdentifier
 {
-	public void Read(SerializedReader reader)
+	internal void Read(SerializedReader reader)
 	{
 		LocalSerializedFileIndex = reader.ReadInt32();
 		if (ObjectInfo.IsLongID(reader.Generation))
@@ -18,7 +18,7 @@ public struct LocalSerializedObjectIdentifier : ISerializedReadable, ISerialized
 		}
 	}
 
-	public readonly void Write(SerializedWriter writer)
+	internal readonly void Write(SerializedWriter writer)
 	{
 		writer.Write(LocalSerializedFileIndex);
 		if (ObjectInfo.IsLongID(writer.Generation))

@@ -103,10 +103,10 @@ public sealed class SerializedFileMetadata
 
 		if (HasScriptTypes(reader.Generation))
 		{
-			ScriptTypes = reader.ReadSerializedArray<LocalSerializedObjectIdentifier>();
+			ScriptTypes = reader.ReadLocalSerializedObjectIdentifierArray();
 		}
 
-		Externals = reader.ReadSerializedArray<FileIdentifier>();
+		Externals = reader.ReadFileIdentifierArray();
 
 		if (HasRefTypes(reader.Generation))
 		{
@@ -130,7 +130,7 @@ public sealed class SerializedFileMetadata
 		}
 	}
 
-	public void Write(SerializedWriter writer)
+	internal void Write(SerializedWriter writer)
 	{
 		if (HasEndian(writer.Generation))
 		{
@@ -160,9 +160,9 @@ public sealed class SerializedFileMetadata
 
 		if (HasScriptTypes(writer.Generation))
 		{
-			writer.WriteSerializedArray(ScriptTypes);
+			writer.WriteLocalSerializedObjectIdentifierArray(ScriptTypes);
 		}
-		writer.WriteSerializedArray(Externals);
+		writer.WriteFileIdentifierArray(Externals);
 		if (HasRefTypes(writer.Generation))
 		{
 			writer.WriteSerializedTypeArray(RefTypes, EnableTypeTree);

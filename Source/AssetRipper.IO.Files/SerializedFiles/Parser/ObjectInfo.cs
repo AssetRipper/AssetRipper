@@ -36,7 +36,7 @@ public struct ObjectInfo
 	/// </summary>
 	public static bool HasLargeFilesSupport(FormatVersion generation) => generation >= FormatVersion.LargeFilesSupport;
 
-	public void Read(SerializedReader reader, bool longFileID, ReadOnlySpan<SerializedType> types, long dataOffset)
+	internal void Read(SerializedReader reader, bool longFileID, ReadOnlySpan<SerializedType> types, long dataOffset)
 	{
 		if (IsLongID(reader.Generation))
 		{
@@ -125,7 +125,7 @@ public struct ObjectInfo
 		}
 	}
 
-	public readonly void Write(SerializedWriter writer, long byteStart)
+	internal readonly void Write(SerializedWriter writer, long byteStart)
 	{
 		if (IsLongID(writer.Generation))
 		{

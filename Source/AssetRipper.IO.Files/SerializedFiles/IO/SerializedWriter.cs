@@ -3,7 +3,7 @@ using AssetRipper.IO.Files.SerializedFiles.Parser;
 
 namespace AssetRipper.IO.Files.SerializedFiles.IO;
 
-public sealed class SerializedWriter : EndianWriter
+internal sealed class SerializedWriter : EndianWriter
 {
 	public SerializedWriter(Stream stream, EndianType endianess, FormatVersion generation, UnityVersion version) : base(stream, endianess)
 	{
@@ -11,16 +11,18 @@ public sealed class SerializedWriter : EndianWriter
 		Version = version;
 	}
 
-	public void WriteSerialized<T>(T value) where T : ISerializedWritable
+	public void WriteFileIdentifierArray(FileIdentifier[] array)
 	{
-		value.Write(this);
+		Write(array.Length);
+		for (int i = 0; i < array.Length; i++)
+		{
+			array[i].Write(this);
+		}
 	}
 
-	public void WriteSerializedArray<T>(T[] array) where T : ISerializedWritable
+	public void WriteLocalSerializedObjectIdentifierArray(LocalSerializedObjectIdentifier[] array)
 	{
-		FillInnerBuffer(array.Length);
-		Write(m_buffer, 0, sizeof(int));
-
+		Write(array.Length);
 		for (int i = 0; i < array.Length; i++)
 		{
 			array[i].Write(this);
@@ -29,8 +31,7 @@ public sealed class SerializedWriter : EndianWriter
 
 	public void WriteObjectInfoArray(ObjectInfo[] array)
 	{
-		FillInnerBuffer(array.Length);
-		Write(m_buffer, 0, sizeof(int));
+		Write(array.Length);
 
 		long byteStart = 0;
 		foreach (ObjectInfo objectInfo in array)
@@ -47,8 +48,7 @@ public sealed class SerializedWriter : EndianWriter
 
 	public void WriteSerializedTypeArray<T>(T[] array, bool hasTypeTree) where T : SerializedTypeBase
 	{
-		FillInnerBuffer(array.Length);
-		Write(m_buffer, 0, sizeof(int));
+		Write(array.Length);
 
 		for (int i = 0; i < array.Length; i++)
 		{

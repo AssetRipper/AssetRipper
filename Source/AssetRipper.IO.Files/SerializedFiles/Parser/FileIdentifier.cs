@@ -5,7 +5,7 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser;
 /// <summary>
 /// A serialized file may be linked with other serialized files to create shared dependencies.
 /// </summary>
-public struct FileIdentifier : ISerializedReadable, ISerializedWritable
+public struct FileIdentifier
 {
 	/// <summary>
 	/// 2.1.0 and greater
@@ -21,7 +21,7 @@ public struct FileIdentifier : ISerializedReadable, ISerializedWritable
 		return file is not null && file.NameFixed == PathName;
 	}
 
-	public void Read(SerializedReader reader)
+	internal void Read(SerializedReader reader)
 	{
 		if (HasAssetPath(reader.Generation))
 		{
@@ -36,7 +36,7 @@ public struct FileIdentifier : ISerializedReadable, ISerializedWritable
 		PathName = SpecialFileNames.FixFileIdentifier(PathNameOrigin);
 	}
 
-	public readonly void Write(SerializedWriter writer)
+	internal readonly void Write(SerializedWriter writer)
 	{
 		if (HasAssetPath(writer.Generation))
 		{

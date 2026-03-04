@@ -13,12 +13,12 @@ public sealed class SerializedType : SerializedTypeBase
 		return !unityVersion.Equals(0, 0, 0) && unityVersion < WriteIDHashForScriptTypeVersion;
 	}
 
-	protected override void ReadTypeDependencies(SerializedReader reader)
+	private protected override void ReadTypeDependencies(SerializedReader reader)
 	{
 		TypeDependencies = reader.ReadInt32Array();
 	}
 
-	protected override void WriteTypeDependencies(SerializedWriter writer)
+	private protected override void WriteTypeDependencies(SerializedWriter writer)
 	{
 		writer.WriteArray(TypeDependencies);
 	}
