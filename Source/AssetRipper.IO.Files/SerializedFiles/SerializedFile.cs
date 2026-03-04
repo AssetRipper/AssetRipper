@@ -218,7 +218,11 @@ public sealed class SerializedFile : FileBase
 				objectInfo.ByteSize = objectInfo.ObjectData?.Length ?? 0;
 
 				byteStart += objectInfo.ByteSize;
-				byteStart += 8 - (byteStart % 8); // each object data must be aligned to 8 bytes
+
+				// each object data must be aligned to 8 bytes
+				long remainder = byteStart & 0b111;
+				long padding = (8 - remainder) & 0b111;
+				byteStart += padding;
 			}
 
 			return newObjects;
