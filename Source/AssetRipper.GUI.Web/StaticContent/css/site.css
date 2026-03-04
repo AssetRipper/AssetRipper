@@ -1,18 +1,18 @@
 /* --- AssetRipper: Modern Blue-to-Violet Redesign --- */
-/* Layout: Original | Palette: Darker Blue & Electric Violet | Style: Pro UI */
+/* Palette: Gemini Blue (#1d7af0) to Electric Violet (#aa39ff) | Style: Pro Dark UI */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 :root {
-    /* Refined Palette */
-    --ar-blue: #1d7af0;          /* Darker Neon Blue */
+    /* Core Redesign Palette */
+    --ar-blue: #1d7af0;          /* Gemini/Neon Blue */
     --ar-violet: #aa39ff;        /* Electric Violet */
     --ar-gradient: linear-gradient(135deg, var(--ar-blue), var(--ar-violet));
     --ar-gradient-hover: linear-gradient(135deg, #2e89ff, #b854ff);
     
-    /* Surface Colors */
-    --ar-bg: #090a0f;            /* Deep Blue-Black Background */
-    --ar-surface: #12141d;       /* Card/Surface Background */
+    /* Backgrounds & Surfaces */
+    --ar-bg: #090a0f;            /* Deep Blue-Black */
+    --ar-surface: #12141d;       /* Card Surface */
     --ar-border: rgba(170, 57, 255, 0.15);
     --ar-glow-focus: rgba(170, 57, 255, 0.2);
 
@@ -50,15 +50,15 @@ main {
     flex: 1;
 }
 
-/* Fix Welcome Text Alignment - Now stacks correctly */
+/* Gemini-style Gradient Welcome Text */
 .display-4 {
     background: var(--ar-gradient);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     font-weight: 800;
-    display: block; /* Forces it to occupy its own line */
+    display: block;
     width: fit-content;
-    margin: 0 auto 1.5rem auto; /* Centers text and adds spacing below */
+    margin: 0 auto 1.5rem auto;
     text-shadow: 0 4px 15px rgba(29, 122, 240, 0.1);
 }
 
@@ -107,7 +107,7 @@ header {
     color: #ffffff !important;
 }
 
-/* --- Settings Cards --- */
+/* --- Settings Page Cards --- */
 .border.rounded.p-3.m-2 {
     background-color: var(--ar-surface);
     border: 1px solid var(--ar-border) !important;
@@ -118,7 +118,7 @@ header {
     box-shadow: 0 4px 20px rgba(0,0,0,0.2);
 }
 
-/* Accent line on the left of cards */
+/* Side-accent for cards */
 .border.rounded.p-3.m-2::before {
     content: "";
     position: absolute;
@@ -127,7 +127,7 @@ header {
     background: var(--ar-gradient);
 }
 
-/* --- Modern Toggle Switches (Replacing Checkboxes) --- */
+/* --- Modern Toggle Switches (Checkboxes) --- */
 .form-check-input {
     appearance: none;
     -webkit-appearance: none;
@@ -167,7 +167,7 @@ header {
     cursor: pointer;
 }
 
-/* --- Buttons --- */
+/* --- Standard Buttons --- */
 .btn {
     border-radius: 6px;
     font-weight: 500;
@@ -186,7 +186,6 @@ header {
     box-shadow: 0 4px 15px rgba(29, 122, 240, 0.3) !important;
 }
 
-/* Disabled "No Files Loaded" Button Fix */
 .btn-secondary:disabled {
     background-color: rgba(255, 255, 255, 0.03) !important;
     border: 1px solid rgba(255, 255, 255, 0.05) !important;
@@ -194,7 +193,7 @@ header {
     opacity: 1;
 }
 
-/* --- Forms & Description --- */
+/* --- Forms & Inputs --- */
 .form-control, .form-select {
     background-color: #1c1f2b !important;
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
@@ -230,7 +229,7 @@ header {
     background-color: rgba(29, 122, 240, 0.03);
 }
 
-/* --- Pre --- */
+/* --- Code/Text Blocks --- */
 pre {
     background-color: #050505 !important;
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -239,9 +238,31 @@ pre {
     padding: 1rem;
 }
 
-/* --- FOOTER (Original Layout Style) --- */
+/* --- Unique Settings Page Save Button --- */
+.settings-save-btn {
+    background: var(--ar-gradient) !important;
+    color: #ffffff !important;
+    border: none !important;
+    padding: 12px 45px !important;
+    font-size: 1.1rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(170, 57, 255, 0.3);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    margin: 1.5rem 0;
+}
+
+.settings-save-btn:hover, .settings-save-btn:focus {
+    background: var(--ar-gradient-hover) !important;
+    box-shadow: 0 8px 25px rgba(170, 57, 255, 0.5) !important;
+    transform: scale(1.03) translateY(-2px);
+}
+
+/* --- Footer & Credits --- */
 footer {
-    padding: 10px;
+    padding: 15px;
     margin-top: auto;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     background-color: transparent;
@@ -262,33 +283,10 @@ footer a:hover {
     text-decoration: underline;
 }
 
-/* --- Utilities --- */
+/* --- Global Utilities --- */
 .dropdown-description.disabled { display: none; }
 
 ::selection {
     background: var(--ar-blue);
     color: #fff;
-}
-
-/* --- Settings Page Unique Save Button --- */
-.settings-save-btn {
-    background: var(--ar-gradient) !important;
-    color: #ffffff !important;
-    border: none !important;
-    padding: 12px 40px !important;
-    font-size: 1.15rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(170, 57, 255, 0.25);
-    transition: all 0.3s ease;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-}
-
-.settings-save-btn:hover, .settings-save-btn:focus {
-    background: var(--ar-gradient-hover) !important;
-    box-shadow: 0 6px 20px rgba(170, 57, 255, 0.45) !important;
-    transform: translateY(-2px);
 }
