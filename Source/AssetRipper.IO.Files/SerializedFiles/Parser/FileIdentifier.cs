@@ -77,7 +77,7 @@ public struct FileIdentifier : ISerializedReadable, ISerializedWritable
 	/// Virtual asset path. Used for cached files, otherwise it's empty.
 	/// The file with that path usually doesn't exist, so it's probably an alias.
 	/// </summary>
-	public string AssetPath { get; set; }
+	public Utf8String AssetPath { get; set; }
 	/// <summary>
 	/// The type of the file
 	/// </summary>

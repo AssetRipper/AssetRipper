@@ -186,6 +186,6 @@ public sealed class SerializedFileMetadata
 	public ObjectInfo[] Object { get; set; } = [];
 	public LocalSerializedObjectIdentifier[] ScriptTypes { get; set; } = [];
 	public FileIdentifier[] Externals { get; set; } = [];
-	public string UserInformation { get; set; } = "";
+	public Utf8String UserInformation { get; set; } = Utf8String.Empty;
 	public SerializedTypeReference[] RefTypes { get; set; } = [];
 }

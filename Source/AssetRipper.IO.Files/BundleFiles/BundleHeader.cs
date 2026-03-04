@@ -15,15 +15,15 @@ public abstract record class BundleHeader : IEndianWritable
 	/// <summary>
 	/// Generation version
 	/// </summary>
-	public string? UnityWebBundleVersion { get; set; }
+	public Utf8String? UnityWebBundleVersion { get; set; }
 	/// <summary>
 	/// Actual engine version
 	/// </summary>
-	public string? UnityWebMinimumRevision { get; set; }
+	public Utf8String? UnityWebMinimumRevision { get; set; }
 
 	public virtual void Read(EndianReader reader)
 	{
-		string signature = reader.ReadStringZeroTerm();
+		Utf8String signature = reader.ReadStringZeroTerm();
 		Debug.Assert(signature == MagicString);
 		Version = (BundleVersion)reader.ReadInt32();
 		Debug.Assert(Version >= 0);
@@ -45,7 +45,7 @@ public abstract record class BundleHeader : IEndianWritable
 		if (reader.BaseStream.Length >= MaxLength)
 		{
 			long position = reader.BaseStream.Position;
-			bool isRead = reader.ReadStringZeroTerm(MaxLength, out string? signature);
+			bool isRead = reader.ReadStringZeroTerm(MaxLength, out Utf8String? signature);
 			reader.BaseStream.Position = position;
 			return isRead && signature == magicString;
 		}

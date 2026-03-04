@@ -28,7 +28,7 @@ public sealed class WebFile : FileContainer
 		List<WebFileEntry> entries = new();
 		using (EndianReader reader = new EndianReader(stream, EndianType.LittleEndian))
 		{
-			string signature = reader.ReadStringZeroTerm();
+			Utf8String signature = reader.ReadStringZeroTerm();
 			Debug.Assert(signature == Signature, $"Signature '{signature}' doesn't match to '{Signature}'");
 
 			int headerLength = reader.ReadInt32(); //total size of the header including the signature and all the entries.
@@ -104,7 +104,7 @@ public sealed class WebFile : FileContainer
 		if (reader.BaseStream.Length - reader.BaseStream.Position > Signature.Length)
 		{
 			long position = reader.BaseStream.Position;
-			bool isRead = reader.ReadStringZeroTerm(Signature.Length + 1, out string? signature);
+			bool isRead = reader.ReadStringZeroTerm(Signature.Length + 1, out Utf8String? signature);
 			reader.BaseStream.Position = position;
 			if (isRead)
 			{

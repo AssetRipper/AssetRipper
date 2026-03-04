@@ -10,15 +10,15 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser;
 /// </remarks>
 public sealed class SerializedTypeReference : SerializedTypeBase
 {
-	public string ClassName { get; set; } = "";
-	public string Namespace { get; set; } = "";
-	public string AsmName { get; set; } = "";
+	public Utf8String ClassName { get; set; } = Utf8String.Empty;
+	public Utf8String Namespace { get; set; } = Utf8String.Empty;
+	public Utf8String AsmName { get; set; } = Utf8String.Empty;
 
 	public string FullName
 	{
 		get
 		{
-			return string.IsNullOrEmpty(Namespace)
+			return Utf8String.IsNullOrEmpty(Namespace)
 				? ClassName
 				: $"{Namespace}.{ClassName}";
 		}
