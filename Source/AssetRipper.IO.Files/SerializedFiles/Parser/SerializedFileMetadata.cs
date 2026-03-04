@@ -150,7 +150,8 @@ public sealed class SerializedFileMetadata
 			writer.Write(EnableTypeTree);
 		}
 
-		writer.WriteSerializedTypeArray(Types, EnableTypeTree);
+		bool enableTypeTree = !HasEnableTypeTree(writer.Generation) || EnableTypeTree;
+		writer.WriteSerializedTypeArray(Types, enableTypeTree);
 		if (HasLongFileID(writer.Generation))
 		{
 			writer.Write(LongFileID);

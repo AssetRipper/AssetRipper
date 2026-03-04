@@ -1,5 +1,4 @@
 using AssetRipper.IO.Endian;
-using AssetRipper.IO.Files.Converters;
 using AssetRipper.IO.Files.SerializedFiles.IO;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
 using AssetRipper.IO.Files.Streams.Smart;
@@ -101,7 +100,13 @@ public sealed class SerializedFile : FileBase
 		SerializedFileMetadata metadata = new();
 		metadata.Read(stream, header);
 
-		SerializedFileMetadataConverter.CombineFormats(header.Version, metadata);
+		if (header.Version >= FormatVersion.RefactorTypeData)
+		{
+			for (int i = 0; i < metadata.Object.Length; i++)
+			{
+				metadata.Object[i].Initialize(metadata.Types);
+			}
+		}
 
 		for (int i = 0; i < metadata.Object.Length; i++)
 		{
