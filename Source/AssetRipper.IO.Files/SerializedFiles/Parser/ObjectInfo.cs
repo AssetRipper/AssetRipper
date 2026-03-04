@@ -240,4 +240,63 @@ public struct ObjectInfo
 	/// </summary>
 	[AllowNull]
 	public byte[] ObjectData { readonly get => field ?? []; set; }
+
+	public ObjectInfo()
+	{
+	}
+
+	public ObjectInfo(SerializedType type)
+	{
+		Type = type;
+		TypeID = type.TypeID;
+		if (type.TypeID >= short.MinValue && type.TypeID <= short.MaxValue)
+		{
+			ClassID = (short)type.TypeID;
+		}
+		ScriptTypeIndex = type.ScriptTypeIndex;
+		Stripped = type.IsStrippedType;
+	}
+
+	public override readonly bool Equals([NotNullWhen(true)] object? obj)
+	{
+		return obj is ObjectInfo other && Equals(other);
+	}
+
+	public readonly bool Equals(ObjectInfo other)
+	{
+		return FileID == other.FileID
+			&& TypeID == other.TypeID
+			&& SerializedTypeIndex == other.SerializedTypeIndex
+			&& ClassID == other.ClassID
+			&& IsDestroyed == other.IsDestroyed
+			&& ScriptTypeIndex == other.ScriptTypeIndex
+			&& Stripped == other.Stripped
+			&& EqualityComparer<SerializedType>.Default.Equals(Type, other.Type)
+			&& ObjectData.AsSpan().SequenceEqual(other.ObjectData);
+	}
+
+	public override readonly int GetHashCode()
+	{
+		HashCode hash = new();
+		hash.Add(FileID);
+		hash.Add(TypeID);
+		hash.Add(SerializedTypeIndex);
+		hash.Add(ClassID);
+		hash.Add(IsDestroyed);
+		hash.Add(ScriptTypeIndex);
+		hash.Add(Stripped);
+		hash.Add(Type);
+		hash.AddBytes(ObjectData);
+		return hash.ToHashCode();
+	}
+
+	public static bool operator ==(ObjectInfo left, ObjectInfo right)
+	{
+		return left.Equals(right);
+	}
+
+	public static bool operator !=(ObjectInfo left, ObjectInfo right)
+	{
+		return !(left == right);
+	}
 }

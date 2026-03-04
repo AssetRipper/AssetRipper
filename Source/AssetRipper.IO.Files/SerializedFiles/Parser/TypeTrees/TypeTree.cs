@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AssetRipper.IO.Files.SerializedFiles.Parser.TypeTrees;
 
-public sealed class TypeTree
+public sealed class TypeTree : IEquatable<TypeTree?>
 {
 	internal void Read(SerializedReader reader)
 	{
@@ -154,11 +154,11 @@ public sealed class TypeTree
 		}
 	}
 
-	public override string? ToString()
+	public override string ToString()
 	{
 		if (Nodes.Count == 0)
 		{
-			return base.ToString();
+			return nameof(TypeTree);
 		}
 
 		return Nodes[0].ToString();
@@ -185,4 +185,37 @@ public sealed class TypeTree
 
 	public List<TypeTreeNode> Nodes { get; } = [];
 	public byte[] StringBuffer { get; set; } = [];
+
+	public override bool Equals(object? obj)
+	{
+		return Equals(obj as TypeTree);
+	}
+
+	public bool Equals(TypeTree? other)
+	{
+		return other is not null
+			&& Nodes.SequenceEqual(other.Nodes)
+			&& StringBuffer.AsSpan().SequenceEqual(other.StringBuffer);
+	}
+
+	public override int GetHashCode()
+	{
+		HashCode hash = new();
+		foreach (TypeTreeNode node in Nodes)
+		{
+			hash.Add(node);
+		}
+		hash.AddBytes(StringBuffer);
+		return hash.ToHashCode();
+	}
+
+	public static bool operator ==(TypeTree? left, TypeTree? right)
+	{
+		return EqualityComparer<TypeTree>.Default.Equals(left, right);
+	}
+
+	public static bool operator !=(TypeTree? left, TypeTree? right)
+	{
+		return !(left == right);
+	}
 }

@@ -50,6 +50,10 @@ internal class SerializedFileTests
 			read = SerializedFileScheme.Default.Read(stream, original.FilePath, original.Name);
 		}
 
+		// Copy FilePath and Name from original to read for comparison since they are not written to the stream
+		read.FilePath = original.FilePath;
+		read.Name = original.Name;
+
 		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(read.Generation, Is.EqualTo(original.Generation));
@@ -59,7 +63,41 @@ internal class SerializedFileTests
 			Assert.That(read.Flags, Is.EqualTo(original.Flags));
 			Assert.That(read.Dependencies.ToArray(), Is.EqualTo(original.Dependencies.ToArray()));
 			Assert.That(read.Objects.ToArray(), Is.EqualTo(original.Objects.ToArray()));
+			Assert.That(read.ScriptTypes.ToArray(), Is.EqualTo(original.ScriptTypes.ToArray()));
+			Assert.That(read.Types.ToArray(), Is.EqualTo(original.Types.ToArray()));
+			Assert.That(read.RefTypes.ToArray(), Is.EqualTo(original.RefTypes.ToArray()));
+			Assert.That(read.UserInformation, Is.EqualTo(original.UserInformation));
 		}
+	}
+
+	[Test]
+	public void ConstructedSerializedFileCanBeWrittenAndReadCorrectly()
+	{
+		SerializedFileBuilder builder = new()
+		{
+			Generation = FormatVersion.LargeFilesSupport,
+			Version = new(6000, 1, 0),
+			Platform = BuildTarget.StandaloneWin64Player,
+			EndianType = EndianType.LittleEndian,
+			HasTypeTree = false,
+		};
+		SerializedType type = new()
+		{
+			TypeID = 1,
+			IsStrippedType = false,
+			ScriptTypeIndex = -1,
+		};
+		ObjectInfo obj = new(type)
+		{
+			FileID = 1,
+			SerializedTypeIndex = 0,
+			ObjectData = RandomData.MakeRandomData(100),
+		};
+		builder.Types.Add(type);
+		builder.Objects.Add(obj);
+
+		SerializedFile original = builder.Build();
+		AssertReadingAndWritingAreConsistent(original);
 	}
 
 	[Theory]
