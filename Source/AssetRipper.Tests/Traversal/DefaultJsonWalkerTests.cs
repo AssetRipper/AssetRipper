@@ -1,6 +1,7 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Export.PrimaryContent;
 using AssetRipper.SourceGenerated.Extensions;
+using System.Globalization;
 using System.Text.Json.Nodes;
 
 namespace AssetRipper.Tests.Traversal;
@@ -11,7 +12,9 @@ internal class DefaultJsonWalkerTests
 	public static void SerializedCustomObjectIsValidJson(Type type)
 	{
 		UnityObjectBase asset = AssetCreator.CreateUnsafe(type);
-		string json = new DefaultJsonWalker().SerializeStandard(asset);
+		StringWriter stringWriter = new(CultureInfo.InvariantCulture) { NewLine = "\n" };
+		asset.WalkStandard(new DefaultJsonWalker(stringWriter));
+		string json = stringWriter.ToString();
 		JsonNode? node = JsonNode.Parse(json);
 		Assert.That(node, Is.Not.Null);
 		Assert.That(node, Is.TypeOf<JsonObject>());

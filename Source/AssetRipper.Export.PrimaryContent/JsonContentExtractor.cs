@@ -15,9 +15,9 @@ public class JsonContentExtractor : IContentExtractor
 
 	public bool Export(IUnityObjectBase asset, string filePath, FileSystem fileSystem)
 	{
-		// Todo: make this use a stream instead of a string for better performance.
-		string json = new JsonWalker(asset.Collection).SerializeStandard(asset);
-		fileSystem.File.WriteAllText(filePath, json);
+		using Stream stream = fileSystem.File.Create(filePath);
+		using StreamWriter writer = new(stream);
+		asset.WalkStandard(new JsonWalker(asset.Collection, writer));
 		return true;
 	}
 
@@ -30,7 +30,7 @@ public class JsonContentExtractor : IContentExtractor
 		protected override string ExportExtension => "json";
 	}
 
-	private sealed class JsonWalker(AssetCollection collection) : DefaultJsonWalker
+	private sealed class JsonWalker(AssetCollection collection, TextWriter textWriter) : DefaultJsonWalker(textWriter)
 	{
 		public override void VisitPPtr<TAsset>(PPtr<TAsset> pptr)
 		{
