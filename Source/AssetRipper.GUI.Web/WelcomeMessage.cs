@@ -56,26 +56,22 @@ public static class WelcomeMessage
 			{
 				char c = line[i];
 
-				// If whitespace, skip coloring to save buffer size, just append
 				if (char.IsWhiteSpace(c))
 				{
 					sb.Append(c);
 					continue;
 				}
 
-				// Calculate interpolation factor (0.0 to 1.0) based on horizontal position
+				// Calculate interpolation factor based on horizontal position
 				double t = (double)i / maxLineLength;
 
-				// Linear interpolation for RGB
 				int r = (int)(startR + (endR - startR) * t);
 				int g = (int)(startG + (endG - startG) * t);
 				int b = (int)(startB + (endB - startB) * t);
 
-				// Append ANSI 24-bit color code
 				sb.Append($"\u001b[38;2;{r};{g};{b}m{c}");
 			}
 			
-			// Reset color at end of line and add newline
 			sb.Append("\u001b[0m");
 			sb.AppendLine();
 		}
