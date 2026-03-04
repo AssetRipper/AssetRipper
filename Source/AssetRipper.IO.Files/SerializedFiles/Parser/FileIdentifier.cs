@@ -17,7 +17,7 @@ public struct FileIdentifier : ISerializedReadable, ISerializedWritable
 	/// </summary>
 	public static bool HasHash(FormatVersion generation) => generation >= FormatVersion.Unknown_5;
 
-	public bool IsFile(SerializedFile? file)
+	public readonly bool IsFile([NotNullWhen(true)] SerializedFile? file)
 	{
 		return file is not null && file.NameFixed == PathName;
 	}

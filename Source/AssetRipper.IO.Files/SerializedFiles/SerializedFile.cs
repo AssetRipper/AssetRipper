@@ -144,11 +144,11 @@ public sealed class SerializedFile : FileBase
 		{
 			UnityVersion = Version,
 			TargetPlatform = Platform,
-			Externals = m_dependencies ?? Array.Empty<FileIdentifier>(),
+			Externals = m_dependencies ?? [],
 			Object = GetNewObjectInfoArray(m_objects),
-			Types = m_types ?? Array.Empty<SerializedType>(),
-			ScriptTypes = m_scriptTypes ?? Array.Empty<LocalSerializedObjectIdentifier>(),
-			RefTypes = m_refTypes ?? Array.Empty<SerializedTypeReference>(),
+			Types = m_types ?? [],
+			ScriptTypes = m_scriptTypes ?? [],
+			RefTypes = m_refTypes ?? [],
 			EnableTypeTree = HasTypeTree,
 		};
 		long metadataPosition;
@@ -199,7 +199,7 @@ public sealed class SerializedFile : FileBase
 		{
 			if (objects is null)
 			{
-				return Array.Empty<ObjectInfo>();
+				return [];
 			}
 
 			ObjectInfo[] newObjects = new ObjectInfo[objects.Length];

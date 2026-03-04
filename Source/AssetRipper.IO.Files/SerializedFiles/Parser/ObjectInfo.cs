@@ -28,6 +28,10 @@ public struct ObjectInfo : ISerializedReadable, ISerializedWritable
 	/// </summary>
 	public static bool HasStripped(FormatVersion generation) => generation >= FormatVersion.SupportsStrippedObject && generation < FormatVersion.RefactorTypeData;
 	/// <summary>
+	/// 5.5.0unk and greater / Format Version at least 17
+	/// </summary>
+	public static bool HasSerializedTypeIndex(FormatVersion generation) => generation >= FormatVersion.RefactorTypeData;
+	/// <summary>
 	/// 2020.1.0 and greater / Format Version at least 22
 	/// </summary>
 	public static bool HasLargeFilesSupport(FormatVersion generation) => generation >= FormatVersion.LargeFilesSupport;
@@ -54,7 +58,7 @@ public struct ObjectInfo : ISerializedReadable, ISerializedWritable
 		}
 
 		ByteSize = reader.ReadInt32();
-		if (reader.Generation >= FormatVersion.RefactorTypeData)
+		if (HasSerializedTypeIndex(reader.Generation))
 		{
 			SerializedTypeIndex = reader.ReadInt32();
 		}

@@ -43,8 +43,8 @@ public abstract class SerializedTypeBase
 	/// <summary>
 	/// Hash128
 	/// </summary>
-	public byte[] ScriptID { get; set; } = Array.Empty<byte>();
-	public byte[] OldTypeHash { get; set; } = Array.Empty<byte>();
+	public byte[] ScriptID { get; set; } = [];
+	public byte[] OldTypeHash { get; set; } = [];
 
 	public void Read(SerializedReader reader, bool hasTypeTree)
 	{
@@ -102,15 +102,15 @@ public abstract class SerializedTypeBase
 	public void Write(SerializedWriter writer, bool hasTypeTree)
 	{
 		writer.Write(RawTypeID);
-		if (writer.Generation >= FormatVersion.RefactoredClassId)
+		if (HasIsStrippedType(writer.Generation))
 		{
 			writer.Write(IsStrippedType);
 		}
-		if (writer.Generation >= FormatVersion.RefactorTypeData)
+		if (HasScriptTypeIndex(writer.Generation))
 		{
 			writer.Write(ScriptTypeIndex);
 		}
-		if (writer.Generation >= FormatVersion.HasTypeTreeHashes)
+		if (HasHash(writer.Generation))
 		{
 			bool writeScriptID = (RawTypeID == -1)
 				|| (RawTypeID == 114)
@@ -125,7 +125,7 @@ public abstract class SerializedTypeBase
 		if (hasTypeTree)
 		{
 			OldType.Write(writer);
-			if (writer.Generation >= FormatVersion.StoresTypeDependencies)
+			if (HasTypeDependencies(writer.Generation))
 			{
 				WriteTypeDependencies(writer);
 			}

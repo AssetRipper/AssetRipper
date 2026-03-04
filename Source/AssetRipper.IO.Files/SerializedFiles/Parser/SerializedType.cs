@@ -4,7 +4,7 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser;
 
 public sealed class SerializedType : SerializedTypeBase
 {
-	public int[] TypeDependencies { get; set; } = Array.Empty<int>();
+	public int[] TypeDependencies { get; set; } = [];
 
 	protected override bool IgnoreScriptTypeForHash(FormatVersion formatVersion, UnityVersion unityVersion)
 	{
@@ -23,5 +23,5 @@ public sealed class SerializedType : SerializedTypeBase
 		writer.WriteArray(TypeDependencies);
 	}
 
-	private static UnityVersion WriteIDHashForScriptTypeVersion { get; } = new UnityVersion(2018, 3, 0, UnityVersionType.Alpha, 1);
+	private static UnityVersion WriteIDHashForScriptTypeVersion => new UnityVersion(2018, 3, 0, UnityVersionType.Alpha, 1);
 }
