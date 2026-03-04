@@ -6,6 +6,7 @@ using AssetRipper.Processing.Textures;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Extensions;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AssetRipper.Export.UnityProjects.Textures;
 
@@ -14,15 +15,27 @@ public class TextureAssetExporter : BinaryAssetExporter
 	public ImageExportFormat ImageExportFormat { get; private set; }
 	private SpriteExportMode SpriteExportMode { get; set; }
 	private bool ExportSprites => SpriteExportMode is not SpriteExportMode.Yaml;
+	
+	// Added to check for Lightmap settings
+	private LightmapTextureExportFormat LightmapFormat { get; }
 
 	public TextureAssetExporter(FullConfiguration configuration)
 	{
 		ImageExportFormat = configuration.ExportSettings.ImageExportFormat;
 		SpriteExportMode = configuration.ExportSettings.SpriteExportMode;
+		LightmapFormat = configuration.ExportSettings.LightmapTextureExportFormat;
 	}
 
 	public override bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection)
 	{
+		// --- FIX FOR LIGHTMAPS ---
+		// If it is a Lightmap and we want YAML, return false to force fallback to YamlStreamedAssetExporter
+		if (LightmapFormat == LightmapTextureExportFormat.Yaml && asset.MainAsset is SourceGenerated.Classes.ClassID_1120.ILightingDataAsset)
+		{
+			exportCollection = null;
+			return false;
+		}
+
 		if (asset.MainAsset is SpriteInformationObject spriteInformationObject && (ExportSprites || asset is not ISprite))
 		{
 			exportCollection = new TextureExportCollection(this, spriteInformationObject, ExportSprites);
