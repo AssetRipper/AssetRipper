@@ -62,6 +62,7 @@ public sealed class SerializedFile : FileBase
 	public ReadOnlySpan<LocalSerializedObjectIdentifier> ScriptTypes => m_scriptTypes;
 	public ReadOnlySpan<SerializedTypeReference> RefTypes => m_refTypes;
 	public bool HasTypeTree { get; private set; }
+	public Utf8String UserInformation { get; private set; } = Utf8String.Empty;
 
 	private static EndianType GetEndianType(SerializedFileHeader header, SerializedFileMetadata metadata)
 	{
@@ -115,6 +116,7 @@ public sealed class SerializedFile : FileBase
 		m_scriptTypes = metadata.ScriptTypes;
 		m_refTypes = metadata.RefTypes;
 		HasTypeTree = metadata.EnableTypeTree;
+		UserInformation = metadata.UserInformation;
 	}
 
 	public override void Write(Stream stream)
@@ -138,6 +140,7 @@ public sealed class SerializedFile : FileBase
 			ScriptTypes = m_scriptTypes ?? [],
 			RefTypes = m_refTypes ?? [],
 			EnableTypeTree = HasTypeTree,
+			UserInformation = UserInformation,
 		};
 		long metadataPosition;
 		long metadataSize;
@@ -217,8 +220,10 @@ public sealed class SerializedFile : FileBase
 			m_dependencies = builder.Dependencies.ToArray(),
 			m_objects = builder.Objects.ToArray(),
 			m_types = builder.Types.ToArray(),
+			m_scriptTypes = builder.ScriptTypes.ToArray(),
 			m_refTypes = builder.RefTypes.ToArray(),
 			HasTypeTree = builder.HasTypeTree,
+			UserInformation = builder.UserInformation,
 		};
 	}
 }

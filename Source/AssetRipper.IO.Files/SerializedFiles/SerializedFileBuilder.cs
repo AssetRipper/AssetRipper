@@ -9,11 +9,13 @@ public sealed class SerializedFileBuilder
 	public UnityVersion Version { get; set; }
 	public BuildTarget Platform { get; set; }
 	public EndianType EndianType { get; set; }
-	public List<FileIdentifier> Dependencies { get; } = new();
-	public List<ObjectInfo> Objects { get; } = new();
-	public List<SerializedType> Types { get; } = new();
-	public List<SerializedTypeReference> RefTypes { get; } = new();
+	public List<FileIdentifier> Dependencies { get; } = [];
+	public List<LocalSerializedObjectIdentifier> ScriptTypes { get; } = [];
+	public List<ObjectInfo> Objects { get; } = [];
+	public List<SerializedType> Types { get; } = [];
+	public List<SerializedTypeReference> RefTypes { get; } = [];
 	public bool HasTypeTree { get; set; }
+	public Utf8String UserInformation { get; set; } = Utf8String.Empty;
 
 	public SerializedFile Build()
 	{
