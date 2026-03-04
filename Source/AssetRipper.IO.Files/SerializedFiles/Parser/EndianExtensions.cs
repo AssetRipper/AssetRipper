@@ -1,6 +1,6 @@
 ﻿using AssetRipper.IO.Endian;
 
-namespace AssetRipper.IO.Files.SerializedFiles.FileIdentifiers;
+namespace AssetRipper.IO.Files.SerializedFiles.Parser;
 
 internal static class EndianExtensions
 {

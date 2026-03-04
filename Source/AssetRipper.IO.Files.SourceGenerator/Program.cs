@@ -8,9 +8,8 @@ internal static class Program
 	public const string SourceDirectory = "../../../../";
 	public const string GeneratorProjectDirectory = SourceDirectory + "AssetRipper.IO.Files.SourceGenerator/";
 	public const string OutputDirectory = SourceDirectory + "AssetRipper.IO.Files/";
-	static void Main(string[] args)
+	static void Main()
 	{
-		SerializedFileClassGenerator.GenerateSerializedFileClasses();
 		WriteFileSystemClass();
 		WriteLocalFileSystemClass();
 		WriteVirtualFileSystemClass();

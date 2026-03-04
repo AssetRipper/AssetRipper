@@ -1,5 +1,4 @@
-﻿using AssetRipper.IO.Files.SerializedFiles.FileIdentifiers;
-using AssetRipper.IO.Files.SerializedFiles.IO;
+﻿using AssetRipper.IO.Files.SerializedFiles.IO;
 
 namespace AssetRipper.IO.Files.SerializedFiles.Parser;
 
