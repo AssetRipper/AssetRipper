@@ -18,7 +18,7 @@ public struct LocalSerializedObjectIdentifier : ISerializedReadable, ISerialized
 		}
 	}
 
-	public void Write(SerializedWriter writer)
+	public readonly void Write(SerializedWriter writer)
 	{
 		writer.Write(LocalSerializedFileIndex);
 		if (ObjectInfo.IsLongID(writer.Generation))
@@ -32,7 +32,7 @@ public struct LocalSerializedObjectIdentifier : ISerializedReadable, ISerialized
 		}
 	}
 
-	public override string ToString()
+	public override readonly string ToString()
 	{
 		return $"[{LocalSerializedFileIndex}, {LocalIdentifierInFile}]";
 	}

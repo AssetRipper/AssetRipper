@@ -33,7 +33,7 @@ public abstract class SerializedTypeBase
 	public int RawTypeID { get; set; }
 	public bool IsStrippedType { get; set; }
 	/// <summary>
-	/// For <see cref="ClassIDType.MonoBehaviour"/> specifies script type
+	/// For MonoBehaviour, this specifies script type
 	/// </summary>
 	public short ScriptTypeIndex { get; set; }
 	/// <summary>

@@ -49,7 +49,7 @@ public sealed class SerializedFileMetadata
 		bool swapEndianess = ReadSwapEndianess(stream, header);
 		EndianType endianess = swapEndianess ? EndianType.BigEndian : EndianType.LittleEndian;
 		using SerializedReader reader = new SerializedReader(stream, endianess, header.Version);
-		Read(reader);
+		Read(reader, header.DataOffset);
 	}
 
 	private bool ReadSwapEndianess(SmartStream stream, SerializedFileHeader header)
@@ -72,7 +72,7 @@ public sealed class SerializedFileMetadata
 		}
 	}
 
-	private void Read(SerializedReader reader)
+	private void Read(SerializedReader reader, long dataOffset)
 	{
 		if (HasSignature(reader.Generation))
 		{
@@ -99,8 +99,7 @@ public sealed class SerializedFileMetadata
 			LongFileID = reader.ReadUInt32();
 		}
 
-		//TODO: pass LongFileID to ObjectInfo
-		Object = reader.ReadSerializedArray<ObjectInfo>();
+		Object = reader.ReadObjectInfoArray(LongFileID != 0, Types, dataOffset);
 
 		if (HasScriptTypes(reader.Generation))
 		{
@@ -157,7 +156,8 @@ public sealed class SerializedFileMetadata
 			writer.Write(LongFileID);
 		}
 
-		writer.WriteSerializedArray(Object);
+		writer.WriteObjectInfoArray(Object);
+
 		if (HasScriptTypes(writer.Generation))
 		{
 			writer.WriteSerializedArray(ScriptTypes);

@@ -43,6 +43,19 @@ public sealed class SerializedReader : EndianReader
 		return array;
 	}
 
+	public ObjectInfo[] ReadObjectInfoArray(bool longFileID, ReadOnlySpan<SerializedType> types, long dataOffset)
+	{
+		int count = ReadInt32();
+		ObjectInfo[] array = new ObjectInfo[count];
+		for (int i = 0; i < count; i++)
+		{
+			ObjectInfo instance = new();
+			instance.Read(this, longFileID, types, dataOffset);
+			array[i] = instance;
+		}
+		return array;
+	}
+
 	public FormatVersion Generation { get; }
 
 	/// <summary>

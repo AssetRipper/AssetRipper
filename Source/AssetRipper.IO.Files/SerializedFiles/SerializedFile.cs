@@ -100,23 +100,6 @@ public sealed class SerializedFile : FileBase
 		SerializedFileMetadata metadata = new();
 		metadata.Read(stream, header);
 
-		if (header.Version >= FormatVersion.RefactorTypeData)
-		{
-			for (int i = 0; i < metadata.Object.Length; i++)
-			{
-				metadata.Object[i].Initialize(metadata.Types);
-			}
-		}
-
-		for (int i = 0; i < metadata.Object.Length; i++)
-		{
-			ref ObjectInfo objectInfo = ref metadata.Object[i];
-			stream.Position = header.DataOffset + objectInfo.ByteStart;
-			byte[] objectData = new byte[objectInfo.ByteSize];
-			stream.ReadExactly(objectData);
-			objectInfo.ObjectData = objectData;
-		}
-
 		SetProperties(header, metadata);
 	}
 
@@ -150,7 +133,7 @@ public sealed class SerializedFile : FileBase
 			UnityVersion = Version,
 			TargetPlatform = Platform,
 			Externals = m_dependencies ?? [],
-			Object = GetNewObjectInfoArray(m_objects),
+			Object = m_objects ?? [],
 			Types = m_types ?? [],
 			ScriptTypes = m_scriptTypes ?? [],
 			RefTypes = m_refTypes ?? [],
@@ -198,34 +181,6 @@ public sealed class SerializedFile : FileBase
 				}
 				AlignStream(writer, 8); // each object data must be aligned to 8 bytes
 			}
-		}
-
-		static ObjectInfo[] GetNewObjectInfoArray(ObjectInfo[]? objects)
-		{
-			if (objects is null)
-			{
-				return [];
-			}
-
-			ObjectInfo[] newObjects = new ObjectInfo[objects.Length];
-			Array.Copy(objects, newObjects, objects.Length);
-
-			long byteStart = 0;
-			for (int i = 0; i < newObjects.Length; i++)
-			{
-				ref ObjectInfo objectInfo = ref newObjects[i];
-				objectInfo.ByteStart = byteStart;
-				objectInfo.ByteSize = objectInfo.ObjectData?.Length ?? 0;
-
-				byteStart += objectInfo.ByteSize;
-
-				// each object data must be aligned to 8 bytes
-				long remainder = byteStart & 0b111;
-				long padding = (8 - remainder) & 0b111;
-				byteStart += padding;
-			}
-
-			return newObjects;
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
