@@ -1,10 +1,11 @@
-﻿using AssetRipper.Assets.Bundles;
+using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Import.Logging;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
 using AssetRipper.SourceGenerated.Extensions;
+using AssetRipper.Processing; // CRITICAL: This allows access to GameObjectNameCleaner
 
 namespace AssetRipper.Processing.PrefabOutlining;
 
