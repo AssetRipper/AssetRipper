@@ -1,4 +1,4 @@
-﻿using AssetRipper.Assets;
+using AssetRipper.Assets;
 using AssetRipper.Export.Configuration;
 using AssetRipper.Export.UnityProjects.AnimatorControllers;
 using AssetRipper.Export.UnityProjects.Audio;
@@ -56,7 +56,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_94;
 
 namespace AssetRipper.Export.UnityProjects;
 
-partial class ProjectExporter
+public sealed partial class ProjectExporter
 {
 	public ProjectExporter(FullConfiguration settings, IAssemblyManager assemblyManager)
 	{
@@ -128,7 +128,10 @@ partial class ProjectExporter
 		{
 			TextureArrayAssetExporter textureArrayExporter = new(settings);
 			OverrideExporter<ICubemapArray>(textureArrayExporter);
-			OverrideExporter<ITexture2DArray>(textureArrayExporter);
+			
+			// --- DISABLED TO FALLBACK TO YAML FOR TEXTURE2DARRAY ---
+			// OverrideExporter<ITexture2DArray>(textureArrayExporter);
+			
 			OverrideExporter<ITexture3D>(textureArrayExporter);
 		}
 

@@ -4,6 +4,9 @@ using AssetRipper.Export.UnityProjects.Scripts.AssemblyDefinitions;
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly;
 using AssetRipper.Import.Structure.Assembly.Managers;
+using AssetRipper.Import.Structure.Assembly.Serializable;
+using AssetRipper.Import.Structure.Assembly.TypeTrees;
+using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Classes.ClassID_1050;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using AssetRipper.SourceGenerated.Extensions;
@@ -36,18 +39,13 @@ public sealed class ScriptExportCollection : ScriptExportCollectionBase
 				}
 			}
 		}
+
+		BuildRecoveredTypeTreeLookup(firstScript);
 	}
 
 	private bool ShouldExport(IMonoScript script)
 	{
-		if (AssetExporter.GetExportType(script) is AssemblyExportType.Decompile)
-		{
-			return script.IsScriptPresents(AssetExporter.AssemblyManager);
-		}
-		else
-		{
-			return false;
-		}
+		return AssetExporter.GetExportType(script) is AssemblyExportType.Decompile;
 	}
 
 	public override bool Export(IExportContainer container, string projectDirectory, FileSystem fileSystem)
@@ -92,7 +90,14 @@ public sealed class ScriptExportCollection : ScriptExportCollectionBase
 			if (!fileSystem.File.Exists(filePath))
 			{
 				fileSystem.Directory.Create(folderPath);
-				fileSystem.File.WriteAllText(filePath, EmptyScript.GetContent(asset));
+				if (m_recoveredTypeTrees.TryGetValue(MonoScriptInfo.From(asset), out TypeTreeNodeStruct rootNode))
+				{
+					fileSystem.File.WriteAllText(filePath, TypeTreeScriptGenerator.Generate(asset, rootNode));
+				}
+				else
+				{
+					fileSystem.File.WriteAllText(filePath, EmptyScript.GetContent(asset));
+				}
 				string assemblyName = asset.GetAssemblyNameFixed();
 				if (!assemblyDefinitionDetailsDictionary.ContainsKey(assemblyName))
 				{
@@ -152,6 +157,25 @@ public sealed class ScriptExportCollection : ScriptExportCollectionBase
 
 	public override string Name => nameof(ScriptExportCollection);
 
+	private void BuildRecoveredTypeTreeLookup(IMonoScript scriptRoot)
+	{
+		foreach (IMonoBehaviour monoBehaviour in scriptRoot.Collection.Bundle.FetchAssetsInHierarchy().OfType<IMonoBehaviour>())
+		{
+			IMonoScript? script = monoBehaviour.ScriptP;
+			if (script is null || monoBehaviour.LoadStructure() is not SerializableStructure structure)
+			{
+				continue;
+			}
+
+			MonoScriptInfo key = MonoScriptInfo.From(script);
+			if (!m_recoveredTypeTrees.ContainsKey(key))
+			{
+				m_recoveredTypeTrees.Add(key, TypeTreeNodeStruct.FromSerializableType(structure.Type));
+			}
+		}
+	}
+
 	private readonly List<IMonoScript> m_export = new();
 	private readonly Dictionary<IUnityObjectBase, IMonoScript> m_scripts = new();
+	private readonly Dictionary<MonoScriptInfo, TypeTreeNodeStruct> m_recoveredTypeTrees = new();
 }

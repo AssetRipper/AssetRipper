@@ -76,6 +76,7 @@
   <Project Path="Source/AssetRipper.DocExtraction/AssetRipper.DocExtraction.csproj" />
   <Project Path="Source/AssetRipper.Export.Modules.Audio/AssetRipper.Export.Modules.Audio.csproj" />
   <Project Path="Source/AssetRipper.Export.Modules.Models/AssetRipper.Export.Modules.Models.csproj" />
+  <Project Path="Source/AssetRipper.Export.Modules.Shaders/AssetRipper.Export.Modules.Shaders.csproj" /> <!-- Added Project -->
   <Project Path="Source/AssetRipper.Export.Modules.Textures/AssetRipper.Export.Modules.Textures.csproj" />
   <Project Path="Source/AssetRipper.Export.PrimaryContent/AssetRipper.Export.PrimaryContent.csproj" />
   <Project Path="Source/AssetRipper.Export.UnityProjects/AssetRipper.Export.UnityProjects.csproj" />

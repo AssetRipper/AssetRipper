@@ -1,4 +1,4 @@
-﻿using AssetRipper.Assets;
+using AssetRipper.Assets;
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Logging;
@@ -91,8 +91,28 @@ public sealed partial class ProjectExporter
 			{
 				currentExportable++;
 				Logger.Info(LogCategory.ExportProgress, $"({currentExportable}/{exportableCount}) Exporting '{collection.Name}'");
-				bool exportedSuccessfully = collection.Export(container, options.ProjectRootPath, fileSystem);
-				if (!exportedSuccessfully)
+				bool exportedSuccessfully;
+				bool failureAlreadyLogged = false;
+				try
+				{
+					exportedSuccessfully = collection.Export(container, options.ProjectRootPath, fileSystem);
+				}
+				catch (UnauthorizedAccessException ex)
+				{
+					exportedSuccessfully = false;
+					failureAlreadyLogged = true;
+					Logger.Warning(LogCategory.ExportProgress, $"Failed to export '{collection.Name}' ({collection.GetType().Name}) due filesystem access denial.");
+					Logger.Warning(LogCategory.ExportProgress, ex.Message);
+					Logger.Verbose(LogCategory.ExportProgress, ex.ToString());
+				}
+				catch (Exception ex)
+				{
+					exportedSuccessfully = false;
+					failureAlreadyLogged = true;
+					Logger.Warning(LogCategory.ExportProgress, $"Failed to export '{collection.Name}' ({collection.GetType().Name}) due exception: {ex.GetType().Name}: {ex.Message}");
+					Logger.Verbose(LogCategory.ExportProgress, ex.ToString());
+				}
+				if (!exportedSuccessfully && !failureAlreadyLogged)
 				{
 					Logger.Warning(LogCategory.ExportProgress, $"Failed to export '{collection.Name}' ({collection.GetType().Name})");
 				}

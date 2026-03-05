@@ -1,6 +1,8 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Assets.Traversal;
+using AssetRipper.Import.Structure.Assembly.Serializable;
+using AssetRipper.SerializationLogic;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Extensions;
@@ -10,6 +12,7 @@ using AssetRipper.SourceGenerated.Subclasses.PropertyName;
 using AssetRipper.Yaml;
 using AssetRipper.Yaml.Extensions;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace AssetRipper.Export.UnityProjects;
@@ -116,7 +119,7 @@ public class YamlWalker : AssetWalker
 		}
 		else
 		{
-			bool result = EnterMap(asset.FlowMappedInYaml);
+			bool result = EnterMap(asset.FlowMappedInYaml || IsManagedReferenceObject(asset));
 			Debug.Assert(result);
 			Debug.Assert(CurrentMappingNode is { Children.Count: 0 });
 			Debug.Assert(CurrentSequenceNode is null);
@@ -132,6 +135,10 @@ public class YamlWalker : AssetWalker
 
 	public override void ExitAsset(IUnityAssetBase asset)
 	{
+		if (asset is SerializableStructure structure && structure.ManagedReferences.Count > 0)
+		{
+			AppendManagedReferences(structure);
+		}
 		ExitMap();
 	}
 
@@ -141,6 +148,10 @@ public class YamlWalker : AssetWalker
 		Debug.Assert(CurrentSequenceNode is null);
 		Debug.Assert(CurrentFieldName is null);
 		if (ExportingAssetImporter && (FieldsToSkipInImporters.Contains(name) || asset.IgnoreFieldInMetaFiles(name)))
+		{
+			return false;
+		}
+		if (asset is SerializableStructure structure && structure.IsManagedReferencesField(name))
 		{
 			return false;
 		}
@@ -526,6 +537,45 @@ public class YamlWalker : AssetWalker
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 	private static bool IsValidDictionaryKey<T>() => IsString<T>() || typeof(T).IsPrimitive || typeof(T) == typeof(GUID);
+
+	private static bool IsManagedReferenceObject(IUnityAssetBase asset)
+	{
+		if (asset is not SerializableStructure structure || structure.Type.Fields.Count != 1)
+		{
+			return false;
+		}
+
+		SerializableType.Field field = structure.Type.Fields[0];
+		return field.Name == "rid"
+			&& field.ArrayDepth == 0
+			&& (field.Type.Type == PrimitiveType.Long || field.Type.Type == PrimitiveType.ULong);
+	}
+
+	private void AppendManagedReferences(SerializableStructure structure)
+	{
+		Debug.Assert(CurrentMappingNode is not null);
+		YamlSequenceNode referencesNode = new(SequenceStyle.Block);
+
+		foreach ((long rid, IUnityAssetBase managedReferenceAsset) in structure.ManagedReferences.OrderBy(pair => pair.Key))
+		{
+			YamlMappingNode entry = new();
+			entry.Add("rid", rid);
+
+			SerializableStructure.ManagedReferenceTypeInfo typeInfo = structure.ManagedReferenceTypes.GetValueOrDefault(rid);
+			YamlMappingNode typeNode = new(MappingStyle.Flow);
+			typeNode.Add("class", typeInfo.ClassName ?? "");
+			typeNode.Add("ns", typeInfo.Namespace ?? "");
+			typeNode.Add("asm", typeInfo.Assembly ?? "");
+			entry.Add("type", typeNode);
+
+			ContextStack.Push(new(entry, "data"));
+			managedReferenceAsset.WalkEditor(this);
+
+			referencesNode.Add(entry);
+		}
+
+		CurrentMappingNode.Add("references", referencesNode);
+	}
 
 	private static class HashHelper
 	{

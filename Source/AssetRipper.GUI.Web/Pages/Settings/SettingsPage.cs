@@ -1,4 +1,4 @@
-﻿using AssetRipper.Export.Configuration;
+using AssetRipper.Export.Configuration;
 using AssetRipper.GUI.Web.Pages.Settings.DropDown;
 using AssetRipper.GUI.Web.Paths;
 using AssetRipper.Primitives;
@@ -44,7 +44,7 @@ public sealed partial class SettingsPage : DefaultPage
 								}
 								using (new Div(writer).WithClass("col").End())
 								{
-									WriteCheckBoxForEnableStaticMeshSeparation(writer, Localization.EnableStaticMeshSeparation, !GameFileLoader.Premium);
+									WriteCheckBoxForEnableStaticMeshSeparation(writer, Localization.EnableStaticMeshSeparation);
 								}
 							}
 
@@ -95,7 +95,7 @@ public sealed partial class SettingsPage : DefaultPage
 								}
 								using (new Div(writer).WithClass("col").End())
 								{
-									WriteCheckBoxForEnableAssetDeduplication(writer, Localization.EnableAssetDeduplication, !GameFileLoader.Premium);
+									WriteCheckBoxForEnableAssetDeduplication(writer, Localization.EnableAssetDeduplication);
 								}
 							}
 
@@ -182,7 +182,7 @@ public sealed partial class SettingsPage : DefaultPage
 
 					using (new Div(writer).WithClass("text-center").End())
 					{
-						new Input(writer).WithType("submit").WithValue(Localization.Save).Close();
+						new Input(writer).WithType("submit").WithClass("btn settings-save-btn").WithValue(Localization.Save).Close();
 					}
 				}
 			}

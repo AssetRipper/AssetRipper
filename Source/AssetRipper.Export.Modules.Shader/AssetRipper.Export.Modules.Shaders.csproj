@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputPath>..\0Bins\Other\AssetRipper.Export.Modules.Shaders\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.Export.Modules.Shaders\$(Configuration)\</IntermediateOutputPath>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\AssetRipper.Import\AssetRipper.Import.csproj" />
+		<ProjectReference Include="..\Smolv\Smolv.csproj" />
+		<ProjectReference Include="..\SpirV\SpirV.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="DXDecompiler-ly" Version="0.0.1" />
+	</ItemGroup>
+
+</Project>

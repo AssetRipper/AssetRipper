@@ -1,21 +1,417 @@
-﻿using AssetRipper.Export.Configuration;
+using AsmResolver.DotNet;
+using AssetRipper.Export.Configuration;
 using AssetRipper.Processing;
+using AssetRipper.SourceGenerated.Classes.ClassID_49;
+using System.IO;
+using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace AssetRipper.Export.UnityProjects.Project;
 
-public class PackageManifestPostExporter : IPostExporter
+public partial class PackageManifestPostExporter : IPostExporter
 {
 	public void DoPostExport(GameData gameData, FullConfiguration settings, FileSystem fileSystem)
 	{
 		string packagesDirectory = fileSystem.Path.Join(settings.ProjectRootPath, "Packages");
 		fileSystem.Directory.Create(packagesDirectory);
+
+		PackageManifest manifest = CreateManifest(settings.Version);
+		Dictionary<string, DetectedPackage> discoveredPackages = ScanDependencies(gameData, settings, fileSystem);
+		InjectDiscoveredDependencies(manifest, settings.Version, discoveredPackages);
+
 		string path = fileSystem.Path.Join(packagesDirectory, "manifest.json");
 		using Stream stream = fileSystem.File.Create(path);
-		CreateManifest(settings.Version).Save(stream);
+		manifest.Save(stream);
 	}
 
 	protected virtual PackageManifest CreateManifest(UnityVersion version)
 	{
 		return PackageManifest.CreateDefault(version);
+	}
+
+	protected virtual Dictionary<string, DetectedPackage> ScanDependencies(GameData gameData, FullConfiguration settings, FileSystem fileSystem)
+	{
+		Dictionary<string, DetectedPackage> dependencies = new(StringComparer.Ordinal);
+
+		ReadEmbeddedManifestDependencies(gameData, dependencies);
+		ReadEmbeddedPackageLockDependencies(gameData, dependencies);
+		ScanExportedAssets(settings.AssetsPath, fileSystem, dependencies);
+		ScanAssemblyNames(gameData, dependencies);
+
+		return dependencies;
+	}
+
+	protected virtual void InjectDiscoveredDependencies(PackageManifest manifest, UnityVersion version, Dictionary<string, DetectedPackage> discoveredPackages)
+	{
+		foreach ((string packageName, DetectedPackage detection) in discoveredPackages)
+		{
+			string? explicitVersion = detection.Version;
+			if (!string.IsNullOrWhiteSpace(explicitVersion))
+			{
+				manifest.Dependencies[packageName] = explicitVersion;
+			}
+			else
+			{
+				manifest.Dependencies[packageName] = ResolveVersion(packageName, version);
+			}
+		}
+	}
+
+	private static void ReadEmbeddedManifestDependencies(GameData gameData, Dictionary<string, DetectedPackage> dependencies)
+	{
+		foreach (ITextAsset textAsset in gameData.GameBundle.FetchAssets().OfType<ITextAsset>())
+		{
+			if (textAsset.OriginalPath is null)
+			{
+				continue;
+			}
+
+			if (!textAsset.OriginalPath.EndsWith("Packages/manifest.json", StringComparison.OrdinalIgnoreCase)
+				&& !textAsset.OriginalPath.EndsWith("Packages\\manifest.json", StringComparison.OrdinalIgnoreCase))
+			{
+				continue;
+			}
+
+			string jsonText = textAsset.Script_C49.String;
+			if (string.IsNullOrWhiteSpace(jsonText))
+			{
+				continue;
+			}
+
+			try
+			{
+				using JsonDocument document = JsonDocument.Parse(jsonText);
+				if (document.RootElement.TryGetProperty("dependencies", out JsonElement dependenciesElement)
+					&& dependenciesElement.ValueKind == JsonValueKind.Object)
+				{
+					foreach (JsonProperty property in dependenciesElement.EnumerateObject())
+					{
+						if (property.Value.ValueKind == JsonValueKind.String)
+						{
+							AddDependency(dependencies, property.Name, property.Value.GetString(), PackageVersionSource.Manifest);
+						}
+					}
+				}
+			}
+			catch
+			{
+				// Ignore malformed embedded manifests and continue with heuristics.
+			}
+		}
+	}
+
+	private static void ReadEmbeddedPackageLockDependencies(GameData gameData, Dictionary<string, DetectedPackage> dependencies)
+	{
+		foreach (ITextAsset textAsset in gameData.GameBundle.FetchAssets().OfType<ITextAsset>())
+		{
+			if (textAsset.OriginalPath is null)
+			{
+				continue;
+			}
+
+			if (!textAsset.OriginalPath.EndsWith("Packages/packages-lock.json", StringComparison.OrdinalIgnoreCase)
+				&& !textAsset.OriginalPath.EndsWith("Packages\\packages-lock.json", StringComparison.OrdinalIgnoreCase))
+			{
+				continue;
+			}
+
+			string jsonText = textAsset.Script_C49.String;
+			if (string.IsNullOrWhiteSpace(jsonText))
+			{
+				continue;
+			}
+
+			try
+			{
+				using JsonDocument document = JsonDocument.Parse(jsonText);
+				if (document.RootElement.TryGetProperty("dependencies", out JsonElement dependenciesElement)
+					&& dependenciesElement.ValueKind == JsonValueKind.Object)
+				{
+					foreach (JsonProperty property in dependenciesElement.EnumerateObject())
+					{
+						if (property.Value.ValueKind == JsonValueKind.Object
+							&& property.Value.TryGetProperty("version", out JsonElement versionElement)
+							&& versionElement.ValueKind == JsonValueKind.String)
+						{
+							AddDependency(dependencies, property.Name, versionElement.GetString(), PackageVersionSource.PackageLock);
+						}
+					}
+				}
+			}
+			catch
+			{
+				// Ignore malformed lock files and continue with heuristics.
+			}
+		}
+	}
+
+	private static void ScanExportedAssets(string assetsPath, FileSystem fileSystem, Dictionary<string, DetectedPackage> dependencies)
+	{
+		if (!fileSystem.Directory.Exists(assetsPath))
+		{
+			return;
+		}
+
+		foreach (string extension in ScannableAssetExtensions)
+		{
+			foreach (string filePath in fileSystem.Directory.EnumerateFiles(assetsPath, extension, SearchOption.AllDirectories))
+			{
+				string text = TryReadAllText(fileSystem, filePath);
+				if (text.Length == 0)
+				{
+					continue;
+				}
+
+				AddPackageHintsFromText(text, dependencies);
+				AddExplicitPackagesFromText(text, dependencies);
+			}
+		}
+	}
+
+	private static void ScanAssemblyNames(GameData gameData, Dictionary<string, DetectedPackage> dependencies)
+	{
+		foreach (var assembly in gameData.AssemblyManager.GetAssemblies())
+		{
+			string assemblyName = assembly.Name ?? string.Empty;
+			if (assemblyName.Length == 0)
+			{
+				continue;
+			}
+			string? assemblyVersion = TryGetAssemblyVersion(assembly);
+
+			if (assemblyName.StartsWith("UnityEngine.UI", StringComparison.Ordinal)
+				|| assemblyName.StartsWith("Unity.UI", StringComparison.Ordinal))
+			{
+				AddDependency(dependencies, "com.unity.ugui", assemblyVersion, PackageVersionSource.Assembly);
+			}
+			if (assemblyName.StartsWith("Unity.TextMeshPro", StringComparison.Ordinal)
+				|| assemblyName.StartsWith("UnityEngine.TextCoreTextEngine", StringComparison.Ordinal))
+			{
+				AddDependency(dependencies, "com.unity.textmeshpro", assemblyVersion, PackageVersionSource.Assembly);
+			}
+			if (assemblyName.StartsWith("Unity.Entities", StringComparison.Ordinal))
+			{
+				AddDependency(dependencies, "com.unity.entities", assemblyVersion, PackageVersionSource.Assembly);
+			}
+			if (assemblyName.StartsWith("Unity.RenderPipelines.Universal", StringComparison.Ordinal)
+				|| assemblyName.StartsWith("UnityEngine.Rendering.Universal", StringComparison.Ordinal))
+			{
+				AddDependency(dependencies, "com.unity.render-pipelines.universal", assemblyVersion, PackageVersionSource.Assembly);
+			}
+			if (assemblyName.StartsWith("Unity.RenderPipelines.HighDefinition", StringComparison.Ordinal)
+				|| assemblyName.StartsWith("UnityEngine.Rendering.HighDefinition", StringComparison.Ordinal))
+			{
+				AddDependency(dependencies, "com.unity.render-pipelines.high-definition", assemblyVersion, PackageVersionSource.Assembly);
+			}
+			if (assemblyName.StartsWith("Unity.RenderPipelines.Core", StringComparison.Ordinal))
+			{
+				AddDependency(dependencies, "com.unity.render-pipelines.core", assemblyVersion, PackageVersionSource.Assembly);
+			}
+			if (assemblyName.StartsWith("Unity.InputSystem", StringComparison.Ordinal)
+				|| assemblyName.StartsWith("UnityEngine.InputSystem", StringComparison.Ordinal))
+			{
+				AddDependency(dependencies, "com.unity.inputsystem", assemblyVersion, PackageVersionSource.Assembly);
+			}
+			if (assemblyName.StartsWith("Unity.XR.Management", StringComparison.Ordinal))
+			{
+				AddDependency(dependencies, "com.unity.xr.management", assemblyVersion, PackageVersionSource.Assembly);
+			}
+			if (assemblyName.StartsWith("Unity.XR.Oculus", StringComparison.Ordinal))
+			{
+				AddDependency(dependencies, "com.unity.xr.oculus", assemblyVersion, PackageVersionSource.Assembly);
+			}
+			if (assemblyName.StartsWith("Unity.Netcode", StringComparison.Ordinal))
+			{
+				AddDependency(dependencies, "com.unity.netcode.gameobjects", assemblyVersion, PackageVersionSource.Assembly);
+			}
+		}
+	}
+
+	private static void AddPackageHintsFromText(string text, Dictionary<string, DetectedPackage> dependencies)
+	{
+		foreach ((string token, string package) in PackageTokenHints)
+		{
+			if (text.Contains(token, StringComparison.Ordinal))
+			{
+				AddDependency(dependencies, package, null, PackageVersionSource.Hint);
+			}
+		}
+	}
+
+	private static void AddExplicitPackagesFromText(string text, Dictionary<string, DetectedPackage> dependencies)
+	{
+		foreach (Match match in PackageWithVersionRegex().Matches(text))
+		{
+			string packageName = match.Groups[1].Value;
+			string version = match.Groups[2].Value;
+			if (packageName.StartsWith("com.unity.", StringComparison.Ordinal) && !string.IsNullOrWhiteSpace(version))
+			{
+				AddDependency(dependencies, packageName, version, PackageVersionSource.ExplicitText);
+			}
+		}
+
+		foreach (Match match in PackageNameRegex().Matches(text))
+		{
+			string packageName = match.Value;
+			if (packageName.StartsWith("com.unity.", StringComparison.Ordinal))
+			{
+				AddDependency(dependencies, packageName, null, PackageVersionSource.Hint);
+			}
+		}
+	}
+
+	private static void AddDependency(Dictionary<string, DetectedPackage> dependencies, string packageName, string? version, PackageVersionSource source)
+	{
+		string normalizedPackageName = NormalizePackageName(packageName);
+		if (!normalizedPackageName.StartsWith("com.unity.", StringComparison.Ordinal))
+		{
+			return;
+		}
+
+		string? normalizedVersion = NormalizeVersion(version);
+		DetectedPackage candidate = new(normalizedVersion, source);
+
+		if (!dependencies.TryGetValue(normalizedPackageName, out DetectedPackage existing))
+		{
+			dependencies.Add(normalizedPackageName, candidate);
+			return;
+		}
+
+		dependencies[normalizedPackageName] = ChooseBetter(existing, candidate);
+	}
+
+	private static DetectedPackage ChooseBetter(DetectedPackage existing, DetectedPackage candidate)
+	{
+		bool existingHasVersion = !string.IsNullOrWhiteSpace(existing.Version);
+		bool candidateHasVersion = !string.IsNullOrWhiteSpace(candidate.Version);
+
+		if (candidateHasVersion && !existingHasVersion)
+		{
+			return candidate;
+		}
+		if (!candidateHasVersion && existingHasVersion)
+		{
+			return existing;
+		}
+		if (candidate.Source >= existing.Source)
+		{
+			return candidate;
+		}
+
+		return existing;
+	}
+
+	private static string NormalizePackageName(string packageName)
+	{
+		return packageName.Trim().ToLowerInvariant();
+	}
+
+	private static string? NormalizeVersion(string? version)
+	{
+		if (string.IsNullOrWhiteSpace(version))
+		{
+			return null;
+		}
+
+		string normalizedVersion = version.Trim();
+		return normalizedVersion.Length == 0 ? null : normalizedVersion;
+	}
+
+	private static string? TryGetAssemblyVersion(AssemblyDefinition assembly)
+	{
+		Version? version = assembly.Version;
+		if (version is null || version.Major < 0 || version.Minor < 0)
+		{
+			return null;
+		}
+
+		int patchVersion = version.Build >= 0 ? version.Build : 0;
+		if (version.Major == 0 && version.Minor == 0 && patchVersion == 0)
+		{
+			return null;
+		}
+
+		return $"{version.Major}.{version.Minor}.{patchVersion}";
+	}
+
+	private static string ResolveVersion(string packageName, UnityVersion version)
+	{
+		return packageName switch
+		{
+			"com.unity.ugui" => "1.0.0",
+			"com.unity.textmeshpro" => version.GreaterThanOrEquals(2021) ? "3.0.6" : version.GreaterThanOrEquals(2019) ? "2.1.6" : "1.5.0",
+			"com.unity.entities" => version.GreaterThanOrEquals(2022) ? "1.0.0" : version.GreaterThanOrEquals(2020) ? "0.51.1-preview.21" : "0.17.0-preview.42",
+			"com.unity.render-pipelines.universal" => version.GreaterThanOrEquals(2021) ? "12.0.0" : version.GreaterThanOrEquals(2020) ? "10.0.0" : "7.5.3",
+			"com.unity.render-pipelines.high-definition" => version.GreaterThanOrEquals(2021) ? "12.1.0" : version.GreaterThanOrEquals(2020) ? "10.5.1" : "7.5.3",
+			"com.unity.render-pipelines.core" => version.GreaterThanOrEquals(2021) ? "12.0.0" : version.GreaterThanOrEquals(2020) ? "10.0.0" : "7.5.3",
+			"com.unity.inputsystem" => version.GreaterThanOrEquals(2021) ? "1.5.1" : version.GreaterThanOrEquals(2020) ? "1.4.4" : "1.0.2",
+			"com.unity.xr.management" => version.GreaterThanOrEquals(2021) ? "4.2.0" : "4.0.1",
+			"com.unity.xr.oculus" => version.GreaterThanOrEquals(2021) ? "4.3.0" : "3.2.3",
+			"com.unity.netcode.gameobjects" => version.GreaterThanOrEquals(2022) ? "1.5.2" : "1.0.0",
+			_ => "1.0.0",
+		};
+	}
+
+	private static string TryReadAllText(FileSystem fileSystem, string path)
+	{
+		try
+		{
+			return fileSystem.File.ReadAllText(path);
+		}
+		catch
+		{
+			return string.Empty;
+		}
+	}
+
+	private static readonly string[] ScannableAssetExtensions =
+	[
+		"*.cs",
+		"*.shader",
+		"*.json",
+		"*.asmdef",
+		"*.asset",
+		"*.prefab",
+		"*.unity",
+		"*.yaml",
+		"*.yml",
+	];
+
+	private static readonly (string token, string package)[] PackageTokenHints =
+	[
+		("namespace UnityEngine.UI", "com.unity.ugui"),
+		("using UnityEngine.UI", "com.unity.ugui"),
+		("using TMPro", "com.unity.textmeshpro"),
+		("namespace TMPro", "com.unity.textmeshpro"),
+		("using Unity.Entities", "com.unity.entities"),
+		("namespace Unity.Entities", "com.unity.entities"),
+		("UnityEngine.Rendering.Universal", "com.unity.render-pipelines.universal"),
+		("Universal Render Pipeline", "com.unity.render-pipelines.universal"),
+		("RenderPipeline\"=\"UniversalPipeline", "com.unity.render-pipelines.universal"),
+		("UnityEngine.Rendering.HighDefinition", "com.unity.render-pipelines.high-definition"),
+		("HDRenderPipeline", "com.unity.render-pipelines.high-definition"),
+		("using UnityEngine.InputSystem", "com.unity.inputsystem"),
+		("namespace UnityEngine.InputSystem", "com.unity.inputsystem"),
+		("using Unity.XR.Management", "com.unity.xr.management"),
+		("using Unity.XR.Oculus", "com.unity.xr.oculus"),
+		("using Unity.Netcode", "com.unity.netcode.gameobjects"),
+		("namespace Unity.Netcode", "com.unity.netcode.gameobjects"),
+	];
+
+	[GeneratedRegex("\"(com\\.unity\\.[a-z0-9][a-z0-9\\.-]*)\"\\s*:\\s*\"([^\"]+)\"", RegexOptions.IgnoreCase)]
+	private static partial Regex PackageWithVersionRegex();
+
+	[GeneratedRegex("com\\.unity\\.[a-z0-9][a-z0-9\\.-]*", RegexOptions.IgnoreCase)]
+	private static partial Regex PackageNameRegex();
+
+	protected readonly record struct DetectedPackage(string? Version, PackageVersionSource Source);
+
+	protected enum PackageVersionSource
+	{
+		Hint = 0,
+		Assembly = 1,
+		ExplicitText = 2,
+		Manifest = 3,
+		PackageLock = 4,
 	}
 }
