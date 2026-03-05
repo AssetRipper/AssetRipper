@@ -1,4 +1,4 @@
-﻿using AssetRipper.Assets.Collections;
+using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Generics;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_2;
@@ -72,14 +72,14 @@ internal readonly struct GameObjectInfo : IEquatable<GameObjectInfo>
 		GameObjectInfo?[] children;
 		if (transform is null)
 		{
-			children = [];
+			children =[];
 		}
 		else
 		{
 			PPtrAccessList<IPPtr_Transform, ITransform> childList = transform.Children_C4P;
 			if (childList.Count == 0)
 			{
-				children = [];
+				children =[];
 			}
 			else
 			{
@@ -115,14 +115,14 @@ internal readonly struct GameObjectInfo : IEquatable<GameObjectInfo>
 		GameObjectInfo?[] children;
 		if (transform is null)
 		{
-			children = [];
+			children =[];
 		}
 		else
 		{
 			PPtrAccessList<IPPtr_Transform, ITransform> childList = transform.Children_C4P;
 			if (childList.Count == 0)
 			{
-				children = [];
+				children =[];
 			}
 			else
 			{
@@ -146,7 +146,7 @@ internal readonly struct GameObjectInfo : IEquatable<GameObjectInfo>
 		PPtrAccessList<IPPtr_Component, IComponent> componentList = root.GetComponentAccessList();
 		if (componentList.Count == 0)
 		{
-			components = [];
+			components =[];
 		}
 		else
 		{
