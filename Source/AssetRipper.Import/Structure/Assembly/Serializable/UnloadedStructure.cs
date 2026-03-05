@@ -77,6 +77,12 @@ public sealed class UnloadedStructure : UnityAssetBase, IDeepCloneable
 				MonoBehaviour.Structure = structure;
 				return structure;
 			}
+
+			// Preserve field layout for export fallback paths even when binary values do not match.
+			structure.Reset();
+			structure.InitializeFields(MonoBehaviour.Collection.Version);
+			MonoBehaviour.Structure = structure;
+			return structure;
 		}
 		else if (failureReason is not null)
 		{

@@ -153,3 +153,25 @@ Exporter Robustness Fix (2026-03-05)
   - `AssetRipper.Export.UnityProjects.dll` (+ `.pdb`) from
     `Source/0Bins/Other/AssetRipper.Export.UnityProjects/Release`
     into `Source/0Bins/AssetRipper.GUI.Free/Release/win-x64/publish`.
+
+Real Version + ProjectSettings + MonoBehaviour Update (2026-03-05)
+- Manifest maker now prefers real package versions by confidence source:
+  - `Packages/packages-lock.json` version (highest)
+  - Embedded `Packages/manifest.json` dependency version
+  - Explicit `"com.unity.*": "<version>"` text matches
+  - Loaded assembly version fallback (`major.minor.build`)
+  - Unity-version heuristic fallback (last resort)
+- Added normalized package merge logic in `PackageManifestPostExporter` so lower-confidence hints never overwrite higher-confidence real versions.
+- Added `ProjectSettingsPostExporter` to recover missing `ProjectSettings/*` files from embedded `ITextAsset` paths, with path sanitization and non-overwrite behavior.
+- Hooked `ProjectSettingsPostExporter` into `ExportHandler.GetPostExporters()`.
+- Improved MonoBehaviour fallback in `UnloadedStructure.LoadStructure()`:
+  - When binary read mismatches, keep initialized script field layout instead of setting structure to null.
+- Improved script fallback type-tree recovery:
+  - `ScriptExportCollection` and `EmptyScriptExportCollection` now call `monoBehaviour.LoadStructure()` when building recovered type trees.
+
+Validation (2026-03-05)
+- `dotnet build Source/AssetRipper.Import/AssetRipper.Import.csproj -c Release --no-restore -m:1 /p:BuildProjectReferences=false` -> Succeeded.
+- `dotnet build Source/AssetRipper.Export.UnityProjects/AssetRipper.Export.UnityProjects.csproj -c Release --no-restore -m:1 /p:BuildProjectReferences=false` -> Succeeded.
+- Existing warnings remain:
+  - `MSB3101` assembly-reference cache write denied in `Source/0Bins/obj/...`.
+  - Existing `#warning` in `TextureExportCollection.cs`.

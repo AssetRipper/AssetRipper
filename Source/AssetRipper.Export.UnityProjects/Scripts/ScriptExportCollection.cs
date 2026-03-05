@@ -162,7 +162,7 @@ public sealed class ScriptExportCollection : ScriptExportCollectionBase
 		foreach (IMonoBehaviour monoBehaviour in scriptRoot.Collection.Bundle.FetchAssetsInHierarchy().OfType<IMonoBehaviour>())
 		{
 			IMonoScript? script = monoBehaviour.ScriptP;
-			if (script is null || monoBehaviour.Structure is not SerializableStructure structure)
+			if (script is null || monoBehaviour.LoadStructure() is not SerializableStructure structure)
 			{
 				continue;
 			}

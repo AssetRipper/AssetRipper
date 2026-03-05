@@ -138,6 +138,7 @@ public class ExportHandler
 
 	protected virtual IEnumerable<IPostExporter> GetPostExporters()
 	{
+		yield return new ProjectSettingsPostExporter();
 		yield return new ProjectVersionPostExporter();
 		yield return new PackageManifestPostExporter();
 		yield return new StreamingAssetsPostExporter();

@@ -1,3 +1,4 @@
+using AsmResolver.DotNet;
 using AssetRipper.Export.Configuration;
 using AssetRipper.Processing;
 using AssetRipper.SourceGenerated.Classes.ClassID_49;
@@ -15,7 +16,7 @@ public partial class PackageManifestPostExporter : IPostExporter
 		fileSystem.Directory.Create(packagesDirectory);
 
 		PackageManifest manifest = CreateManifest(settings.Version);
-		Dictionary<string, string?> discoveredPackages = ScanDependencies(gameData, settings, fileSystem);
+		Dictionary<string, DetectedPackage> discoveredPackages = ScanDependencies(gameData, settings, fileSystem);
 		InjectDiscoveredDependencies(manifest, settings.Version, discoveredPackages);
 
 		string path = fileSystem.Path.Join(packagesDirectory, "manifest.json");
@@ -28,9 +29,9 @@ public partial class PackageManifestPostExporter : IPostExporter
 		return PackageManifest.CreateDefault(version);
 	}
 
-	protected virtual Dictionary<string, string?> ScanDependencies(GameData gameData, FullConfiguration settings, FileSystem fileSystem)
+	protected virtual Dictionary<string, DetectedPackage> ScanDependencies(GameData gameData, FullConfiguration settings, FileSystem fileSystem)
 	{
-		Dictionary<string, string?> dependencies = new(StringComparer.Ordinal);
+		Dictionary<string, DetectedPackage> dependencies = new(StringComparer.Ordinal);
 
 		ReadEmbeddedManifestDependencies(gameData, dependencies);
 		ReadEmbeddedPackageLockDependencies(gameData, dependencies);
@@ -40,10 +41,11 @@ public partial class PackageManifestPostExporter : IPostExporter
 		return dependencies;
 	}
 
-	protected virtual void InjectDiscoveredDependencies(PackageManifest manifest, UnityVersion version, Dictionary<string, string?> discoveredPackages)
+	protected virtual void InjectDiscoveredDependencies(PackageManifest manifest, UnityVersion version, Dictionary<string, DetectedPackage> discoveredPackages)
 	{
-		foreach ((string packageName, string? explicitVersion) in discoveredPackages)
+		foreach ((string packageName, DetectedPackage detection) in discoveredPackages)
 		{
+			string? explicitVersion = detection.Version;
 			if (!string.IsNullOrWhiteSpace(explicitVersion))
 			{
 				manifest.Dependencies[packageName] = explicitVersion;
@@ -55,7 +57,7 @@ public partial class PackageManifestPostExporter : IPostExporter
 		}
 	}
 
-	private static void ReadEmbeddedManifestDependencies(GameData gameData, Dictionary<string, string?> dependencies)
+	private static void ReadEmbeddedManifestDependencies(GameData gameData, Dictionary<string, DetectedPackage> dependencies)
 	{
 		foreach (ITextAsset textAsset in gameData.GameBundle.FetchAssets().OfType<ITextAsset>())
 		{
@@ -86,7 +88,7 @@ public partial class PackageManifestPostExporter : IPostExporter
 					{
 						if (property.Value.ValueKind == JsonValueKind.String)
 						{
-							dependencies[property.Name] = property.Value.GetString();
+							AddDependency(dependencies, property.Name, property.Value.GetString(), PackageVersionSource.Manifest);
 						}
 					}
 				}
@@ -98,7 +100,7 @@ public partial class PackageManifestPostExporter : IPostExporter
 		}
 	}
 
-	private static void ReadEmbeddedPackageLockDependencies(GameData gameData, Dictionary<string, string?> dependencies)
+	private static void ReadEmbeddedPackageLockDependencies(GameData gameData, Dictionary<string, DetectedPackage> dependencies)
 	{
 		foreach (ITextAsset textAsset in gameData.GameBundle.FetchAssets().OfType<ITextAsset>())
 		{
@@ -131,7 +133,7 @@ public partial class PackageManifestPostExporter : IPostExporter
 							&& property.Value.TryGetProperty("version", out JsonElement versionElement)
 							&& versionElement.ValueKind == JsonValueKind.String)
 						{
-							dependencies[property.Name] = versionElement.GetString();
+							AddDependency(dependencies, property.Name, versionElement.GetString(), PackageVersionSource.PackageLock);
 						}
 					}
 				}
@@ -143,7 +145,7 @@ public partial class PackageManifestPostExporter : IPostExporter
 		}
 	}
 
-	private static void ScanExportedAssets(string assetsPath, FileSystem fileSystem, Dictionary<string, string?> dependencies)
+	private static void ScanExportedAssets(string assetsPath, FileSystem fileSystem, Dictionary<string, DetectedPackage> dependencies)
 	{
 		if (!fileSystem.Directory.Exists(assetsPath))
 		{
@@ -166,7 +168,7 @@ public partial class PackageManifestPostExporter : IPostExporter
 		}
 	}
 
-	private static void ScanAssemblyNames(GameData gameData, Dictionary<string, string?> dependencies)
+	private static void ScanAssemblyNames(GameData gameData, Dictionary<string, DetectedPackage> dependencies)
 	{
 		foreach (var assembly in gameData.AssemblyManager.GetAssemblies())
 		{
@@ -175,67 +177,68 @@ public partial class PackageManifestPostExporter : IPostExporter
 			{
 				continue;
 			}
+			string? assemblyVersion = TryGetAssemblyVersion(assembly);
 
 			if (assemblyName.StartsWith("UnityEngine.UI", StringComparison.Ordinal)
 				|| assemblyName.StartsWith("Unity.UI", StringComparison.Ordinal))
 			{
-				dependencies.TryAdd("com.unity.ugui", null);
+				AddDependency(dependencies, "com.unity.ugui", assemblyVersion, PackageVersionSource.Assembly);
 			}
 			if (assemblyName.StartsWith("Unity.TextMeshPro", StringComparison.Ordinal)
 				|| assemblyName.StartsWith("UnityEngine.TextCoreTextEngine", StringComparison.Ordinal))
 			{
-				dependencies.TryAdd("com.unity.textmeshpro", null);
+				AddDependency(dependencies, "com.unity.textmeshpro", assemblyVersion, PackageVersionSource.Assembly);
 			}
 			if (assemblyName.StartsWith("Unity.Entities", StringComparison.Ordinal))
 			{
-				dependencies.TryAdd("com.unity.entities", null);
+				AddDependency(dependencies, "com.unity.entities", assemblyVersion, PackageVersionSource.Assembly);
 			}
 			if (assemblyName.StartsWith("Unity.RenderPipelines.Universal", StringComparison.Ordinal)
 				|| assemblyName.StartsWith("UnityEngine.Rendering.Universal", StringComparison.Ordinal))
 			{
-				dependencies.TryAdd("com.unity.render-pipelines.universal", null);
+				AddDependency(dependencies, "com.unity.render-pipelines.universal", assemblyVersion, PackageVersionSource.Assembly);
 			}
 			if (assemblyName.StartsWith("Unity.RenderPipelines.HighDefinition", StringComparison.Ordinal)
 				|| assemblyName.StartsWith("UnityEngine.Rendering.HighDefinition", StringComparison.Ordinal))
 			{
-				dependencies.TryAdd("com.unity.render-pipelines.high-definition", null);
+				AddDependency(dependencies, "com.unity.render-pipelines.high-definition", assemblyVersion, PackageVersionSource.Assembly);
 			}
 			if (assemblyName.StartsWith("Unity.RenderPipelines.Core", StringComparison.Ordinal))
 			{
-				dependencies.TryAdd("com.unity.render-pipelines.core", null);
+				AddDependency(dependencies, "com.unity.render-pipelines.core", assemblyVersion, PackageVersionSource.Assembly);
 			}
 			if (assemblyName.StartsWith("Unity.InputSystem", StringComparison.Ordinal)
 				|| assemblyName.StartsWith("UnityEngine.InputSystem", StringComparison.Ordinal))
 			{
-				dependencies.TryAdd("com.unity.inputsystem", null);
+				AddDependency(dependencies, "com.unity.inputsystem", assemblyVersion, PackageVersionSource.Assembly);
 			}
 			if (assemblyName.StartsWith("Unity.XR.Management", StringComparison.Ordinal))
 			{
-				dependencies.TryAdd("com.unity.xr.management", null);
+				AddDependency(dependencies, "com.unity.xr.management", assemblyVersion, PackageVersionSource.Assembly);
 			}
 			if (assemblyName.StartsWith("Unity.XR.Oculus", StringComparison.Ordinal))
 			{
-				dependencies.TryAdd("com.unity.xr.oculus", null);
+				AddDependency(dependencies, "com.unity.xr.oculus", assemblyVersion, PackageVersionSource.Assembly);
 			}
 			if (assemblyName.StartsWith("Unity.Netcode", StringComparison.Ordinal))
 			{
-				dependencies.TryAdd("com.unity.netcode.gameobjects", null);
+				AddDependency(dependencies, "com.unity.netcode.gameobjects", assemblyVersion, PackageVersionSource.Assembly);
 			}
 		}
 	}
 
-	private static void AddPackageHintsFromText(string text, Dictionary<string, string?> dependencies)
+	private static void AddPackageHintsFromText(string text, Dictionary<string, DetectedPackage> dependencies)
 	{
 		foreach ((string token, string package) in PackageTokenHints)
 		{
 			if (text.Contains(token, StringComparison.Ordinal))
 			{
-				dependencies.TryAdd(package, null);
+				AddDependency(dependencies, package, null, PackageVersionSource.Hint);
 			}
 		}
 	}
 
-	private static void AddExplicitPackagesFromText(string text, Dictionary<string, string?> dependencies)
+	private static void AddExplicitPackagesFromText(string text, Dictionary<string, DetectedPackage> dependencies)
 	{
 		foreach (Match match in PackageWithVersionRegex().Matches(text))
 		{
@@ -243,7 +246,7 @@ public partial class PackageManifestPostExporter : IPostExporter
 			string version = match.Groups[2].Value;
 			if (packageName.StartsWith("com.unity.", StringComparison.Ordinal) && !string.IsNullOrWhiteSpace(version))
 			{
-				dependencies[packageName] = version;
+				AddDependency(dependencies, packageName, version, PackageVersionSource.ExplicitText);
 			}
 		}
 
@@ -252,9 +255,83 @@ public partial class PackageManifestPostExporter : IPostExporter
 			string packageName = match.Value;
 			if (packageName.StartsWith("com.unity.", StringComparison.Ordinal))
 			{
-				dependencies.TryAdd(packageName, null);
+				AddDependency(dependencies, packageName, null, PackageVersionSource.Hint);
 			}
 		}
+	}
+
+	private static void AddDependency(Dictionary<string, DetectedPackage> dependencies, string packageName, string? version, PackageVersionSource source)
+	{
+		string normalizedPackageName = NormalizePackageName(packageName);
+		if (!normalizedPackageName.StartsWith("com.unity.", StringComparison.Ordinal))
+		{
+			return;
+		}
+
+		string? normalizedVersion = NormalizeVersion(version);
+		DetectedPackage candidate = new(normalizedVersion, source);
+
+		if (!dependencies.TryGetValue(normalizedPackageName, out DetectedPackage existing))
+		{
+			dependencies.Add(normalizedPackageName, candidate);
+			return;
+		}
+
+		dependencies[normalizedPackageName] = ChooseBetter(existing, candidate);
+	}
+
+	private static DetectedPackage ChooseBetter(DetectedPackage existing, DetectedPackage candidate)
+	{
+		bool existingHasVersion = !string.IsNullOrWhiteSpace(existing.Version);
+		bool candidateHasVersion = !string.IsNullOrWhiteSpace(candidate.Version);
+
+		if (candidateHasVersion && !existingHasVersion)
+		{
+			return candidate;
+		}
+		if (!candidateHasVersion && existingHasVersion)
+		{
+			return existing;
+		}
+		if (candidate.Source >= existing.Source)
+		{
+			return candidate;
+		}
+
+		return existing;
+	}
+
+	private static string NormalizePackageName(string packageName)
+	{
+		return packageName.Trim().ToLowerInvariant();
+	}
+
+	private static string? NormalizeVersion(string? version)
+	{
+		if (string.IsNullOrWhiteSpace(version))
+		{
+			return null;
+		}
+
+		string normalizedVersion = version.Trim();
+		return normalizedVersion.Length == 0 ? null : normalizedVersion;
+	}
+
+	private static string? TryGetAssemblyVersion(AssemblyDefinition assembly)
+	{
+		Version? version = assembly.Version;
+		if (version is null || version.Major < 0 || version.Minor < 0)
+		{
+			return null;
+		}
+
+		int patchVersion = version.Build >= 0 ? version.Build : 0;
+		if (version.Major == 0 && version.Minor == 0 && patchVersion == 0)
+		{
+			return null;
+		}
+
+		return $"{version.Major}.{version.Minor}.{patchVersion}";
 	}
 
 	private static string ResolveVersion(string packageName, UnityVersion version)
@@ -326,4 +403,15 @@ public partial class PackageManifestPostExporter : IPostExporter
 
 	[GeneratedRegex("com\\.unity\\.[a-z0-9][a-z0-9\\.-]*", RegexOptions.IgnoreCase)]
 	private static partial Regex PackageNameRegex();
+
+	protected readonly record struct DetectedPackage(string? Version, PackageVersionSource Source);
+
+	protected enum PackageVersionSource
+	{
+		Hint = 0,
+		Assembly = 1,
+		ExplicitText = 2,
+		Manifest = 3,
+		PackageLock = 4,
+	}
 }
