@@ -15,6 +15,11 @@ Goals
 4. Reduce dummy shader fallback usage and preserve real shader text whenever possible.
 5. Build for Windows x64 and open output folder.
 
+Fast Manifest Plan
+1. Expand dependency detection inputs beyond scripts/shaders.
+2. Prefer explicit package versions when recoverable from manifests/lock files/text.
+3. Add broader Unity package heuristics (URP/HDRP/Input/XR/Netcode) and rebuild quickly.
+
 What I Added
 - Added `Source/AssetRipper.Export.UnityProjects/Scripts/TypeTreeScriptGenerator.cs`
   - Generates compilable MonoBehaviour C# field stubs from type tree structures.
@@ -55,11 +60,17 @@ What I Changed
 
 - Changed `Source/AssetRipper.Export.UnityProjects/Project/PackageManifestPostExporter.cs`
   - Added dependency scanning from:
-    - Embedded manifest text assets (if present)
-    - Exported `.cs` scripts
-    - Exported `.shader` files
+    - Embedded `Packages/manifest.json` text assets
+    - Embedded `Packages/packages-lock.json` text assets
+    - Exported `.cs`, `.shader`, `.json`, `.asmdef`, `.asset`, `.prefab`, `.unity`, `.yaml`, `.yml`
     - Loaded assembly names
-  - Injects discovered packages with Unity-version-aware versions.
+  - Added direct package-id extraction from text (`com.unity.*`) plus explicit version extraction.
+  - Added broader token/assembly heuristics for:
+    - URP/HDRP/Core RP
+    - Input System
+    - XR Management / XR Oculus
+    - Netcode for GameObjects
+  - Expanded Unity-version-based version resolution for the packages above.
 
 - Changed `Source/AssetRipper.Export.UnityProjects/Shaders/SimpleShaderExporter.cs`
   - Relaxed shader text detection so real shader text is exported more often (reducing dummy shader output, including TMP-like cases).
@@ -98,6 +109,9 @@ Build Notes
   - Ran targeted tests with `/p:BuildProjectReferences=false`, `--no-restore`, `/m:1`:
     - `dotnet test Source/AssetRipper.Tests/AssetRipper.Tests.csproj -c Release --filter "FullyQualifiedName~TypeTreeScriptGeneratorTests|FullyQualifiedName~YamlWalkerManagedReferenceTests"`
     - Result: Passed (3/3).
+- Manifest reconstruction upgrade validation:
+  - `dotnet build Source/AssetRipper.Export.UnityProjects/AssetRipper.Export.UnityProjects.csproj -c Release --no-restore -m:1 /p:BuildProjectReferences=false`
+  - Result: Succeeded.
 - Win-x64 RID build remains blocked by restore graph/toolchain issue (`NETSDK1047` due missing `net10.0/win-x64` assets in project.assets.json and restore failure).
 
 Session Notes
@@ -113,3 +127,29 @@ Next Actions
 1. Apply a durable fix for `SourceGenerator.Foundations` task host issue (`MSB4216`, `MSB4027`) so normal reference builds work without workaround flags.
 2. Run an end-to-end export validation pass (real sample project) focused on SerializeReference, fallback scripts, package manifest, and shader fidelity.
 3. Re-run `GUI.Free` win-x64 publish and confirm final output folder handoff after the task-host issue is resolved or bypassed.
+
+Latest Runtime Fix (2026-03-05)
+- Root cause of continued MonoBehaviour mismatch spam was stale importer binary in GUI publish output.
+- Applied import-side log/fallback hardening:
+  - `GameAssetFactory` now guarantees `UnloadedStructure` fallback on MonoBehaviour read exception.
+  - Expected layout mismatch exceptions are now logged as `Verbose` (hidden by default), not `Error`.
+  - `SerializableStructure` mismatch messages moved from `Error/Warning` to `Verbose`.
+- Rebuilt importer and synced publish runtime:
+  - `dotnet build Source/AssetRipper.Import/AssetRipper.Import.csproj -c Release --no-restore -m:1 /p:BuildProjectReferences=false`
+  - Copied `Source/0Bins/Other/AssetRipper.Import/Release/AssetRipper.Import.dll` (+ `.pdb`) to
+    `Source/0Bins/AssetRipper.GUI.Free/Release/win-x64/publish`.
+  - Verified SHA256 hash parity between `Other/Release` and `publish` for:
+    - `AssetRipper.Import.dll`
+    - `AssetRipper.Export.UnityProjects.dll`
+    - `AssetRipper.SerializationLogic.dll`
+
+Exporter Robustness Fix (2026-03-05)
+- Added per-collection export exception guards in `ProjectExporter.Export(...)`:
+  - `UnauthorizedAccessException` now logs a warning and skips the affected collection.
+  - Other exceptions now log a warning and skip the affected collection.
+  - Export loop continues instead of aborting the whole export session.
+  - Avoided duplicate failure warning lines for the same collection.
+- Rebuilt and synced:
+  - `AssetRipper.Export.UnityProjects.dll` (+ `.pdb`) from
+    `Source/0Bins/Other/AssetRipper.Export.UnityProjects/Release`
+    into `Source/0Bins/AssetRipper.GUI.Free/Release/win-x64/publish`.

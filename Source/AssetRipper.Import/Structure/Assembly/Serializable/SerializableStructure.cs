@@ -169,12 +169,12 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 
 	private static void LogMonoBehaviourMismatch(SerializableStructure structure, int actual, int expected)
 	{
-		Logger.Error(LogCategory.Import, $"Unable to read MonoBehaviour Structure, because script {structure} layout mismatched binary content (read {actual} bytes, expected {expected} bytes).");
+		Logger.Verbose(LogCategory.Import, $"Unable to fully read MonoBehaviour Structure for script {structure} due layout mismatch (read {actual} bytes, expected {expected} bytes).");
 	}
 
 	private static void LogMonoBehaviorReadException(SerializableStructure structure, Exception ex)
 	{
-		Logger.Error(LogCategory.Import, $"Unable to read MonoBehaviour Structure, because script {structure} layout mismatched binary content ({ex.GetType().Name}).");
+		Logger.Verbose(LogCategory.Import, $"Unable to fully read MonoBehaviour Structure for script {structure} due layout mismatch ({ex.GetType().Name}).");
 	}
 
 	public int Depth { get; }
@@ -348,10 +348,18 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 
 	private static bool IsManagedReferencesField(in SerializableType.Field field)
 	{
-		return field.ArrayDepth == 0
-			&& field.Type.Type == PrimitiveType.Complex
-			&& (field.Name is "managedReferences" or "references"
-				|| field.Type.Name == "ManagedReferencesRegistry");
+		if (field.ArrayDepth != 0 || field.Type.Type != PrimitiveType.Complex)
+		{
+			return false;
+		}
+
+		string normalizedFieldName = NormalizeManagedReferenceName(field.Name);
+		string normalizedTypeName = NormalizeManagedReferenceName(field.Type.Name);
+		return normalizedFieldName is "managedreferences" or "references" or "managedreferencesregistry"
+			|| normalizedTypeName is "managedreferencesregistry" or "managedreference"
+			|| normalizedFieldName.Contains("managedreference", StringComparison.Ordinal)
+			|| normalizedTypeName.Contains("managedreference", StringComparison.Ordinal)
+			|| LooksLikeManagedReferencesRegistry(field.Type);
 	}
 
 	private bool TryReadWithManagedReferencesFirst(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, int managedReferencesFieldIndex)
@@ -403,53 +411,100 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 			return;
 		}
 
-		SerializableValue? refIds = managedReferencesStructure.TryGetField("RefIds")
-			?? managedReferencesStructure.TryGetField("refIds")
-			?? managedReferencesStructure.TryGetField("refIDs")
-			?? managedReferencesStructure.TryGetField("data");
-		if (!refIds.HasValue)
+		if (!TryGetManagedReferencesArray(managedReferencesStructure, out SerializableValue refIds))
 		{
 			return;
 		}
 
-		foreach (IUnityAssetBase referencedObjectAsset in refIds.Value.AsAssetArray)
+		foreach (IUnityAssetBase referencedObjectAsset in refIds.AsAssetArray)
 		{
 			if (referencedObjectAsset is not SerializableStructure referencedObject)
 			{
 				continue;
 			}
 
-			SerializableValue? ridValue = referencedObject.TryGetField("rid");
-			if (!ridValue.HasValue)
+			if (!TryGetFieldByNormalizedName(referencedObject, "rid", out SerializableValue ridValue))
 			{
 				continue;
 			}
 
-			long rid = ridValue.Value.AsInt64;
+			long rid = ridValue.AsInt64;
 			if (rid == 0)
 			{
 				continue;
 			}
 
 			IUnityAssetBase data = EmptyAsset.Instance;
-			SerializableValue? dataField = referencedObject.TryGetField("data");
-			if (dataField.HasValue && dataField.Value.CValue is IUnityAssetBase dataAsset)
+			if (TryGetFieldByNormalizedName(referencedObject, "data", out SerializableValue dataField) && dataField.CValue is IUnityAssetBase dataAsset)
 			{
 				data = dataAsset;
 			}
 			ManagedReferences[rid] = data;
 
 			ManagedReferenceTypeInfo typeInfo = default;
-			SerializableValue? typeField = referencedObject.TryGetField("type");
-			if (typeField.HasValue && typeField.Value.CValue is SerializableStructure typeStructure)
+			if (TryGetFieldByNormalizedName(referencedObject, "type", out SerializableValue typeField) && typeField.CValue is SerializableStructure typeStructure)
 			{
-				string className = typeStructure.TryGetField("class")?.AsString ?? "";
-				string @namespace = typeStructure.TryGetField("ns")?.AsString ?? "";
-				string assembly = typeStructure.TryGetField("asm")?.AsString ?? "";
+				string className = TryGetFieldByNormalizedName(typeStructure, "class", out SerializableValue classField) ? classField.AsString : "";
+				string @namespace = TryGetFieldByNormalizedName(typeStructure, "ns", out SerializableValue namespaceField) ? namespaceField.AsString : "";
+				string assembly = TryGetFieldByNormalizedName(typeStructure, "asm", out SerializableValue assemblyField) ? assemblyField.AsString : "";
 				typeInfo = new ManagedReferenceTypeInfo(className, @namespace, assembly);
 			}
 			ManagedReferenceTypes[rid] = typeInfo;
 		}
+	}
+
+	private static bool LooksLikeManagedReferencesRegistry(SerializableType type)
+	{
+		foreach (SerializableType.Field subField in type.Fields)
+		{
+			string normalizedName = NormalizeManagedReferenceName(subField.Name);
+			if (normalizedName is "refids" or "refid" or "references" or "managedreferences" or "data")
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private static bool TryGetManagedReferencesArray(SerializableStructure structure, out SerializableValue value)
+	{
+		for (int i = 0; i < structure.Type.Fields.Count; i++)
+		{
+			SerializableType.Field field = structure.Type.Fields[i];
+			string normalized = NormalizeManagedReferenceName(field.Name);
+			if (normalized is "refids" or "refid" or "data")
+			{
+				value = structure.Fields[i];
+				return true;
+			}
+		}
+
+		value = default;
+		return false;
+	}
+
+	private static bool TryGetFieldByNormalizedName(SerializableStructure structure, string normalizedFieldName, out SerializableValue value)
+	{
+		for (int i = 0; i < structure.Type.Fields.Count; i++)
+		{
+			if (NormalizeManagedReferenceName(structure.Type.Fields[i].Name) == normalizedFieldName)
+			{
+				value = structure.Fields[i];
+				return true;
+			}
+		}
+
+		value = default;
+		return false;
+	}
+
+	private static string NormalizeManagedReferenceName(string name)
+	{
+		if (name.StartsWith("m_", StringComparison.Ordinal))
+		{
+			name = name[2..];
+		}
+		return name.Replace("_", "", StringComparison.Ordinal).ToLowerInvariant();
 	}
 
 	private void CopyManagedReferences(SerializableStructure source, PPtrConverter converter)
