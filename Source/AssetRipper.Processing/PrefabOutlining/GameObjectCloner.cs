@@ -1,4 +1,4 @@
-﻿using AssetRipper.Assets;
+using AssetRipper.Assets;
 using AssetRipper.Assets.Cloning;
 using AssetRipper.Assets.Collections;
 using AssetRipper.SourceGenerated;
@@ -55,5 +55,5 @@ public static class GameObjectCloner
 		{
 			return asset is T t ? t : default;
 		}
-	}
+	} 
 }
