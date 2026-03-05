@@ -1,23 +1,35 @@
-using System.Text.RegularExpressions;
 using System;
+using System.Text.RegularExpressions;
 
 namespace AssetRipper.Processing.PrefabOutlining;
 
 public static partial class GameObjectNameCleaner
 {
-    // Regex to find and remove suffixes like " (1)", " (2)", etc.
-    [GeneratedRegex("\\([0-9]+\\)$", RegexOptions.Compiled)]
-    private static partial Regex CopySuffixRegex();
+	[GeneratedRegex(@"\s*\(Clone\)$", RegexOptions.Compiled | RegexOptions.IgnoreCase)]
+	private static partial Regex CloneSuffixRegex();
 
-    public static string CleanName(string name)
-    {
-        if (string.IsNullOrEmpty(name))
-            return "GameObject";
+	// Removes one or more trailing copy suffixes like " (1)", "(2)", " (3) (4)".
+	[GeneratedRegex(@"(?:\s*\(\d+\))+$", RegexOptions.Compiled)]
+	private static partial Regex CopySuffixRegex();
 
-        // Remove (Clone) suffix
-        string noClones = name.Replace("(Clone)", "", StringComparison.Ordinal);
-        
-        // Remove number suffixes like (1) and trim whitespace
-        return CopySuffixRegex().Replace(noClones, "").Trim();
-    }
+	public static string CleanName(string name)
+	{
+		if (string.IsNullOrWhiteSpace(name))
+		{
+			return "GameObject";
+		}
+
+		string cleanedName = name.Trim();
+		string previousName;
+		do
+		{
+			previousName = cleanedName;
+			cleanedName = CopySuffixRegex().Replace(cleanedName, "");
+			cleanedName = CloneSuffixRegex().Replace(cleanedName, "");
+			cleanedName = cleanedName.Trim();
+		}
+		while (cleanedName.Length > 0 && !string.Equals(cleanedName, previousName, StringComparison.Ordinal));
+
+		return cleanedName.Length == 0 ? "GameObject" : cleanedName;
+	}
 }

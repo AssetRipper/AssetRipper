@@ -16,7 +16,6 @@ using AssetRipper.Processing.Prefabs;
 using AssetRipper.Processing.Scenes;
 using AssetRipper.Processing.ScriptableObject;
 using AssetRipper.Processing.Textures;
-using AssetRipper.Export.Modules.Shaders; // Added for Legacy Shader Support
 
 namespace AssetRipper.Export.UnityProjects;
 
@@ -85,12 +84,6 @@ public class ExportHandler
 		yield return new MainAssetProcessor();
 		yield return new AnimatorControllerProcessor();
 		yield return new AudioMixerProcessor();
-
-		// Added: Legacy Shader Support integration
-		if (Settings.ExportSettings.ShaderExportMode == ShaderExportMode.Legacy)
-		{
-			yield return new ShaderProcessor();
-		}
 
 		yield return new EditorFormatProcessor(Settings.ProcessingSettings.BundledAssetsExportMode);
 		
