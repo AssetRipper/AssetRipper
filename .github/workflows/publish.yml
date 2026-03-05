@@ -9,45 +9,34 @@ on:
 
 jobs:
   publish:
-    runs-on: ${{ matrix.config.os }}
-
-    strategy:
-      matrix:
-        config:
-          - { name: win_x64, os: windows-latest, runtime: win-x64, executable: AssetRipper.GUI.Free.exe }
-          - { name: win_arm64, os: windows-latest, runtime: win-arm64, executable: AssetRipper.GUI.Free.exe }
-          - { name: linux_x64, os: ubuntu-22.04, runtime: linux-x64, executable: AssetRipper.GUI.Free }
-          - { name: linux_arm64, os: ubuntu-22.04-arm, runtime: linux-arm64, executable: AssetRipper.GUI.Free }
-          - { name: mac_x64, os: macos-14, runtime: osx-x64, executable: AssetRipper.GUI.Free }
-          - { name: mac_arm64, os: macos-14, runtime: osx-arm64, executable: AssetRipper.GUI.Free }
+    runs-on: windows-latest
 
     steps:
       - uses: actions/checkout@v6
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 10.0.x
 
       - name: Publish
-        run: dotnet publish -c Release -r ${{ matrix.config.runtime }}
+        run: dotnet publish -c Release -r win-x64
         working-directory: ./Source/AssetRipper.GUI.Free/
 
       - name: List Files
         shell: bash
         run: ls -R ./Source/0Bins/AssetRipper.GUI.Free/Release/
 
-      - name: List Files
+      - name: Write compile time
         shell: bash
-        run: date -u > ./Source/0Bins/AssetRipper.GUI.Free/Release/${{ matrix.config.runtime }}/publish/compile_time.txt
+        run: date -u > ./Source/0Bins/AssetRipper.GUI.Free/Release/win-x64/publish/compile_time.txt
 
       - name: Upload
         uses: actions/upload-artifact@v7
         with:
-          name: AssetRipper_${{ matrix.config.name }}
+          name: AssetRipper_win_x64
           path: |
-            ./Source/0Bins/AssetRipper.GUI.Free/Release/${{ matrix.config.runtime }}/publish/${{ matrix.config.executable }}
-            ./Source/0Bins/AssetRipper.GUI.Free/Release/${{ matrix.config.runtime }}/publish/*.dll
-            ./Source/0Bins/AssetRipper.GUI.Free/Release/${{ matrix.config.runtime }}/publish/*.so
-            ./Source/0Bins/AssetRipper.GUI.Free/Release/${{ matrix.config.runtime }}/publish/*.dylib
-            ./Source/0Bins/AssetRipper.GUI.Free/Release/${{ matrix.config.runtime }}/publish/compile_time.txt
+            ./Source/0Bins/AssetRipper.GUI.Free/Release/win-x64/publish/AssetRipper.GUI.Free.exe
+            ./Source/0Bins/AssetRipper.GUI.Free/Release/win-x64/publish/*.dll
+            ./Source/0Bins/AssetRipper.GUI.Free/Release/win-x64/publish/compile_time.txt
           if-no-files-found: error
