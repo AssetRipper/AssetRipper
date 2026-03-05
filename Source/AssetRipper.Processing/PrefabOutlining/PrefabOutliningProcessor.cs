@@ -5,135 +5,150 @@ using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
 using AssetRipper.SourceGenerated.Extensions;
-using AssetRipper.Processing; // CRITICAL: This allows access to GameObjectNameCleaner
+// No extra using needed for GameObjectNameCleaner because they share the namespace now
 
 namespace AssetRipper.Processing.PrefabOutlining;
 
 public sealed class PrefabOutliningProcessor : IAssetProcessor
 {
-	//Documentation note: prefab variants were introduced in 2018.3.
-	//That does not affect this processor currently, but it may have an impact on future improvements.
-	//https://blog.unity.com/technology/introducing-unity-2018-3
+    // Documentation note: prefab variants were introduced in 2018.3.
+    // That does not affect this processor currently, but it may have an impact on future improvements.
+    // https://blog.unity.com/technology/introducing-unity-2018-3
 
-	public void Process(GameData gameData)
-	{
-		Logger.Info(LogCategory.Processing, "Prefab Outlining");
-		ProcessedAssetCollection processedCollection = gameData.AddNewProcessedCollection("Outlined Prefabs");
-		MakeDictionaries(
-			gameData.GameBundle,
-			out Dictionary<IGameObject, GameObjectInfo> infoDictionary,
-			out Dictionary<AssetCollection, bool> sceneInfo);
-		MakeBoxes(
-			infoDictionary,
-			sceneInfo,
-			out Dictionary<string, Dictionary<GameObjectInfo, List<IGameObject>>> boxes,
-			out HashSet<IGameObject> prefabRoots);
-		foreach ((string name, Dictionary<GameObjectInfo, List<IGameObject>> variants) in boxes)
-		{
-			if (variants.Count != 1)
-			{
-				continue;//We want the simplest implementation to start out
-			}
+    public void Process(GameData gameData)
+    {
+        Logger.Info(LogCategory.Processing, "Prefab Outlining");
+        ProcessedAssetCollection processedCollection = gameData.AddNewProcessedCollection("Outlined Prefabs");
+        
+        MakeDictionaries(
+            gameData.GameBundle,
+            out Dictionary<IGameObject, GameObjectInfo> infoDictionary,
+            out Dictionary<AssetCollection, bool> sceneInfo);
+            
+        MakeBoxes(
+            infoDictionary,
+            sceneInfo,
+            out Dictionary<string, Dictionary<GameObjectInfo, List<IGameObject>>> boxes,
+            out HashSet<IGameObject> prefabRoots);
 
-			(_, List<IGameObject> box) = variants.First();
+        foreach ((string name, Dictionary<GameObjectInfo, List<IGameObject>> variants) in boxes)
+        {
+            if (variants.Count != 1)
+            {
+                continue; // We want the simplest implementation to start out
+            }
 
-			if (box.Any(g => prefabRoots.Contains(g)))
-			{
-				continue;//Prefab already exists
-			}
+            (_, List<IGameObject> box) = variants.First();
 
-			Logger.Info(LogCategory.Processing, $"Recreating prefab for {name}");
+            if (box.Any(g => prefabRoots.Contains(g)))
+            {
+                continue; // Prefab already exists
+            }
 
-			AddCopyToCollection(name, box[0], processedCollection);
-		}
-	}
+            Logger.Info(LogCategory.Processing, $"Recreating prefab for {name}");
 
-	private static void AddCopyToCollection(string name, IGameObject source, ProcessedAssetCollection collection)
-	{
-		//AddPrefabPlaceHolder(name, collection);
-		AddNewPrefab(name, source, collection);
-	}
+            AddCopyToCollection(name, box[0], processedCollection);
+        }
+    }
 
-	private static void AddNewPrefab(string name, IGameObject source, ProcessedAssetCollection collection)
-	{
-		IGameObject root = GameObjectCloner.Clone(source, collection);
-		root.Name = name;
-		root.SetIsActive(true);
+    private static void AddCopyToCollection(string name, IGameObject source, ProcessedAssetCollection collection)
+    {
+        // AddPrefabPlaceHolder(name, collection);
+        AddNewPrefab(name, source, collection);
+    }
 
-		ITransform transform = root.GetTransform();
-		transform.LocalPosition_C4.Reset();
-		transform.LocalRotation_C4.Reset();
-		transform.LocalScale_C4.SetValues(1, 1, 1);
-		transform.LocalEulerAnglesHint_C4?.Reset();
-		transform.RootOrder_C4 = 0;
-		transform.Father_C4.Reset();
-	}
+    private static void AddNewPrefab(string name, IGameObject source, ProcessedAssetCollection collection)
+    {
+        IGameObject root = GameObjectCloner.Clone(source, collection);
+        root.Name = name;
+        root.SetIsActive(true);
 
-	private static void AddPrefabPlaceHolder(string name, ProcessedAssetCollection collection)
-	{
-		//Place holder code until source gen improves
+        ITransform transform = root.GetTransform();
+        transform.LocalPosition_C4.Reset();
+        transform.LocalRotation_C4.Reset();
+        transform.LocalScale_C4.SetValues(1, 1, 1);
+        transform.LocalEulerAnglesHint_C4?.Reset();
+        transform.RootOrder_C4 = 0;
+        transform.Father_C4.Reset();
+    }
 
-		IGameObject root = CreateNewGameObject(collection);
-		root.Name = name;
-		root.SetIsActive(true);
-		root.TagString = TagManagerConstants.UntaggedTag;
+    private static void AddPrefabPlaceHolder(string name, ProcessedAssetCollection collection)
+    {
+        // Place holder code until source gen improves
 
-		ITransform rootTransform = CreateNewTransform(collection);
-		rootTransform.GameObject_C4P = root;
-		rootTransform.RootOrder_C4 = 0;
-		//Since this Transform has no Father, its RootOrder is zero.
+        IGameObject root = CreateNewGameObject(collection);
+        root.Name = name;
+        root.SetIsActive(true);
+        root.TagString = TagManagerConstants.UntaggedTag;
 
-		root.AddComponent(ClassIDType.Transform, rootTransform);
+        ITransform rootTransform = CreateNewTransform(collection);
+        rootTransform.GameObject_C4P = root;
+        rootTransform.RootOrder_C4 = 0;
+        // Since this Transform has no Father, its RootOrder is zero.
 
-		IGameObject child = CreateNewGameObject(collection);
-		child.Name = "This prefab is a placeholder until AssetRipper improves.";
-		child.SetIsActive(true);
-		child.TagString = TagManagerConstants.UntaggedTag;
+        root.AddComponent(ClassIDType.Transform, rootTransform);
 
-		ITransform childTransform = CreateNewTransform(collection);
-		childTransform.GameObject_C4P = child;
-		childTransform.RootOrder_C4 = 0;
-		//Since this Transform is the only child, its RootOrder is zero.
+        IGameObject child = CreateNewGameObject(collection);
+        child.Name = "This prefab is a placeholder until AssetRipper improves.";
+        child.SetIsActive(true);
+        child.TagString = TagManagerConstants.UntaggedTag;
 
-		childTransform.Father_C4P = rootTransform;
-		rootTransform.Children_C4P.Add(childTransform);
+        ITransform childTransform = CreateNewTransform(collection);
+        childTransform.GameObject_C4P = child;
+        childTransform.RootOrder_C4 = 0;
+        // Since this Transform is the only child, its RootOrder is zero.
 
-		child.AddComponent(ClassIDType.Transform, childTransform);
-	}
+        childTransform.Father_C4P = rootTransform;
+        rootTransform.Children_C4P.Add(childTransform);
 
-	private static IGameObject CreateNewGameObject(ProcessedAssetCollection collection)
-	{
-		return collection.CreateAsset((int)ClassIDType.GameObject, GameObject.Create);
-	}
+        child.AddComponent(ClassIDType.Transform, childTransform);
+    }
 
-	private static ITransform CreateNewTransform(ProcessedAssetCollection collection)
-	{
-		return collection.CreateAsset((int)ClassIDType.Transform, Transform.Create);
-	}
+    private static IGameObject CreateNewGameObject(ProcessedAssetCollection collection)
+    {
+        return collection.CreateAsset((int)ClassIDType.GameObject, GameObject.Create);
+    }
 
-	private static void MakeBoxes(Dictionary<IGameObject, GameObjectInfo> infoDictionary, Dictionary<AssetCollection, bool> sceneInfo, out Dictionary<string, Dictionary<GameObjectInfo, List<IGameObject>>> boxes, out HashSet<IGameObject> prefabRoots)
-	{
-		boxes = [];
-		prefabRoots = [];
-		foreach ((IGameObject gameObject, GameObjectInfo info) in infoDictionary)
-		{
-			string name = GameObjectNameCleaner.CleanName(gameObject.Name);
-			boxes.GetOrAdd(name).GetOrAdd(info).Add(gameObject);
-			if (!sceneInfo[gameObject.Collection] && gameObject.IsRoot())
-			{
-				prefabRoots.Add(gameObject);
-			}
-		}
-	}
+    private static ITransform CreateNewTransform(ProcessedAssetCollection collection)
+    {
+        return collection.CreateAsset((int)ClassIDType.Transform, Transform.Create);
+    }
 
-	private static void MakeDictionaries(GameBundle gameBundle, out Dictionary<IGameObject, GameObjectInfo> infoDictionary, out Dictionary<AssetCollection, bool> sceneInfo)
-	{
-		infoDictionary = [];
-		sceneInfo = [];
-		foreach (AssetCollection collection in gameBundle.FetchAssetCollections())
-		{
-			sceneInfo.Add(collection, collection.IsScene);
-			GameObjectInfo.AddCollectionToDictionary(collection, infoDictionary);
-		}
-	}
+    private static void MakeBoxes(Dictionary<IGameObject, GameObjectInfo> infoDictionary, Dictionary<AssetCollection, bool> sceneInfo, out Dictionary<string, Dictionary<GameObjectInfo, List<IGameObject>>> boxes, out HashSet<IGameObject> prefabRoots)
+    {
+        boxes = [];
+        prefabRoots = [];
+        foreach ((IGameObject gameObject, GameObjectInfo info) in infoDictionary)
+        {
+            // Now works because both classes are in namespace AssetRipper.Processing.PrefabOutlining
+            string name = GameObjectNameCleaner.CleanName(gameObject.Name);
+            
+            if (!boxes.ContainsKey(name))
+            {
+                boxes[name] = new Dictionary<GameObjectInfo, List<IGameObject>>();
+            }
+            if (!boxes[name].ContainsKey(info))
+            {
+                boxes[name][info] = new List<IGameObject>();
+            }
+            
+            boxes[name][info].Add(gameObject);
+
+            if (!sceneInfo[gameObject.Collection] && gameObject.IsRoot())
+            {
+                prefabRoots.Add(gameObject);
+            }
+        }
+    }
+
+    private static void MakeDictionaries(GameBundle gameBundle, out Dictionary<IGameObject, GameObjectInfo> infoDictionary, out Dictionary<AssetCollection, bool> sceneInfo)
+    {
+        infoDictionary = [];
+        sceneInfo = [];
+        foreach (AssetCollection collection in gameBundle.FetchAssetCollections())
+        {
+            sceneInfo.Add(collection, collection.IsScene);
+            GameObjectInfo.AddCollectionToDictionary(collection, infoDictionary);
+        }
+    }
 }
