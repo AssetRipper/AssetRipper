@@ -3,7 +3,6 @@ using AssetRipper.Assets.Metadata;
 using AssetRipper.Assets.Traversal;
 using AssetRipper.Primitives;
 using System.CodeDom.Compiler;
-using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Web;
 
@@ -11,39 +10,11 @@ namespace AssetRipper.Export.PrimaryContent;
 
 public class DefaultJsonWalker : AssetWalker
 {
-	private readonly StringWriter stringWriter = new(CultureInfo.InvariantCulture) { NewLine = "\n" };
 	protected IndentedTextWriter Writer { get; }
 
-	public DefaultJsonWalker()
+	public DefaultJsonWalker(TextWriter textWriter)
 	{
-		Writer = new IndentedTextWriter(stringWriter, "\t");
-	}
-
-	public string SerializeEditor(IUnityAssetBase asset)
-	{
-		Clear();
-		asset.WalkEditor(this);
-		return stringWriter.ToString();
-	}
-
-	public string SerializeRelease(IUnityAssetBase asset)
-	{
-		Clear();
-		asset.WalkRelease(this);
-		return stringWriter.ToString();
-	}
-
-	public string SerializeStandard(IUnityAssetBase asset)
-	{
-		Clear();
-		asset.WalkStandard(this);
-		return stringWriter.ToString();
-	}
-
-	private void Clear()
-	{
-		Writer.Flush();
-		stringWriter.GetStringBuilder().Clear();
+		Writer = new IndentedTextWriter(textWriter, "\t");
 	}
 
 	public override bool EnterAsset(IUnityAssetBase asset)

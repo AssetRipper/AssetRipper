@@ -367,7 +367,9 @@ internal static class AssetAPI
 
 		try
 		{
-			string text = new DefaultJsonWalker().SerializeStandard(asset);
+			StringWriter stringWriter = new(CultureInfo.InvariantCulture) { NewLine = "\n" };
+			asset.WalkStandard(new DefaultJsonWalker(stringWriter));
+			string text = stringWriter.ToString();
 			return Results.Text(text, "application/json").ExecuteAsync(context);
 		}
 		catch (Exception ex)

@@ -3,7 +3,7 @@ using System.Text;
 
 namespace AssetRipper.IO.Files.SerializedFiles.Parser.TypeTrees;
 
-public class TypeTreeNode
+public sealed class TypeTreeNode : IEquatable<TypeTreeNode?>
 {
 	/// <summary>
 	/// 5.0.0a1 and greater<br/>
@@ -96,11 +96,11 @@ public class TypeTreeNode
 		}
 	}
 
-	public override string? ToString()
+	public override string ToString()
 	{
-		if (Type == null)
+		if (string.IsNullOrEmpty(Type))
 		{
-			return base.ToString();
+			return nameof(TypeTreeNode);
 		}
 		else
 		{
@@ -108,7 +108,7 @@ public class TypeTreeNode
 		}
 	}
 
-	public StringBuilder ToString(StringBuilder sb)
+	public void ToString(StringBuilder sb)
 	{
 		sb.Append('\t', Level).Append(Type).Append(' ').Append(Name);
 		sb.AppendFormat(" // ByteSize{0}{1:x}{2}, Index{3}{4:x}{5}, Version{6}{7:x}{8}, IsArray{{{9}}}, MetaFlag{10}{11:x}{12}",
@@ -117,7 +117,6 @@ public class TypeTreeNode
 				"{", Version, "}",
 				TypeFlags,
 				"{", (uint)MetaFlag, "}");
-		return sb;
 	}
 
 	/// <summary>
@@ -164,4 +163,48 @@ public class TypeTreeNode
 	/// </summary>
 	public TransferMetaFlags MetaFlag { get; set; }
 	public ulong RefTypeHash { get; set; }
+
+	public override bool Equals([NotNullWhen(true)] object? obj)
+	{
+		return Equals(obj as TypeTreeNode);
+	}
+
+	public bool Equals([NotNullWhen(true)] TypeTreeNode? other)
+	{
+		return other is not null
+			&& Version == other.Version
+			&& Level == other.Level
+			&& TypeFlags == other.TypeFlags
+			&& Type == other.Type
+			&& Name == other.Name
+			&& ByteSize == other.ByteSize
+			&& Index == other.Index
+			&& MetaFlag == other.MetaFlag
+			&& RefTypeHash == other.RefTypeHash;
+	}
+
+	public override int GetHashCode()
+	{
+		HashCode hash = new();
+		hash.Add(Version);
+		hash.Add(Level);
+		hash.Add(TypeFlags);
+		hash.Add(Type);
+		hash.Add(Name);
+		hash.Add(ByteSize);
+		hash.Add(Index);
+		hash.Add(MetaFlag);
+		hash.Add(RefTypeHash);
+		return hash.ToHashCode();
+	}
+
+	public static bool operator ==(TypeTreeNode? left, TypeTreeNode? right)
+	{
+		return EqualityComparer<TypeTreeNode>.Default.Equals(left, right);
+	}
+
+	public static bool operator !=(TypeTreeNode? left, TypeTreeNode? right)
+	{
+		return !(left == right);
+	}
 }
