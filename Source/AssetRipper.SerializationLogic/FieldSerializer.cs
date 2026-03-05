@@ -198,12 +198,6 @@ public readonly partial struct FieldSerializer
 			(FieldDefinition fieldDefinition, TypeSignature fieldType) = pair;
 			if (WillUnitySerialize(fieldDefinition, fieldType))
 			{
-				if (fieldDefinition.HasSerializeReferenceAttribute())
-				{
-					failureReason = $"{fieldDefinition.DeclaringType?.FullName}.{fieldDefinition.Name} uses the [SerializeReference] attribute, which is currently not supported.";
-					return false;
-				}
-
 				int arrayDepth = 0;
 				if (fieldDefinition.HasFixedBufferAttribute())
 				{

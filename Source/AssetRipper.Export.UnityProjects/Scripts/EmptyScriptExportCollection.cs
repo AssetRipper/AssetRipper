@@ -1,5 +1,8 @@
-﻿using AssetRipper.Export.UnityProjects.Scripts.AssemblyDefinitions;
+using AssetRipper.Export.UnityProjects.Scripts.AssemblyDefinitions;
 using AssetRipper.Import.Logging;
+using AssetRipper.Import.Structure.Assembly.Serializable;
+using AssetRipper.Import.Structure.Assembly.TypeTrees;
+using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using System.Diagnostics;
 
@@ -16,9 +19,12 @@ public sealed class EmptyScriptExportCollection : ScriptExportCollectionBase
 		{
 			UniqueScripts.TryAdd(MonoScriptInfo.From(assetScript), assetScript);
 		}
+
+		BuildRecoveredTypeTreeLookup(firstScript);
 	}
 
 	private Dictionary<MonoScriptInfo, IMonoScript> UniqueScripts { get; } = new();
+	private Dictionary<MonoScriptInfo, TypeTreeNodeStruct> RecoveredTypeTrees { get; } = new();
 
 	public override string Name => nameof(EmptyScriptExportCollection);
 
@@ -41,7 +47,14 @@ public sealed class EmptyScriptExportCollection : ScriptExportCollectionBase
 			string folderPath = fileSystem.Path.Join(assetsDirectoryPath, subFolderPath);
 			string filePath = fileSystem.Path.Join(folderPath, fileName);
 			fileSystem.Directory.Create(folderPath);
-			fileSystem.File.WriteAllText(filePath, EmptyScript.GetContent(info));
+			if (RecoveredTypeTrees.TryGetValue(info, out TypeTreeNodeStruct rootNode))
+			{
+				fileSystem.File.WriteAllText(filePath, TypeTreeScriptGenerator.Generate(info, rootNode));
+			}
+			else
+			{
+				fileSystem.File.WriteAllText(filePath, EmptyScript.GetContent(info));
+			}
 			string assemblyName = info.Assembly;
 			if (!assemblyDefinitionDetailsDictionary.ContainsKey(assemblyName))
 			{
@@ -69,5 +82,23 @@ public sealed class EmptyScriptExportCollection : ScriptExportCollectionBase
 		}
 
 		return true;
+	}
+
+	private void BuildRecoveredTypeTreeLookup(IMonoScript scriptRoot)
+	{
+		foreach (IMonoBehaviour monoBehaviour in scriptRoot.Collection.Bundle.FetchAssetsInHierarchy().OfType<IMonoBehaviour>())
+		{
+			IMonoScript? script = monoBehaviour.ScriptP;
+			if (script is null || monoBehaviour.Structure is not SerializableStructure structure)
+			{
+				continue;
+			}
+
+			MonoScriptInfo key = MonoScriptInfo.From(script);
+			if (!RecoveredTypeTrees.ContainsKey(key))
+			{
+				RecoveredTypeTrees.Add(key, TypeTreeNodeStruct.FromSerializableType(structure.Type));
+			}
+		}
 	}
 }

@@ -13,6 +13,8 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable;
 
 public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 {
+	public readonly record struct ManagedReferenceTypeInfo(string ClassName, string Namespace, string Assembly);
+
 	private UnityVersion Version { get; set; }
 	public override int SerializedVersion => Type.Version;
 	public override bool FlowMappedInYaml => Type.FlowMappedInYaml;
@@ -27,6 +29,21 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 	public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags)
 	{
 		Version = version;
+		ManagedReferences.Clear();
+		ManagedReferenceTypes.Clear();
+
+		int managedReferencesFieldIndex = TryGetManagedReferencesFieldIndex();
+		if (managedReferencesFieldIndex >= 0 && IsAvailable(Type.Fields[managedReferencesFieldIndex]))
+		{
+			EndianSpanReader managedFirstReader = reader;
+			if (TryReadWithManagedReferencesFirst(ref managedFirstReader, version, flags, managedReferencesFieldIndex))
+			{
+				reader = managedFirstReader;
+				return;
+			}
+			ClearFields();
+		}
+
 		for (int i = 0; i < Fields.Length; i++)
 		{
 			SerializableType.Field etalon = Type.Fields[i];
@@ -34,6 +51,12 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 			{
 				Fields[i].Read(ref reader, version, flags, Depth, etalon);
 			}
+		}
+
+		if (managedReferencesFieldIndex >= 0)
+		{
+			SerializableType.Field managedReferencesField = Type.Fields[managedReferencesFieldIndex];
+			CacheManagedReferences(Fields[managedReferencesFieldIndex], managedReferencesField);
 		}
 	}
 
@@ -94,6 +117,14 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 				{
 					yield return pair;
 				}
+			}
+		}
+
+		foreach ((long rid, IUnityAssetBase referencedObject) in ManagedReferences)
+		{
+			foreach ((string path, PPtr pptr) in referencedObject.FetchDependencies())
+			{
+				yield return ($"references[{rid}].{path}", pptr);
 			}
 		}
 	}
@@ -247,6 +278,7 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 				Fields[i].CopyValues(sourceField, Depth, Type.Fields[i], converter);
 			}
 		}
+		CopyManagedReferences(source, converter);
 	}
 
 	public SerializableStructure DeepClone(PPtrConverter converter)
@@ -264,11 +296,15 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 		{
 			field.Reset();
 		}
+		ManagedReferences.Clear();
+		ManagedReferenceTypes.Clear();
 	}
 
 	public void InitializeFields(UnityVersion version)
 	{
 		Version = version;
+		ManagedReferences.Clear();
+		ManagedReferenceTypes.Clear();
 		for (int i = 0; i < Fields.Length; i++)
 		{
 			SerializableType.Field etalon = Type.Fields[i];
@@ -289,4 +325,149 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 	/// <see href="https://forum.unity.com/threads/4-5-serialization-depth.248321/"/>
 	/// </remarks>
 	private static int GetMaxDepthLevel(UnityVersion version) => version.GreaterThanOrEquals(2020, 2, 0, UnityVersionType.Alpha, 21) ? 10 : 7;
+
+	public Dictionary<long, IUnityAssetBase> ManagedReferences { get; } = [];
+	public Dictionary<long, ManagedReferenceTypeInfo> ManagedReferenceTypes { get; } = [];
+
+	public bool IsManagedReferencesField(string name)
+	{
+		return TryGetIndex(name, out int index) && IsManagedReferencesField(Type.Fields[index]);
+	}
+
+	private int TryGetManagedReferencesFieldIndex()
+	{
+		for (int i = 0; i < Type.Fields.Count; i++)
+		{
+			if (IsManagedReferencesField(Type.Fields[i]))
+			{
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	private static bool IsManagedReferencesField(in SerializableType.Field field)
+	{
+		return field.ArrayDepth == 0
+			&& field.Type.Type == PrimitiveType.Complex
+			&& (field.Name is "managedReferences" or "references"
+				|| field.Type.Name == "ManagedReferencesRegistry");
+	}
+
+	private bool TryReadWithManagedReferencesFirst(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, int managedReferencesFieldIndex)
+	{
+		try
+		{
+			SerializableType.Field managedReferencesField = Type.Fields[managedReferencesFieldIndex];
+			Fields[managedReferencesFieldIndex].Read(ref reader, version, flags, Depth, managedReferencesField);
+			CacheManagedReferences(Fields[managedReferencesFieldIndex], managedReferencesField);
+
+			for (int i = 0; i < Fields.Length; i++)
+			{
+				if (i == managedReferencesFieldIndex)
+				{
+					continue;
+				}
+
+				SerializableType.Field etalon = Type.Fields[i];
+				if (IsAvailable(etalon))
+				{
+					Fields[i].Read(ref reader, version, flags, Depth, etalon);
+				}
+			}
+
+			return true;
+		}
+		catch
+		{
+			return false;
+		}
+	}
+
+	private void ClearFields()
+	{
+		for (int i = 0; i < Fields.Length; i++)
+		{
+			Fields[i].Reset();
+		}
+		ManagedReferences.Clear();
+		ManagedReferenceTypes.Clear();
+	}
+
+	private void CacheManagedReferences(SerializableValue managedReferencesFieldValue, in SerializableType.Field managedReferencesField)
+	{
+		if (managedReferencesField.ArrayDepth != 0
+			|| managedReferencesField.Type.Type != PrimitiveType.Complex
+			|| managedReferencesFieldValue.CValue is not SerializableStructure managedReferencesStructure)
+		{
+			return;
+		}
+
+		SerializableValue? refIds = managedReferencesStructure.TryGetField("RefIds")
+			?? managedReferencesStructure.TryGetField("refIds")
+			?? managedReferencesStructure.TryGetField("refIDs")
+			?? managedReferencesStructure.TryGetField("data");
+		if (!refIds.HasValue)
+		{
+			return;
+		}
+
+		foreach (IUnityAssetBase referencedObjectAsset in refIds.Value.AsAssetArray)
+		{
+			if (referencedObjectAsset is not SerializableStructure referencedObject)
+			{
+				continue;
+			}
+
+			SerializableValue? ridValue = referencedObject.TryGetField("rid");
+			if (!ridValue.HasValue)
+			{
+				continue;
+			}
+
+			long rid = ridValue.Value.AsInt64;
+			if (rid == 0)
+			{
+				continue;
+			}
+
+			IUnityAssetBase data = EmptyAsset.Instance;
+			SerializableValue? dataField = referencedObject.TryGetField("data");
+			if (dataField.HasValue && dataField.Value.CValue is IUnityAssetBase dataAsset)
+			{
+				data = dataAsset;
+			}
+			ManagedReferences[rid] = data;
+
+			ManagedReferenceTypeInfo typeInfo = default;
+			SerializableValue? typeField = referencedObject.TryGetField("type");
+			if (typeField.HasValue && typeField.Value.CValue is SerializableStructure typeStructure)
+			{
+				string className = typeStructure.TryGetField("class")?.AsString ?? "";
+				string @namespace = typeStructure.TryGetField("ns")?.AsString ?? "";
+				string assembly = typeStructure.TryGetField("asm")?.AsString ?? "";
+				typeInfo = new ManagedReferenceTypeInfo(className, @namespace, assembly);
+			}
+			ManagedReferenceTypes[rid] = typeInfo;
+		}
+	}
+
+	private void CopyManagedReferences(SerializableStructure source, PPtrConverter converter)
+	{
+		ManagedReferences.Clear();
+		ManagedReferenceTypes.Clear();
+
+		foreach ((long rid, IUnityAssetBase value) in source.ManagedReferences)
+		{
+			IUnityAssetBase clonedValue = value is IDeepCloneable cloneable
+				? cloneable.DeepClone(converter)
+				: value;
+			ManagedReferences.Add(rid, clonedValue);
+		}
+
+		foreach ((long rid, ManagedReferenceTypeInfo value) in source.ManagedReferenceTypes)
+		{
+			ManagedReferenceTypes.Add(rid, value);
+		}
+	}
 }

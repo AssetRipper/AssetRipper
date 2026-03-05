@@ -1,0 +1,115 @@
+AssetRipper Full Fidelity Upgrade Plan
+
+Status: In Progress
+Date: 2026-03-05
+
+Plan File Policy
+- This file is updated after every significant action.
+- It always records what was Added, Changed, Removed, and Fixed.
+- It always records current blockers and the immediate next action.
+
+Goals
+1. Preserve serialized MonoBehaviour data including [SerializeReference] managed references.
+2. Avoid data loss when script DLL types are missing/obfuscated by generating type-tree-based script stubs.
+3. Improve package manifest fidelity with dependency + version recovery.
+4. Reduce dummy shader fallback usage and preserve real shader text whenever possible.
+5. Build for Windows x64 and open output folder.
+
+What I Added
+- Added `Source/AssetRipper.Export.UnityProjects/Scripts/TypeTreeScriptGenerator.cs`
+  - Generates compilable MonoBehaviour C# field stubs from type tree structures.
+  - Skips Unity-hidden fields (`m_`, `rg_`, `<...>`), sanitizes field names, maps primitives/collections.
+- Added `Source/AssetRipper.Tests/Scripts/TypeTreeScriptGeneratorTests.cs`
+  - Validates fallback script generation output for field filtering, type mapping, identifier sanitization, and generic class naming.
+- Added `Source/AssetRipper.Tests/Traversal/YamlWalkerManagedReferenceTests.cs`
+  - Validates managed-reference YAML emission (`references` block) and RID sort order for MonoBehaviour structures.
+- Added/updated `PLAN.txt` policy + running notes to always track adds/changes/removals/fixes and blockers.
+
+What I Changed
+- Changed `Source/AssetRipper.Import/Structure/Assembly/Serializable/SerializableStructure.cs`
+  - Added managed reference storage:
+    - `ManagedReferences: Dictionary<long, IUnityAssetBase>`
+    - `ManagedReferenceTypes: Dictionary<long, ManagedReferenceTypeInfo>`
+  - Updated read flow to try managed-reference-first parsing, then fallback to normal field order.
+  - Added managed reference cache extraction from registry-like fields.
+  - Added copy/reset/init/dependency handling for managed reference maps.
+
+- Changed `Source/AssetRipper.Export.UnityProjects/YamlWalker.cs`
+  - Detects managed-reference RID wrappers and emits them as flow maps (`{rid: ...}`).
+  - Skips direct emission of registry fields in normal traversal.
+  - Appends a `references` block at asset exit when managed references are present.
+
+- Changed `Source/AssetRipper.SerializationLogic/FieldSerializer.cs`
+  - Removed hard-fail rejection of `[SerializeReference]` fields during serializable-type generation.
+
+- Changed `Source/AssetRipper.Import/AssetCreation/GameAssetFactory.cs`
+  - Removed forced nulling/rejection of MonoBehaviour structures containing managed reference registry fields.
+
+- Changed `Source/AssetRipper.Export.UnityProjects/Scripts/ScriptExportCollection.cs`
+  - Added type-tree lookup recovery from MonoBehaviour structures.
+  - Fallback script file generation now uses `TypeTreeScriptGenerator` before `EmptyScript`.
+  - Decompile-mode export now includes all decompile-target scripts, allowing fallback generation for missing types.
+
+- Changed `Source/AssetRipper.Export.UnityProjects/Scripts/EmptyScriptExportCollection.cs`
+  - Added type-tree lookup recovery and generated-script fallback instead of always writing empty scripts.
+
+- Changed `Source/AssetRipper.Export.UnityProjects/Project/PackageManifestPostExporter.cs`
+  - Added dependency scanning from:
+    - Embedded manifest text assets (if present)
+    - Exported `.cs` scripts
+    - Exported `.shader` files
+    - Loaded assembly names
+  - Injects discovered packages with Unity-version-aware versions.
+
+- Changed `Source/AssetRipper.Export.UnityProjects/Shaders/SimpleShaderExporter.cs`
+  - Relaxed shader text detection so real shader text is exported more often (reducing dummy shader output, including TMP-like cases).
+
+What I Removed
+- Removed explicit import-time blocking for managed-reference MonoBehaviours.
+- Removed explicit `[SerializeReference] not supported` hard-stop in field serializer creation.
+
+What I Fixed
+- Fixed fallback script generation path to preserve serializable field layout when exact script types are missing.
+- Fixed manifest generation to include more accurate package dependencies/versions where recoverable.
+- Fixed YAML export path to include managed reference `references` output block.
+- Fixed regression risk by adding explicit test coverage for the above fallback-script and managed-reference YAML behaviors.
+
+Build Notes
+- `AssetRipper.slnx` currently contains an existing broken project reference (`AssetRipper.Export.Modules.Shaders` path mismatch), so full-solution build fails before compile stage.
+- Direct project build initially failed in `_GetProjectReferenceTargetFrameworkProperties`; root cause identified:
+  - `SourceGenerator.Foundations` task host failure (`MSB4216`, `MSB4027`) in `AssetRipper.SourceGenerated.Extensions.SourceGenerator`.
+- Workaround used for code validation:
+  - Build changed dependency projects with `/p:BuildProjectReferences=false` and `/m:1`.
+  - Build succeeded for:
+    - `AssetRipper.SerializationLogic`
+    - `AssetRipper.SourceGenerated.Extensions`
+    - `AssetRipper.Import`
+    - `AssetRipper.Processing`
+    - `AssetRipper.Export`
+    - `AssetRipper.Export.Modules.Audio`
+    - `AssetRipper.Export.Modules.Textures`
+    - `AssetRipper.Export.Modules.Models`
+    - `AssetRipper.Export.UnityProjects`
+- Additional workaround validation (this continuation):
+  - Built test dependencies with `/p:BuildProjectReferences=false`, `--no-restore`, `/m:1`:
+    - `UnityEngine`
+    - `AssetRipper.Export.PrimaryContent`
+    - `AssetRipper.Export.UnityProjects`
+  - Ran targeted tests with `/p:BuildProjectReferences=false`, `--no-restore`, `/m:1`:
+    - `dotnet test Source/AssetRipper.Tests/AssetRipper.Tests.csproj -c Release --filter "FullyQualifiedName~TypeTreeScriptGeneratorTests|FullyQualifiedName~YamlWalkerManagedReferenceTests"`
+    - Result: Passed (3/3).
+- Win-x64 RID build remains blocked by restore graph/toolchain issue (`NETSDK1047` due missing `net10.0/win-x64` assets in project.assets.json and restore failure).
+
+Session Notes
+- Verified all `ProjectReference` paths currently resolve on disk.
+- Captured `restore_diag.log` and `build_diag.log` for troubleshooting task-graph failure.
+- Confirmed repo targets `net10.0` in `Source/Directory.Build.props`.
+- Exporter project output currently validated at:
+  - `Source/0Bins/Other/AssetRipper.Export.UnityProjects/Release/AssetRipper.Export.UnityProjects.dll`
+- Confirmed output folder exists and includes `Release/win-x64` subfolder under:
+  - `Source/0Bins/Other/AssetRipper.Export.UnityProjects/Release`
+
+Next Actions
+1. Apply a durable fix for `SourceGenerator.Foundations` task host issue (`MSB4216`, `MSB4027`) so normal reference builds work without workaround flags.
+2. Run an end-to-end export validation pass (real sample project) focused on SerializeReference, fallback scripts, package manifest, and shader fidelity.
+3. Re-run `GUI.Free` win-x64 publish and confirm final output folder handoff after the task-host issue is resolved or bypassed.
