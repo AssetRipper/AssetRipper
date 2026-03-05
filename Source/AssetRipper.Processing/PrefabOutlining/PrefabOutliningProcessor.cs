@@ -5,7 +5,6 @@ using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
 using AssetRipper.SourceGenerated.Extensions;
-// No extra using needed for GameObjectNameCleaner because they share the namespace now
 
 namespace AssetRipper.Processing.PrefabOutlining;
 
