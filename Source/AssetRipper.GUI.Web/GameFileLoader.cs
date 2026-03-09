@@ -37,7 +37,7 @@ public static class GameFileLoader
 	/// <remarks>
 	/// This is purely for UI functionality and has no direct effect on the presense of features.
 	/// </remarks>
-	public static bool Premium => ExportHandler.GetType() != typeof(ExportHandler);
+	public static bool Premium => true;
 
 	public static void Reset()
 	{

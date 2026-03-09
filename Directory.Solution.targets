@@ -1,0 +1,36 @@
+<Project>
+	<!-- The generated .slnx metaproj hardcodes BuildInParallel="True" on solution fan-out
+	     targets. In this workspace that path intermittently aborts with "Build FAILED"
+	     and no surfaced errors. Override the solution-level targets to serialize project
+	     dispatch while preserving the normal target surface. -->
+	<Target Name="Build" Outputs="@(CollectedBuildOutput)">
+		<MSBuild BuildInParallel="False"
+			Properties="BuildingSolutionFile=true; CurrentSolutionConfigurationContents=$(CurrentSolutionConfigurationContents); SolutionDir=$(SolutionDir); SolutionExt=$(SolutionExt); SolutionFileName=$(SolutionFileName); SolutionName=$(SolutionName); SolutionPath=$(SolutionPath)"
+			Projects="@(ProjectReference)">
+			<Output TaskParameter="TargetOutputs" ItemName="CollectedBuildOutput" />
+		</MSBuild>
+	</Target>
+
+	<Target Name="Clean">
+		<MSBuild BuildInParallel="False"
+			Properties="BuildingSolutionFile=true; CurrentSolutionConfigurationContents=$(CurrentSolutionConfigurationContents); SolutionDir=$(SolutionDir); SolutionExt=$(SolutionExt); SolutionFileName=$(SolutionFileName); SolutionName=$(SolutionName); SolutionPath=$(SolutionPath)"
+			Targets="Clean"
+			Projects="@(ProjectReference->Reverse())" />
+	</Target>
+
+	<Target Name="Rebuild" Outputs="@(CollectedBuildOutput)">
+		<MSBuild BuildInParallel="False"
+			Properties="BuildingSolutionFile=true; CurrentSolutionConfigurationContents=$(CurrentSolutionConfigurationContents); SolutionDir=$(SolutionDir); SolutionExt=$(SolutionExt); SolutionFileName=$(SolutionFileName); SolutionName=$(SolutionName); SolutionPath=$(SolutionPath)"
+			Targets="Rebuild"
+			Projects="@(ProjectReference)">
+			<Output TaskParameter="TargetOutputs" ItemName="CollectedBuildOutput" />
+		</MSBuild>
+	</Target>
+
+	<Target Name="Publish">
+		<MSBuild BuildInParallel="False"
+			Properties="BuildingSolutionFile=true; CurrentSolutionConfigurationContents=$(CurrentSolutionConfigurationContents); SolutionDir=$(SolutionDir); SolutionExt=$(SolutionExt); SolutionFileName=$(SolutionFileName); SolutionName=$(SolutionName); SolutionPath=$(SolutionPath)"
+			Targets="Publish"
+			Projects="@(ProjectReference)" />
+	</Target>
+</Project>

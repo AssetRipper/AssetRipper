@@ -1,1 +1,10 @@
-<Project />
+<Project>
+	<!-- SourceGenerator.Foundations 2.0.14 uses TaskHostFactory for FilterAssembliesTask.
+	     Under the current .NET 10 SDK in this workspace, out-of-proc NET x64 task host creation
+	     fails before compilation. Override it to the default in-proc assembly task so local builds
+	     can complete deterministically. -->
+	<UsingTask TaskName="FilterAssembliesTask"
+		AssemblyFile="$(SgfMsBuildPath)"
+		Condition="'$(SgfMsBuildPath)' != ''"
+		Override="true" />
+</Project>

@@ -12,6 +12,10 @@ public class ScriptableObjectExporter : YamlExporterBase
 		{
 			return EmptyExportCollection.Instance;
 		}
+		else if (AddressablesLayout.TryGetLayout(monoBehaviour, out AddressablesLayout.Layout layout))
+		{
+			return new AddressablesScriptableObjectExportCollection(this, monoBehaviour, layout);
+		}
 		else
 		{
 			return new ScriptableObjectExportCollection(this, monoBehaviour);

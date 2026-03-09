@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Export.Configuration;
+using AssetRipper.Export.UnityProjects.Project;
 using AssetRipper.Import.Structure.Assembly;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.SourceGenerated;
@@ -9,9 +10,12 @@ namespace AssetRipper.Export.UnityProjects.Scripts;
 
 public class ScriptExporter : IAssetExporter
 {
-	public ScriptExporter(IAssemblyManager assemblyManager, FullConfiguration configuration)
+	private readonly RegistryPackageBridge registryPackageBridge;
+
+	public ScriptExporter(IAssemblyManager assemblyManager, FullConfiguration configuration, RegistryPackageBridge registryPackageBridge)
 	{
 		AssemblyManager = assemblyManager;
+		this.registryPackageBridge = registryPackageBridge;
 		Decompiler = new ScriptDecompiler(AssemblyManager)
 		{
 			LanguageVersion = configuration.ExportSettings.ScriptLanguageVersion.ToCSharpLanguageVersion(configuration.Version),
@@ -33,6 +37,12 @@ public class ScriptExporter : IAssetExporter
 	{
 		if (asset is IMonoScript script)
 		{
+			if (registryPackageBridge.SupportsRegistryPackages && registryPackageBridge.TryGetScriptPointer(script, out MetaPtr packagePointer))
+			{
+				exportCollection = new SingleRedirectExportCollection(asset, packagePointer);
+				return true;
+			}
+
 			if (HasDecompiled)
 			{
 				exportCollection = new SingleRedirectExportCollection(asset, CreateExportPointer(script));
@@ -65,6 +75,11 @@ public class ScriptExporter : IAssetExporter
 
 	public MetaPtr CreateExportPointer(IMonoScript script)
 	{
+		if (registryPackageBridge.SupportsRegistryPackages && registryPackageBridge.TryGetScriptPointer(script, out MetaPtr packagePointer))
+		{
+			return packagePointer;
+		}
+
 		return GetExportType(script) switch
 		{
 			AssemblyExportType.Decompile => new(MonoScriptDecompiledFileID, ScriptHashing.CalculateScriptGuid(script), AssetType.Meta),

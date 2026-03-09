@@ -10,6 +10,17 @@ namespace AssetRipper.Export.UnityProjects.Project;
 
 public partial class PackageManifestPostExporter : IPostExporter
 {
+	private readonly RegistryPackageBridge? registryPackageBridge;
+
+	public PackageManifestPostExporter()
+	{
+	}
+
+	public PackageManifestPostExporter(RegistryPackageBridge registryPackageBridge)
+	{
+		this.registryPackageBridge = registryPackageBridge;
+	}
+
 	public void DoPostExport(GameData gameData, FullConfiguration settings, FileSystem fileSystem)
 	{
 		string packagesDirectory = fileSystem.Path.Join(settings.ProjectRootPath, "Packages");
@@ -17,11 +28,17 @@ public partial class PackageManifestPostExporter : IPostExporter
 
 		PackageManifest manifest = CreateManifest(settings.Version);
 		Dictionary<string, DetectedPackage> discoveredPackages = ScanDependencies(gameData, settings, fileSystem);
-		InjectDiscoveredDependencies(manifest, settings.Version, discoveredPackages);
+		InjectDiscoveredDependencies(manifest, discoveredPackages);
 
 		string path = fileSystem.Path.Join(packagesDirectory, "manifest.json");
 		using Stream stream = fileSystem.File.Create(path);
 		manifest.Save(stream);
+
+		if (registryPackageBridge is not null)
+		{
+			string versionsPath = fileSystem.Path.Join(packagesDirectory, "assetripper_versions.txt");
+			fileSystem.File.WriteAllText(versionsPath, registryPackageBridge.BuildVersionsReport());
+		}
 	}
 
 	protected virtual PackageManifest CreateManifest(UnityVersion version)
@@ -37,11 +54,12 @@ public partial class PackageManifestPostExporter : IPostExporter
 		ReadEmbeddedPackageLockDependencies(gameData, dependencies);
 		ScanExportedAssets(settings.AssetsPath, fileSystem, dependencies);
 		ScanAssemblyNames(gameData, dependencies);
+		ReadRegistryBridgeDependencies(dependencies);
 
 		return dependencies;
 	}
 
-	protected virtual void InjectDiscoveredDependencies(PackageManifest manifest, UnityVersion version, Dictionary<string, DetectedPackage> discoveredPackages)
+	protected virtual void InjectDiscoveredDependencies(PackageManifest manifest, Dictionary<string, DetectedPackage> discoveredPackages)
 	{
 		foreach ((string packageName, DetectedPackage detection) in discoveredPackages)
 		{
@@ -50,10 +68,19 @@ public partial class PackageManifestPostExporter : IPostExporter
 			{
 				manifest.Dependencies[packageName] = explicitVersion;
 			}
-			else
-			{
-				manifest.Dependencies[packageName] = ResolveVersion(packageName, version);
-			}
+		}
+	}
+
+	private void ReadRegistryBridgeDependencies(Dictionary<string, DetectedPackage> dependencies)
+	{
+		if (registryPackageBridge is null)
+		{
+			return;
+		}
+
+		foreach ((string packageName, string packageVersion) in registryPackageBridge.ManifestDependencies)
+		{
+			AddDependency(dependencies, packageName, packageVersion, PackageVersionSource.DeepScan);
 		}
 	}
 
@@ -334,24 +361,6 @@ public partial class PackageManifestPostExporter : IPostExporter
 		return $"{version.Major}.{version.Minor}.{patchVersion}";
 	}
 
-	private static string ResolveVersion(string packageName, UnityVersion version)
-	{
-		return packageName switch
-		{
-			"com.unity.ugui" => "1.0.0",
-			"com.unity.textmeshpro" => version.GreaterThanOrEquals(2021) ? "3.0.6" : version.GreaterThanOrEquals(2019) ? "2.1.6" : "1.5.0",
-			"com.unity.entities" => version.GreaterThanOrEquals(2022) ? "1.0.0" : version.GreaterThanOrEquals(2020) ? "0.51.1-preview.21" : "0.17.0-preview.42",
-			"com.unity.render-pipelines.universal" => version.GreaterThanOrEquals(2021) ? "12.0.0" : version.GreaterThanOrEquals(2020) ? "10.0.0" : "7.5.3",
-			"com.unity.render-pipelines.high-definition" => version.GreaterThanOrEquals(2021) ? "12.1.0" : version.GreaterThanOrEquals(2020) ? "10.5.1" : "7.5.3",
-			"com.unity.render-pipelines.core" => version.GreaterThanOrEquals(2021) ? "12.0.0" : version.GreaterThanOrEquals(2020) ? "10.0.0" : "7.5.3",
-			"com.unity.inputsystem" => version.GreaterThanOrEquals(2021) ? "1.5.1" : version.GreaterThanOrEquals(2020) ? "1.4.4" : "1.0.2",
-			"com.unity.xr.management" => version.GreaterThanOrEquals(2021) ? "4.2.0" : "4.0.1",
-			"com.unity.xr.oculus" => version.GreaterThanOrEquals(2021) ? "4.3.0" : "3.2.3",
-			"com.unity.netcode.gameobjects" => version.GreaterThanOrEquals(2022) ? "1.5.2" : "1.0.0",
-			_ => "1.0.0",
-		};
-	}
-
 	private static string TryReadAllText(FileSystem fileSystem, string path)
 	{
 		try
@@ -413,5 +422,6 @@ public partial class PackageManifestPostExporter : IPostExporter
 		ExplicitText = 2,
 		Manifest = 3,
 		PackageLock = 4,
+		DeepScan = 5,
 	}
 }
