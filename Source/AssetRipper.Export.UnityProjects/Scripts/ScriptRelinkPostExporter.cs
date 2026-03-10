@@ -195,7 +195,7 @@ namespace AssetRipperPatches
 					return match.Value;
 				}
 
-				if (!installedScripts.TryGetValue(identityKey, out string? installedGuid))
+				if (!TryResolveInstalledGuid(installedScripts, identityKey, out string? installedGuid))
 				{
 					return match.Value;
 				}
@@ -251,6 +251,10 @@ namespace AssetRipperPatches
 		private static Dictionary<string, string> BuildInstalledScriptMap()
 		{
 			Dictionary<string, string> installedScripts = new Dictionary<string, string>(StringComparer.Ordinal);
+			Dictionary<string, string> namespaceAndClassMatches = new Dictionary<string, string>(StringComparer.Ordinal);
+			HashSet<string> ambiguousNamespaceAndClassMatches = new HashSet<string>(StringComparer.Ordinal);
+			Dictionary<string, string> classMatches = new Dictionary<string, string>(StringComparer.Ordinal);
+			HashSet<string> ambiguousClassMatches = new HashSet<string>(StringComparer.Ordinal);
 			HashSet<string> visitedGuids = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
 			foreach (string root in new[] { "Assets", "Packages" })
@@ -277,8 +281,21 @@ namespace AssetRipperPatches
 
 					string assemblyName = type.Assembly.GetName().Name ?? string.Empty;
 					string identityKey = MakeIdentityKey(assemblyName, type.Namespace ?? string.Empty, type.Name);
-					installedScripts[identityKey] = guid.ToLowerInvariant();
+					string installedGuid = guid.ToLowerInvariant();
+					installedScripts[MakeExactLookupKey(identityKey)] = installedGuid;
+					RegisterFallback(namespaceAndClassMatches, ambiguousNamespaceAndClassMatches, MakeNamespaceAndClassKey(type.Namespace ?? string.Empty, type.Name), installedGuid);
+					RegisterFallback(classMatches, ambiguousClassMatches, MakeClassKey(type.Name), installedGuid);
 				}
+			}
+
+			foreach (KeyValuePair<string, string> pair in namespaceAndClassMatches)
+			{
+				installedScripts[MakeNamespaceAndClassLookupKey(pair.Key)] = pair.Value;
+			}
+
+			foreach (KeyValuePair<string, string> pair in classMatches)
+			{
+				installedScripts[MakeClassLookupKey(pair.Key)] = pair.Value;
 			}
 
 			return installedScripts;
@@ -308,6 +325,77 @@ namespace AssetRipperPatches
 		private static string MakeIdentityKey(string assemblyName, string namespaceName, string className)
 		{
 			return assemblyName + "\t" + namespaceName + "\t" + className;
+		}
+
+		private static bool TryResolveInstalledGuid(Dictionary<string, string> installedScripts, string identityKey, out string installedGuid)
+		{
+			if (installedScripts.TryGetValue(MakeExactLookupKey(identityKey), out installedGuid))
+			{
+				return true;
+			}
+
+			string[] parts = identityKey.Split('\t');
+			if (parts.Length >= 3)
+			{
+				string namespaceAndClassKey = MakeNamespaceAndClassKey(parts[1], parts[2]);
+				if (installedScripts.TryGetValue(MakeNamespaceAndClassLookupKey(namespaceAndClassKey), out installedGuid))
+				{
+					return true;
+				}
+
+				if (installedScripts.TryGetValue(MakeClassLookupKey(MakeClassKey(parts[2])), out installedGuid))
+				{
+					return true;
+				}
+			}
+
+			installedGuid = null;
+			return false;
+		}
+
+		private static void RegisterFallback(Dictionary<string, string> target, HashSet<string> ambiguousKeys, string key, string guid)
+		{
+			if (ambiguousKeys.Contains(key))
+			{
+				return;
+			}
+
+			if (target.TryGetValue(key, out string existingGuid))
+			{
+				if (!string.Equals(existingGuid, guid, StringComparison.OrdinalIgnoreCase))
+				{
+					target.Remove(key);
+					ambiguousKeys.Add(key);
+				}
+				return;
+			}
+
+			target[key] = guid;
+		}
+
+		private static string MakeExactLookupKey(string identityKey)
+		{
+			return "exact\t" + identityKey;
+		}
+
+		private static string MakeNamespaceAndClassLookupKey(string namespaceAndClassKey)
+		{
+			return "namespace\t" + namespaceAndClassKey;
+		}
+
+		private static string MakeClassLookupKey(string classKey)
+		{
+			return "class\t" + classKey;
+		}
+
+		private static string MakeNamespaceAndClassKey(string namespaceName, string className)
+		{
+			return namespaceName + "\t" + className;
+		}
+
+		private static string MakeClassKey(string className)
+		{
+			return className;
 		}
 
 		private static string GetAbsoluteMapPath()

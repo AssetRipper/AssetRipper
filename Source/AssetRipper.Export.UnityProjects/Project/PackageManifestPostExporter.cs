@@ -271,7 +271,7 @@ public partial class PackageManifestPostExporter : IPostExporter
 		{
 			string packageName = match.Groups[1].Value;
 			string version = match.Groups[2].Value;
-			if (packageName.StartsWith("com.unity.", StringComparison.Ordinal) && !string.IsNullOrWhiteSpace(version))
+			if (LooksLikePackageId(packageName) && !string.IsNullOrWhiteSpace(version))
 			{
 				AddDependency(dependencies, packageName, version, PackageVersionSource.ExplicitText);
 			}
@@ -280,7 +280,7 @@ public partial class PackageManifestPostExporter : IPostExporter
 		foreach (Match match in PackageNameRegex().Matches(text))
 		{
 			string packageName = match.Value;
-			if (packageName.StartsWith("com.unity.", StringComparison.Ordinal))
+			if (LooksLikePackageId(packageName))
 			{
 				AddDependency(dependencies, packageName, null, PackageVersionSource.Hint);
 			}
@@ -290,7 +290,7 @@ public partial class PackageManifestPostExporter : IPostExporter
 	private static void AddDependency(Dictionary<string, DetectedPackage> dependencies, string packageName, string? version, PackageVersionSource source)
 	{
 		string normalizedPackageName = NormalizePackageName(packageName);
-		if (!normalizedPackageName.StartsWith("com.unity.", StringComparison.Ordinal))
+		if (!LooksLikePackageId(normalizedPackageName))
 		{
 			return;
 		}
@@ -331,6 +331,11 @@ public partial class PackageManifestPostExporter : IPostExporter
 	private static string NormalizePackageName(string packageName)
 	{
 		return packageName.Trim().ToLowerInvariant();
+	}
+
+	private static bool LooksLikePackageId(string packageName)
+	{
+		return PackageIdRegex().IsMatch(packageName);
 	}
 
 	private static string? NormalizeVersion(string? version)
@@ -407,11 +412,14 @@ public partial class PackageManifestPostExporter : IPostExporter
 		("namespace Unity.Netcode", "com.unity.netcode.gameobjects"),
 	];
 
-	[GeneratedRegex("\"(com\\.unity\\.[a-z0-9][a-z0-9\\.-]*)\"\\s*:\\s*\"([^\"]+)\"", RegexOptions.IgnoreCase)]
+	[GeneratedRegex("\"((?:com|io)\\.[a-z0-9][a-z0-9\\.-]*)\"\\s*:\\s*\"([^\"]+)\"", RegexOptions.IgnoreCase)]
 	private static partial Regex PackageWithVersionRegex();
 
-	[GeneratedRegex("com\\.unity\\.[a-z0-9][a-z0-9\\.-]*", RegexOptions.IgnoreCase)]
+	[GeneratedRegex("(?:com|io)\\.[a-z0-9][a-z0-9\\.-]*", RegexOptions.IgnoreCase)]
 	private static partial Regex PackageNameRegex();
+
+	[GeneratedRegex("^(?:com|io)\\.[a-z0-9][a-z0-9\\.-]*$", RegexOptions.IgnoreCase)]
+	private static partial Regex PackageIdRegex();
 
 	protected readonly record struct DetectedPackage(string? Version, PackageVersionSource Source);
 

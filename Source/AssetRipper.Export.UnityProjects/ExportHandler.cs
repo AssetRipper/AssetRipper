@@ -154,6 +154,10 @@ public class ExportHandler
 		yield return new AddressablesPostExporter(registryPackageBridge);
 		yield return new StreamingAssetsPostExporter();
 		yield return new DllPostExporter();
+		if (Settings.Version.GreaterThanOrEquals(2019, 1))
+		{
+			yield return new ScriptCompileFixPostExporter();
+		}
 		yield return new ScriptRelinkPostExporter();
 		yield return new PathIdMapExporter();
 	}

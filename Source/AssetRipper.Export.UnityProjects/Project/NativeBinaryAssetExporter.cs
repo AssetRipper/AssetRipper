@@ -60,7 +60,7 @@ internal sealed class NativeBinaryAssetExporter : BinaryAssetExporter
 	{
 		public static SerializedFile Build(IExportContainer container, IUnityObjectBase root)
 		{
-			ProcessedBundle bundle = new("BinaryNativeExport");
+			BinaryProxyBundle bundle = new("BinaryNativeExport");
 			BinaryProxyCollection mainCollection = new("Main", bundle, container.ExportVersion, root.Collection.EndianType, BuildTarget.NoTarget, TransferInstructionFlags.NoTransferInstructionFlags);
 
 			Dictionary<IUnityObjectBase, IUnityObjectBase> proxyMap = new();
@@ -277,5 +277,10 @@ internal sealed class NativeBinaryAssetExporter : BinaryAssetExporter
 			AddAsset(asset);
 			return asset;
 		}
+	}
+
+	private sealed class BinaryProxyBundle(string name) : VirtualBundle<BinaryProxyCollection>
+	{
+		public override string Name { get; } = name;
 	}
 }

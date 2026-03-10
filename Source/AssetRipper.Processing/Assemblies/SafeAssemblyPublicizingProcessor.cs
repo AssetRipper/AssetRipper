@@ -50,18 +50,8 @@ public sealed class SafeAssemblyPublicizingProcessor : IAssetProcessor
 
 				foreach (MethodDefinition method in type.Methods)
 				{
-					if (method.IsStaticConstructor())
+					if (PublicizingSupport.ShouldSkipMethodPublicizing(method))
 					{
-						continue;
-					}
-					if (method.Name == "Finalize" && method.IsVirtual && method.IsFamily && method.DeclaringType!.MethodImplementations.Any(i => i.Body == method))
-					{
-						// Finalizers should not be modified.
-						continue;
-					}
-					if (method.DeclaringType!.MethodImplementations.Any(i => i.Body == method))
-					{
-						// Explicit interface implementations should not be modified.
 						continue;
 					}
 					method.IsPublic = true;
@@ -69,6 +59,8 @@ public sealed class SafeAssemblyPublicizingProcessor : IAssetProcessor
 
 				foreach (FieldDefinition field in type.Fields)
 				{
+					PublicizingSupport.DeduplicateNonSerializedAttributes(field);
+
 					if (field.IsCompilerGenerated())
 					{
 						// Backing fields should not be modified.

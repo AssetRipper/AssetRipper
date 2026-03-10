@@ -44,15 +44,7 @@ public sealed class AssemblyCSharpPublicizingProcessor : IAssetProcessor
 
 					foreach (MethodDefinition method in type.Methods)
 					{
-						if (method.IsStaticConstructor())
-						{
-							continue;
-						}
-						if (method.Name == "Finalize" && method.IsVirtual && method.IsFamily && method.DeclaringType!.MethodImplementations.Any(implementation => implementation.Body == method))
-						{
-							continue;
-						}
-						if (method.DeclaringType!.MethodImplementations.Any(implementation => implementation.Body == method))
+						if (PublicizingSupport.ShouldSkipMethodPublicizing(method))
 						{
 							continue;
 						}
@@ -62,6 +54,8 @@ public sealed class AssemblyCSharpPublicizingProcessor : IAssetProcessor
 
 					foreach (FieldDefinition field in type.Fields)
 					{
+						PublicizingSupport.DeduplicateNonSerializedAttributes(field);
+
 						if (field.IsCompilerGenerated() || field.IsPublic)
 						{
 							continue;

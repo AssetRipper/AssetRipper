@@ -18,6 +18,7 @@ public sealed class RegistryPackageBridge
 {
 	private const string UnityPackageCacheRelativePath = @"Unity\cache\packages\packages.unity.com";
 	private static readonly Regex PackageTagRegex = new(@"(?i)(?:packages[/\\])?(?<pkg>(?:com|io)\.[a-z0-9][a-z0-9._-]+)@(?<ver>[0-9]+(?:\.[0-9]+){1,3}(?:[-+][A-Za-z0-9_.-]+)?)", RegexOptions.Compiled);
+	private static readonly Regex PackageReferenceRegex = new(@"(?i)(?:PackageCache|Packages)[/\\](?<pkg>(?:com|io)\.[a-z0-9][a-z0-9._-]+)(?:@(?<ref>[A-Za-z0-9._-]+))?(?=[/\\])", RegexOptions.Compiled);
 	private static readonly Regex PackageIdRegex = new(@"^(?:com|io)\.[a-z0-9][a-z0-9._-]+$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 	private static readonly Regex SemanticVersionRegex = new(@"(?<![0-9])(?<ver>[0-9]+(?:\.[0-9]+){1,3}(?:[-+][A-Za-z0-9_.-]+)?)(?![0-9])", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 	private static readonly Regex NamespaceRegex = new(@"^\s*namespace\s+([A-Za-z_][\w\.]*)\s*(?:;|\{)", RegexOptions.Compiled | RegexOptions.Multiline);
@@ -71,6 +72,12 @@ public sealed class RegistryPackageBridge
 		["VoiceSDK.Runtime.dll"] = new("voice_sdk", "Voice SDK", null, ["voicesdk", "voice sdk"]),
 		["Newtonsoft.Json.dll"] = new("newtonsoft_json", "Newtonsoft.Json", null, ["newtonsoft"]),
 	};
+	private static readonly HashSet<string> ManifestSources = new(StringComparer.Ordinal)
+	{
+		"explicit_tag",
+		"assembly_metadata",
+		"context_strings",
+	};
 
 	private readonly Dictionary<string, Candidate> manifestCandidates = new(StringComparer.Ordinal);
 	private readonly Dictionary<string, Candidate> familyCandidates = new(StringComparer.Ordinal);
@@ -111,7 +118,7 @@ public sealed class RegistryPackageBridge
 	public UnityVersion Version { get; }
 	public string PackageCacheRoot { get; }
 	public bool SupportsRegistryPackages => Version.GreaterThanOrEquals(2018, 1, 0);
-	public IReadOnlyDictionary<string, string> ManifestDependencies => manifestCandidates.ToDictionary(static pair => pair.Key, static pair => pair.Value.Version, StringComparer.Ordinal);
+	public IReadOnlyDictionary<string, string> ManifestDependencies => GetManifestCandidates().ToDictionary(static pair => pair.Key, static pair => pair.Value.Version, StringComparer.Ordinal);
 
 	public bool TryGetScriptPointer(IMonoScript script, out MetaPtr pointer)
 	{
@@ -138,28 +145,75 @@ public sealed class RegistryPackageBridge
 
 	internal IEnumerable<PackageDetection> GetDetections()
 	{
-		foreach ((string key, Candidate candidate) in familyCandidates.OrderBy(static pair => pair.Key, StringComparer.Ordinal))
+		foreach ((string key, FamilyHint hint) in familyHintsByKey.OrderBy(static pair => pair.Key, StringComparer.Ordinal))
 		{
-			FamilyHint hint = familyHintsByKey[key];
-			yield return new PackageDetection(hint.Display, hint.ManifestKey ?? hint.Family, candidate.Version, candidate.Source, candidate.Confidence, candidate.Exact);
+			if (familyCandidates.TryGetValue(key, out Candidate candidate))
+			{
+				yield return new PackageDetection(hint.Display, hint.ManifestKey ?? hint.Family, candidate.Version, candidate.Source, candidate.Confidence, candidate.Exact);
+			}
+			else
+			{
+				yield return new PackageDetection(hint.Display, hint.ManifestKey ?? hint.Family, string.Empty, string.Empty, 0, false);
+			}
 		}
 	}
 
 	public string BuildVersionsReport()
 	{
+		List<PackageDetection> detections = [.. GetDetections()];
+		List<KeyValuePair<string, Candidate>> manifestDependencies = [.. GetManifestCandidates().OrderBy(static pair => pair.Key, StringComparer.Ordinal)];
+
 		StringBuilder builder = new();
-		builder.AppendLine("Official registry packages");
-		foreach ((string packageId, Candidate candidate) in manifestCandidates.OrderBy(static pair => pair.Key, StringComparer.Ordinal))
+		builder.AppendLine("Official registry / UPM packages");
+		if (manifestDependencies.Count == 0)
 		{
-			builder.AppendLine($"{packageId} = {candidate.Version} [{candidate.Source}]");
+			builder.AppendLine("<none>");
+		}
+		else
+		{
+			foreach ((string packageId, Candidate candidate) in manifestDependencies)
+			{
+				builder.AppendLine($"{packageId} = {candidate.Version} [{candidate.Source}]");
+			}
 		}
 		builder.AppendLine();
-		builder.AppendLine("Detected middleware");
-		foreach (PackageDetection detection in GetDetections().Where(static d => !d.Id.StartsWith("com.", StringComparison.Ordinal) && !d.Id.StartsWith("io.", StringComparison.Ordinal)))
+
+		builder.AppendLine("Third-party exact versions");
+		PackageDetection[] exactThirdPartyDetections =
+		[
+			.. detections.Where(static d => !string.IsNullOrWhiteSpace(d.Version) && !LooksLikePackageId(d.Id))
+		];
+		if (exactThirdPartyDetections.Length == 0)
 		{
-			builder.AppendLine($"{detection.Display} = {detection.Version} [{detection.Source}]");
+			builder.AppendLine("<none>");
+		}
+		else
+		{
+			foreach (PackageDetection detection in exactThirdPartyDetections)
+			{
+				builder.AppendLine($"{detection.Display} = {detection.Version} [{detection.Source}]");
+			}
 		}
 		builder.AppendLine();
+
+		builder.AppendLine("Detected families without exact version");
+		PackageDetection[] unresolvedDetections =
+		[
+			.. detections.Where(static d => string.IsNullOrWhiteSpace(d.Version))
+		];
+		if (unresolvedDetections.Length == 0)
+		{
+			builder.AppendLine("<none>");
+		}
+		else
+		{
+			foreach (PackageDetection detection in unresolvedDetections)
+			{
+				builder.AppendLine($"{detection.Display}: family detected, exact version not exposed");
+			}
+		}
+		builder.AppendLine();
+
 		builder.AppendLine("Package cache resolutions");
 		if (packageDirectories.Count == 0)
 		{
@@ -186,12 +240,13 @@ public sealed class RegistryPackageBridge
 		byte[] bytes = ReadAssemblyBytes(assembly);
 		List<string> texts = [.. ExtractAsciiStrings(bytes), .. ExtractUtf16Strings(bytes)];
 		List<(string Package, string Version)> explicitPackages = CollectExplicitPackages(texts);
+		List<string> packageReferences = CollectPackageReferences(texts);
 		foreach ((string packageId, string packageVersion) in explicitPackages)
 		{
 			AddManifestCandidate(packageId, packageVersion, "explicit_tag", 100, exact: true);
 		}
 
-		FamilyHint? hint = TryGetFamilyHint(assemblyName, explicitPackages);
+		FamilyHint? hint = TryGetFamilyHint(assemblyName, explicitPackages, packageReferences);
 		if (hint is null)
 		{
 			return;
@@ -237,6 +292,17 @@ public sealed class RegistryPackageBridge
 		foreach (string value in FindVersionsNearTokens(texts, resolvedHint.Tokens))
 		{
 			AddFamilyCandidate(resolvedHint, value, "context_strings", 68, exact: true);
+		}
+	}
+
+	private IEnumerable<KeyValuePair<string, Candidate>> GetManifestCandidates()
+	{
+		foreach ((string packageId, Candidate candidate) in manifestCandidates)
+		{
+			if (candidate.Exact && ManifestSources.Contains(candidate.Source))
+			{
+				yield return new KeyValuePair<string, Candidate>(packageId, candidate);
+			}
 		}
 	}
 
@@ -425,16 +491,48 @@ public sealed class RegistryPackageBridge
 		return results;
 	}
 
-	private static FamilyHint? TryGetFamilyHint(string assemblyName, List<(string Package, string Version)> explicitPackages)
+	private static List<string> CollectPackageReferences(IEnumerable<string> texts)
+	{
+		List<string> results = [];
+		HashSet<string> seen = new(StringComparer.Ordinal);
+		foreach (string text in texts)
+		{
+			foreach (Match match in PackageReferenceRegex.Matches(text))
+			{
+				string packageId = match.Groups["pkg"].Value.ToLowerInvariant();
+				if (LooksLikePackageId(packageId) && packageId.Count(static c => c == '.') >= 2 && seen.Add(packageId))
+				{
+					results.Add(packageId);
+				}
+			}
+		}
+		return results;
+	}
+
+	private static FamilyHint? TryGetFamilyHint(string assemblyName, List<(string Package, string Version)> explicitPackages, List<string> packageReferences)
 	{
 		if (FamilyHints.TryGetValue(assemblyName, out FamilyHint hint))
 		{
+			if (packageReferences.Count == 1 && !LooksLikePackageId(hint.Family))
+			{
+				string packageId = packageReferences[0];
+				return new FamilyHint(packageId, hint.Display, packageId, hint.Tokens);
+			}
 			return hint;
 		}
 		if (explicitPackages.Count == 1)
 		{
 			(string packageId, _) = explicitPackages[0];
-			return new FamilyHint(packageId, packageId, packageId, []);
+			return new FamilyHint(packageId, packageId, packageId, [assemblyName.ToLowerInvariant()]);
+		}
+		if (packageReferences.Count == 1)
+		{
+			string packageId = packageReferences[0];
+			return new FamilyHint(packageId, packageId, packageId, [assemblyName.ToLowerInvariant()]);
+		}
+		if (LooksLikePackageId(assemblyName))
+		{
+			return new FamilyHint(assemblyName, assemblyName, assemblyName, [assemblyName.ToLowerInvariant()]);
 		}
 		return null;
 	}
