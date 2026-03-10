@@ -175,3 +175,12 @@ Validation (2026-03-05)
 - Existing warnings remain:
   - `MSB3101` assembly-reference cache write denied in `Source/0Bins/obj/...`.
   - Existing `#warning` in `TextureExportCollection.cs`.
+
+
+Latest Update (2026-03-10)
+- Fixed Fusion package ID in RegistryPackageBridge.cs so it exports correctly to manifest.json.
+- Cleaned up root directory, removed old Build_x64 folders, deleted stray logs, and moved deep scan outputs into ResearchLogs folder.
+- Investigated ILSpy Unity settings and PrefabOutliningProcessor for potential fidelity enhancements.
+
+- Enhanced script decompilation in ScriptDecompiler.cs by enabling RemoveDeadCode and RemoveDeadStores in ILSpy DecompilerSettings.
+- Enhanced PrefabOutliningProcessor.cs to preserve original scaling and rotation of root GameObjects during prefab outlining (previously it reset them fully, losing important world space data).

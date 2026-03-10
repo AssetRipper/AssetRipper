@@ -92,9 +92,10 @@ public sealed class PrefabOutliningProcessor : IAssetProcessor
 
 		ITransform transform = root.GetTransform();
 		transform.LocalPosition_C4.Reset();
-		transform.LocalRotation_C4.Reset();
-		transform.LocalScale_C4.SetValues(1, 1, 1);
-		transform.LocalEulerAnglesHint_C4?.Reset();
+		// Keep the original scale and rotation, as the prefab root may have intended non-identity values.
+		// transform.LocalRotation_C4.Reset();
+		// transform.LocalScale_C4.SetValues(1, 1, 1);
+		// transform.LocalEulerAnglesHint_C4?.Reset();
 		transform.RootOrder_C4 = 0;
 		transform.Father_C4.Reset();
 	}

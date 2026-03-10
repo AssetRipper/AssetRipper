@@ -35,6 +35,10 @@ internal class ScriptDecompiler
 
 		settings.UseNestedDirectoriesForNamespaces = true;
 
+		// Clean up Unity scripts during decompilation
+		settings.RemoveDeadCode = true;
+		settings.RemoveDeadStores = true;
+
 		if (FullyQualifiedTypeNames)
 		{
 			settings.AlwaysUseGlobal = true;

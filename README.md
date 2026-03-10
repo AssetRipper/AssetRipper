@@ -9,6 +9,13 @@ AssetRipper is a tool for extracting assets from Unity serialized files (*CAB-*\
 
 AssetRipper supports Unity versions from `3.5.0` to `6000.5.X`. However, support quality may vary slightly for different Unity versions.
 
+## Full Fidelity Upgrades
+
+This repository includes several enhanced features focused on high-fidelity extraction:
+- **Accurate Manifest Generation:** Real UPM dependencies (including third-party packages like Photon Fusion) are dynamically detected and resolved directly into your `manifest.json`.
+- **Advanced Script Fallbacks:** Prevents data loss for missing script assemblies via robust TypeTree-based script regeneration and `[SerializeReference]` managed reference preservation.
+- **Enhanced Decompilation & Scene Generation:** ILSpy dead-code elimination yields clean generated C#, while `PrefabOutliningProcessor` accurately restores root transformations (rotation and scale) in extracted prefabs.
+
 # Premium Edition
 
 [Patreon](https://www.patreon.com/ds5678) supporters at the `Premium` tier or higher receive access to the premium edition of AssetRipper. This edition includes additional [features and improvements](https://assetripper.github.io/AssetRipper/articles/PremiumFeatures.html).
