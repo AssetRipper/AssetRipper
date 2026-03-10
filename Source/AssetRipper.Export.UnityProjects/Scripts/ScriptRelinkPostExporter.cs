@@ -1,5 +1,7 @@
+using AsmResolver.DotNet;
 using AssetRipper.Export.Configuration;
 using AssetRipper.Export.UnityProjects.Project;
+using AssetRipper.Import.Structure.Assembly;
 using AssetRipper.Processing;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using System.Text;
@@ -38,9 +40,19 @@ public sealed class ScriptRelinkPostExporter : IPostExporter
 				continue;
 			}
 
+			string baseType = "";
+			string assemblyVersion = "";
+			try
+			{
+				TypeDefinition typeDef = script.GetTypeDefinition(gameData.AssemblyManager);
+				baseType = typeDef.BaseType?.FullName ?? "";
+				assemblyVersion = typeDef.Module?.Assembly?.Version?.ToString() ?? "";
+			}
+			catch { }
+
 			MetaPtr pointer = scriptExporter.CreateExportPointer(script);
 			ScriptReferenceKey key = new(pointer.GUID.ToString().ToLowerInvariant(), pointer.FileID);
-			entries.TryAdd(key, new ScriptLinkEntry(key.Guid, key.FileID, info.Assembly, info.Namespace, info.Class));
+			entries.TryAdd(key, new ScriptLinkEntry(key.Guid, key.FileID, info.Assembly, info.Namespace, info.Class, baseType, assemblyVersion));
 		}
 
 		return entries.Values
@@ -53,7 +65,7 @@ public sealed class ScriptRelinkPostExporter : IPostExporter
 	private static string BuildMapFile(IEnumerable<ScriptLinkEntry> entries)
 	{
 		StringBuilder builder = new();
-		builder.AppendLine("# guid\tfileID\tassembly\tnamespace\tclass\tfullType");
+		builder.AppendLine("# guid\tfileID\tassembly\tnamespace\tclass\tfullType\tbaseType\tassemblyVersion");
 		foreach (ScriptLinkEntry entry in entries)
 		{
 			builder.Append(entry.Guid);
@@ -68,18 +80,22 @@ public sealed class ScriptRelinkPostExporter : IPostExporter
 			builder.Append('\t');
 			if (string.IsNullOrEmpty(entry.Namespace))
 			{
-				builder.AppendLine(entry.Class);
+				builder.Append(entry.Class);
 			}
 			else
 			{
-				builder.AppendLine($"{entry.Namespace}.{entry.Class}");
+				builder.Append($"{entry.Namespace}.{entry.Class}");
 			}
+			builder.Append('\t');
+			builder.Append(entry.BaseType);
+			builder.Append('\t');
+			builder.AppendLine(entry.AssemblyVersion);
 		}
 		return builder.ToString();
 	}
 
 	private readonly record struct ScriptReferenceKey(string Guid, long FileID);
-	private readonly record struct ScriptLinkEntry(string Guid, long FileID, string Assembly, string Namespace, string Class);
+	private readonly record struct ScriptLinkEntry(string Guid, long FileID, string Assembly, string Namespace, string Class, string BaseType, string AssemblyVersion);
 
 	private const string EditorPatchText = """
 #if UNITY_EDITOR

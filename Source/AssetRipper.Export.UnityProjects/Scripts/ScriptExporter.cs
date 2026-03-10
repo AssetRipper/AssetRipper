@@ -21,6 +21,8 @@ public class ScriptExporter : IAssetExporter
 			LanguageVersion = configuration.ExportSettings.ScriptLanguageVersion.ToCSharpLanguageVersion(configuration.Version),
 			ScriptContentLevel = configuration.ImportSettings.ScriptContentLevel,
 			FullyQualifiedTypeNames = configuration.ExportSettings.ScriptTypesFullyQualified,
+			RemoveDeadCode = configuration.ExportSettings.ScriptRemoveDeadCode,
+			RemoveDeadStores = configuration.ExportSettings.ScriptRemoveDeadStores,
 		};
 		ExportMode = configuration.ExportSettings.ScriptExportMode;
 		ReferenceAssemblyDictionary = ReferenceAssemblies.GetReferenceAssemblies(AssemblyManager, configuration.Version);

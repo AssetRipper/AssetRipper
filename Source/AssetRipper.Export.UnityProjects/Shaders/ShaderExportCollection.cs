@@ -13,6 +13,41 @@ public class ShaderExportCollection : AssetExportCollection<IShader>
 	{
 	}
 
+	public override bool Export(IExportContainer container, string projectDirectory, FileSystem fileSystem)
+	{
+		string subPath = fileSystem.Path.Join(projectDirectory, FileSystem.FixInvalidPathCharacters(Asset.GetBestDirectory()));
+		if (subPath.EndsWith("/Shader", StringComparison.OrdinalIgnoreCase))
+		{
+			subPath = subPath.Substring(0, subPath.Length - 6) + "Shaders";
+		}
+		else if (subPath.EndsWith("\\Shader", StringComparison.OrdinalIgnoreCase))
+		{
+			subPath = subPath.Substring(0, subPath.Length - 6) + "Shaders";
+		}
+		else if (subPath.Contains("/Shader/", StringComparison.OrdinalIgnoreCase))
+		{
+			subPath = subPath.Replace("/Shader/", "/Shaders/", StringComparison.OrdinalIgnoreCase);
+		}
+		else if (subPath.Contains("\\Shader\\", StringComparison.OrdinalIgnoreCase))
+		{
+			subPath = subPath.Replace("\\Shader\\", "\\Shaders\\", StringComparison.OrdinalIgnoreCase);
+		}
+
+		string fileName = GetUniqueFileName(Asset, subPath, fileSystem);
+
+		fileSystem.Directory.Create(subPath);
+
+		string filePath = fileSystem.Path.Join(subPath, fileName);
+		bool result = ExportInner(container, filePath, projectDirectory, fileSystem);
+		if (result)
+		{
+			Meta meta = new Meta(GUID, CreateImporter(container));
+			ExportMeta(container, meta, filePath, fileSystem);
+			return true;
+		}
+		return false;
+	}
+
 	protected override IUnityObjectBase CreateImporter(IExportContainer container)
 	{
 		IShaderImporter importer = ShaderImporter.Create(container.File, container.ExportVersion);

@@ -17,8 +17,8 @@ namespace AssetRipper.Export.UnityProjects.Project;
 public sealed class RegistryPackageBridge
 {
 	private const string UnityPackageCacheRelativePath = @"Unity\cache\packages\packages.unity.com";
-	private static readonly Regex PackageTagRegex = new(@"(?i)(?:packages[/\\])?(?<pkg>(?:com|io)\.[a-z0-9][a-z0-9._-]+)@(?<ver>[0-9]+(?:\.[0-9]+){1,3}(?:[-+][A-Za-z0-9_.-]+)?)", RegexOptions.Compiled);
-	private static readonly Regex PackageReferenceRegex = new(@"(?i)(?:PackageCache|Packages)[/\\](?<pkg>(?:com|io)\.[a-z0-9][a-z0-9._-]+)(?:@(?<ref>[A-Za-z0-9._-]+))?(?=[/\\])", RegexOptions.Compiled);
+	private static readonly Regex PackageTagRegex = new(@"(?i)(?:packages[\\/])?(?<pkg>(?:com|io)\.[a-z0-9][a-z0-9._-]+)@(?<ver>[0-9]+(?:\.[0-9]+){1,3}(?:[-+][A-Za-z0-9_.-]+)?)", RegexOptions.Compiled);
+	private static readonly Regex PackageReferenceRegex = new(@"(?i)(?:PackageCache|Packages)[\\/](?<pkg>(?:com|io)\.[a-z0-9][a-z0-9._-]+)(?:@(?<ref>[A-Za-z0-9._-]+))?(?=[\\/])", RegexOptions.Compiled);
 	private static readonly Regex PackageIdRegex = new(@"^(?:com|io)\.[a-z0-9][a-z0-9._-]+$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 	private static readonly Regex SemanticVersionRegex = new(@"(?<![0-9])(?<ver>[0-9]+(?:\.[0-9]+){1,3}(?:[-+][A-Za-z0-9_.-]+)?)(?![0-9])", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 	private static readonly Regex NamespaceRegex = new(@"^\s*namespace\s+([A-Za-z_][\w\.]*)\s*(?:;|\{)", RegexOptions.Compiled | RegexOptions.Multiline);
@@ -98,6 +98,7 @@ public sealed class RegistryPackageBridge
 	private readonly Lazy<Dictionary<string, MetaPtr>> shaderPointerIndex;
 
 	private readonly HashSet<string> allAssemblies = new(StringComparer.Ordinal);
+	private readonly Dictionary<string, string> assemblyVersions = new(StringComparer.Ordinal);
 	public RegistryPackageBridge(IAssemblyManager assemblyManager, UnityVersion version)
 	{
 		AssemblyManager = assemblyManager;
@@ -209,6 +210,23 @@ public sealed class RegistryPackageBridge
 		}
 		builder.AppendLine();
 
+		builder.AppendLine("Guessed versions (based on Unity version)");
+		bool foundGuess = false;
+		foreach (var hint in FamilyHints.Values)
+		{
+			if (hint.ManifestKey != null && !manifestDependencies.Any(d => d.Key == hint.ManifestKey))
+			{
+				string? guess = GuessPackageVersion(hint.ManifestKey);
+				if (guess != null)
+				{
+					builder.AppendLine($"{hint.ManifestKey} -> {guess} (Compatible with {Version})");
+					foundGuess = true;
+				}
+			}
+		}
+		if (!foundGuess) builder.AppendLine("<none>");
+		builder.AppendLine();
+
 		builder.AppendLine("Detected families without exact version");
 		PackageDetection[] unresolvedDetections =
 		[
@@ -230,20 +248,6 @@ public sealed class RegistryPackageBridge
 		if (includeOtherAssemblies)
 		{
 			builder.AppendLine("Other detected assemblies (potential 3rd party plugins)");
-			HashSet<string> knownAssemblyNames = new(allAssemblies.Count, StringComparer.Ordinal);
-			foreach (string name in allAssemblies)
-			{
-				knownAssemblyNames.Add(name);
-			}
-			foreach (string name in FamilyHints.Keys)
-			{
-				knownAssemblyNames.Add(SpecialFileNames.RemoveAssemblyFileExtension(name));
-			}
-			foreach (var detection in detections)
-			{
-				knownAssemblyNames.Add(detection.Display);
-			}
-
 			List<string> otherAssemblies = allAssemblies
 				.Where(name => !name.StartsWith("Unity.", StringComparison.OrdinalIgnoreCase) && !name.StartsWith("UnityEngine.", StringComparison.OrdinalIgnoreCase))
 				.Where(name => !FamilyHints.ContainsKey(name + ".dll"))
@@ -258,7 +262,14 @@ public sealed class RegistryPackageBridge
 			{
 				foreach (string name in otherAssemblies)
 				{
-					builder.AppendLine($"{name} (version unknown)");
+					if (assemblyVersions.TryGetValue(name, out string? ver))
+					{
+						builder.AppendLine($"{name} = {ver}");
+					}
+					else
+					{
+						builder.AppendLine($"{name} (version unknown)");
+					}
 				}
 			}
 			builder.AppendLine();
@@ -279,6 +290,28 @@ public sealed class RegistryPackageBridge
 		return builder.ToString();
 	}
 
+	private string? GuessPackageVersion(string packageId)
+	{
+		if (packageId == "com.unity.ugui") return "1.0.0";
+		if (packageId == "com.unity.textmeshpro")
+		{
+			if (Version.GreaterThanOrEquals(2021, 3)) return "3.0.6";
+			return "2.1.6";
+		}
+		if (packageId.Contains("render-pipelines.universal"))
+		{
+			if (Version.Major == 2022) return "14.0.11";
+			if (Version.Major == 2021) return "12.1.15";
+			if (Version.Major == 2020) return "10.10.1";
+		}
+		if (packageId.Contains("xr.management"))
+		{
+			if (Version.Major >= 2021) return "4.4.1";
+			return "4.0.1";
+		}
+		return null;
+	}
+
 	private void AnalyzeAssembly(AssemblyDefinition assembly)
 	{
 		string assemblyName = assembly.Name ?? string.Empty;
@@ -296,14 +329,9 @@ public sealed class RegistryPackageBridge
 			AddManifestCandidate(packageId, packageVersion, "explicit_tag", 100, exact: true);
 		}
 
+		string? detectedVersion = null;
 		FamilyHint? hint = TryGetFamilyHint(assemblyName, explicitPackages, packageReferences);
-		if (hint is null)
-		{
-			return;
-		}
-		FamilyHint resolvedHint = hint.Value;
-
-		familyHintsByKey.TryAdd(resolvedHint.Family, resolvedHint);
+		
 		foreach (CustomAttribute attribute in assembly.CustomAttributes)
 		{
 			string attributeName = attribute.Constructor?.DeclaringType?.FullName ?? string.Empty;
@@ -318,7 +346,9 @@ public sealed class RegistryPackageBridge
 				case "System.Reflection.AssemblyInformationalVersionAttribute":
 					foreach (string value in stringArguments)
 					{
-						AddFamilyCandidate(resolvedHint, NormalizeVersion(value), "custom_attribute", 92, exact: true);
+						string normalized = NormalizeVersion(value);
+						if (hint is not null) AddFamilyCandidate(hint.Value, normalized, "custom_attribute", 92, exact: true);
+						detectedVersion ??= normalized;
 					}
 					break;
 				case "System.Reflection.AssemblyFileVersionAttribute":
@@ -326,17 +356,33 @@ public sealed class RegistryPackageBridge
 				case "System.Reflection.AssemblyDescriptionAttribute":
 					foreach (string value in stringArguments)
 					{
-						AddFamilyCandidate(resolvedHint, NormalizeVersion(value), "custom_attribute", 88, exact: true);
+						string normalized = NormalizeVersion(value);
+						if (hint is not null) AddFamilyCandidate(hint.Value, normalized, "custom_attribute", 88, exact: true);
+						detectedVersion ??= normalized;
 					}
 					break;
 				case "System.Reflection.AssemblyMetadataAttribute":
 					if (stringArguments.Count >= 2 && IsVersionMetadataKey(stringArguments[0]))
 					{
-						AddFamilyCandidate(resolvedHint, NormalizeVersion(stringArguments[1]), "assembly_metadata", 90, exact: true);
+						string normalized = NormalizeVersion(stringArguments[1]);
+						if (hint is not null) AddFamilyCandidate(hint.Value, normalized, "assembly_metadata", 90, exact: true);
+						detectedVersion ??= normalized;
 					}
 					break;
 			}
 		}
+
+		if (detectedVersion is not null)
+		{
+			assemblyVersions[assemblyName] = detectedVersion;
+		}
+
+		if (hint is null)
+		{
+			return;
+		}
+		FamilyHint resolvedHint = hint.Value;
+		familyHintsByKey.TryAdd(resolvedHint.Family, resolvedHint);
 
 		AddFamilyCandidate(resolvedHint, NormalizeVersion(assembly.Version?.ToString() ?? string.Empty), "assembly_version", 82, exact: true);
 		foreach (string value in FindVersionsNearTokens(texts, resolvedHint.Tokens))
