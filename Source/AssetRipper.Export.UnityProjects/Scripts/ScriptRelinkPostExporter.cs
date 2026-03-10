@@ -41,18 +41,16 @@ public sealed class ScriptRelinkPostExporter : IPostExporter
 			}
 
 			string baseType = "";
-			string assemblyVersion = "";
 			try
 			{
 				TypeDefinition typeDef = script.GetTypeDefinition(gameData.AssemblyManager);
 				baseType = typeDef.BaseType?.FullName ?? "";
-				assemblyVersion = typeDef.Module?.Assembly?.Version?.ToString() ?? "";
 			}
 			catch { }
 
 			MetaPtr pointer = scriptExporter.CreateExportPointer(script);
 			ScriptReferenceKey key = new(pointer.GUID.ToString().ToLowerInvariant(), pointer.FileID);
-			entries.TryAdd(key, new ScriptLinkEntry(key.Guid, key.FileID, info.Assembly, info.Namespace, info.Class, baseType, assemblyVersion));
+			entries.TryAdd(key, new ScriptLinkEntry(key.Guid, key.FileID, info.Assembly, info.Namespace, info.Class, baseType));
 		}
 
 		return entries.Values
@@ -65,7 +63,7 @@ public sealed class ScriptRelinkPostExporter : IPostExporter
 	private static string BuildMapFile(IEnumerable<ScriptLinkEntry> entries)
 	{
 		StringBuilder builder = new();
-		builder.AppendLine("# guid\tfileID\tassembly\tnamespace\tclass\tfullType\tbaseType\tassemblyVersion");
+		builder.AppendLine("# guid\tfileID\tassembly\tnamespace\tclass\tfullType\tbaseType");
 		foreach (ScriptLinkEntry entry in entries)
 		{
 			builder.Append(entry.Guid);
@@ -87,15 +85,13 @@ public sealed class ScriptRelinkPostExporter : IPostExporter
 				builder.Append($"{entry.Namespace}.{entry.Class}");
 			}
 			builder.Append('\t');
-			builder.Append(entry.BaseType);
-			builder.Append('\t');
-			builder.AppendLine(entry.AssemblyVersion);
+			builder.AppendLine(entry.BaseType);
 		}
 		return builder.ToString();
 	}
 
 	private readonly record struct ScriptReferenceKey(string Guid, long FileID);
-	private readonly record struct ScriptLinkEntry(string Guid, long FileID, string Assembly, string Namespace, string Class, string BaseType, string AssemblyVersion);
+	private readonly record struct ScriptLinkEntry(string Guid, long FileID, string Assembly, string Namespace, string Class, string BaseType);
 
 	private const string EditorPatchText = """
 #if UNITY_EDITOR
