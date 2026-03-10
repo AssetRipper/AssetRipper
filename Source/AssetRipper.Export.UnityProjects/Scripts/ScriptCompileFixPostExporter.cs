@@ -12,7 +12,8 @@ public sealed class ScriptCompileFixPostExporter : IPostExporter
 	private static readonly Regex NonSerializedAttributeLineRegex = new(@"^\[(?:field:\s*)?(?:(?:global::)?System\.)?NonSerialized(?:Attribute)?\]\s*$", RegexOptions.Compiled);
 	private static readonly Regex FieldOffsetAttributeLineRegex = new(@"^\[(?:field:\s*)?(?:(?:global::)?System\.Runtime\.InteropServices\.)?FieldOffset(?:Attribute)?\s*\(.*\)\]\s*$", RegexOptions.Compiled);
 	private static readonly Regex TypeDeclarationRegex = new(@"\b(?:class|struct)\b", RegexOptions.Compiled);
-	private static readonly Regex LogTypeReferenceRegex = new(@"(?<![\w\.])LogType\.", RegexOptions.Compiled);
+	private static readonly Regex LogTypeWordRegex = new(@"(?<![\w\.])LogType\b", RegexOptions.Compiled);
+	private static readonly Regex SimulationAccessRegex = new(@"\b(Runner|runner)\.Simulation\b", RegexOptions.Compiled);
 
 	public void DoPostExport(GameData gameData, FullConfiguration settings, FileSystem fileSystem)
 	{
@@ -105,8 +106,7 @@ public sealed class ScriptCompileFixPostExporter : IPostExporter
 		}
 
 		// Replace Runner.Simulation with Runner._simulation to resolve access issues in decompiled Fusion scripts
-		return text.Replace(".Runner.Simulation", ".Runner._simulation", StringComparison.Ordinal)
-				   .Replace("runner.Simulation", "runner._simulation", StringComparison.Ordinal);
+		return SimulationAccessRegex.Replace(text, "$1._simulation");
 	}
 
 	private static string CollapseDuplicateNonSerializedAttributes(string text)
@@ -152,12 +152,12 @@ public sealed class ScriptCompileFixPostExporter : IPostExporter
 	{
 		if (!text.Contains("using Fusion;", StringComparison.Ordinal)
 			|| !text.Contains("using UnityEngine;", StringComparison.Ordinal)
-			|| text.IndexOf("LogType.", StringComparison.Ordinal) < 0)
+			|| text.IndexOf("LogType", StringComparison.Ordinal) < 0)
 		{
 			return text;
 		}
 
-		return LogTypeReferenceRegex.Replace(text, "UnityEngine.LogType.");
+		return LogTypeWordRegex.Replace(text, "UnityEngine.LogType");
 	}
 
 	private static string FixBrokenExplicitLayout(string text)
@@ -283,7 +283,7 @@ public sealed class ScriptCompileFixPostExporter : IPostExporter
 				continue;
 			}
 
-			if (IsInstanceFieldDeclaration(trimmedLine))
+			if (IsInstanceMember(trimmedLine))
 			{
 				if (!seenFieldOffsetInAttributeBlock)
 				{
@@ -297,12 +297,10 @@ public sealed class ScriptCompileFixPostExporter : IPostExporter
 		return false;
 	}
 
-	private static bool IsInstanceFieldDeclaration(string trimmedLine)
+	private static bool IsInstanceMember(string trimmedLine)
 	{
 		if (!trimmedLine.EndsWith(";", StringComparison.Ordinal)
-			|| trimmedLine.IndexOf("{", StringComparison.Ordinal) >= 0
-			|| trimmedLine.IndexOf("(", StringComparison.Ordinal) >= 0
-			|| trimmedLine.Contains("=>", StringComparison.Ordinal))
+			&& !trimmedLine.EndsWith("}", StringComparison.Ordinal))
 		{
 			return false;
 		}
@@ -312,6 +310,12 @@ public sealed class ScriptCompileFixPostExporter : IPostExporter
 			|| ContainsWord(trimmedLine, "event")
 			|| ContainsWord(trimmedLine, "const")
 			|| ContainsWord(trimmedLine, "static"))
+		{
+			return false;
+		}
+
+		// Skip methods (but keep auto-properties)
+		if (trimmedLine.IndexOf("(", StringComparison.Ordinal) >= 0 && !trimmedLine.Contains("get;", StringComparison.Ordinal) && !trimmedLine.Contains("set;", StringComparison.Ordinal))
 		{
 			return false;
 		}

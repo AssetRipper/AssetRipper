@@ -25,8 +25,7 @@ internal static class PublicizingSupport
 			return true;
 		}
 
-		// Preserve the original accessibility of true overrides so decompiled code keeps valid base-member signatures.
-		return method.IsVirtual && method.IsReuseSlot && !method.IsNewSlot;
+		return false;
 	}
 
 	public static void DeduplicateNonSerializedAttributes(FieldDefinition field)
