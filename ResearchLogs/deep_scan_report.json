@@ -1,0 +1,3777 @@
+{
+  "folder": "G:\\Projects\\Unity Projects\\Fall 2024\\AuxiliaryFiles\\GameAssemblies",
+  "summary": {
+    "total_dlls": 207,
+    "exact_versions": 84,
+    "family_only": 123,
+    "family_only_files": [
+      "AA.Mothership.dll",
+      "ALINE.dll",
+      "andywiecko.BurstTriangulator.dll",
+      "Assembly-CSharp-firstpass.dll",
+      "Assembly-CSharp.dll",
+      "AssistantCoreSDKRuntime.dll",
+      "Backtrace.Unity.dll",
+      "BakeryRuntimeAssembly.dll",
+      "Facebook.Wit.Dictation.dll",
+      "geometry3Sharp.dll",
+      "GT_CustomMapSupportRuntime.dll",
+      "KID.dll",
+      "MeshBakerCore.dll",
+      "Meta.Voice.Hub.Runtime.dll",
+      "Meta.Voice.Samples.BuiltInTimer.dll",
+      "Meta.Voice.Samples.Chess.dll",
+      "Meta.Voice.Samples.Dictation.dll",
+      "Meta.Voice.Samples.LightTraits.dll",
+      "Meta.Voice.Samples.LiveUnderstanding.dll",
+      "Meta.Voice.Samples.Shapes.dll",
+      "Meta.Voice.Samples.ShapesConduit.dll",
+      "Meta.Voice.Samples.TTSVoices.dll",
+      "Meta.VoiceSDK.Mic.Common.dll",
+      "Meta.VoiceSDK.Mic.Other.dll",
+      "Meta.WitAi.Conduit.dll",
+      "Meta.WitAi.dll",
+      "Meta.WitAi.Lib.dll",
+      "Meta.WitAi.TTS.dll",
+      "Meta.XR.BuildingBlocks.dll",
+      "modio.UI.dll",
+      "NanoSockets.dll",
+      "NavMeshComponents.dll",
+      "Newtonsoft.Json.UnityConverters.Addressables.dll",
+      "Newtonsoft.Json.UnityConverters.dll",
+      "Nobi.UiRoundedCorners.dll",
+      "Oculus.AudioManager.dll",
+      "Oculus.Interaction.dll",
+      "Oculus.Interaction.OVR.dll",
+      "Oculus.Interaction.OVR.Samples.dll",
+      "Oculus.LipSync.dll",
+      "Oculus.Platform.dll",
+      "Oculus.Spatializer.dll",
+      "Pathfinding.ClipperLib.dll",
+      "Pathfinding.Poly2Tri.dll",
+      "PhotonUnityNetworking.Utilities.dll",
+      "PhotonVoice.API.dll",
+      "PhotonVoice.dll",
+      "PhotonVoice.PUN.dll",
+      "PlayFab.dll",
+      "Sirenix.OdinInspector.Attributes.dll",
+      "Sirenix.OdinInspector.Modules.Unity.Addressables.dll",
+      "SteamVR.dll",
+      "SteamVR_Actions.dll",
+      "TechniePhysicsCreator.dll",
+      "Unity.XR.OpenVR.dll",
+      "UnityEngine.AccessibilityModule.dll",
+      "UnityEngine.AIModule.dll",
+      "UnityEngine.AndroidJNIModule.dll",
+      "UnityEngine.AnimationModule.dll",
+      "UnityEngine.ARModule.dll",
+      "UnityEngine.AssetBundleModule.dll",
+      "UnityEngine.AudioModule.dll",
+      "UnityEngine.ClothModule.dll",
+      "UnityEngine.ClusterInputModule.dll",
+      "UnityEngine.ClusterRendererModule.dll",
+      "UnityEngine.ContentLoadModule.dll",
+      "UnityEngine.CrashReportingModule.dll",
+      "UnityEngine.DirectorModule.dll",
+      "UnityEngine.dll",
+      "UnityEngine.DSPGraphModule.dll",
+      "UnityEngine.GameCenterModule.dll",
+      "UnityEngine.GIModule.dll",
+      "UnityEngine.GridModule.dll",
+      "UnityEngine.HotReloadModule.dll",
+      "UnityEngine.ImageConversionModule.dll",
+      "UnityEngine.IMGUIModule.dll",
+      "UnityEngine.InputLegacyModule.dll",
+      "UnityEngine.InputModule.dll",
+      "UnityEngine.JSONSerializeModule.dll",
+      "UnityEngine.LocalizationModule.dll",
+      "UnityEngine.NVIDIAModule.dll",
+      "UnityEngine.ParticleSystemModule.dll",
+      "UnityEngine.PerformanceReportingModule.dll",
+      "UnityEngine.Physics2DModule.dll",
+      "UnityEngine.PhysicsModule.dll",
+      "UnityEngine.ProfilerModule.dll",
+      "UnityEngine.PropertiesModule.dll",
+      "UnityEngine.RuntimeInitializeOnLoadManagerInitializerModule.dll",
+      "UnityEngine.ScreenCaptureModule.dll",
+      "UnityEngine.SharedInternalsModule.dll",
+      "UnityEngine.SpriteShapeModule.dll",
+      "UnityEngine.StreamingModule.dll",
+      "UnityEngine.SubstanceModule.dll",
+      "UnityEngine.SubsystemsModule.dll",
+      "UnityEngine.TerrainModule.dll",
+      "UnityEngine.TerrainPhysicsModule.dll",
+      "UnityEngine.TextCoreFontEngineModule.dll",
+      "UnityEngine.TextCoreTextEngineModule.dll",
+      "UnityEngine.TextRenderingModule.dll",
+      "UnityEngine.TilemapModule.dll",
+      "UnityEngine.TLSModule.dll",
+      "UnityEngine.UIElementsModule.dll",
+      "UnityEngine.UIModule.dll",
+      "UnityEngine.UmbraModule.dll",
+      "UnityEngine.UnityAnalyticsCommonModule.dll",
+      "UnityEngine.UnityAnalyticsModule.dll",
+      "UnityEngine.UnityConnectModule.dll",
+      "UnityEngine.UnityCurlModule.dll",
+      "UnityEngine.UnityTestProtocolModule.dll",
+      "UnityEngine.UnityWebRequestAssetBundleModule.dll",
+      "UnityEngine.UnityWebRequestAudioModule.dll",
+      "UnityEngine.UnityWebRequestModule.dll",
+      "UnityEngine.UnityWebRequestTextureModule.dll",
+      "UnityEngine.UnityWebRequestWWWModule.dll",
+      "UnityEngine.VehiclesModule.dll",
+      "UnityEngine.VFXModule.dll",
+      "UnityEngine.VideoModule.dll",
+      "UnityEngine.VirtualTexturingModule.dll",
+      "UnityEngine.VRModule.dll",
+      "UnityEngine.WindModule.dll",
+      "UnityEngine.XRModule.dll",
+      "VYaml.Core.dll",
+      "ZString.dll"
+    ]
+  },
+  "results": [
+    {
+      "file": "AA.Mothership.dll",
+      "family": "com.aa.mothership",
+      "display": "com.aa.mothership",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Package refs seen: com.aa.mothership",
+        "Family identified as com.aa.mothership, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "AA.Mothership",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "ALINE.dll",
+      "family": "ALINE",
+      "display": "ALINE",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as ALINE, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "ALINE",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "andywiecko.BurstTriangulator.dll",
+      "family": "com.andywiecko.burst.triangulator",
+      "display": "com.andywiecko.burst.triangulator",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Package refs seen: com.andywiecko.burst.triangulator",
+        "Family identified as com.andywiecko.burst.triangulator, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "andywiecko.BurstTriangulator",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "Assembly-CSharp-firstpass.dll",
+      "family": "Assembly-CSharp-firstpass",
+      "display": "Assembly-CSharp-firstpass",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as Assembly-CSharp-firstpass, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "Assembly-CSharp-firstpass",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "Assembly-CSharp.dll",
+      "family": "Assembly-CSharp",
+      "display": "Assembly-CSharp",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as Assembly-CSharp, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "Assembly-CSharp",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "AssistantCoreSDKRuntime.dll",
+      "family": "AssistantCoreSDKRuntime",
+      "display": "AssistantCoreSDKRuntime",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as AssistantCoreSDKRuntime, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "AssistantCoreSDKRuntime",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "AstarPathfindingProject.dll",
+      "family": "astar_pathfinding_project",
+      "display": "A* Pathfinding Project",
+      "version": "4.2.18",
+      "source": "il_astar_static_ctor",
+      "confidence": 98,
+      "exact": true,
+      "notes": [
+        "Recovered from AstarPath static constructor.",
+        "FullyDefinedVersion symbol is present; exact Astar version may be hidden in metadata or constant blobs."
+      ],
+      "assembly_name": "AstarPathfindingProject",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Autodesk.Fbx.dll",
+      "family": "com.autodesk.fbx",
+      "display": "Autodesk FBX",
+      "version": "4.2.1",
+      "source": "family_propagation",
+      "confidence": 92,
+      "exact": true,
+      "notes": [
+        "Family identified as Autodesk FBX, but no trusted exact version was exposed.",
+        "Inherited version 4.2.1 from sibling FbxBuildTestAssets.dll."
+      ],
+      "assembly_name": "Autodesk.Fbx",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Backtrace.Unity.dll",
+      "family": "io.backtrace.unity",
+      "display": "io.backtrace.unity",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Package refs seen: io.backtrace.unity",
+        "Family identified as io.backtrace.unity, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "Backtrace.Unity",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "BakeryRuntimeAssembly.dll",
+      "family": "bakery_gpu_lightmapper",
+      "display": "Bakery GPU Lightmapper",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as Bakery GPU Lightmapper, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "BakeryRuntimeAssembly",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "Cinemachine.dll",
+      "family": "com.unity.cinemachine",
+      "display": "Unity Cinemachine",
+      "version": "2.9.5",
+      "source": "explicit_tag",
+      "confidence": 100,
+      "exact": true,
+      "notes": [
+        "Embedded package@version marker found.",
+        "Package refs seen: com.unity.cinemachine, com.unity.cinemachine.editor",
+        "Explicit packages seen: com.unity.cinemachine@2.9.5, com.unity.cinemachine@2.9"
+      ],
+      "assembly_name": "Cinemachine",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [
+        [
+          "com.unity.cinemachine",
+          "2.9.5"
+        ],
+        [
+          "com.unity.cinemachine",
+          "2.9"
+        ]
+      ],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Facebook.Wit.Dictation.dll",
+      "family": "Facebook.Wit.Dictation",
+      "display": "Facebook.Wit.Dictation",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as Facebook.Wit.Dictation, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "Facebook.Wit.Dictation",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "FbxBuildTestAssets.dll",
+      "family": "com.autodesk.fbx",
+      "display": "com.autodesk.fbx",
+      "version": "4.2.1",
+      "source": "explicit_tag",
+      "confidence": 100,
+      "exact": true,
+      "notes": [
+        "Embedded package@version marker found.",
+        "Package refs seen: com.autodesk.fbx",
+        "Explicit packages seen: com.autodesk.fbx@4.2.1"
+      ],
+      "assembly_name": "FbxBuildTestAssets",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [
+        [
+          "com.autodesk.fbx",
+          "4.2.1"
+        ]
+      ],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Fusion.Common.dll",
+      "family": "photon_fusion",
+      "display": "Photon Fusion",
+      "version": "2.0.0.807+aff720a2",
+      "source": "custom_attribute",
+      "confidence": 92,
+      "exact": true,
+      "notes": [
+        "System.Reflection.AssemblyInformationalVersionAttribute=2.0.0.807+aff720a2"
+      ],
+      "assembly_name": "Fusion.Common",
+      "assembly_version": "2.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Fusion.Log.dll",
+      "family": "photon_fusion",
+      "display": "Photon Fusion",
+      "version": "2.0.0",
+      "source": "custom_attribute",
+      "confidence": 92,
+      "exact": true,
+      "notes": [
+        "System.Reflection.AssemblyInformationalVersionAttribute=2.0.0"
+      ],
+      "assembly_name": "Fusion.Log",
+      "assembly_version": "2.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Fusion.Realtime.dll",
+      "family": "photon_fusion",
+      "display": "Photon Fusion",
+      "version": "2.0.0.807+aff720a2",
+      "source": "custom_attribute",
+      "confidence": 92,
+      "exact": true,
+      "notes": [
+        "System.Reflection.AssemblyInformationalVersionAttribute=2.0.0.807+aff720a2"
+      ],
+      "assembly_name": "Fusion.Realtime",
+      "assembly_version": "2.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Fusion.Runtime.dll",
+      "family": "photon_fusion",
+      "display": "Photon Fusion",
+      "version": "2.0.0.807+aff720a2",
+      "source": "custom_attribute",
+      "confidence": 92,
+      "exact": true,
+      "notes": [
+        "System.Reflection.AssemblyInformationalVersionAttribute=2.0.0.807+aff720a2"
+      ],
+      "assembly_name": "Fusion.Runtime",
+      "assembly_version": "2.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Fusion.Sockets.dll",
+      "family": "photon_fusion",
+      "display": "Photon Fusion",
+      "version": "2.0.0.807+aff720a2",
+      "source": "custom_attribute",
+      "confidence": 92,
+      "exact": true,
+      "notes": [
+        "System.Reflection.AssemblyInformationalVersionAttribute=2.0.0.807+aff720a2"
+      ],
+      "assembly_name": "Fusion.Sockets",
+      "assembly_version": "2.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Fusion.Unity.dll",
+      "family": "photon_fusion",
+      "display": "Photon Fusion",
+      "version": "2.0.0.0",
+      "source": "context_strings",
+      "confidence": 68,
+      "exact": true,
+      "notes": [
+        "Version near tokens fusion."
+      ],
+      "assembly_name": "Fusion.Unity",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "geometry3Sharp.dll",
+      "family": "com.virgis.geometry",
+      "display": "com.virgis.geometry",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Package refs seen: com.virgis.geometry",
+        "Family identified as com.virgis.geometry, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "geometry3Sharp",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "GT_CustomMapSupportRuntime.dll",
+      "family": "GT_CustomMapSupportRuntime",
+      "display": "GT_CustomMapSupportRuntime",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as GT_CustomMapSupportRuntime, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "GT_CustomMapSupportRuntime",
+      "assembly_version": "1.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "KID.dll",
+      "family": "KID",
+      "display": "KID",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as KID, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "KID",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "MeshBakerCore.dll",
+      "family": "MeshBakerCore",
+      "display": "MeshBakerCore",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as MeshBakerCore, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "MeshBakerCore",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "Meta.Voice.Hub.Runtime.dll",
+      "family": "Meta.Voice.Hub.Runtime",
+      "display": "Meta.Voice.Hub.Runtime",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as Meta.Voice.Hub.Runtime, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "Meta.Voice.Hub.Runtime",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "Meta.Voice.Samples.BuiltInTimer.dll",
+      "family": "Meta.Voice.Samples.BuiltInTimer",
+      "display": "Meta.Voice.Samples.BuiltInTimer",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as Meta.Voice.Samples.BuiltInTimer, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "Meta.Voice.Samples.BuiltInTimer",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "Meta.Voice.Samples.Chess.dll",
+      "family": "Meta.Voice.Samples.Chess",
+      "display": "Meta.Voice.Samples.Chess",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as Meta.Voice.Samples.Chess, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "Meta.Voice.Samples.Chess",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "Meta.Voice.Samples.Dictation.dll",
+      "family": "Meta.Voice.Samples.Dictation",
+      "display": "Meta.Voice.Samples.Dictation",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as Meta.Voice.Samples.Dictation, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "Meta.Voice.Samples.Dictation",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "Meta.Voice.Samples.LightTraits.dll",
+      "family": "Meta.Voice.Samples.LightTraits",
+      "display": "Meta.Voice.Samples.LightTraits",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as Meta.Voice.Samples.LightTraits, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "Meta.Voice.Samples.LightTraits",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "Meta.Voice.Samples.LiveUnderstanding.dll",
+      "family": "Meta.Voice.Samples.LiveUnderstanding",
+      "display": "Meta.Voice.Samples.LiveUnderstanding",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as Meta.Voice.Samples.LiveUnderstanding, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "Meta.Voice.Samples.LiveUnderstanding",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "Meta.Voice.Samples.Shapes.dll",
+      "family": "Meta.Voice.Samples.Shapes",
+      "display": "Meta.Voice.Samples.Shapes",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as Meta.Voice.Samples.Shapes, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "Meta.Voice.Samples.Shapes",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "Meta.Voice.Samples.ShapesConduit.dll",
+      "family": "Meta.Voice.Samples.ShapesConduit",
+      "display": "Meta.Voice.Samples.ShapesConduit",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as Meta.Voice.Samples.ShapesConduit, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "Meta.Voice.Samples.ShapesConduit",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "Meta.Voice.Samples.TTSVoices.dll",
+      "family": "Meta.Voice.Samples.TTSVoices",
+      "display": "Meta.Voice.Samples.TTSVoices",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as Meta.Voice.Samples.TTSVoices, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "Meta.Voice.Samples.TTSVoices",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "Meta.VoiceSDK.Mic.Common.dll",
+      "family": "Meta.VoiceSDK.Mic.Common",
+      "display": "Meta.VoiceSDK.Mic.Common",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as Meta.VoiceSDK.Mic.Common, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "Meta.VoiceSDK.Mic.Common",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "Meta.VoiceSDK.Mic.Other.dll",
+      "family": "Meta.VoiceSDK.Mic.Other",
+      "display": "Meta.VoiceSDK.Mic.Other",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as Meta.VoiceSDK.Mic.Other, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "Meta.VoiceSDK.Mic.Other",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "Meta.WitAi.Conduit.dll",
+      "family": "wit_unity",
+      "display": "Wit Unity",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as Wit Unity, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "Meta.WitAi.Conduit",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "Meta.WitAi.dll",
+      "family": "wit_unity",
+      "display": "Wit Unity",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as Wit Unity, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "Meta.WitAi",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "Meta.WitAi.Lib.dll",
+      "family": "wit_unity",
+      "display": "Wit Unity",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as Wit Unity, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "Meta.WitAi.Lib",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "Meta.WitAi.TTS.dll",
+      "family": "wit_unity",
+      "display": "Wit Unity",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as Wit Unity, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "Meta.WitAi.TTS",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "Meta.XR.BuildingBlocks.dll",
+      "family": "meta_xr_building_blocks",
+      "display": "Meta XR Building Blocks",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as Meta XR Building Blocks, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "Meta.XR.BuildingBlocks",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "modio.UI.dll",
+      "family": "modio.UI",
+      "display": "modio.UI",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as modio.UI, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "modio.UI",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "modio.UnityPlugin.dll",
+      "family": "modio_unity_plugin",
+      "display": "mod.io Unity Plugin",
+      "version": "1.4.3.0",
+      "source": "custom_attribute",
+      "confidence": 88,
+      "exact": true,
+      "notes": [
+        "System.Reflection.AssemblyFileVersionAttribute=1.4.3.0"
+      ],
+      "assembly_name": "modio.UnityPlugin",
+      "assembly_version": "1.4.3.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Mono.Security.dll",
+      "family": "Mono.Security",
+      "display": "Mono.Security",
+      "version": "4.0.0.0",
+      "source": "pe_version_info",
+      "confidence": 86,
+      "exact": true,
+      "notes": [
+        "fixed_product_version=4.0.0.0"
+      ],
+      "assembly_name": "Mono.Security",
+      "assembly_version": "4.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "mscorlib.dll",
+      "family": "mscorlib",
+      "display": "mscorlib",
+      "version": "4.6.57.0",
+      "source": "custom_attribute",
+      "confidence": 92,
+      "exact": true,
+      "notes": [
+        "System.Reflection.AssemblyInformationalVersionAttribute=4.6.57.0"
+      ],
+      "assembly_name": "mscorlib",
+      "assembly_version": "4.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "NanoSockets.dll",
+      "family": "NanoSockets",
+      "display": "NanoSockets",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as NanoSockets, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "NanoSockets",
+      "assembly_version": "1.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "NavMeshComponents.dll",
+      "family": "NavMeshComponents",
+      "display": "NavMeshComponents",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as NavMeshComponents, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "NavMeshComponents",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "netstandard.dll",
+      "family": "netstandard",
+      "display": "netstandard",
+      "version": "2.1.0.0",
+      "source": "custom_attribute",
+      "confidence": 92,
+      "exact": true,
+      "notes": [
+        "System.Reflection.AssemblyInformationalVersionAttribute=2.1.0.0"
+      ],
+      "assembly_name": "netstandard",
+      "assembly_version": "2.1.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Newtonsoft.Json.dll",
+      "family": "Newtonsoft.Json",
+      "display": "Newtonsoft.Json",
+      "version": "13.0.2+cf0a246981c33ae00121dfe58b850aefeac1aac0",
+      "source": "custom_attribute",
+      "confidence": 92,
+      "exact": true,
+      "notes": [
+        "System.Reflection.AssemblyInformationalVersionAttribute=13.0.2+cf0a246981c33ae00121dfe58b850aefeac1aac0"
+      ],
+      "assembly_name": "Newtonsoft.Json",
+      "assembly_version": "13.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Newtonsoft.Json.UnityConverters.Addressables.dll",
+      "family": "Newtonsoft.Json.UnityConverters.Addressables",
+      "display": "Newtonsoft.Json.UnityConverters.Addressables",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as Newtonsoft.Json.UnityConverters.Addressables, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "Newtonsoft.Json.UnityConverters.Addressables",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "Newtonsoft.Json.UnityConverters.dll",
+      "family": "Newtonsoft.Json.UnityConverters",
+      "display": "Newtonsoft.Json.UnityConverters",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as Newtonsoft.Json.UnityConverters, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "Newtonsoft.Json.UnityConverters",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "Nobi.UiRoundedCorners.dll",
+      "family": "Nobi.UiRoundedCorners",
+      "display": "Nobi.UiRoundedCorners",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as Nobi.UiRoundedCorners, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "Nobi.UiRoundedCorners",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "Oculus.AudioManager.dll",
+      "family": "oculus_audio_manager",
+      "display": "Oculus Audio Manager",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as Oculus Audio Manager, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "Oculus.AudioManager",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "Oculus.Interaction.dll",
+      "family": "oculus_interaction",
+      "display": "Oculus Interaction",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as Oculus Interaction, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "Oculus.Interaction",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "Oculus.Interaction.OVR.dll",
+      "family": "oculus_interaction",
+      "display": "Oculus Interaction",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as Oculus Interaction, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "Oculus.Interaction.OVR",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "Oculus.Interaction.OVR.Samples.dll",
+      "family": "oculus_interaction",
+      "display": "Oculus Interaction",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as Oculus Interaction, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "Oculus.Interaction.OVR.Samples",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "Oculus.LipSync.dll",
+      "family": "oculus_lipsync",
+      "display": "Oculus LipSync",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as Oculus LipSync, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "Oculus.LipSync",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "Oculus.Platform.dll",
+      "family": "oculus_platform",
+      "display": "Oculus Platform",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as Oculus Platform, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "Oculus.Platform",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "Oculus.Spatializer.dll",
+      "family": "oculus_spatializer",
+      "display": "Oculus Spatializer",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as Oculus Spatializer, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "Oculus.Spatializer",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "Oculus.VR.dll",
+      "family": "oculus_integration",
+      "display": "Oculus Integration",
+      "version": "1.89.0",
+      "source": "ovr_wrapper_constant",
+      "confidence": 96,
+      "exact": true,
+      "notes": [
+        "OVRPlugin.wrapperVersion constant resolved from OVRP_* field.",
+        "Package refs seen: com.meta.photo3d, com.meta.photo3d.generator, com.oculus.vrshell"
+      ],
+      "assembly_name": "Oculus.VR",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Pathfinding.ClipperLib.dll",
+      "family": "Pathfinding.ClipperLib",
+      "display": "Pathfinding.ClipperLib",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as Pathfinding.ClipperLib, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "Pathfinding.ClipperLib",
+      "assembly_version": "1.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "Pathfinding.Ionic.Zip.Reduced.dll",
+      "family": "Pathfinding.Ionic.Zip.Reduced",
+      "display": "Pathfinding.Ionic.Zip.Reduced",
+      "version": "1.9.1.9000",
+      "source": "custom_attribute",
+      "confidence": 88,
+      "exact": true,
+      "notes": [
+        "System.Reflection.AssemblyFileVersionAttribute=1.9.1.9000"
+      ],
+      "assembly_name": "Pathfinding.Ionic.Zip.Reduced",
+      "assembly_version": "1.9.1.9000",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Pathfinding.Poly2Tri.dll",
+      "family": "Pathfinding.Poly2Tri",
+      "display": "Pathfinding.Poly2Tri",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as Pathfinding.Poly2Tri, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "Pathfinding.Poly2Tri",
+      "assembly_version": "1.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "Photon3Unity3D.dll",
+      "family": "photon_realtime",
+      "display": "Photon Realtime",
+      "version": "4.1.7.2",
+      "source": "custom_attribute",
+      "confidence": 92,
+      "exact": true,
+      "notes": [
+        "System.Reflection.AssemblyInformationalVersionAttribute=4.1.7.2"
+      ],
+      "assembly_name": "Photon3Unity3D",
+      "assembly_version": "4.1.7.2",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "PhotonRealtime.dll",
+      "family": "photon_realtime",
+      "display": "Photon Realtime",
+      "version": "4.1.7.2",
+      "source": "family_propagation",
+      "confidence": 84,
+      "exact": true,
+      "notes": [
+        "Family identified as Photon Realtime, but no trusted exact version was exposed.",
+        "Inherited version 4.1.7.2 from sibling Photon3Unity3D.dll."
+      ],
+      "assembly_name": "PhotonRealtime",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "PhotonUnityNetworking.dll",
+      "family": "photon_pun_2",
+      "display": "Photon PUN 2",
+      "version": "2.40",
+      "source": "field_constant",
+      "confidence": 98,
+      "exact": true,
+      "notes": [
+        "Photon.Pun.PhotonNetwork.PunVersion constant table value.",
+        "PunVersion symbol is present; exact PUN version may still be recoverable with deeper constant parsing."
+      ],
+      "assembly_name": "PhotonUnityNetworking",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "PhotonUnityNetworking.Utilities.dll",
+      "family": "PhotonUnityNetworking.Utilities",
+      "display": "PhotonUnityNetworking.Utilities",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as PhotonUnityNetworking.Utilities, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "PhotonUnityNetworking.Utilities",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "PhotonVoice.API.dll",
+      "family": "photon_voice_2",
+      "display": "Photon Voice 2",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as Photon Voice 2, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "PhotonVoice.API",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "PhotonVoice.dll",
+      "family": "photon_voice_2",
+      "display": "Photon Voice 2",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as Photon Voice 2, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "PhotonVoice",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "PhotonVoice.Fusion.dll",
+      "family": "photon_voice_2",
+      "display": "Photon Voice 2",
+      "version": "2.0.0.0",
+      "source": "context_strings",
+      "confidence": 68,
+      "exact": true,
+      "notes": [
+        "Version near tokens photonvoice, fusion."
+      ],
+      "assembly_name": "PhotonVoice.Fusion",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "PhotonVoice.PUN.dll",
+      "family": "photon_voice_2",
+      "display": "Photon Voice 2",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as Photon Voice 2, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "PhotonVoice.PUN",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "PlayFab.dll",
+      "family": "com.playfab.events.sessions",
+      "display": "com.playfab.events.sessions",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Package refs seen: com.playfab.events.sessions",
+        "Family identified as com.playfab.events.sessions, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "PlayFab",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "Sirenix.OdinInspector.Attributes.dll",
+      "family": "Sirenix.OdinInspector.Attributes",
+      "display": "Sirenix.OdinInspector.Attributes",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as Sirenix.OdinInspector.Attributes, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "Sirenix.OdinInspector.Attributes",
+      "assembly_version": "1.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "Sirenix.OdinInspector.Modules.Unity.Addressables.dll",
+      "family": "Sirenix.OdinInspector.Modules.Unity.Addressables",
+      "display": "Sirenix.OdinInspector.Modules.Unity.Addressables",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as Sirenix.OdinInspector.Modules.Unity.Addressables, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "Sirenix.OdinInspector.Modules.Unity.Addressables",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "SteamVR.dll",
+      "family": "steamvr_unity_plugin",
+      "display": "SteamVR Unity Plugin",
+      "version": "2.2+",
+      "source": "steamvr_actions_heuristic",
+      "confidence": 48,
+      "exact": false,
+      "notes": [
+        "SteamVR_Actions.dll exists; Valve release notes tie that assembly to the 2.2+ plugin generation."
+      ],
+      "assembly_name": "SteamVR",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "family-only match"
+    },
+    {
+      "file": "SteamVR_Actions.dll",
+      "family": "steamvr_unity_plugin",
+      "display": "SteamVR Unity Plugin",
+      "version": "2.2+",
+      "source": "steamvr_actions_heuristic",
+      "confidence": 48,
+      "exact": false,
+      "notes": [
+        "SteamVR_Actions.dll exists; Valve release notes tie that assembly to the 2.2+ plugin generation."
+      ],
+      "assembly_name": "SteamVR_Actions",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "family-only match"
+    },
+    {
+      "file": "System.ComponentModel.Composition.dll",
+      "family": "System.ComponentModel.Composition",
+      "display": "System.ComponentModel.Composition",
+      "version": "4.6.57.0",
+      "source": "custom_attribute",
+      "confidence": 92,
+      "exact": true,
+      "notes": [
+        "System.Reflection.AssemblyInformationalVersionAttribute=4.6.57.0"
+      ],
+      "assembly_name": "System.ComponentModel.Composition",
+      "assembly_version": "4.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "System.Configuration.dll",
+      "family": "System.Configuration",
+      "display": "System.Configuration",
+      "version": "4.6.57.0",
+      "source": "custom_attribute",
+      "confidence": 92,
+      "exact": true,
+      "notes": [
+        "System.Reflection.AssemblyInformationalVersionAttribute=4.6.57.0"
+      ],
+      "assembly_name": "System.Configuration",
+      "assembly_version": "4.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "System.Core.dll",
+      "family": "System.Core",
+      "display": "System.Core",
+      "version": "4.6.57.0",
+      "source": "custom_attribute",
+      "confidence": 92,
+      "exact": true,
+      "notes": [
+        "System.Reflection.AssemblyInformationalVersionAttribute=4.6.57.0"
+      ],
+      "assembly_name": "System.Core",
+      "assembly_version": "4.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "System.Data.DataSetExtensions.dll",
+      "family": "System.Data.DataSetExtensions",
+      "display": "System.Data.DataSetExtensions",
+      "version": "4.6.57.0",
+      "source": "custom_attribute",
+      "confidence": 92,
+      "exact": true,
+      "notes": [
+        "System.Reflection.AssemblyInformationalVersionAttribute=4.6.57.0"
+      ],
+      "assembly_name": "System.Data.DataSetExtensions",
+      "assembly_version": "4.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "System.Data.dll",
+      "family": "System.Data",
+      "display": "System.Data",
+      "version": "4.6.57.0",
+      "source": "custom_attribute",
+      "confidence": 92,
+      "exact": true,
+      "notes": [
+        "System.Reflection.AssemblyInformationalVersionAttribute=4.6.57.0"
+      ],
+      "assembly_name": "System.Data",
+      "assembly_version": "4.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "System.dll",
+      "family": "System",
+      "display": "System",
+      "version": "4.6.57.0",
+      "source": "custom_attribute",
+      "confidence": 92,
+      "exact": true,
+      "notes": [
+        "System.Reflection.AssemblyInformationalVersionAttribute=4.6.57.0"
+      ],
+      "assembly_name": "System",
+      "assembly_version": "4.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "System.Drawing.dll",
+      "family": "System.Drawing",
+      "display": "System.Drawing",
+      "version": "4.6.57.0",
+      "source": "custom_attribute",
+      "confidence": 92,
+      "exact": true,
+      "notes": [
+        "System.Reflection.AssemblyInformationalVersionAttribute=4.6.57.0"
+      ],
+      "assembly_name": "System.Drawing",
+      "assembly_version": "4.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "System.EnterpriseServices.dll",
+      "family": "System.EnterpriseServices",
+      "display": "System.EnterpriseServices",
+      "version": "4.6.57.0",
+      "source": "custom_attribute",
+      "confidence": 92,
+      "exact": true,
+      "notes": [
+        "System.Reflection.AssemblyInformationalVersionAttribute=4.6.57.0"
+      ],
+      "assembly_name": "System.EnterpriseServices",
+      "assembly_version": "4.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "System.IO.Compression.dll",
+      "family": "System.IO.Compression",
+      "display": "System.IO.Compression",
+      "version": "4.6.57.0",
+      "source": "custom_attribute",
+      "confidence": 92,
+      "exact": true,
+      "notes": [
+        "System.Reflection.AssemblyInformationalVersionAttribute=4.6.57.0"
+      ],
+      "assembly_name": "System.IO.Compression",
+      "assembly_version": "4.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "System.IO.Compression.FileSystem.dll",
+      "family": "System.IO.Compression.FileSystem",
+      "display": "System.IO.Compression.FileSystem",
+      "version": "4.6.57.0",
+      "source": "custom_attribute",
+      "confidence": 92,
+      "exact": true,
+      "notes": [
+        "System.Reflection.AssemblyInformationalVersionAttribute=4.6.57.0"
+      ],
+      "assembly_name": "System.IO.Compression.FileSystem",
+      "assembly_version": "4.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "System.Net.Http.dll",
+      "family": "System.Net.Http",
+      "display": "System.Net.Http",
+      "version": "4.6.57.0",
+      "source": "custom_attribute",
+      "confidence": 92,
+      "exact": true,
+      "notes": [
+        "System.Reflection.AssemblyInformationalVersionAttribute=4.6.57.0"
+      ],
+      "assembly_name": "System.Net.Http",
+      "assembly_version": "4.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "System.Numerics.dll",
+      "family": "System.Numerics",
+      "display": "System.Numerics",
+      "version": "4.6.57.0",
+      "source": "custom_attribute",
+      "confidence": 92,
+      "exact": true,
+      "notes": [
+        "System.Reflection.AssemblyInformationalVersionAttribute=4.6.57.0"
+      ],
+      "assembly_name": "System.Numerics",
+      "assembly_version": "4.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "System.Runtime.CompilerServices.Unsafe.dll",
+      "family": "System.Runtime.CompilerServices.Unsafe",
+      "display": "System.Runtime.CompilerServices.Unsafe",
+      "version": "6.0.0",
+      "source": "custom_attribute",
+      "confidence": 92,
+      "exact": true,
+      "notes": [
+        "System.Reflection.AssemblyInformationalVersionAttribute=6.0.0"
+      ],
+      "assembly_name": "System.Runtime.CompilerServices.Unsafe",
+      "assembly_version": "6.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "System.Runtime.dll",
+      "family": "System.Runtime",
+      "display": "System.Runtime",
+      "version": "4.0.0.0",
+      "source": "custom_attribute",
+      "confidence": 92,
+      "exact": true,
+      "notes": [
+        "System.Reflection.AssemblyInformationalVersionAttribute=4.0.0.0"
+      ],
+      "assembly_name": "System.Runtime",
+      "assembly_version": "4.1.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "System.Runtime.InteropServices.dll",
+      "family": "System.Runtime.InteropServices",
+      "display": "System.Runtime.InteropServices",
+      "version": "4.0.0.0",
+      "source": "assembly_version",
+      "confidence": 82,
+      "exact": true,
+      "notes": [
+        "Assembly table name=System.Runtime.InteropServices."
+      ],
+      "assembly_name": "System.Runtime.InteropServices",
+      "assembly_version": "4.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "System.Runtime.Serialization.dll",
+      "family": "System.Runtime.Serialization",
+      "display": "System.Runtime.Serialization",
+      "version": "4.6.57.0",
+      "source": "custom_attribute",
+      "confidence": 92,
+      "exact": true,
+      "notes": [
+        "System.Reflection.AssemblyInformationalVersionAttribute=4.6.57.0"
+      ],
+      "assembly_name": "System.Runtime.Serialization",
+      "assembly_version": "4.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "System.Security.dll",
+      "family": "System.Security",
+      "display": "System.Security",
+      "version": "4.6.57.0",
+      "source": "custom_attribute",
+      "confidence": 92,
+      "exact": true,
+      "notes": [
+        "System.Reflection.AssemblyInformationalVersionAttribute=4.6.57.0"
+      ],
+      "assembly_name": "System.Security",
+      "assembly_version": "4.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "System.ServiceModel.Internals.dll",
+      "family": "System.ServiceModel.Internals",
+      "display": "System.ServiceModel.Internals",
+      "version": "4.6.57.0",
+      "source": "custom_attribute",
+      "confidence": 92,
+      "exact": true,
+      "notes": [
+        "System.Reflection.AssemblyInformationalVersionAttribute=4.6.57.0"
+      ],
+      "assembly_name": "System.ServiceModel.Internals",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "System.Transactions.dll",
+      "family": "System.Transactions",
+      "display": "System.Transactions",
+      "version": "4.6.57.0",
+      "source": "custom_attribute",
+      "confidence": 92,
+      "exact": true,
+      "notes": [
+        "System.Reflection.AssemblyInformationalVersionAttribute=4.6.57.0"
+      ],
+      "assembly_name": "System.Transactions",
+      "assembly_version": "4.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "System.Xml.dll",
+      "family": "System.Xml",
+      "display": "System.Xml",
+      "version": "4.6.57.0",
+      "source": "custom_attribute",
+      "confidence": 92,
+      "exact": true,
+      "notes": [
+        "System.Reflection.AssemblyInformationalVersionAttribute=4.6.57.0"
+      ],
+      "assembly_name": "System.Xml",
+      "assembly_version": "4.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "System.Xml.Linq.dll",
+      "family": "System.Xml.Linq",
+      "display": "System.Xml.Linq",
+      "version": "4.6.57.0",
+      "source": "custom_attribute",
+      "confidence": 92,
+      "exact": true,
+      "notes": [
+        "System.Reflection.AssemblyInformationalVersionAttribute=4.6.57.0"
+      ],
+      "assembly_name": "System.Xml.Linq",
+      "assembly_version": "4.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "TechniePhysicsCreator.dll",
+      "family": "TechniePhysicsCreator",
+      "display": "TechniePhysicsCreator",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as TechniePhysicsCreator, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "TechniePhysicsCreator",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "Unity.Addressables.dll",
+      "family": "com.unity.addressables",
+      "display": "Unity Addressables",
+      "version": "1.21.19",
+      "source": "explicit_tag",
+      "confidence": 100,
+      "exact": true,
+      "notes": [
+        "Embedded package@version marker found.",
+        "Package refs seen: com.unity.addressables",
+        "Explicit packages seen: com.unity.addressables@1.21.19"
+      ],
+      "assembly_name": "Unity.Addressables",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [
+        [
+          "com.unity.addressables",
+          "1.21.19"
+        ]
+      ],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Unity.AI.Navigation.dll",
+      "family": "com.unity.ai.navigation",
+      "display": "Unity AI Navigation",
+      "version": "1.1.3",
+      "source": "explicit_tag",
+      "confidence": 100,
+      "exact": true,
+      "notes": [
+        "Embedded package@version marker found.",
+        "Package refs seen: com.unity.ai.navigation",
+        "Explicit packages seen: com.unity.ai.navigation@1.1.3, com.unity.ai.navigation@1.1"
+      ],
+      "assembly_name": "Unity.AI.Navigation",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [
+        [
+          "com.unity.ai.navigation",
+          "1.1.3"
+        ],
+        [
+          "com.unity.ai.navigation",
+          "1.1"
+        ]
+      ],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Unity.Animation.Rigging.dll",
+      "family": "com.unity.animation.rigging",
+      "display": "Unity Animation Rigging",
+      "version": "1.2.1",
+      "source": "explicit_tag",
+      "confidence": 100,
+      "exact": true,
+      "notes": [
+        "Embedded package@version marker found.",
+        "Package refs seen: com.unity.animation.rigging",
+        "Explicit packages seen: com.unity.animation.rigging@1.2.1, com.unity.animation.rigging@1.2"
+      ],
+      "assembly_name": "Unity.Animation.Rigging",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [
+        [
+          "com.unity.animation.rigging",
+          "1.2.1"
+        ],
+        [
+          "com.unity.animation.rigging",
+          "1.2"
+        ]
+      ],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Unity.Animation.Rigging.DocCodeExamples.dll",
+      "family": "com.unity.animation.rigging",
+      "display": "Unity Animation Rigging",
+      "version": "1.2.1",
+      "source": "explicit_tag",
+      "confidence": 100,
+      "exact": true,
+      "notes": [
+        "Embedded package@version marker found.",
+        "Package refs seen: com.unity.animation.rigging",
+        "Explicit packages seen: com.unity.animation.rigging@1.2.1"
+      ],
+      "assembly_name": "Unity.Animation.Rigging.DocCodeExamples",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [
+        [
+          "com.unity.animation.rigging",
+          "1.2.1"
+        ]
+      ],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Unity.Burst.dll",
+      "family": "com.unity.burst",
+      "display": "Unity Burst",
+      "version": "1.8.7",
+      "source": "explicit_tag",
+      "confidence": 100,
+      "exact": true,
+      "notes": [
+        "Embedded package@version marker found.",
+        "Package refs seen: com.unity.burst",
+        "Explicit packages seen: com.unity.burst@1.8.7"
+      ],
+      "assembly_name": "Unity.Burst",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [
+        [
+          "com.unity.burst",
+          "1.8.7"
+        ]
+      ],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Unity.Burst.Unsafe.dll",
+      "family": "com.unity.burst",
+      "display": "Unity Burst",
+      "version": "4.0.0.0",
+      "source": "custom_attribute",
+      "confidence": 92,
+      "exact": true,
+      "notes": [
+        "System.Reflection.AssemblyInformationalVersionAttribute=4.0.0.0"
+      ],
+      "assembly_name": "Unity.Burst.Unsafe",
+      "assembly_version": "4.0.5.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Unity.Collections.dll",
+      "family": "com.unity.collections",
+      "display": "Unity Collections",
+      "version": "2.2.0",
+      "source": "explicit_tag",
+      "confidence": 100,
+      "exact": true,
+      "notes": [
+        "Embedded package@version marker found.",
+        "Package refs seen: com.unity.collections",
+        "Explicit packages seen: com.unity.collections@2.2.0"
+      ],
+      "assembly_name": "Unity.Collections",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [
+        [
+          "com.unity.collections",
+          "2.2.0"
+        ]
+      ],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Unity.Collections.LowLevel.ILSupport.dll",
+      "family": "com.unity.collections",
+      "display": "Unity Collections",
+      "version": "2.1.0.0",
+      "source": "context_strings",
+      "confidence": 68,
+      "exact": true,
+      "notes": [
+        "Version near tokens collections.",
+        "Package refs seen: com.unity.collections"
+      ],
+      "assembly_name": "Unity.Collections.LowLevel.ILSupport",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Unity.Formats.Fbx.Runtime.dll",
+      "family": "com.autodesk.fbx",
+      "display": "Autodesk FBX",
+      "version": "4.2.1",
+      "source": "context_strings",
+      "confidence": 68,
+      "exact": true,
+      "notes": [
+        "Version near tokens fbx, autodesk.",
+        "Package refs seen: com.unity.formats.fbx",
+        "Explicit packages seen: com.unity.formats.fbx@4.2.1"
+      ],
+      "assembly_name": "Unity.Formats.Fbx.Runtime",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [
+        [
+          "com.unity.formats.fbx",
+          "4.2.1"
+        ]
+      ],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Unity.InputSystem.dll",
+      "family": "com.unity.inputsystem",
+      "display": "Unity Input System",
+      "version": "1.6.1",
+      "source": "explicit_tag",
+      "confidence": 100,
+      "exact": true,
+      "notes": [
+        "Embedded package@version marker found.",
+        "Package refs seen: com.unity.inputsystem",
+        "Explicit packages seen: com.unity.inputsystem@1.6.1, com.unity.inputsystem@1.6"
+      ],
+      "assembly_name": "Unity.InputSystem",
+      "assembly_version": "1.6.1.0",
+      "explicit_packages": [
+        [
+          "com.unity.inputsystem",
+          "1.6.1"
+        ],
+        [
+          "com.unity.inputsystem",
+          "1.6"
+        ]
+      ],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Unity.InputSystem.ForUI.dll",
+      "family": "com.unity.inputsystem",
+      "display": "Unity Input System",
+      "version": "1.6.1",
+      "source": "family_propagation",
+      "confidence": 92,
+      "exact": true,
+      "notes": [
+        "Family identified as Unity Input System, but no trusted exact version was exposed.",
+        "Inherited version 1.6.1 from sibling Unity.InputSystem.dll."
+      ],
+      "assembly_name": "Unity.InputSystem.ForUI",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Unity.Mathematics.dll",
+      "family": "com.unity.mathematics",
+      "display": "Unity Mathematics",
+      "version": "1.3.1",
+      "source": "explicit_tag",
+      "confidence": 100,
+      "exact": true,
+      "notes": [
+        "Embedded package@version marker found.",
+        "Package refs seen: com.unity.mathematics",
+        "Explicit packages seen: com.unity.mathematics@1.3.1"
+      ],
+      "assembly_name": "Unity.Mathematics",
+      "assembly_version": "1.0.0.0",
+      "explicit_packages": [
+        [
+          "com.unity.mathematics",
+          "1.3.1"
+        ]
+      ],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Unity.ProBuilder.Csg.dll",
+      "family": "com.unity.probuilder",
+      "display": "Unity ProBuilder",
+      "version": "5.0.7",
+      "source": "explicit_tag",
+      "confidence": 100,
+      "exact": true,
+      "notes": [
+        "Embedded package@version marker found.",
+        "Package refs seen: com.unity.probuilder",
+        "Explicit packages seen: com.unity.probuilder@5.0.7"
+      ],
+      "assembly_name": "Unity.ProBuilder.Csg",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [
+        [
+          "com.unity.probuilder",
+          "5.0.7"
+        ]
+      ],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Unity.ProBuilder.dll",
+      "family": "com.unity.probuilder",
+      "display": "Unity ProBuilder",
+      "version": "5.0.7",
+      "source": "explicit_tag",
+      "confidence": 100,
+      "exact": true,
+      "notes": [
+        "Embedded package@version marker found.",
+        "Package refs seen: com.unity.probuilder",
+        "Explicit packages seen: com.unity.probuilder@5.0.7"
+      ],
+      "assembly_name": "Unity.ProBuilder",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [
+        [
+          "com.unity.probuilder",
+          "5.0.7"
+        ]
+      ],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Unity.ProBuilder.KdTree.dll",
+      "family": "com.unity.probuilder",
+      "display": "Unity ProBuilder",
+      "version": "5.0.7",
+      "source": "explicit_tag",
+      "confidence": 100,
+      "exact": true,
+      "notes": [
+        "Embedded package@version marker found.",
+        "Package refs seen: com.unity.probuilder",
+        "Explicit packages seen: com.unity.probuilder@5.0.7"
+      ],
+      "assembly_name": "Unity.ProBuilder.KdTree",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [
+        [
+          "com.unity.probuilder",
+          "5.0.7"
+        ]
+      ],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Unity.ProBuilder.Poly2Tri.dll",
+      "family": "com.unity.probuilder",
+      "display": "Unity ProBuilder",
+      "version": "5.0.7",
+      "source": "explicit_tag",
+      "confidence": 100,
+      "exact": true,
+      "notes": [
+        "Embedded package@version marker found.",
+        "Package refs seen: com.unity.probuilder",
+        "Explicit packages seen: com.unity.probuilder@5.0.7"
+      ],
+      "assembly_name": "Unity.ProBuilder.Poly2Tri",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [
+        [
+          "com.unity.probuilder",
+          "5.0.7"
+        ]
+      ],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Unity.ProBuilder.Stl.dll",
+      "family": "com.unity.probuilder",
+      "display": "Unity ProBuilder",
+      "version": "5.0.7",
+      "source": "explicit_tag",
+      "confidence": 100,
+      "exact": true,
+      "notes": [
+        "Embedded package@version marker found.",
+        "Package refs seen: com.unity.probuilder",
+        "Explicit packages seen: com.unity.probuilder@5.0.7"
+      ],
+      "assembly_name": "Unity.ProBuilder.Stl",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [
+        [
+          "com.unity.probuilder",
+          "5.0.7"
+        ]
+      ],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Unity.Profiling.Core.dll",
+      "family": "com.unity.profiling.core",
+      "display": "Unity Profiling Core",
+      "version": "1.0.2",
+      "source": "explicit_tag",
+      "confidence": 100,
+      "exact": true,
+      "notes": [
+        "Embedded package@version marker found.",
+        "Package refs seen: com.unity.profiling.core",
+        "Explicit packages seen: com.unity.profiling.core@1.0.2"
+      ],
+      "assembly_name": "Unity.Profiling.Core",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [
+        [
+          "com.unity.profiling.core",
+          "1.0.2"
+        ]
+      ],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Unity.RenderPipeline.Universal.ShaderLibrary.dll",
+      "family": "com.unity.render-pipelines.universal",
+      "display": "Unity URP",
+      "version": "14.0.8",
+      "source": "explicit_tag",
+      "confidence": 100,
+      "exact": true,
+      "notes": [
+        "Embedded package@version marker found.",
+        "Package refs seen: com.unity.render-pipelines.universal",
+        "Explicit packages seen: com.unity.render-pipelines.universal@14.0.8"
+      ],
+      "assembly_name": "Unity.RenderPipeline.Universal.ShaderLibrary",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [
+        [
+          "com.unity.render-pipelines.universal",
+          "14.0.8"
+        ]
+      ],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Unity.RenderPipelines.Core.Runtime.dll",
+      "family": "com.unity.render-pipelines.core",
+      "display": "Unity RP Core",
+      "version": "14.0.8",
+      "source": "explicit_tag",
+      "confidence": 100,
+      "exact": true,
+      "notes": [
+        "Embedded package@version marker found.",
+        "Package refs seen: com.unity.render-pipelines.core",
+        "Explicit packages seen: com.unity.render-pipelines.core@14.0.8"
+      ],
+      "assembly_name": "Unity.RenderPipelines.Core.Runtime",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [
+        [
+          "com.unity.render-pipelines.core",
+          "14.0.8"
+        ]
+      ],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Unity.RenderPipelines.Core.ShaderLibrary.dll",
+      "family": "com.unity.render-pipelines.core",
+      "display": "Unity RP Core",
+      "version": "14.0.8",
+      "source": "explicit_tag",
+      "confidence": 100,
+      "exact": true,
+      "notes": [
+        "Embedded package@version marker found.",
+        "Package refs seen: com.unity.render-pipelines.core",
+        "Explicit packages seen: com.unity.render-pipelines.core@14.0.8"
+      ],
+      "assembly_name": "Unity.RenderPipelines.Core.ShaderLibrary",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [
+        [
+          "com.unity.render-pipelines.core",
+          "14.0.8"
+        ]
+      ],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.dll",
+      "family": "com.unity.shadergraph",
+      "display": "Unity Shader Graph",
+      "version": "14.0.8",
+      "source": "explicit_tag",
+      "confidence": 100,
+      "exact": true,
+      "notes": [
+        "Embedded package@version marker found.",
+        "Package refs seen: com.unity.shadergraph",
+        "Explicit packages seen: com.unity.shadergraph@14.0.8"
+      ],
+      "assembly_name": "Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [
+        [
+          "com.unity.shadergraph",
+          "14.0.8"
+        ]
+      ],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Unity.RenderPipelines.Universal.Runtime.dll",
+      "family": "com.unity.render-pipelines.universal",
+      "display": "Unity URP",
+      "version": "14.0.8",
+      "source": "explicit_tag",
+      "confidence": 100,
+      "exact": true,
+      "notes": [
+        "Embedded package@version marker found.",
+        "Package refs seen: com.unity.render-pipelines.universal",
+        "Explicit packages seen: com.unity.render-pipelines.universal@14.0.8"
+      ],
+      "assembly_name": "Unity.RenderPipelines.Universal.Runtime",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [
+        [
+          "com.unity.render-pipelines.universal",
+          "14.0.8"
+        ]
+      ],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Unity.RenderPipelines.Universal.Shaders.dll",
+      "family": "com.unity.render-pipelines.universal",
+      "display": "Unity URP",
+      "version": "14.0.8",
+      "source": "explicit_tag",
+      "confidence": 100,
+      "exact": true,
+      "notes": [
+        "Embedded package@version marker found.",
+        "Package refs seen: com.unity.render-pipelines.universal",
+        "Explicit packages seen: com.unity.render-pipelines.universal@14.0.8"
+      ],
+      "assembly_name": "Unity.RenderPipelines.Universal.Shaders",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [
+        [
+          "com.unity.render-pipelines.universal",
+          "14.0.8"
+        ]
+      ],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Unity.ResourceManager.dll",
+      "family": "com.unity.addressables",
+      "display": "Unity Addressables",
+      "version": "1.21.19",
+      "source": "explicit_tag",
+      "confidence": 100,
+      "exact": true,
+      "notes": [
+        "Embedded package@version marker found.",
+        "Package refs seen: com.unity.addressables",
+        "Explicit packages seen: com.unity.addressables@1.21.19"
+      ],
+      "assembly_name": "Unity.ResourceManager",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [
+        [
+          "com.unity.addressables",
+          "1.21.19"
+        ]
+      ],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Unity.ScriptableBuildPipeline.dll",
+      "family": "com.unity.scriptablebuildpipeline",
+      "display": "Unity Scriptable Build Pipeline",
+      "version": "1.21.21",
+      "source": "explicit_tag",
+      "confidence": 100,
+      "exact": true,
+      "notes": [
+        "Embedded package@version marker found.",
+        "Package refs seen: com.unity.scriptablebuildpipeline",
+        "Explicit packages seen: com.unity.scriptablebuildpipeline@1.21.21"
+      ],
+      "assembly_name": "Unity.ScriptableBuildPipeline",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [
+        [
+          "com.unity.scriptablebuildpipeline",
+          "1.21.21"
+        ]
+      ],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Unity.Splines.dll",
+      "family": "com.unity.splines",
+      "display": "Unity Splines",
+      "version": "2.2.1",
+      "source": "explicit_tag",
+      "confidence": 100,
+      "exact": true,
+      "notes": [
+        "Embedded package@version marker found.",
+        "Package refs seen: com.unity.splines",
+        "Explicit packages seen: com.unity.splines@2.2.1"
+      ],
+      "assembly_name": "Unity.Splines",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [
+        [
+          "com.unity.splines",
+          "2.2.1"
+        ]
+      ],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Unity.TextMeshPro.dll",
+      "family": "com.unity.textmeshpro",
+      "display": "TextMeshPro",
+      "version": "3.0.9",
+      "source": "explicit_tag",
+      "confidence": 100,
+      "exact": true,
+      "notes": [
+        "Embedded package@version marker found.",
+        "Package refs seen: com.unity.textmeshpro",
+        "Explicit packages seen: com.unity.textmeshpro@3.0.9, com.unity.textmeshpro@3.0"
+      ],
+      "assembly_name": "Unity.TextMeshPro",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [
+        [
+          "com.unity.textmeshpro",
+          "3.0.9"
+        ],
+        [
+          "com.unity.textmeshpro",
+          "3.0"
+        ]
+      ],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Unity.Timeline.dll",
+      "family": "com.unity.timeline",
+      "display": "Unity Timeline",
+      "version": "1.7.4",
+      "source": "explicit_tag",
+      "confidence": 100,
+      "exact": true,
+      "notes": [
+        "Embedded package@version marker found.",
+        "Package refs seen: com.unity.timeline",
+        "Explicit packages seen: com.unity.timeline@1.7.4"
+      ],
+      "assembly_name": "Unity.Timeline",
+      "assembly_version": "1.0.0.0",
+      "explicit_packages": [
+        [
+          "com.unity.timeline",
+          "1.7.4"
+        ]
+      ],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Unity.XR.CoreUtils.dll",
+      "family": "com.unity.xr.core-utils",
+      "display": "XR Core Utils",
+      "version": "2.2.1",
+      "source": "explicit_tag",
+      "confidence": 100,
+      "exact": true,
+      "notes": [
+        "Embedded package@version marker found.",
+        "Package refs seen: com.unity.xr.core-utils",
+        "Explicit packages seen: com.unity.xr.core-utils@2.2.1, com.unity.xr.core-utils@2.0"
+      ],
+      "assembly_name": "Unity.XR.CoreUtils",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [
+        [
+          "com.unity.xr.core-utils",
+          "2.2.1"
+        ],
+        [
+          "com.unity.xr.core-utils",
+          "2.0"
+        ]
+      ],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Unity.XR.Interaction.Toolkit.dll",
+      "family": "com.unity.xr.interaction.toolkit",
+      "display": "XR Interaction Toolkit",
+      "version": "2.3.2",
+      "source": "explicit_tag",
+      "confidence": 100,
+      "exact": true,
+      "notes": [
+        "Embedded package@version marker found.",
+        "Package refs seen: com.unity.xr.interaction.toolkit, com.unity.xr.core-utils",
+        "Explicit packages seen: com.unity.xr.interaction.toolkit@2.3.2, com.unity.xr.interaction.toolkit@2.3"
+      ],
+      "assembly_name": "Unity.XR.Interaction.Toolkit",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [
+        [
+          "com.unity.xr.interaction.toolkit",
+          "2.3.2"
+        ],
+        [
+          "com.unity.xr.interaction.toolkit",
+          "2.3"
+        ]
+      ],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Unity.XR.Management.dll",
+      "family": "com.unity.xr.management",
+      "display": "XR Management",
+      "version": "4.4.0",
+      "source": "explicit_tag",
+      "confidence": 100,
+      "exact": true,
+      "notes": [
+        "Embedded package@version marker found.",
+        "Package refs seen: com.unity.xr.management, com.unity.xr.management.loader_settings",
+        "Explicit packages seen: com.unity.xr.management@4.4.0"
+      ],
+      "assembly_name": "Unity.XR.Management",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [
+        [
+          "com.unity.xr.management",
+          "4.4.0"
+        ]
+      ],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Unity.XR.Oculus.dll",
+      "family": "com.unity.xr.oculus",
+      "display": "Unity XR Oculus",
+      "version": "3.3.0",
+      "source": "explicit_tag",
+      "confidence": 100,
+      "exact": true,
+      "notes": [
+        "Embedded package@version marker found.",
+        "Package refs seen: com.unity.xr.oculus",
+        "Explicit packages seen: com.unity.xr.oculus@3.3.0"
+      ],
+      "assembly_name": "Unity.XR.Oculus",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [
+        [
+          "com.unity.xr.oculus",
+          "3.3.0"
+        ]
+      ],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "Unity.XR.OpenVR.dll",
+      "family": "com.valvesoftware.unity.openvr",
+      "display": "OpenVR XR Plugin",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Package refs seen: com.valvesoftware.unity.openvr",
+        "Family identified as OpenVR XR Plugin, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "Unity.XR.OpenVR",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.AccessibilityModule.dll",
+      "family": "UnityEngine.AccessibilityModule",
+      "display": "UnityEngine.AccessibilityModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.AccessibilityModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.AccessibilityModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.AIModule.dll",
+      "family": "UnityEngine.AIModule",
+      "display": "UnityEngine.AIModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.AIModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.AIModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.AndroidJNIModule.dll",
+      "family": "UnityEngine.AndroidJNIModule",
+      "display": "UnityEngine.AndroidJNIModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.AndroidJNIModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.AndroidJNIModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.AnimationModule.dll",
+      "family": "UnityEngine.AnimationModule",
+      "display": "UnityEngine.AnimationModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.AnimationModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.AnimationModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.ARModule.dll",
+      "family": "UnityEngine.ARModule",
+      "display": "UnityEngine.ARModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.ARModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.ARModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.AssetBundleModule.dll",
+      "family": "UnityEngine.AssetBundleModule",
+      "display": "UnityEngine.AssetBundleModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.AssetBundleModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.AssetBundleModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.AudioModule.dll",
+      "family": "io.bindings.h",
+      "display": "io.bindings.h",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Package refs seen: io.bindings.h",
+        "Family identified as io.bindings.h, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.AudioModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.ClothModule.dll",
+      "family": "UnityEngine.ClothModule",
+      "display": "UnityEngine.ClothModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.ClothModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.ClothModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.ClusterInputModule.dll",
+      "family": "UnityEngine.ClusterInputModule",
+      "display": "UnityEngine.ClusterInputModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.ClusterInputModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.ClusterInputModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.ClusterRendererModule.dll",
+      "family": "UnityEngine.ClusterRendererModule",
+      "display": "UnityEngine.ClusterRendererModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.ClusterRendererModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.ClusterRendererModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.ContentLoadModule.dll",
+      "family": "UnityEngine.ContentLoadModule",
+      "display": "UnityEngine.ContentLoadModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.ContentLoadModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.ContentLoadModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.CoreModule.dll",
+      "family": "com.unity.collections",
+      "display": "com.unity.collections",
+      "version": "2.2.0",
+      "source": "family_propagation",
+      "confidence": 92,
+      "exact": true,
+      "notes": [
+        "Package refs seen: com.unity.collections",
+        "Family identified as com.unity.collections, but no trusted exact version was exposed.",
+        "Inherited version 2.2.0 from sibling Unity.Collections.dll."
+      ],
+      "assembly_name": "UnityEngine.CoreModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "UnityEngine.CrashReportingModule.dll",
+      "family": "UnityEngine.CrashReportingModule",
+      "display": "UnityEngine.CrashReportingModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.CrashReportingModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.CrashReportingModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.DirectorModule.dll",
+      "family": "UnityEngine.DirectorModule",
+      "display": "UnityEngine.DirectorModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.DirectorModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.DirectorModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.dll",
+      "family": "UnityEngine",
+      "display": "UnityEngine",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.DSPGraphModule.dll",
+      "family": "UnityEngine.DSPGraphModule",
+      "display": "UnityEngine.DSPGraphModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.DSPGraphModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.DSPGraphModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.GameCenterModule.dll",
+      "family": "UnityEngine.GameCenterModule",
+      "display": "UnityEngine.GameCenterModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.GameCenterModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.GameCenterModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.GIModule.dll",
+      "family": "UnityEngine.GIModule",
+      "display": "UnityEngine.GIModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.GIModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.GIModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.GridModule.dll",
+      "family": "UnityEngine.GridModule",
+      "display": "UnityEngine.GridModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.GridModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.GridModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.HotReloadModule.dll",
+      "family": "UnityEngine.HotReloadModule",
+      "display": "UnityEngine.HotReloadModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.HotReloadModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.HotReloadModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.ImageConversionModule.dll",
+      "family": "UnityEngine.ImageConversionModule",
+      "display": "UnityEngine.ImageConversionModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.ImageConversionModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.ImageConversionModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.IMGUIModule.dll",
+      "family": "UnityEngine.IMGUIModule",
+      "display": "UnityEngine.IMGUIModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.IMGUIModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.IMGUIModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.InputLegacyModule.dll",
+      "family": "UnityEngine.InputLegacyModule",
+      "display": "UnityEngine.InputLegacyModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.InputLegacyModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.InputLegacyModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.InputModule.dll",
+      "family": "UnityEngine.InputModule",
+      "display": "UnityEngine.InputModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.InputModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.InputModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.JSONSerializeModule.dll",
+      "family": "UnityEngine.JSONSerializeModule",
+      "display": "UnityEngine.JSONSerializeModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.JSONSerializeModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.JSONSerializeModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.LocalizationModule.dll",
+      "family": "UnityEngine.LocalizationModule",
+      "display": "UnityEngine.LocalizationModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.LocalizationModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.LocalizationModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.NVIDIAModule.dll",
+      "family": "UnityEngine.NVIDIAModule",
+      "display": "UnityEngine.NVIDIAModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.NVIDIAModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.NVIDIAModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.ParticleSystemModule.dll",
+      "family": "UnityEngine.ParticleSystemModule",
+      "display": "UnityEngine.ParticleSystemModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.ParticleSystemModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.ParticleSystemModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.PerformanceReportingModule.dll",
+      "family": "UnityEngine.PerformanceReportingModule",
+      "display": "UnityEngine.PerformanceReportingModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.PerformanceReportingModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.PerformanceReportingModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.Physics2DModule.dll",
+      "family": "UnityEngine.Physics2DModule",
+      "display": "UnityEngine.Physics2DModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.Physics2DModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.Physics2DModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.PhysicsModule.dll",
+      "family": "UnityEngine.PhysicsModule",
+      "display": "UnityEngine.PhysicsModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.PhysicsModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.PhysicsModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.ProfilerModule.dll",
+      "family": "UnityEngine.ProfilerModule",
+      "display": "UnityEngine.ProfilerModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.ProfilerModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.ProfilerModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.PropertiesModule.dll",
+      "family": "UnityEngine.PropertiesModule",
+      "display": "UnityEngine.PropertiesModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.PropertiesModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.PropertiesModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.RuntimeInitializeOnLoadManagerInitializerModule.dll",
+      "family": "UnityEngine.RuntimeInitializeOnLoadManagerInitializerModule",
+      "display": "UnityEngine.RuntimeInitializeOnLoadManagerInitializerModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.RuntimeInitializeOnLoadManagerInitializerModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.RuntimeInitializeOnLoadManagerInitializerModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.ScreenCaptureModule.dll",
+      "family": "UnityEngine.ScreenCaptureModule",
+      "display": "UnityEngine.ScreenCaptureModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.ScreenCaptureModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.ScreenCaptureModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.SharedInternalsModule.dll",
+      "family": "UnityEngine.SharedInternalsModule",
+      "display": "UnityEngine.SharedInternalsModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.SharedInternalsModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.SharedInternalsModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.SpatialTracking.dll",
+      "family": "com.unity.xr.legacyinputhelpers",
+      "display": "XR Legacy Input Helpers",
+      "version": "2.1.10",
+      "source": "explicit_tag",
+      "confidence": 100,
+      "exact": true,
+      "notes": [
+        "Embedded package@version marker found.",
+        "Package refs seen: com.unity.xr.legacyinputhelpers",
+        "Explicit packages seen: com.unity.xr.legacyinputhelpers@2.1.10, com.unity.xr.legacyinputhelpers@2.1"
+      ],
+      "assembly_name": "UnityEngine.SpatialTracking",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [
+        [
+          "com.unity.xr.legacyinputhelpers",
+          "2.1.10"
+        ],
+        [
+          "com.unity.xr.legacyinputhelpers",
+          "2.1"
+        ]
+      ],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "UnityEngine.SpriteMaskModule.dll",
+      "family": "UnityEngine.SpriteMaskModule",
+      "display": "UnityEngine.SpriteMaskModule",
+      "version": "2.1.0.0",
+      "source": "context_strings",
+      "confidence": 68,
+      "exact": true,
+      "notes": [
+        "Version near tokens unityengine.spritemaskmodule."
+      ],
+      "assembly_name": "UnityEngine.SpriteMaskModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "UnityEngine.SpriteShapeModule.dll",
+      "family": "UnityEngine.SpriteShapeModule",
+      "display": "UnityEngine.SpriteShapeModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.SpriteShapeModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.SpriteShapeModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.StreamingModule.dll",
+      "family": "UnityEngine.StreamingModule",
+      "display": "UnityEngine.StreamingModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.StreamingModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.StreamingModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.SubstanceModule.dll",
+      "family": "UnityEngine.SubstanceModule",
+      "display": "UnityEngine.SubstanceModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.SubstanceModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.SubstanceModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.SubsystemsModule.dll",
+      "family": "UnityEngine.SubsystemsModule",
+      "display": "UnityEngine.SubsystemsModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.SubsystemsModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.SubsystemsModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.TerrainModule.dll",
+      "family": "UnityEngine.TerrainModule",
+      "display": "UnityEngine.TerrainModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.TerrainModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.TerrainModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.TerrainPhysicsModule.dll",
+      "family": "UnityEngine.TerrainPhysicsModule",
+      "display": "UnityEngine.TerrainPhysicsModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.TerrainPhysicsModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.TerrainPhysicsModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.TextCoreFontEngineModule.dll",
+      "family": "UnityEngine.TextCoreFontEngineModule",
+      "display": "UnityEngine.TextCoreFontEngineModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.TextCoreFontEngineModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.TextCoreFontEngineModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.TextCoreTextEngineModule.dll",
+      "family": "UnityEngine.TextCoreTextEngineModule",
+      "display": "UnityEngine.TextCoreTextEngineModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.TextCoreTextEngineModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.TextCoreTextEngineModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.TextRenderingModule.dll",
+      "family": "UnityEngine.TextRenderingModule",
+      "display": "UnityEngine.TextRenderingModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.TextRenderingModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.TextRenderingModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.TilemapModule.dll",
+      "family": "UnityEngine.TilemapModule",
+      "display": "UnityEngine.TilemapModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.TilemapModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.TilemapModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.TLSModule.dll",
+      "family": "UnityEngine.TLSModule",
+      "display": "UnityEngine.TLSModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.TLSModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.TLSModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.UI.dll",
+      "family": "com.unity.ugui",
+      "display": "Unity UI",
+      "version": "1.0.0",
+      "source": "explicit_tag",
+      "confidence": 100,
+      "exact": true,
+      "notes": [
+        "Embedded package@version marker found.",
+        "Package refs seen: com.unity.render-pipelines.universal, com.unity.shadergraph, com.unity.ugui",
+        "Explicit packages seen: com.unity.render-pipelines.universal@14.0.8, com.unity.shadergraph@14.0.8, com.unity.ugui@1.0.0"
+      ],
+      "assembly_name": "UnityEngine.UI",
+      "assembly_version": "1.0.0.0",
+      "explicit_packages": [
+        [
+          "com.unity.render-pipelines.universal",
+          "14.0.8"
+        ],
+        [
+          "com.unity.shadergraph",
+          "14.0.8"
+        ],
+        [
+          "com.unity.ugui",
+          "1.0.0"
+        ]
+      ],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "UnityEngine.UIElementsModule.dll",
+      "family": "com.unity.ui",
+      "display": "com.unity.ui",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Package refs seen: com.unity.ui",
+        "Family identified as com.unity.ui, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.UIElementsModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.UIModule.dll",
+      "family": "UnityEngine.UIModule",
+      "display": "UnityEngine.UIModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.UIModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.UIModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.UmbraModule.dll",
+      "family": "UnityEngine.UmbraModule",
+      "display": "UnityEngine.UmbraModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.UmbraModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.UmbraModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.UnityAnalyticsCommonModule.dll",
+      "family": "UnityEngine.UnityAnalyticsCommonModule",
+      "display": "UnityEngine.UnityAnalyticsCommonModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.UnityAnalyticsCommonModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.UnityAnalyticsCommonModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.UnityAnalyticsModule.dll",
+      "family": "UnityEngine.UnityAnalyticsModule",
+      "display": "UnityEngine.UnityAnalyticsModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.UnityAnalyticsModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.UnityAnalyticsModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.UnityConnectModule.dll",
+      "family": "UnityEngine.UnityConnectModule",
+      "display": "UnityEngine.UnityConnectModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.UnityConnectModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.UnityConnectModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.UnityCurlModule.dll",
+      "family": "UnityEngine.UnityCurlModule",
+      "display": "UnityEngine.UnityCurlModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.UnityCurlModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.UnityCurlModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.UnityTestProtocolModule.dll",
+      "family": "UnityEngine.UnityTestProtocolModule",
+      "display": "UnityEngine.UnityTestProtocolModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.UnityTestProtocolModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.UnityTestProtocolModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.UnityWebRequestAssetBundleModule.dll",
+      "family": "UnityEngine.UnityWebRequestAssetBundleModule",
+      "display": "UnityEngine.UnityWebRequestAssetBundleModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.UnityWebRequestAssetBundleModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.UnityWebRequestAssetBundleModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.UnityWebRequestAudioModule.dll",
+      "family": "UnityEngine.UnityWebRequestAudioModule",
+      "display": "UnityEngine.UnityWebRequestAudioModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.UnityWebRequestAudioModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.UnityWebRequestAudioModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.UnityWebRequestModule.dll",
+      "family": "UnityEngine.UnityWebRequestModule",
+      "display": "UnityEngine.UnityWebRequestModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.UnityWebRequestModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.UnityWebRequestModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.UnityWebRequestTextureModule.dll",
+      "family": "UnityEngine.UnityWebRequestTextureModule",
+      "display": "UnityEngine.UnityWebRequestTextureModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.UnityWebRequestTextureModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.UnityWebRequestTextureModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.UnityWebRequestWWWModule.dll",
+      "family": "UnityEngine.UnityWebRequestWWWModule",
+      "display": "UnityEngine.UnityWebRequestWWWModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.UnityWebRequestWWWModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.UnityWebRequestWWWModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.VehiclesModule.dll",
+      "family": "UnityEngine.VehiclesModule",
+      "display": "UnityEngine.VehiclesModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.VehiclesModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.VehiclesModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.VFXModule.dll",
+      "family": "UnityEngine.VFXModule",
+      "display": "UnityEngine.VFXModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.VFXModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.VFXModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.VideoModule.dll",
+      "family": "UnityEngine.VideoModule",
+      "display": "UnityEngine.VideoModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.VideoModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.VideoModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.VirtualTexturingModule.dll",
+      "family": "UnityEngine.VirtualTexturingModule",
+      "display": "UnityEngine.VirtualTexturingModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.VirtualTexturingModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.VirtualTexturingModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.VRModule.dll",
+      "family": "UnityEngine.VRModule",
+      "display": "UnityEngine.VRModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.VRModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.VRModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.WindModule.dll",
+      "family": "UnityEngine.WindModule",
+      "display": "UnityEngine.WindModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.WindModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.WindModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "UnityEngine.XR.LegacyInputHelpers.dll",
+      "family": "com.unity.xr.legacyinputhelpers",
+      "display": "XR Legacy Input Helpers",
+      "version": "2.1.10",
+      "source": "explicit_tag",
+      "confidence": 100,
+      "exact": true,
+      "notes": [
+        "Embedded package@version marker found.",
+        "Package refs seen: com.unity.xr.legacyinputhelpers",
+        "Explicit packages seen: com.unity.xr.legacyinputhelpers@2.1.10"
+      ],
+      "assembly_name": "UnityEngine.XR.LegacyInputHelpers",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [
+        [
+          "com.unity.xr.legacyinputhelpers",
+          "2.1.10"
+        ]
+      ],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "UnityEngine.XRModule.dll",
+      "family": "UnityEngine.XRModule",
+      "display": "UnityEngine.XRModule",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as UnityEngine.XRModule, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "UnityEngine.XRModule",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "Valve.Newtonsoft.Json.dll",
+      "family": "Valve.Newtonsoft.Json",
+      "display": "Valve.Newtonsoft.Json",
+      "version": "9.0.1.19813",
+      "source": "custom_attribute",
+      "confidence": 88,
+      "exact": true,
+      "notes": [
+        "System.Reflection.AssemblyFileVersionAttribute=9.0.1.19813"
+      ],
+      "assembly_name": "Valve.Newtonsoft.Json",
+      "assembly_version": "9.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "VoiceSDK.Dictation.Runtime.dll",
+      "family": "voice_sdk",
+      "display": "Voice SDK",
+      "version": "57.0.0",
+      "source": "family_propagation",
+      "confidence": 88,
+      "exact": true,
+      "notes": [
+        "Family identified as Voice SDK, but no trusted exact version was exposed.",
+        "Inherited version 57.0.0 from sibling VoiceSDK.Runtime.dll."
+      ],
+      "assembly_name": "VoiceSDK.Dictation.Runtime",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "VoiceSDK.Runtime.dll",
+      "family": "voice_sdk",
+      "display": "Voice SDK",
+      "version": "57.0.0",
+      "source": "il_voice_sdk",
+      "confidence": 96,
+      "exact": true,
+      "notes": [
+        "Voice SDK getter/static constructor exposed build 57.0.0."
+      ],
+      "assembly_name": "VoiceSDK.Runtime",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "VYaml.Core.dll",
+      "family": "VYaml.Core",
+      "display": "VYaml.Core",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as VYaml.Core, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "VYaml.Core",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    },
+    {
+      "file": "websocket-sharp.dll",
+      "family": "websocket-sharp",
+      "display": "websocket-sharp",
+      "version": "1.0.2.0",
+      "source": "pe_version_info",
+      "confidence": 86,
+      "exact": true,
+      "notes": [
+        "fixed_product_version=1.0.2.0"
+      ],
+      "assembly_name": "websocket-sharp",
+      "assembly_version": "1.0.2.0",
+      "explicit_packages": [],
+      "unresolved_reason": ""
+    },
+    {
+      "file": "ZString.dll",
+      "family": "ZString",
+      "display": "ZString",
+      "version": "",
+      "source": "",
+      "confidence": 0,
+      "exact": false,
+      "notes": [
+        "Family identified as ZString, but no trusted exact version was exposed."
+      ],
+      "assembly_name": "ZString",
+      "assembly_version": "0.0.0.0",
+      "explicit_packages": [],
+      "unresolved_reason": "no exact version token exposed"
+    }
+  ],
+  "manifest": {
+    "com.autodesk.fbx": "4.2.1",
+    "com.unity.addressables": "1.21.19",
+    "com.unity.ai.navigation": "1.1.3",
+    "com.unity.animation.rigging": "1.2.1",
+    "com.unity.burst": "1.8.7",
+    "com.unity.cinemachine": "2.9.5",
+    "com.unity.collections": "2.2.0",
+    "com.unity.formats.fbx": "4.2.1",
+    "com.unity.inputsystem": "1.6.1",
+    "com.unity.mathematics": "1.3.1",
+    "com.unity.probuilder": "5.0.7",
+    "com.unity.profiling.core": "1.0.2",
+    "com.unity.render-pipelines.core": "14.0.8",
+    "com.unity.render-pipelines.universal": "14.0.8",
+    "com.unity.scriptablebuildpipeline": "1.21.21",
+    "com.unity.shadergraph": "14.0.8",
+    "com.unity.splines": "2.2.1",
+    "com.unity.textmeshpro": "3.0.9",
+    "com.unity.timeline": "1.7.4",
+    "com.unity.ugui": "1.0.0",
+    "com.unity.xr.core-utils": "2.2.1",
+    "com.unity.xr.interaction.toolkit": "2.3.2",
+    "com.unity.xr.legacyinputhelpers": "2.1.10",
+    "com.unity.xr.management": "4.4.0",
+    "com.unity.xr.oculus": "3.3.0"
+  }
+}
