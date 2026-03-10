@@ -190,8 +190,11 @@ public sealed class NetworkPropertyDeweavingProcessor : IAssetProcessor
 
 			if (ContainsIgnoreCase(namespaceName, "Fusion")
 				|| ContainsIgnoreCase(namespaceName, "Mirror")
+				|| ContainsIgnoreCase(namespaceName, "Photon")
+				|| ContainsIgnoreCase(namespaceName, "PlayFab")
 				|| ContainsIgnoreCase(typeName, "Networked")
-				|| ContainsIgnoreCase(typeName, "SyncVar"))
+				|| ContainsIgnoreCase(typeName, "SyncVar")
+				|| ContainsIgnoreCase(typeName, "PunRPC"))
 			{
 				return true;
 			}

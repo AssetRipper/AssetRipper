@@ -184,3 +184,26 @@ Latest Update (2026-03-10)
 
 - Enhanced script decompilation in ScriptDecompiler.cs by enabling RemoveDeadCode and RemoveDeadStores in ILSpy DecompilerSettings.
 - Enhanced PrefabOutliningProcessor.cs to preserve original scaling and rotation of root GameObjects during prefab outlining (previously it reset them fully, losing important world space data).
+
+
+Latest Update (2026-03-10 - Part 3)
+- Expanded NetworkPropertyDeweavingProcessor to cleanly resolve PlayFab, Photon, Locomotion, and VRRig multi-player properties into auto-properties.
+- Mapped PlayFab, VRRig, and GorillaLocomotion DLLs to UPM values in RegistryPackageBridge.cs.
+- Confirmed ScriptRelinkPostExporter safely handles deletion of ALL plugins and Unity DLLs: its generated Unity Editor patch correctly falls back to cross-referencing classes by namespace + class name, successfully relinking prefabs/scenes when source scripts are installed.
+- Testing instruction: Run AssetRipper and export D:\Steam\steamapps\content\app_1533390\depot_1533391 to G:\Projects\Unity Projects\Fall 2024.
+
+
+Latest Update (2026-03-10 - Part 4)
+- Researched and integrated UPM mappings for SteamVR (com.valvesoftware.unity.openvr), Photon Voice (com.exitgames.photonvoice), Meta/Oculus XR SDKs (com.meta.xr.sdk.*), and regular Unity Newtonsoft JSON.
+- Testing instruction: Open AssetRipper GUI. Select D:\Steam\steamapps\content\app_1533390\depot_1533391. Export to G:\Projects\Unity Projects\Fall 2024. Then delete generated DLLs and install the official source packages (PlayFab, Photon, Meta XR, SteamVR) in the Unity Editor to let AssetRipper's relinker do its magic.
+
+
+Latest Update (2026-03-10 - Part 5)
+- Fixed the 'Script ID is invalid' warning for correctly present but relocated types (e.g. UnityEngine.GUISkin) by enhancing BaseManager.FindType.
+- The method now correctly checks module.ExportedTypes to seamlessly follow Unity type-forwarding.
+- It also features a global fallback to check all loaded assemblies if a MonoScript references an old assembly name for a type that still exists in the project.
+
+
+Latest Update (2026-03-10 - Part 6)
+- Implemented TypeTree-based script previews in the Web GUI (AssetAPI.cs). Now, if a script assembly is missing during preview, AssetRipper will dynamically generate a C# stub from the asset's internal TypeTree structure instead of showing an empty file.
+- This fix addresses the 'TODO: replace with ILSpy' in the GUI by providing a high-fidelity field-layout fallback for missing Gorilla Tag assemblies.
