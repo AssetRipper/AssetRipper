@@ -40,7 +40,7 @@ public sealed class ScriptCompileFixPostExporter : IPostExporter
 			}
 
 			string originalText = fileSystem.File.ReadAllText(filePath);
-			string updatedText = FixSource(originalText);
+			string updatedText = FixSource(originalText, settings.ExportSettings);
 			if (string.Equals(originalText, updatedText, StringComparison.Ordinal))
 			{
 				continue;
@@ -76,18 +76,37 @@ public sealed class ScriptCompileFixPostExporter : IPostExporter
 		}
 	}
 
-	private static string FixSource(string text)
+	private static string FixSource(string text, ExportSettings settings)
 	{
 		bool hadCrLf = text.Contains("\r\n", StringComparison.Ordinal);
 		string updatedText = text.Replace("\r\n", "\n", StringComparison.Ordinal);
 		updatedText = CollapseDuplicateNonSerializedAttributes(updatedText);
-		updatedText = QualifyAmbiguousFusionLogType(updatedText);
+		if (settings.EnableAmbiguousLogFix)
+		{
+			updatedText = QualifyAmbiguousFusionLogType(updatedText);
+		}
 		updatedText = FixBrokenExplicitLayout(updatedText);
+		if (settings.EnableSimulationAccessFix)
+		{
+			updatedText = FixFusionSimulationAccess(updatedText);
+		}
 		if (hadCrLf)
 		{
 			updatedText = updatedText.Replace("\n", "\r\n", StringComparison.Ordinal);
 		}
 		return updatedText;
+	}
+
+	private static string FixFusionSimulationAccess(string text)
+	{
+		if (!text.Contains("using Fusion;", StringComparison.Ordinal))
+		{
+			return text;
+		}
+
+		// Replace Runner.Simulation with Runner._simulation to resolve access issues in decompiled Fusion scripts
+		return text.Replace(".Runner.Simulation", ".Runner._simulation", StringComparison.Ordinal)
+				   .Replace("runner.Simulation", "runner._simulation", StringComparison.Ordinal);
 	}
 
 	private static string CollapseDuplicateNonSerializedAttributes(string text)

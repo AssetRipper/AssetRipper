@@ -53,7 +53,7 @@ public sealed class ScriptRelinkPostExporter : IPostExporter
 	private static string BuildMapFile(IEnumerable<ScriptLinkEntry> entries)
 	{
 		StringBuilder builder = new();
-		builder.AppendLine("# guid\tfileID\tassembly\tnamespace\tclass");
+		builder.AppendLine("# guid\tfileID\tassembly\tnamespace\tclass\tfullType");
 		foreach (ScriptLinkEntry entry in entries)
 		{
 			builder.Append(entry.Guid);
@@ -64,7 +64,16 @@ public sealed class ScriptRelinkPostExporter : IPostExporter
 			builder.Append('\t');
 			builder.Append(entry.Namespace);
 			builder.Append('\t');
-			builder.AppendLine(entry.Class);
+			builder.Append(entry.Class);
+			builder.Append('\t');
+			if (string.IsNullOrEmpty(entry.Namespace))
+			{
+				builder.AppendLine(entry.Class);
+			}
+			else
+			{
+				builder.AppendLine($"{entry.Namespace}.{entry.Class}");
+			}
 		}
 		return builder.ToString();
 	}

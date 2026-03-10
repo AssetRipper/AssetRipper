@@ -65,23 +65,23 @@ public sealed class RegistryPackageBridge
 		["Fusion.Runtime.dll"] = new("com.photonengine.fusion", "Photon Fusion", null, ["fusion"]),
 		["Fusion.Sockets.dll"] = new("com.photonengine.fusion", "Photon Fusion", null, ["fusion"]),
 		["Fusion.Unity.dll"] = new("com.photonengine.fusion", "Photon Fusion", null, ["fusion"]),
-		["PhotonRealtime.dll"] = new("com.exitgames.photonrealtime", "Photon Realtime", null, ["photon", "realtime"]),
-		["PhotonUnityNetworking.dll"] = new("com.exitgames.photonpun", "Photon PUN 2", null, ["photon.pun", "punversion"]),
-		["PhotonVoice.dll"] = new("com.exitgames.photonvoice", "Photon Voice", null, ["photon", "voice"]),
+		["PhotonRealtime.dll"] = new("com.exitgames.photonrealtime", "Photon Realtime", null, ["photon", "realtime", "version"]),
+		["PhotonUnityNetworking.dll"] = new("com.exitgames.photonpun", "Photon PUN 2", null, ["photon.pun", "punversion", "pun"]),
+		["PhotonVoice.dll"] = new("com.exitgames.photonvoice", "Photon Voice", null, ["photon", "voice", "version"]),
 		["PhotonVoice.API.dll"] = new("com.exitgames.photonvoice", "Photon Voice API", null, ["photon", "voice"]),
-		["PlayFab.dll"] = new("com.playfab.xplatcppsdk", "PlayFab SDK", null, ["playfab"]),
+		["PlayFab.dll"] = new("com.playfab.xplatcppsdk", "PlayFab SDK", null, ["playfab", "version", "sdk"]),
 		["PlayFabAllModels.dll"] = new("com.playfab.xplatcppsdk", "PlayFab SDK Models", null, ["playfab"]),
 		["PlayFabErrors.dll"] = new("com.playfab.xplatcppsdk", "PlayFab SDK Errors", null, ["playfab"]),
-		["VRRig.dll"] = new("com.anotheraxiom.vrrig", "VRRig", null, ["vrrig"]),
-		["GorillaLocomotion.dll"] = new("com.anotheraxiom.gorillalocomotion", "Gorilla Locomotion", null, ["gorillalocomotion"]),
+		["VRRig.dll"] = new("com.anotheraxiom.vrrig", "VRRig", null, ["vrrig", "version"]),
+		["GorillaLocomotion.dll"] = new("com.anotheraxiom.gorillalocomotion", "Gorilla Locomotion", null, ["gorillalocomotion", "version"]),
 		["modio.UnityPlugin.dll"] = new("com.modio.modio-unity", "mod.io Unity Plugin", null, ["mod.io", "modio"]),
-		["Oculus.VR.dll"] = new("com.meta.xr.sdk.all", "Meta XR SDK All", null, ["oculus", "ovr", "meta"]),
+		["Oculus.VR.dll"] = new("com.meta.xr.sdk.all", "Meta XR SDK All", null, ["oculus", "ovr", "meta", "version"]),
 		["Oculus.Interaction.dll"] = new("com.meta.xr.sdk.interaction", "Meta XR Interaction", null, ["oculus", "interaction", "meta"]),
 		["VoiceSDK.Runtime.dll"] = new("com.meta.xr.sdk.voice", "Meta Voice SDK", null, ["voicesdk", "voice sdk", "meta"]),
-		["SteamVR.dll"] = new("com.valvesoftware.unity.openvr", "SteamVR OpenVR Plugin", null, ["steamvr", "valve", "openvr"]),
+		["SteamVR.dll"] = new("com.valvesoftware.unity.openvr", "SteamVR OpenVR Plugin", null, ["steamvr", "valve", "openvr", "version"]),
 		["SteamVR_Actions.dll"] = new("com.valvesoftware.unity.openvr", "SteamVR Actions", null, ["steamvr", "actions", "valve"]),
 		["Valve.Newtonsoft.Json.dll"] = new("com.valvesoftware.unity.openvr", "SteamVR Newtonsoft", null, ["steamvr", "valve"]),
-		["Newtonsoft.Json.dll"] = new("com.unity.nuget.newtonsoft-json", "Newtonsoft.Json", null, ["newtonsoft", "json"]),
+		["Newtonsoft.Json.dll"] = new("com.unity.nuget.newtonsoft-json", "Newtonsoft.Json", null, ["newtonsoft", "json", "version"]),
 	};
 	private static readonly HashSet<string> ManifestSources = new(StringComparer.Ordinal)
 	{
@@ -97,6 +97,7 @@ public sealed class RegistryPackageBridge
 	private readonly Lazy<Dictionary<ScriptIdentity, MetaPtr>> scriptPointerIndex;
 	private readonly Lazy<Dictionary<string, MetaPtr>> shaderPointerIndex;
 
+	private readonly HashSet<string> allAssemblies = new(StringComparer.Ordinal);
 	public RegistryPackageBridge(IAssemblyManager assemblyManager, UnityVersion version)
 	{
 		AssemblyManager = assemblyManager;
@@ -112,6 +113,7 @@ public sealed class RegistryPackageBridge
 
 		foreach (AssemblyDefinition assembly in assemblyManager.GetAssemblies())
 		{
+			allAssemblies.Add(assembly.Name ?? string.Empty);
 			AnalyzeAssembly(assembly);
 		}
 
@@ -169,7 +171,7 @@ public sealed class RegistryPackageBridge
 		}
 	}
 
-	public string BuildVersionsReport()
+	public string BuildVersionsReport(bool includeOtherAssemblies = true)
 	{
 		List<PackageDetection> detections = [.. GetDetections()];
 		List<KeyValuePair<string, Candidate>> manifestDependencies = [.. GetManifestCandidates().OrderBy(static pair => pair.Key, StringComparer.Ordinal)];
@@ -224,6 +226,43 @@ public sealed class RegistryPackageBridge
 			}
 		}
 		builder.AppendLine();
+
+		if (includeOtherAssemblies)
+		{
+			builder.AppendLine("Other detected assemblies (potential 3rd party plugins)");
+			HashSet<string> knownAssemblyNames = new(allAssemblies.Count, StringComparer.Ordinal);
+			foreach (string name in allAssemblies)
+			{
+				knownAssemblyNames.Add(name);
+			}
+			foreach (string name in FamilyHints.Keys)
+			{
+				knownAssemblyNames.Add(SpecialFileNames.RemoveAssemblyFileExtension(name));
+			}
+			foreach (var detection in detections)
+			{
+				knownAssemblyNames.Add(detection.Display);
+			}
+
+			List<string> otherAssemblies = allAssemblies
+				.Where(name => !name.StartsWith("Unity.", StringComparison.OrdinalIgnoreCase) && !name.StartsWith("UnityEngine.", StringComparison.OrdinalIgnoreCase))
+				.Where(name => !FamilyHints.ContainsKey(name + ".dll"))
+				.OrderBy(name => name, StringComparer.Ordinal)
+				.ToList();
+
+			if (otherAssemblies.Count == 0)
+			{
+				builder.AppendLine("<none>");
+			}
+			else
+			{
+				foreach (string name in otherAssemblies)
+				{
+					builder.AppendLine($"{name} (version unknown)");
+				}
+			}
+			builder.AppendLine();
+		}
 
 		builder.AppendLine("Package cache resolutions");
 		if (packageDirectories.Count == 0)

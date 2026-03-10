@@ -37,7 +37,7 @@ public partial class PackageManifestPostExporter : IPostExporter
 		if (registryPackageBridge is not null)
 		{
 			string versionsPath = fileSystem.Path.Join(packagesDirectory, "assetripper_versions.txt");
-			fileSystem.File.WriteAllText(versionsPath, registryPackageBridge.BuildVersionsReport());
+			fileSystem.File.WriteAllText(versionsPath, registryPackageBridge.BuildVersionsReport(settings.ExportSettings.ExportUnresolvedAssemblies));
 		}
 	}
 

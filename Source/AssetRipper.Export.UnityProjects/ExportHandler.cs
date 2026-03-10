@@ -62,8 +62,14 @@ public class ExportHandler
 		yield return new AttributePolyfillGenerator();
 		yield return new MonoExplicitPropertyRepairProcessor();
 		yield return new ObfuscationRepairProcessor();
-		yield return new TypeTreeNamingBridgeProcessor();
-		yield return new NetworkPropertyDeweavingProcessor();
+		if (Settings.ProcessingSettings.EnableTypeTreeNamingBridge)
+		{
+			yield return new TypeTreeNamingBridgeProcessor();
+		}
+		if (Settings.ProcessingSettings.EnableNetworkDeweaving)
+		{
+			yield return new NetworkPropertyDeweavingProcessor();
+		}
 		yield return new ForwardingAssemblyGenerator();
 		if (Settings.ImportSettings.ScriptContentLevel == ScriptContentLevel.Level1)
 		{
