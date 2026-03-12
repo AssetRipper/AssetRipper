@@ -87,6 +87,12 @@ public sealed record class SerializedFileHeader
 			&& headerDefinedFileSize == (ulong)fileSize;
 	}
 
+	public void Read(Stream stream)
+	{
+		using EndianReader reader = new(stream, EndianType.BigEndian);
+		Read(reader);
+	}
+
 	public void Read(EndianReader reader)
 	{
 		//For gen 22+ these will be zero
@@ -121,6 +127,12 @@ public sealed record class SerializedFileHeader
 		{
 			throw new Exception($"Unsupported file generation {Version}'");
 		}
+	}
+
+	public void Write(Stream stream)
+	{
+		using EndianWriter writer = new(stream, EndianType.BigEndian);
+		Write(writer);
 	}
 
 	public void Write(EndianWriter writer)

@@ -90,10 +90,7 @@ public sealed class SerializedFile : FileBase
 	public override void Read(SmartStream stream)
 	{
 		SerializedFileHeader header = new();
-		using (EndianReader reader = new EndianReader(stream, EndianType.BigEndian))
-		{
-			header.Read(reader);
-		}
+		header.Read(stream);
 		if (SerializedFileMetadata.IsMetadataAtTheEnd(header.Version))
 		{
 			stream.Position = header.FileSize - header.MetadataSize;
@@ -127,7 +124,7 @@ public sealed class SerializedFile : FileBase
 			Version = Generation,
 			Endianess = EndianType == EndianType.BigEndian,
 		};
-		header.Write(new EndianWriter(stream, EndianType.BigEndian));
+		header.Write(stream);
 
 		using SerializedWriter writer = new(stream, EndianType, Generation, Version);
 		SerializedFileMetadata metadata = new()

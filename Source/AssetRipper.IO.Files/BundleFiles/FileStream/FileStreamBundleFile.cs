@@ -25,9 +25,8 @@ public sealed class FileStreamBundleFile : FileContainer
 
 	public override void Read(SmartStream stream)
 	{
-		EndianReader reader = new EndianReader(stream, EndianType.BigEndian);
 		long basePosition = stream.Position;
-		Header.Read(reader);
+		Header.Read(stream);
 		long headerSize = stream.Position - basePosition;
 		ReadFileStreamMetadata(stream, basePosition);//ReadBlocksInfoAndDirectory
 		ReadFileStreamData(stream, basePosition, headerSize);//ReadBlocks and ReadFiles
@@ -35,9 +34,8 @@ public sealed class FileStreamBundleFile : FileContainer
 
 	public override void Write(Stream stream)
 	{
-		EndianWriter writer = new EndianWriter(stream, EndianType.BigEndian);
 		long basePosition = stream.Position;
-		Header.Write(writer);
+		Header.Write(stream);
 		long headerSize = stream.Position - basePosition;
 		WriteFileStreamMetadata(stream, basePosition);
 		WriteFileStreamData(stream, basePosition, headerSize);

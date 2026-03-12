@@ -13,9 +13,8 @@ public abstract class RawWebBundleFile<THeader> : FileContainer where THeader : 
 
 	public override void Read(SmartStream stream)
 	{
-		EndianReader reader = new EndianReader(stream, EndianType.BigEndian);
 		long basePosition = stream.Position;
-		Header.Read(reader);
+		Header.Read(stream);
 		long headerSize = stream.Position - basePosition;
 		if (headerSize != Header.HeaderSize)
 		{
@@ -27,8 +26,7 @@ public abstract class RawWebBundleFile<THeader> : FileContainer where THeader : 
 
 	public override void Write(Stream stream)
 	{
-		EndianWriter writer = new EndianWriter(stream, EndianType.BigEndian);
-		Header.Write(writer);
+		Header.Write(stream);
 		throw new NotImplementedException();
 	}
 

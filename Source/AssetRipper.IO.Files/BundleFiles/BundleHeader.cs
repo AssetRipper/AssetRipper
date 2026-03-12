@@ -15,11 +15,17 @@ public abstract record class BundleHeader : IEndianWritable
 	/// <summary>
 	/// Generation version
 	/// </summary>
-	public Utf8String? UnityWebBundleVersion { get; set; }
+	public Utf8String UnityWebBundleVersion { get; set; } = Utf8String.Empty;
 	/// <summary>
 	/// Actual engine version
 	/// </summary>
-	public Utf8String? UnityWebMinimumRevision { get; set; }
+	public Utf8String UnityWebMinimumRevision { get; set; } = Utf8String.Empty;
+
+	public void Read(Stream stream)
+	{
+		using EndianReader reader = new(stream, EndianType.BigEndian);
+		Read(reader);
+	}
 
 	public virtual void Read(EndianReader reader)
 	{
@@ -31,12 +37,18 @@ public abstract record class BundleHeader : IEndianWritable
 		UnityWebMinimumRevision = reader.ReadStringZeroTerm();
 	}
 
+	public void Write(Stream stream)
+	{
+		using EndianWriter writer = new(stream, EndianType.BigEndian);
+		Write(writer);
+	}
+
 	public virtual void Write(EndianWriter writer)
 	{
 		writer.WriteStringZeroTerm(MagicString);
 		writer.Write((int)Version);
-		writer.WriteStringZeroTerm(UnityWebBundleVersion ?? throw new NullReferenceException(nameof(UnityWebBundleVersion)));
-		writer.WriteStringZeroTerm(UnityWebMinimumRevision ?? throw new NullReferenceException(nameof(UnityWebMinimumRevision)));
+		writer.WriteStringZeroTerm(UnityWebBundleVersion);
+		writer.WriteStringZeroTerm(UnityWebMinimumRevision);
 	}
 
 	private protected static bool IsBundleHeader(EndianReader reader, string magicString)

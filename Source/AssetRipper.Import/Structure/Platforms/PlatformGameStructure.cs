@@ -365,8 +365,10 @@ public abstract partial class PlatformGameStructure
 
 	protected UnityVersion GetUnityVersionFromBundleFile(string filePath)
 	{
-		string version = new FileStreamBundleFile(filePath, FileSystem).Header.UnityWebMinimumRevision ?? "";
-		return UnityVersion.Parse(version);
+		using Stream stream = FileSystem.File.OpenRead(filePath);
+		FileStreamBundleHeader header = new();
+		header.Read(stream);
+		return UnityVersion.Parse(header.UnityWebMinimumRevision);
 	}
 
 	protected UnityVersion? GetUnityVersionFromDataDirectory(string dataDirectoryPath)
