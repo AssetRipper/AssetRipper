@@ -1,4 +1,4 @@
-﻿using AssetRipper.Assets.Bundles;
+using AssetRipper.Assets.Bundles;
 using AssetRipper.Export.Configuration;
 using AssetRipper.Export.UnityProjects.PathIdMapping;
 using AssetRipper.Export.UnityProjects.Project;
@@ -11,9 +11,11 @@ using AssetRipper.Processing.AnimatorControllers;
 using AssetRipper.Processing.Assemblies;
 using AssetRipper.Processing.AudioMixers;
 using AssetRipper.Processing.Editor;
+using AssetRipper.Processing.PrefabOutlining;
 using AssetRipper.Processing.Prefabs;
 using AssetRipper.Processing.Scenes;
 using AssetRipper.Processing.ScriptableObject;
+using AssetRipper.Processing.StaticMeshes;
 using AssetRipper.Processing.Textures;
 
 namespace AssetRipper.Export.UnityProjects;
@@ -60,6 +62,14 @@ public class ExportHandler
 		yield return new AttributePolyfillGenerator();
 		yield return new MonoExplicitPropertyRepairProcessor();
 		yield return new ObfuscationRepairProcessor();
+		if (Settings.ProcessingSettings.EnableTypeTreeNamingBridge)
+		{
+			yield return new TypeTreeNamingBridgeProcessor();
+		}
+		if (Settings.ProcessingSettings.EnableNetworkDeweaving)
+		{
+			yield return new NetworkPropertyDeweavingProcessor();
+		}
 		yield return new ForwardingAssemblyGenerator();
 		if (Settings.ImportSettings.ScriptContentLevel == ScriptContentLevel.Level1)
 		{
@@ -75,16 +85,30 @@ public class ExportHandler
 		{
 			yield return new SafeAssemblyPublicizingProcessor();
 		}
+		yield return new AssemblyCSharpPublicizingProcessor();
 		yield return new RemoveAssemblyKeyFileAttributeProcessor();
 		yield return new InternalsVisibileToPublicKeyRemover();
 
+		// Asset processors
 		yield return new SceneDefinitionProcessor();
 		yield return new MainAssetProcessor();
 		yield return new AnimatorControllerProcessor();
 		yield return new AudioMixerProcessor();
+
+		if (Settings.ProcessingSettings.EnableStaticMeshSeparation)
+		{
+			yield return new StaticMeshProcessor();
+		}
+
 		yield return new EditorFormatProcessor(Settings.ProcessingSettings.BundledAssetsExportMode);
-		//Static mesh separation goes here
-		yield return new LightingDataProcessor();//Needs to be after static mesh separation
+		
+		// Prefab outlining (Restored)
+		if (Settings.ProcessingSettings.EnablePrefabOutlining)
+		{
+			yield return new PrefabOutliningProcessor();
+		}
+		
+		yield return new LightingDataProcessor();//Needs to be after prefab outlining
 		yield return new PrefabProcessor();
 		yield return new SpriteProcessor();
 		yield return new ScriptableObjectProcessor();
@@ -100,14 +124,15 @@ public class ExportHandler
 		Settings.ExportRootPath = outputPath;
 		Settings.SetProjectSettings(gameData.ProjectVersion);
 
-		ProjectExporter projectExporter = new(Settings, gameData.AssemblyManager);
+		RegistryPackageBridge registryPackageBridge = new(gameData.AssemblyManager, gameData.ProjectVersion);
+		ProjectExporter projectExporter = new(Settings, gameData.AssemblyManager, registryPackageBridge);
 		BeforeExport(projectExporter);
 		projectExporter.DoFinalOverrides(Settings);
 		projectExporter.Export(gameData.GameBundle, Settings, fileSystem);
 
 		Logger.Info(LogCategory.Export, "Finished exporting assets");
 
-		foreach (IPostExporter postExporter in GetPostExporters())
+		foreach (IPostExporter postExporter in GetPostExporters(registryPackageBridge))
 		{
 			postExporter.DoPostExport(gameData, Settings, fileSystem);
 		}
@@ -127,12 +152,19 @@ public class ExportHandler
 	{
 	}
 
-	protected virtual IEnumerable<IPostExporter> GetPostExporters()
+	protected virtual IEnumerable<IPostExporter> GetPostExporters(RegistryPackageBridge registryPackageBridge)
 	{
+		yield return new ProjectSettingsPostExporter();
 		yield return new ProjectVersionPostExporter();
-		yield return new PackageManifestPostExporter();
+		yield return new PackageManifestPostExporter(registryPackageBridge);
+		yield return new AddressablesPostExporter(registryPackageBridge);
 		yield return new StreamingAssetsPostExporter();
 		yield return new DllPostExporter();
+		if (Settings.Version.GreaterThanOrEquals(2019, 1))
+		{
+			yield return new ScriptCompileFixPostExporter();
+		}
+		yield return new ScriptRelinkPostExporter();
 		yield return new PathIdMapExporter();
 	}
 

@@ -51,6 +51,16 @@ public sealed record class ExportSettings
 
 	public bool ExportUnreadableAssets { get; set; } = false;
 
+	public bool ExportUnresolvedAssemblies { get; set; } = true;
+
+	public bool EnableSimulationAccessFix { get; set; } = true;
+
+	public bool EnableAmbiguousLogFix { get; set; } = true;
+
+	public bool ScriptRemoveDeadCode { get; set; } = true;
+
+	public bool ScriptRemoveDeadStores { get; set; } = true;
+
 	public bool SaveSettingsToDisk { get; set; }
 
 	public string? LanguageCode { get; set; }
@@ -66,5 +76,10 @@ public sealed record class ExportSettings
 		Logger.Info(LogCategory.General, $"{nameof(SpriteExportMode)}: {SpriteExportMode}");
 		Logger.Info(LogCategory.General, $"{nameof(TextExportMode)}: {TextExportMode}");
 		Logger.Info(LogCategory.General, $"{nameof(ExportUnreadableAssets)}: {ExportUnreadableAssets}");
+		Logger.Info(LogCategory.General, $"{nameof(ExportUnresolvedAssemblies)}: {ExportUnresolvedAssemblies}");
+		Logger.Info(LogCategory.General, $"{nameof(EnableSimulationAccessFix)}: {EnableSimulationAccessFix}");
+		Logger.Info(LogCategory.General, $"{nameof(EnableAmbiguousLogFix)}: {EnableAmbiguousLogFix}");
+		Logger.Info(LogCategory.General, $"{nameof(ScriptRemoveDeadCode)}: {ScriptRemoveDeadCode}");
+		Logger.Info(LogCategory.General, $"{nameof(ScriptRemoveDeadStores)}: {ScriptRemoveDeadStores}");
 	}
 }

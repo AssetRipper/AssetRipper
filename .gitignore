@@ -12,3 +12,92 @@ bin
 *.blend1
 launchSettings.json
 .DS_Store
+_uscs_runner/AssetRipper.Primitives.dll
+_uscs_runner/AssetsTools.NET.dll
+_uscs_runner/classdata.tpk
+_uscs_runner/CommandLine.dll
+_uscs_runner/logs/session-20260305-214950.log
+_uscs_runner/logs/session-20260305-215004.log
+_uscs_runner/logs/session-20260305-215005.log
+_uscs_runner/logs/session-20260305-215006.log
+_uscs_runner/logs/session-20260305-215018.log
+_uscs_runner/logs/shaders/Custom_AdditiveColorVertColorNoFog_2186.log
+_uscs_runner/logs/shaders/Gorilla_AdditiveGodRaySimple_2193.log
+_uscs_runner/logs/shaders/Gorilla_ContainerLiquid_2192.log
+_uscs_runner/logs/shaders/Gorilla_CutoffLerpLightmap_2184.log
+_uscs_runner/logs/shaders/Gorilla_DayNightLerpSky2Material_2189.log
+_uscs_runner/logs/shaders/Gorilla_DayNightLerpSky3Material_2181.log
+_uscs_runner/logs/shaders/Gorilla_DayNightLerpSkyMaterial_2190.log
+_uscs_runner/logs/shaders/Gorilla_DayNightLerpUnlit_2188.log
+_uscs_runner/logs/shaders/Gorilla_GorillaColorMasks_2178.log
+_uscs_runner/logs/shaders/Gorilla_GorillaUnlit_2180.log
+_uscs_runner/logs/shaders/Gorilla_GorillaUnlitVertColor_2185.log
+_uscs_runner/logs/shaders/Gorilla_GorillaUnlitWithEmissiveTex_2177.log
+_uscs_runner/logs/shaders/Gorilla_Halloween22_CandleFlameWobble_2176.log
+_uscs_runner/logs/shaders/Gorilla_Halloween22_HornsSlingshotElastic_2195.log
+_uscs_runner/logs/shaders/Gorilla_Halloween22_HornsSlingshotImpactFX_2191.log
+_uscs_runner/logs/shaders/Gorilla_Halloween22_HornsSlingshotProjectile_2187.log
+_uscs_runner/logs/shaders/Gorilla_Particle (Additive)_2194.log
+_uscs_runner/logs/shaders/Gorilla_SkyJungle22_Gorilla_SkyJungle_WindTunnelRibbons_2182.log
+_uscs_runner/logs/shaders/Gorilla_TransparentUnlit (GT)_2179.log
+_uscs_runner/logs/shaders/GorillaTag_WaterSurface (GT)_2183.log
+_uscs_runner/logs/shaders/Legacy Shaders_Particles_Alpha Blended Premultiply_2173.log
+_uscs_runner/logs/shaders/Legacy Shaders_Particles_Alpha Blended_2172.log
+_uscs_runner/logs/shaders/Mobile_Unlit (Supports Lightmap)_2175.log
+_uscs_runner/logs/shaders/Particles_Standard Unlit_2174.log
+_uscs_runner/logs/shaders/Skybox_Procedural_2171.log
+_uscs_runner/logs/shaders/Standard_2170.log
+_uscs_runner/Microsoft.IO.RecyclableMemoryStream.dll
+_uscs_runner/MsgPack.dll
+_uscs_runner/Ryujinx.Common.dll
+_uscs_runner/Ryujinx.Graphics.Shader.dll
+_uscs_runner/Ryujinx.ShaderTools.dll
+_uscs_runner/Shader decompiler updated by StevenVR.rar
+_uscs_runner/Spv.Generator.dll
+_uscs_runner/System.CodeDom.dll
+_uscs_runner/System.Management.dll
+_uscs_runner/USCSandbox.deps.json
+_uscs_runner/USCSandbox.dll
+_uscs_runner/USCSandbox.exe
+_uscs_runner/USCSandbox.pdb
+_uscs_runner/USCSandbox.runtimeconfig.json
+Source/_publish_temp/artifacts_gui_only/publish/AssetRipper.GUI.Free/release_win-x64/AssetRipper by StevenVR.rar
+Source/_publish_temp/artifacts_gui_only/publish/AssetRipper.GUI.Free/release_win-x64/AssetRipper.GUI.Free.exe
+Source/_Quarantine/DiscordStuff.cs.txt
+Source/AssetRipper.GUI.Free/$null
+Source/AssetRipper.GUI.Free/publish/appsettings.Development.json
+Source/AssetRipper.GUI.Free/publish/appsettings.json
+Source/AssetRipper.GUI.Free/publish/AssetRipper.Assets.pdb
+Source/AssetRipper.GUI.Free/publish/AssetRipper.Configuration.pdb
+Source/AssetRipper.GUI.Free/publish/AssetRipper.Export.Modules.Audio.pdb
+Source/AssetRipper.GUI.Free/publish/AssetRipper.Export.Modules.Models.pdb
+Source/AssetRipper.GUI.Free/publish/AssetRipper.Export.Modules.Textures.pdb
+Source/AssetRipper.GUI.Free/publish/AssetRipper.Export.pdb
+Source/AssetRipper.GUI.Free/publish/AssetRipper.Export.PrimaryContent.pdb
+Source/AssetRipper.GUI.Free/publish/AssetRipper.Export.UnityProjects.pdb
+Source/AssetRipper.GUI.Free/publish/AssetRipper.GUI.Free.exe
+Source/AssetRipper.GUI.Free/publish/AssetRipper.GUI.Free.pdb
+Source/AssetRipper.GUI.Free/publish/AssetRipper.GUI.Free.staticwebassets.endpoints.json
+Source/AssetRipper.GUI.Free/publish/AssetRipper.GUI.Licensing.pdb
+Source/AssetRipper.GUI.Free/publish/AssetRipper.GUI.Localizations.pdb
+Source/AssetRipper.GUI.Free/publish/AssetRipper.GUI.Web.pdb
+Source/AssetRipper.GUI.Free/publish/AssetRipper.Import.pdb
+Source/AssetRipper.GUI.Free/publish/AssetRipper.IO.Files.pdb
+Source/AssetRipper.GUI.Free/publish/AssetRipper.Numerics.pdb
+Source/AssetRipper.GUI.Free/publish/AssetRipper.Processing.pdb
+Source/AssetRipper.GUI.Free/publish/AssetRipper.SerializationLogic.pdb
+Source/AssetRipper.GUI.Free/publish/AssetRipper.SourceGenerated.Extensions.pdb
+Source/AssetRipper.GUI.Free/publish/AssetRipper.Web.pdb
+Source/AssetRipper.GUI.Free/publish/AssetRipper.Yaml.pdb
+Source/AssetRipper.GUI.Free/publish/capstone.dll
+Source/AssetRipper.GUI.Free/$null
+/Build_x64_done
+/Build_x64_final
+/Build_x64_refresh
+/Build_x64
+/AdvancedBuild
+/AdvancedBuildFixes
+/TestBuild
+/UltimateBuild
+/UltimateFidelityBuild/temp/bc8f
+/UltimateFidelityBuild

@@ -1,4 +1,4 @@
-﻿using AssetRipper.GUI.Web.Paths;
+using AssetRipper.GUI.Web.Paths;
 
 namespace AssetRipper.GUI.Web.Pages;
 
@@ -28,12 +28,12 @@ public sealed class IndexPage : DefaultPage
 			else
 			{
 				new P(writer).WithClass("mt-4").Close(Localization.DonationMessage);
-				using (new Div(writer).WithClass("d-flex justify-content-center mt-3").End())
-				{
-					new A(writer).WithClass("btn btn-primary m-1").WithNewTabAttributes().WithHref("https://patreon.com/ds5678").Close("Patreon");
-					new A(writer).WithClass("btn btn-primary m-1").WithNewTabAttributes().WithHref("https://paypal.me/ds5678").Close("Paypal");
-					new A(writer).WithClass("btn btn-primary m-1").WithNewTabAttributes().WithHref("https://github.com/sponsors/ds5678").Close("GitHub Sponsors");
-				}
+			}
+
+			using (new Div(writer).WithClass("d-flex justify-content-center mt-3").End())
+			{
+				new A(writer).WithClass("btn btn-primary m-1").WithNewTabAttributes().WithHref("https://discord.gg/2QHekWpMYE").Close("Steven Unity Hub");
+				new A(writer).WithClass("btn btn-primary m-1").WithNewTabAttributes().WithHref("https://creeper1212.github.io/Gorilla-Tag-Version-History-Explorer/").Close("Gorilla Tag Version History Explorer");
 			}
 		}
 	}

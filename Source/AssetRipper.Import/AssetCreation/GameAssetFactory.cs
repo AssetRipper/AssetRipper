@@ -76,18 +76,17 @@ public sealed class GameAssetFactory : AssetFactoryBase
 			if (type is not null && TypeTreeNodeStruct.TryMakeFromTypeTree(type.OldType, out TypeTreeNodeStruct rootNode))
 			{
 				structure = SerializableTreeType.FromRootNode(rootNode, true).CreateSerializableStructure();
-				if (structure.Type.Fields.Count > 0 && structure.Type.Fields[^1] is { Type.Name: "ManagedReferencesRegistry", Name: "references" })
-				{
-					Logger.Error(LogCategory.Import, $"MonoBehaviour has a field with the [SerializeReference] attribute, which is not currently supported.");
-					monoBehaviour.Structure = null;
-				}
-				else if (structure.TryRead(ref reader, monoBehaviour))
+				if (structure.TryRead(ref reader, monoBehaviour))
 				{
 					monoBehaviour.Structure = structure;
 				}
 				else
 				{
-					monoBehaviour.Structure = null;
+					// Keep a best-effort structure layout for export paths (fallback scripts/YAML),
+					// even when binary values cannot be safely parsed for this MonoBehaviour.
+					structure.Reset();
+					structure.InitializeFields(monoBehaviour.Collection.Version);
+					monoBehaviour.Structure = structure;
 				}
 			}
 			else
@@ -97,6 +96,11 @@ public sealed class GameAssetFactory : AssetFactoryBase
 		}
 		catch (Exception ex)
 		{
+			if (monoBehaviour.Structure is null)
+			{
+				int remainingStart = Math.Clamp(reader.Position, 0, assetData.Count);
+				monoBehaviour.Structure = new UnloadedStructure(monoBehaviour, assemblyManager, assetData.Slice(remainingStart));
+			}
 			LogMonoBehaviorReadException(monoBehaviour, ex);
 		}
 		return monoBehaviour;
@@ -231,7 +235,16 @@ public sealed class GameAssetFactory : AssetFactoryBase
 
 	private static void LogMonoBehaviorReadException(IMonoBehaviour monoBehaviour, Exception ex)
 	{
-		Logger.Error(LogCategory.Import, $"Unable to read {monoBehaviour}, because script {monoBehaviour.Structure} layout mismatched binary content ({ex.GetType().Name}).");
+		string structureName = monoBehaviour.Structure?.ToString() ?? "<unknown>";
+		string message = $"Unable to fully read {monoBehaviour}; script {structureName} layout mismatched binary content ({ex.GetType().Name}). Falling back to unloaded structure data.";
+		if (ex is ArgumentOutOfRangeException || ex is IndexOutOfRangeException || ex is System.IO.EndOfStreamException)
+		{
+			Logger.Verbose(LogCategory.Import, message);
+		}
+		else
+		{
+			Logger.Warning(LogCategory.Import, message);
+		}
 	}
 
 	private static string MakeError_ReadException(IUnityObjectBase asset, Exception ex)

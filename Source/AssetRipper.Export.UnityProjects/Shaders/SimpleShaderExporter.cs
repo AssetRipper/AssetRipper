@@ -30,8 +30,8 @@ public class SimpleShaderExporter : ShaderExporterBase
 
 	private static bool HasDecompiledShaderText(string text)
 	{
-		return !string.IsNullOrEmpty(text)
-			&& !text.Contains("Program")
-			&& !text.Contains("SubProgram");
+		return !string.IsNullOrWhiteSpace(text)
+			&& text.Contains("Shader", StringComparison.Ordinal)
+			&& text.Contains("SubShader", StringComparison.Ordinal);
 	}
 }

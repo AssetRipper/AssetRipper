@@ -253,19 +253,50 @@ public partial class BaseManager : IAssemblyManager
 	protected TypeDefinition? FindType(string assembly, string @namespace, string name)
 	{
 		AssemblyDefinition? definition = FindAssembly(assembly);
-		if (definition == null)
+		if (definition != null)
 		{
-			return null;
-		}
-
-		foreach (ModuleDefinition module in definition.Modules)
-		{
-			TypeDefinition? type = module.GetType(@namespace, name);
-			if (type != null)
+			foreach (ModuleDefinition module in definition.Modules)
 			{
-				return type;
+				TypeDefinition? type = module.GetType(@namespace, name);
+				if (type != null)
+				{
+					return type;
+				}
+
+				// Check exported types (Type Forwarding)
+				foreach (ExportedType exportedType in module.ExportedTypes)
+				{
+					if (exportedType.Namespace == @namespace && exportedType.Name == name)
+					{
+						ITypeDefOrRef? resolvedType = exportedType.Resolve();
+						if (resolvedType is TypeDefinition typeDef)
+						{
+							return typeDef;
+						}
+					}
+				}
 			}
 		}
+
+		// Fallback: search all loaded assemblies for the type in case it was relocated
+		// (e.g. UnityEngine.GUISkin moved to UnityEngine.IMGUIModule)
+		foreach (AssemblyDefinition? loadedAssembly in m_assemblies.Values.Distinct())
+		{
+			if (loadedAssembly == null || loadedAssembly == definition)
+			{
+				continue;
+			}
+
+			foreach (ModuleDefinition module in loadedAssembly.Modules)
+			{
+				TypeDefinition? type = module.GetType(@namespace, name);
+				if (type != null)
+				{
+					return type;
+				}
+			}
+		}
+
 		return null;
 	}
 

@@ -1,40 +1,292 @@
+/* --- AssetRipper: Modern Blue-to-Violet Redesign --- */
+/* Palette: Gemini Blue (#1d7af0) to Electric Violet (#aa39ff) | Style: Pro Dark UI */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+    /* Core Redesign Palette */
+    --ar-blue: #1d7af0;          /* Gemini/Neon Blue */
+    --ar-violet: #aa39ff;        /* Electric Violet */
+    --ar-gradient: linear-gradient(135deg, var(--ar-blue), var(--ar-violet));
+    --ar-gradient-hover: linear-gradient(135deg, #2e89ff, #b854ff);
+    
+    /* Backgrounds & Surfaces */
+    --ar-bg: #090a0f;            /* Deep Blue-Black */
+    --ar-surface: #12141d;       /* Card Surface */
+    --ar-border: rgba(170, 57, 255, 0.15);
+    --ar-glow-focus: rgba(170, 57, 255, 0.2);
+
+    /* Bootstrap Overrides */
+    --bs-body-bg: var(--ar-bg);
+    --bs-body-color: #dbe0eb;
+    --bs-primary: var(--ar-violet);
+    --bs-link-color: var(--ar-blue);
+    --bs-link-hover-color: var(--ar-violet);
+}
+
+/* --- Base Layout --- */
 html {
-	font-size: 14px;
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
 }
 
 @media (min-width: 768px) {
-	html {
-		font-size: 16px;
-	}
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-	box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-	position: relative;
-	min-height: 100%;
+    html { font-size: 16px; }
 }
 
 body {
-	margin: 0;
-	padding: 0;
-	min-height: 100vh; /* Ensure the body takes up at least the full height of the viewport */
-	display: flex;
-	flex-direction: column;
+    background-color: var(--ar-bg) !important;
+    color: #dbe0eb !important;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 main {
-	flex: 1; /* Allow the main content to grow and fill available space */
+    flex: 1;
 }
 
+/* Gemini-style Gradient Welcome Text */
+.display-4 {
+    background: var(--ar-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+    display: block;
+    width: fit-content;
+    margin: 0 auto 1.5rem auto;
+    text-shadow: 0 4px 15px rgba(29, 122, 240, 0.1);
+}
+
+/* --- Header & Navigation --- */
+header {
+    background: rgba(18, 20, 29, 0.9) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--ar-border);
+    padding: 0.5rem 0;
+    margin-bottom: 2rem;
+}
+
+.btn-group .btn-dark {
+    background: transparent !important;
+    border: none !important;
+    color: #aeb1b8;
+    font-weight: 500;
+    border-radius: 6px;
+    transition: color 0.2s ease;
+}
+
+.btn-group .btn-dark:hover, 
+.btn-group .btn-dark[aria-expanded="true"] {
+    color: #ffffff !important;
+    background: rgba(29, 122, 240, 0.1) !important;
+}
+
+/* --- Dropdowns --- */
+.dropdown-menu {
+    background-color: var(--ar-surface) !important;
+    border: 1px solid var(--ar-border) !important;
+    border-radius: 8px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    padding: 4px 0;
+}
+
+.dropdown-item {
+    color: #dbe0eb !important;
+    padding: 8px 20px;
+    font-weight: 500;
+}
+
+.dropdown-item:active, .dropdown-item:hover, .dropdown-item:focus {
+    background: var(--ar-gradient) !important;
+    color: #ffffff !important;
+}
+
+/* --- Settings Page Cards --- */
+.border.rounded.p-3.m-2 {
+    background-color: var(--ar-surface);
+    border: 1px solid var(--ar-border) !important;
+    border-radius: 12px !important;
+    padding: 1.5rem !important;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+/* Side-accent for cards */
+.border.rounded.p-3.m-2::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: var(--ar-gradient);
+}
+
+/* --- Modern Toggle Switches (Checkboxes) --- */
+.form-check-input {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 36px !important;
+    height: 18px !important;
+    background-color: #2a2d3d !important;
+    border-radius: 20px !important;
+    position: relative;
+    cursor: pointer;
+    border: none !important;
+    transition: background 0.2s ease;
+    margin-top: 0.25rem;
+}
+
+.form-check-input::before {
+    content: "";
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background-color: #fff;
+    border-radius: 50%;
+    top: 3px;
+    left: 3px;
+    transition: transform 0.2s ease;
+}
+
+.form-check-input:checked {
+    background: var(--ar-gradient) !important;
+}
+
+.form-check-input:checked::before {
+    transform: translateX(18px);
+}
+
+.form-check-label {
+    padding-left: 8px;
+    cursor: pointer;
+}
+
+/* --- Standard Buttons --- */
+.btn {
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background: var(--ar-gradient) !important;
+    border: none !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 10px rgba(29, 122, 240, 0.15);
+}
+
+.btn-primary:hover, .btn-primary:focus {
+    background: var(--ar-gradient-hover) !important;
+    box-shadow: 0 4px 15px rgba(29, 122, 240, 0.3) !important;
+}
+
+.btn-secondary:disabled {
+    background-color: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    color: #6c7080 !important;
+    opacity: 1;
+}
+
+/* --- Forms & Inputs --- */
+.form-control, .form-select {
+    background-color: #1c1f2b !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 6px;
+    color: #fff !important;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--ar-blue) !important;
+    box-shadow: 0 0 0 3px var(--ar-glow-focus) !important;
+}
+
+.dropdown-description {
+    font-size: 0.85rem;
+    color: #8890a0;
+    border-left: 2px solid var(--ar-violet);
+    padding-left: 10px;
+    margin-top: 0.5rem;
+    font-style: italic;
+}
+
+/* --- Tables --- */
+.table thead th {
+    background-color: var(--ar-surface);
+    border-bottom: 2px solid var(--ar-blue);
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+}
+
+.table tbody tr:hover {
+    background-color: rgba(29, 122, 240, 0.03);
+}
+
+/* --- Code/Text Blocks --- */
+pre {
+    background-color: #050505 !important;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-left: 4px solid var(--ar-violet);
+    color: #aeb1b8;
+    padding: 1rem;
+}
+
+/* --- Unique Settings Page Save Button --- */
+.settings-save-btn {
+    background: var(--ar-gradient) !important;
+    color: #ffffff !important;
+    border: none !important;
+    padding: 12px 45px !important;
+    font-size: 1.1rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(170, 57, 255, 0.3);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    margin: 1.5rem 0;
+}
+
+.settings-save-btn:hover, .settings-save-btn:focus {
+    background: var(--ar-gradient-hover) !important;
+    box-shadow: 0 8px 25px rgba(170, 57, 255, 0.5) !important;
+    transform: scale(1.03) translateY(-2px);
+}
+
+/* --- Footer & Credits --- */
 footer {
-	padding: 10px;
-	margin-top: auto; /* Push the footer to the bottom of the container */
+    padding: 15px;
+    margin-top: auto;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: transparent;
 }
 
-/* This lets the dropdown descriptions in the settings menu render correctly. */
-.dropdown-description.disabled {
-	display: none; /* Hide disabled elements */
+.text-muted {
+    color: #8890a0 !important;
+}
+
+footer a {
+    color: var(--ar-blue);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+footer a:hover {
+    color: var(--ar-violet);
+    text-decoration: underline;
+}
+
+/* --- Global Utilities --- */
+.dropdown-description.disabled { display: none; }
+
+::selection {
+    background: var(--ar-blue);
+    color: #fff;
 }

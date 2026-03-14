@@ -16,6 +16,8 @@ internal class ScriptDecompiler
 	public ScriptContentLevel ScriptContentLevel { get; set; } = ScriptContentLevel.Level2;
 	public ScriptingBackend ScriptingBackend { get; set; } = ScriptingBackend.Unknown;
 	public bool FullyQualifiedTypeNames { get; set; } = false;
+	public bool RemoveDeadCode { get; set; } = true;
+	public bool RemoveDeadStores { get; set; } = true;
 
 	public ScriptDecompiler(IAssemblyManager assemblyManager) : this(new CecilAssemblyResolver(assemblyManager), assemblyManager.ScriptingBackend) { }
 	private ScriptDecompiler(CecilAssemblyResolver cecilAssemblyResolver, ScriptingBackend scriptingBackend)
@@ -34,6 +36,10 @@ internal class ScriptDecompiler
 		settings.ShowXmlDocumentation = true;
 
 		settings.UseNestedDirectoriesForNamespaces = true;
+
+		// Clean up Unity scripts during decompilation
+		settings.RemoveDeadCode = RemoveDeadCode;
+		settings.RemoveDeadStores = RemoveDeadStores;
 
 		if (FullyQualifiedTypeNames)
 		{

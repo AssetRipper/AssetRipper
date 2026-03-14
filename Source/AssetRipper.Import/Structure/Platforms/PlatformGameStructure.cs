@@ -196,27 +196,35 @@ public abstract partial class PlatformGameStructure
 	/// </remarks>
 	protected void CollectDefaultSerializedFiles(string root, List<KeyValuePair<string, string>> files)
 	{
+		HashSet<string> addedNames = new(files.Select(static pair => pair.Key), StringComparer.Ordinal);
+
 		string filePath = FileSystem.Path.Join(root, GlobalGameManagersName);
 		if (MultiFileStream.Exists(filePath, FileSystem))
 		{
-			AddFile(files, GlobalGameManagersName, filePath);
+			if (addedNames.Add(GlobalGameManagersName))
+			{
+				AddFile(files, GlobalGameManagersName, filePath);
+			}
 		}
 		else
 		{
 			filePath = FileSystem.Path.Join(root, MainDataName);
 			if (MultiFileStream.Exists(filePath, FileSystem))
 			{
-				AddFile(files, MainDataName, filePath);
+				if (addedNames.Add(MainDataName))
+				{
+					AddFile(files, MainDataName, filePath);
+				}
 			}
 		}
 
-		foreach (string levelFile in FileSystem.Directory.EnumerateFiles(root))
+		foreach (string serializedFile in FileSystem.Directory.EnumerateFiles(root))
 		{
-			string name = FileSystem.Path.GetFileName(levelFile);
-			if (LevelTemplateRegex.IsMatch(name))
+			string name = FileSystem.Path.GetFileName(serializedFile);
+			string actualName = MultiFileStream.GetFileName(name);
+			if (IsPrimaryEngineFile(actualName) && addedNames.Add(actualName))
 			{
-				string levelName = MultiFileStream.GetFileName(name);
-				AddFile(files, levelName, levelFile);
+				AddFile(files, actualName, serializedFile);
 			}
 		}
 	}

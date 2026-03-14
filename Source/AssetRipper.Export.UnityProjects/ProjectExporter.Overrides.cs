@@ -1,4 +1,4 @@
-﻿using AssetRipper.Assets;
+using AssetRipper.Assets;
 using AssetRipper.Export.Configuration;
 using AssetRipper.Export.UnityProjects.AnimatorControllers;
 using AssetRipper.Export.UnityProjects.Audio;
@@ -20,6 +20,7 @@ using AssetRipper.Processing.Textures;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_1001;
 using AssetRipper.SourceGenerated.Classes.ClassID_1032;
+using AssetRipper.SourceGenerated.Classes.ClassID_1120;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using AssetRipper.SourceGenerated.Classes.ClassID_116;
@@ -37,6 +38,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_189;
 using AssetRipper.SourceGenerated.Classes.ClassID_2;
 using AssetRipper.SourceGenerated.Classes.ClassID_21;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
+using AssetRipper.SourceGenerated.Classes.ClassID_238;
 using AssetRipper.SourceGenerated.Classes.ClassID_240;
 using AssetRipper.SourceGenerated.Classes.ClassID_244;
 using AssetRipper.SourceGenerated.Classes.ClassID_27;
@@ -56,10 +58,12 @@ using AssetRipper.SourceGenerated.Classes.ClassID_94;
 
 namespace AssetRipper.Export.UnityProjects;
 
-partial class ProjectExporter
+public sealed partial class ProjectExporter
 {
-	public ProjectExporter(FullConfiguration settings, IAssemblyManager assemblyManager)
+	public ProjectExporter(FullConfiguration settings, IAssemblyManager assemblyManager, RegistryPackageBridge registryPackageBridge)
 	{
+		enableAssetDeduplication = settings.ProcessingSettings.EnableAssetDeduplication;
+
 		OverrideExporter<IUnityObjectBase>(new DefaultYamlExporter(), true);
 
 		ManagerAssetExporter managerExporter = new();
@@ -104,6 +108,9 @@ partial class ProjectExporter
 		OverrideExporter<ITextAsset>(new TextAssetExporter(settings));
 		OverrideExporter<IMovieTexture>(new MovieTextureAssetExporter());
 		OverrideExporter<IVideoClip>(new VideoClipExporter());
+		NativeBinaryAssetExporter nativeBinaryAssetExporter = new();
+		OverrideExporter<ILightingDataAsset>(nativeBinaryAssetExporter);
+		OverrideExporter<INavMeshData>(nativeBinaryAssetExporter);
 
 		//Texture exporters
 		TextureAssetExporter textureExporter = new(settings);
@@ -128,8 +135,6 @@ partial class ProjectExporter
 		{
 			TextureArrayAssetExporter textureArrayExporter = new(settings);
 			OverrideExporter<ICubemapArray>(textureArrayExporter);
-			OverrideExporter<ITexture2DArray>(textureArrayExporter);
-			OverrideExporter<ITexture3D>(textureArrayExporter);
 		}
 
 		//Font exporter
@@ -139,6 +144,10 @@ partial class ProjectExporter
 		OverrideExporter<ITexture>(fontAssetExporter);
 
 		//Shader exporters
+		if (settings.Version.GreaterThanOrEquals(2018, 1, 0))
+		{
+			OverrideExporter<IShader>(new RegistryShaderExporter(registryPackageBridge));
+		}
 		OverrideExporter<IShader>(settings.ExportSettings.ShaderExportMode switch
 		{
 			ShaderExportMode.Yaml => new YamlShaderExporter(),
@@ -170,7 +179,7 @@ partial class ProjectExporter
 		OverrideExporter<ITexture2D>(terrainYamlExporter);
 
 		//Script exporter
-		OverrideExporter<IMonoScript>(new ScriptExporter(assemblyManager, settings));
+		OverrideExporter<IMonoScript>(new ScriptExporter(assemblyManager, settings, registryPackageBridge));
 
 		//Animator Controller
 		OverrideExporter<IUnityObjectBase>(new AnimatorControllerExporter());

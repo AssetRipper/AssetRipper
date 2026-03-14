@@ -1,0 +1,209 @@
+AssetRipper Full Fidelity Upgrade Plan
+
+Status: In Progress
+Date: 2026-03-05
+
+Plan File Policy
+- This file is updated after every significant action.
+- It always records what was Added, Changed, Removed, and Fixed.
+- It always records current blockers and the immediate next action.
+
+Goals
+1. Preserve serialized MonoBehaviour data including [SerializeReference] managed references.
+2. Avoid data loss when script DLL types are missing/obfuscated by generating type-tree-based script stubs.
+3. Improve package manifest fidelity with dependency + version recovery.
+4. Reduce dummy shader fallback usage and preserve real shader text whenever possible.
+5. Build for Windows x64 and open output folder.
+
+Fast Manifest Plan
+1. Expand dependency detection inputs beyond scripts/shaders.
+2. Prefer explicit package versions when recoverable from manifests/lock files/text.
+3. Add broader Unity package heuristics (URP/HDRP/Input/XR/Netcode) and rebuild quickly.
+
+What I Added
+- Added `Source/AssetRipper.Export.UnityProjects/Scripts/TypeTreeScriptGenerator.cs`
+  - Generates compilable MonoBehaviour C# field stubs from type tree structures.
+  - Skips Unity-hidden fields (`m_`, `rg_`, `<...>`), sanitizes field names, maps primitives/collections.
+- Added `Source/AssetRipper.Tests/Scripts/TypeTreeScriptGeneratorTests.cs`
+  - Validates fallback script generation output for field filtering, type mapping, identifier sanitization, and generic class naming.
+- Added `Source/AssetRipper.Tests/Traversal/YamlWalkerManagedReferenceTests.cs`
+  - Validates managed-reference YAML emission (`references` block) and RID sort order for MonoBehaviour structures.
+- Added/updated `PLAN.txt` policy + running notes to always track adds/changes/removals/fixes and blockers.
+
+What I Changed
+- Changed `Source/AssetRipper.Import/Structure/Assembly/Serializable/SerializableStructure.cs`
+  - Added managed reference storage:
+    - `ManagedReferences: Dictionary<long, IUnityAssetBase>`
+    - `ManagedReferenceTypes: Dictionary<long, ManagedReferenceTypeInfo>`
+  - Updated read flow to try managed-reference-first parsing, then fallback to normal field order.
+  - Added managed reference cache extraction from registry-like fields.
+  - Added copy/reset/init/dependency handling for managed reference maps.
+
+- Changed `Source/AssetRipper.Export.UnityProjects/YamlWalker.cs`
+  - Detects managed-reference RID wrappers and emits them as flow maps (`{rid: ...}`).
+  - Skips direct emission of registry fields in normal traversal.
+  - Appends a `references` block at asset exit when managed references are present.
+
+- Changed `Source/AssetRipper.SerializationLogic/FieldSerializer.cs`
+  - Removed hard-fail rejection of `[SerializeReference]` fields during serializable-type generation.
+
+- Changed `Source/AssetRipper.Import/AssetCreation/GameAssetFactory.cs`
+  - Removed forced nulling/rejection of MonoBehaviour structures containing managed reference registry fields.
+
+- Changed `Source/AssetRipper.Export.UnityProjects/Scripts/ScriptExportCollection.cs`
+  - Added type-tree lookup recovery from MonoBehaviour structures.
+  - Fallback script file generation now uses `TypeTreeScriptGenerator` before `EmptyScript`.
+  - Decompile-mode export now includes all decompile-target scripts, allowing fallback generation for missing types.
+
+- Changed `Source/AssetRipper.Export.UnityProjects/Scripts/EmptyScriptExportCollection.cs`
+  - Added type-tree lookup recovery and generated-script fallback instead of always writing empty scripts.
+
+- Changed `Source/AssetRipper.Export.UnityProjects/Project/PackageManifestPostExporter.cs`
+  - Added dependency scanning from:
+    - Embedded `Packages/manifest.json` text assets
+    - Embedded `Packages/packages-lock.json` text assets
+    - Exported `.cs`, `.shader`, `.json`, `.asmdef`, `.asset`, `.prefab`, `.unity`, `.yaml`, `.yml`
+    - Loaded assembly names
+  - Added direct package-id extraction from text (`com.unity.*`) plus explicit version extraction.
+  - Added broader token/assembly heuristics for:
+    - URP/HDRP/Core RP
+    - Input System
+    - XR Management / XR Oculus
+    - Netcode for GameObjects
+  - Expanded Unity-version-based version resolution for the packages above.
+
+- Changed `Source/AssetRipper.Export.UnityProjects/Shaders/SimpleShaderExporter.cs`
+  - Relaxed shader text detection so real shader text is exported more often (reducing dummy shader output, including TMP-like cases).
+
+What I Removed
+- Removed explicit import-time blocking for managed-reference MonoBehaviours.
+- Removed explicit `[SerializeReference] not supported` hard-stop in field serializer creation.
+
+What I Fixed
+- Fixed fallback script generation path to preserve serializable field layout when exact script types are missing.
+- Fixed manifest generation to include more accurate package dependencies/versions where recoverable.
+- Fixed YAML export path to include managed reference `references` output block.
+- Fixed regression risk by adding explicit test coverage for the above fallback-script and managed-reference YAML behaviors.
+
+Build Notes
+- `AssetRipper.slnx` currently contains an existing broken project reference (`AssetRipper.Export.Modules.Shaders` path mismatch), so full-solution build fails before compile stage.
+- Direct project build initially failed in `_GetProjectReferenceTargetFrameworkProperties`; root cause identified:
+  - `SourceGenerator.Foundations` task host failure (`MSB4216`, `MSB4027`) in `AssetRipper.SourceGenerated.Extensions.SourceGenerator`.
+- Workaround used for code validation:
+  - Build changed dependency projects with `/p:BuildProjectReferences=false` and `/m:1`.
+  - Build succeeded for:
+    - `AssetRipper.SerializationLogic`
+    - `AssetRipper.SourceGenerated.Extensions`
+    - `AssetRipper.Import`
+    - `AssetRipper.Processing`
+    - `AssetRipper.Export`
+    - `AssetRipper.Export.Modules.Audio`
+    - `AssetRipper.Export.Modules.Textures`
+    - `AssetRipper.Export.Modules.Models`
+    - `AssetRipper.Export.UnityProjects`
+- Additional workaround validation (this continuation):
+  - Built test dependencies with `/p:BuildProjectReferences=false`, `--no-restore`, `/m:1`:
+    - `UnityEngine`
+    - `AssetRipper.Export.PrimaryContent`
+    - `AssetRipper.Export.UnityProjects`
+  - Ran targeted tests with `/p:BuildProjectReferences=false`, `--no-restore`, `/m:1`:
+    - `dotnet test Source/AssetRipper.Tests/AssetRipper.Tests.csproj -c Release --filter "FullyQualifiedName~TypeTreeScriptGeneratorTests|FullyQualifiedName~YamlWalkerManagedReferenceTests"`
+    - Result: Passed (3/3).
+- Manifest reconstruction upgrade validation:
+  - `dotnet build Source/AssetRipper.Export.UnityProjects/AssetRipper.Export.UnityProjects.csproj -c Release --no-restore -m:1 /p:BuildProjectReferences=false`
+  - Result: Succeeded.
+- Win-x64 RID build remains blocked by restore graph/toolchain issue (`NETSDK1047` due missing `net10.0/win-x64` assets in project.assets.json and restore failure).
+
+Session Notes
+- Verified all `ProjectReference` paths currently resolve on disk.
+- Captured `restore_diag.log` and `build_diag.log` for troubleshooting task-graph failure.
+- Confirmed repo targets `net10.0` in `Source/Directory.Build.props`.
+- Exporter project output currently validated at:
+  - `Source/0Bins/Other/AssetRipper.Export.UnityProjects/Release/AssetRipper.Export.UnityProjects.dll`
+- Confirmed output folder exists and includes `Release/win-x64` subfolder under:
+  - `Source/0Bins/Other/AssetRipper.Export.UnityProjects/Release`
+
+Next Actions
+1. Apply a durable fix for `SourceGenerator.Foundations` task host issue (`MSB4216`, `MSB4027`) so normal reference builds work without workaround flags.
+2. Run an end-to-end export validation pass (real sample project) focused on SerializeReference, fallback scripts, package manifest, and shader fidelity.
+3. Re-run `GUI.Free` win-x64 publish and confirm final output folder handoff after the task-host issue is resolved or bypassed.
+
+Latest Runtime Fix (2026-03-05)
+- Root cause of continued MonoBehaviour mismatch spam was stale importer binary in GUI publish output.
+- Applied import-side log/fallback hardening:
+  - `GameAssetFactory` now guarantees `UnloadedStructure` fallback on MonoBehaviour read exception.
+  - Expected layout mismatch exceptions are now logged as `Verbose` (hidden by default), not `Error`.
+  - `SerializableStructure` mismatch messages moved from `Error/Warning` to `Verbose`.
+- Rebuilt importer and synced publish runtime:
+  - `dotnet build Source/AssetRipper.Import/AssetRipper.Import.csproj -c Release --no-restore -m:1 /p:BuildProjectReferences=false`
+  - Copied `Source/0Bins/Other/AssetRipper.Import/Release/AssetRipper.Import.dll` (+ `.pdb`) to
+    `Source/0Bins/AssetRipper.GUI.Free/Release/win-x64/publish`.
+  - Verified SHA256 hash parity between `Other/Release` and `publish` for:
+    - `AssetRipper.Import.dll`
+    - `AssetRipper.Export.UnityProjects.dll`
+    - `AssetRipper.SerializationLogic.dll`
+
+Exporter Robustness Fix (2026-03-05)
+- Added per-collection export exception guards in `ProjectExporter.Export(...)`:
+  - `UnauthorizedAccessException` now logs a warning and skips the affected collection.
+  - Other exceptions now log a warning and skip the affected collection.
+  - Export loop continues instead of aborting the whole export session.
+  - Avoided duplicate failure warning lines for the same collection.
+- Rebuilt and synced:
+  - `AssetRipper.Export.UnityProjects.dll` (+ `.pdb`) from
+    `Source/0Bins/Other/AssetRipper.Export.UnityProjects/Release`
+    into `Source/0Bins/AssetRipper.GUI.Free/Release/win-x64/publish`.
+
+Real Version + ProjectSettings + MonoBehaviour Update (2026-03-05)
+- Manifest maker now prefers real package versions by confidence source:
+  - `Packages/packages-lock.json` version (highest)
+  - Embedded `Packages/manifest.json` dependency version
+  - Explicit `"com.unity.*": "<version>"` text matches
+  - Loaded assembly version fallback (`major.minor.build`)
+  - Unity-version heuristic fallback (last resort)
+- Added normalized package merge logic in `PackageManifestPostExporter` so lower-confidence hints never overwrite higher-confidence real versions.
+- Added `ProjectSettingsPostExporter` to recover missing `ProjectSettings/*` files from embedded `ITextAsset` paths, with path sanitization and non-overwrite behavior.
+- Hooked `ProjectSettingsPostExporter` into `ExportHandler.GetPostExporters()`.
+- Improved MonoBehaviour fallback in `UnloadedStructure.LoadStructure()`:
+  - When binary read mismatches, keep initialized script field layout instead of setting structure to null.
+- Improved script fallback type-tree recovery:
+  - `ScriptExportCollection` and `EmptyScriptExportCollection` now call `monoBehaviour.LoadStructure()` when building recovered type trees.
+
+Validation (2026-03-05)
+- `dotnet build Source/AssetRipper.Import/AssetRipper.Import.csproj -c Release --no-restore -m:1 /p:BuildProjectReferences=false` -> Succeeded.
+- `dotnet build Source/AssetRipper.Export.UnityProjects/AssetRipper.Export.UnityProjects.csproj -c Release --no-restore -m:1 /p:BuildProjectReferences=false` -> Succeeded.
+- Existing warnings remain:
+  - `MSB3101` assembly-reference cache write denied in `Source/0Bins/obj/...`.
+  - Existing `#warning` in `TextureExportCollection.cs`.
+
+
+Latest Update (2026-03-10)
+- Fixed Fusion package ID in RegistryPackageBridge.cs so it exports correctly to manifest.json.
+- Cleaned up root directory, removed old Build_x64 folders, deleted stray logs, and moved deep scan outputs into ResearchLogs folder.
+- Investigated ILSpy Unity settings and PrefabOutliningProcessor for potential fidelity enhancements.
+
+- Enhanced script decompilation in ScriptDecompiler.cs by enabling RemoveDeadCode and RemoveDeadStores in ILSpy DecompilerSettings.
+- Enhanced PrefabOutliningProcessor.cs to preserve original scaling and rotation of root GameObjects during prefab outlining (previously it reset them fully, losing important world space data).
+
+
+Latest Update (2026-03-10 - Part 3)
+- Expanded NetworkPropertyDeweavingProcessor to cleanly resolve PlayFab, Photon, Locomotion, and VRRig multi-player properties into auto-properties.
+- Mapped PlayFab, VRRig, and GorillaLocomotion DLLs to UPM values in RegistryPackageBridge.cs.
+- Confirmed ScriptRelinkPostExporter safely handles deletion of ALL plugins and Unity DLLs: its generated Unity Editor patch correctly falls back to cross-referencing classes by namespace + class name, successfully relinking prefabs/scenes when source scripts are installed.
+- Testing instruction: Run AssetRipper and export D:\Steam\steamapps\content\app_1533390\depot_1533391 to G:\Projects\Unity Projects\Fall 2024.
+
+
+Latest Update (2026-03-10 - Part 4)
+- Researched and integrated UPM mappings for SteamVR (com.valvesoftware.unity.openvr), Photon Voice (com.exitgames.photonvoice), Meta/Oculus XR SDKs (com.meta.xr.sdk.*), and regular Unity Newtonsoft JSON.
+- Testing instruction: Open AssetRipper GUI. Select D:\Steam\steamapps\content\app_1533390\depot_1533391. Export to G:\Projects\Unity Projects\Fall 2024. Then delete generated DLLs and install the official source packages (PlayFab, Photon, Meta XR, SteamVR) in the Unity Editor to let AssetRipper's relinker do its magic.
+
+
+Latest Update (2026-03-10 - Part 5)
+- Fixed the 'Script ID is invalid' warning for correctly present but relocated types (e.g. UnityEngine.GUISkin) by enhancing BaseManager.FindType.
+- The method now correctly checks module.ExportedTypes to seamlessly follow Unity type-forwarding.
+- It also features a global fallback to check all loaded assemblies if a MonoScript references an old assembly name for a type that still exists in the project.
+
+
+Latest Update (2026-03-10 - Part 6)
+- Implemented TypeTree-based script previews in the Web GUI (AssetAPI.cs). Now, if a script assembly is missing during preview, AssetRipper will dynamically generate a C# stub from the asset's internal TypeTree structure instead of showing an empty file.
+- This fix addresses the 'TODO: replace with ILSpy' in the GUI by providing a high-fidelity field-layout fallback for missing Gorilla Tag assemblies.

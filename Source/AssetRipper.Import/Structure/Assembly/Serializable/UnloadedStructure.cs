@@ -5,6 +5,7 @@ using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Assets.Traversal;
 using AssetRipper.Import.Logging;
+using AssetRipper.Import.Structure.Assembly;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.IO.Endian;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
@@ -76,14 +77,47 @@ public sealed class UnloadedStructure : UnityAssetBase, IDeepCloneable
 				MonoBehaviour.Structure = structure;
 				return structure;
 			}
+
+			// Preserve field layout for export fallback paths even when binary values do not match.
+			structure.Reset();
+			structure.InitializeFields(MonoBehaviour.Collection.Version);
+			MonoBehaviour.Structure = structure;
+			return structure;
 		}
 		else if (failureReason is not null)
 		{
-			Logger.Warning(LogCategory.Import, $"Could not read MonoBehaviour structure for `{MonoBehaviour.ScriptP?.GetFullName()}`. Reason: {failureReason}");
+			string message = $"Could not read MonoBehaviour structure for `{MonoBehaviour.ScriptP?.GetFullName()}`. Reason: {failureReason}";
+			if (failureReason == "Script ID is invalid" && IsLikelyEditorOnlyScript())
+			{
+				Logger.Info(LogCategory.Import, message);
+			}
+			else
+			{
+				Logger.Warning(LogCategory.Import, message);
+			}
 		}
 
 		MonoBehaviour.Structure = null;
 		return null;
+	}
+
+	private bool IsLikelyEditorOnlyScript()
+	{
+		var script = MonoBehaviour.ScriptP;
+		if (script is null)
+		{
+			return false;
+		}
+
+		string assemblyName = script.GetAssemblyNameFixed();
+		if (assemblyName.EndsWith(".Editor", StringComparison.OrdinalIgnoreCase)
+			|| assemblyName.Contains(".Editor.", StringComparison.OrdinalIgnoreCase))
+		{
+			return true;
+		}
+
+		string scriptNamespace = script.Namespace;
+		return scriptNamespace.Contains(".Editor", StringComparison.OrdinalIgnoreCase);
 	}
 
 	private UnityAssetBase LoadStructureOrStatelessAsset()

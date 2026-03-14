@@ -10,6 +10,12 @@
 		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.GUI.Free\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+		<!-- Fast local verification should not emit or rewrite an apphost. -->
+		<UseAppHost>false</UseAppHost>
+		<PublishAot>false</PublishAot>
+	</PropertyGroup>
+
 	<PropertyGroup>
 		<!-- https://learn.microsoft.com/en-us/dotnet/core/deploying/trimming/trimming-options#trim-framework-library-features -->
 		<EnableUnsafeBinaryFormatterSerialization>false</EnableUnsafeBinaryFormatterSerialization>
