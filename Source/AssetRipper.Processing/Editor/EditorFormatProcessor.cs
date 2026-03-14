@@ -175,6 +175,11 @@ public class EditorFormatProcessor : IAssetProcessor
 			case IPlayableDirector playableDirector:
 				EditorFormatConverterAsync.Convert(playableDirector);
 				break;
+			case IAssetBundle assetBundle:
+				// PreloadTable is not used by AssetRipper and can be very large, so clear it to save memory and processing time.
+				assetBundle.PreloadTable.Clear();
+				assetBundle.PreloadTable.Capacity = 0;
+				break;
 			case IGraphicsSettings graphicsSettings:
 				graphicsSettings.ConvertToEditorFormat();
 				break;
