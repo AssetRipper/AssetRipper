@@ -73,12 +73,12 @@ internal static class Program
 	private static void ExtractZip(string zipFilePath, string targetDirectory)
 	{
 		using FileStream stream = File.OpenRead(zipFilePath);
-		using IReader reader = ZipReader.OpenReader(stream, new SharpCompress.Readers.ReaderOptions()
+		using IReader reader = ZipReader.OpenReader(stream);
+		reader.WriteAllToDirectory(targetDirectory, new ExtractionOptions()
 		{
 			ExtractFullPath = true,
 			Overwrite = true,
 		});
-		reader.WriteAllToDirectory(targetDirectory);
 	}
 
 	private static XElement GetChild(this XContainer parent, string localName)
