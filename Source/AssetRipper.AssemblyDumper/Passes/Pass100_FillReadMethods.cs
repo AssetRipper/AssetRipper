@@ -391,6 +391,15 @@ public static class Pass100_FillReadMethods
 		instructions.Add(CilOpCodes.Ldloc, countLocal); //Load count
 		instructions.Add(CilOpCodes.Blt, jumpTargetList); //Jump back up if less than
 
+		// Set capacity to count to free any excess memory
+		{
+			MethodDefinition setCapacityMethodDefinition = SharedState.Instance.Importer.LookupMethod(typeof(AssetDictionary<,>), m => m.Name == $"set_{nameof(AssetDictionary<,>.Capacity)}" && m.Parameters.Count == 1);
+			IMethodDefOrRef setCapacityMethodReference = MethodUtils.MakeMethodOnGenericType(SharedState.Instance.Importer, genericDictionaryType, setCapacityMethodDefinition);
+			instructions.Add(CilOpCodes.Ldarg_0);
+			instructions.Add(CilOpCodes.Ldloc, countLocal);
+			instructions.AddCall(setCapacityMethodReference);
+		}
+
 		if (align)
 		{
 			instructions.Add(CilOpCodes.Ldarg_1);
@@ -628,6 +637,15 @@ public static class Pass100_FillReadMethods
 		loopConditionStartList.Instruction = instructions.Add(CilOpCodes.Ldloc, iLocal); //Load i
 		instructions.Add(CilOpCodes.Ldloc, countLocal); //Load count
 		instructions.Add(CilOpCodes.Blt, jumpTargetList); //Jump back up if less than
+
+		// Set capacity to free any excess allocated memory
+		{
+			MethodDefinition setCapacityMethodDefinition = SharedState.Instance.Importer.LookupMethod(typeof(AssetList<>), m => m.Name == $"set_{nameof(AssetList<>.Capacity)}" && m.Parameters.Count == 1);
+			IMethodDefOrRef setCapacityMethodReference = MethodUtils.MakeMethodOnGenericType(SharedState.Instance.Importer, genericListType, setCapacityMethodDefinition);
+			instructions.Add(CilOpCodes.Ldarg_0);
+			instructions.Add(CilOpCodes.Ldloc, countLocal);
+			instructions.AddCall(setCapacityMethodReference);
+		}
 
 		if (align)
 		{
