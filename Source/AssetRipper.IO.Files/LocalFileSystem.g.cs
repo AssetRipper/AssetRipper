@@ -150,6 +150,11 @@ public sealed partial class LocalFileSystem : FileSystem
 			return global::System.IO.Path.IsPathRooted(path);
 		}
 
+		public global::System.String GetTempPath()
+		{
+			return global::System.IO.Path.GetTempPath();
+		}
+
 	}
 
 	public LocalFileSystem()

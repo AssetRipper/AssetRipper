@@ -17,7 +17,7 @@ public partial class LocalFileSystem : FileSystem
 
 	private static string ExecutingDirectory => AppContext.BaseDirectory;
 
-	public string LocalTemporaryDirectory => Path.Join(ExecutingDirectory, "temp", GetRandomString()[0..4]);
+	public string LocalTemporaryDirectory => Path.Join(Path.GetTempPath(), "AssetRipper", GetRandomString()[0..4]);
 
 	public override string TemporaryDirectory
 	{
