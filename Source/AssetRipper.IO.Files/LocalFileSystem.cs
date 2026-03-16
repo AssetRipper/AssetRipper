@@ -1,4 +1,6 @@
-﻿namespace AssetRipper.IO.Files;
+﻿using System.Diagnostics;
+
+namespace AssetRipper.IO.Files;
 
 public partial class LocalFileSystem : FileSystem
 {
@@ -17,7 +19,9 @@ public partial class LocalFileSystem : FileSystem
 
 	private static string ExecutingDirectory => AppContext.BaseDirectory;
 
-	public string LocalTemporaryDirectory => Path.Join(ExecutingDirectory, "temp", GetRandomString()[0..4]);
+	private string LocalTemporaryDirectory => Path.Join(ExecutingDirectory, "temp", GetRandomString()[0..4]);
+
+	private string SystemTemporaryDirectory => Path.Join(System.IO.Path.GetTempPath(), "AssetRipper", GetRandomString()[0..4]);
 
 	public override string TemporaryDirectory
 	{
@@ -26,6 +30,17 @@ public partial class LocalFileSystem : FileSystem
 			if (string.IsNullOrEmpty(field))
 			{
 				field = LocalTemporaryDirectory;
+				Debug.Assert(!Directory.Exists(field));
+				try
+				{
+					Directory.Create(field);
+					File.WriteAllText(Path.Join(field, ".WriteTest"), "test");
+					Directory.Delete(field);
+				}
+				catch (Exception e) when (e is IOException or UnauthorizedAccessException)
+				{
+					field = SystemTemporaryDirectory;
+				}
 			}
 			return field;
 		}
