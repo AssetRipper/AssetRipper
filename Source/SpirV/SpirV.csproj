@@ -1,8 +1,0 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
-	<PropertyGroup>
-		<OutputPath>..\0Bins\Other\SpirV\$(Configuration)\</OutputPath>
-		<IntermediateOutputPath>..\0Bins\obj\SpriV\$(Configuration)\</IntermediateOutputPath>
-	</PropertyGroup>
-
-</Project>

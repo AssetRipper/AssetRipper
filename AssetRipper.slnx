@@ -112,7 +112,5 @@
   <Project Path="Source/AssetRipper.Web/AssetRipper.Web.csproj" />
   <Project Path="Source/AssetRipper.Yaml.Tests/AssetRipper.Yaml.Tests.csproj" />
   <Project Path="Source/AssetRipper.Yaml/AssetRipper.Yaml.csproj" />
-  <Project Path="Source/Smolv/Smolv.csproj" />
-  <Project Path="Source/SpirV/SpirV.csproj" />
   <Project Path="Source/UnityEngine/UnityEngine.csproj" />
 </Solution>
