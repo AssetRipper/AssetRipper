@@ -1,6 +1,8 @@
-﻿using AssetRipper.IO.Files;
+﻿using AssetRipper.Import.Structure.Assembly;
+using AssetRipper.Import.Structure.Platforms;
+using AssetRipper.IO.Files;
 
-namespace AssetRipper.Import.Structure.Platforms;
+namespace AssetRipper.Import.Platforms;
 
 internal sealed class AndroidGameStructure : PlatformGameStructure
 {
@@ -29,15 +31,15 @@ internal sealed class AndroidGameStructure : PlatformGameStructure
 
 		if (HasIl2CppFiles())
 		{
-			Backend = Assembly.ScriptingBackend.IL2Cpp;
+			Backend = ScriptingBackend.IL2Cpp;
 		}
 		else if (IsMono(ManagedPath))
 		{
-			Backend = Assembly.ScriptingBackend.Mono;
+			Backend = ScriptingBackend.Mono;
 		}
 		else
 		{
-			Backend = Assembly.ScriptingBackend.Unknown;
+			Backend = ScriptingBackend.Unknown;
 		}
 
 		if (obbPath != null)

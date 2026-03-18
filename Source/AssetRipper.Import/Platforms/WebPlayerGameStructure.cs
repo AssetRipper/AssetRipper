@@ -1,8 +1,10 @@
+using AssetRipper.Import.Structure;
 using AssetRipper.Import.Structure.Assembly;
+using AssetRipper.Import.Structure.Platforms;
 using AssetRipper.IO.Files;
 using System.Diagnostics;
 
-namespace AssetRipper.Import.Structure.Platforms;
+namespace AssetRipper.Import.Platforms;
 
 internal sealed class WebPlayerGameStructure : PlatformGameStructure
 {

@@ -1,7 +1,9 @@
-﻿using AssetRipper.IO.Files;
+﻿using AssetRipper.Import.Structure.Assembly;
+using AssetRipper.Import.Structure.Platforms;
+using AssetRipper.IO.Files;
 using System.Diagnostics;
 
-namespace AssetRipper.Import.Structure.Platforms;
+namespace AssetRipper.Import.Platforms;
 
 internal sealed class MacGameStructure : PlatformGameStructure
 {
@@ -33,15 +35,15 @@ internal sealed class MacGameStructure : PlatformGameStructure
 
 		if (HasIl2CppFiles())
 		{
-			Backend = Assembly.ScriptingBackend.IL2Cpp;
+			Backend = ScriptingBackend.IL2Cpp;
 		}
 		else if (HasMonoAssemblies(ManagedPath))
 		{
-			Backend = Assembly.ScriptingBackend.Mono;
+			Backend = ScriptingBackend.Mono;
 		}
 		else
 		{
-			Backend = Assembly.ScriptingBackend.Unknown;
+			Backend = ScriptingBackend.Unknown;
 		}
 	}
 

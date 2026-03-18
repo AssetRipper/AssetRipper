@@ -1,6 +1,8 @@
-﻿using AssetRipper.IO.Files;
+﻿using AssetRipper.Import.Structure.Assembly;
+using AssetRipper.Import.Structure.Platforms;
+using AssetRipper.IO.Files;
 
-namespace AssetRipper.Import.Structure.Platforms;
+namespace AssetRipper.Import.Platforms;
 
 internal sealed class SwitchGameStructure : PlatformGameStructure
 {
@@ -24,7 +26,7 @@ internal sealed class SwitchGameStructure : PlatformGameStructure
 		Version = GetUnityVersionFromDataDirectory(GameDataPath);
 		Il2CppGameAssemblyPath = FileSystem.Path.Join(rootPath, ExefsName, MainName);
 		Il2CppMetaDataPath = FileSystem.Path.Join(ManagedPath, MetadataName, DefaultGlobalMetadataName);
-		Backend = HasIl2CppFiles() ? Assembly.ScriptingBackend.IL2Cpp : Assembly.ScriptingBackend.Unknown;
+		Backend = HasIl2CppFiles() ? ScriptingBackend.IL2Cpp : ScriptingBackend.Unknown;
 
 		DataPaths = [GameDataPath];
 	}

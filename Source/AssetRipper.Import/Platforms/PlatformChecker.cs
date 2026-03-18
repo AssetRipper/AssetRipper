@@ -1,7 +1,8 @@
 ﻿using AssetRipper.Import.Logging;
+using AssetRipper.Import.Structure.Platforms;
 using AssetRipper.IO.Files;
 
-namespace AssetRipper.Import.Structure.Platforms;
+namespace AssetRipper.Import.Platforms;
 
 public static class PlatformChecker
 {
