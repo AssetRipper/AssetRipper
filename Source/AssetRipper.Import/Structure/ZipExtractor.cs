@@ -16,6 +16,8 @@ internal static class ZipExtractor
 	private const string XapkExtension = ".xapk";
 	private const string VpkExtension = ".vpk"; //PS Vita
 	private const string IpaExtension = ".ipa"; //iOS App Store Package
+	private const string XapExtension = ".xap"; //Windows Phone App Package
+	private const string AppxExtension = ".appx"; //Windows 8/10 App Package
 	private const uint ZipNormalMagic = 0x04034B50;
 	private const uint ZipEmptyMagic = 0x06054B50;
 	private const uint ZipSpannedMagic = 0x08074B50;
@@ -32,6 +34,8 @@ internal static class ZipExtractor
 				case ObbExtension:
 				case VpkExtension:
 				case IpaExtension:
+				case XapExtension:
+				case AppxExtension:
 					result.Add(ExtractZip(path, fileSystem));
 					break;
 				case ApksExtension:

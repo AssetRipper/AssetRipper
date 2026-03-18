@@ -51,6 +51,10 @@ public static class PlatformChecker
 		{
 			platformStructure = wiiUGameStructure;
 		}
+		else if (CheckWindowsPhone(paths, fileSystem, out WindowsPhoneGameStructure? windowsPhoneGameStructure))
+		{
+			platformStructure = windowsPhoneGameStructure;
+		}
 
 		if (CheckMixed(paths, fileSystem, out MixedGameStructure? mixedGameStructure))
 		{
@@ -245,6 +249,22 @@ public static class PlatformChecker
 				gameStructure = new WiiUGameStructure(path, fileSystem);
 				paths.Remove(path);
 				Logger.Info(LogCategory.Import, $"WiiU game structure has been found at '{path}'");
+				return true;
+			}
+		}
+		gameStructure = null;
+		return false;
+	}
+
+	private static bool CheckWindowsPhone(List<string> paths, FileSystem fileSystem, [NotNullWhen(true)] out WindowsPhoneGameStructure? gameStructure)
+	{
+		foreach (string path in paths)
+		{
+			if (WindowsPhoneGameStructure.Exists(path, fileSystem))
+			{
+				gameStructure = new WindowsPhoneGameStructure(path, fileSystem);
+				paths.Remove(path);
+				Logger.Info(LogCategory.Import, $"Windows Phone game structure has been found at '{path}'");
 				return true;
 			}
 		}
