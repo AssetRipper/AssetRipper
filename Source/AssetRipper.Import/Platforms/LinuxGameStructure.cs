@@ -26,9 +26,9 @@ internal sealed class LinuxGameStructure : PlatformGameStructure
 		StreamingAssetsPath = FileSystem.Path.Join(GameDataPath, StreamingName);
 		ResourcesPath = FileSystem.Path.Join(GameDataPath, ResourcesName);
 		ManagedPath = FileSystem.Path.Join(GameDataPath, ManagedName);
-		UnityPlayerPath = FileSystem.Path.Join(RootPath, DefaultUnityPlayerName);
+		UnityPlayerPath = FileSystem.Path.Join(RootPath, "UnityPlayer.so");
 		Version = null;
-		Il2CppGameAssemblyPath = FileSystem.Path.Join(RootPath, DefaultGameAssemblyName);
+		Il2CppGameAssemblyPath = FileSystem.Path.Join(RootPath, "GameAssembly.so");
 		Il2CppMetaDataPath = FileSystem.Path.Join(GameDataPath, "il2cpp_data", MetadataName, DefaultGlobalMetadataName);
 
 		if (HasIl2CppFiles())

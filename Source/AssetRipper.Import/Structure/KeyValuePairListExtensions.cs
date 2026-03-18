@@ -4,10 +4,7 @@ internal static class KeyValuePairListExtensions
 {
 	public static IEnumerable<TValue> Values<TKey, TValue>(this List<KeyValuePair<TKey, TValue>> list)
 	{
-		foreach (KeyValuePair<TKey, TValue> pair in list)
-		{
-			yield return pair.Value;
-		}
+		return list.Select(pair => pair.Value);
 	}
 
 	public static void Add<TKey, TValue>(this List<KeyValuePair<TKey, TValue>> list, TKey key, TValue value)

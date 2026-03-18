@@ -81,16 +81,6 @@ internal sealed class iOSGameStructure : PlatformGameStructure
 		return false;
 	}
 
-	private void CollectiOSStreamingAssets(string root, List<KeyValuePair<string, string>> files)
-	{
-		string streamingPath = FileSystem.Path.Join(root, iOSStreamingName);
-		if (FileSystem.Directory.Exists(streamingPath))
-		{
-			CollectAssetBundlesRecursively(streamingPath, files);
-		}
-	}
-
-
 	private const string iOSStreamingName = "Raw";
 
 	private const string PayloadName = "Payload";
