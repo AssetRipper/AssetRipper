@@ -4,7 +4,6 @@ using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Import.Logging;
 using AssetRipper.IO.Files;
-using AssetRipper.Processing.Editor;
 using AssetRipper.SourceGenerated.Classes.ClassID_1045;
 using AssetRipper.SourceGenerated.Classes.ClassID_141;
 using AssetRipper.SourceGenerated.Classes.ClassID_142;

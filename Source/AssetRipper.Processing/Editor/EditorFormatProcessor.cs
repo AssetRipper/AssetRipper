@@ -114,14 +114,8 @@ public class EditorFormatProcessor : IAssetProcessor
 			case IAnimationClip animationClip:
 				AnimationClipConverter.Process(animationClip, checksumCache!.Value);
 				break;
-			case IAssetBundle assetBundle:
-				OriginalPathHelper.SetOriginalPaths(assetBundle, bundledAssetsExportMode);
-				break;
 			case INavMeshSettings navMeshSettings:
 				navMeshSettings.ConvertToEditorFormat();
-				break;
-			case IResourceManager resourceManager:
-				OriginalPathHelper.SetOriginalPaths(resourceManager);
 				break;
 			case TypeTreeObject { IsPlayerSettings: true } playerSettings:
 				SerializableStructure editorStructure = playerSettings.EditorFields;

@@ -78,7 +78,9 @@ public class ExportHandler
 		yield return new RemoveAssemblyKeyFileAttributeProcessor();
 		yield return new InternalsVisibileToPublicKeyRemover();
 
+		// Asset processors
 		yield return new SceneDefinitionProcessor();
+		yield return new OriginalPathProcessor(Settings.ProcessingSettings.BundledAssetsExportMode);
 		yield return new MainAssetProcessor();
 		yield return new AnimatorControllerProcessor();
 		yield return new AudioMixerProcessor();
@@ -125,6 +127,7 @@ public class ExportHandler
 
 	protected virtual void BeforeExport(ProjectExporter projectExporter)
 	{
+		// Needed for the premium edition
 	}
 
 	protected virtual IEnumerable<IPostExporter> GetPostExporters()
