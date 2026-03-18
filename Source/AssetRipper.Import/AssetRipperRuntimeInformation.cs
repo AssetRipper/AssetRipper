@@ -1,4 +1,4 @@
-﻿using AssetRipper.Import.Utils;
+﻿using AssetRipper.IO.Files;
 using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
@@ -31,7 +31,7 @@ public static partial class AssetRipperRuntimeInformation
 		/// <summary>
 		/// Either "Compiled" or "Published"
 		/// </summary>
-		public static string Type => File.Exists(ExecutingDirectory.Combine("AssetRipper.Assets.dll")) ? "Compiled" : "Published";
+		public static string Type => File.Exists(Path.Join(LocalFileSystem.ExecutingDirectory, "AssetRipper.Assets.dll")) ? "Compiled" : "Published";
 
 		public static string? Version => typeof(AssetRipperRuntimeInformation).Assembly.GetName().Version?.ToString();
 	}
@@ -129,7 +129,7 @@ public static partial class AssetRipperRuntimeInformation
 	{
 		get
 		{
-			string path = ExecutingDirectory.Combine("compile_time.txt");
+			string path = Path.Join(LocalFileSystem.ExecutingDirectory, "compile_time.txt");
 			if (File.Exists(path))
 			{
 				return File.ReadAllText(path).Trim();

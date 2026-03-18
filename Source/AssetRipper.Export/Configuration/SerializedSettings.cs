@@ -1,6 +1,6 @@
 ﻿using AssetRipper.Export.UnityProjects.Configuration;
 using AssetRipper.Import.Configuration;
-using AssetRipper.Import.Utils;
+using AssetRipper.IO.Files;
 using AssetRipper.Processing.Configuration;
 using System.Text.Json;
 
@@ -10,7 +10,7 @@ public readonly record struct SerializedSettings(ImportSettings Import, Processi
 {
 	public const string DefaultFileName = "AssetRipper.Settings.json";
 
-	public static string DefaultFilePath => ExecutingDirectory.Combine(DefaultFileName);
+	public static string DefaultFilePath => Path.Join(LocalFileSystem.ExecutingDirectory, DefaultFileName);
 
 	public static SerializedSettings Load(string path)
 	{

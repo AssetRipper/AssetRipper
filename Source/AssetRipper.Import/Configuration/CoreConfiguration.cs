@@ -1,6 +1,6 @@
 ﻿using AssetRipper.Configuration;
 using AssetRipper.Import.Logging;
-using AssetRipper.Import.Utils;
+using AssetRipper.IO.Files;
 using System.Diagnostics;
 
 namespace AssetRipper.Import.Configuration;
@@ -56,7 +56,7 @@ public class CoreConfiguration
 
 	public virtual void ResetToDefaultValues()
 	{
-		ExportRootPath = ExecutingDirectory.Combine("Ripped");
+		ExportRootPath = Path.Join(LocalFileSystem.ExecutingDirectory, "Ripped");
 		SingletonData.Clear();
 		ListData.Clear();
 	}

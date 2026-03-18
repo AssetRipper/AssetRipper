@@ -17,7 +17,7 @@ public partial class LocalFileSystem : FileSystem
 		public override void Delete(string path) => System.IO.Directory.Delete(path, true);
 	}
 
-	private static string ExecutingDirectory => AppContext.BaseDirectory;
+	public static string ExecutingDirectory => AppContext.BaseDirectory;
 
 	private string LocalTemporaryDirectory => Path.Join(ExecutingDirectory, "temp", GetRandomString()[0..4]);
 

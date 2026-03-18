@@ -1,4 +1,4 @@
-﻿using AssetRipper.Import.Utils;
+﻿using AssetRipper.IO.Files;
 
 namespace AssetRipper.Import.Logging;
 
@@ -6,7 +6,7 @@ public abstract class FileLoggerBase : ILogger
 {
 	protected readonly string filePath;
 
-	public FileLoggerBase() : this(ExecutingDirectory.Combine("AssetRipper.log")) { }
+	public FileLoggerBase() : this(Path.Join(LocalFileSystem.ExecutingDirectory, "AssetRipper.log")) { }
 
 	/// <param name="filePath">The absolute path to the log file</param>
 	public FileLoggerBase(string filePath)
