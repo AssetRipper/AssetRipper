@@ -84,8 +84,13 @@ public static class ImporterFactory
 
 	private static int CalculateMaxTextureSize(int width, int height)
 	{
-		uint maxSideLength = (uint)Math.Max(width, height);
-		return Math.Max(2048, (int)BitOperations.RoundUpToPowerOf2(maxSideLength));
+		int maxSideLength = int.Max(width, height);
+		int result = (int)BitOperations.RoundUpToPowerOf2((uint)maxSideLength);
+
+		// Unity only supports up to 16384 for max texture size.
+		// https://docs.unity3d.com/6000.4/Documentation/ScriptReference/SystemInfo-maxTextureSize.html
+		// 2048 is an arbitrary minimum.
+		return int.Clamp(result, 2048, 16384);
 	}
 
 	private readonly ref struct TextureImporterData
