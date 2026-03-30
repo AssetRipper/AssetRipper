@@ -12,6 +12,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<!-- Fmod5Sharp references Microsoft.Bcl.Memory 9.0.0, which has a security warning. -->
+		<PackageReference Include="Microsoft.Bcl.Memory" Version="10.0.5" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="..\AssetRipper.Export\AssetRipper.Export.csproj" />
 	</ItemGroup>
 
