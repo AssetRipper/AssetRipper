@@ -14,7 +14,7 @@
 		<PackageReference Include="AssetRipper.Conversions.FastPng" Version="1.1.0" />
 		<PackageReference Include="AssetRipper.Conversions.UnityCrunch" Version="1.0.3" />
 		<PackageReference Include="AssetRipper.TextureDecoder" Version="2.6.1" />
-		<PackageReference Include="AssetRipper.Tpk" Version="1.1.0" />
+		<PackageReference Include="AssetRipper.Tpk" Version="1.2.0" />
 		<PackageReference Include="StbImageWriteSharp" Version="1.16.7" />
 	</ItemGroup>
 

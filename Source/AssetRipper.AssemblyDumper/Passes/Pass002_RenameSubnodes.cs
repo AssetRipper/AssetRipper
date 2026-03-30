@@ -654,6 +654,10 @@ public static class Pass002_RenameSubnodes
 			string suffix = node.Name.Substring(5);
 			node.Name = "m_Source" + suffix;
 		}
+		else if (node.Name == "m_Val")
+		{
+			node.Name = "m_Value";
+		}
 	}
 
 	private static bool TryRenameSubNode(this UniversalNode node, string currentName, string newName)

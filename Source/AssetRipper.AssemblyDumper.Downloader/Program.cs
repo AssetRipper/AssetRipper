@@ -58,7 +58,7 @@ internal static class Program
 	private static byte[] DecompressZipFile(Stream inputStream)
 	{
 		using IWritableArchive<ZipWriterOptions> archive = ZipArchive.OpenArchive(inputStream);
-		IArchiveEntry entry = archive.Entries.Where(entry => !entry.IsDirectory).Single();
+		IArchiveEntry entry = archive.Entries.Single(entry => !entry.IsDirectory);
 		using MemoryStream outputStream = new();
 		entry.WriteTo(outputStream);
 		return outputStream.ToArray();

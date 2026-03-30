@@ -8,7 +8,7 @@
 	<ItemGroup>
 		<PackageReference Include="AssetRipper.HashAlgorithms" Version="1.0.0" />
 		<PackageReference Include="AssetRipper.Mining.PredefinedAssets" Version="1.5.0" />
-		<PackageReference Include="AssetRipper.Tpk" Version="1.1.0" />
+		<PackageReference Include="AssetRipper.Tpk" Version="1.2.0" />
 	</ItemGroup>
 
 	<ItemGroup>
