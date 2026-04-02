@@ -22,7 +22,12 @@ public class SceneExportCollection : ExportCollection, IComparer<IUnityObjectBas
 		int index = 0;
 		foreach (IUnityObjectBase asset in Hierarchy.Assets)
 		{
-			m_exportIDs.Add(asset, asset.Collection is SerializedAssetCollection ? asset.PathID : ExportIdHandler.GetPseudoRandomValue(index++));
+			long exportID = asset.Collection is SerializedAssetCollection
+				? asset.PathID
+				: asset.Collection.Version.GreaterThanOrEquals(5, 5)
+					? ExportIdHandler.GetPseudoRandomValue64(index++)
+					: ExportIdHandler.GetPseudoRandomValue32(index++);
+			m_exportIDs.Add(asset, exportID);
 		}
 
 		componentArray = hierarchy.ExportableAssets.Order(this).ToArray();
