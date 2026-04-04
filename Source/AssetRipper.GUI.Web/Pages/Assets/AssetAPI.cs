@@ -440,7 +440,7 @@ internal static class AssetAPI
 	{
 		return asset switch
 		{
-			IShader shader => DumpShaderDataAsText(shader),
+			IShader shader => shader.Has_Script() && !shader.Script.IsEmpty ? shader.Script : DumpShaderDataAsText(shader),
 			IMonoScript monoScript => DecompileMonoScript(monoScript),
 			ITextAsset textAsset => textAsset.Script_C49,
 			_ => "",
