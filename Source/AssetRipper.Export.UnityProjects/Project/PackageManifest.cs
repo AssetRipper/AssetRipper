@@ -14,11 +14,23 @@ public record class PackageManifest([property: JsonPropertyName("dependencies")]
 		JsonSerializer.Serialize(stream, this, PackageManifestSerializerContext.Default.PackageManifest);
 	}
 
-	public static PackageManifest CreateDefault(UnityVersion version)
+	public static PackageManifest CreateDefault(UnityVersion version, Dictionary<string, string>? detectedPackages = null)
 	{
 		PackageManifest manifest = new();
 		manifest.AddDefaultDependencies(version);
+		if (detectedPackages is not null)
+		{
+			manifest.AddDetectedPackages(detectedPackages);
+		}
 		return manifest;
+	}
+
+	public void AddDetectedPackages(Dictionary<string, string> packages)
+	{
+		foreach ((string name, string version) in packages)
+		{
+			Dependencies.TryAdd(name, version);
+		}
 	}
 
 	public void AddDefaultDependencies(UnityVersion version)

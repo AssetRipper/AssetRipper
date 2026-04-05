@@ -6,6 +6,7 @@ using AssetRipper.Export.UnityProjects.Scripts;
 using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure;
+using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.Processing;
 using AssetRipper.Processing.AnimatorControllers;
 using AssetRipper.Processing.Assemblies;
@@ -101,6 +102,18 @@ public class ExportHandler
 
 		Settings.ExportRootPath = outputPath;
 		Settings.SetProjectSettings(gameData.ProjectVersion);
+
+		// Package detection
+		if (Settings.ExportSettings.PackageDetectionMode == PackageDetectionMode.Auto)
+		{
+			Logger.Info(LogCategory.Export, "Running automatic package detection...");
+			Dictionary<string, UnityGuid> referenceAssemblies = ReferenceAssemblies.GetReferenceAssemblies(
+				gameData.AssemblyManager, gameData.ProjectVersion);
+			Settings.DetectedPackages = PackageDetector.Detect(
+				gameData.AssemblyManager, referenceAssemblies, gameData.ProjectVersion,
+				out Dictionary<string, string> scriptGuids);
+			Settings.DetectedAssemblyGuids = scriptGuids;
+		}
 
 		ProjectExporter projectExporter = new(Settings, gameData.AssemblyManager);
 		BeforeExport(projectExporter);

@@ -22,6 +22,18 @@ public class FullConfiguration : CoreConfiguration
 
 	public bool SaveSettingsToDisk => ExportSettings.SaveSettingsToDisk;
 
+	/// <summary>
+	/// Transient runtime state: detected Unity packages (not serialized).
+	/// Set during export when PackageDetectionMode is Auto.
+	/// </summary>
+	public Dictionary<string, string>? DetectedPackages { get; set; }
+
+	/// <summary>
+	/// Transient runtime state: assembly GUIDs extracted from Unity package tarballs (not serialized).
+	/// Maps assembly names to their .asmdef GUID hex strings for correct script references.
+	/// </summary>
+	public Dictionary<string, string>? DetectedAssemblyGuids { get; set; }
+
 	public string? LanguageCode
 	{
 		get => ExportSettings.LanguageCode;

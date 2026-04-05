@@ -11,11 +11,11 @@ public class PackageManifestPostExporter : IPostExporter
 		fileSystem.Directory.Create(packagesDirectory);
 		string path = fileSystem.Path.Join(packagesDirectory, "manifest.json");
 		using Stream stream = fileSystem.File.Create(path);
-		CreateManifest(settings.Version).Save(stream);
+		CreateManifest(settings.Version, settings.DetectedPackages).Save(stream);
 	}
 
-	protected virtual PackageManifest CreateManifest(UnityVersion version)
+	protected virtual PackageManifest CreateManifest(UnityVersion version, Dictionary<string, string>? detectedPackages)
 	{
-		return PackageManifest.CreateDefault(version);
+		return PackageManifest.CreateDefault(version, detectedPackages);
 	}
 }
