@@ -49,7 +49,7 @@ public static class Pass555_CreateCommonString
 	private static void ThrowIfStringCountIsWrong()
 	{
 		int count = SharedState.Instance.CommonString.Strings.Count;
-		if (count != 112)
+		if (count != 113)
 		{
 			throw new Exception($"The size of Common String has changed! {count}");
 		}

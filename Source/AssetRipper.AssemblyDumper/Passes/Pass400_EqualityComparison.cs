@@ -272,6 +272,7 @@ internal static class Pass400_EqualityComparison
 			InterfaceUtils.InterfaceMethodImplementation,
 			SharedState.Instance.Importer.Boolean);
 		method.AddParameter(type.ToTypeSignature(), "other");
+		method.AddNullableContextAttribute(NullableAnnotation.MaybeNull);
 		CilInstructionCollection instructions = method.GetInstructions();
 
 		CilInstructionLabel falseLabel = new();
@@ -468,6 +469,7 @@ internal static class Pass400_EqualityComparison
 			MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.Virtual,
 			SharedState.Instance.Importer.Boolean);
 		method.AddParameter(SharedState.Instance.Importer.Object, "obj");
+		method.AddNullableContextAttribute(NullableAnnotation.MaybeNull);
 		CilInstructionCollection instructions = method.GetInstructions();
 
 		instructions.Add(CilOpCodes.Ldarg_0);

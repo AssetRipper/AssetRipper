@@ -11,6 +11,7 @@
 		<PackageReference Include="AssetRipper.Checksum" Version="1.1.0" />
 		<PackageReference Include="AssetRipper.CIL" Version="1.2.2" />
 		<PackageReference Include="AssetRipper.Tpk.TypeTrees.Json" Version="1.2.0" />
+		<PackageReference Include="Basic.Reference.Assemblies.Net100" Version="1.8.4" />
 	</ItemGroup>
 
 	<ItemGroup>
