@@ -191,7 +191,7 @@ public sealed class UnityRegistryClient : IDisposable
 		return reader.ReadToEnd();
 	}
 
-	private static UnityGuid? ParseGuidFromMeta(string metaContent)
+	internal static UnityGuid? ParseGuidFromMeta(string metaContent)
 	{
 		// Meta files are YAML-like, look for "guid: <hex>"
 		foreach (string line in metaContent.Split('\n'))
@@ -216,7 +216,7 @@ public sealed class UnityRegistryClient : IDisposable
 		return null;
 	}
 
-	private static string? ParseAssemblyNameFromAsmdef(string asmdefContent)
+	internal static string? ParseAssemblyNameFromAsmdef(string asmdefContent)
 	{
 		try
 		{
@@ -237,7 +237,7 @@ public sealed class UnityRegistryClient : IDisposable
 	/// Find the latest non-preview version that is compatible with the project's Unity version.
 	/// Falls back to the latest version if no stable match is found.
 	/// </summary>
-	private static PackageVersionInfo? FindBestVersion(JsonElement root, UnityVersion projectUnityVersion, string packageName)
+	internal static PackageVersionInfo? FindBestVersion(JsonElement root, UnityVersion projectUnityVersion, string packageName)
 	{
 		if (!root.TryGetProperty("versions", out JsonElement versionsElement))
 		{
@@ -314,7 +314,7 @@ public sealed class UnityRegistryClient : IDisposable
 	/// <summary>
 	/// Compare two semver-like version strings. Returns positive if a > b.
 	/// </summary>
-	private static int CompareVersionStrings(string a, string b)
+	internal static int CompareVersionStrings(string a, string b)
 	{
 		// Split off pre-release suffix
 		string aBase = a.Contains('-') ? a[..a.IndexOf('-')] : a;
