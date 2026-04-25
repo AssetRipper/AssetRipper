@@ -12,3 +12,5 @@ bin
 *.blend1
 launchSettings.json
 .DS_Store
+/.dotnet
+dotnet-install.ps1

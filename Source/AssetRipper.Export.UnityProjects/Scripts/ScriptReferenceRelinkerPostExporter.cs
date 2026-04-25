@@ -245,9 +245,11 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 					{
 						StringBuilder sb = new StringBuilder();
 						sb.AppendLine("AssetRipper: " + unresolvedCount.ToString(CultureInfo.InvariantCulture) + " script reference(s) could not be resolved. The following scripts were not found in the project:");
-						foreach (string identity in unresolvedIdentities)
+						List<string> sortedUnresolved = unresolvedIdentities.ToList();
+						sortedUnresolved.Sort(StringComparer.Ordinal);
+						foreach (string identity in sortedUnresolved)
 						{
-							sb.AppendLine("  - " + identity.Replace("\t", " / "));
+							sb.AppendLine("  - " + identity.Replace("|", " / "));
 						}
 						Debug.LogWarning(sb.ToString());
 					}
@@ -290,12 +292,24 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 						if (monoScript == null) continue;
 
 						Type type = monoScript.GetClass();
-						if (type == null) continue;
-
-						string assemblyName = type.Assembly.GetName().Name ?? string.Empty;
-						string namespaceName = type.Namespace ?? string.Empty;
-						string className = type.Name;
-						string identityKey = MakeIdentityKey(assemblyName, namespaceName, className);
+						string identityKey;
+						if (type != null)
+						{
+							string assemblyName = type.Assembly.GetName().Name ?? string.Empty;
+							string fullTypeName = type.FullName ?? string.Empty;
+							identityKey = MakeIdentityKey(assemblyName, fullTypeName);
+						}
+						else
+						{
+							string scriptName = monoScript.name;
+							if (string.IsNullOrEmpty(scriptName)) continue;
+							string dir = Path.GetDirectoryName(assetPath) ?? string.Empty;
+							dir = dir.Replace('\\', '/');
+							string inferredAssembly = TryInferAssemblyName(dir);
+							string inferredNamespace = InferNamespace(dir);
+							string fullTypeName = string.IsNullOrEmpty(inferredNamespace) ? scriptName : inferredNamespace + "." + scriptName;
+							identityKey = MakeIdentityKey(inferredAssembly, fullTypeName);
+						}
 
 						if (!identityToSourceGuid.TryGetValue(identityKey, out string expectedGuid)) continue;
 
@@ -380,11 +394,11 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 					if (missing.Count > 0)
 					{
 						sb.AppendLine();
-						sb.AppendLine("Missing scripts (Assembly / Namespace / Class):");
+						sb.AppendLine("Missing scripts (Assembly / FullType):");
 						missing.Sort(StringComparer.Ordinal);
 						foreach (string identity in missing)
 						{
-							sb.AppendLine("  - " + identity.Replace("\t", " / "));
+							sb.AppendLine("  - " + identity.Replace("|", " / "));
 						}
 					}
 
@@ -487,7 +501,7 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 						if (line.Length == 0 || line[0] == '#') continue;
 
 						string[] parts = rawLine.Split('\t');
-						if (parts.Length < 5) continue;
+						if (parts.Length < 6) continue;
 
 						if (!long.TryParse(parts[1], NumberStyles.Integer,
 								CultureInfo.InvariantCulture, out long fileId))
@@ -495,15 +509,12 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 							continue;
 						}
 
-						map[MakeSourceKey(parts[0], fileId)] = MakeIdentityKey(parts[2], parts[3], parts[4]);
+						// Key: Assembly + FullTypeName (column 2 and 5)
+						map[MakeSourceKey(parts[0], fileId)] = MakeIdentityKey(parts[2], parts[5]);
 					}
 					return map;
 				}
 
-				/// <summary>
-				/// Builds a map from identity key (assembly+namespace+class) to the source GUID.
-				/// Used for .meta file recovery to know what GUID a script should have.
-				/// </summary>
 				private static Dictionary<string, string> LoadIdentityToGuidMap(string mapPath)
 				{
 					Dictionary<string, string> map = new Dictionary<string, string>(StringComparer.Ordinal);
@@ -513,10 +524,11 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 						if (line.Length == 0 || line[0] == '#') continue;
 
 						string[] parts = rawLine.Split('\t');
-						if (parts.Length < 5) continue;
+						if (parts.Length < 6) continue;
 
 						string guid = parts[0].Trim().ToLowerInvariant();
-						string identityKey = MakeIdentityKey(parts[2], parts[3], parts[4]);
+						// Key: Assembly + FullTypeName
+						string identityKey = MakeIdentityKey(parts[2], parts[5]);
 						if (!map.ContainsKey(identityKey))
 						{
 							map[identityKey] = guid;
@@ -539,9 +551,8 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 						if (type != null)
 						{
 							string assemblyName = type.Assembly.GetName().Name ?? string.Empty;
-							string namespaceName = type.Namespace ?? string.Empty;
-							string className = type.Name;
-							string key = MakeIdentityKey(assemblyName, namespaceName, className);
+							string fullTypeName = type.FullName ?? string.Empty;
+							string key = MakeIdentityKey(assemblyName, fullTypeName);
 							if (!installedScripts.ContainsKey(key))
 							{
 								installedScripts[key] = guid.ToLowerInvariant();
@@ -561,9 +572,10 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 
 							// Look for assembly name from .asmdef files in parent directories
 							string inferredAssembly = TryInferAssemblyName(dir);
+							string inferredNamespace = InferNamespace(dir);
 
-							// Use an empty namespace as fallback
-							string key = MakeIdentityKey(inferredAssembly, string.Empty, scriptName);
+							string fullTypeName = string.IsNullOrEmpty(inferredNamespace) ? scriptName : inferredNamespace + "." + scriptName;
+							string key = MakeIdentityKey(inferredAssembly, fullTypeName);
 							if (!installedScripts.ContainsKey(key))
 							{
 								installedScripts[key] = guid.ToLowerInvariant();
@@ -571,6 +583,16 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 						}
 					}
 					return installedScripts;
+				}
+
+				private static string InferNamespace(string directory)
+				{
+					int scriptsIdx = directory.IndexOf("/Scripts/", StringComparison.OrdinalIgnoreCase);
+					if (scriptsIdx >= 0)
+					{
+						return directory.Substring(scriptsIdx + 9).Replace('/', '.');
+					}
+					return "";
 				}
 
 				/// <summary>
@@ -653,9 +675,9 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 					return guid.ToLowerInvariant() + "|" + fileId.ToString(CultureInfo.InvariantCulture);
 				}
 
-				private static string MakeIdentityKey(string assemblyName, string namespaceName, string className)
+				private static string MakeIdentityKey(string assemblyName, string fullTypeName)
 				{
-					return assemblyName + "\t" + namespaceName + "\t" + className;
+					return assemblyName + "|" + fullTypeName;
 				}
 
 				private static string GetAbsoluteMapPath()

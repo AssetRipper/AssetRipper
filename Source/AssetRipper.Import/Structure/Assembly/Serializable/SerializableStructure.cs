@@ -59,15 +59,6 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 				{
 					Logger.Info(LogCategory.Import, $"ManagedRefTrace {Type.Name}.{etalon.Name}: {startPosition} -> {reader.Position}");
 				}
-				if (etalon.Name == "references"
-					&& i > 0
-					&& Fields[i].CValue is ManagedReferencesRegistryAsset { UsedLegacyShortTerminusTail: true }
-					&& Type.Fields[i - 1].Type.Type == PrimitiveType.String
-					&& Fields[i - 1].CValue is string previousValue
-					&& previousValue == ManagedReferenceResolver.TerminusKey.ClassName)
-				{
-					Fields[i - 1].AsString = string.Empty;
-				}
 			}
 		}
 	}
@@ -277,13 +268,6 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 				}
 				registry.EnsureNullReference(rid.AsInt64);
 			}
-		}
-
-		if (TryGetIndex("ownershipRequestNonce", out int index)
-			&& Fields[index].CValue is string value
-			&& value == ManagedReferenceResolver.TerminusKey.ClassName)
-		{
-			Fields[index].AsString = string.Empty;
 		}
 
 		if (!foundManagedReference && registry.References.Count == 0)

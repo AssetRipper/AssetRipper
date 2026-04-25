@@ -29,7 +29,7 @@ jobs:
           dotnet-version: 10.0.x
 
       - name: Publish
-        run: dotnet publish -c Release -r ${{ matrix.config.runtime }}
+        run: dotnet publish -c Release -r ${{ matrix.config.runtime }} -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true --self-contained true
         working-directory: ./Source/AssetRipper.GUI.Free/
 
       - name: List Files

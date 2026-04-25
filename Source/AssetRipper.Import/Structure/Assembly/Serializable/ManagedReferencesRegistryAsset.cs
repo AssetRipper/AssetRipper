@@ -55,11 +55,6 @@ internal sealed class ManagedReferencesRegistryAsset : UnityAssetBase, IDeepClon
 		References.Clear();
 		Trace($"registry version={Version} position={reader.Position}");
 
-		if (TryReadLegacyShortTerminusTail(ref reader))
-		{
-			return;
-		}
-
 		if (Version == 1)
 		{
 			long rid = 0;
@@ -83,47 +78,6 @@ internal sealed class ManagedReferencesRegistryAsset : UnityAssetBase, IDeepClon
 				References.Add(ReadEntry(ref reader, version, flags, 0, hasRidPrefix: true));
 			}
 		}
-	}
-
-	private bool TryReadLegacyShortTerminusTail(ref EndianSpanReader reader)
-	{
-		if (Version != ManagedReferenceResolver.TerminusKey.Namespace.Length)
-		{
-			return false;
-		}
-
-		int startPosition = reader.Position;
-		try
-		{
-			string namespaceName = ReadRawUtf8String(ref reader, Version);
-			reader.Align();
-			string assemblyName = reader.ReadUtf8StringAligned().String;
-			if (namespaceName == ManagedReferenceResolver.TerminusKey.Namespace
-				&& assemblyName == ManagedReferenceResolver.TerminusKey.AssemblyName
-				&& reader.Position == reader.Length)
-			{
-				Version = 1;
-				UsedLegacyShortTerminusTail = true;
-				Trace("registry legacy short terminus tail detected");
-				return true;
-			}
-		}
-		catch
-		{
-		}
-
-		reader.Position = startPosition;
-		return false;
-	}
-
-	private static string ReadRawUtf8String(ref EndianSpanReader reader, int length)
-	{
-		byte[] bytes = new byte[length];
-		for (int i = 0; i < length; i++)
-		{
-			bytes[i] = reader.ReadByte();
-		}
-		return Encoding.UTF8.GetString(bytes);
 	}
 
 	private ManagedReferenceEntry ReadEntry(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, long rid, bool hasRidPrefix)
@@ -246,7 +200,7 @@ internal sealed class ManagedReferencesRegistryAsset : UnityAssetBase, IDeepClon
 			{
 				Rid = entry.Rid,
 				Type = entry.Type,
-				Data = entry.Data,
+				Data = entry.Data is IDeepCloneable cloneable ? cloneable.DeepClone(converter) : entry.Data,
 			});
 		}
 	}
