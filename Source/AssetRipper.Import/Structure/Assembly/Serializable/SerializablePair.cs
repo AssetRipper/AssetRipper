@@ -29,8 +29,13 @@ public sealed class SerializablePair
 
 	public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags)
 	{
-		First.Read(ref reader, version, flags, Depth, FirstField);
-		Second.Read(ref reader, version, flags, Depth, SecondField);
+		Read(ref reader, version, flags, null);
+	}
+
+	internal void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, ManagedReferenceResolver? managedReferenceResolver)
+	{
+		First.Read(ref reader, version, flags, Depth, FirstField, managedReferenceResolver);
+		Second.Read(ref reader, version, flags, Depth, SecondField, managedReferenceResolver);
 	}
 
 	public void Write(AssetWriter writer)

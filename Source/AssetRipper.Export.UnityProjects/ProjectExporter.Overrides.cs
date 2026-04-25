@@ -123,14 +123,7 @@ partial class ProjectExporter
 				: settings.ExportSettings.ImageExportFormat));
 		}
 
-		//Texture Array exporters
-		if (settings.Version.GreaterThanOrEquals(2020, 2))
-		{
-			TextureArrayAssetExporter textureArrayExporter = new(settings);
-			OverrideExporter<ICubemapArray>(textureArrayExporter);
-			OverrideExporter<ITexture2DArray>(textureArrayExporter);
-			OverrideExporter<ITexture3D>(textureArrayExporter);
-		}
+		//Texture Array exporters - let them fall through to default YAML exporter for .asset files
 
 		//Font exporter
 		FontAssetExporter fontAssetExporter = new FontAssetExporter();

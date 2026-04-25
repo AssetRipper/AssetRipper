@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Cloning;
+using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
@@ -8,6 +9,7 @@ using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.IO.Endian;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
+using System.Text;
 
 namespace AssetRipper.Import.Structure.Assembly.Serializable;
 
@@ -71,15 +73,32 @@ public sealed class UnloadedStructure : UnityAssetBase, IDeepCloneable
 		if (structure is not null)
 		{
 			EndianSpanReader reader = new EndianSpanReader(StructureData, MonoBehaviour.Collection.EndianType);
-			if (structure.TryRead(ref reader, MonoBehaviour))
+			ManagedReferenceResolver resolver = new(MonoBehaviour.Collection as SerializedAssetCollection, AssemblyManager, MonoBehaviour.Collection.Version);
+			if (structure.TryRead(ref reader, MonoBehaviour, false, resolver, logFailure: false))
 			{
 				MonoBehaviour.Structure = structure;
 				return structure;
 			}
+			else if (structure.CanUseLossyManagedReferenceFallback())
+			{
+				structure.ApplyLossyManagedReferenceFallbackFixups();
+				Logger.Warning(LogCategory.Import, $"Using lossy managed-reference fallback for `{MonoBehaviour.ScriptP?.GetFullName()}`.");
+				MonoBehaviour.Structure = structure;
+				return structure;
+			}
+			else if (ShouldTraceManagedReferenceLayout(MonoBehaviour.ScriptP?.ClassName_R))
+			{
+				int dumpOffset = Math.Max(0, reader.Position - 32);
+				Logger.Info(LogCategory.Import, $"ManagedRefTrace {MonoBehaviour.ScriptP?.ClassName_R} structure bytes at {dumpOffset}: {DumpBytes(StructureData, dumpOffset)}");
+			}
 		}
 		else if (failureReason is not null)
 		{
-			Logger.Warning(LogCategory.Import, $"Could not read MonoBehaviour structure for `{MonoBehaviour.ScriptP?.GetFullName()}`. Reason: {failureReason}");
+			if (!("Script ID is invalid".Equals(failureReason, StringComparison.Ordinal)
+				&& ImportWarningSuppressor.IsIgnorableInvalidScript(MonoBehaviour.ScriptP)))
+			{
+				Logger.Warning(LogCategory.Import, $"Could not read MonoBehaviour structure for `{MonoBehaviour.ScriptP?.GetFullName()}`. Reason: {failureReason}");
+			}
 		}
 
 		MonoBehaviour.Structure = null;
@@ -89,6 +108,38 @@ public sealed class UnloadedStructure : UnityAssetBase, IDeepCloneable
 	private UnityAssetBase LoadStructureOrStatelessAsset()
 	{
 		return (UnityAssetBase?)LoadStructure() ?? StatelessAsset.Instance;
+	}
+
+	private static bool ShouldTraceManagedReferenceLayout(string? typeName)
+	{
+		if (Environment.GetEnvironmentVariable("AR_DEBUG_MANAGED_REFERENCE") is not "1")
+		{
+			return false;
+		}
+
+		return typeName is "RequestableOwnershipGuard" or "TransferrableItemSlotTransformOverride";
+	}
+
+	private static string DumpBytes(ReadOnlyArraySegment<byte> data, int offset)
+	{
+		int length = Math.Min(80, Math.Max(0, data.Count - offset));
+		if (length == 0)
+		{
+			return "<none>";
+		}
+
+		ReadOnlySpan<byte> bytes = data;
+		bytes = bytes.Slice(offset, length);
+		StringBuilder builder = new(length * 3);
+		for (int i = 0; i < bytes.Length; i++)
+		{
+			if (i > 0)
+			{
+				builder.Append(' ');
+			}
+			builder.Append(bytes[i].ToString("X2"));
+		}
+		return builder.ToString();
 	}
 
 	public IUnityAssetBase DeepClone(PPtrConverter converter)

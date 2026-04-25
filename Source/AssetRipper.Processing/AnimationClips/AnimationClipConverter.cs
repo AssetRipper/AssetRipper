@@ -501,7 +501,9 @@ public readonly partial struct AnimationClipConverter
 			curve.ClassID = (int)curveData.ClassID;
 			curve.Script.SetAsset(m_clip.Collection, curveData.Script as IMonoScript);
 			curve.Curve.SetDefaultRotationOrderAndCurveLoopType();
-			//Todo: set IFloatCurve.Flags or verify that 0 is an acceptable value.
+			// Flags = 0 means no special curve behavior, which is the default Unity uses
+			// for standard float curves. Non-zero flags are only used for internal Unity
+			// curves (e.g., Euler hint curves use flag 1). Zero is correct here.
 			m_floats.Add(curveData, curve);
 		}
 

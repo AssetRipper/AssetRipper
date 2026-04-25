@@ -152,7 +152,10 @@ public sealed class GameStructure : IDisposable
 			string? path = RequestAssembly(assembly);
 			if (path is null)
 			{
-				Logger.Log(LogType.Warning, LogCategory.Import, $"Assembly '{assembly}' hasn't been found");
+				if (!ImportWarningSuppressor.IsIgnorableMissingAssembly(assembly))
+				{
+					Logger.Log(LogType.Warning, LogCategory.Import, $"Assembly '{assembly}' hasn't been found");
+				}
 				return;
 			}
 			AssemblyManager.Load(path, FileSystem);

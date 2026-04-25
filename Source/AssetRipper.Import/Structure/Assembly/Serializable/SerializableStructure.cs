@@ -8,6 +8,7 @@ using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.SerializationLogic;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
+using System.Text;
 
 namespace AssetRipper.Import.Structure.Assembly.Serializable;
 
@@ -26,13 +27,47 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 
 	public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags)
 	{
+		Read(ref reader, version, flags, null);
+	}
+
+	internal void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, ManagedReferenceResolver? managedReferenceResolver)
+	{
 		Version = version;
 		for (int i = 0; i < Fields.Length; i++)
 		{
 			SerializableType.Field etalon = Type.Fields[i];
 			if (IsAvailable(etalon))
 			{
-				Fields[i].Read(ref reader, version, flags, Depth, etalon);
+				int startPosition = reader.Position;
+				try
+				{
+					Fields[i].Read(ref reader, version, flags, Depth, etalon, managedReferenceResolver);
+				}
+				catch
+				{
+					if (ShouldTraceManagedReferenceLayout(Type.Name))
+					{
+						Logger.Info(LogCategory.Import, $"ManagedRefTrace {Type.Name}.{etalon.Name} failed at {startPosition}");
+						if (etalon.Name == "references")
+						{
+							Logger.Info(LogCategory.Import, $"ManagedRefTrace {Type.Name}.references bytes at {startPosition}: {DumpBytes(reader, startPosition)}");
+						}
+					}
+					throw;
+				}
+				if (ShouldTraceManagedReferenceLayout(Type.Name))
+				{
+					Logger.Info(LogCategory.Import, $"ManagedRefTrace {Type.Name}.{etalon.Name}: {startPosition} -> {reader.Position}");
+				}
+				if (etalon.Name == "references"
+					&& i > 0
+					&& Fields[i].CValue is ManagedReferencesRegistryAsset { UsedLegacyShortTerminusTail: true }
+					&& Type.Fields[i - 1].Type.Type == PrimitiveType.String
+					&& Fields[i - 1].CValue is string previousValue
+					&& previousValue == ManagedReferenceResolver.TerminusKey.ClassName)
+				{
+					Fields[i - 1].AsString = string.Empty;
+				}
 			}
 		}
 	}
@@ -119,18 +154,34 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 
 	public bool TryRead(ref EndianSpanReader reader, IMonoBehaviour monoBehaviour)
 	{
+		return TryRead(ref reader, monoBehaviour, false, null, true);
+	}
+
+	public bool TryRead(ref EndianSpanReader reader, IMonoBehaviour monoBehaviour, bool allowTrailingBytes)
+	{
+		return TryRead(ref reader, monoBehaviour, allowTrailingBytes, null, true);
+	}
+
+	internal bool TryRead(ref EndianSpanReader reader, IMonoBehaviour monoBehaviour, bool allowTrailingBytes, ManagedReferenceResolver? managedReferenceResolver, bool logFailure = true)
+	{
 		try
 		{
-			Read(ref reader, monoBehaviour.Collection.Version, monoBehaviour.Collection.Flags);
+			Read(ref reader, monoBehaviour.Collection.Version, monoBehaviour.Collection.Flags, managedReferenceResolver);
 		}
 		catch (Exception ex)
 		{
-			LogMonoBehaviorReadException(this, ex);
+			if (logFailure)
+			{
+				LogMonoBehaviorReadException(this, ex);
+			}
 			return false;
 		}
-		if (reader.Position != reader.Length)
+		if (!allowTrailingBytes && reader.Position != reader.Length)
 		{
-			LogMonoBehaviourMismatch(this, reader.Position, reader.Length);
+			if (logFailure)
+			{
+				LogMonoBehaviourMismatch(this, reader.Position, reader.Length);
+			}
 			return false;
 		}
 		return true;
@@ -144,6 +195,119 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 	private static void LogMonoBehaviorReadException(SerializableStructure structure, Exception ex)
 	{
 		Logger.Error(LogCategory.Import, $"Unable to read MonoBehaviour Structure, because script {structure} layout mismatched binary content ({ex.GetType().Name}).");
+	}
+
+	private static bool ShouldTraceManagedReferenceLayout(string typeName)
+	{
+		if (Environment.GetEnvironmentVariable("AR_DEBUG_MANAGED_REFERENCE") is not "1")
+		{
+			return false;
+		}
+
+		return typeName is "RequestableOwnershipGuard" or "TransferrableItemSlotTransformOverride" or "SlotTransformOverride" or "NetworkProjectConfigAsset";
+	}
+
+	private static string DumpBytes(EndianSpanReader reader, int offset)
+	{
+		int safeOffset = Math.Max(0, Math.Min(offset, reader.Length));
+		int length = Math.Min(96, Math.Max(0, reader.Length - safeOffset));
+		if (length == 0)
+		{
+			return "<none>";
+		}
+
+		EndianSpanReader copy = reader;
+		copy.Position = safeOffset;
+		StringBuilder builder = new(length * 3);
+		for (int i = 0; i < length; i++)
+		{
+			if (i > 0)
+			{
+				builder.Append(' ');
+			}
+			builder.Append(copy.ReadByte().ToString("X2"));
+		}
+		return builder.ToString();
+	}
+
+	public bool CanUseLossyManagedReferenceFallback()
+	{
+		if (Fields.Length == 0)
+		{
+			return false;
+		}
+
+		SerializableType.Field lastField = Type.Fields[^1];
+		if (lastField.Name != "references" || lastField.Type.Name != "ManagedReferencesRegistry")
+		{
+			return false;
+		}
+
+		for (int i = 0; i < Fields.Length - 1; i++)
+		{
+			if (Fields[i].PValue != 0 || Fields[i].CValue is not null)
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public void ApplyLossyManagedReferenceFallbackFixups()
+	{
+		if (!CanUseLossyManagedReferenceFallback())
+		{
+			return;
+		}
+
+		ManagedReferencesRegistryAsset registry = GetOrCreateFallbackRegistry();
+		bool foundManagedReference = false;
+
+		for (int i = 0; i < Fields.Length - 1; i++)
+		{
+			SerializableType.Field field = Type.Fields[i];
+			if (field.ArrayDepth == 0 && field.Type.Name == "managedReference" && Fields[i].CValue is SerializableStructure managedReference)
+			{
+				foundManagedReference = true;
+				ref SerializableValue rid = ref managedReference["rid"];
+				if (rid.AsInt64 == 0)
+				{
+					rid.AsInt64 = -2;
+				}
+				registry.EnsureNullReference(rid.AsInt64);
+			}
+		}
+
+		if (TryGetIndex("ownershipRequestNonce", out int index)
+			&& Fields[index].CValue is string value
+			&& value == ManagedReferenceResolver.TerminusKey.ClassName)
+		{
+			Fields[index].AsString = string.Empty;
+		}
+
+		if (!foundManagedReference && registry.References.Count == 0)
+		{
+			Fields[^1] = default;
+		}
+	}
+
+	private ManagedReferencesRegistryAsset GetOrCreateFallbackRegistry()
+	{
+		ref SerializableValue registryField = ref Fields[^1];
+		if (registryField.CValue is ManagedReferencesRegistryAsset existingRegistry)
+		{
+			if (existingRegistry.Version == 0)
+			{
+				existingRegistry.InitializeFallback(2);
+			}
+			return existingRegistry;
+		}
+
+		ManagedReferencesRegistryAsset registry = new(null);
+		registry.InitializeFallback(2);
+		registryField.AsAsset = registry;
+		return registry;
 	}
 
 	public int Depth { get; }

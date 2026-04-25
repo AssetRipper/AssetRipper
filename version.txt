@@ -1,0 +1,2 @@
+AssetRipper version: 1.3.13
+Commit: cfb8dfff9f3e4a68c39672a9a7282f9526a6fbba

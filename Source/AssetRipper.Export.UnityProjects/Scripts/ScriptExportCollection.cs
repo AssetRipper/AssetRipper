@@ -104,13 +104,13 @@ public sealed class ScriptExportCollection : ScriptExportCollectionBase
 
 			if (fileSystem.File.Exists($"{filePath}.meta"))
 			{
-				Logger.Error(LogCategory.Export, $"Metafile already exists at {filePath}.meta");
-				//throw new Exception($"Metafile already exists at {filePath}.meta");
+				// A duplicate .meta file can occur when multiple MonoScripts resolve to the same
+				// export path. Rather than silently skipping (which leaves broken references),
+				// delete the stale .meta and regenerate it with the correct GUID for this script.
+				Logger.Warning(LogCategory.Export, $"Metafile already exists at {filePath}.meta — overwriting with correct GUID.");
+				fileSystem.File.Delete($"{filePath}.meta");
 			}
-			else
-			{
-				OnScriptExported(container, asset, filePath, fileSystem);
-			}
+			OnScriptExported(container, asset, filePath, fileSystem);
 		}
 
 		// assembly definitions were added in 2017.3

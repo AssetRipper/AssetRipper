@@ -1,4 +1,4 @@
-﻿using AssetRipper.Assets;
+using AssetRipper.Assets;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using ICSharpCode.Decompiler.CSharp;

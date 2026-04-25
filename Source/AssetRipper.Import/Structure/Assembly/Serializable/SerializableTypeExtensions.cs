@@ -14,6 +14,15 @@ public static class SerializableTypeExtensions
 
 	public static IUnityAssetBase CreateInstance(this SerializableType type, int depth, UnityVersion version)
 	{
+		return CreateInstance(type, depth, version, null);
+	}
+
+	internal static IUnityAssetBase CreateInstance(this SerializableType type, int depth, UnityVersion version, ManagedReferenceResolver? managedReferenceResolver)
+	{
+		if (type.Name == "ManagedReferencesRegistry")
+		{
+			return new ManagedReferencesRegistryAsset(managedReferenceResolver);
+		}
 		if (type.IsEngineStruct())
 		{
 			return GameAssetFactory.CreateEngineAsset(type.Name, version);

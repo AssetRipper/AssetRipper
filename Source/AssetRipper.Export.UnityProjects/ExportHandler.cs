@@ -106,6 +106,7 @@ public class ExportHandler
 		BeforeExport(projectExporter);
 		projectExporter.DoFinalOverrides(Settings);
 		projectExporter.Export(gameData.GameBundle, Settings, fileSystem);
+		Project.UnityPatches.ApplyBuiltinEditorScripts(outputPath, fileSystem);
 
 		Logger.Info(LogCategory.Export, "Finished exporting assets");
 
@@ -137,6 +138,7 @@ public class ExportHandler
 		yield return new StreamingAssetsPostExporter();
 		yield return new DllPostExporter();
 		yield return new PathIdMapExporter();
+		yield return new ScriptReferenceRelinkerPostExporter();
 	}
 
 	public GameData LoadAndProcess(IReadOnlyList<string> paths, FileSystem fileSystem)

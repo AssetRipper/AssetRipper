@@ -20,7 +20,10 @@ internal sealed partial record class GameInitializer
 			string? resPath = RequestResource(fixedName);
 			if (resPath is null)
 			{
-				Logger.Log(LogType.Warning, LogCategory.Import, $"Resource file '{resName}' hasn't been found");
+				if (!ImportWarningSuppressor.IsIgnorableMissingResource(resName))
+				{
+					Logger.Log(LogType.Warning, LogCategory.Import, $"Resource file '{resName}' hasn't been found");
+				}
 				return null;
 			}
 

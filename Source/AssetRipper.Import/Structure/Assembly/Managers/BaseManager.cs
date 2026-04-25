@@ -210,7 +210,7 @@ public partial class BaseManager : IAssemblyManager
 			}
 
 			if (typeCache.TryGetValue(type, out SerializableType? monoType)
-				|| fieldSerializer.TryCreateSerializableType(type, typeCache, out monoType, out failureReason))
+				|| fieldSerializer.TryCreateSerializableTypeForMonoBehaviour(type, typeCache, out monoType, out failureReason))
 			{
 				scriptType = monoType;
 				failureReason = null;

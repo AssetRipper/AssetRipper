@@ -2,7 +2,9 @@
 using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.IO;
 using AssetRipper.Assets.Metadata;
+using AssetRipper.Assets.Collections;
 using AssetRipper.Import.Logging;
+using AssetRipper.Import.Structure.Assembly;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.Import.Structure.Assembly.Serializable;
 using AssetRipper.Import.Structure.Assembly.TypeTrees;
@@ -72,27 +74,30 @@ public sealed class GameAssetFactory : AssetFactoryBase
 		try
 		{
 			monoBehaviour.Read(ref reader);
+			int structureDataOffset = reader.Position;
 			SerializableStructure? structure;
 			if (type is not null && TypeTreeNodeStruct.TryMakeFromTypeTree(type.OldType, out TypeTreeNodeStruct rootNode))
 			{
-				structure = SerializableTreeType.FromRootNode(rootNode, true).CreateSerializableStructure();
-				if (structure.Type.Fields.Count > 0 && structure.Type.Fields[^1] is { Type.Name: "ManagedReferencesRegistry", Name: "references" })
+				ManagedReferenceResolver resolver = new(monoBehaviour.Collection as SerializedAssetCollection, assemblyManager, monoBehaviour.Collection.Version);
+				if ((structure = SerializableTreeType.FromRootNode(rootNode, true).CreateSerializableStructure()).TryRead(ref reader, monoBehaviour, false, resolver, logFailure: false))
 				{
-					Logger.Error(LogCategory.Import, $"MonoBehaviour has a field with the [SerializeReference] attribute, which is not currently supported.");
-					monoBehaviour.Structure = null;
+					monoBehaviour.Structure = structure;
 				}
-				else if (structure.TryRead(ref reader, monoBehaviour))
+				else if (structure.CanUseLossyManagedReferenceFallback())
 				{
+					structure.ApplyLossyManagedReferenceFallbackFixups();
+					Logger.Warning(LogCategory.Import, $"Using lossy managed-reference fallback for `{monoBehaviour.ScriptP?.GetFullName()}`.");
 					monoBehaviour.Structure = structure;
 				}
 				else
 				{
-					monoBehaviour.Structure = null;
+					// Fall back to lazy assembly-based reading if the embedded type tree layout does not deserialize cleanly.
+					monoBehaviour.Structure = new UnloadedStructure(monoBehaviour, assemblyManager, assetData.Slice(structureDataOffset));
 				}
 			}
 			else
 			{
-				monoBehaviour.Structure = new UnloadedStructure(monoBehaviour, assemblyManager, assetData.Slice(reader.Position));
+				monoBehaviour.Structure = new UnloadedStructure(monoBehaviour, assemblyManager, assetData.Slice(structureDataOffset));
 			}
 		}
 		catch (Exception ex)

@@ -1,4 +1,4 @@
-﻿using AsmResolver.DotNet;
+using AsmResolver.DotNet;
 using AssetRipper.Assets;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
@@ -18,7 +18,6 @@ public sealed class ScriptExportCollection : ExportCollectionBase
 	}
 
 	public override IContentExtractor ContentExtractor { get; }
-
 	public LanguageVersion LanguageVersion { get; }
 
 	public override IEnumerable<IUnityObjectBase> Assets => [];
@@ -34,24 +33,21 @@ public sealed class ScriptExportCollection : ExportCollectionBase
 		string assemblyDirectory = fileSystem.Path.Join(projectDirectory, "Assemblies");
 		fileSystem.Directory.Create(assemblyDirectory);
 
-		//Export assemblies
 		List<string> assemblyPaths = new();
 		foreach (AssemblyDefinition assembly in assemblyManager.GetAssemblies())
 		{
 			Stream stream = assemblyManager.GetStreamForAssembly(assembly);
 			stream.Position = 0;
 
-			//Write assembly
+			string assemblyPath = fileSystem.Path.Join(assemblyDirectory, assembly.Name + ".dll");
+			assemblyPaths.Add(assemblyPath);
+			using (Stream fileStream = fileSystem.File.Create(assemblyPath))
 			{
-				string assemblyPath = fileSystem.Path.Join(assemblyDirectory, assembly.Name + ".dll");
-				assemblyPaths.Add(assemblyPath);
-				using Stream fileStream = fileSystem.File.Create(assemblyPath);
 				stream.CopyTo(fileStream);
-				stream.Position = 0;
 			}
+			stream.Position = 0;
 		}
 
-		//Decompile scripts
 		string scriptDirectory = fileSystem.Path.Join(projectDirectory, "Scripts");
 		foreach (string assemblyPath in assemblyPaths)
 		{
@@ -66,6 +62,7 @@ public sealed class ScriptExportCollection : ExportCollectionBase
 			settings.AlwaysShowEnumMemberValues = true;
 			settings.ShowXmlDocumentation = true;
 
+			settings.UseSdkStyleProjectFormat = false;//sdk style can throw
 			settings.UseNestedDirectoriesForNamespaces = true;
 
 			WholeProjectDecompiler decompiler = new(settings, new UniversalAssemblyResolver(assemblyPath, false, null), null, null, null);
