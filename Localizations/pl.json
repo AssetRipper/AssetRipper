@@ -265,5 +265,14 @@
     "settings": "Ustawienia",
     "shader": "Shader",
     "settings_can_only_be_changed_before_loading_files": "Ustawienia mogą zostać zmienione tylko przed załadowaniem plików.",
-    "width": "Szerokość"
+    "width": "Szerokość",
+    "assets_per_page": "Zasoby Na Stronę",
+    "enter_search_query": "Wprowadź zapytanie aby znaleźć zasoby.",
+    "next": "Następna",
+    "no_results_found": "Nie znaleziono żadnych wyników.",
+    "page": "Strona",
+    "previous": "Poprzednia",
+    "results": "Wyniki",
+    "search": "Szukaj",
+    "search_placeholder": "Wprowadź nazwę zasobu lub klasy..."
 }
