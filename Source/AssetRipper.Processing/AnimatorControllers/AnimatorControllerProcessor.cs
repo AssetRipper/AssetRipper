@@ -1,4 +1,4 @@
-﻿using AssetRipper.Assets;
+using AssetRipper.Assets;
 using AssetRipper.Assets.Cloning;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Import.Logging;
@@ -30,87 +30,81 @@ public sealed class AnimatorControllerProcessor : IAssetProcessor
 			.ToList();
 
 		ProcessedAssetCollection processedCollection = gameData.AddNewProcessedCollection("Generated AnimatorController Dependencies");
+
 		foreach (IAnimatorController controller in animatorControllers)
 		{
-			Process(controller, processedCollection);
+			ProcessControllerState(controller, processedCollection);
 		}
 
-		List<HashSet<IUnityObjectBase>> assetSets = [];
-		Dictionary<IUnityObjectBase, List<int>> assetToSetIndices = new();
+		// Tracks which assets have already been mapped to an earlier AnimatorController
+		HashSet<IUnityObjectBase> globallyClaimedAssets = new();
+
 		foreach (IAnimatorController controller in animatorControllers)
 		{
-			int setIndex = assetSets.Count;
-			HashSet<IUnityObjectBase> assetSet = [];
-			assetSets.Add(assetSet);
+			// Unique assets belonging to this controller's graph. 
+			// Distinct() prevents a controller from mistakenly cloning an asset from itself.
+			List<IUnityObjectBase> hierarchy = controller.FetchEditorHierarchy()
+				.WhereNotNull()
+				.Distinct()
+				.ToList();
+			
+			hierarchy.Remove(controller);
 
-			foreach (IUnityObjectBase dependency in controller.FetchEditorHierarchy().WhereNotNull())
+			Dictionary<IUnityObjectBase, IUnityObjectBase> cloneMap = new();
+
+			// 1. Identify assets that belong to this controller but are ALREADY claimed by an earlier one
+			foreach (IUnityObjectBase asset in hierarchy)
 			{
-				assetSet.Add(dependency);
-				if (!assetToSetIndices.TryGetValue(dependency, out List<int>? setIndices))
+				if (!globallyClaimedAssets.Add(asset))
 				{
-					setIndices = [setIndex];
-					assetToSetIndices.Add(dependency, setIndices);
-				}
-				else if (!setIndices.Contains(setIndex))
-				{
-					setIndices.Add(setIndex);
+					IUnityObjectBase clonedAsset = processedCollection.CreateAsset(asset.ClassID, AssetFactory.Create);
+					cloneMap.Add(asset, clonedAsset);
 				}
 			}
-		}
 
-		foreach ((IUnityObjectBase asset, List<int> setIndices) in assetToSetIndices)
-		{
-			if (setIndices.Count <= 1)
+			// 2. Isolate subgraph if there are shared components
+			if (cloneMap.Count > 0)
 			{
-				continue;
-			}
+				MultiReplacementAssetResolver resolver = new(cloneMap);
 
-			for (int i = 1; i < setIndices.Count; i++)
-			{
-				int currentSetIndex = setIndices[i];
-				HashSet<IUnityObjectBase> currentSet = assetSets[currentSetIndex];
-				currentSet.Remove(asset);
+				// Remap the controller's immediate pointers
+				controller.CopyValues(controller, new PPtrConverter(controller.Collection, controller.Collection, resolver));
 
-				IUnityObjectBase clonedAsset = processedCollection.CreateAsset(asset.ClassID, AssetFactory.Create);
-				SingleReplacementAssetResolver resolver = new(asset, clonedAsset);
-				clonedAsset.CopyValues(asset, new PPtrConverter(asset.Collection, clonedAsset.Collection, resolver));
-
-				foreach (IUnityObjectBase otherAsset in currentSet)
+				foreach (IUnityObjectBase asset in hierarchy)
 				{
-					otherAsset.CopyValues(otherAsset, new PPtrConverter(otherAsset.Collection, otherAsset.Collection, resolver));
+					if (cloneMap.TryGetValue(asset, out IUnityObjectBase? clonedAsset))
+					{
+						// Copy the original data into the clone, rewriting pointers mapping to the new subgraph
+						clonedAsset.CopyValues(asset, new PPtrConverter(asset.Collection, clonedAsset.Collection, resolver));
+					}
+					else
+					{
+						// It's exclusive to this controller. Rewrite any pointers aiming at old shared assets
+						asset.CopyValues(asset, new PPtrConverter(asset.Collection, asset.Collection, resolver));
+					}
 				}
-
-				Debug.Assert(!currentSet.OfType<IAnimatorController>().First().FetchEditorHierarchy().Contains(asset));
-				Debug.Assert(currentSet.OfType<IAnimatorController>().First().FetchEditorHierarchy().Contains(clonedAsset));
-
-				currentSet.Add(clonedAsset);
 			}
-		}
-		assetToSetIndices.Clear();
 
-		Debug.Assert(assetSets.Count == animatorControllers.Count);
-		for (int i = 0; i < animatorControllers.Count; i++)
-		{
-			IAnimatorController controller = animatorControllers[i];
-			HashSet<IUnityObjectBase> assetSet = assetSets[i];
-			Debug.Assert(controller.FetchEditorHierarchy().WhereNotNull().Distinct().Count() == assetSet.Count);
-			Debug.Assert(controller.FetchEditorHierarchy().WhereNotNull().All(assetSet.Contains));
-			foreach (IUnityObjectBase asset in assetSet)
+			// 3. Assign MainAsset cleanly using the dynamically updated hierarchy
+			foreach (IUnityObjectBase asset in controller.FetchEditorHierarchy().WhereNotNull().Distinct())
 			{
-				Debug.Assert(asset.MainAsset is null);
-				asset.MainAsset = controller;
+				if (asset != controller)
+				{
+					Debug.Assert(asset.MainAsset is null || asset.MainAsset == controller);
+					asset.MainAsset = controller;
+				}
 			}
 		}
 	}
 
-	private static void Process(IAnimatorController controller, ProcessedAssetCollection processedCollection)
+	private static void ProcessControllerState(IAnimatorController controller, ProcessedAssetCollection processedCollection)
 	{
 		IControllerConstant controllerConstant = controller.Controller;
-		IAnimatorStateMachine[] StateMachines = new IAnimatorStateMachine[controllerConstant.StateMachineArray.Count];
+
+		IAnimatorStateMachine[] stateMachines = new IAnimatorStateMachine[controllerConstant.StateMachineArray.Count];
 		for (int i = 0; i < controllerConstant.StateMachineArray.Count; i++)
 		{
-			IAnimatorStateMachine stateMachine = VirtualAnimationFactory.CreateRootAnimatorStateMachine(processedCollection, controller, i);
-			StateMachines[i] = stateMachine;
+			stateMachines[i] = VirtualAnimationFactory.CreateRootAnimatorStateMachine(processedCollection, controller, i);
 		}
 
 		controller.AnimatorParameters.Clear();
@@ -126,28 +120,37 @@ public sealed class AnimatorControllerProcessor : IAssetProcessor
 		for (int i = 0; i < controllerConstant.LayerArray.Count; i++)
 		{
 			uint stateMachineIndex = controllerConstant.LayerArray[i].Data.StateMachineIndex;
-			IAnimatorStateMachine stateMachine = StateMachines[stateMachineIndex];
+			
+			// Safe bounds check against obfuscated/corrupted AssetBundles
+			IAnimatorStateMachine? stateMachine = stateMachineIndex < stateMachines.Length 
+				? stateMachines[stateMachineIndex] 
+				: null;
+
 			IAnimatorControllerLayer newLayer = controller.AnimatorLayers.AddNew();
 			InitializeLayer(newLayer, stateMachine, controller, i);
 		}
 	}
 
-	private static void InitializeLayer(IAnimatorControllerLayer animatorControllerLayer, IAnimatorStateMachine stateMachine, IAnimatorController controller, int layerIndex)
+	private static void InitializeLayer(IAnimatorControllerLayer animatorControllerLayer, IAnimatorStateMachine? stateMachine, IAnimatorController controller, int layerIndex)
 	{
 		ILayerConstant layer = controller.Controller.LayerArray[layerIndex].Data;
 
 		animatorControllerLayer.Name = controller.TOS[layer.Binding];
 
-		animatorControllerLayer.StateMachine.SetAsset(controller.Collection, stateMachine);
+		if (stateMachine is not null)
+		{
+			animatorControllerLayer.StateMachine.SetAsset(controller.Collection, stateMachine);
+		}
 
-#warning TODO: animator
-		//Mask = new();
+#warning TODO: animator Mask
+		// animatorControllerLayer.Mask = new();
 
 		animatorControllerLayer.BlendingMode = layer.LayerBlendingMode;
 		animatorControllerLayer.SyncedLayerIndex = layer.StateMachineSynchronizedLayerIndex == 0 ? -1 : (int)layer.StateMachineIndex;
 		animatorControllerLayer.DefaultWeight = layer.DefaultWeight;
 		animatorControllerLayer.IKPass = layer.IKPass;
 		animatorControllerLayer.SyncedLayerAffectsTiming = layer.SyncedLayerAffectsTiming;
+
 		if (animatorControllerLayer.Has_Controller())
 		{
 			animatorControllerLayer.Controller.SetAsset(controller.Collection, controller);
@@ -158,32 +161,66 @@ public sealed class AnimatorControllerProcessor : IAssetProcessor
 	{
 		IValueConstant value = controller.Controller.Values.Data.ValueArray[paramIndex];
 		parameter.Name = controller.TOS[value.ID];
+
 		AnimatorControllerParameterType type = value.GetTypeValue();
+		int index = (int)value.Index;
+
+		// Implemented safety bounds checks to prevent IndexOutOfRange exceptions in corrupted bundles
 		switch (type)
 		{
 			case AnimatorControllerParameterType.Trigger:
-				parameter.DefaultBool = controller.Controller.DefaultValues.Data.BoolValues[(int)value.Index];
-				break;
-
 			case AnimatorControllerParameterType.Bool:
-				parameter.DefaultBool = controller.Controller.DefaultValues.Data.BoolValues[(int)value.Index];
+				if (index >= 0 && index < controller.Controller.DefaultValues.Data.BoolValues.Count)
+				{
+					parameter.DefaultBool = controller.Controller.DefaultValues.Data.BoolValues[index];
+				}
 				break;
 
 			case AnimatorControllerParameterType.Int:
-				parameter.DefaultInt = controller.Controller.DefaultValues.Data.IntValues[(int)value.Index];
+				if (index >= 0 && index < controller.Controller.DefaultValues.Data.IntValues.Count)
+				{
+					parameter.DefaultInt = controller.Controller.DefaultValues.Data.IntValues[index];
+				}
 				break;
 
 			case AnimatorControllerParameterType.Float:
-				parameter.DefaultFloat = controller.Controller.DefaultValues.Data.FloatValues[(int)value.Index];
+				if (index >= 0 && index < controller.Controller.DefaultValues.Data.FloatValues.Count)
+				{
+					parameter.DefaultFloat = controller.Controller.DefaultValues.Data.FloatValues[index];
+				}
 				break;
 
 			default:
 				throw new NotSupportedException($"Parameter type '{type}' isn't supported");
 		}
+
 		parameter.Type = (int)type;
+
 		if (parameter.Has_Controller())
 		{
 			parameter.Controller.SetAsset(controller.Collection, controller);
+		}
+	}
+
+	/// <summary>
+	/// Optimized implementation mapping multiple replaced instances simultaneously rather than iterating one by one.
+	/// </summary>
+	private sealed class MultiReplacementAssetResolver : IAssetResolver
+	{
+		private readonly Dictionary<IUnityObjectBase, IUnityObjectBase> _replacements;
+
+		public MultiReplacementAssetResolver(Dictionary<IUnityObjectBase, IUnityObjectBase> replacements)
+		{
+			_replacements = replacements;
+		}
+
+		public IUnityObjectBase? Resolve(IUnityObjectBase? asset)
+		{
+			if (asset is not null && _replacements.TryGetValue(asset, out IUnityObjectBase? replacement))
+			{
+				return replacement;
+			}
+			return asset;
 		}
 	}
 }
