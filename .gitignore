@@ -1,16 +1,47 @@
-**/.vs/
-**/*.csproj.user
-packages/
-**/packages.config
-obj
-0Bins/
-bin
-*.user
-.idea
-**/build/
-.vscode
-*.blend1
-launchSettings.json
+```
+# Build artifacts
+*.pyc
+__pycache__/
+*.o
+*.obj
+*.exe
+*.dll
+*.so
+*.a
+*.out
+dist/
+build/
+target/
+
+# Dependencies
+node_modules/
+venv/
+.venv/
+.env
+.env.local
+.env.*
+
+# Editor/IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*.tmp
+
+# System files
 .DS_Store
-/.dotnet
-dotnet-install.ps1
+Thumbs.db
+
+# Logs
+*.log
+
+# Coverage
+coverage/
+htmlcov/
+.coverage
+
+# Cache directories
+.mypy_cache/
+.pytest_cache/
+.gradle/
+```
