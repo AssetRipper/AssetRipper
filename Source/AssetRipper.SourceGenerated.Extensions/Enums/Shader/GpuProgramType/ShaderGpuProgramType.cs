@@ -1,4 +1,5 @@
 using AssetRipper.IO.Files;
+using System;
 
 namespace AssetRipper.SourceGenerated.Extensions.Enums.Shader.GpuProgramType;
 
@@ -33,7 +34,7 @@ public enum ShaderGpuProgramType
 	MetalVS = 23,
 	MetalFS = 24,
 	SPIRV = 25,
-	Console = 26,
+	// The alias 'Console = 26' has been removed to avoid ambiguity with ConsoleVS.
 	ConsoleVS = 26,
 	ConsoleFS = 27,
 	ConsoleHS = 28,
@@ -52,70 +53,35 @@ public static class ShaderGpuProgramTypeExtensions
 
 	public static bool IsGL(this ShaderGpuProgramType _this)
 	{
-		switch (_this)
-		{
-			case ShaderGpuProgramType.GLLegacy:
-			case ShaderGpuProgramType.GLCore32:
-			case ShaderGpuProgramType.GLCore41:
-			case ShaderGpuProgramType.GLCore43:
-			case ShaderGpuProgramType.GLES:
-			case ShaderGpuProgramType.GLES3:
-			case ShaderGpuProgramType.GLES31:
-			case ShaderGpuProgramType.GLES31AEP:
-				return true;
-
-			default:
-				return false;
-		}
-	}
-
-	public static bool IsMetal(this ShaderGpuProgramType _this)
-	{
 		return _this switch
 		{
-			ShaderGpuProgramType.MetalFS or ShaderGpuProgramType.MetalVS => true,
+			ShaderGpuProgramType.GLLegacy or
+			ShaderGpuProgramType.GLCore32 or
+			ShaderGpuProgramType.GLCore41 or
+			ShaderGpuProgramType.GLCore43 or
+			ShaderGpuProgramType.GLES or
+			ShaderGpuProgramType.GLES3 or
+			ShaderGpuProgramType.GLES31 or
+			ShaderGpuProgramType.GLES31AEP => true,
 			_ => false,
 		};
 	}
 
+	public static bool IsMetal(this ShaderGpuProgramType _this)
+	{
+		return _this is ShaderGpuProgramType.MetalFS or ShaderGpuProgramType.MetalVS;
+	}
+
 	public static bool IsDX(this ShaderGpuProgramType _this)
 	{
-		switch (_this)
-		{
-			case ShaderGpuProgramType.DX9PixelSM20:
-			case ShaderGpuProgramType.DX9PixelSM30:
-			case ShaderGpuProgramType.DX9VertexSM20:
-			case ShaderGpuProgramType.DX9VertexSM30:
-			case ShaderGpuProgramType.DX10Level9Pixel:
-			case ShaderGpuProgramType.DX10Level9Vertex:
-			case ShaderGpuProgramType.DX11DomainSM50:
-			case ShaderGpuProgramType.DX11GeometrySM40:
-			case ShaderGpuProgramType.DX11GeometrySM50:
-			case ShaderGpuProgramType.DX11HullSM50:
-			case ShaderGpuProgramType.DX11PixelSM40:
-			case ShaderGpuProgramType.DX11PixelSM50:
-			case ShaderGpuProgramType.DX11VertexSM40:
-			case ShaderGpuProgramType.DX11VertexSM50:
-				return true;
-
-			default:
-				return false;
-		}
+		// Enum values for DirectX are contiguous from 9 to 22.
+		return _this >= ShaderGpuProgramType.DX9VertexSM20 && _this <= ShaderGpuProgramType.DX11DomainSM50;
 	}
 
 	public static bool IsDX9(this ShaderGpuProgramType _this)
 	{
-		switch (_this)
-		{
-			case ShaderGpuProgramType.DX9PixelSM20:
-			case ShaderGpuProgramType.DX9PixelSM30:
-			case ShaderGpuProgramType.DX9VertexSM20:
-			case ShaderGpuProgramType.DX9VertexSM30:
-				return true;
-
-			default:
-				return false;
-		}
+		// Enum values for DirectX 9 are contiguous from 9 to 12.
+		return _this >= ShaderGpuProgramType.DX9VertexSM20 && _this <= ShaderGpuProgramType.DX9PixelSM30;
 	}
 
 	public static GPUPlatform ToGPUPlatform(this ShaderGpuProgramType _this, BuildTarget platform)
@@ -167,48 +133,37 @@ public static class ShaderGpuProgramTypeExtensions
 
 			case ShaderGpuProgramType.SPIRV:
 				return GPUPlatform.Vulkan;
+				
+			case ShaderGpuProgramType.PS5NGGC:
+				return GPUPlatform.PS5;
+
+			case ShaderGpuProgramType.RayTracing:
+				// RayTracing is a pipeline type, not a specific hardware platform.
+				return GPUPlatform.Unknown;
 
 			case ShaderGpuProgramType.ConsoleVS:
 			case ShaderGpuProgramType.ConsoleFS:
 			case ShaderGpuProgramType.ConsoleHS:
 			case ShaderGpuProgramType.ConsoleDS:
 			case ShaderGpuProgramType.ConsoleGS:
-				switch (platform)
+				return platform switch
 				{
-					case BuildTarget.PS3:
-						return GPUPlatform.PS3;
-					case BuildTarget.PS4:
-						return GPUPlatform.PS4;
-					case BuildTarget.PSM:
-						return GPUPlatform.PSM;
-					case BuildTarget.PSP2:
-						return GPUPlatform.Vita;
-
-					case BuildTarget.Xbox360:
-						return GPUPlatform.Xbox360;
-					case BuildTarget.XboxOne:
-						return GPUPlatform.XboxOne;
-#warning		 TODO:
-					//return GPUPlatform.xboxone_d3d12;
-
-					case BuildTarget.WiiU:
-						return GPUPlatform.WiiU;
-
-					case BuildTarget.N3DS:
-						return GPUPlatform.N3DS;
-
-					case BuildTarget.GoogleNaCl:
-						return GPUPlatform.GlesDesktop;
-
-					case BuildTarget.Flash:
-						return GPUPlatform.Flash;
-
-					case BuildTarget.Switch:
-						return GPUPlatform.Switch;
-
-					default:
-						throw new NotSupportedException($"Unsupported console platform {platform}");
-				}
+					BuildTarget.PS3 => GPUPlatform.PS3,
+					BuildTarget.PS4 => GPUPlatform.PS4,
+					BuildTarget.PS5 => GPUPlatform.PS5,
+					BuildTarget.PSM => GPUPlatform.PSM,
+					BuildTarget.PSP2 => GPUPlatform.Vita,
+					BuildTarget.Xbox360 => GPUPlatform.Xbox360,
+					// We cannot reliably distinguish between D3D11 and D3D12 for XboxOne from shader data alone.
+					// Defaulting to the base XboxOne (D3D11) is the safest and most consistent approach.
+					BuildTarget.XboxOne => GPUPlatform.XboxOne,
+					BuildTarget.WiiU => GPUPlatform.WiiU,
+					BuildTarget.N3DS => GPUPlatform.N3DS,
+					BuildTarget.GoogleNaCl => GPUPlatform.GlesDesktop,
+					BuildTarget.Flash => GPUPlatform.Flash,
+					BuildTarget.Switch => GPUPlatform.Switch,
+					_ => throw new NotSupportedException($"Unsupported console platform {platform}"),
+				};
 
 			default:
 				throw new NotSupportedException($"Unsupported gpu program type {_this}");
@@ -236,19 +191,8 @@ public static class ShaderGpuProgramTypeExtensions
 				return "!!GL4x";
 
 			case ShaderGpuProgramType.GLLegacy:
-				{
-					// for ver < 5.0
-					/*if (type == ShaderType.Vertex)
-					{
-						return "!!ARBvp1.0";
-					}
-					else if (type == ShaderType.Fragment)
-					{
-						return "!!ARBfp1.0";
-					}*/
-					// but since serialization work only for >= 5.4 always return
-					return "!!GLSL"; // v1.20
-				}
+				// Serialization only works for Unity 5.4+, where this is always "!!GLSL".
+				return "!!GLSL";
 
 			case ShaderGpuProgramType.DX9VertexSM20:
 				return "vs_2_0";
@@ -288,60 +232,45 @@ public static class ShaderGpuProgramTypeExtensions
 
 			case ShaderGpuProgramType.SPIRV:
 				return "spirv";
+
+			case ShaderGpuProgramType.RayTracing:
+				return "raytracing";
+
+			case ShaderGpuProgramType.PS5NGGC:
+			case ShaderGpuProgramType.ConsoleVS:
+			case ShaderGpuProgramType.ConsoleFS:
+			case ShaderGpuProgramType.ConsoleGS:
+			case ShaderGpuProgramType.ConsoleHS:
+			case ShaderGpuProgramType.ConsoleDS:
+				return platform switch
+				{
+					BuildTarget.Flash => type is ShaderType.Vertex ? "agal_vs" : "agal_ps",
+					BuildTarget.PS4 => _this switch
+					{
+						ShaderGpuProgramType.ConsoleVS => "pssl_vs",
+						ShaderGpuProgramType.ConsoleFS => "pssl_ps",
+						ShaderGpuProgramType.ConsoleGS => "pssl_gs",
+						_ => throw new NotSupportedException($"Unsupported gpu program type {_this} for PS4"),
+					},
+					BuildTarget.PS5 => _this switch
+					{
+						ShaderGpuProgramType.PS5NGGC => "ps5nggc", // Map to PS5 native next-gen geometry compiler
+						_ => throw new NotSupportedException($"Unsupported gpu program type {_this} for PS5"),
+					},
+					BuildTarget.Switch => type switch
+					{
+						ShaderType.Vertex => "nssl_vs",
+						ShaderType.Fragment => "nssl_ps",
+						ShaderType.Geometry => "nssl_gs",
+						ShaderType.Hull => "nssl_hs",
+						_ => throw new NotSupportedException($"Unsupported shader type {type} for Switch"),
+					},
+					_ => throw new NotSupportedException($"Unsupported platform {platform} for console gpu program type {_this}"),
+				};
+
+			default:
+				throw new NotSupportedException($"Unsupported gpu program type {_this}[{platform}, {type}]");
 		}
-
-		switch (platform)
-		{
-			case BuildTarget.Flash:
-				{
-					if (_this == ShaderGpuProgramType.Console)
-					{
-						switch (type)
-						{
-							case ShaderType.Vertex:
-								return "agal_vs";
-							case ShaderType.Fragment:
-								return "agal_ps";
-						}
-					}
-				}
-				break;
-
-			case BuildTarget.PS4:
-				{
-					switch (_this)
-					{
-						case ShaderGpuProgramType.ConsoleVS:
-							return "pssl_vs";
-						case ShaderGpuProgramType.ConsoleFS:
-							return "pssl_ps";
-						case ShaderGpuProgramType.ConsoleGS:
-							return "pssl_gs";
-					}
-				}
-				break;
-
-			case BuildTarget.Switch:
-				{
-					if (_this == ShaderGpuProgramType.Console)
-					{
-						switch (type)
-						{
-							case ShaderType.Vertex:
-								return "nssl_vs";
-							case ShaderType.Fragment:
-								return "nssl_ps";
-							case ShaderType.Geometry:
-								return "nssl_gs";
-							case ShaderType.Hull:
-								return "nssl_hs";
-						}
-					}
-				}
-				break;
-		}
-
-		throw new NotSupportedException($"Unsupported gpu program type {_this} [{platform}, {type}]");
 	}
 
 	public static int ToShaderModelVersion(this ShaderGpuProgramType _this)
