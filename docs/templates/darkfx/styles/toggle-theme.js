@@ -1,35 +1,36 @@
-const sw = document.getElementById("switch-style"), sw_mobile = document.getElementById("switch-style-m"), b = document.body;
-if (b) {
-  function toggleTheme(target, dark) {
-    target.classList.toggle("dark-theme", dark)
-    target.classList.toggle("light-theme", !dark)
-  }
+document.addEventListener("DOMContentLoaded", () => {
+	const sw = document.getElementById("switch-style");
+	const sw_mobile = document.getElementById("switch-style-m");
+	const body = document.body;
 
-  function switchEventListener() {
-    toggleTheme(b, this.checked);
-    if (window.localStorage) {
-      this.checked ? localStorage.setItem("theme", "dark-theme") : localStorage.setItem("theme", "light-theme")
-    }
-  }
+	if (!body) return;
 
-  var isDarkTheme = !window.localStorage || !window.localStorage.getItem("theme") || window.localStorage && localStorage.getItem("theme") === "dark-theme";
+	function toggleTheme(isDark) {
+		body.classList.toggle("dark-theme", isDark);
+		body.classList.toggle("light-theme", !isDark);
+		
+		// Synchronize state across both UI components
+		if (sw) sw.checked = isDark;
+		if (sw_mobile) sw_mobile.checked = isDark;
+		
+		if (window.localStorage) {
+			localStorage.setItem("theme", isDark ? "dark-theme" : "light-theme");
+		}
+	}
 
-  if(sw && sw_mobile){
-    sw.checked = isDarkTheme;
-    sw_mobile.checked = isDarkTheme;
+	function onSwitchChange(event) {
+		toggleTheme(event.target.checked);
+	}
 
-    sw.addEventListener("change", switchEventListener);
-    sw_mobile.addEventListener("change", switchEventListener);
-    
-    // sync state between switches
-    sw.addEventListener("change", function() {
-      sw_mobile.checked = this.checked;
-    });
+	// Determine initial theme. Default to dark if no setting exists.
+	const hasStorage = !!window.localStorage;
+	const storedTheme = hasStorage ? localStorage.getItem("theme") : null;
+	const isDarkTheme = storedTheme ? storedTheme === "dark-theme" : true;
 
-    sw_mobile.addEventListener("change", function() {
-      sw.checked = this.checked;
-    });
-  }
+	// Bind listeners if elements exist
+	if (sw) sw.addEventListener("change", onSwitchChange);
+	if (sw_mobile) sw_mobile.addEventListener("change", onSwitchChange);
 
-  toggleTheme(b, isDarkTheme);
-}
+	// Apply the computed initial theme state
+	toggleTheme(isDarkTheme);
+});
