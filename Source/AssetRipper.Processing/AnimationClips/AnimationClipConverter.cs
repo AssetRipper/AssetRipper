@@ -28,8 +28,11 @@ using AssetRipper.SourceGenerated.Subclasses.PPtrKeyframe;
 using AssetRipper.SourceGenerated.Subclasses.QuaternionCurve;
 using AssetRipper.SourceGenerated.Subclasses.StreamedClip;
 using AssetRipper.SourceGenerated.Subclasses.Vector3Curve;
+using System;
 using System.Buffers;
 using System.Buffers.Binary;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 namespace AssetRipper.Processing.AnimationClips;
@@ -53,6 +56,9 @@ public readonly partial struct AnimationClipConverter
 	{
 		if (m_clip.Has_ClipBindingConstant_C74())
 		{
+			// Pre-warm the cache in O(N) rather than taking an O(N^2) hit over thousands of lazy lookups.
+			InitializeBindingsCache();
+
 			IClip clip = m_clip.MuscleClip_C74.Clip.Data;
 
 			IReadOnlyList<StreamedFrame> streamedFrames = GenerateFramesFromStreamedClip(clip.StreamedClip);
@@ -72,18 +78,48 @@ public readonly partial struct AnimationClipConverter
 		}
 	}
 
+	private void InitializeBindingsCache()
+	{
+		int currentCurveIndex = 0;
+		AccessListBase<IGenericBinding> bindings = ClipBindingConstant.GenericBindings;
+		
+		for (int i = 0; i < bindings.Count; i++)
+		{
+			IGenericBinding binding = bindings[i];
+			int dimension = binding.GetClassID() == ClassIDType.Transform ? binding.TransformType().GetDimension() : 1;
+			
+			if (dimension < 1 && binding.IsTransform())
+			{
+				throw new IndexOutOfRangeException("Transform AnimationCurve can't have Dimension less than 1.");
+			}
+
+			for (int d = 0; d < dimension; d++)
+			{
+				m_bindingsCache[currentCurveIndex + d] = binding;
+			}
+			
+			currentCurveIndex += dimension;
+		}
+	}
+
 	private void ProcessStreams(IReadOnlyList<StreamedFrame> streamedFrames)
 	{
-		Span<float> curveValues = [0, 0, 0, 0];
-		Span<float> inSlopeValues = [0, 0, 0, 0];
-		Span<float> outSlopeValues = [0, 0, 0, 0];
-		bool UseNegInfSlopes = m_clip.SupportsNegativeInfinitySlopes();
+		Span<float> curveValues = stackalloc float[4];
+		Span<float> inSlopeValues = stackalloc float[4];
+		Span<float> outSlopeValues = stackalloc float[4];
+		curveValues.Clear();
+		inSlopeValues.Clear();
+		outSlopeValues.Clear();
+		
+		bool useNegInfSlopes = m_clip.SupportsNegativeInfinitySlopes();
 
 		if (streamedFrames.Count > 1)
 		{
 			streamedFrames[0].Time = 0f; // fix first frame for PPtrCurves to have Time=0 instead of float.MinValue
 		}
+		
 		int frameCount = streamedFrames.Count - 1; // last StreamedFrame is dummy so must be skipped
+		
 		for (int frameIdx = 0; frameIdx < frameCount; frameIdx++)
 		{
 			// last real frame doesn't need outSlope calculation, and will have inSlope from previous iteration
@@ -96,6 +132,7 @@ public readonly partial struct AnimationClipConverter
 				IGenericBinding binding = GetBinding(curveID);
 				string path = GetCurvePath(binding.Path);
 				StreamedCurveKey curve;
+				
 				if (binding.IsTransform())
 				{
 					int transformDim = binding.TransformType().GetDimension();
@@ -112,7 +149,7 @@ public readonly partial struct AnimationClipConverter
 							if (TryGetNextFrame(streamedFrames, frameIdx, curveID, out StreamedFrame? nextFrame, out int nextCurveIdx))
 							{
 								StreamedCurveKey nextCurve = nextFrame.Curves[nextCurveIdx + offset];
-								curve.CalculateSlopes(frame.Time, nextFrame.Time, nextCurve, UseNegInfSlopes);
+								curve.CalculateSlopes(frame.Time, nextFrame.Time, nextCurve, useNegInfSlopes);
 							}
 						}
 						curveValues[offset] = curve.Value;
@@ -123,6 +160,7 @@ public readonly partial struct AnimationClipConverter
 					AddTransformCurve(frame.Time, binding, curveValues, inSlopeValues, outSlopeValues, 0, path);
 					continue;
 				}
+				
 				curve = frame.Curves[curveIdx];
 				if (!binding.IsPPtrCurve()) // Skip slope calculation for PPtrCurves
 				{
@@ -136,10 +174,11 @@ public readonly partial struct AnimationClipConverter
 						if (TryGetNextFrame(streamedFrames, frameIdx, curveID, out StreamedFrame? nextFrame, out int nextCurveIdx))
 						{
 							StreamedCurveKey nextCurve = nextFrame.Curves[nextCurveIdx];
-							curve.CalculateSlopes(frame.Time, nextFrame.Time, nextCurve, UseNegInfSlopes);
+							curve.CalculateSlopes(frame.Time, nextFrame.Time, nextCurve, useNegInfSlopes);
 						}
 					}
 				}
+				
 				if (binding.CustomType == (byte)BindingCustomType.None)
 				{
 					AddDefaultCurve(binding, path, frame.Time, curve.Value, curve.InSlope, curve.OutSlope);
@@ -155,77 +194,101 @@ public readonly partial struct AnimationClipConverter
 
 	private void ProcessDenses(DenseClip dense, int preDenseCurves)
 	{
-		ReadOnlySpan<float> slopeValues = [0, 0, 0, 0]; // no slopes - 0 values
-
-		float[] rentedArray = ArrayPool<float>.Shared.Rent(dense.SampleArray.Count);
-		dense.SampleArray.CopyTo(rentedArray);
-		ReadOnlySpan<float> curveValues = new(rentedArray, 0, dense.SampleArray.Count);
-
-		for (int frameIndex = 0; frameIndex < dense.FrameCount; frameIndex++)
+		if (dense.SampleArray.Count == 0)
 		{
-			float time = frameIndex / dense.SampleRate + dense.BeginTime;
-			int frameOffset = frameIndex * (int)dense.CurveCount;
-			for (int curveIndex = 0; curveIndex < dense.CurveCount;)
+			return;
+		}
+
+		ReadOnlySpan<float> slopeValues = [0f, 0f, 0f, 0f]; // no slopes - 0 values
+		float[] rentedArray = ArrayPool<float>.Shared.Rent(dense.SampleArray.Count);
+		
+		try
+		{
+			dense.SampleArray.CopyTo(rentedArray);
+			ReadOnlySpan<float> curveValues = new(rentedArray, 0, dense.SampleArray.Count);
+
+			for (int frameIndex = 0; frameIndex < dense.FrameCount; frameIndex++)
 			{
-				int index = preDenseCurves + curveIndex;
-				IGenericBinding binding = GetBinding(index);
-				string path = GetCurvePath(binding.Path);
-				int framePosition = frameOffset + curveIndex;
-				if (binding.IsTransform())
+				float time = frameIndex / dense.SampleRate + dense.BeginTime;
+				int frameOffset = frameIndex * (int)dense.CurveCount;
+				for (int curveIndex = 0; curveIndex < dense.CurveCount;)
 				{
-					AddTransformCurve(time, binding, curveValues, slopeValues, slopeValues, framePosition, path);
-					curveIndex += binding.TransformType().GetDimension();
-				}
-				else if (binding.CustomType == (byte)BindingCustomType.None)
-				{
-					AddDefaultCurve(binding, path, time, dense.SampleArray[framePosition]);
-					curveIndex++;
-				}
-				else
-				{
-					AddCustomCurve(binding, path, time, dense.SampleArray[framePosition]);
-					curveIndex++;
+					int index = preDenseCurves + curveIndex;
+					IGenericBinding binding = GetBinding(index);
+					string path = GetCurvePath(binding.Path);
+					int framePosition = frameOffset + curveIndex;
+					
+					if (binding.IsTransform())
+					{
+						AddTransformCurve(time, binding, curveValues, slopeValues, slopeValues, framePosition, path);
+						curveIndex += binding.TransformType().GetDimension();
+					}
+					else if (binding.CustomType == (byte)BindingCustomType.None)
+					{
+						AddDefaultCurve(binding, path, time, dense.SampleArray[framePosition]);
+						curveIndex++;
+					}
+					else
+					{
+						AddCustomCurve(binding, path, time, dense.SampleArray[framePosition]);
+						curveIndex++;
+					}
 				}
 			}
 		}
-		ArrayPool<float>.Shared.Return(rentedArray);
+		finally
+		{
+			ArrayPool<float>.Shared.Return(rentedArray);
+		}
 	}
 
 	private void ProcessConstant(ConstantClip constant, int preConstantCurves, float lastFrame)
 	{
-		float[] rentedArray = ArrayPool<float>.Shared.Rent(constant.Data.Count);
-		constant.Data.CopyTo(rentedArray);
-		ReadOnlySpan<float> curveValues = new(rentedArray, 0, constant.Data.Count);
-
-		ReadOnlySpan<float> slopeValues = [0, 0, 0, 0]; // no slopes - 0 values
-
-		float time = 0f;
-		int Is1or2Frames = time == lastFrame ? 1 : 2; // a constant curve can be made with 1 or 2 frames
-		for (int i = 0; i < Is1or2Frames; i++, time += lastFrame)
+		if (constant.Data.Count == 0)
 		{
-			for (int curveIndex = 0; curveIndex < constant.Data.Count;)
+			return;
+		}
+
+		ReadOnlySpan<float> slopeValues = [0f, 0f, 0f, 0f]; // no slopes - 0 values
+		float[] rentedArray = ArrayPool<float>.Shared.Rent(constant.Data.Count);
+		
+		try
+		{
+			constant.Data.CopyTo(rentedArray);
+			ReadOnlySpan<float> curveValues = new(rentedArray, 0, constant.Data.Count);
+
+			float time = 0f;
+			int Is1or2Frames = time == lastFrame ? 1 : 2; // a constant curve can be made with 1 or 2 frames
+			for (int i = 0; i < Is1or2Frames; i++, time += lastFrame)
 			{
-				int index = preConstantCurves + curveIndex;
-				IGenericBinding binding = GetBinding(index);
-				string path = GetCurvePath(binding.Path);
-				if (binding.IsTransform())
+				for (int curveIndex = 0; curveIndex < constant.Data.Count;)
 				{
-					AddTransformCurve(time, binding, curveValues, slopeValues, slopeValues, curveIndex, path);
-					curveIndex += binding.TransformType().GetDimension();
-				}
-				else if (binding.CustomType == (byte)BindingCustomType.None)
-				{
-					AddDefaultCurve(binding, path, time, constant.Data[curveIndex]);
-					curveIndex++;
-				}
-				else
-				{
-					AddCustomCurve(binding, path, time, constant.Data[curveIndex]);
-					curveIndex++;
+					int index = preConstantCurves + curveIndex;
+					IGenericBinding binding = GetBinding(index);
+					string path = GetCurvePath(binding.Path);
+					
+					if (binding.IsTransform())
+					{
+						AddTransformCurve(time, binding, curveValues, slopeValues, slopeValues, curveIndex, path);
+						curveIndex += binding.TransformType().GetDimension();
+					}
+					else if (binding.CustomType == (byte)BindingCustomType.None)
+					{
+						AddDefaultCurve(binding, path, time, constant.Data[curveIndex]);
+						curveIndex++;
+					}
+					else
+					{
+						AddCustomCurve(binding, path, time, constant.Data[curveIndex]);
+						curveIndex++;
+					}
 				}
 			}
 		}
-		ArrayPool<float>.Shared.Return(rentedArray);
+		finally
+		{
+			ArrayPool<float>.Shared.Return(rentedArray);
+		}
 	}
 
 	private void AddCustomCurve(IGenericBinding binding, string path, float time, float value, float inTangent = 0, float outTangent = 0)
@@ -283,7 +346,6 @@ public readonly partial struct AnimationClipConverter
 					key.InSlope.SetValues(inX, inY, inZ);
 					key.OutSlope.SetValues(outX, outY, outZ);
 					key.Time = time;
-					// this enum member is version agnostic
 					key.TangentMode = TangentMode.FreeFree.ToTangent(Version);
 					key.WeightedMode = (int)WeightedMode.None;
 					key.InWeight?.SetValues(DefaultFloatWeight, DefaultFloatWeight, DefaultFloatWeight);
@@ -321,7 +383,6 @@ public readonly partial struct AnimationClipConverter
 					key.InSlope.SetValues(inX, inY, inZ, inW);
 					key.OutSlope.SetValues(outX, outY, outZ, outW);
 					key.Time = time;
-					// this enum member is version agnostic
 					key.TangentMode = TangentMode.FreeFree.ToTangent(Version);
 					key.WeightedMode = (int)WeightedMode.None;
 					key.InWeight?.SetValues(DefaultFloatWeight, DefaultFloatWeight, DefaultFloatWeight, DefaultFloatWeight);
@@ -356,7 +417,6 @@ public readonly partial struct AnimationClipConverter
 					key.InSlope.SetValues(inX, inY, inZ);
 					key.OutSlope.SetValues(outX, outY, outZ);
 					key.Time = time;
-					// this enum member is version agnostic
 					key.TangentMode = TangentMode.FreeFree.ToTangent(Version);
 					key.WeightedMode = (int)WeightedMode.None;
 					key.InWeight?.SetValues(DefaultFloatWeight, DefaultFloatWeight, DefaultFloatWeight);
@@ -395,7 +455,6 @@ public readonly partial struct AnimationClipConverter
 					key.InSlope.SetValues(inX, inY, inZ);
 					key.OutSlope.SetValues(outX, outY, outZ);
 					key.Time = time;
-					// this enum member is version agnostic
 					key.TangentMode = TangentMode.FreeFree.ToTangent(Version);
 					key.WeightedMode = (int)WeightedMode.None;
 					key.InWeight?.SetValues(DefaultFloatWeight, DefaultFloatWeight, DefaultFloatWeight);
@@ -530,7 +589,11 @@ public readonly partial struct AnimationClipConverter
 			m_pptrs.Add(curveData, curve);
 		}
 
-		IPPtr_Object? value = index < 0 ? null : ClipBindingConstant.PptrCurveMapping[index];
+		// Prevent exceptions due to corrupted bounds / malformed animation mapping indices
+		IPPtr_Object? value = index < 0 || index >= ClipBindingConstant.PptrCurveMapping.Count 
+			? null 
+			: ClipBindingConstant.PptrCurveMapping[index];
+			
 		IPPtrKeyframe key = curve.Curve.AddNew();
 		key.Time = time;
 		key.Value.CopyValues(value, new PPtrConverter(m_clip));
@@ -542,30 +605,7 @@ public readonly partial struct AnimationClipConverter
 		{
 			return binding;
 		}
-		int curves = 0;
-		AccessListBase<IGenericBinding> bindings = ClipBindingConstant.GenericBindings;
-		for (int i = 0; i < bindings.Count; i++)
-		{
-			binding = bindings[i];
-			if (binding.GetClassID() == ClassIDType.Transform)
-			{
-				curves += binding.TransformType().GetDimension();
-			}
-			else
-			{
-				curves += 1;
-			}
-			if (curves > index)
-			{
-				m_bindingsCache[index] = binding;
-				if (binding.IsTransform() && binding.TransformType().GetDimension() < 1)
-				{
-					// If an animation was malformed, this avoids the possibility of an infinite FOR loop when processing Transform bindings
-					throw new IndexOutOfRangeException("Transform AnimationCurve can't have Dimension less than 1.");
-				}
-				return binding;
-			}
-		}
+		// This should not be reachable after InitializeBindingsCache is called.
 		throw new ArgumentException($"Binding with index {index} hasn't been found", nameof(index));
 	}
 
@@ -603,18 +643,34 @@ public readonly partial struct AnimationClipConverter
 	public IReadOnlyList<StreamedFrame> GenerateFramesFromStreamedClip(IStreamedClip clip)
 	{
 		List<StreamedFrame> frames = new();
-		Span<byte> buffer = new byte[clip.Data.Count * sizeof(uint)];
-		AssetCollection collection = m_clip.Collection;
-		CopyDataToBuffer(clip, collection, buffer);
-
-		EndianSpanReader reader = new(buffer, collection.EndianType);
-		while (reader.Position < reader.Length)
+		int bufferSize = clip.Data.Count * sizeof(uint);
+		if (bufferSize == 0)
 		{
-			StreamedFrame frame = new();
-			frame.Read(ref reader, collection.Version);
-			frames.Add(frame);
+			return frames;
 		}
-		return frames;
+
+		// Rented array prevents allocating huge buffers onto the Large Object Heap
+		byte[] bufferArray = ArrayPool<byte>.Shared.Rent(bufferSize);
+		
+		try
+		{
+			Span<byte> buffer = bufferArray.AsSpan(0, bufferSize);
+			AssetCollection collection = m_clip.Collection;
+			CopyDataToBuffer(clip, collection, buffer);
+
+			EndianSpanReader reader = new(buffer, collection.EndianType);
+			while (reader.Position < reader.Length)
+			{
+				StreamedFrame frame = new();
+				frame.Read(ref reader, collection.Version);
+				frames.Add(frame);
+			}
+			return frames;
+		}
+		finally
+		{
+			ArrayPool<byte>.Shared.Return(bufferArray);
+		}
 
 		static bool CpuEndiannessMatchesCollection(AssetCollection collection)
 		{
