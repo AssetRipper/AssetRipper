@@ -1,4 +1,17 @@
-﻿const { createApp } = Vue
+const { createApp } = Vue;
+
+// Utility to create isolated debounce execution contexts
+function debounce(fn, delay) {
+	let timeoutId;
+	return function (...args) {
+		if (timeoutId) {
+			clearTimeout(timeoutId);
+		}
+		timeoutId = setTimeout(() => {
+			fn.apply(this, args);
+		}, delay);
+	};
+}
 
 const app = createApp({
 	data() {
@@ -7,103 +20,106 @@ const app = createApp({
 			load_path_exists: false,
 			export_path: '',
 			export_path_has_files: false,
-			create_subfolder: false
-		}
+			create_subfolder: false,
+			is_dialog_open: false // Semaphore to prevent backend dialog thread exhaustion
+		};
+	},
+	created() {
+		// Initialize independent debounced watchers to prevent race conditions
+		this.debouncedLoadPathCheck = debounce(this.checkLoadPath, 300);
+		this.debouncedExportPathCheck = debounce(this.checkExportPath, 300);
 	},
 	methods: {
-		async handleLoadPathChange() {
-			// Add a debounce mechanism to avoid too many requests in a short time
-			if (this.debouncedInput) {
-				clearTimeout(this.debouncedInput);
-			}
-
-			this.debouncedInput = setTimeout(async () => {
-				try {
-					this.load_path_exists = await this.fetchDirectoryExists(this.load_path) || await this.fetchFileExists(this.load_path);
-				} catch (error) {
-					console.error('Error fetching data:', error);
-				}
-			}, 300); // Adjust the debounce time as needed (300 milliseconds in this example)
+		handleLoadPathChange() {
+			this.debouncedLoadPathCheck();
 		},
-		async handleExportPathChange() {
-			// Add a debounce mechanism to avoid too many requests in a short time
-			if (this.debouncedInput) {
-				clearTimeout(this.debouncedInput);
+		handleExportPathChange() {
+			this.debouncedExportPathCheck();
+		},
+		async checkLoadPath() {
+			if (!this.load_path) {
+				this.load_path_exists = false;
+				return;
 			}
-
-			this.debouncedInput = setTimeout(async () => {
-				try {
-					if (this.create_subfolder) {
-						this.export_path_has_files = false;
-					} else {
-						this.export_path_has_files = await this.fetchDirectoryExists(this.export_path) && !(await this.fetchDirectoryEmpty(this.export_path));
-					}
-				} catch (error) {
-					console.error('Error fetching data:', error);
+			try {
+				const isDir = await this.fetchDirectoryExists(this.load_path);
+				const isFile = await this.fetchFileExists(this.load_path);
+				this.load_path_exists = isDir || isFile;
+			} catch (error) {
+				console.error('Error validating load path:', error);
+				this.load_path_exists = false;
+			}
+		},
+		async checkExportPath() {
+			if (!this.export_path) {
+				this.export_path_has_files = false;
+				return;
+			}
+			try {
+				if (this.create_subfolder) {
+					this.export_path_has_files = false;
+				} else {
+					const exists = await this.fetchDirectoryExists(this.export_path);
+					const empty = await this.fetchDirectoryEmpty(this.export_path);
+					this.export_path_has_files = exists && !empty;
 				}
-			}, 300); // Adjust the debounce time as needed (300 milliseconds in this example)
+			} catch (error) {
+				console.error('Error validating export path:', error);
+				this.export_path_has_files = false;
+			}
 		},
 		async handleSelectLoadFile() {
-			// Add a debounce mechanism to avoid too many requests in a short time
-			if (this.debouncedInput) {
-				clearTimeout(this.debouncedInput);
-			}
-
-			this.debouncedInput = setTimeout(async () => {
-				try {
-					const response = await fetch(`/Dialogs/OpenFile`);
-					this.load_path = await response.json();
-				} catch (error) {
-					console.error('Error fetching data:', error);
-				}
-				await this.handleLoadPathChange();
-			}, 300); // Adjust the debounce time as needed (300 milliseconds in this example)
+			await this.openDialog('/Dialogs/OpenFile', (result) => {
+				this.load_path = result;
+				this.checkLoadPath(); // Validate immediately upon return
+			});
 		},
 		async handleSelectLoadFolder() {
-			// Add a debounce mechanism to avoid too many requests in a short time
-			if (this.debouncedInput) {
-				clearTimeout(this.debouncedInput);
-			}
-
-			this.debouncedInput = setTimeout(async () => {
-				try {
-					const response = await fetch(`/Dialogs/OpenFolder`);
-					this.load_path = await response.json();
-				} catch (error) {
-					console.error('Error fetching data:', error);
-				}
-				await this.handleLoadPathChange();
-			}, 300); // Adjust the debounce time as needed (300 milliseconds in this example)
+			await this.openDialog('/Dialogs/OpenFolder', (result) => {
+				this.load_path = result;
+				this.checkLoadPath();
+			});
 		},
 		async handleSelectExportFolder() {
-			// Add a debounce mechanism to avoid too many requests in a short time
-			if (this.debouncedInput) {
-				clearTimeout(this.debouncedInput);
-			}
+			await this.openDialog('/Dialogs/OpenFolder', (result) => {
+				this.export_path = result;
+				this.checkExportPath();
+			});
+		},
+		async openDialog(endpoint, onSuccess) {
+			if (this.is_dialog_open) return; // Enforce semaphore lock
+			this.is_dialog_open = true;
 
-			this.debouncedInput = setTimeout(async () => {
-				try {
-					const response = await fetch(`/Dialogs/OpenFolder`);
-					this.export_path = await response.json();
-				} catch (error) {
-					console.error('Error fetching data:', error);
+			try {
+				const response = await fetch(endpoint);
+				if (!response.ok) throw new Error(`Backend returned HTTP ${response.status}`);
+				
+				const result = await response.json();
+				if (result) {
+					onSuccess(result);
 				}
-				await this.handleExportPathChange();
-			}, 300); // Adjust the debounce time as needed (300 milliseconds in this example)
+			} catch (error) {
+				console.error(`Error opening dialog at ${endpoint}:`, error);
+			} finally {
+				this.is_dialog_open = false; // Release lock
+			}
 		},
 		async fetchFileExists(path) {
 			const response = await fetch(`/IO/File/Exists?Path=${encodeURIComponent(path)}`);
+			if (!response.ok) return false;
 			return await response.json();
 		},
 		async fetchDirectoryExists(path) {
 			const response = await fetch(`/IO/Directory/Exists?Path=${encodeURIComponent(path)}`);
+			if (!response.ok) return false;
 			return await response.json();
 		},
 		async fetchDirectoryEmpty(path) {
 			const response = await fetch(`/IO/Directory/Empty?Path=${encodeURIComponent(path)}`);
+			if (!response.ok) return true; // Fail-safe assumption
 			return await response.json();
-		},
+		}
 	}
-})
+});
 
-const mountedApp = app.mount('#app')
+app.mount('#app');
