@@ -34,8 +34,8 @@ public enum ShaderGpuProgramType
 	MetalVS = 23,
 	MetalFS = 24,
 	SPIRV = 25,
-	// The alias 'Console = 26' has been removed to avoid ambiguity with ConsoleVS.
-	ConsoleVS = 26,
+	Console = 26,   // RESTORED ALIAS
+	ConsoleVS = 26, 
 	ConsoleFS = 27,
 	ConsoleHS = 28,
 	ConsoleDS = 29,
