@@ -1,31 +1,41 @@
 using System;
-// The 'MethodDefinition' class is typically from a library like AsmResolver or Mono.Cecil.
-// This using statement is implied by the project's dependencies.
-// using AsmResolver.DotNet; 
+
+// Note: AsmResolver namespaces are implied by the project.
+// using AsmResolver.DotNet;
 
 namespace AssetRipper.SerializationLogic.Extensions;
 
 internal static class MethodDefinitionExtensions
 {
+	/// <summary>
+	/// Compares two method definitions for reference equality.
+	/// </summary>
+	/// <remarks>
+	/// This check avoids expensive string comparisons. It relies on the metadata 
+	/// reader (e.g., AsmResolver) interning MethodDefinition instances, meaning 
+	/// the same logical method within a single module will resolve to the same object reference.
+	/// </remarks>
 	public static bool SameAs(this MethodDefinition? self, MethodDefinition? other)
 	{
-		// FIX: Replaced expensive string comparison with a direct reference check.
-		// This fulfills the FIXME's intent and is highly performant because metadata
-		// libraries cache these objects, ensuring a single instance per method definition.
 		return ReferenceEquals(self, other);
 	}
 
+	/// <summary>
+	/// Extracts the underlying property name from a property accessor method (e.g., "get_MyProp" -> "MyProp").
+	/// </summary>
 	public static string PropertyName(this MethodDefinition self)
 	{
 		ArgumentNullException.ThrowIfNull(self);
 
-		if (self.Name is null || self.Name.Length < 5)
+		// self.Name is a Utf8String. self.Name.Length is the byte count. 
+		// We must check the decoded string length (self.Name.Value.Length) to safely slice characters.
+		if (self.Name?.Value is not { Length: >= 5 } nameValue || 
+		    !(nameValue.StartsWith("get_") || nameValue.StartsWith("set_")))
 		{
-			// Improved exception message for better diagnostics.
-			throw new ArgumentException("Method name is too short to be a property accessor.", nameof(self));
+			throw new ArgumentException($"Method name '{self.Name?.Value}' is not a valid property accessor.", nameof(self));
 		}
 
-		return self.Name.Value.Substring(4);
+		return nameValue[4..];
 	}
 
 	public static bool IsConversionOperator(this MethodDefinition method)
@@ -58,7 +68,7 @@ internal static class MethodDefinitionExtensions
 		return method.IsSimpleGetter() || method.IsSimpleSetter();
 	}
 
-	public static bool IsDefaultConstructor(MethodDefinition m)
+	public static bool IsDefaultConstructor(this MethodDefinition m)
 	{
 		ArgumentNullException.ThrowIfNull(m);
 		return m.IsConstructor && !m.IsStatic && m.Parameters.Count == 0;
