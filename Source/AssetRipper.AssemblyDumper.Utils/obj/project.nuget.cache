@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "3R9jGxz0UOo=",
+  "success": true,
+  "projectFilePath": "G:\\AssetRipper Project\\AssetRipper\\Source\\AssetRipper.AssemblyDumper.Utils\\AssetRipper.AssemblyDumper.Utils.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\PC\\.nuget\\packages\\assetripper.primitives\\3.2.0\\assetripper.primitives.3.2.0.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\microsoft.net.illink.tasks\\10.0.5\\microsoft.net.illink.tasks.10.0.5.nupkg.sha512"
+  ],
+  "logs": []
+}

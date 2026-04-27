@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "1RUuzBuhI4U=",
+  "success": true,
+  "projectFilePath": "G:\\AssetRipper Project\\AssetRipper\\Source\\AssetRipper.IO.Files.SourceGenerator\\AssetRipper.IO.Files.SourceGenerator.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\PC\\.nuget\\packages\\assetripper.io.endian\\2.1.0\\assetripper.io.endian.2.1.0.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\assetripper.primitives\\3.2.0\\assetripper.primitives.3.2.0.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\assetripper.text.sourcegeneration\\1.2.3\\assetripper.text.sourcegeneration.1.2.3.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\microsoft.net.illink.tasks\\10.0.5\\microsoft.net.illink.tasks.10.0.5.nupkg.sha512"
+  ],
+  "logs": []
+}

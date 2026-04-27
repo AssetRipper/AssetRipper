@@ -4,6 +4,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_1001;
 using AssetRipper.SourceGenerated.Classes.ClassID_18;
 using AssetRipper.SourceGenerated.Classes.ClassID_2;
+using AssetRipper.SourceGenerated.Classes.ClassID_224;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
 using AssetRipper.SourceGenerated.Classes.ClassID_78;
 using AssetRipper.SourceGenerated.Enums;
@@ -184,6 +185,11 @@ public static class GameObjectExtensions
 			if (component is ITransform trfm)
 			{
 				transform = trfm;
+			}
+			// Special handling for RectTransform to ensure UI Canvas hierarchy integrity
+			if (component is IRectTransform rectTransform)
+			{
+				transform = (ITransform)rectTransform;
 			}
 		}
 

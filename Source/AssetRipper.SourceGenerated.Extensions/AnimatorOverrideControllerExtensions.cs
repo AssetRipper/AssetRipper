@@ -1,5 +1,7 @@
-﻿using AssetRipper.SourceGenerated.Classes.ClassID_221;
+﻿using AssetRipper.Assets;
+using AssetRipper.SourceGenerated.Classes.ClassID_221;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
+using AssetRipper.SourceGenerated.Classes.ClassID_91;
 using AssetRipper.SourceGenerated.Classes.ClassID_93;
 using AssetRipper.SourceGenerated.Subclasses.AnimationClipOverride;
 
@@ -26,5 +28,24 @@ public static class AnimatorOverrideControllerExtensions
 			return baseController.ContainsAnimationClip(clip);
 		}
 		return false;
+	}
+
+	public static IEnumerable<IUnityObjectBase?> FetchEditorHierarchy(this IAnimatorOverrideController animatorOverrideController)
+	{
+		yield return animatorOverrideController;
+
+		IRuntimeAnimatorController? baseController = animatorOverrideController.ControllerP;
+		if (baseController is IAnimatorController animatorController)
+		{
+			foreach (IUnityObjectBase? asset in animatorController.FetchEditorHierarchy())
+			{
+				yield return asset;
+			}
+		}
+
+		foreach (IAnimationClipOverride overClip in animatorOverrideController.Clips)
+		{
+			yield return overClip.OverrideClip.TryGetAsset(animatorOverrideController.Collection);
+		}
 	}
 }

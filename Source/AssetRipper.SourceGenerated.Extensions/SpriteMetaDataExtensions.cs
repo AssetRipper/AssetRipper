@@ -60,7 +60,7 @@ public static class SpriteMetaDataExtensions
 
 		// Edges are built from the render-data outline vertices. Only attempt generation
 		// when the sprite actually carries vertex data we can read from.
-		if (instance.Has_Edges() && sprite.Has_RD() && sprite.RD.Has_Vertices())
+		if (instance.Has_Edges() && sprite.RD != null && sprite.RD.Has_Vertices())
 		{
 			GenerateEdges(sprite, atlas, rect, pivot, instance.Edges);
 		}
@@ -101,19 +101,31 @@ public static class SpriteMetaDataExtensions
 	/// </remarks>
 	private static void ScaleAndOffsetBones(ISprite sprite)
 	{
+		if (sprite.Bones is null)
+		{
+			return;
+		}
+
 		float halfWidth  = sprite.Rect.Width  / 2f;
 		float halfHeight = sprite.Rect.Height / 2f;
 
 		foreach (ISpriteBone bone in sprite.Bones)
 		{
-			bone.Position.Scale(sprite.PixelsToUnits);
-			bone.Length *= sprite.PixelsToUnits;
-
-			if (bone.ParentId == -1)
+			if (bone is null)
 			{
-				bone.Position.X += halfWidth;
-				bone.Position.Y += halfHeight;
+				continue;
 			}
+			var position = bone.Position;
+			if (position is not null)
+			{
+				position!.Scale(sprite.PixelsToUnits);
+				if (bone!.ParentId == -1)
+				{
+					position!.X += halfWidth;
+					position!.Y += halfHeight;
+				}
+			}
+			bone!.Length *= sprite.PixelsToUnits;
 		}
 	}
 
@@ -126,7 +138,7 @@ public static class SpriteMetaDataExtensions
 		Vector3[]?     vertices = null;
 		BoneWeight4[]? skin     = null;
 
-		if (origin.RD.Has_VertexData())
+		if (origin.RD != null && origin.RD.Has_VertexData())
 		{
 			VertexDataBlob
 				.Create(origin.RD.VertexData, origin.Collection.Version, origin.Collection.EndianType)
@@ -184,7 +196,7 @@ public static class SpriteMetaDataExtensions
 		{
 			instance.Indices.Clear();
 
-			if (origin.RD.Has_IndexBuffer())
+			if (origin.RD != null && origin.RD.Has_IndexBuffer())
 			{
 				ReadOnlySpan<byte> indexBuffer = origin.RD.IndexBuffer;
 				if (indexBuffer.Length != 0)
@@ -234,7 +246,7 @@ public static class SpriteMetaDataExtensions
 		Vector2 pivot,
 		AssetList<AssetList<Vector2f>> shape)
 	{
-		if (!sprite.Has_PhysicsShape() || sprite.PhysicsShape.Count == 0)
+		if (shape is null || !sprite.Has_PhysicsShape() || sprite.PhysicsShape.Count == 0)
 		{
 			return;
 		}
@@ -272,6 +284,11 @@ public static class SpriteMetaDataExtensions
 		Vector2 pivot,
 		AssetList<Vector2Int> edges)
 	{
+		if (edges is null || sprite.RD is null)
+		{
+			return;
+		}
+
 		AssetList<AssetList<Vector2f>> outlines = new();
 		GenerateOutline(sprite.RD, sprite.Collection.Version, outlines);
 
@@ -293,8 +310,8 @@ public static class SpriteMetaDataExtensions
 			{
 				Vector2 point = (Vector2)outline[i] * sprite.PixelsToUnits + pivotShift;
 				Vector2Int edge = edges.AddNew();
-				edge.m_X = (int)point.X;
-				edge.m_Y = (int)point.Y;
+				edge.X = (int)point.X;
+				edge.Y = (int)point.Y;
 			}
 		}
 
@@ -309,14 +326,14 @@ public static class SpriteMetaDataExtensions
 			case SpritePackingRotation.FlipHorizontal:
 				for (int i = 0; i < edges.Count; i++)
 				{
-					edges[i].m_X = -edges[i].m_X;
+					edges[i].X = -edges[i].X;
 				}
 				break;
 
 			case SpritePackingRotation.FlipVertical:
 				for (int i = 0; i < edges.Count; i++)
 				{
-					edges[i].m_Y = -edges[i].m_Y;
+					edges[i].Y = -edges[i].Y;
 				}
 				break;
 
@@ -326,17 +343,17 @@ public static class SpriteMetaDataExtensions
 				for (int i = 0; i < edges.Count; i++)
 				{
 					Vector2Int edge = edges[i];
-					int tmp  = edge.m_X;
-					edge.m_X = edge.m_Y;
-					edge.m_Y = tmp;
+					int tmp  = edge.X;
+					edge.X = edge.Y;
+					edge.Y = tmp;
 				}
 				break;
 
 			case SpritePackingRotation.Rotate180:
 				for (int i = 0; i < edges.Count; i++)
 				{
-					edges[i].m_X = -edges[i].m_X;
-					edges[i].m_Y = -edges[i].m_Y;
+					edges[i].X = -edges[i].X;
+					edges[i].Y = -edges[i].Y;
 				}
 				break;
 		}
@@ -417,10 +434,15 @@ public static class SpriteMetaDataExtensions
 			isPacked = atlasData.IsPacked;
 			rotation = atlasData.PackingRotation;
 		}
-		else
+		else if (sprite.RD is not null)
 		{
 			isPacked = sprite.RD.IsPacked;
 			rotation = sprite.RD.PackingRotation;
+		}
+		else
+		{
+			isPacked = false;
+			rotation = SpritePackingRotation.None;
 		}
 	}
 
@@ -435,6 +457,11 @@ public static class SpriteMetaDataExtensions
 		Vector2 pivot,
 		AssetList<AssetList<Vector2f>> outlines)
 	{
+		if (outlines is null || sprite.RD is null)
+		{
+			return;
+		}
+
 		GenerateOutline(sprite.RD, sprite.Collection.Version, outlines);
 
 		Vector2 pivotShift = ComputePivotShift(rect, pivot);
@@ -460,6 +487,11 @@ public static class SpriteMetaDataExtensions
 		UnityVersion version,
 		AssetList<AssetList<Vector2f>> outlines)
 	{
+		if (outlines is null)
+		{
+			return;
+		}
+
 		outlines.Clear();
 
 		if (spriteRenderData.Has_VertexData()
@@ -518,9 +550,9 @@ public static class SpriteMetaDataExtensions
 		Vector3i[] triangles = new Vector3i[submesh.IndexCount / 3];
 		for (int o = (int)submesh.FirstByte, ti = 0; ti < triangles.Length; o += 3 * sizeof(ushort), ti++)
 		{
-			ushort x = BinaryPrimitives.ReadUInt16LittleEndian(indexBuffer[o..]);
-			ushort y = BinaryPrimitives.ReadUInt16LittleEndian(indexBuffer[(o + sizeof(ushort))..]);
-			ushort z = BinaryPrimitives.ReadUInt16LittleEndian(indexBuffer[(o + 2 * sizeof(ushort))..]);
+			ushort x = BinaryPrimitives.ReadUInt16LittleEndian(indexBuffer.Slice(o, sizeof(ushort)));
+			ushort y = BinaryPrimitives.ReadUInt16LittleEndian(indexBuffer.Slice(o + sizeof(ushort), sizeof(ushort)));
+			ushort z = BinaryPrimitives.ReadUInt16LittleEndian(indexBuffer.Slice(o + 2 * sizeof(ushort), sizeof(ushort)));
 			triangles[ti] = new Vector3i(x, y, z);
 		}
 

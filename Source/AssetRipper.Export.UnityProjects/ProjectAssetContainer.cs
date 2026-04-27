@@ -2,6 +2,7 @@ using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Export.UnityProjects.Project;
 using AssetRipper.Import.Configuration;
+using AssetRipper.Import.Logging;
 using AssetRipper.Processing.Scenes;
 using AssetRipper.SourceGenerated.Classes.ClassID_141;
 using System.Diagnostics;
@@ -26,8 +27,10 @@ public class ProjectAssetContainer : IExportContainer
 		{
 			foreach (IUnityObjectBase asset in collection.Assets)
 			{
-				CheckIfAlreadyAdded(this, asset, collection);
-				m_assetCollections.Add(asset, collection);
+				if (!m_assetCollections.TryAdd(asset, collection))
+				{
+					Logger.Warning(LogCategory.Export, $"Asset {asset} is already added by {m_assetCollections[asset]}. Skipping addition from {collection}.");
+				}
 			}
 			if (collection is SceneExportCollection scene)
 			{
@@ -35,15 +38,6 @@ public class ProjectAssetContainer : IExportContainer
 			}
 		}
 		m_scenes = scenes.ToArray();
-
-		[Conditional("DEBUG")]
-		static void CheckIfAlreadyAdded(ProjectAssetContainer container, IUnityObjectBase asset, IExportCollection currentCollection)
-		{
-			if (container.m_assetCollections.TryGetValue(asset, out IExportCollection? previousCollection))
-			{
-				throw new ArgumentException($"Asset {asset} is already added by {previousCollection}");
-			}
-		}
 	}
 
 	public long GetExportID(IUnityObjectBase asset)

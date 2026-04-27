@@ -1,0 +1,29 @@
+{
+  "version": 2,
+  "dgSpecHash": "NbbjdUkZMog=",
+  "success": true,
+  "projectFilePath": "G:\\AssetRipper Project\\AssetRipper\\Source\\AssetRipper.SerializationLogic.Tests\\AssetRipper.SerializationLogic.Tests.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\PC\\.nuget\\packages\\asmresolver\\6.0.0-beta.5\\asmresolver.6.0.0-beta.5.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\asmresolver.dotnet\\6.0.0-beta.5\\asmresolver.dotnet.6.0.0-beta.5.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\asmresolver.pe\\6.0.0-beta.5\\asmresolver.pe.6.0.0-beta.5.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\asmresolver.pe.file\\6.0.0-beta.5\\asmresolver.pe.file.6.0.0-beta.5.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\assetripper.primitives\\3.2.0\\assetripper.primitives.3.2.0.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\microsoft.applicationinsights\\2.23.0\\microsoft.applicationinsights.2.23.0.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\microsoft.codecoverage\\18.4.0\\microsoft.codecoverage.18.4.0.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\microsoft.extensions.dependencymodel\\8.0.2\\microsoft.extensions.dependencymodel.8.0.2.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\microsoft.net.test.sdk\\18.4.0\\microsoft.net.test.sdk.18.4.0.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\microsoft.testing.extensions.telemetry\\2.1.0\\microsoft.testing.extensions.telemetry.2.1.0.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\microsoft.testing.extensions.trxreport.abstractions\\2.1.0\\microsoft.testing.extensions.trxreport.abstractions.2.1.0.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\microsoft.testing.extensions.vstestbridge\\2.1.0\\microsoft.testing.extensions.vstestbridge.2.1.0.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\microsoft.testing.platform\\2.1.0\\microsoft.testing.platform.2.1.0.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\microsoft.testing.platform.msbuild\\2.1.0\\microsoft.testing.platform.msbuild.2.1.0.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\microsoft.testplatform.objectmodel\\18.4.0\\microsoft.testplatform.objectmodel.18.4.0.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\microsoft.testplatform.testhost\\18.4.0\\microsoft.testplatform.testhost.18.4.0.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\nunit\\4.5.1\\nunit.4.5.1.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\nunit.analyzers\\4.12.0\\nunit.analyzers.4.12.0.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\nunit3testadapter\\6.2.0\\nunit3testadapter.6.2.0.nupkg.sha512"
+  ],
+  "logs": []
+}

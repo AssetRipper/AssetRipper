@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "dgSpecHash": "s4tvRNrnUV0=",
+  "success": true,
+  "projectFilePath": "G:\\AssetRipper Project\\AssetRipper\\Source\\AssetRipper.AssemblyDumper\\AssetRipper.AssemblyDumper.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\PC\\.nuget\\packages\\asmresolver\\6.0.0-beta.5\\asmresolver.6.0.0-beta.5.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\asmresolver.dotnet\\6.0.0-beta.5\\asmresolver.dotnet.6.0.0-beta.5.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\asmresolver.pe\\6.0.0-beta.5\\asmresolver.pe.6.0.0-beta.5.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\asmresolver.pe.file\\6.0.0-beta.5\\asmresolver.pe.file.6.0.0-beta.5.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\assetripper.checksum\\1.1.0\\assetripper.checksum.1.1.0.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\assetripper.cil\\1.2.2\\assetripper.cil.1.2.2.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\assetripper.hashalgorithms\\1.0.0\\assetripper.hashalgorithms.1.0.0.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\assetripper.io.endian\\2.1.0\\assetripper.io.endian.2.1.0.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\assetripper.primitives\\3.2.0\\assetripper.primitives.3.2.0.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\assetripper.tpk\\1.2.0\\assetripper.tpk.1.2.0.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\assetripper.tpk.typetrees.json\\1.2.0\\assetripper.tpk.typetrees.json.1.2.0.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\basic.reference.assemblies.net100\\1.8.5\\basic.reference.assemblies.net100.1.8.5.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\k4os.compression.lz4\\1.3.8\\k4os.compression.lz4.1.3.8.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\microsoft.codeanalysis.analyzers\\3.3.4\\microsoft.codeanalysis.analyzers.3.3.4.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\microsoft.codeanalysis.common\\4.11.0\\microsoft.codeanalysis.common.4.11.0.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\microsoft.net.illink.tasks\\10.0.5\\microsoft.net.illink.tasks.10.0.5.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\sharpcompress\\0.47.4\\sharpcompress.0.47.4.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\system.io.hashing\\9.0.7\\system.io.hashing.9.0.7.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\zstdsharp.port\\0.8.7\\zstdsharp.port.0.8.7.nupkg.sha512"
+  ],
+  "logs": []
+}

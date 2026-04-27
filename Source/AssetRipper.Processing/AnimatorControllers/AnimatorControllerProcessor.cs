@@ -143,7 +143,6 @@ public sealed class AnimatorControllerProcessor : IAssetProcessor
 		}
 
 #warning TODO: animator Mask
-		// animatorControllerLayer.Mask = new();
 
 		animatorControllerLayer.BlendingMode = layer.LayerBlendingMode;
 		animatorControllerLayer.SyncedLayerIndex = layer.StateMachineSynchronizedLayerIndex == 0 ? -1 : (int)layer.StateMachineIndex;
@@ -214,13 +213,13 @@ public sealed class AnimatorControllerProcessor : IAssetProcessor
 			_replacements = replacements;
 		}
 
-		public IUnityObjectBase? Resolve(IUnityObjectBase? asset)
+		public T? Resolve<T>(IUnityObjectBase? asset) where T : IUnityObjectBase
 		{
 			if (asset is not null && _replacements.TryGetValue(asset, out IUnityObjectBase? replacement))
 			{
-				return replacement;
+				return (T)replacement;
 			}
-			return asset;
+			return (T?)asset;
 		}
 	}
 }

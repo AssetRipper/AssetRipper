@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "SVz0GKcr3Mo=",
+  "success": true,
+  "projectFilePath": "G:\\AssetRipper Project\\AssetRipper\\Source\\AssetRipper.AssemblyDumper.NuGetFixer\\AssetRipper.AssemblyDumper.NuGetFixer.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\PC\\.nuget\\packages\\microsoft.net.illink.tasks\\10.0.5\\microsoft.net.illink.tasks.10.0.5.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\sharpcompress\\0.47.4\\sharpcompress.0.47.4.nupkg.sha512"
+  ],
+  "logs": []
+}

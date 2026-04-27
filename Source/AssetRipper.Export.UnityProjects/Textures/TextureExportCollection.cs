@@ -95,7 +95,7 @@ public class TextureExportCollection : AssetsExportCollection<ITexture2D>
 		bool isSingleSprite = textureSpriteInformation.Count == 1;
 
 		// Guarding RD access: RenderData can be stripped or malformed in highly optimized bundles.
-		if (isSingleSprite && firstSprite.Has_RD() && firstSprite.Rect == firstSprite.RD.TextureRect && firstSprite.Name == Asset.Name)
+		if (isSingleSprite && firstSprite.RD != null && firstSprite.Rect == firstSprite.RD.TextureRect && firstSprite.Name == Asset.Name)
 		{
 			importer.SpriteModeE = SpriteImportMode.Single;
 		}
@@ -106,7 +106,7 @@ public class TextureExportCollection : AssetsExportCollection<ITexture2D>
 		}
 
 		importer.SpriteExtrude = firstSprite.Extrude;
-		importer.SpriteMeshType = (int)(firstSprite.Has_RD() ? firstSprite.RD.MeshType : SpriteMeshType.FullRect);
+		importer.SpriteMeshType = (int)(firstSprite.RD != null ? firstSprite.RD.MeshType : SpriteMeshType.FullRect);
 		
 		if (isSingleSprite)
 		{

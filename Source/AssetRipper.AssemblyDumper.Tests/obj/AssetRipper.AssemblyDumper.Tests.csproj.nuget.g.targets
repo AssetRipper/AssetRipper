@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <Import Project="$(NuGetPackageRoot)microsoft.testing.platform\2.1.0\buildTransitive\net9.0\Microsoft.Testing.Platform.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.testing.platform\2.1.0\buildTransitive\net9.0\Microsoft.Testing.Platform.targets')" />
+    <Import Project="$(NuGetPackageRoot)microsoft.testing.platform.msbuild\2.1.0\buildTransitive\Microsoft.Testing.Platform.MSBuild.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.testing.platform.msbuild\2.1.0\buildTransitive\Microsoft.Testing.Platform.MSBuild.targets')" />
+    <Import Project="$(NuGetPackageRoot)nunit3testadapter\6.2.0\build\net8.0\NUnit3TestAdapter.targets" Condition="Exists('$(NuGetPackageRoot)nunit3testadapter\6.2.0\build\net8.0\NUnit3TestAdapter.targets')" />
+    <Import Project="$(NuGetPackageRoot)microsoft.testplatform.testhost\18.4.0\build\net8.0\Microsoft.TestPlatform.TestHost.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.testplatform.testhost\18.4.0\build\net8.0\Microsoft.TestPlatform.TestHost.targets')" />
+    <Import Project="$(NuGetPackageRoot)microsoft.codecoverage\18.4.0\build\netstandard2.0\Microsoft.CodeCoverage.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.codecoverage\18.4.0\build\netstandard2.0\Microsoft.CodeCoverage.targets')" />
+    <Import Project="$(NuGetPackageRoot)microsoft.net.test.sdk\18.4.0\build\net8.0\Microsoft.NET.Test.Sdk.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.net.test.sdk\18.4.0\build\net8.0\Microsoft.NET.Test.Sdk.targets')" />
+    <Import Project="$(NuGetPackageRoot)microsoft.codeanalysis.analyzers\3.3.4\buildTransitive\Microsoft.CodeAnalysis.Analyzers.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.analyzers\3.3.4\buildTransitive\Microsoft.CodeAnalysis.Analyzers.targets')" />
+  </ImportGroup>
+</Project>

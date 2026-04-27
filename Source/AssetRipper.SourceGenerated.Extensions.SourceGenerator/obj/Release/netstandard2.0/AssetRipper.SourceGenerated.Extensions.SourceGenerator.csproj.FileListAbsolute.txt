@@ -1,0 +1,11 @@
+G:\AssetRipper Project\AssetRipper\Source\AssetRipper.SourceGenerated.Extensions.SourceGenerator\bin\Release\netstandard2.0\AssetRipper.SourceGenerated.Extensions.SourceGenerator.deps.json
+G:\AssetRipper Project\AssetRipper\Source\AssetRipper.SourceGenerated.Extensions.SourceGenerator\bin\Release\netstandard2.0\AssetRipper.SourceGenerated.Extensions.SourceGenerator.dll
+G:\AssetRipper Project\AssetRipper\Source\AssetRipper.SourceGenerated.Extensions.SourceGenerator\bin\Release\netstandard2.0\AssetRipper.SourceGenerated.Extensions.SourceGenerator.pdb
+G:\AssetRipper Project\AssetRipper\Source\AssetRipper.SourceGenerated.Extensions.SourceGenerator\obj\Release\netstandard2.0\AssetRipper.SourceGenerated.Extensions.SourceGenerator.csproj.AssemblyReference.cache
+G:\AssetRipper Project\AssetRipper\Source\AssetRipper.SourceGenerated.Extensions.SourceGenerator\obj\Release\netstandard2.0\AssetRipper.SourceGenerated.Extensions.SourceGenerator.GeneratedMSBuildEditorConfig.editorconfig
+G:\AssetRipper Project\AssetRipper\Source\AssetRipper.SourceGenerated.Extensions.SourceGenerator\obj\Release\netstandard2.0\AssetRipper.SourceGenerated.Extensions.SourceGenerator.AssemblyInfoInputs.cache
+G:\AssetRipper Project\AssetRipper\Source\AssetRipper.SourceGenerated.Extensions.SourceGenerator\obj\Release\netstandard2.0\AssetRipper.SourceGenerated.Extensions.SourceGenerator.AssemblyInfo.cs
+G:\AssetRipper Project\AssetRipper\Source\AssetRipper.SourceGenerated.Extensions.SourceGenerator\obj\Release\netstandard2.0\AssetRipper.SourceGenerated.Extensions.SourceGenerator.csproj.CoreCompileInputs.cache
+G:\AssetRipper Project\AssetRipper\Source\AssetRipper.SourceGenerated.Extensions.SourceGenerator\obj\Release\netstandard2.0\AssetRipper.SourceGenerated.Extensions.SourceGenerator.sourcelink.json
+G:\AssetRipper Project\AssetRipper\Source\AssetRipper.SourceGenerated.Extensions.SourceGenerator\obj\Release\netstandard2.0\AssetRipper.SourceGenerated.Extensions.SourceGenerator.dll
+G:\AssetRipper Project\AssetRipper\Source\AssetRipper.SourceGenerated.Extensions.SourceGenerator\obj\Release\netstandard2.0\AssetRipper.SourceGenerated.Extensions.SourceGenerator.pdb
