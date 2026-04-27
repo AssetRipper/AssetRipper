@@ -50,6 +50,16 @@ public static class MonoBehaviourExtensions
 		return monoBehaviour.IsType("UnityEngine.Rendering.PostProcessing", "PostProcessProfile");
 	}
 
+	public static bool IsAddressableAssetSettings(this IMonoBehaviour monoBehaviour)
+	{
+		return monoBehaviour.IsType("UnityEngine.AddressableAssets", "AddressableAssetSettings");
+	}
+
+	public static bool IsAddressableAssetGroup(this IMonoBehaviour monoBehaviour)
+	{
+		return monoBehaviour.IsType("UnityEngine.AddressableAssets", "AddressableAssetGroup");
+	}
+
 	private static bool IsType(this IMonoBehaviour monoBehaviour, string @namespace, string name)
 	{
 		return TryGetScript(monoBehaviour, out IMonoScript? script) && script.IsType(@namespace, name);

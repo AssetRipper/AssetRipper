@@ -1,5 +1,8 @@
-```
 # Build artifacts
+[Bb]in/
+[Oo]bj/
+[Tt]est[Rr]esults/
+0Bins/
 *.pyc
 __pycache__/
 *.o
@@ -44,4 +47,3 @@ htmlcov/
 .mypy_cache/
 .pytest_cache/
 .gradle/
-```
