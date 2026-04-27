@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {
+      "AssetRipper.Configuration/1.3.14": {
+        "runtime": {
+          "AssetRipper.Configuration.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "AssetRipper.Configuration/1.3.14": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

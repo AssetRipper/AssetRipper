@@ -76,89 +76,7 @@
           }
         }
       },
-      "Microsoft.NET.ILLink.Tasks/10.0.5": {
-        "type": "package",
-        "build": {
-          "build/Microsoft.NET.ILLink.Tasks.props": {}
-        }
-      }
-    },
-    "net10.0/win-x64": {
-      "AsmResolver/6.0.0-beta.5": {
-        "type": "package",
-        "compile": {
-          "lib/net10.0/AsmResolver.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/AsmResolver.dll": {
-            "related": ".pdb;.xml"
-          }
-        }
-      },
-      "AsmResolver.DotNet/6.0.0-beta.5": {
-        "type": "package",
-        "dependencies": {
-          "AsmResolver.PE": "6.0.0-beta.5"
-        },
-        "compile": {
-          "lib/net10.0/AsmResolver.DotNet.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/AsmResolver.DotNet.dll": {
-            "related": ".pdb;.xml"
-          }
-        }
-      },
-      "AsmResolver.PE/6.0.0-beta.5": {
-        "type": "package",
-        "dependencies": {
-          "AsmResolver.PE.File": "6.0.0-beta.5"
-        },
-        "compile": {
-          "lib/net10.0/AsmResolver.PE.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/AsmResolver.PE.dll": {
-            "related": ".pdb;.xml"
-          }
-        }
-      },
-      "AsmResolver.PE.File/6.0.0-beta.5": {
-        "type": "package",
-        "dependencies": {
-          "AsmResolver": "6.0.0-beta.5"
-        },
-        "compile": {
-          "lib/net10.0/AsmResolver.PE.File.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/AsmResolver.PE.File.dll": {
-            "related": ".pdb;.xml"
-          }
-        }
-      },
-      "AssetRipper.Primitives/3.2.0": {
-        "type": "package",
-        "compile": {
-          "lib/net9.0/AssetRipper.Primitives.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net9.0/AssetRipper.Primitives.dll": {
-            "related": ".xml"
-          }
-        }
-      },
-      "Microsoft.NET.ILLink.Tasks/10.0.5": {
+      "Microsoft.NET.ILLink.Tasks/10.0.3": {
         "type": "package",
         "build": {
           "build/Microsoft.NET.ILLink.Tasks.props": {}
@@ -360,14 +278,13 @@
         "lib/netstandard2.0/AssetRipper.Primitives.xml"
       ]
     },
-    "Microsoft.NET.ILLink.Tasks/10.0.5": {
-      "sha512": "A+5ZuQ0f449tM+MQrhf6R9ZX7lYpjk/ODEwLYKrnF6111rtARx8fVsm4YznUnQiKnnXfaXNBqgxmil6RW3L3SA==",
+    "Microsoft.NET.ILLink.Tasks/10.0.3": {
+      "sha512": "aPMP5s9wVihQ8V8iyyI9r7krbDQx6thy+jsqFrPXIevVI+HBayJhDBY2iC38iZS/phlT8E014uZxiTEjBI+XHA==",
       "type": "package",
-      "path": "microsoft.net.illink.tasks/10.0.5",
+      "path": "microsoft.net.illink.tasks/10.0.3",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
-        ".signature.p7s",
         "Icon.png",
         "Sdk/Sdk.props",
         "THIRD-PARTY-NOTICES.TXT",
@@ -376,7 +293,7 @@
         "build/Microsoft.NET.ILLink.Analyzers.props",
         "build/Microsoft.NET.ILLink.Tasks.props",
         "build/Microsoft.NET.ILLink.targets",
-        "microsoft.net.illink.tasks.10.0.5.nupkg.sha512",
+        "microsoft.net.illink.tasks.10.0.3.nupkg.sha512",
         "microsoft.net.illink.tasks.nuspec",
         "tools/net/ILLink.Tasks.deps.json",
         "tools/net/ILLink.Tasks.dll",
@@ -391,22 +308,6 @@
         "tools/net/illink.deps.json",
         "tools/net/illink.dll",
         "tools/net/illink.runtimeconfig.json",
-        "tools/netframework/ILLink.Tasks.dll",
-        "tools/netframework/ILLink.Tasks.dll.config",
-        "tools/netframework/Mono.Cecil.Mdb.dll",
-        "tools/netframework/Mono.Cecil.Pdb.dll",
-        "tools/netframework/Mono.Cecil.Rocks.dll",
-        "tools/netframework/Mono.Cecil.dll",
-        "tools/netframework/Sdk/Sdk.props",
-        "tools/netframework/System.Buffers.dll",
-        "tools/netframework/System.Collections.Immutable.dll",
-        "tools/netframework/System.Memory.dll",
-        "tools/netframework/System.Numerics.Vectors.dll",
-        "tools/netframework/System.Reflection.Metadata.dll",
-        "tools/netframework/System.Runtime.CompilerServices.Unsafe.dll",
-        "tools/netframework/build/Microsoft.NET.ILLink.Analyzers.props",
-        "tools/netframework/build/Microsoft.NET.ILLink.Tasks.props",
-        "tools/netframework/build/Microsoft.NET.ILLink.targets",
         "useSharedDesignerContext.txt"
       ]
     }
@@ -415,29 +316,30 @@
     "net10.0": [
       "AsmResolver.DotNet >= 6.0.0-beta.5",
       "AssetRipper.Primitives >= 3.2.0",
-      "Microsoft.NET.ILLink.Tasks >= 10.0.5"
+      "Microsoft.NET.ILLink.Tasks >= 10.0.3"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\PC\\.nuget\\packages\\": {}
+    "/home/jules/.nuget/packages/": {}
   },
   "project": {
     "version": "1.3.14",
     "restore": {
-      "projectUniqueName": "G:\\AssetRipper Project\\AssetRipper\\Source\\AssetRipper.SerializationLogic\\AssetRipper.SerializationLogic.csproj",
+      "projectUniqueName": "/app/Source/AssetRipper.SerializationLogic/AssetRipper.SerializationLogic.csproj",
       "projectName": "AssetRipper.SerializationLogic",
-      "projectPath": "G:\\AssetRipper Project\\AssetRipper\\Source\\AssetRipper.SerializationLogic\\AssetRipper.SerializationLogic.csproj",
-      "packagesPath": "C:\\Users\\PC\\.nuget\\packages\\",
-      "outputPath": "G:\\AssetRipper Project\\AssetRipper\\Source\\AssetRipper.SerializationLogic\\obj\\",
+      "projectPath": "/app/Source/AssetRipper.SerializationLogic/AssetRipper.SerializationLogic.csproj",
+      "packagesPath": "/home/jules/.nuget/packages/",
+      "outputPath": "/app/Source/AssetRipper.SerializationLogic/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "G:\\AssetRipper Project\\AssetRipper\\NuGet.Config",
-        "C:\\Users\\PC\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "/app/nuget.config",
+        "/home/jules/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net10.0"
       ],
       "sources": {
+        "/usr/lib/dotnet/library-packs": {},
         "https://api.nuget.org/v3/index.json": {},
         "https://nuget.samboy.dev/v3/index.json": {}
       },
@@ -457,7 +359,7 @@
         "auditLevel": "low",
         "auditMode": "all"
       },
-      "SdkAnalysisLevel": "10.0.200"
+      "SdkAnalysisLevel": "10.0.100"
     },
     "frameworks": {
       "net10.0": {
@@ -474,7 +376,7 @@
           "Microsoft.NET.ILLink.Tasks": {
             "suppressParent": "All",
             "target": "Package",
-            "version": "[10.0.5, )",
+            "version": "[10.0.3, )",
             "autoReferenced": true
           }
         },
@@ -489,26 +391,12 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "downloadDependencies": [
-          {
-            "name": "Microsoft.AspNetCore.App.Runtime.win-x64",
-            "version": "[10.0.5, 10.0.5]"
-          },
-          {
-            "name": "Microsoft.NETCore.App.Runtime.win-x64",
-            "version": "[10.0.5, 10.0.5]"
-          },
-          {
-            "name": "Microsoft.WindowsDesktop.App.Runtime.win-x64",
-            "version": "[10.0.5, 10.0.5]"
-          }
-        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.201/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/10.0.103/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.CSharp": "(,4.7.32767]",
           "Microsoft.VisualBasic": "(,10.4.32767]",
@@ -783,11 +671,6 @@
           "System.Xml.XPath": "(,4.3.32767]",
           "System.Xml.XPath.XDocument": "(,5.0.32767]"
         }
-      }
-    },
-    "runtimes": {
-      "win-x64": {
-        "#import": []
       }
     }
   }

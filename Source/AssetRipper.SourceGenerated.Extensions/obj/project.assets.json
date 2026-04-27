@@ -73,160 +73,7 @@
           }
         }
       },
-      "Microsoft.NET.ILLink.Tasks/10.0.5": {
-        "type": "package",
-        "build": {
-          "build/Microsoft.NET.ILLink.Tasks.props": {}
-        }
-      },
-      "SharpCompress/0.47.4": {
-        "type": "package",
-        "compile": {
-          "lib/net10.0/SharpCompress.dll": {}
-        },
-        "runtime": {
-          "lib/net10.0/SharpCompress.dll": {}
-        }
-      },
-      "System.IO.Hashing/9.0.7": {
-        "type": "package",
-        "compile": {
-          "lib/net9.0/System.IO.Hashing.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net9.0/System.IO.Hashing.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "ZstdSharp.Port/0.8.7": {
-        "type": "package",
-        "compile": {
-          "lib/net9.0/ZstdSharp.dll": {}
-        },
-        "runtime": {
-          "lib/net9.0/ZstdSharp.dll": {}
-        }
-      },
-      "AssetRipper.Assets/1.3.14": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v10.0",
-        "dependencies": {
-          "AssetRipper.IO.Files": "1.3.14"
-        },
-        "compile": {
-          "bin/placeholder/AssetRipper.Assets.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/AssetRipper.Assets.dll": {}
-        }
-      },
-      "AssetRipper.IO.Files/1.3.14": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v10.0",
-        "dependencies": {
-          "AssetRipper.IO.Endian": "2.1.0",
-          "AssetRipper.Primitives": "3.2.0",
-          "K4os.Compression.LZ4": "1.3.8",
-          "SharpCompress": "0.47.4",
-          "ZstdSharp.Port": "0.8.7"
-        },
-        "compile": {
-          "bin/placeholder/AssetRipper.IO.Files.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/AssetRipper.IO.Files.dll": {}
-        }
-      },
-      "AssetRipper.Numerics/1.3.14": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v10.0",
-        "compile": {
-          "bin/placeholder/AssetRipper.Numerics.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/AssetRipper.Numerics.dll": {}
-        }
-      }
-    },
-    "net10.0/win-x64": {
-      "AssetRipper.Checksum/1.1.0": {
-        "type": "package",
-        "dependencies": {
-          "System.IO.Hashing": "9.0.7"
-        },
-        "compile": {
-          "lib/net9.0/AssetRipper.Checksum.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net9.0/AssetRipper.Checksum.dll": {
-            "related": ".xml"
-          }
-        }
-      },
-      "AssetRipper.IO.Endian/2.1.0": {
-        "type": "package",
-        "dependencies": {
-          "AssetRipper.Primitives": "3.2.0"
-        },
-        "compile": {
-          "lib/net10.0/AssetRipper.IO.Endian.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/AssetRipper.IO.Endian.dll": {
-            "related": ".xml"
-          }
-        }
-      },
-      "AssetRipper.Primitives/3.2.0": {
-        "type": "package",
-        "compile": {
-          "lib/net9.0/AssetRipper.Primitives.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net9.0/AssetRipper.Primitives.dll": {
-            "related": ".xml"
-          }
-        }
-      },
-      "AssetRipper.SourceGenerated/1.3.14.2": {
-        "type": "package",
-        "compile": {
-          "lib/net10.0/AssetRipper.SourceGenerated.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/AssetRipper.SourceGenerated.dll": {
-            "related": ".xml"
-          }
-        }
-      },
-      "K4os.Compression.LZ4/1.3.8": {
-        "type": "package",
-        "compile": {
-          "lib/net6.0/K4os.Compression.LZ4.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net6.0/K4os.Compression.LZ4.dll": {
-            "related": ".xml"
-          }
-        }
-      },
-      "Microsoft.NET.ILLink.Tasks/10.0.5": {
+      "Microsoft.NET.ILLink.Tasks/10.0.3": {
         "type": "package",
         "build": {
           "build/Microsoft.NET.ILLink.Tasks.props": {}
@@ -398,14 +245,13 @@
         "lib/netstandard2.1/K4os.Compression.LZ4.xml"
       ]
     },
-    "Microsoft.NET.ILLink.Tasks/10.0.5": {
-      "sha512": "A+5ZuQ0f449tM+MQrhf6R9ZX7lYpjk/ODEwLYKrnF6111rtARx8fVsm4YznUnQiKnnXfaXNBqgxmil6RW3L3SA==",
+    "Microsoft.NET.ILLink.Tasks/10.0.3": {
+      "sha512": "aPMP5s9wVihQ8V8iyyI9r7krbDQx6thy+jsqFrPXIevVI+HBayJhDBY2iC38iZS/phlT8E014uZxiTEjBI+XHA==",
       "type": "package",
-      "path": "microsoft.net.illink.tasks/10.0.5",
+      "path": "microsoft.net.illink.tasks/10.0.3",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
-        ".signature.p7s",
         "Icon.png",
         "Sdk/Sdk.props",
         "THIRD-PARTY-NOTICES.TXT",
@@ -414,7 +260,7 @@
         "build/Microsoft.NET.ILLink.Analyzers.props",
         "build/Microsoft.NET.ILLink.Tasks.props",
         "build/Microsoft.NET.ILLink.targets",
-        "microsoft.net.illink.tasks.10.0.5.nupkg.sha512",
+        "microsoft.net.illink.tasks.10.0.3.nupkg.sha512",
         "microsoft.net.illink.tasks.nuspec",
         "tools/net/ILLink.Tasks.deps.json",
         "tools/net/ILLink.Tasks.dll",
@@ -429,22 +275,6 @@
         "tools/net/illink.deps.json",
         "tools/net/illink.dll",
         "tools/net/illink.runtimeconfig.json",
-        "tools/netframework/ILLink.Tasks.dll",
-        "tools/netframework/ILLink.Tasks.dll.config",
-        "tools/netframework/Mono.Cecil.Mdb.dll",
-        "tools/netframework/Mono.Cecil.Pdb.dll",
-        "tools/netframework/Mono.Cecil.Rocks.dll",
-        "tools/netframework/Mono.Cecil.dll",
-        "tools/netframework/Sdk/Sdk.props",
-        "tools/netframework/System.Buffers.dll",
-        "tools/netframework/System.Collections.Immutable.dll",
-        "tools/netframework/System.Memory.dll",
-        "tools/netframework/System.Numerics.Vectors.dll",
-        "tools/netframework/System.Reflection.Metadata.dll",
-        "tools/netframework/System.Runtime.CompilerServices.Unsafe.dll",
-        "tools/netframework/build/Microsoft.NET.ILLink.Analyzers.props",
-        "tools/netframework/build/Microsoft.NET.ILLink.Tasks.props",
-        "tools/netframework/build/Microsoft.NET.ILLink.targets",
         "useSharedDesignerContext.txt"
       ]
     },
@@ -539,29 +369,30 @@
       "AssetRipper.Checksum >= 1.1.0",
       "AssetRipper.Numerics >= 1.3.14",
       "AssetRipper.SourceGenerated >= 1.3.14.2",
-      "Microsoft.NET.ILLink.Tasks >= 10.0.5"
+      "Microsoft.NET.ILLink.Tasks >= 10.0.3"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\PC\\.nuget\\packages\\": {}
+    "/home/jules/.nuget/packages/": {}
   },
   "project": {
     "version": "1.3.14",
     "restore": {
-      "projectUniqueName": "G:\\AssetRipper Project\\AssetRipper\\Source\\AssetRipper.SourceGenerated.Extensions\\AssetRipper.SourceGenerated.Extensions.csproj",
+      "projectUniqueName": "/app/Source/AssetRipper.SourceGenerated.Extensions/AssetRipper.SourceGenerated.Extensions.csproj",
       "projectName": "AssetRipper.SourceGenerated.Extensions",
-      "projectPath": "G:\\AssetRipper Project\\AssetRipper\\Source\\AssetRipper.SourceGenerated.Extensions\\AssetRipper.SourceGenerated.Extensions.csproj",
-      "packagesPath": "C:\\Users\\PC\\.nuget\\packages\\",
-      "outputPath": "G:\\AssetRipper Project\\AssetRipper\\Source\\AssetRipper.SourceGenerated.Extensions\\obj\\",
+      "projectPath": "/app/Source/AssetRipper.SourceGenerated.Extensions/AssetRipper.SourceGenerated.Extensions.csproj",
+      "packagesPath": "/home/jules/.nuget/packages/",
+      "outputPath": "/app/Source/AssetRipper.SourceGenerated.Extensions/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "G:\\AssetRipper Project\\AssetRipper\\NuGet.Config",
-        "C:\\Users\\PC\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "/app/nuget.config",
+        "/home/jules/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net10.0"
       ],
       "sources": {
+        "/usr/lib/dotnet/library-packs": {},
         "https://api.nuget.org/v3/index.json": {},
         "https://nuget.samboy.dev/v3/index.json": {}
       },
@@ -569,11 +400,11 @@
         "net10.0": {
           "targetAlias": "net10.0",
           "projectReferences": {
-            "G:\\AssetRipper Project\\AssetRipper\\Source\\AssetRipper.Assets\\AssetRipper.Assets.csproj": {
-              "projectPath": "G:\\AssetRipper Project\\AssetRipper\\Source\\AssetRipper.Assets\\AssetRipper.Assets.csproj"
+            "/app/Source/AssetRipper.Assets/AssetRipper.Assets.csproj": {
+              "projectPath": "/app/Source/AssetRipper.Assets/AssetRipper.Assets.csproj"
             },
-            "G:\\AssetRipper Project\\AssetRipper\\Source\\AssetRipper.Numerics\\AssetRipper.Numerics.csproj": {
-              "projectPath": "G:\\AssetRipper Project\\AssetRipper\\Source\\AssetRipper.Numerics\\AssetRipper.Numerics.csproj"
+            "/app/Source/AssetRipper.Numerics/AssetRipper.Numerics.csproj": {
+              "projectPath": "/app/Source/AssetRipper.Numerics/AssetRipper.Numerics.csproj"
             }
           }
         }
@@ -588,7 +419,7 @@
         "auditLevel": "low",
         "auditMode": "all"
       },
-      "SdkAnalysisLevel": "10.0.200"
+      "SdkAnalysisLevel": "10.0.100"
     },
     "frameworks": {
       "net10.0": {
@@ -605,7 +436,7 @@
           "Microsoft.NET.ILLink.Tasks": {
             "suppressParent": "All",
             "target": "Package",
-            "version": "[10.0.5, )",
+            "version": "[10.0.3, )",
             "autoReferenced": true
           }
         },
@@ -620,26 +451,12 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "downloadDependencies": [
-          {
-            "name": "Microsoft.AspNetCore.App.Runtime.win-x64",
-            "version": "[10.0.5, 10.0.5]"
-          },
-          {
-            "name": "Microsoft.NETCore.App.Runtime.win-x64",
-            "version": "[10.0.5, 10.0.5]"
-          },
-          {
-            "name": "Microsoft.WindowsDesktop.App.Runtime.win-x64",
-            "version": "[10.0.5, 10.0.5]"
-          }
-        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.201/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/10.0.103/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.CSharp": "(,4.7.32767]",
           "Microsoft.VisualBasic": "(,10.4.32767]",
@@ -914,11 +731,6 @@
           "System.Xml.XPath": "(,4.3.32767]",
           "System.Xml.XPath.XDocument": "(,5.0.32767]"
         }
-      }
-    },
-    "runtimes": {
-      "win-x64": {
-        "#import": []
       }
     }
   }

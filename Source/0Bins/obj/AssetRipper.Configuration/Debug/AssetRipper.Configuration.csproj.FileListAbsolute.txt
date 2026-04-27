@@ -1,0 +1,12 @@
+/app/Source/0Bins/Other/AssetRipper.Configuration/Debug/AssetRipper.Configuration.deps.json
+/app/Source/0Bins/Other/AssetRipper.Configuration/Debug/AssetRipper.Configuration.dll
+/app/Source/0Bins/Other/AssetRipper.Configuration/Debug/AssetRipper.Configuration.pdb
+/app/Source/0Bins/obj/AssetRipper.Configuration/Debug/AssetRipper.Configuration.GeneratedMSBuildEditorConfig.editorconfig
+/app/Source/0Bins/obj/AssetRipper.Configuration/Debug/AssetRipper.Configuration.AssemblyInfoInputs.cache
+/app/Source/0Bins/obj/AssetRipper.Configuration/Debug/AssetRipper.Configuration.AssemblyInfo.cs
+/app/Source/0Bins/obj/AssetRipper.Configuration/Debug/AssetRipper.Configuration.csproj.CoreCompileInputs.cache
+/app/Source/0Bins/obj/AssetRipper.Configuration/Debug/AssetRipper.Configuration.sourcelink.json
+/app/Source/0Bins/obj/AssetRipper.Configuration/Debug/AssetRipper.Configuration.dll
+/app/Source/0Bins/obj/AssetRipper.Configuration/Debug/refint/AssetRipper.Configuration.dll
+/app/Source/0Bins/obj/AssetRipper.Configuration/Debug/AssetRipper.Configuration.pdb
+/app/Source/0Bins/obj/AssetRipper.Configuration/Debug/ref/AssetRipper.Configuration.dll

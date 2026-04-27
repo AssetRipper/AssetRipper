@@ -1,26 +1,27 @@
 {
   "format": 1,
   "restore": {
-    "G:\\AssetRipper Project\\AssetRipper\\Source\\AssetRipper.Numerics\\AssetRipper.Numerics.csproj": {}
+    "/app/Source/AssetRipper.Numerics/AssetRipper.Numerics.csproj": {}
   },
   "projects": {
-    "G:\\AssetRipper Project\\AssetRipper\\Source\\AssetRipper.Numerics\\AssetRipper.Numerics.csproj": {
+    "/app/Source/AssetRipper.Numerics/AssetRipper.Numerics.csproj": {
       "version": "1.3.14",
       "restore": {
-        "projectUniqueName": "G:\\AssetRipper Project\\AssetRipper\\Source\\AssetRipper.Numerics\\AssetRipper.Numerics.csproj",
+        "projectUniqueName": "/app/Source/AssetRipper.Numerics/AssetRipper.Numerics.csproj",
         "projectName": "AssetRipper.Numerics",
-        "projectPath": "G:\\AssetRipper Project\\AssetRipper\\Source\\AssetRipper.Numerics\\AssetRipper.Numerics.csproj",
-        "packagesPath": "C:\\Users\\PC\\.nuget\\packages\\",
-        "outputPath": "G:\\AssetRipper Project\\AssetRipper\\Source\\AssetRipper.Numerics\\obj\\",
+        "projectPath": "/app/Source/AssetRipper.Numerics/AssetRipper.Numerics.csproj",
+        "packagesPath": "/home/jules/.nuget/packages/",
+        "outputPath": "/app/Source/AssetRipper.Numerics/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "G:\\AssetRipper Project\\AssetRipper\\NuGet.Config",
-          "C:\\Users\\PC\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "/app/nuget.config",
+          "/home/jules/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
         ],
         "sources": {
+          "/usr/lib/dotnet/library-packs": {},
           "https://api.nuget.org/v3/index.json": {},
           "https://nuget.samboy.dev/v3/index.json": {}
         },
@@ -40,7 +41,7 @@
           "auditLevel": "low",
           "auditMode": "all"
         },
-        "SdkAnalysisLevel": "10.0.200"
+        "SdkAnalysisLevel": "10.0.100"
       },
       "frameworks": {
         "net10.0": {
@@ -49,7 +50,7 @@
             "Microsoft.NET.ILLink.Tasks": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[10.0.5, )",
+              "version": "[10.0.3, )",
               "autoReferenced": true
             }
           },
@@ -64,26 +65,12 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Runtime.win-x64",
-              "version": "[10.0.5, 10.0.5]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Runtime.win-x64",
-              "version": "[10.0.5, 10.0.5]"
-            },
-            {
-              "name": "Microsoft.WindowsDesktop.App.Runtime.win-x64",
-              "version": "[10.0.5, 10.0.5]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.201/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/10.0.103/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.CSharp": "(,4.7.32767]",
             "Microsoft.VisualBasic": "(,10.4.32767]",
@@ -358,11 +345,6 @@
             "System.Xml.XPath": "(,4.3.32767]",
             "System.Xml.XPath.XDocument": "(,5.0.32767]"
           }
-        }
-      },
-      "runtimes": {
-        "win-x64": {
-          "#import": []
         }
       }
     }
