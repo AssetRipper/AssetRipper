@@ -20,7 +20,7 @@ public sealed class SceneDefinition
 		{
 			Name = name,
 			Path = $"Assets/Scenes/{name}",
-			GUID = guid.IsZero ? UnityGuid.NewGuid() : guid,
+			GUID = guid.IsZero ? new(RandomGuid.Next()) : guid,
 		};
 	}
 
@@ -36,7 +36,7 @@ public sealed class SceneDefinition
 		{
 			Name = System.IO.Path.GetFileName(path),
 			Path = path,
-			GUID = guid.IsZero ? UnityGuid.NewGuid() : guid,
+			GUID = guid.IsZero ? new(RandomGuid.Next()) : guid,
 		};
 	}
 
