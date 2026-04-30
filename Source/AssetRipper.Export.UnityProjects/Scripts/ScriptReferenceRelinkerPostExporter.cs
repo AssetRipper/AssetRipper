@@ -108,6 +108,13 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 		return assemblyName switch
 		{
 			"unity.addressables" => "Unity.Addressables",
+			"unity.inputsystem" => "Unity.InputSystem",
+			"unity.resourcegraph" => "Unity.ResourceGraph",
+			"Assembly - CSharp" => "Assembly-CSharp",
+			"Assembly - CSharp - firstpass" => "Assembly-CSharp-firstpass",
+			"Assembly - CSharp - Editor" => "Assembly-CSharp-Editor",
+			"Assembly - UnityScript" => "Assembly-UnityScript",
+			"Assembly - UnityScript - firstpass" => "Assembly-UnityScript-firstpass",
 			_ => assemblyName,
 		};
 	}
@@ -170,6 +177,12 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 				private static void DiagnoseFromMenu()
 				{
 					DiagnoseUnresolvedScripts();
+				}
+
+				[MenuItem("Tools/AssetRipper/Clean Unresolved References")]
+				private static void CleanUnresolvedFromMenu()
+				{
+					CleanUnresolvedReferences();
 				}
 
 				private static void TryAutoRelink()
@@ -419,6 +432,88 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 					{
 						Debug.Log(sb.ToString());
 					}
+				}
+
+				private static void CleanUnresolvedReferences()
+				{
+					string mapPath = GetAbsoluteMapPath();
+					if (!File.Exists(mapPath))
+					{
+						Debug.LogWarning("AssetRipper relink map not found at: " + mapPath);
+						return;
+					}
+
+					Dictionary<string, string> sourceMap = LoadSourceMap(mapPath);
+					Dictionary<string, string> installedScripts = BuildInstalledScriptMap();
+
+					int cleanedFiles = 0;
+					int cleanedReferences = 0;
+
+					try
+					{
+						AssetDatabase.StartAssetEditing();
+						string[] candidatePaths = EnumerateCandidateAssetPaths().ToArray();
+						float total = candidatePaths.Length;
+
+						for (int i = 0; i < candidatePaths.Length; i++)
+						{
+							string assetPath = candidatePaths[i];
+							EditorUtility.DisplayProgressBar("Cleaning Unresolved References", assetPath, (float)i / total);
+
+							if (TryCleanFile(assetPath, sourceMap, installedScripts, out int count))
+							{
+								cleanedFiles++;
+								cleanedReferences += count;
+							}
+						}
+					}
+					finally
+					{
+						AssetDatabase.StopAssetEditing();
+						EditorUtility.ClearProgressBar();
+					}
+
+					if (cleanedFiles > 0)
+					{
+						AssetDatabase.Refresh();
+						Debug.Log("AssetRipper successfully cleaned " + cleanedReferences.ToString(CultureInfo.InvariantCulture) + " unresolved script references across " + cleanedFiles.ToString(CultureInfo.InvariantCulture) + " assets.");
+					}
+					else
+					{
+						Debug.Log("AssetRipper clean: No unresolved references found to clean.");
+					}
+				}
+
+				private static bool TryCleanFile(string assetPath, Dictionary<string, string> sourceMap, Dictionary<string, string> installedScripts, out int cleanedCount)
+				{
+					cleanedCount = 0;
+					string fullPath = Path.GetFullPath(assetPath);
+					string originalText;
+					try { originalText = File.ReadAllText(fullPath); }
+					catch { return false; }
+
+					int localCleaned = 0;
+					string updatedText = PPtrReferenceRegex.Replace(originalText, match =>
+					{
+						if (!long.TryParse(match.Groups["fileID"].Value, NumberStyles.Integer, CultureInfo.InvariantCulture, out long fileId)) return match.Value;
+						string guid = match.Groups["guid"].Value.ToLowerInvariant();
+						string sourceKey = MakeSourceKey(guid, fileId);
+						if (!sourceMap.TryGetValue(sourceKey, out string identityKey)) return match.Value;
+						if (installedScripts.ContainsKey(identityKey)) return match.Value;
+
+						localCleaned++;
+						return "{fileID: 0}";
+					});
+
+					cleanedCount = localCleaned;
+					if (localCleaned == 0 || string.Equals(originalText, updatedText, StringComparison.Ordinal)) return false;
+
+					try
+					{
+						File.WriteAllText(fullPath, updatedText);
+						return true;
+					}
+					catch { return false; }
 				}
 
 				private static bool TryRelinkFile(
@@ -698,7 +793,8 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 						"*.signal", "*.lighting", "*.flare",
 						"*.mixer", "*.renderTexture",
 						"*.shadervariants", "*.terrainlayer",
-						"*.fontsettings", "*.guiskin", "*.brush"
+						"*.fontsettings", "*.guiskin", "*.brush",
+						"*.physicMaterial", "*.physicsMaterial2D", "*.font", "*.vfx", "*.spriteatlas"
 					};
 
 					// Search Assets/ folder
@@ -744,6 +840,13 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 					switch (assemblyName)
 					{
 						case "unity.addressables": return "Unity.Addressables";
+						case "unity.inputsystem": return "Unity.InputSystem";
+						case "unity.resourcegraph": return "Unity.ResourceGraph";
+						case "Assembly - CSharp": return "Assembly-CSharp";
+						case "Assembly - CSharp - firstpass": return "Assembly-CSharp-firstpass";
+						case "Assembly - CSharp - Editor": return "Assembly-CSharp-Editor";
+						case "Assembly - UnityScript": return "Assembly-UnityScript";
+						case "Assembly - UnityScript - firstpass": return "Assembly-UnityScript-firstpass";
 						default: return assemblyName;
 					}
 				}
