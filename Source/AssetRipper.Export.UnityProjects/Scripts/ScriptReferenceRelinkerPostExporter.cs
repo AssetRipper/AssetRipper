@@ -40,7 +40,7 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 	private static ScriptReferenceMapEntry CreateEntry(IMonoScript script, ScriptExporter exporter)
 	{
 		MetaPtr pointer = exporter.CreateExportPointer(script);
-		string assemblyName = script.GetAssemblyNameFixed();
+		string assemblyName = NormalizeAssemblyName(script.GetAssemblyNameFixed());
 		string namespaceName = script.Namespace.String;
 		string className = script.ClassName_R.String;
 		string fullTypeName = script.GetFullName();
@@ -101,6 +101,15 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 			.Replace('\r', ' ')
 			.Replace('\n', ' ')
 			.Trim();
+	}
+
+	private static string NormalizeAssemblyName(string assemblyName)
+	{
+		return assemblyName switch
+		{
+			"unity.addressables" => "Unity.Addressables",
+			_ => assemblyName,
+		};
 	}
 
 	private readonly record struct ScriptReferenceMapEntry(
@@ -587,11 +596,33 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 
 				private static string InferNamespace(string directory)
 				{
+					directory = directory.Replace('\\', '/');
+					if (!directory.EndsWith("/")) directory += "/";
+
 					int scriptsIdx = directory.IndexOf("/Scripts/", StringComparison.OrdinalIgnoreCase);
 					if (scriptsIdx >= 0)
 					{
-						return directory.Substring(scriptsIdx + 9).Replace('/', '.');
+						string sub = directory.Substring(scriptsIdx + 9);
+						int nextSlash = sub.IndexOf('/');
+						if (nextSlash >= 0)
+						{
+							return sub.Substring(nextSlash + 1).Trim('/').Replace('/', '.');
+						}
+						return "";
 					}
+
+					int pluginsIdx = directory.IndexOf("/Plugins/", StringComparison.OrdinalIgnoreCase);
+					if (pluginsIdx >= 0)
+					{
+						string sub = directory.Substring(pluginsIdx + 9);
+						int nextSlash = sub.IndexOf('/');
+						if (nextSlash >= 0)
+						{
+							return sub.Substring(nextSlash + 1).Trim('/').Replace('/', '.');
+						}
+						return "";
+					}
+
 					return "";
 				}
 
@@ -603,9 +634,35 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 				{
 					try
 					{
-						string dir = directory;
+						string dir = directory.Replace('\\', '/');
+						if (!dir.EndsWith("/")) dir += "/";
+
+						// Try to infer from AssetRipper's export structure: Assets/Scripts/{AssemblyName}/...
+						int scriptsIdx = dir.IndexOf("/Scripts/", StringComparison.OrdinalIgnoreCase);
+						if (scriptsIdx >= 0)
+						{
+							string sub = dir.Substring(scriptsIdx + 9);
+							int nextSlash = sub.IndexOf('/');
+							if (nextSlash >= 0)
+							{
+								return sub.Substring(0, nextSlash);
+							}
+						}
+
+						int pluginsIdx = dir.IndexOf("/Plugins/", StringComparison.OrdinalIgnoreCase);
+						if (pluginsIdx >= 0)
+						{
+							string sub = dir.Substring(pluginsIdx + 9);
+							int nextSlash = sub.IndexOf('/');
+							if (nextSlash >= 0)
+							{
+								return sub.Substring(0, nextSlash);
+							}
+						}
+
 						while (!string.IsNullOrEmpty(dir))
 						{
+							dir = dir.TrimEnd('/');
 							// Don't search outside the exported project folders
 							if (!dir.StartsWith("Assets", StringComparison.OrdinalIgnoreCase)
 								&& !dir.StartsWith("Packages", StringComparison.OrdinalIgnoreCase))
@@ -620,7 +677,7 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 								return Path.GetFileNameWithoutExtension(asmdefFiles[0]);
 							}
 							string parent = Path.GetDirectoryName(dir);
-							if (string.Equals(parent, dir, StringComparison.OrdinalIgnoreCase)) break;
+							if (string.IsNullOrEmpty(parent) || string.Equals(parent, dir, StringComparison.OrdinalIgnoreCase)) break;
 							dir = parent;
 						}
 					}
@@ -651,7 +708,9 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 						{
 							foreach (string fullPath in Directory.GetFiles("Assets", extension, SearchOption.AllDirectories))
 							{
-								yield return fullPath.Replace('\\', '/');
+								string normalizedPath = fullPath.Replace('\\', '/');
+								if (normalizedPath.Contains("/Editor/AssetRipperPatches/")) continue;
+								yield return normalizedPath;
 							}
 						}
 					}
@@ -677,7 +736,16 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 
 				private static string MakeIdentityKey(string assemblyName, string fullTypeName)
 				{
-					return assemblyName + "|" + fullTypeName;
+					return NormalizeAssemblyName(assemblyName) + "|" + fullTypeName;
+				}
+
+				private static string NormalizeAssemblyName(string assemblyName)
+				{
+					switch (assemblyName)
+					{
+						case "unity.addressables": return "Unity.Addressables";
+						default: return assemblyName;
+					}
 				}
 
 				private static string GetAbsoluteMapPath()
