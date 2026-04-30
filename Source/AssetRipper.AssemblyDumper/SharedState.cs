@@ -3,6 +3,7 @@ using AssetRipper.AssemblyDumper.Attributes;
 using AssetRipper.AssemblyDumper.Methods;
 using AssetRipper.AssemblyDumper.Utils;
 using AssetRipper.DocExtraction.DataStructures;
+using UnityEngine;
 
 namespace AssetRipper.AssemblyDumper;
 
@@ -64,6 +65,7 @@ internal sealed class SharedState : AssemblyBuilder
 	public MethodDefinition NullableAttributeConstructorByte { get; }
 	public MethodDefinition NullableAttributeConstructorByteArray { get; }
 	public MethodDefinition NullableContextAttributeConstructor { get; }
+	public IMethodDefOrRef SerializeReferenceConstructor { get; }
 	public TypeDefinition PrivateImplementationDetails { get; }
 
 	private SharedState(
@@ -95,6 +97,8 @@ internal sealed class SharedState : AssemblyBuilder
 		NullableAttributeConstructorByteArray = nullableAttributeType.Methods
 			.Single(m => m.IsConstructor && m.Parameters.Count == 1 && m.Parameters[0].ParameterType is SzArrayTypeSignature);
 
+		SerializeReferenceConstructor = Importer.ImportConstructor<SerializeReference>(0);
+
 		PrivateImplementationDetails = new TypeDefinition(null, "<PrivateImplementationDetails>", TypeAttributes.NotPublic | TypeAttributes.AutoLayout | TypeAttributes.AnsiClass | TypeAttributes.Sealed);
 		Module.TopLevelTypes.Add(PrivateImplementationDetails);
 		PrivateImplementationDetails.AddCompilerGeneratedAttribute(Importer);
@@ -119,6 +123,7 @@ internal sealed class SharedState : AssemblyBuilder
 		AddLocalReferenceModule("AssetRipper.IO.Files");
 		AddLocalReferenceModule("AssetRipper.Numerics");
 		AddLocalReferenceModule("AssetRipper.Primitives");
+		AddLocalReferenceModule("UnityEngine");
 		AddSystemReferenceModule("System.Runtime");
 		AddSystemReferenceModule("System.Numerics.Vectors");
 		AddSystemReferenceModule("System.Linq");

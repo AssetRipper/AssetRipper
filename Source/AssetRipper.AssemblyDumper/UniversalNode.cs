@@ -73,6 +73,7 @@ internal sealed class UniversalNode : IEquatable<UniversalNode>, IDeepCloneable<
 					"map" => NodeType.Map,
 					"pair" => NodeType.Pair,
 					"TypelessData" => NodeType.TypelessData,
+					"managedReference" or "managedRefArrayItem" => NodeType.ManagedReference,
 					"string" or Passes.Pass002_RenameSubnodes.Utf8StringName => NodeType.String,
 					_ => NodeType.Type,
 				};
