@@ -1,6 +1,0 @@
-/app/Source/0Bins/obj/AssetRipper.SourceGenerated.Extensions/Debug/AssetRipper.SourceGenerated.Extensions.csproj.AssemblyReference.cache
-/app/Source/0Bins/obj/AssetRipper.SourceGenerated.Extensions/Debug/AssetRipper.SourceGenerated.Extensions.GeneratedMSBuildEditorConfig.editorconfig
-/app/Source/0Bins/obj/AssetRipper.SourceGenerated.Extensions/Debug/AssetRipper.SourceGenerated.Extensions.AssemblyInfoInputs.cache
-/app/Source/0Bins/obj/AssetRipper.SourceGenerated.Extensions/Debug/AssetRipper.SourceGenerated.Extensions.AssemblyInfo.cs
-/app/Source/0Bins/obj/AssetRipper.SourceGenerated.Extensions/Debug/AssetRipper.SourceGenerated.Extensions.csproj.CoreCompileInputs.cache
-/app/Source/0Bins/obj/AssetRipper.SourceGenerated.Extensions/Debug/AssetRipper.SourceGenerated.Extensions.sourcelink.json

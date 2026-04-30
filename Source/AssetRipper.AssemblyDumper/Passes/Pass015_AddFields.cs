@@ -85,6 +85,23 @@ public static class Pass015_AddFields
 		FieldDefinition fieldDefinition = new FieldDefinition(mainNode.Name, FieldAttributes.Assembly, new FieldSignature(fieldType));
 		type.Fields.Add(fieldDefinition);
 		fieldDefinition.AddDebuggerBrowsableNeverAttribute();
+		if (IsManagedReference(mainNode))
+		{
+			fieldDefinition.AddCustomAttribute(SharedState.Instance.SerializeReferenceConstructor);
+		}
+	}
+
+	private static bool IsManagedReference(UniversalNode node)
+	{
+		if (node.NodeType == NodeType.ManagedReference)
+		{
+			return true;
+		}
+		if (node.NodeType == NodeType.Array && node.SubNodes.Count >= 2)
+		{
+			return IsManagedReference(node.SubNodes[1]);
+		}
+		return false;
 	}
 
 	private static bool IsFieldInBaseType(UniversalClass unityClass, string fieldName)

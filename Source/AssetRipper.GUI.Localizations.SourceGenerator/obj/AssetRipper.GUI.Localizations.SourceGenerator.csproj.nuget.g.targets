@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
-<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
-    <Import Project="$(NuGetPackageRoot)system.text.json\10.0.7\buildTransitive\netstandard2.0\System.Text.Json.targets" Condition="Exists('$(NuGetPackageRoot)system.text.json\10.0.7\buildTransitive\netstandard2.0\System.Text.Json.targets')" />
-    <Import Project="$(NuGetPackageRoot)sourcegenerator.foundations\2.0.14\build\SourceGenerator.Foundations.targets" Condition="Exists('$(NuGetPackageRoot)sourcegenerator.foundations\2.0.14\build\SourceGenerator.Foundations.targets')" />
-    <Import Project="$(NuGetPackageRoot)netstandard.library\2.0.3\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('$(NuGetPackageRoot)netstandard.library\2.0.3\build\netstandard2.0\NETStandard.Library.targets')" />
-    <Import Project="$(NuGetPackageRoot)microsoft.codeanalysis.analyzers\5.3.0\buildTransitive\Microsoft.CodeAnalysis.Analyzers.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.analyzers\5.3.0\buildTransitive\Microsoft.CodeAnalysis.Analyzers.targets')" />
-  </ImportGroup>
-</Project>

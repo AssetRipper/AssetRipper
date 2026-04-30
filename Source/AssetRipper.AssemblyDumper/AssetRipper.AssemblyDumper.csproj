@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
@@ -20,6 +20,7 @@
 		<ProjectReference Include="..\AssetRipper.DocExtraction\AssetRipper.DocExtraction.csproj" />
 		<ProjectReference Include="..\AssetRipper.IO.Files\AssetRipper.IO.Files.csproj" />
 		<ProjectReference Include="..\AssetRipper.Numerics\AssetRipper.Numerics.csproj" />
+		<ProjectReference Include="..\UnityEngine\UnityEngine.csproj" />
 	</ItemGroup>
 
 </Project>

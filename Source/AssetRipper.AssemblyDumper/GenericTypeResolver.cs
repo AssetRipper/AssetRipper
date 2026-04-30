@@ -76,6 +76,7 @@ internal static class GenericTypeResolver
 			NodeType.TypelessData => SharedState.Instance.Importer.UInt8.MakeSzArrayType(),
 			NodeType.Array => ResolveArrayType(node, version),
 			NodeType.Type => SharedState.Instance.SubclassGroups[node.TypeName].GetTypeForVersion(version).ToTypeSignature(),
+			NodeType.ManagedReference => SharedState.Instance.Importer.Object,
 			_ => node.NodeType.ToPrimitiveTypeSignature(),
 		};
 	}
