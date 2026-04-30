@@ -69,7 +69,7 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 			assemblyName,
 			namespaceName,
 			className,
-			fullTypeName,
+			fullTypeName.ToLowerInvariant(),
 			baseTypeName,
 			scriptName);
 	}
@@ -105,7 +105,8 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 
 	private static string NormalizeAssemblyName(string assemblyName)
 	{
-		return assemblyName.ToLowerInvariant() switch
+		string lower = assemblyName.ToLowerInvariant();
+		return lower switch
 		{
 			"unity.addressables" => "Unity.Addressables",
 			"unity.inputsystem" => "Unity.InputSystem",
@@ -115,11 +116,23 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 			"unity.renderpipelines.core.runtime" => "Unity.RenderPipelines.Core.Runtime",
 			"unity.visualeffectgraph.runtime" => "Unity.VisualEffectGraph.Runtime",
 			"unity.textmeshpro" => "Unity.TextMeshPro",
+			"unity.mathematics" => "Unity.Mathematics",
+			"unity.xr.interaction.toolkit" => "Unity.XR.Interaction.Toolkit",
+			"unity.visualscripting.core" => "Unity.VisualScripting.Core",
+			"unity.burst" => "Unity.Burst",
+			"unity.physics" => "Unity.Physics",
+			"unity.physics2d" => "Unity.Physics2D",
+			"unity.ugui" => "Unity.UI",
+			"unity.ai.navigation" => "Unity.AI.Navigation",
+			"unity.timeline" => "Unity.Timeline",
+			"unity.postprocessing.runtime" => "Unity.Postprocessing.Runtime",
+			"unity.recorder" => "Unity.Recorder",
 			"assembly - csharp" => "Assembly-CSharp",
 			"assembly - csharp - firstpass" => "Assembly-CSharp-firstpass",
 			"assembly - csharp - editor" => "Assembly-CSharp-Editor",
 			"assembly - unityscript" => "Assembly-UnityScript",
 			"assembly - unityscript - firstpass" => "Assembly-UnityScript-firstpass",
+			_ when lower.StartsWith("assembly - ", StringComparison.Ordinal) => assemblyName.Replace(" - ", "-"),
 			_ => assemblyName,
 		};
 	}
@@ -169,13 +182,19 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 				[MenuItem("Tools/AssetRipper/Relink All References")]
 				private static void RelinkFromMenu()
 				{
-					Relink(true);
+					Relink(true, false);
+				}
+
+				[MenuItem("Tools/AssetRipper/Relink All (Dry Run)")]
+				private static void RelinkDryRunFromMenu()
+				{
+					Relink(true, true);
 				}
 
 				[MenuItem("Assets/AssetRipper/Relink Selected Reference(s)", false, 2000)]
 				private static void RelinkSelectedFromMenu()
 				{
-					RelinkSelected();
+					RelinkSelected(false);
 				}
 
 				[MenuItem("Tools/AssetRipper/Recover Missing Meta Files")]
@@ -193,19 +212,31 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 				[MenuItem("Tools/AssetRipper/Force Sync GUIDs from Map")]
 				private static void ForceSyncFromMenu()
 				{
-					ForceSyncMetaFiles(true);
+					if (EditorUtility.DisplayDialog("Force Sync GUIDs", "This will overwrite the GUIDs in your existing .meta files to match the AssetRipper map. This cannot be easily undone. Continue?", "Yes", "Cancel"))
+					{
+						ForceSyncMetaFiles(true);
+					}
 				}
 
 				[MenuItem("Tools/AssetRipper/Clean Unresolved References")]
 				private static void CleanUnresolvedFromMenu()
 				{
-					CleanUnresolvedReferences();
+					if (EditorUtility.DisplayDialog("Clean Unresolved References", "This will search the entire project and null out any script references that cannot be found in the current project but exist in the AssetRipper map. Continue?", "Yes", "Cancel"))
+					{
+						CleanUnresolvedReferences(false);
+					}
+				}
+
+				[MenuItem("Tools/AssetRipper/Clean All Unresolved (Dry Run)")]
+				private static void CleanUnresolvedDryRunFromMenu()
+				{
+					CleanUnresolvedReferences(true);
 				}
 
 				[MenuItem("Assets/AssetRipper/Clean Selected Unresolved Reference(s)", false, 2001)]
 				private static void CleanSelectedFromMenu()
 				{
-					CleanSelectedUnresolved();
+					CleanSelectedUnresolved(false);
 				}
 
 				private static void TryAutoRelink()
@@ -220,7 +251,7 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 					Relink(false);
 				}
 
-				private static void RelinkSelected()
+				private static void RelinkSelected(bool dryRun)
 				{
 					string mapPath = GetAbsoluteMapPath();
 					if (!File.Exists(mapPath))
@@ -250,7 +281,7 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 						AssetDatabase.StartAssetEditing();
 						for (int i = 0; i < selectedPaths.Length; i++)
 						{
-							if (TryRelinkFile(selectedPaths[i], sourceMap, installedScripts, out int replacements, out int _, out int _, unresolvedIdentities))
+							if (TryRelinkFile(selectedPaths[i], sourceMap, installedScripts, out int replacements, out int _, out int _, unresolvedIdentities, dryRun))
 							{
 								changedFiles++;
 								changedReferences += replacements;
@@ -265,7 +296,8 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 					if (changedFiles > 0)
 					{
 						AssetDatabase.Refresh();
-						Debug.Log("AssetRipper: Relinked " + changedReferences + " references in " + changedFiles + " selected assets.");
+						string action = dryRun ? "Would relink " : "Relinked ";
+						Debug.Log("AssetRipper: " + action + changedReferences + " references in " + changedFiles + " selected assets.");
 					}
 					else
 					{
@@ -273,7 +305,7 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 					}
 				}
 
-				private static void Relink(bool verbose)
+				private static void Relink(bool verbose, bool dryRun = false)
 				{
 					string mapPath = GetAbsoluteMapPath();
 					if (!File.Exists(mapPath))
@@ -306,7 +338,7 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 							string assetPath = candidatePaths[i];
 							if (verbose) EditorUtility.DisplayProgressBar("Relinking Assets", assetPath, (float)i / total);
 
-							if (TryRelinkFile(assetPath, sourceMap, installedScripts, out int replacements, out int skipped, out int unresolved, unresolvedIdentities))
+							if (TryRelinkFile(assetPath, sourceMap, installedScripts, out int replacements, out int skipped, out int unresolved, unresolvedIdentities, dryRun))
 							{
 								changedFiles++;
 								changedReferences += replacements;
@@ -324,7 +356,8 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 					if (changedFiles > 0)
 					{
 						AssetDatabase.Refresh();
-						Debug.Log("AssetRipper successfully relinked "
+						string action = dryRun ? "Would relink " : "Successfully relinked ";
+						Debug.Log("AssetRipper " + action
 							+ changedReferences.ToString(CultureInfo.InvariantCulture)
 							+ " references across "
 							+ changedFiles.ToString(CultureInfo.InvariantCulture)
@@ -538,7 +571,7 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 					}
 				}
 
-				private static void CleanSelectedUnresolved()
+				private static void CleanSelectedUnresolved(bool dryRun)
 				{
 					string mapPath = GetAbsoluteMapPath();
 					if (!File.Exists(mapPath))
@@ -565,7 +598,7 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 						AssetDatabase.StartAssetEditing();
 						for (int i = 0; i < selectedPaths.Length; i++)
 						{
-							if (TryCleanFile(selectedPaths[i], sourceMap, installedScripts, out int count))
+							if (TryCleanFile(selectedPaths[i], sourceMap, installedScripts, out int count, dryRun))
 							{
 								cleanedFiles++;
 								cleanedReferences += count;
@@ -580,7 +613,8 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 					if (cleanedFiles > 0)
 					{
 						AssetDatabase.Refresh();
-						Debug.Log("AssetRipper: Cleaned " + cleanedReferences + " references in " + cleanedFiles + " selected assets.");
+						string action = dryRun ? "Would clean " : "Cleaned ";
+						Debug.Log("AssetRipper: " + action + cleanedReferences + " references in " + cleanedFiles + " selected assets.");
 					}
 					else
 					{
@@ -588,7 +622,7 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 					}
 				}
 
-				private static void CleanUnresolvedReferences()
+				private static void CleanUnresolvedReferences(bool dryRun)
 				{
 					string mapPath = GetAbsoluteMapPath();
 					if (!File.Exists(mapPath))
@@ -614,7 +648,7 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 							string assetPath = candidatePaths[i];
 							EditorUtility.DisplayProgressBar("Cleaning Unresolved References", assetPath, (float)i / total);
 
-							if (TryCleanFile(assetPath, sourceMap, installedScripts, out int count))
+							if (TryCleanFile(assetPath, sourceMap, installedScripts, out int count, dryRun))
 							{
 								cleanedFiles++;
 								cleanedReferences += count;
@@ -630,7 +664,8 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 					if (cleanedFiles > 0)
 					{
 						AssetDatabase.Refresh();
-						Debug.Log("AssetRipper successfully cleaned " + cleanedReferences.ToString(CultureInfo.InvariantCulture) + " unresolved script references across " + cleanedFiles.ToString(CultureInfo.InvariantCulture) + " assets.");
+						string action = dryRun ? "Would clean " : "Successfully cleaned ";
+						Debug.Log("AssetRipper " + action + cleanedReferences.ToString(CultureInfo.InvariantCulture) + " unresolved script references across " + cleanedFiles.ToString(CultureInfo.InvariantCulture) + " assets.");
 					}
 					else
 					{
@@ -638,7 +673,7 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 					}
 				}
 
-				private static bool TryCleanFile(string assetPath, Dictionary<string, string> sourceMap, Dictionary<string, string> installedScripts, out int cleanedCount)
+				private static bool TryCleanFile(string assetPath, Dictionary<string, string> sourceMap, Dictionary<string, string> installedScripts, out int cleanedCount, bool dryRun = false)
 				{
 					cleanedCount = 0;
 					string fullPath = Path.GetFullPath(assetPath);
@@ -661,6 +696,7 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 
 					cleanedCount = localCleaned;
 					if (localCleaned == 0 || string.Equals(originalText, updatedText, StringComparison.Ordinal)) return false;
+					if (dryRun) return true;
 
 					try
 					{
@@ -677,7 +713,8 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 					out int replacements,
 					out int skipped,
 					out int unresolved,
-					HashSet<string> unresolvedIdentities)
+					HashSet<string> unresolvedIdentities,
+					bool dryRun = false)
 				{
 					replacements = 0;
 					skipped = 0;
@@ -742,6 +779,8 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 						return false;
 					}
 
+					if (dryRun) return true;
+
 					try
 					{
 						File.WriteAllText(fullPath, updatedText);
@@ -758,7 +797,7 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 						string line = rawLine.Trim();
 						if (line.Length == 0 || line[0] == '#') continue;
 
-						string[] parts = rawLine.Split('\t');
+						string[] parts = line.Split('\t');
 						if (parts.Length < 6) continue;
 
 						if (!long.TryParse(parts[1], NumberStyles.Integer,
@@ -781,7 +820,7 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 						string line = rawLine.Trim();
 						if (line.Length == 0 || line[0] == '#') continue;
 
-						string[] parts = rawLine.Split('\t');
+						string[] parts = line.Split('\t');
 						if (parts.Length < 6) continue;
 
 						string guid = parts[0].Trim().ToLowerInvariant();
@@ -981,37 +1020,37 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 						"*.shadervariants", "*.terrainlayer",
 						"*.fontsettings", "*.guiskin", "*.brush",
 						"*.physicMaterial", "*.physicsMaterial2D", "*.font", "*.vfx", "*.spriteatlas",
-						"*.inputactions", "*.spriteatlasv2", "*.computeShader"
+						"*.inputactions", "*.spriteatlasv2", "*.computeShader",
+						"*.shadergraph", "*.subgraph", "*.visualelements", "*.uss",
+						"*.uxml", "*.razor"
 					};
 				}
 
 				private static IEnumerable<string> EnumerateCandidateAssetPaths()
 				{
-					string[] extensions = GetCandidateExtensions();
+					HashSet<string> extensions = new HashSet<string>(GetCandidateExtensions(), StringComparer.OrdinalIgnoreCase);
 
-					// Search Assets/ folder
 					if (Directory.Exists("Assets"))
 					{
-						foreach (string extension in extensions)
+						foreach (string fullPath in Directory.EnumerateFiles("Assets", "*.*", SearchOption.AllDirectories))
 						{
-							foreach (string fullPath in Directory.GetFiles("Assets", extension, SearchOption.AllDirectories))
+							string normalizedPath = fullPath.Replace('\\', '/');
+							if (normalizedPath.Contains("/Editor/AssetRipperPatches/")) continue;
+							if (extensions.Contains("*" + Path.GetExtension(normalizedPath)))
 							{
-								string normalizedPath = fullPath.Replace('\\', '/');
-								if (normalizedPath.Contains("/Editor/AssetRipperPatches/")) continue;
 								yield return normalizedPath;
 							}
 						}
 					}
 
-					// Search Packages/ folder (Unity 2018.1+)
-					// Embedded and local packages may contain assets with script references
 					if (Directory.Exists("Packages"))
 					{
-						foreach (string extension in extensions)
+						foreach (string fullPath in Directory.EnumerateFiles("Packages", "*.*", SearchOption.AllDirectories))
 						{
-							foreach (string fullPath in Directory.GetFiles("Packages", extension, SearchOption.AllDirectories))
+							string normalizedPath = fullPath.Replace('\\', '/');
+							if (extensions.Contains("*" + Path.GetExtension(normalizedPath)))
 							{
-								yield return fullPath.Replace('\\', '/');
+								yield return normalizedPath;
 							}
 						}
 					}
@@ -1024,12 +1063,13 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 
 				private static string MakeIdentityKey(string assemblyName, string fullTypeName)
 				{
-					return NormalizeAssemblyName(assemblyName) + "|" + fullTypeName;
+					return NormalizeAssemblyName(assemblyName) + "|" + fullTypeName.ToLowerInvariant();
 				}
 
 				private static string NormalizeAssemblyName(string assemblyName)
 				{
-					switch (assemblyName.ToLowerInvariant())
+					string lower = assemblyName.ToLowerInvariant();
+					switch (lower)
 					{
 						case "unity.addressables": return "Unity.Addressables";
 						case "unity.inputsystem": return "Unity.InputSystem";
@@ -1039,12 +1079,25 @@ public sealed class ScriptReferenceRelinkerPostExporter : IPostExporter
 						case "unity.renderpipelines.core.runtime": return "Unity.RenderPipelines.Core.Runtime";
 						case "unity.visualeffectgraph.runtime": return "Unity.VisualEffectGraph.Runtime";
 						case "unity.textmeshpro": return "Unity.TextMeshPro";
+						case "unity.mathematics": return "Unity.Mathematics";
+						case "unity.xr.interaction.toolkit": return "Unity.XR.Interaction.Toolkit";
+						case "unity.visualscripting.core": return "Unity.VisualScripting.Core";
+						case "unity.burst": return "Unity.Burst";
+						case "unity.physics": return "Unity.Physics";
+						case "unity.physics2d": return "Unity.Physics2D";
+						case "unity.ugui": return "Unity.UI";
+						case "unity.ai.navigation": return "Unity.AI.Navigation";
+						case "unity.timeline": return "Unity.Timeline";
+						case "unity.postprocessing.runtime": return "Unity.Postprocessing.Runtime";
+						case "unity.recorder": return "Unity.Recorder";
 						case "assembly - csharp": return "Assembly-CSharp";
 						case "assembly - csharp - firstpass": return "Assembly-CSharp-firstpass";
 						case "assembly - csharp - editor": return "Assembly-CSharp-Editor";
 						case "assembly - unityscript": return "Assembly-UnityScript";
 						case "assembly - unityscript - firstpass": return "Assembly-UnityScript-firstpass";
-						default: return assemblyName;
+						default:
+							if (lower.StartsWith("assembly - ")) return assemblyName.Replace(" - ", "-");
+							return assemblyName;
 					}
 				}
 
