@@ -13,7 +13,7 @@ namespace AssetRipper.GUI.Web.Paths;
 
 internal static class PathLinking
 {
-	private const string DefaultClasses = "btn btn-dark p-0 m-0";
+	private const string DefaultClasses = "btn btn-primary p-1 px-2 m-0 my-1";
 
 	public static void WriteLink(TextWriter writer, Bundle bundle, string? name = null, string? @class = DefaultClasses)
 	{
