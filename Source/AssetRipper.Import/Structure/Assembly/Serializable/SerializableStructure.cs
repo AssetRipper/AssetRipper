@@ -4,6 +4,7 @@ using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Assets.Traversal;
 using AssetRipper.Import.Logging;
+using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.SerializationLogic;
@@ -24,7 +25,7 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 		Fields = new SerializableValue[type.Fields.Count];
 	}
 
-	public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags)
+	public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, IAssemblyManager? assemblyManager = null)
 	{
 		Version = version;
 		for (int i = 0; i < Fields.Length; i++)
@@ -32,7 +33,46 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 			SerializableType.Field etalon = Type.Fields[i];
 			if (IsAvailable(etalon))
 			{
-				Fields[i].Read(ref reader, version, flags, Depth, etalon);
+				bool skipNormalRead = false;
+
+				if (assemblyManager != null)
+				{
+					if (Type.Name == "ReferencedObject")
+					{
+						if (etalon.Name == "data")
+						{
+							SerializableValue myType = this["type"];
+							string cName = myType["class"].AsString;
+							string nSpace = myType["ns"].AsString;
+							string aName = myType["asm"].AsString;
+
+							if (cName != "" && cName != null)
+							{
+								ScriptIdentifier id = assemblyManager.GetScriptID(aName, nSpace, cName);
+								SerializableType? tempType = null;
+								string? dummy = "";
+								bool success = assemblyManager.TryGetSerializableType(id, version, out tempType, out dummy);
+
+								if (success == true)
+								{
+									SerializableStructure newStruct = new SerializableStructure(tempType!, Depth + 1);
+									newStruct.Read(ref reader, version, flags, assemblyManager);
+
+									SerializableValue tempVal = new SerializableValue();
+									tempVal.AsAsset = newStruct;
+									Fields[i] = tempVal;
+
+									skipNormalRead = true;
+								}
+							}
+						}
+					}
+				}
+
+				if (skipNormalRead == false)
+				{
+					Fields[i].Read(ref reader, version, flags, Depth, etalon, assemblyManager);
+				}
 			}
 		}
 	}
@@ -117,11 +157,11 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 		return true;
 	}
 
-	public bool TryRead(ref EndianSpanReader reader, IMonoBehaviour monoBehaviour)
+	public bool TryRead(ref EndianSpanReader reader, IMonoBehaviour monoBehaviour, IAssemblyManager assemblyManager)
 	{
 		try
 		{
-			Read(ref reader, monoBehaviour.Collection.Version, monoBehaviour.Collection.Flags);
+			Read(ref reader, monoBehaviour.Collection.Version, monoBehaviour.Collection.Flags, assemblyManager);
 		}
 		catch (Exception ex)
 		{
