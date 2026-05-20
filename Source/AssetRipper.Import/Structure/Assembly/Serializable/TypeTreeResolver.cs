@@ -11,7 +11,7 @@ internal sealed class TypeTreeResolver : ITypeResolver
 
 	public TypeTreeResolver(IReadOnlyList<SerializedTypeReference> refTypes)
 	{
-		m_refTypes = refTypes is SerializedTypeReference[] array ? array : refTypes.ToArray();
+		m_refTypes = refTypes;
 	}
 
 	public bool TryGetSerializableType(
