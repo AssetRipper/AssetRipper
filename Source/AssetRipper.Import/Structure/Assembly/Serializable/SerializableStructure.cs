@@ -50,7 +50,7 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 							string namespaceName = nsVal.AsString;
 							string assemblyName = asmVal.AsString;
 
-							if (!string.IsNullOrEmpty(className) && serializedTypeResolver != null)
+							if (serializedTypeResolver != null)
 							{
 								ScriptIdentifier scriptId = new ScriptIdentifier(assemblyName, namespaceName, className);
 								if (serializedTypeResolver.TryGetSerializableType(scriptId, version, out SerializableType? resolvedType, out _))
