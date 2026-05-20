@@ -31,7 +31,6 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 	public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, ISerializedTypeResolver? serializedTypeResolver = null)
 	{
 		Version = version;
-
 		for (int i = 0; i < Fields.Length; i++)
 		{
 			SerializableType.Field etalon = Type.Fields[i];
