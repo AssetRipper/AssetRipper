@@ -61,7 +61,6 @@ public sealed class SerializedAssetCollection : AssetCollection
 			Platform = file.Platform,
 			Flags = file.Flags,
 			EndianType = file.EndianType,
-			RefTypes = file.RefTypes.ToArray(),
 		};
 		ReadOnlySpan<FileIdentifier> fileDependencies = file.Dependencies;
 		if (fileDependencies.Length > 0)
