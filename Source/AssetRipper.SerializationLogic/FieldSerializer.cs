@@ -209,6 +209,7 @@ public readonly partial struct FieldSerializer
 				if (fieldDefinition.HasSerializeReferenceAttribute())
 				{
 					fields.Add(new Field(ManagedReferenceTypes.GetManagedReferenceType(), 0, fieldDefinition.Name ?? "", true));
+					containsSerializeReference = true;
 					continue;
 				}
 
