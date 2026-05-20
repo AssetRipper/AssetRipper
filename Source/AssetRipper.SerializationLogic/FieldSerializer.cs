@@ -200,6 +200,7 @@ public readonly partial struct FieldSerializer
 		Dictionary<ITypeDefOrRef, SerializableType> typeCache,
 		[NotNullWhen(false)] out string? failureReason)
 	{
+		containsSerializeReference = false;
 		foreach ((FieldDefinition, TypeSignature) pair in enumerable)
 		{
 			(FieldDefinition fieldDefinition, TypeSignature fieldType) = pair;
