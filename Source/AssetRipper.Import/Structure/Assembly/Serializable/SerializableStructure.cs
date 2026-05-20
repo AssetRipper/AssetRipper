@@ -16,8 +16,11 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable;
 
 public interface ISerializedTypeResolver
 {
-	IReadOnlyList<SerializedTypeReference>? RefTypes { get; }
-	IAssemblyManager? AssemblyManager { get; }
+	bool TryGetSerializableType(
+		ScriptIdentifier scriptID,
+		UnityVersion version,
+		[NotNullWhen(true)] out SerializableType? scriptType,
+		[NotNullWhen(false)] out string? failureReason);
 }
 
 public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
