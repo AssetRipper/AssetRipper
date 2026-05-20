@@ -198,7 +198,8 @@ public readonly partial struct FieldSerializer
 		List<Field> fields,
 		IEnumerable<(FieldDefinition, TypeSignature)> enumerable,
 		Dictionary<ITypeDefOrRef, SerializableType> typeCache,
-		[NotNullWhen(false)] out string? failureReason)
+		[NotNullWhen(false)] out string? failureReason,
+		out bool containsSerializeReference)
 	{
 		containsSerializeReference = false;
 		foreach ((FieldDefinition, TypeSignature) pair in enumerable)
