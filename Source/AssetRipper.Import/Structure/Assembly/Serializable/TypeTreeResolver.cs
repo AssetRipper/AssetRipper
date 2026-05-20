@@ -37,7 +37,7 @@ internal sealed class TypeTreeResolver : ITypeResolver
 		}
 
 		scriptType = null;
-		failureReason = "type reference not found in type tree";
+		failureReason = "Serialized type reference was not found in the set of available type trees.";
 		return false;
 	}
 }
