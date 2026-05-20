@@ -6,8 +6,6 @@ using AssetRipper.Assets.Traversal;
 using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.SerializationLogic;
-using AssetRipper.Import.Structure.Assembly.Managers;
-using AssetRipper.IO.Files.SerializedFiles.Parser;
 using System.Collections;
 using System.Diagnostics;
 
