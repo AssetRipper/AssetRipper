@@ -19,11 +19,6 @@ internal sealed class MonoType : SerializableType
 		int maxDepth = 0;
 		foreach (Field field in Fields)
 		{
-			if (field.Type.HasSerializeReference)
-			{
-				HasSerializeReference = true;
-			}
-
 			if (field.Type.IsMaxDepthKnown)
 			{
 				maxDepth = Math.Max(maxDepth, field.Type.MaxDepth + 1);
