@@ -1,4 +1,4 @@
-﻿using AssetRipper.Assets.Cloning;
+using AssetRipper.Assets.Cloning;
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Traversal;
 using AssetRipper.IO.Endian;
@@ -27,10 +27,10 @@ public sealed class SerializablePair
 		Depth = depth;
 	}
 
-	public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags)
+	public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, ITypeResolver serializedTypeResolver)
 	{
-		First.Read(ref reader, version, flags, Depth, FirstField);
-		Second.Read(ref reader, version, flags, Depth, SecondField);
+		First.Read(ref reader, version, flags, Depth, FirstField, serializedTypeResolver);
+		Second.Read(ref reader, version, flags, Depth, SecondField, serializedTypeResolver);
 	}
 
 	public void Write(AssetWriter writer)

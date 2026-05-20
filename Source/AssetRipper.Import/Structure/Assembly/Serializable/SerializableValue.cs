@@ -432,7 +432,7 @@ public record struct SerializableValue([property: DebuggerBrowsable(DebuggerBrow
 		return result;
 	}
 
-	public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, int depth, in SerializableType.Field etalon, ISerializedTypeResolver serializedTypeResolver)
+	public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, int depth, in SerializableType.Field etalon, ITypeResolver serializedTypeResolver)
 	{
 		switch (etalon.ArrayDepth)
 		{
@@ -485,7 +485,7 @@ public record struct SerializableValue([property: DebuggerBrowsable(DebuggerBrow
 					case PrimitiveType.MapPair:
 						{
 							SerializablePair pair = new(etalon.Type, depth + 1);
-							pair.Read(ref reader, version, flags);
+							pair.Read(ref reader, version, flags, serializedTypeResolver);
 							AsPair = pair;
 						}
 						break;
@@ -550,7 +550,7 @@ public record struct SerializableValue([property: DebuggerBrowsable(DebuggerBrow
 							for (int i = 0; i < count; i++)
 							{
 								SerializablePair pair = new(etalon.Type, depth + 1);
-								pair.Read(ref reader, version, flags);
+								pair.Read(ref reader, version, flags, serializedTypeResolver);
 								pairs[i] = pair;
 							}
 
@@ -656,7 +656,7 @@ public record struct SerializableValue([property: DebuggerBrowsable(DebuggerBrow
 			reader.Align();
 		}
 
-		static IUnityAssetBase CreateAndReadComplexStructure(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, int depth, SerializableType.Field etalon, ISerializedTypeResolver serializedTypeResolver)
+		static IUnityAssetBase CreateAndReadComplexStructure(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, int depth, SerializableType.Field etalon, ITypeResolver serializedTypeResolver)
 		{
 			IUnityAssetBase asset = etalon.Type.CreateInstance(depth + 1, version);
 			if (asset is SerializableStructure structure)

@@ -28,8 +28,9 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 		Fields = new SerializableValue[type.Fields.Count];
 	}
 
-	public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, ISerializedTypeResolver? serializedTypeResolver = null)
+	public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, ITypeResolver? serializedTypeResolver = null)
 	{
+		ITypeResolver resolver = serializedTypeResolver ?? ITypeResolver.Null;
 		Version = version;
 		for (int i = 0; i < Fields.Length; i++)
 		{
@@ -50,20 +51,17 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 							string namespaceName = nsVal.AsString;
 							string assemblyName = asmVal.AsString;
 
-							if (serializedTypeResolver != null)
+							ScriptIdentifier scriptId = new ScriptIdentifier(assemblyName, namespaceName, className);
+							if (resolver.TryGetSerializableType(scriptId, version, out SerializableType? resolvedType, out _))
 							{
-								ScriptIdentifier scriptId = new ScriptIdentifier(assemblyName, namespaceName, className);
-								if (serializedTypeResolver.TryGetSerializableType(scriptId, version, out SerializableType? resolvedType, out _))
-								{
-									SerializableStructure resolvedStructure = new SerializableStructure(resolvedType, Depth + 1);
-									resolvedStructure.Read(ref reader, version, flags, serializedTypeResolver);
+								SerializableStructure resolvedStructure = new SerializableStructure(resolvedType, Depth + 1);
+								resolvedStructure.Read(ref reader, version, flags, resolver);
 
-									SerializableValue resolvedValue = new SerializableValue();
-									resolvedValue.AsAsset = resolvedStructure;
-									Fields[i] = resolvedValue;
+								SerializableValue resolvedValue = new SerializableValue();
+								resolvedValue.AsAsset = resolvedStructure;
+								Fields[i] = resolvedValue;
 
-									skipNormalRead = true;
-								}
+								skipNormalRead = true;
 							}
 						}
 					}
@@ -71,7 +69,7 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 
 				if (skipNormalRead == false)
 				{
-					Fields[i].Read(ref reader, version, flags, Depth, etalon, serializedTypeResolver);
+					Fields[i].Read(ref reader, version, flags, Depth, etalon, resolver);
 				}
 			}
 		}
@@ -157,7 +155,7 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 		return true;
 	}
 
-	public bool TryRead(ref EndianSpanReader reader, IMonoBehaviour monoBehaviour, ISerializedTypeResolver serializedTypeResolver)
+	public bool TryRead(ref EndianSpanReader reader, IMonoBehaviour monoBehaviour, ITypeResolver serializedTypeResolver)
 	{
 		try
 		{
@@ -329,69 +327,4 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 	/// <see href="https://forum.unity.com/threads/4-5-serialization-depth.248321/"/>
 	/// </remarks>
 	private static int GetMaxDepthLevel(UnityVersion version) => version.GreaterThanOrEquals(2020, 2, 0, UnityVersionType.Alpha, 21) ? 10 : 7;
-}
-
-public interface ISerializedTypeResolver
-{
-	bool TryGetSerializableType(
-		ScriptIdentifier scriptID,
-		UnityVersion version,
-		[NotNullWhen(true)] out SerializableType? scriptType,
-		[NotNullWhen(false)] out string? failureReason);
-}
-
-internal sealed class TypeTreeSerializedTypeResolver : ISerializedTypeResolver
-{
-	private readonly SerializedTypeReference[] m_refTypes;
-
-	public TypeTreeSerializedTypeResolver(ReadOnlySpan<SerializedTypeReference> refTypes)
-	{
-		m_refTypes = refTypes.ToArray();
-	}
-
-	public bool TryGetSerializableType(
-		ScriptIdentifier scriptID,
-		UnityVersion version,
-		[NotNullWhen(true)] out SerializableType? scriptType,
-		[NotNullWhen(false)] out string? failureReason)
-	{
-		for (int i = 0; i < m_refTypes.Length; i++)
-		{
-			SerializedTypeReference refType = m_refTypes[i];
-			if (refType.ClassName.String == scriptID.Name &&
-				refType.Namespace.String == scriptID.Namespace &&
-				refType.AsmName.String == scriptID.Assembly)
-			{
-				if (TypeTreeNodeStruct.TryMakeFromTypeTree(refType.OldType, out TypeTreeNodeStruct rootNode))
-				{
-					scriptType = SerializableTreeType.FromRootNode(rootNode, true);
-					failureReason = null;
-					return true;
-				}
-			}
-		}
-
-		scriptType = null;
-		failureReason = "type reference not found in type tree";
-		return false;
-	}
-}
-
-internal sealed class AssemblySerializedTypeResolver : ISerializedTypeResolver
-{
-	private readonly IAssemblyManager m_assemblyManager;
-
-	public AssemblySerializedTypeResolver(IAssemblyManager assemblyManager)
-	{
-		m_assemblyManager = assemblyManager;
-	}
-
-	public bool TryGetSerializableType(
-		ScriptIdentifier scriptID,
-		UnityVersion version,
-		[NotNullWhen(true)] out SerializableType? scriptType,
-		[NotNullWhen(false)] out string? failureReason)
-	{
-		return m_assemblyManager.TryGetSerializableType(scriptID, version, out scriptType, out failureReason);
-	}
 }

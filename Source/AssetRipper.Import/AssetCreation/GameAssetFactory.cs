@@ -77,7 +77,7 @@ public sealed class GameAssetFactory : AssetFactoryBase
 			if (type is not null && TypeTreeNodeStruct.TryMakeFromTypeTree(type.OldType, out TypeTreeNodeStruct rootNode))
 			{
 				structure = SerializableTreeType.FromRootNode(rootNode, true).CreateSerializableStructure();
-				if (structure.TryRead(ref reader, monoBehaviour, new TypeTreeSerializedTypeResolver(refTypes)))
+				if (structure.TryRead(ref reader, monoBehaviour, new TypeTreeResolver(refTypes)))
 				{
 					monoBehaviour.Structure = structure;
 				}

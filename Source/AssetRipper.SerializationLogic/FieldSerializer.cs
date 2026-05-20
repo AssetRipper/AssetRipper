@@ -130,20 +130,23 @@ public readonly partial struct FieldSerializer
 
 		if (TryCreateSerializableFields(typeStack, monoType, fields, GetFieldsInType(typeDefinition), typeCache, out failureReason))
 		{
-			bool hasSerializeReference = false;
-			HashSet<SerializableType> visited = new();
-			foreach (Field field in fields)
+			if (typeDefinition.InheritsFromMonoBehaviour() || typeDefinition.InheritsFromScriptableObject())
 			{
-				if (HasSerializeReferenceRecursive(field.Type, visited))
+				bool hasSerializeReference = false;
+				HashSet<SerializableType> visited = new();
+				foreach (Field field in fields)
 				{
-					hasSerializeReference = true;
-					break;
+					if (HasSerializeReferenceRecursive(field.Type, visited))
+					{
+						hasSerializeReference = true;
+						break;
+					}
 				}
-			}
 
-			if (hasSerializeReference && (typeDefinition.InheritsFromMonoBehaviour() || typeDefinition.InheritsFromScriptableObject()))
-			{
-				fields.Add(new SerializableType.Field(ManagedReferenceTypes.GetManagedReferencesRegistryType(), 0, "references", true));
+				if (hasSerializeReference)
+				{
+					fields.Add(new SerializableType.Field(ManagedReferenceTypes.GetManagedReferencesRegistryType(), 0, "references", true));
+				}
 			}
 			monoType.SetDepth();
 			typeStack.Pop();

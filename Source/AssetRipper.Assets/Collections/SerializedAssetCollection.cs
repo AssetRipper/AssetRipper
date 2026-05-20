@@ -73,7 +73,7 @@ public sealed class SerializedAssetCollection : AssetCollection
 
 	private static void ReadData(SerializedAssetCollection collection, SerializedFile file, AssetFactoryBase factory)
 	{
-		SerializedRefType[] refTypes = file.RefTypes.ToArray();
+		SerializedTypeReference[] refTypes = file.RefTypes.ToArray();
 		foreach (ObjectInfo objectInfo in file.Objects)
 		{
 			int classID = objectInfo.TypeID < 0 ? 114 : objectInfo.TypeID;
