@@ -20,7 +20,7 @@ internal sealed class TypeTreeResolver : ITypeResolver
 		[NotNullWhen(true)] out SerializableType? scriptType,
 		[NotNullWhen(false)] out string? failureReason)
 	{
-		for (int i = 0; i < m_refTypes.Length; i++)
+		for (int i = 0; i < m_refTypes.Count; i++)
 		{
 			SerializedTypeReference refType = m_refTypes[i];
 			if (refType.ClassName.String == scriptID.Name &&

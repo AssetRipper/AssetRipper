@@ -54,7 +54,7 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 							if (serializedTypeResolver.TryGetSerializableType(scriptId, version, out SerializableType? resolvedType, out _))
 							{
 								SerializableStructure resolvedStructure = new SerializableStructure(resolvedType, Depth + 1);
-								resolvedStructure.Read(ref reader, version, flags, resolver);
+								resolvedStructure.Read(ref reader, version, flags, serializedTypeResolver);
 
 								SerializableValue resolvedValue = new SerializableValue();
 								resolvedValue.AsAsset = resolvedStructure;
@@ -68,7 +68,7 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 
 				if (skipNormalRead == false)
 				{
-					Fields[i].Read(ref reader, version, flags, Depth, etalon, resolver);
+					Fields[i].Read(ref reader, version, flags, Depth, etalon, serializedTypeResolver);
 				}
 			}
 		}

@@ -1,4 +1,4 @@
-﻿using AssetRipper.Assets;
+using AssetRipper.Assets;
 using AssetRipper.Assets.Cloning;
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
@@ -51,12 +51,12 @@ public abstract class TypeTreeObject : NullObject
 
 		public override void ReadRelease(ref EndianSpanReader reader)
 		{
-			Fields.Read(ref reader, Collection.Version, Collection.Flags);
+			Fields.Read(ref reader, Collection.Version, Collection.Flags, ITypeResolver.Null);
 		}
 
 		public override void ReadEditor(ref EndianSpanReader reader)
 		{
-			Fields.Read(ref reader, Collection.Version, Collection.Flags);
+			Fields.Read(ref reader, Collection.Version, Collection.Flags, ITypeResolver.Null);
 		}
 
 		public override void WalkStandard(AssetWalker walker)
@@ -88,13 +88,13 @@ public abstract class TypeTreeObject : NullObject
 
 		public override void ReadRelease(ref EndianSpanReader reader)
 		{
-			ReleaseFields.Read(ref reader, Collection.Version, Collection.Flags);
+			ReleaseFields.Read(ref reader, Collection.Version, Collection.Flags, ITypeResolver.Null);
 			ConvertFields(ReleaseFields, EditorFields);
 		}
 
 		public override void ReadEditor(ref EndianSpanReader reader)
 		{
-			EditorFields.Read(ref reader, Collection.Version, Collection.Flags);
+			EditorFields.Read(ref reader, Collection.Version, Collection.Flags, ITypeResolver.Null);
 			ConvertFields(EditorFields, ReleaseFields);
 		}
 

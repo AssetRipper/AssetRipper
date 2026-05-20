@@ -2,13 +2,7 @@ using AsmResolver.DotNet;
 using AssetRipper.Import.Structure.Platforms;
 using AssetRipper.IO.Files;
 using AssetRipper.SerializationLogic;
-
 using AssetRipper.Import.Structure.Assembly.Serializable;
-using AsmResolver.DotNet;
-using AssetRipper.Import.Structure.Assembly.Serializable;
-using AssetRipper.Import.Structure.Platforms;
-using AssetRipper.IO.Files;
-using AssetRipper.SerializationLogic;
 
 namespace AssetRipper.Import.Structure.Assembly.Managers;
 
