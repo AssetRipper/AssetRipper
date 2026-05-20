@@ -376,6 +376,7 @@ internal sealed class TypeTreeSerializedTypeResolver : ISerializedTypeResolver
 		failureReason = "type reference not found in type tree";
 		return false;
 	}
+}
 
 internal sealed class AssemblySerializedTypeResolver : ISerializedTypeResolver
 {
