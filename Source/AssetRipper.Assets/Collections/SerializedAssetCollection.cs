@@ -12,7 +12,6 @@ namespace AssetRipper.Assets.Collections;
 public sealed class SerializedAssetCollection : AssetCollection
 {
 	private FileIdentifier[]? DependencyIdentifiers { get; set; }
-	public SerializedTypeReference[] RefTypes { get; private set; } = [];
 
 	private SerializedAssetCollection(Bundle bundle) : base(bundle)
 	{
