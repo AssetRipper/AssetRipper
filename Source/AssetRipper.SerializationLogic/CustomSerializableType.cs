@@ -10,7 +10,7 @@ internal sealed class CustomSerializableType : SerializableType
 		{
 			if (field.Type.IsMaxDepthKnown)
 			{
-				MaxDepth = Math.Max(MaxDepth, field.Type.MaxDepth + 1);
+				MaxDepth = int.Max(MaxDepth, field.Type.MaxDepth + 1);
 			}
 		}
 	}
