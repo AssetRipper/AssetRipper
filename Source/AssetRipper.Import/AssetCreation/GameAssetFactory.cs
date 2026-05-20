@@ -48,7 +48,7 @@ public sealed class GameAssetFactory : AssetFactoryBase
 
 	private IAssemblyManager AssemblyManager { get; }
 
-	public override IUnityObjectBase? ReadAsset(AssetInfo assetInfo, ReadOnlyArraySegment<byte> assetData, SerializedType? assetType, ReadOnlySpan<SerializedRefType> refTypes)
+	public override IUnityObjectBase? ReadAsset(AssetInfo assetInfo, ReadOnlyArraySegment<byte> assetData, SerializedType? assetType, IReadOnlyList<SerializedRefType> refTypes)
 	{
 		if (assetInfo.Collection.Version.LessThan(3, 5))
 		{
