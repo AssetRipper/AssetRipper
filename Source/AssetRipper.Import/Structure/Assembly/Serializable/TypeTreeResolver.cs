@@ -7,7 +7,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable;
 
 internal sealed class TypeTreeResolver : ITypeResolver
 {
-	private readonly SerializedTypeReference[] m_refTypes;
+	private readonly IReadOnlyList<SerializedTypeReference> m_refTypes;
 
 	public TypeTreeResolver(IReadOnlyList<SerializedTypeReference> refTypes)
 	{
