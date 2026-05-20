@@ -43,20 +43,22 @@ public abstract class TypeTreeObject : NullObject
 		public SerializableStructure Fields { get; }
 		public override SerializableStructure ReleaseFields => Fields;
 		public override SerializableStructure EditorFields => Fields;
+		private readonly ITypeResolver _resolver;
 
-		public SingleTypeTreeObject(AssetInfo assetInfo, TypeTreeNodeStruct root) : base(assetInfo)
+		public SingleTypeTreeObject(AssetInfo assetInfo, TypeTreeNodeStruct root, ITypeResolver resolver) : base(assetInfo)
 		{
+			_resolver = resolver;
 			Fields = SerializableTreeType.FromRootNode(root).CreateSerializableStructure();
 		}
 
 		public override void ReadRelease(ref EndianSpanReader reader)
 		{
-			Fields.Read(ref reader, Collection.Version, Collection.Flags, ITypeResolver.Null);
+			Fields.Read(ref reader, Collection.Version, Collection.Flags, _resolver);
 		}
 
 		public override void ReadEditor(ref EndianSpanReader reader)
 		{
-			Fields.Read(ref reader, Collection.Version, Collection.Flags, ITypeResolver.Null);
+			Fields.Read(ref reader, Collection.Version, Collection.Flags, _resolver);
 		}
 
 		public override void WalkStandard(AssetWalker walker)
@@ -79,22 +81,26 @@ public abstract class TypeTreeObject : NullObject
 	{
 		public override SerializableStructure ReleaseFields { get; }
 		public override SerializableStructure EditorFields { get; }
+		private readonly ITypeResolver _releaseResolver;
+		private readonly ITypeResolver _editorResolver;
 
-		public DoubleTypeTreeObject(AssetInfo assetInfo, TypeTreeNodeStruct releaseRoot, TypeTreeNodeStruct editorRoot) : base(assetInfo)
+		public DoubleTypeTreeObject(AssetInfo assetInfo, TypeTreeNodeStruct releaseRoot, TypeTreeNodeStruct editorRoot, ITypeResolver releaseResolver, ITypeResolver editorResolver) : base(assetInfo)
 		{
+			_releaseResolver = releaseResolver;
+			_editorResolver = editorResolver;
 			ReleaseFields = SerializableTreeType.FromRootNode(releaseRoot).CreateSerializableStructure();
 			EditorFields = SerializableTreeType.FromRootNode(editorRoot).CreateSerializableStructure();
 		}
 
 		public override void ReadRelease(ref EndianSpanReader reader)
 		{
-			ReleaseFields.Read(ref reader, Collection.Version, Collection.Flags, ITypeResolver.Null);
+			ReleaseFields.Read(ref reader, Collection.Version, Collection.Flags, _releaseResolver);
 			ConvertFields(ReleaseFields, EditorFields);
 		}
 
 		public override void ReadEditor(ref EndianSpanReader reader)
 		{
-			EditorFields.Read(ref reader, Collection.Version, Collection.Flags, ITypeResolver.Null);
+			EditorFields.Read(ref reader, Collection.Version, Collection.Flags, _editorResolver);
 			ConvertFields(EditorFields, ReleaseFields);
 		}
 

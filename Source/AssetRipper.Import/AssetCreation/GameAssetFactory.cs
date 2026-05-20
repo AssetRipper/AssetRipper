@@ -192,7 +192,7 @@ public sealed class GameAssetFactory : AssetFactoryBase
 		IUnityObjectBase? asset = AssetFactory.CreateSerialized(assetInfo, version);
 		if (asset is null && TypeTreeNodeStruct.TryMakeFromTpk((ClassIDType)assetInfo.ClassID, version, out TypeTreeNodeStruct releaseRoot, out TypeTreeNodeStruct editorRoot))
 		{
-			return TypeTreeObject.Create(assetInfo, releaseRoot, editorRoot);
+			return TypeTreeObject.Create(assetInfo, releaseRoot, editorRoot, ITypeResolver.Null, ITypeResolver.Null);
 		}
 		else
 		{
