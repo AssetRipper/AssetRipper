@@ -67,7 +67,7 @@ public sealed class GameAssetFactory : AssetFactoryBase
 		}
 	}
 
-	private static IMonoBehaviour ReadMonoBehaviour(IMonoBehaviour monoBehaviour, ReadOnlyArraySegment<byte> assetData, IAssemblyManager assemblyManager, SerializedType? type, ReadOnlySpan<SerializedTypeReference> refTypes)
+	private static IMonoBehaviour ReadMonoBehaviour(IMonoBehaviour monoBehaviour, ReadOnlyArraySegment<byte> assetData, IAssemblyManager assemblyManager, SerializedType? type, IReadOnlyList<SerializedTypeReference> refTypes)
 	{
 		EndianSpanReader reader = new EndianSpanReader(assetData, monoBehaviour.Collection.EndianType);
 		try
