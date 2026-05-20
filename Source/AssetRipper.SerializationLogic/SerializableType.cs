@@ -23,8 +23,6 @@ public abstract class SerializableType
 		Namespace = @namespace;
 		Type = type;
 		Name = name;
-		HasSerializeReference = type == PrimitiveType.Complex &&
-			(name == "managedReference" || name == "ReferencedObjectData");
 	}
 
 	public bool IsPrimitive()
