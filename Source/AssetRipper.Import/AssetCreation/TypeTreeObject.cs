@@ -32,7 +32,7 @@ public abstract class TypeTreeObject : NullObject
 
 	public sealed override void WalkEditor(AssetWalker walker) => EditorFields.WalkEditor(walker);
 
-	public static TypeTreeObject Create(AssetInfo assetInfo, TypeTreeNodeStruct root) => new SingleTypeTreeObject(assetInfo, root);
+	public static TypeTreeObject Create(AssetInfo assetInfo, TypeTreeNodeStruct root, ITypeResolver resolver) => new SingleTypeTreeObject(assetInfo, root, resolver);
 
 	public static TypeTreeObject Create(AssetInfo assetInfo, TypeTreeNodeStruct releaseRoot, TypeTreeNodeStruct editorRoot) => new DoubleTypeTreeObject(assetInfo, releaseRoot, editorRoot);
 
