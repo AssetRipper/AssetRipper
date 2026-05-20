@@ -7,11 +7,11 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable;
 
 internal sealed class TypeTreeResolver : ITypeResolver
 {
-	private readonly SerializedTypeReference[] m_refTypes;
+	private readonly IReadOnlyList<SerializedTypeReference> m_refTypes;
 
 	public TypeTreeResolver(IReadOnlyList<SerializedTypeReference> refTypes)
 	{
-		m_refTypes = refTypes is SerializedTypeReference[] array ? array : refTypes.ToArray();
+		m_refTypes = refTypes;
 	}
 
 	public bool TryGetSerializableType(
@@ -43,7 +43,7 @@ internal sealed class TypeTreeResolver : ITypeResolver
 		}
 
 		scriptType = null;
-		failureReason = "type reference not found in type tree";
+		failureReason = "Serialized type reference was not found in the set of available type trees.";
 		return false;
 	}
 }

@@ -28,9 +28,8 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 		Fields = new SerializableValue[type.Fields.Count];
 	}
 
-	public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, ITypeResolver? serializedTypeResolver = null)
+	public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, ITypeResolver serializedTypeResolver)
 	{
-		ITypeResolver resolver = serializedTypeResolver ?? ITypeResolver.Null;
 		Version = version;
 		for (int i = 0; i < Fields.Length; i++)
 		{
@@ -52,7 +51,7 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 							string assemblyName = asmVal.AsString;
 
 							ScriptIdentifier scriptId = new ScriptIdentifier(assemblyName, namespaceName, className);
-							if (resolver.TryGetSerializableType(scriptId, version, out SerializableType? resolvedType, out _))
+							if (serializedTypeResolver.TryGetSerializableType(scriptId, version, out SerializableType? resolvedType, out _))
 							{
 								SerializableStructure resolvedStructure = new SerializableStructure(resolvedType, Depth + 1);
 								resolvedStructure.Read(ref reader, version, flags, resolver);
