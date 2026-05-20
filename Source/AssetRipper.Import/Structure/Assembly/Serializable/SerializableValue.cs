@@ -656,7 +656,7 @@ public record struct SerializableValue([property: DebuggerBrowsable(DebuggerBrow
 			reader.Align();
 		}
 
-		static IUnityAssetBase CreateAndReadComplexStructure(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, int depth, SerializableType.Field etalon, ISerializedTypeResolver? serializedTypeResolver)
+		static IUnityAssetBase CreateAndReadComplexStructure(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, int depth, SerializableType.Field etalon, ISerializedTypeResolver serializedTypeResolver)
 		{
 			IUnityAssetBase asset = etalon.Type.CreateInstance(depth + 1, version);
 			if (asset is SerializableStructure structure)
