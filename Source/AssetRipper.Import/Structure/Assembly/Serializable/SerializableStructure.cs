@@ -36,8 +36,6 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 		Fields = new SerializableValue[type.Fields.Count];
 	}
 
-	private readonly record struct DefaultSerializedTypeResolver(IReadOnlyList<SerializedTypeReference>? RefTypes, IAssemblyManager? AssemblyManager) : ISerializedTypeResolver;
-
 	public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, IReadOnlyList<SerializedTypeReference>? refTypes = null, IAssemblyManager? assemblyManager = null)
 	{
 		Read(ref reader, version, flags, new DefaultSerializedTypeResolver(refTypes, assemblyManager));
