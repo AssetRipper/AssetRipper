@@ -34,7 +34,7 @@ public abstract class TypeTreeObject : NullObject
 
 	public static TypeTreeObject Create(AssetInfo assetInfo, TypeTreeNodeStruct root, ITypeResolver resolver) => new SingleTypeTreeObject(assetInfo, root, resolver);
 
-	public static TypeTreeObject Create(AssetInfo assetInfo, TypeTreeNodeStruct releaseRoot, TypeTreeNodeStruct editorRoot) => new DoubleTypeTreeObject(assetInfo, releaseRoot, editorRoot);
+	public static TypeTreeObject Create(AssetInfo assetInfo, TypeTreeNodeStruct releaseRoot, TypeTreeNodeStruct editorRoot, ITypeResolver releaseResolver, ITypeResolver editorResolver) => new DoubleTypeTreeObject(assetInfo, releaseRoot, editorRoot, releaseResolver, editorResolver);
 
 	private string GetDebuggerDisplay() => ClassName;
 
