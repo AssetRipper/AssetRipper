@@ -15,7 +15,7 @@ public readonly partial struct FieldSerializer
 
 		if (type.Type == PrimitiveType.Complex)
 		{
-			if (type.Name == "managedReference")
+			if (type.Name == "managedReference" || type.Name == "ReferencedObjectData")
 			{
 				return true;
 			}

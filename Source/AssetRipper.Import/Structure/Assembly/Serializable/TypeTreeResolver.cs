@@ -33,6 +33,12 @@ internal sealed class TypeTreeResolver : ITypeResolver
 					failureReason = null;
 					return true;
 				}
+				else
+				{
+					scriptType = null;
+					failureReason = "failed to create root node from type tree";
+					return false;
+				}
 			}
 		}
 
