@@ -78,7 +78,7 @@ public sealed class SerializedAssetCollection : AssetCollection
 		{
 			int classID = objectInfo.TypeID < 0 ? 114 : objectInfo.TypeID;
 			AssetInfo assetInfo = new AssetInfo(collection, objectInfo.FileID, classID);
-			IUnityObjectBase? asset = factory.ReadAsset(assetInfo, objectInfo.ObjectData, objectInfo.Type, file.RefTypes);
+			IUnityObjectBase? asset = factory.ReadAsset(assetInfo, objectInfo.ObjectData, objectInfo.Type, refTypes);
 			if (asset is not null)
 			{
 				collection.AddAsset(asset);
