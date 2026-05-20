@@ -1,4 +1,4 @@
-﻿namespace AssetRipper.SerializationLogic;
+namespace AssetRipper.SerializationLogic;
 
 public abstract class SerializableType
 {
