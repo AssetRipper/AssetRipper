@@ -1,4 +1,4 @@
-﻿using AssetRipper.Assets;
+using AssetRipper.Assets;
 using AssetRipper.Assets.Exceptions;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.IO;
@@ -10,7 +10,7 @@ namespace AssetRipper.Tools.JsonSerializer;
 
 public sealed class JsonAssetFactory : AssetFactoryBase
 {
-	public override IUnityObjectBase? ReadAsset(AssetInfo assetInfo, ReadOnlyArraySegment<byte> assetData, SerializedType? assetType)
+	public override IUnityObjectBase? ReadAsset(AssetInfo assetInfo, ReadOnlyArraySegment<byte> assetData, SerializedType? assetType, ReadOnlySpan<SerializedTypeReference> refTypes)
 	{
 		if (assetType?.OldType.Nodes.Count > 0)
 		{

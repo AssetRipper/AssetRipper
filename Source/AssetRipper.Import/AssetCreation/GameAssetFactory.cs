@@ -48,7 +48,7 @@ public sealed class GameAssetFactory : AssetFactoryBase
 
 	private IAssemblyManager AssemblyManager { get; }
 
-	public override IUnityObjectBase? ReadAsset(AssetInfo assetInfo, ReadOnlyArraySegment<byte> assetData, SerializedType? assetType, IReadOnlyList<SerializedRefType> refTypes)
+	public override IUnityObjectBase? ReadAsset(AssetInfo assetInfo, ReadOnlyArraySegment<byte> assetData, SerializedType? assetType, ReadOnlySpan<SerializedTypeReference> refTypes)
 	{
 		if (assetInfo.Collection.Version.LessThan(3, 5))
 		{
@@ -59,7 +59,7 @@ public sealed class GameAssetFactory : AssetFactoryBase
 		}
 		else if (assetInfo.ClassID == (int)ClassIDType.MonoBehaviour)
 		{
-			return ReadMonoBehaviour(MonoBehaviour.Create(assetInfo), assetData, AssemblyManager, assetType);
+			return ReadMonoBehaviour(MonoBehaviour.Create(assetInfo), assetData, AssemblyManager, assetType, refTypes);
 		}
 		else
 		{
@@ -67,7 +67,7 @@ public sealed class GameAssetFactory : AssetFactoryBase
 		}
 	}
 
-	private static IMonoBehaviour ReadMonoBehaviour(IMonoBehaviour monoBehaviour, ReadOnlyArraySegment<byte> assetData, IAssemblyManager assemblyManager, SerializedType? type)
+	private static IMonoBehaviour ReadMonoBehaviour(IMonoBehaviour monoBehaviour, ReadOnlyArraySegment<byte> assetData, IAssemblyManager assemblyManager, SerializedType? type, ReadOnlySpan<SerializedTypeReference> refTypes)
 	{
 		EndianSpanReader reader = new EndianSpanReader(assetData, monoBehaviour.Collection.EndianType);
 		try
@@ -77,7 +77,7 @@ public sealed class GameAssetFactory : AssetFactoryBase
 			if (type is not null && TypeTreeNodeStruct.TryMakeFromTypeTree(type.OldType, out TypeTreeNodeStruct rootNode))
 			{
 				structure = SerializableTreeType.FromRootNode(rootNode, true).CreateSerializableStructure();
-				if (structure.TryRead(ref reader, monoBehaviour, new SerializedRefTypeCollection(refTypes)))
+				if (structure.TryRead(ref reader, monoBehaviour, new TypeTreeSerializedTypeResolver(refTypes)))
 				{
 					monoBehaviour.Structure = structure;
 				}

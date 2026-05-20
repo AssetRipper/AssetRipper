@@ -1,4 +1,4 @@
-﻿using AssetRipper.Assets;
+using AssetRipper.Assets;
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Generics;
@@ -157,7 +157,7 @@ internal static class Program
 
 	private sealed class TextureAssetFactory : AssetFactoryBase
 	{
-		public override IUnityObjectBase? ReadAsset(AssetInfo assetInfo, ReadOnlyArraySegment<byte> assetData, SerializedType? assetType)
+		public override IUnityObjectBase? ReadAsset(AssetInfo assetInfo, ReadOnlyArraySegment<byte> assetData, SerializedType? assetType, ReadOnlySpan<SerializedTypeReference> refTypes)
 		{
 			IUnityObjectBase? asset = CreateAsset(assetInfo);
 			if (asset is not null)
