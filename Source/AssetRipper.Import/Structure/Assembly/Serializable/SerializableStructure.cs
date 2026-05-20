@@ -38,7 +38,7 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 			{
 				bool skipNormalRead = false;
 
-				if (Type.Name == "ReferencedObject" && etalon.Name == "data" && etalon.Type.Fields.Count == 0)
+				if (etalon.Type.Name == "ReferencedObjectData" && etalon.Type.Fields.Count == 0)
 				{
 					if (TryGetField("type", out SerializableValue typeVal) && typeVal.AsAsset is SerializableStructure typeStructure)
 					{
