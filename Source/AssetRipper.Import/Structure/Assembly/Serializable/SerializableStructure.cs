@@ -157,7 +157,7 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 		return true;
 	}
 
-	public bool TryRead(ref EndianSpanReader reader, IMonoBehaviour monoBehaviour, ISerializedTypeResolver? serializedTypeResolver)
+	public bool TryRead(ref EndianSpanReader reader, IMonoBehaviour monoBehaviour, ISerializedTypeResolver serializedTypeResolver)
 	{
 		try
 		{
