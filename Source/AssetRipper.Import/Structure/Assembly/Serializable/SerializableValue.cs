@@ -432,7 +432,7 @@ public record struct SerializableValue([property: DebuggerBrowsable(DebuggerBrow
 		return result;
 	}
 
-	public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, int depth, in SerializableType.Field etalon, ISerializedTypeResolver? serializedTypeResolver = null)
+	public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, int depth, in SerializableType.Field etalon, ISerializedTypeResolver serializedTypeResolver)
 	{
 		switch (etalon.ArrayDepth)
 		{
