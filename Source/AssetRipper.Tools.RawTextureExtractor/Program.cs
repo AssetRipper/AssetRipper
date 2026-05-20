@@ -157,7 +157,7 @@ internal static class Program
 
 	private sealed class TextureAssetFactory : AssetFactoryBase
 	{
-		public override IUnityObjectBase? ReadAsset(AssetInfo assetInfo, ReadOnlyArraySegment<byte> assetData, SerializedType? assetType, ReadOnlySpan<SerializedTypeReference> refTypes)
+		public override IUnityObjectBase? ReadAsset(AssetInfo assetInfo, ReadOnlyArraySegment<byte> assetData, SerializedType? assetType, IReadOnlyList<SerializedTypeReference> refTypes)
 		{
 			IUnityObjectBase? asset = CreateAsset(assetInfo);
 			if (asset is not null)
