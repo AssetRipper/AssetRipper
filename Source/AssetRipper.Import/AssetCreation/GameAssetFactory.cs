@@ -1,4 +1,5 @@
 using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.IO;
 using AssetRipper.Assets.Metadata;
@@ -76,13 +77,7 @@ public sealed class GameAssetFactory : AssetFactoryBase
 			if (type is not null && TypeTreeNodeStruct.TryMakeFromTypeTree(type.OldType, out TypeTreeNodeStruct rootNode))
 			{
 				structure = SerializableTreeType.FromRootNode(rootNode, true).CreateSerializableStructure();
-				//if (structure.Type.Fields.Count > 0 && structure.Type.Fields[^1] is { Type.Name: "ManagedReferencesRegistry", Name: "references" })
-				//{
-				//	Logger.Error(LogCategory.Import, $"MonoBehaviour has a field with the [SerializeReference] attribute, which is not currently supported.");
-				//	monoBehaviour.Structure = null;
-				//}
-				//else if (structure.TryRead(ref reader, monoBehaviour, assemblyManager))
-				if (structure.TryRead(ref reader, monoBehaviour, assemblyManager))
+				if (structure.TryRead(ref reader, monoBehaviour, (monoBehaviour.Collection as SerializedAssetCollection)?.RefTypes, null))
 				{
 					monoBehaviour.Structure = structure;
 				}

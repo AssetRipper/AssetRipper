@@ -5,12 +5,20 @@ using AssetRipper.Assets.Metadata;
 using AssetRipper.Assets.Traversal;
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly.Managers;
+using AssetRipper.Import.Structure.Assembly.TypeTrees;
 using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files.SerializedFiles;
+using AssetRipper.IO.Files.SerializedFiles.Parser;
 using AssetRipper.SerializationLogic;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 
 namespace AssetRipper.Import.Structure.Assembly.Serializable;
+
+public interface ISerializedTypeResolver
+{
+	IReadOnlyList<SerializedTypeReference>? RefTypes { get; }
+	IAssemblyManager? AssemblyManager { get; }
+}
 
 public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 {
@@ -25,9 +33,19 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 		Fields = new SerializableValue[type.Fields.Count];
 	}
 
-	public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, IAssemblyManager? assemblyManager = null)
+	private readonly record struct DefaultSerializedTypeResolver(IReadOnlyList<SerializedTypeReference>? RefTypes, IAssemblyManager? AssemblyManager) : ISerializedTypeResolver;
+
+	public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, IReadOnlyList<SerializedTypeReference>? refTypes = null, IAssemblyManager? assemblyManager = null)
+	{
+		Read(ref reader, version, flags, new DefaultSerializedTypeResolver(refTypes, assemblyManager));
+	}
+
+	public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, ISerializedTypeResolver? serializedTypeResolver)
 	{
 		Version = version;
+		IReadOnlyList<SerializedTypeReference>? refTypes = serializedTypeResolver?.RefTypes;
+		IAssemblyManager? assemblyManager = serializedTypeResolver?.AssemblyManager;
+
 		for (int i = 0; i < Fields.Length; i++)
 		{
 			SerializableType.Field etalon = Type.Fields[i];
@@ -35,34 +53,58 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 			{
 				bool skipNormalRead = false;
 
-				if (assemblyManager != null)
+				if (Type.Name == "ReferencedObject" && etalon.Name == "data" && etalon.Type.Fields.Count == 0)
 				{
-					if (Type.Name == "ReferencedObject")
+					if (TryGetField("type", out SerializableValue typeVal) && typeVal.AsAsset is SerializableStructure typeStructure)
 					{
-						if (etalon.Name == "data")
+						if (typeStructure.TryGetField("class", out SerializableValue classVal) &&
+							typeStructure.TryGetField("ns", out SerializableValue nsVal) &&
+							typeStructure.TryGetField("asm", out SerializableValue asmVal))
 						{
-							SerializableValue myType = this["type"];
-							string cName = myType["class"].AsString;
-							string nSpace = myType["ns"].AsString;
-							string aName = myType["asm"].AsString;
+							string className = classVal.AsString;
+							string namespaceName = nsVal.AsString;
+							string assemblyName = asmVal.AsString;
 
-							if (cName != "" && cName != null)
+							if (!string.IsNullOrEmpty(className))
 							{
-								ScriptIdentifier id = assemblyManager.GetScriptID(aName, nSpace, cName);
-								SerializableType? tempType = null;
-								string? dummy = "";
-								bool success = assemblyManager.TryGetSerializableType(id, version, out tempType, out dummy);
-
-								if (success == true)
+								if (refTypes != null)
 								{
-									SerializableStructure newStruct = new SerializableStructure(tempType!, Depth + 1);
-									newStruct.Read(ref reader, version, flags, assemblyManager);
+									foreach (SerializedTypeReference refType in refTypes)
+									{
+										if (refType.ClassName.String == className && refType.Namespace.String == namespaceName && refType.AsmName.String == assemblyName)
+										{
+											if (TypeTreeNodeStruct.TryMakeFromTypeTree(refType.OldType, out TypeTreeNodeStruct rootNode))
+											{
+												SerializableStructure resolvedStructure = SerializableTreeType.FromRootNode(rootNode, true).CreateSerializableStructure();
+												resolvedStructure.Read(ref reader, version, flags, new DefaultSerializedTypeResolver(refTypes, null));
+												
+												SerializableValue resolvedValue = new SerializableValue();
+												resolvedValue.AsAsset = resolvedStructure;
+												Fields[i] = resolvedValue;
+												skipNormalRead = true;
+											}
+											break;
+										}
+									}
+								}
+								else if (assemblyManager != null)
+								{
+									ScriptIdentifier scriptId = assemblyManager.GetScriptID(assemblyName, namespaceName, className);
+									SerializableType? resolvedType = null;
+									string? failureReason = "";
+									bool isTypeResolved = assemblyManager.TryGetSerializableType(scriptId, version, out resolvedType, out failureReason);
 
-									SerializableValue tempVal = new SerializableValue();
-									tempVal.AsAsset = newStruct;
-									Fields[i] = tempVal;
+									if (isTypeResolved == true)
+									{
+										SerializableStructure resolvedStructure = new SerializableStructure(resolvedType!, Depth + 1);
+										resolvedStructure.Read(ref reader, version, flags, new DefaultSerializedTypeResolver(null, assemblyManager));
 
-									skipNormalRead = true;
+										SerializableValue resolvedValue = new SerializableValue();
+										resolvedValue.AsAsset = resolvedStructure;
+										Fields[i] = resolvedValue;
+
+										skipNormalRead = true;
+									}
 								}
 							}
 						}
@@ -71,7 +113,7 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 
 				if (skipNormalRead == false)
 				{
-					Fields[i].Read(ref reader, version, flags, Depth, etalon, assemblyManager);
+					Fields[i].Read(ref reader, version, flags, Depth, etalon, refTypes, assemblyManager);
 				}
 			}
 		}
@@ -157,11 +199,11 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 		return true;
 	}
 
-	public bool TryRead(ref EndianSpanReader reader, IMonoBehaviour monoBehaviour, IAssemblyManager assemblyManager)
+	public bool TryRead(ref EndianSpanReader reader, IMonoBehaviour monoBehaviour, IReadOnlyList<SerializedTypeReference>? refTypes, IAssemblyManager? assemblyManager)
 	{
 		try
 		{
-			Read(ref reader, monoBehaviour.Collection.Version, monoBehaviour.Collection.Flags, assemblyManager);
+			Read(ref reader, monoBehaviour.Collection.Version, monoBehaviour.Collection.Flags, refTypes, assemblyManager);
 		}
 		catch (Exception ex)
 		{

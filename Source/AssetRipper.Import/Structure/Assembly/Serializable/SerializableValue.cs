@@ -7,6 +7,7 @@ using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.SerializationLogic;
 using AssetRipper.Import.Structure.Assembly.Managers;
+using AssetRipper.IO.Files.SerializedFiles.Parser;
 using System.Collections;
 using System.Diagnostics;
 
@@ -431,7 +432,7 @@ public record struct SerializableValue([property: DebuggerBrowsable(DebuggerBrow
 		return result;
 	}
 
-	public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, int depth, in SerializableType.Field etalon, IAssemblyManager? assemblyManager = null)
+	public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, int depth, in SerializableType.Field etalon, IReadOnlyList<SerializedTypeReference>? refTypes = null, IAssemblyManager? assemblyManager = null)
 	{
 		switch (etalon.ArrayDepth)
 		{
@@ -478,7 +479,7 @@ public record struct SerializableValue([property: DebuggerBrowsable(DebuggerBrow
 						AsString = reader.ReadUtf8StringAligned().String;
 						break;
 					case PrimitiveType.Complex:
-						AsAsset = CreateAndReadComplexStructure(ref reader, version, flags, depth, etalon, assemblyManager);
+						AsAsset = CreateAndReadComplexStructure(ref reader, version, flags, depth, etalon, refTypes, assemblyManager);
 						break;
 					case PrimitiveType.Pair:
 					case PrimitiveType.MapPair:
@@ -564,7 +565,7 @@ public record struct SerializableValue([property: DebuggerBrowsable(DebuggerBrow
 							IUnityAssetBase[] structures = CreateArray<IUnityAssetBase>(count);
 							for (int i = 0; i < count; i++)
 							{
-								structures[i] = CreateAndReadComplexStructure(ref reader, version, flags, depth, etalon, assemblyManager);
+								structures[i] = CreateAndReadComplexStructure(ref reader, version, flags, depth, etalon, refTypes, assemblyManager);
 							}
 							AsAssetArray = structures;
 						}
@@ -629,7 +630,7 @@ public record struct SerializableValue([property: DebuggerBrowsable(DebuggerBrow
 								IUnityAssetBase[] structures = CreateArray<IUnityAssetBase>(innerCount);
 								for (int j = 0; j < innerCount; j++)
 								{
-									structures[j] = CreateAndReadComplexStructure(ref reader, version, flags, depth, etalon, assemblyManager);
+									structures[j] = CreateAndReadComplexStructure(ref reader, version, flags, depth, etalon, refTypes, assemblyManager);
 								}
 								result[i] = structures;
 
@@ -655,12 +656,12 @@ public record struct SerializableValue([property: DebuggerBrowsable(DebuggerBrow
 			reader.Align();
 		}
 
-		static IUnityAssetBase CreateAndReadComplexStructure(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, int depth, SerializableType.Field etalon, IAssemblyManager? assemblyManager)
+		static IUnityAssetBase CreateAndReadComplexStructure(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, int depth, SerializableType.Field etalon, IReadOnlyList<SerializedTypeReference>? refTypes, IAssemblyManager? assemblyManager)
 		{
 			IUnityAssetBase asset = etalon.Type.CreateInstance(depth + 1, version);
 			if (asset is SerializableStructure structure)
 			{
-				structure.Read(ref reader, version, flags, assemblyManager);
+				structure.Read(ref reader, version, flags, refTypes, assemblyManager);
 			}
 			else
 			{

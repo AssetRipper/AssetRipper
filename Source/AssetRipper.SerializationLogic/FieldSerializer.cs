@@ -1,4 +1,4 @@
-﻿using AssetRipper.SerializationLogic.Extensions;
+using AssetRipper.SerializationLogic.Extensions;
 using System.Diagnostics;
 using static AssetRipper.SerializationLogic.SerializableType;
 
@@ -6,6 +6,30 @@ namespace AssetRipper.SerializationLogic;
 
 public readonly partial struct FieldSerializer
 {
+	private static bool HasSerializeReferenceRecursive(SerializableType type, HashSet<SerializableType> visited)
+	{
+		if (!visited.Add(type))
+		{
+			return false;
+		}
+
+		if (type.Type == PrimitiveType.Complex)
+		{
+			if (type.Name == "managedReference")
+			{
+				return true;
+			}
+			foreach (SerializableType.Field field in type.Fields)
+			{
+				if (HasSerializeReferenceRecursive(field.Type, visited))
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	public bool TryCreateSerializableType(TypeDefinition typeDefinition,
 		[NotNullWhen(true)] out SerializableType? result,
 		[NotNullWhen(false)] out string? failureReason)
@@ -106,6 +130,21 @@ public readonly partial struct FieldSerializer
 
 		if (TryCreateSerializableFields(typeStack, monoType, fields, GetFieldsInType(typeDefinition), typeCache, out failureReason))
 		{
+			bool hasSerializeReference = false;
+			HashSet<SerializableType> visited = new();
+			foreach (Field field in fields)
+			{
+				if (HasSerializeReferenceRecursive(field.Type, visited))
+				{
+					hasSerializeReference = true;
+					break;
+				}
+			}
+
+			if (hasSerializeReference && (typeDefinition.InheritsFromMonoBehaviour() || typeDefinition.InheritsFromScriptableObject()))
+			{
+				fields.Add(new SerializableType.Field(ManagedReferenceTypes.GetManagedReferencesRegistryType(), 0, "references", true));
+			}
 			monoType.SetDepth();
 			typeStack.Pop();
 			result = monoType;
@@ -200,8 +239,8 @@ public readonly partial struct FieldSerializer
 			{
 				if (fieldDefinition.HasSerializeReferenceAttribute())
 				{
-					failureReason = $"{fieldDefinition.DeclaringType?.FullName}.{fieldDefinition.Name} uses the [SerializeReference] attribute, which is currently not supported.";
-					return false;
+					fields.Add(new Field(ManagedReferenceTypes.GetManagedReferenceType(), 0, fieldDefinition.Name ?? "", true));
+					continue;
 				}
 
 				int arrayDepth = 0;
