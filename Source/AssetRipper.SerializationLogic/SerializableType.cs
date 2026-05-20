@@ -62,7 +62,6 @@ public abstract class SerializableType
 	/// </remarks>
 	public int MaxDepth { get; protected set; } = -1;
 	public bool IsMaxDepthKnown => MaxDepth >= 0;
-	public bool HasSerializeReference { get; protected set; }
 	private HashSet<SerializableType>? _cyclicReferences;
 
 	internal protected void AddCyclicReference(SerializableType other)
