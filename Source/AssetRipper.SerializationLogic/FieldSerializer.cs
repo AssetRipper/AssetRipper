@@ -41,6 +41,7 @@ public readonly partial struct FieldSerializer
 		{
 			result = null;
 			failureReason = $"Failed to resolve type signature {typeSignature.FullName}.";
+			containsSerializeReference = default;
 			return false;
 		}
 		else
