@@ -290,7 +290,8 @@ public readonly partial struct FieldSerializer
 		int arrayDepth,
 		Dictionary<ITypeDefOrRef, SerializableType> typeCache,
 		out Field result,
-		[NotNullWhen(false)] out string? failureReason)
+		[NotNullWhen(false)] out string? failureReason,
+		out bool containsSerializeReference)
 	{
 		switch (typeSignature)
 		{
