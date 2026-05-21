@@ -91,7 +91,7 @@ public readonly partial struct FieldSerializer
 
 		if (typeDefinition.BaseType is not null)
 		{
-			if (!TryCreateSerializableType(typeDefinition.BaseType.ToTypeSignature(), typeCache, typeStack, out SerializableType? baseType, out failureReason))
+			if (!TryCreateSerializableType(typeDefinition.BaseType.ToTypeSignature(), typeCache, typeStack, out SerializableType? baseType, out failureReason, out containsSerializeReference))
 			{
 				typeCache.Remove(typeDefinition);
 				typeStack.Pop();
