@@ -68,6 +68,7 @@ public readonly partial struct FieldSerializer
 		{
 			result = null;
 			failureReason = "Generic types are not serializable.";
+			containsSerializeReference = default;
 			return false;
 		}
 		if (typeDefinition.TryGetPrimitiveType(out PrimitiveType primitiveType))
