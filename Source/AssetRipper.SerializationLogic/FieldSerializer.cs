@@ -158,7 +158,7 @@ public readonly partial struct FieldSerializer
 		}
 		else if (baseType is not null)
 		{
-			if (!TryCreateSerializableType(baseType, typeCache, typeStack, out SerializableType? baseMonoType, out failureReason))
+			if (!TryCreateSerializableType(baseType, typeCache, typeStack, out SerializableType? baseMonoType, out failureReason, out containsSerializeReference))
 			{
 				typeCache.Remove(typeCacheKey);
 				typeStack.Pop();
