@@ -104,7 +104,6 @@ public readonly partial struct FieldSerializer
 			fields.EnsureCapacity(typeDefinition.Fields.Count);
 		}
 
-		
 		if (TryCreateSerializableFields(typeStack, monoType, fields, GetFieldsInType(typeDefinition), typeCache, out failureReason, out bool containsSerializeReference))
 		{
 			monoType.SetDepth();
