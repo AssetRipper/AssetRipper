@@ -56,7 +56,8 @@ public readonly partial struct FieldSerializer
 		Dictionary<ITypeDefOrRef, SerializableType> typeCache,
 		Stack<MonoType> typeStack,
 		[NotNullWhen(true)] out SerializableType? result,
-		[NotNullWhen(false)] out string? failureReason)
+		[NotNullWhen(false)] out string? failureReason,
+		out bool containsSerializeReference)
 	{
 		if (typeCache.TryGetValue(typeDefinition, out SerializableType? cachedType))
 		{
