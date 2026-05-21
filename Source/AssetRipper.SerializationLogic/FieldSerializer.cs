@@ -46,7 +46,7 @@ public readonly partial struct FieldSerializer
 		}
 		else
 		{
-			return TryCreateSerializableType(typeDefinition, typeCache, typeStack, out result, out failureReason);
+			return TryCreateSerializableType(typeDefinition, typeCache, typeStack, out result, out failureReason, out containsSerializeReference);
 		}
 	}
 
