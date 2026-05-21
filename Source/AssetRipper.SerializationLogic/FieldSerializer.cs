@@ -351,7 +351,7 @@ public readonly partial struct FieldSerializer
 				{
 					return TryCreateSerializableField(typeStack, name, genericInstanceTypeSignature.TypeArguments[0], arrayDepth + 1, typeCache, out result, out failureReason, out containsSerializeReference);
 				}
-				else if (TryCreateSerializableType(genericInstanceTypeSignature, typeCache, typeStack, out SerializableType? monoType, out failureReason, out _))
+				else if (TryCreateSerializableType(genericInstanceTypeSignature, typeCache, typeStack, out SerializableType? monoType, out failureReason, out containsSerializeReference))
 				{
 					result = new(monoType, arrayDepth, name, true);
 					return true;
