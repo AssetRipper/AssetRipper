@@ -113,8 +113,7 @@ public readonly partial struct FieldSerializer
 		{
 			monoType.SetDepth();
 
-			if ((typeDefinition.InheritsFromMonoBehaviour() || typeDefinition.InheritsFromScriptableObject())
-				&& containsSerializeReference)
+			if (containsSerializeReference && (typeDefinition.InheritsFromMonoBehaviour() || typeDefinition.InheritsFromScriptableObject()))
 			{
 				fields.Add(new SerializableType.Field(ManagedReferenceTypes.GetManagedReferencesRegistryType(), 0, "references", true));
 			}
