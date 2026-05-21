@@ -6,415 +6,415 @@ namespace AssetRipper.SerializationLogic;
 
 public readonly partial struct FieldSerializer
 {
-        public bool TryCreateSerializableType(TypeDefinition typeDefinition,
-                [NotNullWhen(true)] out SerializableType? result,
-                [NotNullWhen(false)] out string? failureReason)
-        {
-                return TryCreateSerializableType(typeDefinition, new(SignatureComparer.Default), out result, out failureReason);
-        }
+	public bool TryCreateSerializableType(TypeDefinition typeDefinition,
+		[NotNullWhen(true)] out SerializableType? result,
+		[NotNullWhen(false)] out string? failureReason)
+	{
+		return TryCreateSerializableType(typeDefinition, new(SignatureComparer.Default), out result, out failureReason);
+	}
 
-        public bool TryCreateSerializableType(
-                TypeDefinition typeDefinition,
-                Dictionary<ITypeDefOrRef, (SerializableType, bool)> typeCache,
-                [NotNullWhen(true)] out SerializableType? result,
-                [NotNullWhen(false)] out string? failureReason)
-        {
-                Stack<MonoType> typeStack = new();
-                bool returnValue = TryCreateSerializableType(typeDefinition, typeCache, typeStack, out result, out failureReason, out _);
-                Debug.Assert(typeStack.Count == 0, "The type stack should be empty after processing.");
-                return returnValue;
-        }
+	public bool TryCreateSerializableType(
+		TypeDefinition typeDefinition,
+		Dictionary<ITypeDefOrRef, (SerializableType, bool)> typeCache,
+		[NotNullWhen(true)] out SerializableType? result,
+		[NotNullWhen(false)] out string? failureReason)
+	{
+		Stack<MonoType> typeStack = new();
+		bool returnValue = TryCreateSerializableType(typeDefinition, typeCache, typeStack, out result, out failureReason, out _);
+		Debug.Assert(typeStack.Count == 0, "The type stack should be empty after processing.");
+		return returnValue;
+	}
 
-        private bool TryCreateSerializableType(
-                TypeSignature typeSignature,
-                Dictionary<ITypeDefOrRef, (SerializableType, bool)> typeCache,
-                Stack<MonoType> typeStack,
-                [NotNullWhen(true)] out SerializableType? result,
-                [NotNullWhen(false)] out string? failureReason,
-                out bool containsSerializeReference)
-        {
-                if (typeSignature is GenericInstanceTypeSignature genericInstanceType)
-                {
-                        return TryCreateSerializableType(genericInstanceType, typeCache, typeStack, out result, out failureReason, out containsSerializeReference);
-                }
-                TypeDefinition? typeDefinition = typeSignature.Resolve();
-                if (typeDefinition is null)
-                {
-                        result = null;
-                        failureReason = $"Failed to resolve type signature {typeSignature.FullName}.";
-                        containsSerializeReference = default;
-                        return false;
-                }
-                else
-                {
-                        return TryCreateSerializableType(typeDefinition, typeCache, typeStack, out result, out failureReason, out containsSerializeReference);
-                }
-        }
+	private bool TryCreateSerializableType(
+		TypeSignature typeSignature,
+		Dictionary<ITypeDefOrRef, (SerializableType, bool)> typeCache,
+		Stack<MonoType> typeStack,
+		[NotNullWhen(true)] out SerializableType? result,
+		[NotNullWhen(false)] out string? failureReason,
+		out bool containsSerializeReference)
+	{
+		if (typeSignature is GenericInstanceTypeSignature genericInstanceType)
+		{
+			return TryCreateSerializableType(genericInstanceType, typeCache, typeStack, out result, out failureReason, out containsSerializeReference);
+		}
+		TypeDefinition? typeDefinition = typeSignature.Resolve();
+		if (typeDefinition is null)
+		{
+			result = null;
+			failureReason = $"Failed to resolve type signature {typeSignature.FullName}.";
+			containsSerializeReference = default;
+			return false;
+		}
+		else
+		{
+			return TryCreateSerializableType(typeDefinition, typeCache, typeStack, out result, out failureReason, out containsSerializeReference);
+		}
+	}
 
-        private bool TryCreateSerializableType(
-                TypeDefinition typeDefinition,
-                Dictionary<ITypeDefOrRef, (SerializableType, bool)> typeCache,
-                Stack<MonoType> typeStack,
-                [NotNullWhen(true)] out SerializableType? result,
-                [NotNullWhen(false)] out string? failureReason,
-                out bool containsSerializeReference)
-        {
-                if (typeCache.TryGetValue(typeDefinition, out (SerializableType, bool) cachedEntry))
-                {
-                        result = cachedEntry.Item1;
-                        failureReason = null;
-                        containsSerializeReference = cachedEntry.Item2;
-                        return true;
-                }
-                if (typeDefinition.GenericParameters.Count > 0)
-                {
-                        result = null;
-                        failureReason = "Generic types are not serializable.";
-                        containsSerializeReference = default;
-                        return false;
-                }
-                if (typeDefinition.TryGetPrimitiveType(out PrimitiveType primitiveType))
-                {
-                        result = SerializablePrimitiveType.GetOrCreate(primitiveType);
-                        typeCache.Add(typeDefinition, (result, false));
-                        failureReason = null;
-                        containsSerializeReference = false;
-                        return true;
-                }
+	private bool TryCreateSerializableType(
+		TypeDefinition typeDefinition,
+		Dictionary<ITypeDefOrRef, (SerializableType, bool)> typeCache,
+		Stack<MonoType> typeStack,
+		[NotNullWhen(true)] out SerializableType? result,
+		[NotNullWhen(false)] out string? failureReason,
+		out bool containsSerializeReference)
+	{
+		if (typeCache.TryGetValue(typeDefinition, out (SerializableType, bool) cachedEntry))
+		{
+			result = cachedEntry.Item1;
+			failureReason = null;
+			containsSerializeReference = cachedEntry.Item2;
+			return true;
+		}
+		if (typeDefinition.GenericParameters.Count > 0)
+		{
+			result = null;
+			failureReason = "Generic types are not serializable.";
+			containsSerializeReference = default;
+			return false;
+		}
+		if (typeDefinition.TryGetPrimitiveType(out PrimitiveType primitiveType))
+		{
+			result = SerializablePrimitiveType.GetOrCreate(primitiveType);
+			typeCache.Add(typeDefinition, (result, false));
+			failureReason = null;
+			containsSerializeReference = false;
+			return true;
+		}
 
-                //Ensure we allocate some initial space so that we have less chance of needing to resize the list.
-                List<Field> fields = [];
+		//Ensure we allocate some initial space so that we have less chance of needing to resize the list.
+		List<Field> fields = [];
 
-                //Caching before completion prevents infinite loops.
-                MonoType monoType = new(typeDefinition, fields);
-                typeCache.Add(typeDefinition, (monoType, false));
-                typeStack.Push(monoType);
+		//Caching before completion prevents infinite loops.
+		MonoType monoType = new(typeDefinition, fields);
+		typeCache.Add(typeDefinition, (monoType, false));
+		typeStack.Push(monoType);
 
-                if (typeDefinition.BaseType is not null)
-                {
-                        if (!TryCreateSerializableType(typeDefinition.BaseType.ToTypeSignature(), typeCache, typeStack, out SerializableType? baseType, out failureReason, out containsSerializeReference))
-                        {
-                                typeCache.Remove(typeDefinition);
-                                typeStack.Pop();
-                                result = null;
-                                return false;
-                        }
-                        else
-                        {
-                                fields.EnsureCapacity(baseType.Fields.Count + typeDefinition.Fields.Count);
-                                fields.AddRange(baseType.Fields);
-                        }
-                }
-                else
-                {
-                        fields.EnsureCapacity(typeDefinition.Fields.Count);
-                        containsSerializeReference = false;
-                }
+		if (typeDefinition.BaseType is not null)
+		{
+			if (!TryCreateSerializableType(typeDefinition.BaseType.ToTypeSignature(), typeCache, typeStack, out SerializableType? baseType, out failureReason, out containsSerializeReference))
+			{
+				typeCache.Remove(typeDefinition);
+				typeStack.Pop();
+				result = null;
+				return false;
+			}
+			else
+			{
+				fields.EnsureCapacity(baseType.Fields.Count + typeDefinition.Fields.Count);
+				fields.AddRange(baseType.Fields);
+			}
+		}
+		else
+		{
+			fields.EnsureCapacity(typeDefinition.Fields.Count);
+			containsSerializeReference = false;
+		}
 
-                if (TryCreateSerializableFields(typeStack, monoType, fields, GetFieldsInType(typeDefinition), typeCache, out failureReason, out bool containsSerializeReference2))
-                {
-                        containsSerializeReference |= containsSerializeReference2;
-                        monoType.SetDepth();
+		if (TryCreateSerializableFields(typeStack, monoType, fields, GetFieldsInType(typeDefinition), typeCache, out failureReason, out bool containsSerializeReference2))
+		{
+			containsSerializeReference |= containsSerializeReference2;
+			monoType.SetDepth();
 
-                        if (containsSerializeReference && (typeDefinition.InheritsFromMonoBehaviour() || typeDefinition.InheritsFromScriptableObject()))
-                        {
-                                fields.Add(new SerializableType.Field(ManagedReferenceTypes.GetManagedReferencesRegistryType(), 0, "references", true));
-                        }
+			if (containsSerializeReference && (typeDefinition.InheritsFromMonoBehaviour() || typeDefinition.InheritsFromScriptableObject()))
+			{
+				fields.Add(new SerializableType.Field(ManagedReferenceTypes.GetManagedReferencesRegistryType(), 0, "references", true));
+			}
 
-                        typeCache[typeDefinition] = (monoType, containsSerializeReference);
-                        typeStack.Pop();
-                        result = monoType;
-                        return true;
-                }
-                else
-                {
-                        typeCache.Remove(typeDefinition);
-                        typeStack.Pop();
-                        result = null;
-                        return false;
-                }
-        }
+			typeCache[typeDefinition] = (monoType, containsSerializeReference);
+			typeStack.Pop();
+			result = monoType;
+			return true;
+		}
+		else
+		{
+			typeCache.Remove(typeDefinition);
+			typeStack.Pop();
+			result = null;
+			return false;
+		}
+	}
 
-        private bool TryCreateSerializableType(
-                GenericInstanceTypeSignature genericInst,
-                Dictionary<ITypeDefOrRef, (SerializableType, bool)> typeCache,
-                Stack<MonoType> typeStack,
-                [NotNullWhen(true)] out SerializableType? result,
-                [NotNullWhen(false)] out string? failureReason,
-                out bool containsSerializeReference)
-        {
-                ITypeDefOrRef typeCacheKey = genericInst.ToTypeDefOrRef();
-                if (typeCache.TryGetValue(typeCacheKey, out (SerializableType, bool) cachedEntry))
-                {
-                        result = cachedEntry.Item1;
-                        failureReason = null;
-                        containsSerializeReference = cachedEntry.Item2;
-                        return true;
-                }
+	private bool TryCreateSerializableType(
+		GenericInstanceTypeSignature genericInst,
+		Dictionary<ITypeDefOrRef, (SerializableType, bool)> typeCache,
+		Stack<MonoType> typeStack,
+		[NotNullWhen(true)] out SerializableType? result,
+		[NotNullWhen(false)] out string? failureReason,
+		out bool containsSerializeReference)
+	{
+		ITypeDefOrRef typeCacheKey = genericInst.ToTypeDefOrRef();
+		if (typeCache.TryGetValue(typeCacheKey, out (SerializableType, bool) cachedEntry))
+		{
+			result = cachedEntry.Item1;
+			failureReason = null;
+			containsSerializeReference = cachedEntry.Item2;
+			return true;
+		}
 
-                List<Field> fields = [];
+		List<Field> fields = [];
 
-                MonoType monoType = new(genericInst.GenericType, fields);
-                typeCache.Add(typeCacheKey, (monoType, false));
-                typeStack.Push(monoType);
+		MonoType monoType = new(genericInst.GenericType, fields);
+		typeCache.Add(typeCacheKey, (monoType, false));
+		typeStack.Push(monoType);
 
-                if (!TryGetBaseType(genericInst, out TypeSignature? baseType))
-                {
-                        typeCache.Remove(typeCacheKey);
-                        typeStack.Pop();
-                        result = null;
-                        failureReason = $"Failed to resolve base type of {genericInst.FullName}.";
-                        containsSerializeReference = default;
-                        return false;
-                }
-                else if (baseType is not null)
-                {
-                        if (!TryCreateSerializableType(baseType, typeCache, typeStack, out SerializableType? baseMonoType, out failureReason, out containsSerializeReference))
-                        {
-                                typeCache.Remove(typeCacheKey);
-                                typeStack.Pop();
-                                result = null;
-                                return false;
-                        }
-                        else
-                        {
-                                fields.EnsureCapacity(baseMonoType.Fields.Count + genericInst.GenericType.Resolve()!.Fields.Count);
-                                fields.AddRange(baseMonoType.Fields);
-                        }
-                }
-                else
-                {
-                        fields.EnsureCapacity(genericInst.GenericType.Resolve()!.Fields.Count);
-                        containsSerializeReference = false;
-                }
+		if (!TryGetBaseType(genericInst, out TypeSignature? baseType))
+		{
+			typeCache.Remove(typeCacheKey);
+			typeStack.Pop();
+			result = null;
+			failureReason = $"Failed to resolve base type of {genericInst.FullName}.";
+			containsSerializeReference = default;
+			return false;
+		}
+		else if (baseType is not null)
+		{
+			if (!TryCreateSerializableType(baseType, typeCache, typeStack, out SerializableType? baseMonoType, out failureReason, out containsSerializeReference))
+			{
+				typeCache.Remove(typeCacheKey);
+				typeStack.Pop();
+				result = null;
+				return false;
+			}
+			else
+			{
+				fields.EnsureCapacity(baseMonoType.Fields.Count + genericInst.GenericType.Resolve()!.Fields.Count);
+				fields.AddRange(baseMonoType.Fields);
+			}
+		}
+		else
+		{
+			fields.EnsureCapacity(genericInst.GenericType.Resolve()!.Fields.Count);
+			containsSerializeReference = false;
+		}
 
-                if (TryCreateSerializableFields(typeStack, monoType, fields, GetFieldsInType(genericInst), typeCache, out failureReason, out bool containsSerializeReference2))
-                {
-                        containsSerializeReference |= containsSerializeReference2;
-                        monoType.SetDepth();
-                        typeCache[typeCacheKey] = (monoType, containsSerializeReference);
-                        typeStack.Pop();
-                        result = monoType;
-                        return true;
-                }
-                else
-                {
-                        typeCache.Remove(typeCacheKey);
-                        typeStack.Pop();
-                        result = null;
-                        return false;
-                }
-        }
+		if (TryCreateSerializableFields(typeStack, monoType, fields, GetFieldsInType(genericInst), typeCache, out failureReason, out bool containsSerializeReference2))
+		{
+			containsSerializeReference |= containsSerializeReference2;
+			monoType.SetDepth();
+			typeCache[typeCacheKey] = (monoType, containsSerializeReference);
+			typeStack.Pop();
+			result = monoType;
+			return true;
+		}
+		else
+		{
+			typeCache.Remove(typeCacheKey);
+			typeStack.Pop();
+			result = null;
+			return false;
+		}
+	}
 
-        private bool TryCreateSerializableFields(
-                Stack<MonoType> typeStack,
-                MonoType monoType,
-                List<Field> fields,
-                IEnumerable<(FieldDefinition, TypeSignature)> enumerable,
-                Dictionary<ITypeDefOrRef, (SerializableType, bool)> typeCache,
-                [NotNullWhen(false)] out string? failureReason,
-                out bool containsSerializeReference)
-        {
-                containsSerializeReference = false;
-                foreach ((FieldDefinition, TypeSignature) pair in enumerable)
-                {
-                        (FieldDefinition fieldDefinition, TypeSignature fieldType) = pair;
-                        if (WillUnitySerialize(fieldDefinition, fieldType))
-                        {
-                                if (fieldDefinition.HasSerializeReferenceAttribute())
-                                {
-                                        fields.Add(new Field(ManagedReferenceTypes.GetManagedReferenceType(), 0, fieldDefinition.Name ?? "", true));
-                                        containsSerializeReference = true;
-                                        continue;
-                                }
+	private bool TryCreateSerializableFields(
+		Stack<MonoType> typeStack,
+		MonoType monoType,
+		List<Field> fields,
+		IEnumerable<(FieldDefinition, TypeSignature)> enumerable,
+		Dictionary<ITypeDefOrRef, (SerializableType, bool)> typeCache,
+		[NotNullWhen(false)] out string? failureReason,
+		out bool containsSerializeReference)
+	{
+		containsSerializeReference = false;
+		foreach ((FieldDefinition, TypeSignature) pair in enumerable)
+		{
+			(FieldDefinition fieldDefinition, TypeSignature fieldType) = pair;
+			if (WillUnitySerialize(fieldDefinition, fieldType))
+			{
+				if (fieldDefinition.HasSerializeReferenceAttribute())
+				{
+					fields.Add(new Field(ManagedReferenceTypes.GetManagedReferenceType(), 0, fieldDefinition.Name ?? "", true));
+					containsSerializeReference = true;
+					continue;
+				}
 
-                                int arrayDepth = 0;
-                                if (fieldDefinition.HasFixedBufferAttribute())
-                                {
-                                        fieldType = fieldDefinition.GetFixedBufferElementType();
-                                        arrayDepth = 1;
-                                }
+				int arrayDepth = 0;
+				if (fieldDefinition.HasFixedBufferAttribute())
+				{
+					fieldType = fieldDefinition.GetFixedBufferElementType();
+					arrayDepth = 1;
+				}
 
-                                if (fieldType is CustomModifierTypeSignature customModifierType)
-                                {
-                                        fieldType = customModifierType.BaseType;
-                                }
+				if (fieldType is CustomModifierTypeSignature customModifierType)
+				{
+					fieldType = customModifierType.BaseType;
+				}
 
-                                if (TryCreateSerializableField(typeStack, fieldDefinition.Name ?? "", fieldType, arrayDepth, typeCache, out Field field, out failureReason, out bool fieldContainsSerializeReference))
-                                {
-                                        containsSerializeReference |= fieldContainsSerializeReference;
-                                        if (monoType.IsCyclicReference(field.Type))
-                                        {
-                                                // Infinite recursion disqualifies a field from serialization.
-                                        }
-                                        else if (!field.Type.IsMaxDepthKnown)
-                                        {
-                                                // New cycle reference detected.
-                                                List<MonoType> cycleList = new(typeStack.Count);
-                                                foreach (MonoType monoTypeInStack in typeStack)
-                                                {
-                                                        cycleList.Add(monoTypeInStack);
-                                                        if (monoTypeInStack == field.Type)
-                                                        {
-                                                                break;
-                                                        }
-                                                }
+				if (TryCreateSerializableField(typeStack, fieldDefinition.Name ?? "", fieldType, arrayDepth, typeCache, out Field field, out failureReason, out bool fieldContainsSerializeReference))
+				{
+					containsSerializeReference |= fieldContainsSerializeReference;
+					if (monoType.IsCyclicReference(field.Type))
+					{
+						// Infinite recursion disqualifies a field from serialization.
+					}
+					else if (!field.Type.IsMaxDepthKnown)
+					{
+						// New cycle reference detected.
+						List<MonoType> cycleList = new(typeStack.Count);
+						foreach (MonoType monoTypeInStack in typeStack)
+						{
+							cycleList.Add(monoTypeInStack);
+							if (monoTypeInStack == field.Type)
+							{
+								break;
+							}
+						}
 
-                                                for (int i = 0; i < cycleList.Count; i++)
-                                                {
-                                                        for (int j = 0; j <= i; j++)
-                                                        {
-                                                                SerializableType type1 = cycleList[i];
-                                                                SerializableType type2 = cycleList[j];
-                                                                type1.AddCyclicReference(type2);
-                                                                type2.AddCyclicReference(type1);
-                                                        }
-                                                }
-                                        }
-                                        else
-                                        {
-                                                fields.Add(field);
-                                        }
-                                }
-                                else
-                                {
-                                        return false;
-                                }
-                        }
-                }
-                failureReason = null;
-                return true;
-        }
+						for (int i = 0; i < cycleList.Count; i++)
+						{
+							for (int j = 0; j <= i; j++)
+							{
+								SerializableType type1 = cycleList[i];
+								SerializableType type2 = cycleList[j];
+								type1.AddCyclicReference(type2);
+								type2.AddCyclicReference(type1);
+							}
+						}
+					}
+					else
+					{
+						fields.Add(field);
+					}
+				}
+				else
+				{
+					return false;
+				}
+			}
+		}
+		failureReason = null;
+		return true;
+	}
 
-        private bool TryCreateSerializableField(
-                Stack<MonoType> typeStack,
-                string name,
-                TypeSignature typeSignature,
-                int arrayDepth,
-                Dictionary<ITypeDefOrRef, (SerializableType, bool)> typeCache,
-                out Field result,
-                [NotNullWhen(false)] out string? failureReason,
-                out bool containsSerializeReference)
-        {
-                switch (typeSignature)
-                {
-                        case TypeDefOrRefSignature typeDefOrRefSignature:
-                                TypeDefinition typeDefinition = typeDefOrRefSignature.Type.CheckedResolve();
-                                SerializableType fieldType;
-                                if (typeDefinition.IsEnum)
-                                {
-                                        CorLibTypeSignature enumValueType = (CorLibTypeSignature?)typeDefinition.GetEnumUnderlyingType() ?? throw new("Failed to resolve enum underlying type.");
-                                        PrimitiveType primitiveType = enumValueType.ToPrimitiveType();
-                                        fieldType = SerializablePrimitiveType.GetOrCreate(primitiveType);
-                                        containsSerializeReference = false;
-                                }
-                                else if (typeDefinition.InheritsFromObject())
-                                {
-                                        fieldType = SerializablePointerType.Shared;
-                                        containsSerializeReference = false;
-                                }
-                                else if (typeCache.TryGetValue(typeDefinition, out (SerializableType, bool) cachedEntry))
-                                {
-                                        //This needs to come after the InheritsFromObject check so that those fields get properly converted into PPtr assets.
-                                        fieldType = cachedEntry.Item1;
-                                        containsSerializeReference = cachedEntry.Item2;
-                                }
-                                else if (TryCreateSerializableType(typeDefinition, typeCache, typeStack, out SerializableType? monoType, out failureReason, out containsSerializeReference))
-                                {
-                                        fieldType = monoType;
-                                }
-                                else
-                                {
-                                        result = default;
-                                        return false;
-                                }
+	private bool TryCreateSerializableField(
+		Stack<MonoType> typeStack,
+		string name,
+		TypeSignature typeSignature,
+		int arrayDepth,
+		Dictionary<ITypeDefOrRef, (SerializableType, bool)> typeCache,
+		out Field result,
+		[NotNullWhen(false)] out string? failureReason,
+		out bool containsSerializeReference)
+	{
+		switch (typeSignature)
+		{
+			case TypeDefOrRefSignature typeDefOrRefSignature:
+				TypeDefinition typeDefinition = typeDefOrRefSignature.Type.CheckedResolve();
+				SerializableType fieldType;
+				if (typeDefinition.IsEnum)
+				{
+					CorLibTypeSignature enumValueType = (CorLibTypeSignature?)typeDefinition.GetEnumUnderlyingType() ?? throw new("Failed to resolve enum underlying type.");
+					PrimitiveType primitiveType = enumValueType.ToPrimitiveType();
+					fieldType = SerializablePrimitiveType.GetOrCreate(primitiveType);
+					containsSerializeReference = false;
+				}
+				else if (typeDefinition.InheritsFromObject())
+				{
+					fieldType = SerializablePointerType.Shared;
+					containsSerializeReference = false;
+				}
+				else if (typeCache.TryGetValue(typeDefinition, out (SerializableType, bool) cachedEntry))
+				{
+					//This needs to come after the InheritsFromObject check so that those fields get properly converted into PPtr assets.
+					fieldType = cachedEntry.Item1;
+					containsSerializeReference = cachedEntry.Item2;
+				}
+				else if (TryCreateSerializableType(typeDefinition, typeCache, typeStack, out SerializableType? monoType, out failureReason, out containsSerializeReference))
+				{
+					fieldType = monoType;
+				}
+				else
+				{
+					result = default;
+					return false;
+				}
 
-                                result = new Field(fieldType, arrayDepth, name, true);
-                                failureReason = null;
-                                return true;
+				result = new Field(fieldType, arrayDepth, name, true);
+				failureReason = null;
+				return true;
 
-                        case CorLibTypeSignature corLibTypeSignature:
-                                result = new Field(SerializablePrimitiveType.GetOrCreate(corLibTypeSignature.ToPrimitiveType()), arrayDepth, name, true);
-                                failureReason = null;
-                                containsSerializeReference = false;
-                                return true;
+			case CorLibTypeSignature corLibTypeSignature:
+				result = new Field(SerializablePrimitiveType.GetOrCreate(corLibTypeSignature.ToPrimitiveType()), arrayDepth, name, true);
+				failureReason = null;
+				containsSerializeReference = false;
+				return true;
 
-                        case SzArrayTypeSignature szArrayTypeSignature:
-                                return TryCreateSerializableField(typeStack, name, szArrayTypeSignature.BaseType, arrayDepth + 1, typeCache, out result, out failureReason, out containsSerializeReference);
+			case SzArrayTypeSignature szArrayTypeSignature:
+				return TryCreateSerializableField(typeStack, name, szArrayTypeSignature.BaseType, arrayDepth + 1, typeCache, out result, out failureReason, out containsSerializeReference);
 
-                        case GenericInstanceTypeSignature genericInstanceTypeSignature:
-                                if (genericInstanceTypeSignature.InheritsFromObject())
-                                {
-                                        result = new Field(SerializablePointerType.Shared, arrayDepth, name, true);
-                                        failureReason = null;
-                                        containsSerializeReference = false;
-                                        return true;
-                                }
-                                else if (typeCache.TryGetValue(genericInstanceTypeSignature.ToTypeDefOrRef(), out (SerializableType, bool) cachedGenericEntry))
-                                {
-                                        result = new Field(cachedGenericEntry.Item1, arrayDepth, name, true);
-                                        failureReason = null;
-                                        containsSerializeReference = cachedGenericEntry.Item2;
-                                        return true;
-                                }
-                                else if (genericInstanceTypeSignature.GenericType is { Namespace.Value: "System.Collections.Generic", Name.Value: "List`1" })
-                                {
-                                        return TryCreateSerializableField(typeStack, name, genericInstanceTypeSignature.TypeArguments[0], arrayDepth + 1, typeCache, out result, out failureReason, out containsSerializeReference);
-                                }
-                                else if (TryCreateSerializableType(genericInstanceTypeSignature, typeCache, typeStack, out SerializableType? monoType, out failureReason, out containsSerializeReference))
-                                {
-                                        result = new(monoType, arrayDepth, name, true);
-                                        return true;
-                                }
-                                else
-                                {
-                                        result = default;
-                                        return false;
-                                }
+			case GenericInstanceTypeSignature genericInstanceTypeSignature:
+				if (genericInstanceTypeSignature.InheritsFromObject())
+				{
+					result = new Field(SerializablePointerType.Shared, arrayDepth, name, true);
+					failureReason = null;
+					containsSerializeReference = false;
+					return true;
+				}
+				else if (typeCache.TryGetValue(genericInstanceTypeSignature.ToTypeDefOrRef(), out (SerializableType, bool) cachedGenericEntry))
+				{
+					result = new Field(cachedGenericEntry.Item1, arrayDepth, name, true);
+					failureReason = null;
+					containsSerializeReference = cachedGenericEntry.Item2;
+					return true;
+				}
+				else if (genericInstanceTypeSignature.GenericType is { Namespace.Value: "System.Collections.Generic", Name.Value: "List`1" })
+				{
+					return TryCreateSerializableField(typeStack, name, genericInstanceTypeSignature.TypeArguments[0], arrayDepth + 1, typeCache, out result, out failureReason, out containsSerializeReference);
+				}
+				else if (TryCreateSerializableType(genericInstanceTypeSignature, typeCache, typeStack, out SerializableType? monoType, out failureReason, out containsSerializeReference))
+				{
+					result = new(monoType, arrayDepth, name, true);
+					return true;
+				}
+				else
+				{
+					result = default;
+					return false;
+				}
 
-                        default:
-                                result = default;
-                                failureReason = $"{typeSignature.FullName} not supported.";
-                                containsSerializeReference = default;
-                                return false;
-                }
-        }
+			default:
+				result = default;
+				failureReason = $"{typeSignature.FullName} not supported.";
+				containsSerializeReference = default;
+				return false;
+		}
+	}
 
-        private static bool TryGetBaseType(GenericInstanceTypeSignature genericInstanceType, out TypeSignature? baseType)
-        {
-                TypeDefinition? typeDefinition = genericInstanceType.GenericType.Resolve();
-                if (typeDefinition is null)
-                {
-                        baseType = null;
-                        return false;
-                }
+	private static bool TryGetBaseType(GenericInstanceTypeSignature genericInstanceType, out TypeSignature? baseType)
+	{
+		TypeDefinition? typeDefinition = genericInstanceType.GenericType.Resolve();
+		if (typeDefinition is null)
+		{
+			baseType = null;
+			return false;
+		}
 
-                baseType = typeDefinition.BaseType?.ToTypeSignature().InstantiateGenericTypes(new GenericContext(genericInstanceType, null));
-                return true;
-        }
+		baseType = typeDefinition.BaseType?.ToTypeSignature().InstantiateGenericTypes(new GenericContext(genericInstanceType, null));
+		return true;
+	}
 
-        private static IEnumerable<(FieldDefinition, TypeSignature)> GetFieldsInType(TypeDefinition typeDefinition)
-        {
-                return typeDefinition.Fields.Select(field =>
-                {
-                        TypeSignature fieldType = field.Signature!.FieldType;
-                        return (field, fieldType);
-                });
-        }
+	private static IEnumerable<(FieldDefinition, TypeSignature)> GetFieldsInType(TypeDefinition typeDefinition)
+	{
+		return typeDefinition.Fields.Select(field =>
+		{
+			TypeSignature fieldType = field.Signature!.FieldType;
+			return (field, fieldType);
+		});
+	}
 
-        private static IEnumerable<(FieldDefinition, TypeSignature)> GetFieldsInType(GenericInstanceTypeSignature genericInst)
-        {
-                TypeDefinition? typeDefinition = genericInst.Resolve();
-                if (typeDefinition is null)
-                {
-                        return [];
-                }
-                return typeDefinition.Fields.Select(field =>
-                {
-                        TypeSignature fieldType = field.Signature!.FieldType;
-                        GenericContext genericContext = new GenericContext(genericInst, null);
-                        TypeSignature instanceTypeSignature = fieldType.InstantiateGenericTypes(genericContext);
-                        return (field, instanceTypeSignature);
-                });
-        }
+	private static IEnumerable<(FieldDefinition, TypeSignature)> GetFieldsInType(GenericInstanceTypeSignature genericInst)
+	{
+		TypeDefinition? typeDefinition = genericInst.Resolve();
+		if (typeDefinition is null)
+		{
+			return [];
+		}
+		return typeDefinition.Fields.Select(field =>
+		{
+			TypeSignature fieldType = field.Signature!.FieldType;
+			GenericContext genericContext = new GenericContext(genericInst, null);
+			TypeSignature instanceTypeSignature = fieldType.InstantiateGenericTypes(genericContext);
+			return (field, instanceTypeSignature);
+		});
+	}
 }
