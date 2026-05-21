@@ -35,7 +35,7 @@ public readonly partial struct FieldSerializer
 	{
 		if (typeSignature is GenericInstanceTypeSignature genericInstanceType)
 		{
-			return TryCreateSerializableType(genericInstanceType, typeCache, typeStack, out result, out failureReason);
+			return TryCreateSerializableType(genericInstanceType, typeCache, typeStack, out result, out failureReason, out containsSerializeReference);
 		}
 		TypeDefinition? typeDefinition = typeSignature.Resolve();
 		if (typeDefinition is null)
