@@ -63,6 +63,7 @@ public readonly partial struct FieldSerializer
 		{
 			result = cachedType;
 			failureReason = null;
+			containsSerializeReference = default;
 			return true;
 		}
 		if (typeDefinition.GenericParameters.Count > 0)
