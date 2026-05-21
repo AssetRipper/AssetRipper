@@ -1,4 +1,4 @@
-﻿using AsmResolver.DotNet;
+using AsmResolver.DotNet;
 using AsmResolver.DotNet.Builder;
 using AsmResolver.DotNet.Signatures;
 using AsmResolver.PE.Builder;
@@ -16,7 +16,7 @@ public partial class BaseManager : IAssemblyManager
 	protected readonly Dictionary<string, AssemblyDefinition?> m_assemblies = new();
 	protected readonly Dictionary<AssemblyDefinition, Stream> m_assemblyStreams = new(SignatureComparer.Default);
 	protected readonly Dictionary<string, bool> m_validTypes = new();
-	private readonly Dictionary<FieldSerializer, Dictionary<ITypeDefOrRef, SerializableType>> monoTypeCache = new();
+	private readonly Dictionary<FieldSerializer, Dictionary<ITypeDefOrRef, (SerializableType, bool)>> monoTypeCache = new();
 
 	private event Action<string> m_requestAssemblyCallback;
 	private readonly Dictionary<string, SerializableType> m_serializableTypes = new();
@@ -203,16 +203,16 @@ public partial class BaseManager : IAssemblyManager
 		else
 		{
 			FieldSerializer fieldSerializer = new(version);
-			if (!monoTypeCache.TryGetValue(fieldSerializer, out Dictionary<ITypeDefOrRef, SerializableType>? typeCache))
+			if (!monoTypeCache.TryGetValue(fieldSerializer, out Dictionary<ITypeDefOrRef, (SerializableType, bool)>? typeCache))
 			{
 				typeCache = new(SignatureComparer.Default);
 				monoTypeCache[fieldSerializer] = typeCache;
 			}
 
-			if (typeCache.TryGetValue(type, out SerializableType? monoType)
-				|| fieldSerializer.TryCreateSerializableType(type, typeCache, out monoType, out failureReason))
+			if (typeCache.TryGetValue(type, out (SerializableType, bool) cachedEntry)
+				|| fieldSerializer.TryCreateSerializableType(type, typeCache, out cachedEntry.Item1, out failureReason))
 			{
-				scriptType = monoType;
+				scriptType = cachedEntry.Item1;
 				failureReason = null;
 				return true;
 			}

@@ -31,10 +31,10 @@ public static class SerializableTypes
 	public static List<SerializableType> CreateMultiple(TypeDefinition type, UnityVersion version)
 	{
 		FieldSerializer serializer = new(version);
-		Dictionary<ITypeDefOrRef, SerializableType> typeCache = [];
+		Dictionary<ITypeDefOrRef, (SerializableType, bool)> typeCache = [];
 		if (serializer.TryCreateSerializableType(type, typeCache, out _, out string? failureReason))
 		{
-			return typeCache.Values.ToList();
+			return typeCache.Values.Select(v => v.Item1).ToList();
 		}
 		else
 		{
