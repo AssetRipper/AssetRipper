@@ -104,12 +104,13 @@ public readonly partial struct FieldSerializer
 			fields.EnsureCapacity(typeDefinition.Fields.Count);
 		}
 
-		if (TryCreateSerializableFields(typeStack, monoType, fields, GetFieldsInType(typeDefinition), typeCache, out failureReason))
+		
+		if (TryCreateSerializableFields(typeStack, monoType, fields, GetFieldsInType(typeDefinition), typeCache, out failureReason, out bool containsSerializeReference))
 		{
 			monoType.SetDepth();
 
 			if ((typeDefinition.InheritsFromMonoBehaviour() || typeDefinition.InheritsFromScriptableObject())
-				&& monoType.HasSerializeReference)
+				&& containsSerializeReference)
 			{
 				fields.Add(new SerializableType.Field(ManagedReferenceTypes.GetManagedReferencesRegistryType(), 0, "references", true));
 			}
@@ -176,7 +177,8 @@ public readonly partial struct FieldSerializer
 			fields.EnsureCapacity(genericInst.GenericType.Resolve()!.Fields.Count);
 		}
 
-		if (TryCreateSerializableFields(typeStack, monoType, fields, GetFieldsInType(genericInst), typeCache, out failureReason))
+		
+		if (TryCreateSerializableFields(typeStack, monoType, fields, GetFieldsInType(genericInst), typeCache, out failureReason, out _))
 		{
 			monoType.SetDepth();
 			typeStack.Pop();
