@@ -20,7 +20,7 @@ public readonly partial struct FieldSerializer
 		[NotNullWhen(false)] out string? failureReason)
 	{
 		Stack<MonoType> typeStack = new();
-		bool returnValue = TryCreateSerializableType(typeDefinition, typeCache, typeStack, out result, out failureReason);
+		bool returnValue = TryCreateSerializableType(typeDefinition, typeCache, typeStack, out result, out failureReason, out _);
 		Debug.Assert(typeStack.Count == 0, "The type stack should be empty after processing.");
 		return returnValue;
 	}
