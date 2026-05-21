@@ -187,7 +187,6 @@ public readonly partial struct FieldSerializer
 			containsSerializeReference = false;
 		}
 
-
 		if (TryCreateSerializableFields(typeStack, monoType, fields, GetFieldsInType(genericInst), typeCache, out failureReason, out bool containsSerializeReference2))
 		{
 			containsSerializeReference |= containsSerializeReference2;
