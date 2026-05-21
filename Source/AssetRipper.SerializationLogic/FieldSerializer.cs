@@ -174,6 +174,7 @@ public readonly partial struct FieldSerializer
 		else
 		{
 			fields.EnsureCapacity(genericInst.GenericType.Resolve()!.Fields.Count);
+			containsSerializeReference = false;
 		}
 
 		
