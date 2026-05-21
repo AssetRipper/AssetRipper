@@ -177,7 +177,7 @@ public readonly partial struct FieldSerializer
 		}
 
 		
-		if (TryCreateSerializableFields(typeStack, monoType, fields, GetFieldsInType(genericInst), typeCache, out failureReason, out _))
+		if (TryCreateSerializableFields(typeStack, monoType, fields, GetFieldsInType(genericInst), typeCache, out failureReason, out bool containsSerializeReference2))
 		{
 			containsSerializeReference |= containsSerializeReference2;
 			monoType.SetDepth();
