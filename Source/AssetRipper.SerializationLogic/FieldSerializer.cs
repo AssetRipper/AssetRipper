@@ -78,6 +78,7 @@ public readonly partial struct FieldSerializer
 			result = SerializablePrimitiveType.GetOrCreate(primitiveType);
 			typeCache.Add(typeDefinition, result);
 			failureReason = null;
+			containsSerializeReference = false;
 			return true;
 		}
 
@@ -146,6 +147,7 @@ public readonly partial struct FieldSerializer
 		{
 			result = cachedType;
 			failureReason = null;
+			containsSerializeReference = default;
 			return true;
 		}
 
@@ -185,7 +187,7 @@ public readonly partial struct FieldSerializer
 			containsSerializeReference = false;
 		}
 
-		
+
 		if (TryCreateSerializableFields(typeStack, monoType, fields, GetFieldsInType(genericInst), typeCache, out failureReason, out bool containsSerializeReference2))
 		{
 			containsSerializeReference |= containsSerializeReference2;
@@ -311,7 +313,7 @@ public readonly partial struct FieldSerializer
 					//This needs to come after the InheritsFromObject check so that those fields get properly converted into PPtr assets.
 					fieldType = cachedMonoType;
 				}
-				else if (TryCreateSerializableType(typeDefinition, typeCache, typeStack, out SerializableType? monoType, out failureReason))
+				else if (TryCreateSerializableType(typeDefinition, typeCache, typeStack, out SerializableType? monoType, out failureReason, out _))
 				{
 					fieldType = monoType;
 				}
@@ -350,7 +352,7 @@ public readonly partial struct FieldSerializer
 				{
 					return TryCreateSerializableField(typeStack, name, genericInstanceTypeSignature.TypeArguments[0], arrayDepth + 1, typeCache, out result, out failureReason);
 				}
-				else if (TryCreateSerializableType(genericInstanceTypeSignature, typeCache, typeStack, out SerializableType? monoType, out failureReason))
+				else if (TryCreateSerializableType(genericInstanceTypeSignature, typeCache, typeStack, out SerializableType? monoType, out failureReason, out _))
 				{
 					result = new(monoType, arrayDepth, name, true);
 					return true;
