@@ -332,7 +332,7 @@ public readonly partial struct FieldSerializer
 				return true;
 
 			case SzArrayTypeSignature szArrayTypeSignature:
-				return TryCreateSerializableField(typeStack, name, szArrayTypeSignature.BaseType, arrayDepth + 1, typeCache, out result, out failureReason);
+				return TryCreateSerializableField(typeStack, name, szArrayTypeSignature.BaseType, arrayDepth + 1, typeCache, out result, out failureReason, out containsSerializeReference);
 
 			case GenericInstanceTypeSignature genericInstanceTypeSignature:
 				if (genericInstanceTypeSignature.InheritsFromObject())
