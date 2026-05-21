@@ -154,6 +154,7 @@ public readonly partial struct FieldSerializer
 			typeStack.Pop();
 			result = null;
 			failureReason = $"Failed to resolve base type of {genericInst.FullName}.";
+			containsSerializeReference = default;
 			return false;
 		}
 		else if (baseType is not null)
