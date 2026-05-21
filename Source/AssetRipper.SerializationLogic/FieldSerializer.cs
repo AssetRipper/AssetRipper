@@ -313,7 +313,7 @@ public readonly partial struct FieldSerializer
 					//This needs to come after the InheritsFromObject check so that those fields get properly converted into PPtr assets.
 					fieldType = cachedMonoType;
 				}
-				else if (TryCreateSerializableType(typeDefinition, typeCache, typeStack, out SerializableType? monoType, out failureReason, out _))
+				else if (TryCreateSerializableType(typeDefinition, typeCache, typeStack, out SerializableType? monoType, out failureReason, out containsSerializeReference))
 				{
 					fieldType = monoType;
 				}
