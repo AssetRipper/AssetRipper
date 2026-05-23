@@ -6,7 +6,7 @@
           "src": "../",
           "files": [
             "**.csproj",
-            "**.sln"
+            "**.slnx"
           ]
         }
       ],
@@ -55,8 +55,7 @@
     "globalMetadataFiles": [],
     "fileMetadataFiles": [],
     "template": [
-      "default",
-      "templates/darkfx"
+      "default"
     ],
     "postProcessors": [],
     "markdownEngineName": "markdig",
