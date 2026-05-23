@@ -40,7 +40,7 @@ jobs:
           dotnet-version: 10.0.x
 
       - name: Setup DocFX
-        run: dotnet tool install -g docfx
+        run: dotnet tool update -g docfx
 
       - name: Install dependencies
         run: dotnet restore
@@ -64,6 +64,12 @@ jobs:
     permissions:
       pages: write      # to deploy to Pages
       id-token: write   # to verify the deployment originates from an appropriate source
+
+    # Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+    # However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+    concurrency:
+      group: "pages"
+      cancel-in-progress: false
 
     # Deploy to the github-pages environment
     environment:
