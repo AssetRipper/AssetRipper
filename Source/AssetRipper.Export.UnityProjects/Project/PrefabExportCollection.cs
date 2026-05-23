@@ -64,7 +64,7 @@ public class PrefabExportCollection : AssetsExportCollection<IPrefabInstance>
 	}
 
 	/// <summary>
-	/// Used for <see cref="IPrefabInstance.SourcePrefab"/>
+	/// Used for <see cref="IPrefabInstance.SourcePrefabP"/>
 	/// </summary>
 	/// <returns></returns>
 	public MetaPtr GenerateMetaPtrForPrefab()

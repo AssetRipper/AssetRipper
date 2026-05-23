@@ -12,10 +12,9 @@
 </p>
 
 <p align="center">
-  <a href="#Features">Features</a> •
   <a href="#getting-started">Getting Started</a> •
   <a href="#premium-edition">Premium Edition</a> •
-  <a href="#Donations">Donations</a> •
+  <a href="#donations">Donations</a> •
   <a href="#contributing">Contributing</a>
 </p>
 

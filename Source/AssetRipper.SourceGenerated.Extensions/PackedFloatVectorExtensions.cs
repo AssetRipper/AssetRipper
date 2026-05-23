@@ -45,7 +45,6 @@ public static class PackedFloatVectorExtensions
 		/// <summary>
 		/// A high accuracy default packing method for any <see langword="unmanaged""/> type.
 		/// </summary>
-		/// <param name="packedVector"></param>
 		/// <param name="data"></param>
 		public void Pack<T>(ReadOnlySpan<T> data) where T : unmanaged
 		{
@@ -55,7 +54,6 @@ public static class PackedFloatVectorExtensions
 		/// <summary>
 		/// A high accuracy default packing method
 		/// </summary>
-		/// <param name="packedVector"></param>
 		/// <param name="data"></param>
 		public void Pack(ReadOnlySpan<float> data)
 		{
