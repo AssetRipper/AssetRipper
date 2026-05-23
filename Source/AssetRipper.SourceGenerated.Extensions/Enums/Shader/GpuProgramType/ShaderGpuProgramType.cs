@@ -187,9 +187,8 @@ public static class ShaderGpuProgramTypeExtensions
 					case BuildTarget.Xbox360:
 						return GPUPlatform.Xbox360;
 					case BuildTarget.XboxOne:
+						// Cannot distinguish between D3D11 and D3D12, so we default to D3D11.
 						return GPUPlatform.XboxOne;
-#warning		 TODO:
-					//return GPUPlatform.xboxone_d3d12;
 
 					case BuildTarget.WiiU:
 						return GPUPlatform.WiiU;
@@ -209,6 +208,12 @@ public static class ShaderGpuProgramTypeExtensions
 					default:
 						throw new NotSupportedException($"Unsupported console platform {platform}");
 				}
+
+			case ShaderGpuProgramType.RayTracing:
+				return GPUPlatform.Unknown;
+
+			case ShaderGpuProgramType.PS5NGGC:
+				return GPUPlatform.PS5;
 
 			default:
 				throw new NotSupportedException($"Unsupported gpu program type {_this}");
@@ -288,6 +293,12 @@ public static class ShaderGpuProgramTypeExtensions
 
 			case ShaderGpuProgramType.SPIRV:
 				return "spirv";
+
+			case ShaderGpuProgramType.RayTracing:
+				return "raytracing";
+
+			case ShaderGpuProgramType.PS5NGGC:
+				return "ps5nggc";
 		}
 
 		switch (platform)
