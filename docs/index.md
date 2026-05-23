@@ -18,13 +18,12 @@
   <a href="#contributing">Contributing</a>
 </p>
 
-AssetRipper is a powerful tool for loading and converting Unity engine assets. It can process:
-- Serialized files (`*CAB-*`, `*.assets`, `*.sharedAssets`, etc.)
-- Asset bundles (`*.unity3d`, `*.bundle`, etc.)
+AssetRipper is a powerful tool for analyzing Unity game files. For example, it enables developers to:
 
-The loaded assets are converted into:
-- The native Unity engine format for easy use in Unity Editor.
-- Standard formats that traditional software, like Blender, can read.
+* Find dependency assets that were accidentally included in the game
+* Convert assets into the native Unity engine format
+* Identify code that could not be inlined or trimmed from the build
+* Find broken asset references
 
 AssetRipper supports Unity versions from `3.5.0` to `6000.5.X`. However, support quality may vary slightly for different Unity versions.
 
@@ -35,8 +34,6 @@ AssetRipper supports Unity versions from `3.5.0` to `6000.5.X`. However, support
 3. Run AssetRipper executable.
 4. Change the settings to your preference.
 5. Open your Unity game folder or asset files.
-6. Wait for the extraction and conversion process to complete.
-7. Access your extracted assets in the output folder.
 
 There is also a [community guide for Mac users](https://assetripper.github.io/AssetRipper/articles/RunningOnMac.html).
 
@@ -48,9 +45,9 @@ There is also a [community guide for Mac users](https://assetripper.github.io/As
 
 Your support helps maintain and improve AssetRipper. If you find this tool useful, please consider donating:
 
-- [GitHub Sponsors](https://github.com/sponsors/ds5678)
-- [Patreon](https://www.patreon.com/ds5678)
-- [PayPal](https://paypal.me/ds5678)
+* [GitHub Sponsors](https://github.com/sponsors/ds5678)
+* [Patreon](https://www.patreon.com/ds5678)
+* [PayPal](https://paypal.me/ds5678)
 
 Patreon donors receive special roles on our [Discord server](https://discord.gg/XqXa53W2Yh).
 
@@ -64,8 +61,7 @@ We welcome contributions from the community! Whether it's bug reports, feature r
 
 # Legal Disclaimers
 
-- AssetRipper is licensed under the [GNU General Public License v3.0](https://github.com/AssetRipper/AssetRipper/blob/master/LICENSE.md).
-- AssetRipper is not sponsored by or affiliated with Unity Technologies or its affiliates.
-- "Unity" is a trademark or registered trademark of Unity Technologies or its affiliates in the U.S. and elsewhere.
-
-For a full list of attributions, please see our [Credits](articles/Credits.md) page.
+* AssetRipper is licensed under the [GNU General Public License v3.0](https://github.com/AssetRipper/AssetRipper/blob/master/LICENSE.md).
+* AssetRipper is not sponsored by or affiliated with Unity Technologies or its affiliates.
+* "Unity" is a trademark or registered trademark of Unity Technologies or its affiliates in the U.S. and elsewhere.
+* The [Credits](articles/Credits.md) page contains a list of attributions.
