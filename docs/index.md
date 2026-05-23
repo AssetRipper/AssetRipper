@@ -65,7 +65,6 @@ We welcome contributions from the community! Whether it's bug reports, feature r
 # Legal Disclaimers
 
 - AssetRipper is licensed under the [GNU General Public License v3.0](https://github.com/AssetRipper/AssetRipper/blob/master/LICENSE.md).
-- Using or distributing output from this software may be subject to copyright laws in your jurisdiction.
 - AssetRipper is not sponsored by or affiliated with Unity Technologies or its affiliates.
 - "Unity" is a trademark or registered trademark of Unity Technologies or its affiliates in the U.S. and elsewhere.
 
