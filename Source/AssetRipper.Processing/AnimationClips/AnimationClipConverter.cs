@@ -155,6 +155,11 @@ public readonly partial struct AnimationClipConverter
 
 	private void ProcessDenses(DenseClip dense, int preDenseCurves)
 	{
+		if (dense.FrameCount == 0 || dense.CurveCount == 0)
+		{
+			return;
+		}
+
 		ReadOnlySpan<float> slopeValues = [0, 0, 0, 0]; // no slopes - 0 values
 
 		float[] rentedArray = ArrayPool<float>.Shared.Rent(dense.SampleArray.Count);
@@ -193,6 +198,11 @@ public readonly partial struct AnimationClipConverter
 
 	private void ProcessConstant(ConstantClip constant, int preConstantCurves, float lastFrame)
 	{
+		if (constant.Data.Count == 0)
+		{
+			return;
+		}
+
 		float[] rentedArray = ArrayPool<float>.Shared.Rent(constant.Data.Count);
 		constant.Data.CopyTo(rentedArray);
 		ReadOnlySpan<float> curveValues = new(rentedArray, 0, constant.Data.Count);
@@ -600,8 +610,16 @@ public readonly partial struct AnimationClipConverter
 
 	public IReadOnlyList<StreamedFrame> GenerateFramesFromStreamedClip(IStreamedClip clip)
 	{
+		if (clip.Data.Count == 0)
+		{
+			return [];
+		}
+
+		int byteCount = clip.Data.Count * sizeof(uint);
+		byte[] rentedArray = ArrayPool<byte>.Shared.Rent(byteCount);
+		Span<byte> buffer = rentedArray.AsSpan(0, byteCount);
+
 		List<StreamedFrame> frames = new();
-		Span<byte> buffer = new byte[clip.Data.Count * sizeof(uint)];
 		AssetCollection collection = m_clip.Collection;
 		CopyDataToBuffer(clip, collection, buffer);
 
@@ -612,6 +630,7 @@ public readonly partial struct AnimationClipConverter
 			frame.Read(ref reader, collection.Version);
 			frames.Add(frame);
 		}
+		ArrayPool<byte>.Shared.Return(rentedArray);
 		return frames;
 
 		static bool CpuEndiannessMatchesCollection(AssetCollection collection)
