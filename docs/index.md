@@ -18,12 +18,12 @@
   <a href="#contributing">Contributing</a>
 </p>
 
-AssetRipper is a powerful tool for analyzing Unity game files. For example, it enables developers to:
+AssetRipper is a powerful tool for analyzing Unity game files. For example, it enables game developers to:
 
-* Find dependency assets that were accidentally included in the game
-* Convert assets into the native Unity engine format
-* Identify code that could not be inlined or trimmed from the build
-* Find broken asset references
+* Find dependency assets that were accidentally included in their game
+* Convert their assets into the native Unity engine format
+* Identify code that could not be inlined or trimmed from their build
+* Find broken asset references that would cause issues in their game
 
 AssetRipper supports Unity versions from `3.5.0` to `6000.5.X`. However, support quality may vary slightly for different Unity versions.
 
@@ -39,17 +39,14 @@ There is also a [community guide for Mac users](https://assetripper.github.io/As
 
 # Premium Edition
 
-[Patreon](https://www.patreon.com/ds5678) supporters at the `Premium` tier or higher receive access to the premium edition of AssetRipper. This edition includes additional [features and improvements](https://assetripper.github.io/AssetRipper/articles/PremiumFeatures.html).
+There is a premium edition of AssetRipper. This edition includes additional [features and improvements](https://assetripper.github.io/AssetRipper/articles/PremiumFeatures.html).
 
 # Donations
 
 Your support helps maintain and improve AssetRipper. If you find this tool useful, please consider donating:
 
 * [GitHub Sponsors](https://github.com/sponsors/ds5678)
-* [Patreon](https://www.patreon.com/ds5678)
 * [PayPal](https://paypal.me/ds5678)
-
-Patreon donors receive special roles on our [Discord server](https://discord.gg/XqXa53W2Yh).
 
 # Contributing
 
