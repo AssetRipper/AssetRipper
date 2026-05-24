@@ -52,10 +52,6 @@ Your support helps maintain and improve AssetRipper. If you find this tool usefu
 
 We welcome contributions from the community! Whether it's bug reports, feature requests, or code contributions, please feel free to get involved.
 
-<a href="https://github.com/AssetRipper/AssetRipper/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=AssetRipper/AssetRipper"/>
-</a>
-
 # Legal Disclaimers
 
 * AssetRipper is licensed under the [GNU General Public License v3.0](https://github.com/AssetRipper/AssetRipper/blob/master/LICENSE.md).
