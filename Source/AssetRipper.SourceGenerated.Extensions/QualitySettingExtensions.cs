@@ -57,7 +57,7 @@ public static class QualitySettingExtensions
 		return (ShadowResolution)setting.ShadowResolution;
 	}
 
-	public static ShadowProjection Get(this IQualitySetting setting)
+	public static ShadowProjection GetShadowProjection(this IQualitySetting setting)
 	{
 		return (ShadowProjection)setting.ShadowProjection;
 	}

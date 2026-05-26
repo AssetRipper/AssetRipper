@@ -49,7 +49,7 @@ internal static class Program
 					foreach (FileSystemApi api in classApiList)
 					{
 						// Inherit documentation from System.IO
-						writer.WriteLine($"/// <inheritdoc cref=\"{api.FullName}({api.ParametersWithoutNames})\"/>");
+						writer.WriteLine($"/// <inheritdoc cref=\"{api.FullName}({api.ParametersWithoutNames.Replace('<', '{').Replace('>', '}')})\"/>");
 
 						string virtualKeyword = api.Type is FileSystemApiType.Sealed ? "" : "virtual ";
 						writer.WriteLine($"public {virtualKeyword}{api.BaseReturnType} {api.Name}({api.ParametersWithTypes})");

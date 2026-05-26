@@ -7,7 +7,7 @@ public sealed class MovieTextureAssetExporter : BinaryAssetExporter
 {
 	public override bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection)
 	{
-		if (asset is IMovieTexture texture && IsValidData(texture.MovieData))
+		if (asset is IMovieTexture texture && IsValidData(texture.MovieData_C152))
 		{
 			exportCollection = new MovieTextureAssetExportCollection(this, texture);
 			return true;
@@ -21,7 +21,7 @@ public sealed class MovieTextureAssetExporter : BinaryAssetExporter
 
 	public override bool Export(IExportContainer container, IUnityObjectBase asset, string path, FileSystem fileSystem)
 	{
-		fileSystem.File.WriteAllBytes(path, ((IMovieTexture)asset).MovieData!);
+		fileSystem.File.WriteAllBytes(path, ((IMovieTexture)asset).MovieData_C152!);
 		return true;
 	}
 }

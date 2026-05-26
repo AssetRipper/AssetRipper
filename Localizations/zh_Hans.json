@@ -265,5 +265,8 @@
     "shader_decompilation": "反编译着色器（Shader）",
     "static_mesh_separation": "分离静态网格（Static Mesh）",
     "supported": "已支持",
-    "all": "全部"
+    "all": "全部",
+    "enter_search_query": "输入关键词搜索资源。",
+    "next": "下一个",
+    "no_results_found": "未找到结果。"
 }

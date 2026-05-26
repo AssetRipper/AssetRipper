@@ -60,19 +60,19 @@ public abstract partial class FileSystem
 			throw new global::System.NotSupportedException();
 		}
 
-		/// <inheritdoc cref="global::System.IO.File.WriteAllBytes(global::System.String, global::System.ReadOnlySpan<global::System.Byte>)"/>
+		/// <inheritdoc cref="global::System.IO.File.WriteAllBytes(global::System.String, global::System.ReadOnlySpan{global::System.Byte})"/>
 		public virtual void WriteAllBytes(global::System.String path, global::System.ReadOnlySpan<global::System.Byte> bytes)
 		{
 			throw new global::System.NotSupportedException();
 		}
 
-		/// <inheritdoc cref="global::System.IO.File.WriteAllText(global::System.String, global::System.ReadOnlySpan<global::System.Char>)"/>
+		/// <inheritdoc cref="global::System.IO.File.WriteAllText(global::System.String, global::System.ReadOnlySpan{global::System.Char})"/>
 		public virtual void WriteAllText(global::System.String path, global::System.ReadOnlySpan<global::System.Char> contents)
 		{
 			throw new global::System.NotSupportedException();
 		}
 
-		/// <inheritdoc cref="global::System.IO.File.WriteAllText(global::System.String, global::System.ReadOnlySpan<global::System.Char>, global::System.Text.Encoding)"/>
+		/// <inheritdoc cref="global::System.IO.File.WriteAllText(global::System.String, global::System.ReadOnlySpan{global::System.Char}, global::System.Text.Encoding)"/>
 		public virtual void WriteAllText(global::System.String path, global::System.ReadOnlySpan<global::System.Char> contents, global::System.Text.Encoding encoding)
 		{
 			throw new global::System.NotSupportedException();
@@ -202,13 +202,13 @@ public abstract partial class FileSystem
 			return global::System.IO.Path.Join(path1, path2, path3, path4);
 		}
 
-		/// <inheritdoc cref="global::System.IO.Path.Join(params global::System.ReadOnlySpan<global::System.String>)"/>
+		/// <inheritdoc cref="global::System.IO.Path.Join(params global::System.ReadOnlySpan{global::System.String})"/>
 		public virtual global::System.String Join(params global::System.ReadOnlySpan<global::System.String> paths)
 		{
 			return global::System.IO.Path.Join(paths);
 		}
 
-		/// <inheritdoc cref="global::System.IO.Path.GetDirectoryName(global::System.ReadOnlySpan<global::System.Char>)"/>
+		/// <inheritdoc cref="global::System.IO.Path.GetDirectoryName(global::System.ReadOnlySpan{global::System.Char})"/>
 		public global::System.ReadOnlySpan<global::System.Char> GetDirectoryName(global::System.ReadOnlySpan<global::System.Char> path)
 		{
 			return global::System.IO.Path.GetDirectoryName(path);
@@ -220,7 +220,7 @@ public abstract partial class FileSystem
 			return global::System.IO.Path.GetDirectoryName(path);
 		}
 
-		/// <inheritdoc cref="global::System.IO.Path.GetExtension(global::System.ReadOnlySpan<global::System.Char>)"/>
+		/// <inheritdoc cref="global::System.IO.Path.GetExtension(global::System.ReadOnlySpan{global::System.Char})"/>
 		public global::System.ReadOnlySpan<global::System.Char> GetExtension(global::System.ReadOnlySpan<global::System.Char> path)
 		{
 			return global::System.IO.Path.GetExtension(path);
@@ -232,7 +232,7 @@ public abstract partial class FileSystem
 			return global::System.IO.Path.GetExtension(path);
 		}
 
-		/// <inheritdoc cref="global::System.IO.Path.GetFileName(global::System.ReadOnlySpan<global::System.Char>)"/>
+		/// <inheritdoc cref="global::System.IO.Path.GetFileName(global::System.ReadOnlySpan{global::System.Char})"/>
 		public global::System.ReadOnlySpan<global::System.Char> GetFileName(global::System.ReadOnlySpan<global::System.Char> path)
 		{
 			return global::System.IO.Path.GetFileName(path);
@@ -244,7 +244,7 @@ public abstract partial class FileSystem
 			return global::System.IO.Path.GetFileName(path);
 		}
 
-		/// <inheritdoc cref="global::System.IO.Path.GetFileNameWithoutExtension(global::System.ReadOnlySpan<global::System.Char>)"/>
+		/// <inheritdoc cref="global::System.IO.Path.GetFileNameWithoutExtension(global::System.ReadOnlySpan{global::System.Char})"/>
 		public global::System.ReadOnlySpan<global::System.Char> GetFileNameWithoutExtension(global::System.ReadOnlySpan<global::System.Char> path)
 		{
 			return global::System.IO.Path.GetFileNameWithoutExtension(path);
@@ -268,7 +268,7 @@ public abstract partial class FileSystem
 			return global::System.IO.Path.GetRelativePath(relativeTo, path);
 		}
 
-		/// <inheritdoc cref="global::System.IO.Path.IsPathRooted(global::System.ReadOnlySpan<global::System.Char>)"/>
+		/// <inheritdoc cref="global::System.IO.Path.IsPathRooted(global::System.ReadOnlySpan{global::System.Char})"/>
 		public virtual global::System.Boolean IsPathRooted(global::System.ReadOnlySpan<global::System.Char> path)
 		{
 			throw new global::System.NotSupportedException();

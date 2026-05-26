@@ -5,10 +5,12 @@ on:
   push:
     branches: [master]
     paths:
+      - ".github/workflows/docfx_build.yml"
       - "docs/**"
   pull_request:
     branches: [master]
     paths:
+      - ".github/workflows/docfx_build.yml"
       - "docs/**"
   schedule:
     - cron: "0 0 * * 0" #once per week
@@ -26,8 +28,8 @@ on:
 # * * * * *
 
 jobs:
-  generate-docs:
-    runs-on: windows-latest
+  build:
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
@@ -38,9 +40,7 @@ jobs:
           dotnet-version: 10.0.x
 
       - name: Setup DocFX
-        uses: crazy-max/ghaction-chocolatey@v4
-        with:
-          args: install docfx
+        run: dotnet tool update -g docfx
 
       - name: Install dependencies
         run: dotnet restore
@@ -50,10 +50,33 @@ jobs:
         run: docfx docfx.json
         continue-on-error: false
 
-      - name: Publish
-        if: ${{ ( github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' ) && github.repository == 'AssetRipper/AssetRipper' }}
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v5
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: docs/_site
-          force_orphan: true
+          path: ./docs/_site
+
+  deploy:
+    if: ${{ ( github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' ) && github.repository == 'AssetRipper/AssetRipper' }}
+    runs-on: ubuntu-latest
+    needs: build
+
+    # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
+    permissions:
+      pages: write      # to deploy to Pages
+      id-token: write   # to verify the deployment originates from an appropriate source
+
+    # Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+    # However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+    concurrency:
+      group: "pages"
+      cancel-in-progress: false
+
+    # Deploy to the github-pages environment
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5 # or specific "vX.X.X" version tag for this action

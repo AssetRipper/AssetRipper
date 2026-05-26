@@ -10,18 +10,6 @@ namespace AssetRipper.SourceGenerated.Extensions;
 
 public static class SpriteSheetMetaDataExtensions
 {
-	public static ISpriteMetaData GetSpriteMetaData(this ISpriteSheetMetaData data, Utf8String name)
-	{
-		for (int i = 0; i < data.Sprites.Count; i++)
-		{
-			if (data.Sprites[i].Name == name)
-			{
-				return data.Sprites[i];
-			}
-		}
-		throw new ArgumentException($"There is no sprite metadata with name {name}", nameof(name));
-	}
-
 	public static void CopyFromSpriteMetaData(this ISpriteSheetMetaData instance, ISpriteMetaData spriteMetaData)
 	{
 		if (instance.Has_Outline() && spriteMetaData.Has_Outline())

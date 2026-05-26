@@ -92,13 +92,13 @@ public sealed class BinaryAssetContentExtractor : IContentExtractor
 		{
 		}
 
-		protected override ReadOnlySpan<byte> Data => Asset.MovieData ?? [];
+		protected override ReadOnlySpan<byte> Data => Asset.MovieData_C152 ?? [];
 
 		protected override string ExportExtension => "ogv";
 
 		public static MovieTextureExportCollection? Create(IMovieTexture asset)
 		{
-			if (asset.Has_MovieData() && asset.MovieData.Length > 0)
+			if (asset.Has_MovieData_C152() && asset.MovieData_C152.Length > 0)
 			{
 				return new MovieTextureExportCollection(asset);
 			}

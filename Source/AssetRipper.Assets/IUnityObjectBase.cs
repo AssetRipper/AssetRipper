@@ -131,7 +131,7 @@ public interface IUnityObjectBase : IUnityAssetBase
 	/// <remarks>
 	/// In order of preference:<br/>
 	/// 1. <see cref="OverrideName"/><br/>
-	/// 2. <see cref="IHasNameString.NameString"/><br/>
+	/// 2. <see cref="INamed.Name"/><br/>
 	/// 3. <see cref="OriginalName"/><br/>
 	/// 4. <see cref="ClassName"/><br/>
 	/// <see cref="OriginalName"/> has secondary preference because file importers can create assets with a different name from the file.

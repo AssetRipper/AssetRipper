@@ -15,20 +15,10 @@ public static class TransformTypeExtensions
 		return _this >= TransformType.Translation && _this <= TransformType.EulerRotation;
 	}
 
-	public static int GetDimension(this TransformType _this)
+	public static int GetDimension(this TransformType _this) => _this switch
 	{
-		switch (_this)
-		{
-			case TransformType.Translation:
-			case TransformType.Scaling:
-			case TransformType.EulerRotation:
-				return 3;
-
-			case TransformType.Rotation:
-				return 4;
-
-			default:
-				throw new NotImplementedException($"Binding type {_this} is not implemented");
-		}
-	}
+		TransformType.Translation or TransformType.Scaling or TransformType.EulerRotation => 3,
+		TransformType.Rotation => 4,
+		_ => throw new ArgumentOutOfRangeException(nameof(_this), _this, $"Invalid {nameof(TransformType)} value"),
+	};
 }
