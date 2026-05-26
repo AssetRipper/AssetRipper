@@ -66,32 +66,12 @@ internal sealed class SharedState : AssemblyBuilder
 	public MethodDefinition NullableContextAttributeConstructor { get; }
 	public TypeDefinition PrivateImplementationDetails { get; }
 
-	private static readonly string referenceDirectory;
-
-	static SharedState()
-	{
-		referenceDirectory = "";
-		for (int i = 50; i >= 0; i--)
-		{
-			string path = @$"C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\9.0.{i}\ref\net9.0\";
-			if (Directory.Exists(path))
-			{
-				referenceDirectory = path;
-				break;
-			}
-		}
-		if (referenceDirectory.Length == 0)
-		{
-			throw new InvalidOperationException(".NET reference directory could not be found");
-		}
-	}
-
 	private SharedState(
 		UnityVersion[] sourceVersions,
 		Dictionary<int, VersionedList<UniversalClass>> classes,
 		UniversalCommonString commonString,
 		byte[] tpkData)
-		: base(AssemblyName, new Version(0, 0, 0, 0), KnownCorLibs.SystemRuntime_v9_0_0_0)
+		: base(AssemblyName, new Version(0, 0, 0, 0), KnownCorLibs.SystemRuntime_v10_0_0_0)
 	{
 		SourceVersions = sourceVersions;
 		CommonString = commonString;
@@ -128,7 +108,7 @@ internal sealed class SharedState : AssemblyBuilder
 		byte[] tpkData)
 	{
 		_instance = new SharedState(sourceVersions, classes, commonString, tpkData);
-		_instance.AddTargetFrameworkAttribute(".NET 9.0");
+		_instance.AddTargetFrameworkAttribute(".NET 10.0");
 		File.WriteAllBytes("processed.tpk", tpkData);
 	}
 
@@ -150,19 +130,16 @@ internal sealed class SharedState : AssemblyBuilder
 
 	private void AddLocalReferenceModule(string name)
 	{
-		string path = Path.Combine(AppContext.BaseDirectory, $"{name}.dll"); ;
-		AddReferenceModule(path);
+		string path = Path.Combine(AppContext.BaseDirectory, $"{name}.dll");
+		ModuleDefinition module = ModuleDefinition.FromFile(path);
+		Importer.AddReferenceModule(module);
 	}
 
 	private void AddSystemReferenceModule(string name)
 	{
-		string path = $"{referenceDirectory}{name}.dll";
-		AddReferenceModule(path);
-	}
-
-	private void AddReferenceModule(string path)
-	{
-		ModuleDefinition module = ModuleDefinition.FromFile(path);
+		string fileName = $"{name}.dll";
+		byte[] imageData = Basic.Reference.Assemblies.Net100.ReferenceInfos.AllValues.First(t => t.FileName == fileName).ImageBytes;
+		ModuleDefinition module = ModuleDefinition.FromBytes(imageData);
 		Importer.AddReferenceModule(module);
 	}
 

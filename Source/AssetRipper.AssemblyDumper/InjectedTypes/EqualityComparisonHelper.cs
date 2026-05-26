@@ -41,21 +41,24 @@ internal static class EqualityComparisonHelper
 
 	// eg string, int, bool, Vector3f
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static bool EquatableEquals<T>(T x, T y) where T : IEquatable<T>
+	public static bool EquatableEquals<T>(T x, T y)
+		where T : notnull, IEquatable<T>
 	{
 		return x.Equals(y);
 	}
 
 	// eg AssetList<float>, AssetList<Utf8String>, or AssetList<Vector3f>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static bool EquatableListEquals<T>(AssetList<T> x, AssetList<T> y) where T : IEquatable<T>, new()
+	public static bool EquatableListEquals<T>(AssetList<T> x, AssetList<T> y)
+		where T : notnull, IEquatable<T>, new()
 	{
 		return RuntimeHelpers.IsReferenceOrContainsReferences<T>()
 			? x.SequenceEqual(y)
 			: x.GetSpan().SequenceEqual(y.GetSpan());
 	}
 
-	public static bool EquatableListListEquals<T>(AssetList<AssetList<T>> x, AssetList<AssetList<T>> y) where T : IEquatable<T>, new()
+	public static bool EquatableListListEquals<T>(AssetList<AssetList<T>> x, AssetList<AssetList<T>> y)
+		where T : notnull, IEquatable<T>, new()
 	{
 		if (x.Count != y.Count)
 		{
@@ -72,12 +75,16 @@ internal static class EqualityComparisonHelper
 		return true;
 	}
 
-	public static bool EquatablePairEquals<TKey, TValue>(AssetPair<TKey, TValue> x, AssetPair<TKey, TValue> y) where TKey : IEquatable<TKey>, new() where TValue : IEquatable<TValue>, new()
+	public static bool EquatablePairEquals<TKey, TValue>(AssetPair<TKey, TValue> x, AssetPair<TKey, TValue> y)
+		where TKey : notnull, IEquatable<TKey>, new()
+		where TValue : notnull, IEquatable<TValue>, new()
 	{
 		return x.Key.Equals(y.Key) && x.Value.Equals(y.Value);
 	}
 
-	public static bool EquatableDictionaryEquals<TKey, TValue>(AssetDictionary<TKey, TValue> x, AssetDictionary<TKey, TValue> y) where TKey : IEquatable<TKey>, new() where TValue : IEquatable<TValue>, new()
+	public static bool EquatableDictionaryEquals<TKey, TValue>(AssetDictionary<TKey, TValue> x, AssetDictionary<TKey, TValue> y)
+		where TKey : notnull, IEquatable<TKey>, new()
+		where TValue : notnull, IEquatable<TValue>, new()
 	{
 		if (x.Count != y.Count)
 		{
@@ -94,7 +101,9 @@ internal static class EqualityComparisonHelper
 		return true;
 	}
 
-	public static bool EquatableDictionaryListEquals<TKey, TValueElement>(AssetDictionary<TKey, AssetList<TValueElement>> x, AssetDictionary<TKey, AssetList<TValueElement>> y) where TKey : IEquatable<TKey>, new() where TValueElement : IEquatable<TValueElement>, new()
+	public static bool EquatableDictionaryListEquals<TKey, TValueElement>(AssetDictionary<TKey, AssetList<TValueElement>> x, AssetDictionary<TKey, AssetList<TValueElement>> y)
+		where TKey : notnull, IEquatable<TKey>, new()
+		where TValueElement : notnull, IEquatable<TValueElement>, new()
 	{
 		if (x.Count != y.Count)
 		{
@@ -112,13 +121,15 @@ internal static class EqualityComparisonHelper
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static bool? AssetEquals<T>(T x, T y, AssetEqualityComparer comparer) where T : IUnityAssetBase
+	public static bool? AssetEquals<T>(T x, T y, AssetEqualityComparer comparer)
+		where T : notnull, IUnityAssetBase
 	{
 		return x.AddToEqualityComparer(y, comparer);
 	}
 
 	// eg AssetList<ChildAnimatorState>
-	public static bool? AssetListEquals<T>(AssetList<T> x, AssetList<T> y, AssetEqualityComparer comparer) where T : new()
+	public static bool? AssetListEquals<T>(AssetList<T> x, AssetList<T> y, AssetEqualityComparer comparer)
+		where T : notnull, new()
 	{
 		if (x.Count != y.Count)
 		{
@@ -141,8 +152,8 @@ internal static class EqualityComparisonHelper
 	}
 
 	public static bool? AssetPairEquals<TKey, TValue>(AssetPair<TKey, TValue> x, AssetPair<TKey, TValue> y, AssetEqualityComparer comparer)
-		where TKey : new()
-		where TValue : new()
+		where TKey : notnull, new()
+		where TValue : notnull, new()
 	{
 		bool? keyResult = GenericAssetEquals(x.Key, y.Key, comparer);
 		if (keyResult == false)
@@ -163,8 +174,8 @@ internal static class EqualityComparisonHelper
 	}
 
 	public static bool? AssetDictionaryEquals<TKey, TValue>(AssetDictionary<TKey, TValue> x, AssetDictionary<TKey, TValue> y, AssetEqualityComparer comparer)
-		where TKey : new()
-		where TValue : new()
+		where TKey : notnull, new()
+		where TValue : notnull, new()
 	{
 		if (x.Count != y.Count)
 		{
@@ -187,8 +198,8 @@ internal static class EqualityComparisonHelper
 	}
 
 	public static bool? AssetPairListEquals<TKey, TValue>(AssetList<AssetPair<TKey, TValue>> x, AssetList<AssetPair<TKey, TValue>> y, AssetEqualityComparer comparer)
-		where TKey : new()
-		where TValue : new()
+		where TKey : notnull, new()
+		where TValue : notnull, new()
 	{
 		if (x.Count != y.Count)
 		{
@@ -211,8 +222,8 @@ internal static class EqualityComparisonHelper
 	}
 
 	public static bool? AssetDictionaryListEquals<TKey, TValueElement>(AssetDictionary<TKey, AssetList<TValueElement>> x, AssetDictionary<TKey, AssetList<TValueElement>> y, AssetEqualityComparer comparer)
-		where TKey : new()
-		where TValueElement : new()
+		where TKey : notnull, new()
+		where TValueElement : notnull, new()
 	{
 		if (x.Count != y.Count)
 		{
@@ -243,9 +254,9 @@ internal static class EqualityComparisonHelper
 	}
 
 	public static bool? AssetDictionaryPairEquals<TPairKey, TPairValue, TValue>(AssetDictionary<AssetPair<TPairKey, TPairValue>, TValue> x, AssetDictionary<AssetPair<TPairKey, TPairValue>, TValue> y, AssetEqualityComparer comparer)
-		where TPairKey : new()
-		where TPairValue : new()
-		where TValue : new()
+		where TPairKey : notnull, new()
+		where TPairValue : notnull, new()
+		where TValue : notnull, new()
 	{
 		if (x.Count != y.Count)
 		{
@@ -276,6 +287,7 @@ internal static class EqualityComparisonHelper
 	}
 
 	private static bool? GenericAssetEquals<T>(T x, T y, AssetEqualityComparer comparer)
+		where T : notnull
 	{
 		if (typeof(T).IsAssignableTo(typeof(IUnityAssetBase)))
 		{

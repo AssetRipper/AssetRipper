@@ -29,11 +29,11 @@
 		<PackageReference Include="AssetRipper.GUI.Web.Dependencies" Version="1.1.0" />
 		<PackageReference Include="AssetRipper.NativeDialogs" Version="1.1.2" />
 		<PackageReference Include="AssetRipper.Text.Html" Version="2.1.0" />
-		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.5" />
+		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.7" />
 		<PackageReference Include="Microsoft.OpenApi" Version="2.6.1" />
 		<PackageReference Include="Ookii.CommandLine" Version="5.0.0" />
 		<PackageReference Include="oqo0.SwaggerThemes" Version="1.4.3" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.5" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.7" />
 	</ItemGroup>
 
 </Project>

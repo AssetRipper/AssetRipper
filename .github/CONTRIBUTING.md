@@ -29,4 +29,4 @@ Posting well-written issues is an excellent way to report bugs and share ideas a
 
 Before posting an issue, make sure it hasn't already been addressed in the [previously posted issues](https://github.com/AssetRipper/AssetRipper/issues?q=is%3Aissue).
 
-If posting a bug report, please be sure to include your log file. It is in the same folder as the `exe` file and will be called `AssetRipper.log`.
+If posting a bug report, please be sure to include your log file. It is in the same folder as the `exe` file and will be called `AssetRipper_time_stamp.log`.

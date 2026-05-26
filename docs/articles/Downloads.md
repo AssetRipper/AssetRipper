@@ -38,4 +38,4 @@ For advanced users, every commit triggers an automatic "nightly" build via Githu
 
 ---
 
-If you encounter any issues, please report them on our [Issue Tracker](https://github.com/AssetRipper/AssetRipper/issues).
+If you encounter any issues, please report them on the [Issue Tracker](https://github.com/AssetRipper/AssetRipper/issues).

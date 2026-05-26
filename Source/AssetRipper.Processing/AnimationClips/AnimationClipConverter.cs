@@ -30,6 +30,7 @@ using AssetRipper.SourceGenerated.Subclasses.StreamedClip;
 using AssetRipper.SourceGenerated.Subclasses.Vector3Curve;
 using System.Buffers;
 using System.Buffers.Binary;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace AssetRipper.Processing.AnimationClips;
@@ -53,6 +54,8 @@ public readonly partial struct AnimationClipConverter
 	{
 		if (m_clip.Has_ClipBindingConstant_C74())
 		{
+			InitializeBindingsCache();
+
 			IClip clip = m_clip.MuscleClip_C74.Clip.Data;
 
 			IReadOnlyList<StreamedFrame> streamedFrames = GenerateFramesFromStreamedClip(clip.StreamedClip);
@@ -69,6 +72,31 @@ public readonly partial struct AnimationClipConverter
 			}
 
 			m_clip.MuscleClipInfo_C74.Initialize(m_clip.MuscleClip_C74);
+		}
+	}
+
+	private void InitializeBindingsCache()
+	{
+		m_bindingsCache.Clear();
+
+		int currentCurveIndex = 0;
+		AccessListBase<IGenericBinding> bindings = ClipBindingConstant.GenericBindings;
+
+		for (int i = 0; i < bindings.Count; i++)
+		{
+			IGenericBinding binding = bindings[i];
+			int dimension = binding.GetClassID() == ClassIDType.Transform
+				? binding.TransformType().GetDimension()
+				: 1;
+
+			Debug.Assert(dimension >= 1 && dimension <= 4);
+
+			for (int d = 0; d < dimension; d++)
+			{
+				m_bindingsCache[currentCurveIndex + d] = binding;
+			}
+
+			currentCurveIndex += dimension;
 		}
 	}
 
@@ -155,6 +183,11 @@ public readonly partial struct AnimationClipConverter
 
 	private void ProcessDenses(DenseClip dense, int preDenseCurves)
 	{
+		if (dense.FrameCount == 0 || dense.CurveCount == 0)
+		{
+			return;
+		}
+
 		ReadOnlySpan<float> slopeValues = [0, 0, 0, 0]; // no slopes - 0 values
 
 		float[] rentedArray = ArrayPool<float>.Shared.Rent(dense.SampleArray.Count);
@@ -193,6 +226,11 @@ public readonly partial struct AnimationClipConverter
 
 	private void ProcessConstant(ConstantClip constant, int preConstantCurves, float lastFrame)
 	{
+		if (constant.Data.Count == 0)
+		{
+			return;
+		}
+
 		float[] rentedArray = ArrayPool<float>.Shared.Rent(constant.Data.Count);
 		constant.Data.CopyTo(rentedArray);
 		ReadOnlySpan<float> curveValues = new(rentedArray, 0, constant.Data.Count);
@@ -540,30 +578,6 @@ public readonly partial struct AnimationClipConverter
 		{
 			return binding;
 		}
-		int curves = 0;
-		AccessListBase<IGenericBinding> bindings = ClipBindingConstant.GenericBindings;
-		for (int i = 0; i < bindings.Count; i++)
-		{
-			binding = bindings[i];
-			if (binding.GetClassID() == ClassIDType.Transform)
-			{
-				curves += binding.TransformType().GetDimension();
-			}
-			else
-			{
-				curves += 1;
-			}
-			if (curves > index)
-			{
-				m_bindingsCache[index] = binding;
-				if (binding.IsTransform() && binding.TransformType().GetDimension() < 1)
-				{
-					// If an animation was malformed, this avoids the possibility of an infinite FOR loop when processing Transform bindings
-					throw new IndexOutOfRangeException("Transform AnimationCurve can't have Dimension less than 1.");
-				}
-				return binding;
-			}
-		}
 		throw new ArgumentException($"Binding with index {index} hasn't been found", nameof(index));
 	}
 
@@ -600,8 +614,16 @@ public readonly partial struct AnimationClipConverter
 
 	public IReadOnlyList<StreamedFrame> GenerateFramesFromStreamedClip(IStreamedClip clip)
 	{
+		if (clip.Data.Count == 0)
+		{
+			return [];
+		}
+
+		int byteCount = clip.Data.Count * sizeof(uint);
+		byte[] rentedArray = ArrayPool<byte>.Shared.Rent(byteCount);
+		Span<byte> buffer = rentedArray.AsSpan(0, byteCount);
+
 		List<StreamedFrame> frames = new();
-		Span<byte> buffer = new byte[clip.Data.Count * sizeof(uint)];
 		AssetCollection collection = m_clip.Collection;
 		CopyDataToBuffer(clip, collection, buffer);
 
@@ -612,6 +634,7 @@ public readonly partial struct AnimationClipConverter
 			frame.Read(ref reader, collection.Version);
 			frames.Add(frame);
 		}
+		ArrayPool<byte>.Shared.Return(rentedArray);
 		return frames;
 
 		static bool CpuEndiannessMatchesCollection(AssetCollection collection)

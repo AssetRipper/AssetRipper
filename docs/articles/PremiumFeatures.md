@@ -1,12 +1,16 @@
 # Premium Features
 
-## Traditional Il2Cpp Recovery
+AssetRipper has several premium features to make its export more similar to the original project, in order to reduce the difficulty for game developers to compare them.
 
-This is an experimental feature for recovering code compiled with Il2Cpp. It takes a traditional decompilation approach. It can be enabled by selecting Script Content Level 3 in the settings.
+## Static Mesh Separation
 
-For performance, mscorlib and any assemblies whose names start with System or Unity have been excluded from analysis. The source code for those assemblies should be publicly available, in one form or another.
+Objects marked as static in a scene get merged when the game is compiled. This is an optimization Unity uses to reduce draw calls. This feature reverses that process to the best of its ability.
 
-From a quick glance, the success rate seems to be currently between 10 and 20 percent of methods on x86 games. Other platforms have lower rates of recovery. Improvements are ongoing.
+* If a mesh is used statically multiple times in the game, even across different scenes, AssetRipper intelligently identifies these duplicates and generates a single mesh for all the instances.
+* If the original mesh exists in the game files, it's used instead of generating a new mesh.
+* Mesh names are lost during static batching, so the GameObject name is used instead. Some sensible name cleaning is applied.
+
+This feature has a setting for enabling it, which defaults to true.
 
 ## Shader Decompilation
 
@@ -17,21 +21,19 @@ This is an experimental shader decompiler that strives to support all variants a
 * Vulkan shaders can be decompiled on any platform.
 * DirectX shaders can only be decompiled on Windows computers.
 
-## Static Mesh Separation
-
-Objects marked as static in a scene get merged when the game is compiled. This is an optimization Unity uses to reduce draw calls. Unfortunately, it also makes game recovery more difficult. This feature reverses that process to the best of its ability.
-
-* If a mesh is used statically multiple times in the game, even across different scenes, AssetRipper intelligently identifies these duplicates and generates a single mesh for all the instances.
-* If the original mesh exists in the game files, it's used instead of generating a new mesh.
-* Mesh names are lost during static batching, so the GameObject name is used instead. Some sensible name cleaning is applied.
-
-This feature has a setting for enabling it, which defaults to true.
-
 ## Prefab Outlining
 
 When a game is compiled, all prefabs in a scene are inlined (instantiated), so any information about the original prefab is lost. This feature attempts to reverse that process by analyzing all GameObject hierarchies in the game and identifying repetitions that can be replaced with new (or existing) prefabs.
 
 This feature has a setting for enabling it, which defaults to false.
+
+## Traditional Il2Cpp Analysis
+
+This is an experimental feature for analyzing code compiled with Il2Cpp. It takes a traditional decompilation approach. It can be enabled by selecting Script Content Level 3 in the settings.
+
+For performance, mscorlib and any assemblies whose names start with System or Unity have been excluded from analysis.
+
+The success rate seems to be currently between 10 and 20 percent of methods on x86 games. Other platforms have lower success rates. Improvements are ongoing.
 
 ## Asset Deduplication
 
@@ -51,17 +53,17 @@ This feature has a setting for enabling it, which defaults to false.
 
 ## User Defined Package Export
 
-One of the most frustrating things for users is package export. Previously, exported projects referenced only the default set of Unity core modules. Whenever a user would reference a package that the game had used, the new package would conflict with assemblies and scripts within the exported project. Deleting the conflicting exported files would break any asset references to those files.
+Without this feature, exported projects reference only the default set of Unity core modules. Whenever a user adds references to packages that their game used, the new packages will conflict with assemblies and scripts within the exported project. Deleting the conflicting exported files will break any asset references to those files.
 
 There are third-party tools available to help fix broken script references, but they mostly rely on guessing the scripts from the MonoBehaviour fields. In addition, they do nothing to fix broken references for other asset types. That is the purpose of this feature: export asset and package references, so that the user doesn't have to fix broken references later.
 
-Unfortunately, it is not feasible to datamine all possible packages, not even restricted to the official offerings from Unity. As such, users and communities be responsible for mining the packages specific to their game. However, there are some resources to help programmers do the required datamining. https://github.com/AssetRipper/MarrowMiningDemo
+Unfortunately, it is not feasible to datamine all possible packages, not even restricted to the official offerings from Unity. As such, users are responsible for mining the packages specific to their game. However, there are some resources to help them do the required datamining. https://github.com/AssetRipper/MarrowMiningDemo
 
-This experimental feature can be enabled by going to the Configuration Files page, which can be accessed with "View/Configuration Files" in the file menu. To enable the feature, the user must upload package data json files appropriate for the game being ripped. Example json files are available in the Marrow Mining Demo I linked above.
+This experimental feature can be enabled by going to the Configuration Files page, which can be accessed with "View/Configuration Files" in the file menu. To enable the feature, the user must upload package data json files appropriate for their game. Example json files are available in the Marrow Mining Demo I linked above.
 
 ## Asset Path Overrides
 
-This feature allows users to change the export destination of an asset. It can be enabled by going to the Configuration Files page, which can be accessed with "View/Configuration Files" in the file menu. To enable the feature, the user must upload a json file appropriate for the game being ripped.
+This feature allows users to change the export destination of an asset. It can be enabled by going to the Configuration Files page, which can be accessed with "View/Configuration Files" in the file menu. To enable the feature, the user must upload a json file appropriate for their game.
 
 ### Path Override File Structure
 
