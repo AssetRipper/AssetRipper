@@ -71,17 +71,9 @@ internal sealed class UnityRegistryClient : IDisposable
 				return null;
 			}
 
-			foreach (JsonProperty versionEntry in versionsElement.EnumerateObject())
-			{
-				JsonElement versionData = versionEntry.Value;
-				if (versionData.TryGetProperty("dist", out JsonElement distElement)
-					&& distElement.TryGetProperty("tarball", out JsonElement tarballElement))
-				{
-					return tarballElement.GetString();
-				}
-			}
-
-			return null;
+			return versionsElement.EnumerateObject()
+				.Select(versionEntry => TryGetTarballUrl(versionEntry.Value))
+				.FirstOrDefault(url => url is not null);
 		}
 		catch (Exception ex)
 		{
@@ -106,8 +98,6 @@ internal sealed class UnityRegistryClient : IDisposable
 
 	/// <summary>
 	/// Download a package tarball and extract per-script GUIDs from .cs.meta files.
-	/// Unity packages are source-compiled, so script references use the .cs.meta GUID
-	/// (with fileID 11500000), not the .asmdef GUID.
 	/// </summary>
 	public Dictionary<string, UnityGuid> ExtractScriptGuids(string tarballUrl)
 	{
@@ -194,23 +184,6 @@ internal sealed class UnityRegistryClient : IDisposable
 		return null;
 	}
 
-	internal static string? ParseAssemblyNameFromAsmdef(string asmdefContent)
-	{
-		try
-		{
-			using JsonDocument doc = JsonDocument.Parse(asmdefContent);
-			if (doc.RootElement.TryGetProperty("name", out JsonElement nameElement))
-			{
-				return nameElement.GetString();
-			}
-		}
-		catch
-		{
-			// Invalid JSON
-		}
-		return null;
-	}
-
 	/// <summary>
 	/// Find the latest non-prerelease version compatible with the project's Unity version.
 	/// Falls back to the latest prerelease if no stable match exists, since some packages
@@ -230,47 +203,19 @@ internal sealed class UnityRegistryClient : IDisposable
 
 		foreach (JsonProperty versionEntry in versionsElement.EnumerateObject())
 		{
-			string versionString = versionEntry.Name;
-			JsonElement versionData = versionEntry.Value;
-
-			UnityVersion minUnityVersion = default;
-			if (versionData.TryGetProperty("unity", out JsonElement unityElement))
-			{
-				string? unityStr = unityElement.GetString();
-				if (!string.IsNullOrEmpty(unityStr))
-				{
-					try
-					{
-						minUnityVersion = UnityVersion.Parse(unityStr);
-					}
-					catch
-					{
-						// Unparseable — treat as compatible with any Unity version
-					}
-				}
-			}
-
-			if (minUnityVersion != default && projectUnityVersion < minUnityVersion)
+			if (!IsCompatibleVersion(versionEntry.Value, projectUnityVersion))
 			{
 				continue;
 			}
 
-			string? tarballUrl = null;
-			if (versionData.TryGetProperty("dist", out JsonElement distElement)
-				&& distElement.TryGetProperty("tarball", out JsonElement tarballElement))
-			{
-				tarballUrl = tarballElement.GetString();
-			}
-
+			string versionString = versionEntry.Name;
+			string? tarballUrl = TryGetTarballUrl(versionEntry.Value);
 			bool isPreRelease = versionString.Contains('-');
 
-			if (!isPreRelease)
+			if (!isPreRelease && (bestStableVersion is null || CompareVersionStrings(versionString, bestStableVersion) > 0))
 			{
-				if (bestStableVersion is null || CompareVersionStrings(versionString, bestStableVersion) > 0)
-				{
-					bestStableVersion = versionString;
-					bestStableTarball = tarballUrl;
-				}
+				bestStableVersion = versionString;
+				bestStableTarball = tarballUrl;
 			}
 
 			if (bestAnyVersion is null || CompareVersionStrings(versionString, bestAnyVersion) > 0)
@@ -284,6 +229,41 @@ internal sealed class UnityRegistryClient : IDisposable
 		string? tarball = bestStableVersion is not null ? bestStableTarball : bestAnyTarball;
 
 		return version is not null ? new PackageVersionInfo(version, tarball) : null;
+	}
+
+	private static bool IsCompatibleVersion(JsonElement versionData, UnityVersion projectUnityVersion)
+	{
+		if (!versionData.TryGetProperty("unity", out JsonElement unityElement))
+		{
+			return true;
+		}
+
+		string? unityStr = unityElement.GetString();
+		if (string.IsNullOrEmpty(unityStr))
+		{
+			return true;
+		}
+
+		try
+		{
+			UnityVersion minUnityVersion = UnityVersion.Parse(unityStr);
+			return projectUnityVersion >= minUnityVersion;
+		}
+		catch
+		{
+			// Unparseable, treat as compatible with any Unity version
+			return true;
+		}
+	}
+
+	private static string? TryGetTarballUrl(JsonElement versionData)
+	{
+		if (versionData.TryGetProperty("dist", out JsonElement distElement)
+			&& distElement.TryGetProperty("tarball", out JsonElement tarballElement))
+		{
+			return tarballElement.GetString();
+		}
+		return null;
 	}
 
 	/// <summary>

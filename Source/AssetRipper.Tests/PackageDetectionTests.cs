@@ -1,5 +1,6 @@
 using AssetRipper.Export.UnityProjects.Project;
 using AssetRipper.Primitives;
+using AssetRipper.Processing;
 using System.Text.Json;
 
 namespace AssetRipper.Tests;
@@ -148,10 +149,10 @@ internal class PackageDetectionTests
 	[Test]
 	public void CreateDefault_WithDetectedPackages_IncludesBoth()
 	{
-		Dictionary<string, string> detected = new()
-		{
-			["com.unity.textmeshpro"] = "3.0.6",
-		};
+		PackageDetectionResult detected = new(
+			new Dictionary<string, string> { ["com.unity.textmeshpro"] = "3.0.6" },
+			new Dictionary<string, UnityGuid>(),
+			new HashSet<string>());
 
 		PackageManifest manifest = PackageManifest.CreateDefault(new UnityVersion(2022), detected);
 
@@ -174,10 +175,10 @@ internal class PackageDetectionTests
 	[Test]
 	public void Manifest_SerializesToValidJson()
 	{
-		Dictionary<string, string> detected = new()
-		{
-			["com.unity.textmeshpro"] = "3.0.6",
-		};
+		PackageDetectionResult detected = new(
+			new Dictionary<string, string> { ["com.unity.textmeshpro"] = "3.0.6" },
+			new Dictionary<string, UnityGuid>(),
+			new HashSet<string>());
 
 		PackageManifest manifest = PackageManifest.CreateDefault(new UnityVersion(2022), detected);
 
@@ -242,38 +243,6 @@ internal class PackageDetectionTests
 	public void ParseGuidFromMeta_EmptyContent_ReturnsNull()
 	{
 		UnityGuid? result = UnityRegistryClient.ParseGuidFromMeta("");
-
-		Assert.That(result, Is.Null);
-	}
-
-	#endregion
-
-	#region UnityRegistryClient - ParseAssemblyNameFromAsmdef
-
-	[Test]
-	public void ParseAssemblyNameFromAsmdef_ValidJson_ReturnsName()
-	{
-		string asmdefContent = """{"name": "Unity.TextMeshPro", "references": []}""";
-
-		string? result = UnityRegistryClient.ParseAssemblyNameFromAsmdef(asmdefContent);
-
-		Assert.That(result, Is.EqualTo("Unity.TextMeshPro"));
-	}
-
-	[Test]
-	public void ParseAssemblyNameFromAsmdef_NoNameProperty_ReturnsNull()
-	{
-		string asmdefContent = """{"references": []}""";
-
-		string? result = UnityRegistryClient.ParseAssemblyNameFromAsmdef(asmdefContent);
-
-		Assert.That(result, Is.Null);
-	}
-
-	[Test]
-	public void ParseAssemblyNameFromAsmdef_InvalidJson_ReturnsNull()
-	{
-		string? result = UnityRegistryClient.ParseAssemblyNameFromAsmdef("not json");
 
 		Assert.That(result, Is.Null);
 	}

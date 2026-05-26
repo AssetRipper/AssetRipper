@@ -1,4 +1,4 @@
-﻿using AssetRipper.Export.Configuration;
+using AssetRipper.Export.Configuration;
 using AssetRipper.Processing;
 
 namespace AssetRipper.Export.UnityProjects.Project;
@@ -11,11 +11,11 @@ public class PackageManifestPostExporter : IPostExporter
 		fileSystem.Directory.Create(packagesDirectory);
 		string path = fileSystem.Path.Join(packagesDirectory, "manifest.json");
 		using Stream stream = fileSystem.File.Create(path);
-		CreateManifest(settings.Version, settings.DetectedPackages).Save(stream);
+		CreateManifest(settings.Version, gameData.PackageDetection).Save(stream);
 	}
 
-	protected virtual PackageManifest CreateManifest(UnityVersion version, Dictionary<string, string>? detectedPackages)
+	protected virtual PackageManifest CreateManifest(UnityVersion version, PackageDetectionResult? packageDetection)
 	{
-		return PackageManifest.CreateDefault(version, detectedPackages);
+		return PackageManifest.CreateDefault(version, packageDetection);
 	}
 }

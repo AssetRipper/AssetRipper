@@ -12,7 +12,7 @@ internal static class AssemblyToPackageMapper
 		["UnityEngine.UI"] = "com.unity.ugui",
 		["UnityEditor.UI"] = "com.unity.ugui",
 
-		// com.unity.textmeshpro (separate package in Unity < 2023, merged into ugui in Unity 6+)
+		// com.unity.textmeshpro
 		["Unity.TextMeshPro"] = "com.unity.textmeshpro",
 		["Unity.TextMeshPro.Editor"] = "com.unity.textmeshpro",
 
@@ -135,10 +135,10 @@ internal static class AssemblyToPackageMapper
 		["Unity.2D.Psdimporter.Editor"] = "com.unity.2d.psdimporter",
 		["PsdPlugin"] = "com.unity.2d.psdimporter",
 
-		// com.unity.nuget.newtonsoft-json (pre-compiled DLL, no .asmdef)
+		// com.unity.nuget.newtonsoft-json
 		["Newtonsoft.Json"] = "com.unity.nuget.newtonsoft-json",
 
-		// com.unity.ext.nunit (pre-compiled DLL, no .asmdef)
+		// com.unity.ext.nunit
 		["nunit.framework"] = "com.unity.ext.nunit",
 
 		// com.unity.probuilder
@@ -298,7 +298,7 @@ internal static class AssemblyToPackageMapper
 		["Unity.XR.CoreUtils"] = "com.unity.xr.core-utils",
 		["Unity.XR.CoreUtils.Editor"] = "com.unity.xr.core-utils",
 
-		// com.unity.xr.arfoundation (includes ARSubsystems and Simulation)
+		// com.unity.xr.arfoundation
 		["Unity.XR.ARFoundation"] = "com.unity.xr.arfoundation",
 		["Unity.XR.ARFoundation.Editor"] = "com.unity.xr.arfoundation",
 		["Unity.XR.ARFoundation.InternalUtils"] = "com.unity.xr.arfoundation",
@@ -309,7 +309,7 @@ internal static class AssemblyToPackageMapper
 		["Unity.XR.Simulation"] = "com.unity.xr.arfoundation",
 		["Unity.XR.Simulation.Editor"] = "com.unity.xr.arfoundation",
 
-		// com.unity.xr.arsubsystems (also bundled in arfoundation)
+		// com.unity.xr.arsubsystems
 		["Unity.XR.ARSubsystems"] = "com.unity.xr.arsubsystems",
 		["Unity.XR.ARSubsystems.Editor"] = "com.unity.xr.arsubsystems",
 
@@ -434,6 +434,8 @@ internal static class AssemblyToPackageMapper
 		return TryHeuristicMapping(assemblyName);
 	}
 
+	private static readonly string[] HeuristicSuffixes = [".Editor", ".Runtime", ".Tests"];
+
 	private static string? TryHeuristicMapping(string assemblyName)
 	{
 		if (!assemblyName.StartsWith("Unity.", StringComparison.Ordinal))
@@ -443,14 +445,10 @@ internal static class AssemblyToPackageMapper
 
 		string remainder = assemblyName["Unity.".Length..];
 
-		string[] suffixesToRemove = [".Editor", ".Runtime", ".Tests"];
-		foreach (string suffix in suffixesToRemove)
+		string? matchedSuffix = HeuristicSuffixes.FirstOrDefault(s => remainder.EndsWith(s, StringComparison.Ordinal));
+		if (matchedSuffix is not null)
 		{
-			if (remainder.EndsWith(suffix, StringComparison.Ordinal))
-			{
-				remainder = remainder[..^suffix.Length];
-				break;
-			}
+			remainder = remainder[..^matchedSuffix.Length];
 		}
 
 		if (string.IsNullOrEmpty(remainder))

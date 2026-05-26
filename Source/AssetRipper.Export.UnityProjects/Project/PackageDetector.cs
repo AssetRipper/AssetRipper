@@ -1,129 +1,135 @@
 using AssetRipper.Export.UnityProjects.Scripts;
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly.Managers;
+using AssetRipper.Processing;
 
 namespace AssetRipper.Export.UnityProjects.Project;
 
 internal static class PackageDetector
 {
 	/// <summary>
-	/// Detect Unity packages used by the game based on loaded assemblies.
-	/// Iterates <paramref name="assemblyManager"/> exactly once; <paramref name="packageAssemblyNames"/>
-	/// receives every assembly that maps to a resolved package so the script exporter can mark them as
+	/// Detect Unity packages used by the game based on loaded assemblies. The assembly manager is
+	/// iterated exactly once; assemblies that resolve to a package are reported in
+	/// <see cref="PackageDetectionResult.PackageAssemblies"/> so the script exporter can mark them as
 	/// Skip without re-walking the assembly list.
 	/// </summary>
-	public static Dictionary<string, string> Detect(
+	public static PackageDetectionResult Detect(
 		IAssemblyManager assemblyManager,
 		Dictionary<string, UnityGuid> referenceAssemblies,
-		UnityVersion projectVersion,
-		out Dictionary<string, string> scriptGuids,
-		out HashSet<string> packageAssemblyNames)
+		UnityVersion projectVersion)
 	{
-		scriptGuids = new Dictionary<string, string>(StringComparer.Ordinal);
-		packageAssemblyNames = new HashSet<string>(StringComparer.Ordinal);
-
 		if (!assemblyManager.IsSet)
 		{
-			return new Dictionary<string, string>(StringComparer.Ordinal);
+			return PackageDetectionResult.Empty;
 		}
 
-		Dictionary<string, List<string>> packageToAssemblies = new(StringComparer.Ordinal);
+		Dictionary<string, List<string>> packageToAssemblies = CollectCandidates(assemblyManager, referenceAssemblies);
 
-		foreach (AsmResolver.DotNet.AssemblyDefinition assembly in assemblyManager.GetAssemblies())
+		if (packageToAssemblies.Count == 0)
 		{
-			string? assemblyName = assembly.Name;
-			if (string.IsNullOrEmpty(assemblyName))
-			{
-				continue;
-			}
+			Logger.Info(LogCategory.Export, "No additional Unity packages detected.");
+			return PackageDetectionResult.Empty;
+		}
 
-			if (ReferenceAssemblies.IsPredefinedAssembly(assemblyName))
-			{
-				continue;
-			}
+		Logger.Info(LogCategory.Export, $"Detected {packageToAssemblies.Count} candidate package(s). Resolving versions from Unity Registry...");
 
-			if (referenceAssemblies.ContainsKey(assemblyName))
-			{
-				continue;
-			}
+		Dictionary<string, string> detectedPackages = new(StringComparer.Ordinal);
+		Dictionary<string, UnityGuid> scriptGuids = new(StringComparer.Ordinal);
+		HashSet<string> packageAssemblyNames = new(StringComparer.Ordinal);
 
+		using UnityRegistryClient registryClient = new();
+
+		foreach ((string packageName, List<string> assemblyNames) in packageToAssemblies)
+		{
+			if (TryResolvePackage(registryClient, packageName, projectVersion, scriptGuids, out string? resolvedVersion))
+			{
+				detectedPackages[packageName] = resolvedVersion;
+				packageAssemblyNames.UnionWith(assemblyNames);
+			}
+		}
+
+		Logger.Info(LogCategory.Export, $"Resolved {detectedPackages.Count} Unity package(s) with {scriptGuids.Count} script GUID(s).");
+		return new PackageDetectionResult(detectedPackages, scriptGuids, packageAssemblyNames);
+	}
+
+	private static Dictionary<string, List<string>> CollectCandidates(
+		IAssemblyManager assemblyManager,
+		Dictionary<string, UnityGuid> referenceAssemblies)
+	{
+		Dictionary<string, List<string>> result = new(StringComparer.Ordinal);
+
+		IEnumerable<string> candidates = assemblyManager.GetAssemblies()
+			.Select(assembly => (string?)assembly.Name)
+			.Where(name => !string.IsNullOrEmpty(name)
+				&& !ReferenceAssemblies.IsPredefinedAssembly(name)
+				&& !referenceAssemblies.ContainsKey(name))
+			.Select(name => name!);
+
+		foreach (string assemblyName in candidates)
+		{
 			string? packageName = AssemblyToPackageMapper.TryGetPackageName(assemblyName);
 			if (packageName is null)
 			{
 				continue;
 			}
 
-			if (!packageToAssemblies.TryGetValue(packageName, out List<string>? list))
+			if (!result.TryGetValue(packageName, out List<string>? list))
 			{
 				list = new List<string>();
-				packageToAssemblies[packageName] = list;
+				result[packageName] = list;
 			}
 			list.Add(assemblyName);
 		}
 
-		if (packageToAssemblies.Count == 0)
+		return result;
+	}
+
+	private static bool TryResolvePackage(
+		UnityRegistryClient registryClient,
+		string packageName,
+		UnityVersion projectVersion,
+		Dictionary<string, UnityGuid> scriptGuids,
+		[NotNullWhen(true)] out string? resolvedVersion)
+	{
+		PackageVersionInfo? info = registryClient.GetCompatibleVersionInfo(packageName, projectVersion);
+		if (info is not null)
 		{
-			Logger.Info(LogCategory.Export, "No additional Unity packages detected.");
-			return new Dictionary<string, string>(StringComparer.Ordinal);
+			resolvedVersion = info.Version;
+			Logger.Info(LogCategory.Export, $"  {packageName} @ {info.Version}");
+			if (info.TarballUrl is not null)
+			{
+				Logger.Info(LogCategory.Export, $"  Extracting script GUIDs from {packageName}...");
+				MergeGuids(registryClient.ExtractScriptGuids(info.TarballUrl), scriptGuids);
+			}
+			return true;
 		}
 
-		Dictionary<string, string> detectedPackages = new(StringComparer.Ordinal);
-
-		Logger.Info(LogCategory.Export, $"Detected {packageToAssemblies.Count} candidate package(s). Resolving versions from Unity Registry...");
-
-		using UnityRegistryClient registryClient = new();
-
-		foreach ((string packageName, List<string> assemblyNames) in packageToAssemblies)
+		string? fallback = AssemblyToPackageMapper.GetFallbackVersion(packageName);
+		if (fallback is null)
 		{
-			PackageVersionInfo? info = registryClient.GetCompatibleVersionInfo(packageName, projectVersion);
-
-			if (info is not null)
-			{
-				detectedPackages[packageName] = info.Version;
-				Logger.Info(LogCategory.Export, $"  {packageName} @ {info.Version}");
-
-				if (info.TarballUrl is not null)
-				{
-					Logger.Info(LogCategory.Export, $"  Extracting script GUIDs from {packageName}...");
-					Dictionary<string, UnityGuid> packageGuids = registryClient.ExtractScriptGuids(info.TarballUrl);
-					foreach (KeyValuePair<string, UnityGuid> kvp in packageGuids)
-					{
-						scriptGuids[kvp.Key] = kvp.Value.ToString();
-					}
-				}
-			}
-			else
-			{
-				string? fallbackVersion = AssemblyToPackageMapper.GetFallbackVersion(packageName);
-				if (fallbackVersion is null)
-				{
-					Logger.Warning(LogCategory.Export, $"  {packageName} — skipped (not found on registry, likely a sub-assembly of another package)");
-					continue;
-				}
-
-				detectedPackages[packageName] = fallbackVersion;
-				Logger.Info(LogCategory.Export, $"  {packageName} @ {fallbackVersion} (embedded package, using fallback version)");
-
-				// GUIDs are stable across all versions of a package, so any available version works for embedded packages.
-				string? anyTarballUrl = registryClient.GetAnyTarballUrl(packageName);
-				if (anyTarballUrl is not null)
-				{
-					Logger.Info(LogCategory.Export, $"  Extracting script GUIDs from {packageName} (using any available version)...");
-					Dictionary<string, UnityGuid> packageGuids = registryClient.ExtractScriptGuids(anyTarballUrl);
-					foreach (KeyValuePair<string, UnityGuid> kvp in packageGuids)
-					{
-						scriptGuids[kvp.Key] = kvp.Value.ToString();
-					}
-				}
-			}
-
-			foreach (string assemblyName in assemblyNames)
-			{
-				packageAssemblyNames.Add(assemblyName);
-			}
+			Logger.Warning(LogCategory.Export, $"  {packageName} — skipped (not found on registry, likely a sub-assembly of another package)");
+			resolvedVersion = null;
+			return false;
 		}
 
-		Logger.Info(LogCategory.Export, $"Resolved {detectedPackages.Count} Unity package(s) with {scriptGuids.Count} script GUID(s).");
-		return detectedPackages;
+		resolvedVersion = fallback;
+		Logger.Info(LogCategory.Export, $"  {packageName} @ {fallback} (embedded package, using fallback version)");
+
+		// GUIDs are stable across all versions of a package, so any available version works for embedded packages.
+		string? anyTarballUrl = registryClient.GetAnyTarballUrl(packageName);
+		if (anyTarballUrl is not null)
+		{
+			Logger.Info(LogCategory.Export, $"  Extracting script GUIDs from {packageName} (using any available version)...");
+			MergeGuids(registryClient.ExtractScriptGuids(anyTarballUrl), scriptGuids);
+		}
+		return true;
+	}
+
+	private static void MergeGuids(Dictionary<string, UnityGuid> source, Dictionary<string, UnityGuid> target)
+	{
+		foreach (KeyValuePair<string, UnityGuid> kvp in source)
+		{
+			target[kvp.Key] = kvp.Value;
+		}
 	}
 }
