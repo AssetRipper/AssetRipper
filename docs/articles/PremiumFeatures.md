@@ -1,6 +1,6 @@
 # Premium Features
 
-AssetRipper has several features to make its export more similar to the original project, in order to reduce the difficulty for game developers to compare them.
+AssetRipper has several premium features to make its export more similar to the original project, in order to reduce the difficulty for game developers to compare them.
 
 ## Static Mesh Separation
 
