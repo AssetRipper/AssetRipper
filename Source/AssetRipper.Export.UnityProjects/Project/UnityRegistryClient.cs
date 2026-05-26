@@ -6,41 +6,22 @@ using System.Text.Json;
 
 namespace AssetRipper.Export.UnityProjects.Project;
 
-/// <summary>
-/// Result of querying the Unity Registry for a package.
-/// </summary>
-public sealed record PackageVersionInfo(string Version, string? TarballUrl);
+internal sealed record PackageVersionInfo(string Version, string? TarballUrl);
 
-/// <summary>
-/// Client for the Unity Package Registry (packages.unity.com).
-/// Used to resolve correct package versions for a given Unity version.
-/// </summary>
-public sealed class UnityRegistryClient : IDisposable
+internal sealed class UnityRegistryClient : IDisposable
 {
 	private const string RegistryUrl = "https://packages.unity.com";
 
-	private readonly HttpClient _httpClient;
+	private readonly HttpClient httpClient;
 
 	public UnityRegistryClient()
 	{
-		_httpClient = new HttpClient
+		httpClient = new HttpClient
 		{
 			Timeout = TimeSpan.FromSeconds(30),
 		};
 	}
 
-	/// <summary>
-	/// Query the registry for a package and find the best compatible version for the given Unity version.
-	/// </summary>
-	/// <returns>The best compatible version string, or null if the package was not found or no compatible version exists.</returns>
-	public string? GetCompatibleVersion(string packageName, UnityVersion projectUnityVersion)
-	{
-		return GetCompatibleVersionInfo(packageName, projectUnityVersion)?.Version;
-	}
-
-	/// <summary>
-	/// Query the registry for a package and find the best compatible version, including tarball URL.
-	/// </summary>
 	public PackageVersionInfo? GetCompatibleVersionInfo(string packageName, UnityVersion projectUnityVersion)
 	{
 		try
@@ -71,9 +52,9 @@ public sealed class UnityRegistryClient : IDisposable
 	}
 
 	/// <summary>
-	/// Get the tarball URL for any version of a package (ignoring compatibility).
-	/// Used to extract .asmdef GUIDs for embedded/fallback packages where no compatible version exists.
-	/// GUIDs are stable across all versions of a package.
+	/// Get a tarball URL for any version of the package, ignoring Unity-version compatibility.
+	/// Used for embedded packages where no compatible version exists on the registry but we still
+	/// want script GUIDs — GUIDs are stable across all package versions.
 	/// </summary>
 	public string? GetAnyTarballUrl(string packageName)
 	{
@@ -90,7 +71,6 @@ public sealed class UnityRegistryClient : IDisposable
 				return null;
 			}
 
-			// Just grab the first version's tarball URL
 			foreach (JsonProperty versionEntry in versionsElement.EnumerateObject())
 			{
 				JsonElement versionData = versionEntry.Value;
@@ -112,15 +92,15 @@ public sealed class UnityRegistryClient : IDisposable
 
 	private JsonDocument? FetchPackageDocument(string packageName)
 	{
-		string url = $"{RegistryUrl}/{packageName}";
-		using HttpResponseMessage response = _httpClient.GetAsync(url).GetAwaiter().GetResult();
+		using HttpRequestMessage request = new(HttpMethod.Get, $"{RegistryUrl}/{packageName}");
+		using HttpResponseMessage response = httpClient.Send(request);
 
 		if (!response.IsSuccessStatusCode)
 		{
 			return null;
 		}
 
-		using Stream stream = response.Content.ReadAsStreamAsync().GetAwaiter().GetResult();
+		using Stream stream = response.Content.ReadAsStream();
 		return JsonDocument.Parse(stream);
 	}
 
@@ -129,21 +109,21 @@ public sealed class UnityRegistryClient : IDisposable
 	/// Unity packages are source-compiled, so script references use the .cs.meta GUID
 	/// (with fileID 11500000), not the .asmdef GUID.
 	/// </summary>
-	/// <returns>Dictionary mapping class names to their .cs.meta GUIDs.</returns>
 	public Dictionary<string, UnityGuid> ExtractScriptGuids(string tarballUrl)
 	{
 		Dictionary<string, UnityGuid> guids = new(StringComparer.Ordinal);
 
 		try
 		{
-			using HttpResponseMessage response = _httpClient.GetAsync(tarballUrl).GetAwaiter().GetResult();
+			using HttpRequestMessage request = new(HttpMethod.Get, tarballUrl);
+			using HttpResponseMessage response = httpClient.Send(request);
 			if (!response.IsSuccessStatusCode)
 			{
 				Logger.Warning(LogCategory.Export, $"Unity Registry: Failed to download tarball: {response.StatusCode}");
 				return guids;
 			}
 
-			using Stream httpStream = response.Content.ReadAsStreamAsync().GetAwaiter().GetResult();
+			using Stream httpStream = response.Content.ReadAsStream();
 			using GZipStream gzipStream = new(httpStream, CompressionMode.Decompress);
 			using TarReader tarReader = new(gzipStream);
 
@@ -156,16 +136,15 @@ public sealed class UnityRegistryClient : IDisposable
 
 				string entryName = entry.Name;
 
-				// Match .cs.meta files (but not .asmdef.meta, .shader.meta, etc.)
+				// .asmdef.meta, .shader.meta, etc. would also end with .meta — only .cs.meta carries script GUIDs.
 				if (entryName.EndsWith(".cs.meta", StringComparison.OrdinalIgnoreCase))
 				{
 					string metaContent = ReadStreamAsString(entry.DataStream);
 					UnityGuid? guid = ParseGuidFromMeta(metaContent);
 					if (guid is not null)
 					{
-						// Extract class name from file path: "package/Scripts/Runtime/TextMeshProUGUI.cs.meta" → "TextMeshProUGUI"
-						string fileName = Path.GetFileName(entryName); // "TextMeshProUGUI.cs.meta"
-						string className = fileName[..^".cs.meta".Length]; // "TextMeshProUGUI"
+						string fileName = Path.GetFileName(entryName);
+						string className = fileName[..^".cs.meta".Length];
 
 						if (!string.IsNullOrEmpty(className))
 						{
@@ -193,7 +172,6 @@ public sealed class UnityRegistryClient : IDisposable
 
 	internal static UnityGuid? ParseGuidFromMeta(string metaContent)
 	{
-		// Meta files are YAML-like, look for "guid: <hex>"
 		foreach (string line in metaContent.Split('\n'))
 		{
 			string trimmed = line.Trim();
@@ -234,8 +212,9 @@ public sealed class UnityRegistryClient : IDisposable
 	}
 
 	/// <summary>
-	/// Find the latest non-preview version that is compatible with the project's Unity version.
-	/// Falls back to the latest version if no stable match is found.
+	/// Find the latest non-prerelease version compatible with the project's Unity version.
+	/// Falls back to the latest prerelease if no stable match exists, since some packages
+	/// (e.g. early-preview ones) ship without a stable release.
 	/// </summary>
 	internal static PackageVersionInfo? FindBestVersion(JsonElement root, UnityVersion projectUnityVersion, string packageName)
 	{
@@ -254,7 +233,6 @@ public sealed class UnityRegistryClient : IDisposable
 			string versionString = versionEntry.Name;
 			JsonElement versionData = versionEntry.Value;
 
-			// Parse the minimum Unity version required by this package version
 			UnityVersion minUnityVersion = default;
 			if (versionData.TryGetProperty("unity", out JsonElement unityElement))
 			{
@@ -267,18 +245,16 @@ public sealed class UnityRegistryClient : IDisposable
 					}
 					catch
 					{
-						// Can't parse, treat as compatible with any version
+						// Unparseable — treat as compatible with any Unity version
 					}
 				}
 			}
 
-			// Check if this version is compatible with the project's Unity version
 			if (minUnityVersion != default && projectUnityVersion < minUnityVersion)
 			{
-				continue; // This package version requires a newer Unity
+				continue;
 			}
 
-			// Extract tarball URL
 			string? tarballUrl = null;
 			if (versionData.TryGetProperty("dist", out JsonElement distElement)
 				&& distElement.TryGetProperty("tarball", out JsonElement tarballElement))
@@ -297,7 +273,6 @@ public sealed class UnityRegistryClient : IDisposable
 				}
 			}
 
-			// Track best of any version (including pre-release) as fallback
 			if (bestAnyVersion is null || CompareVersionStrings(versionString, bestAnyVersion) > 0)
 			{
 				bestAnyVersion = versionString;
@@ -312,11 +287,11 @@ public sealed class UnityRegistryClient : IDisposable
 	}
 
 	/// <summary>
-	/// Compare two semver-like version strings. Returns positive if a > b.
+	/// Compare two semver-like version strings. Returns positive if a &gt; b.
+	/// Stable (no '-' suffix) is treated as greater than prerelease for the same base version.
 	/// </summary>
 	internal static int CompareVersionStrings(string a, string b)
 	{
-		// Split off pre-release suffix
 		string aBase = a.Contains('-') ? a[..a.IndexOf('-')] : a;
 		string bBase = b.Contains('-') ? b[..b.IndexOf('-')] : b;
 
@@ -335,7 +310,6 @@ public sealed class UnityRegistryClient : IDisposable
 			}
 		}
 
-		// If base versions are equal, non-prerelease > prerelease
 		bool aPreRelease = a.Contains('-');
 		bool bPreRelease = b.Contains('-');
 		if (aPreRelease != bPreRelease)
@@ -348,6 +322,6 @@ public sealed class UnityRegistryClient : IDisposable
 
 	public void Dispose()
 	{
-		_httpClient.Dispose();
+		httpClient.Dispose();
 	}
 }

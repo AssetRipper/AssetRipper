@@ -23,23 +23,17 @@ public class ScriptExporter : IAssetExporter
 		ExportMode = configuration.ExportSettings.ScriptExportMode;
 		ReferenceAssemblyDictionary = ReferenceAssemblies.GetReferenceAssemblies(AssemblyManager, configuration.Version);
 
-		// Add detected package assemblies to the reference dictionary so they get skipped.
 		if (configuration.ExportSettings.PackageDetectionMode == PackageDetectionMode.Auto
-			&& configuration.DetectedPackages is { Count: > 0 })
+			&& configuration.DetectedPackageAssemblyNames is { Count: > 0 })
 		{
-			HashSet<string> packageAssemblyNames = PackageDetector.GetPackageAssemblyNames(
-				assemblyManager, configuration.DetectedPackages);
-
-			foreach (string assemblyName in packageAssemblyNames)
+			foreach (string assemblyName in configuration.DetectedPackageAssemblyNames)
 			{
-				// The GUID value in ReferenceAssemblyDictionary doesn't matter for package scripts
-				// (we use per-script .cs.meta GUIDs instead), but we need the entry to exist
-				// so GetExportType() returns Skip.
+				// The GUID value here is never read for package scripts — CreateSkipExportPointer uses
+				// ScriptGuidMap instead — but the entry must exist so GetExportType() returns Skip.
 				ReferenceAssemblyDictionary[assemblyName] = ScriptHashing.CalculateAssemblyGuid(assemblyName);
 				Logger.Info(LogCategory.Export, $"Skipping package assembly: {assemblyName}");
 			}
 
-			// Build per-script GUID map from .cs.meta GUIDs extracted from package tarballs
 			if (configuration.DetectedAssemblyGuids is { Count: > 0 })
 			{
 				foreach (KeyValuePair<string, string> kvp in configuration.DetectedAssemblyGuids)

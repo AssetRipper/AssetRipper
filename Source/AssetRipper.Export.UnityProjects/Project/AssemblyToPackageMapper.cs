@@ -1,12 +1,9 @@
 namespace AssetRipper.Export.UnityProjects.Project;
 
-/// <summary>
-/// Maps assembly names to Unity package names using a static dictionary and heuristic fallback.
-/// </summary>
-public static class AssemblyToPackageMapper
+internal static class AssemblyToPackageMapper
 {
 	/// <summary>
-	/// Known assembly-to-package mappings extracted from .asmdef files in Unity package tarballs.
+	/// Assembly-to-package mappings extracted from .asmdef files in Unity package tarballs.
 	/// Covers all official com.unity.* packages as of 2026.
 	/// </summary>
 	private static readonly Dictionary<string, string> KnownMappings = new(StringComparer.Ordinal)
@@ -422,20 +419,12 @@ public static class AssemblyToPackageMapper
 		["com.unity.2d.tilemap"] = "1.0.0",
 	};
 
-	/// <summary>
-	/// Get a fallback version for packages that may not be on the public registry.
-	/// </summary>
-	public static string? GetFallbackVersion(string packageName)
+	internal static string? GetFallbackVersion(string packageName)
 	{
 		return FallbackVersions.GetValueOrDefault(packageName);
 	}
 
-	/// <summary>
-	/// Try to map an assembly name to a Unity package name.
-	/// First checks the static mapping, then falls back to heuristic pattern matching.
-	/// </summary>
-	/// <returns>The package name, or null if the assembly cannot be mapped.</returns>
-	public static string? TryGetPackageName(string assemblyName)
+	internal static string? TryGetPackageName(string assemblyName)
 	{
 		if (KnownMappings.TryGetValue(assemblyName, out string? packageName))
 		{
@@ -445,22 +434,15 @@ public static class AssemblyToPackageMapper
 		return TryHeuristicMapping(assemblyName);
 	}
 
-	/// <summary>
-	/// Heuristic: Try to derive a package name from the assembly name pattern.
-	/// Only works for Unity packages following standard naming conventions.
-	/// </summary>
 	private static string? TryHeuristicMapping(string assemblyName)
 	{
-		// Pattern: Unity.{Name} or Unity.{Name}.Editor or Unity.{Name}.Runtime
 		if (!assemblyName.StartsWith("Unity.", StringComparison.Ordinal))
 		{
 			return null;
 		}
 
-		// Remove "Unity." prefix
 		string remainder = assemblyName["Unity.".Length..];
 
-		// Remove common suffixes
 		string[] suffixesToRemove = [".Editor", ".Runtime", ".Tests"];
 		foreach (string suffix in suffixesToRemove)
 		{
@@ -471,15 +453,11 @@ public static class AssemblyToPackageMapper
 			}
 		}
 
-		// Skip single-segment names that are likely part of Unity engine (e.g., Unity.Collections might be fine)
 		if (string.IsNullOrEmpty(remainder))
 		{
 			return null;
 		}
 
-		// Convert to package name: Unity.SomeThing → com.unity.something
-		string candidatePackage = $"com.unity.{remainder.ToLowerInvariant()}";
-
-		return candidatePackage;
+		return $"com.unity.{remainder.ToLowerInvariant()}";
 	}
 }

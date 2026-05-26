@@ -103,7 +103,6 @@ public class ExportHandler
 		Settings.ExportRootPath = outputPath;
 		Settings.SetProjectSettings(gameData.ProjectVersion);
 
-		// Package detection
 		if (Settings.ExportSettings.PackageDetectionMode == PackageDetectionMode.Auto)
 		{
 			Logger.Info(LogCategory.Export, "Running automatic package detection...");
@@ -111,8 +110,10 @@ public class ExportHandler
 				gameData.AssemblyManager, gameData.ProjectVersion);
 			Settings.DetectedPackages = PackageDetector.Detect(
 				gameData.AssemblyManager, referenceAssemblies, gameData.ProjectVersion,
-				out Dictionary<string, string> scriptGuids);
+				out Dictionary<string, string> scriptGuids,
+				out HashSet<string> packageAssemblyNames);
 			Settings.DetectedAssemblyGuids = scriptGuids;
+			Settings.DetectedPackageAssemblyNames = packageAssemblyNames;
 		}
 
 		ProjectExporter projectExporter = new(Settings, gameData.AssemblyManager);
