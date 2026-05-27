@@ -14,7 +14,7 @@
 <p align="center">
   <a href="#getting-started">Getting Started</a> •
   <a href="#premium-edition">Premium Edition</a> •
-  <a href="#donations">Donations</a> •
+  <a href="#tips">Tips</a> •
   <a href="#contributing">Contributing</a>
 </p>
 
@@ -41,9 +41,9 @@ There is also a [community guide for Mac users](https://assetripper.github.io/As
 
 There is a premium edition of AssetRipper. This edition includes additional [features and improvements](https://assetripper.github.io/AssetRipper/articles/PremiumFeatures.html).
 
-# Donations
+# Tips
 
-Your support helps maintain and improve AssetRipper. If you find this tool useful, please consider donating:
+Your support helps maintain and improve AssetRipper. If you find this tool useful, please consider tipping:
 
 * [GitHub Sponsors](https://github.com/sponsors/ds5678)
 * [PayPal](https://paypal.me/ds5678)

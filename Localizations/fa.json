@@ -50,7 +50,7 @@
     "csharp_type": "نوع C#",
     "data": "داده‌ها",
     "default_version": "نسخه پیش‌فرض",
-    "donation_message": "اگر از AssetRipper خوشتان آمده است، لطفاً حمایت مالی کنید:",
+    "tipping_message": "اگر از AssetRipper خوشتان آمده است، لطفاً حمایت مالی کنید:",
     "enable_asset_deduplication": "فعال‌سازی حذف تکرار دارایی‌ها",
     "enable_prefab_outlining": "فعال‌سازی مشخص کردن جزئیات پیش‌ساخته",
     "enable_static_mesh_separation": "فعال‌سازی جداسازی مش استاتیک",

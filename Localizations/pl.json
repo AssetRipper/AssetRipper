@@ -222,7 +222,7 @@
     "create_subfolder": "Stwórz Podfolder",
     "bundle": "Pakiet",
     "class_id_type_number": "Numer Typu ID Klasy",
-    "donation_message": "Jeśli podoba Ci się AssetRipper, rozważ wsparcie projektu darowizną:",
+    "tipping_message": "Jeśli podoba Ci się AssetRipper, rozważ wsparcie projektu darowizną:",
     "enable_asset_deduplication": "Włącz Deduplikację Zasobów",
     "export_unreadable_assets": "Eksportuj Nieczytelne Zasoby",
     "filter": "Filtr",

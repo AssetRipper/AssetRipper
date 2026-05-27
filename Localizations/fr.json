@@ -151,7 +151,7 @@
     "view_loaded_files": "Voir les fichiers chargés",
     "welcome": "Bienvenue",
     "width": "Largeur",
-    "donation_message": "Si vous aimez AssetRipper, s'il vous plaît faire un don :",
+    "tipping_message": "Si vous aimez AssetRipper, s'il vous plaît faire un don :",
     "no_files_loaded": "Aucun fichier chargé",
     "export_primary_content": "Exporter le contenu principal",
     "lightmap_texture_export_title": "Format d'exportation de texture Lightmap",

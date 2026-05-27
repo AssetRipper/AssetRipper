@@ -232,7 +232,7 @@
     "audio_clip": "オーディオクリップ",
     "bundles": "バンドル",
     "name": "名前",
-    "donation_message": "AssetRipper が気に入ったら寄付をご検討ください:",
+    "tipping_message": "AssetRipper が気に入ったら寄付をご検討ください:",
     "all": "すべて",
     "bundle": "バンドル",
     "class_id_type_number": "クラス ID タイプ番号",

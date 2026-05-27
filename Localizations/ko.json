@@ -89,7 +89,7 @@
     "data": "데이터",
     "height": "높이",
     "default_version": "기본 버전",
-    "donation_message": "AssetRipper가 마음에 드신다면 기부도 할 수 있어요:",
+    "tipping_message": "AssetRipper가 마음에 드신다면 기부도 할 수 있어요:",
     "enable_asset_deduplication": "중복된 에셋 삭제 활성화",
     "enable_prefab_outlining": "Prefab Outlining 활성화",
     "enable_static_mesh_separation": "Static Mesh 분리 활성화",

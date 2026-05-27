@@ -164,7 +164,7 @@
     "csharp_type": "Тип C#",
     "data": "Дані",
     "default_version": "Версія за замовчуванням",
-    "donation_message": "Якщо Вам сподобався AssetRipper, ви можете підтримати проект:",
+    "tipping_message": "Якщо Вам сподобався AssetRipper, ви можете підтримати проект:",
     "enable_asset_deduplication": "Увімкнути дедублікацію активів",
     "enable_prefab_outlining": "Увімкнути Prefab Outlining",
     "format": "Формат",

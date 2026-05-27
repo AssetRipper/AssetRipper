@@ -145,7 +145,7 @@
     "text_asset_format_text": "纯文本（Plain Text）",
     "text_asset_format_text_description": "导出为纯文本文件（.txt）。",
     "welcome_title": "欢迎使用 AssetRipper",
-    "donation_message": "如果您喜欢 AssetRipper，请考虑捐助我们：",
+    "tipping_message": "如果您喜欢 AssetRipper，请考虑捐助我们：",
     "script": "脚本（Script）",
     "script_export_format_hybrid_description": "特殊的程序集（如 Assembly-CSharp）进行反编译。其他程序集以编译的 DLL 格式导出。",
     "audio_clip": "音频剪辑（AudioClip）",
