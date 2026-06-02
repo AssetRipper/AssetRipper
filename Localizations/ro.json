@@ -169,7 +169,7 @@
     "csharp_type": "Tip C#",
     "data": "Date",
     "default_version": "Versiune implicită",
-    "donation_message": "Dacă îți place AssetRipper, te rugăm să iei în considerare o donație:",
+    "tipping_message": "Dacă îți place AssetRipper, te rugăm să iei în considerare o donație:",
     "enable_asset_deduplication": "Activează deduplicarea resurselor",
     "enable_prefab_outlining": "Activează conturarea prefaburilor",
     "error": "Eroare",

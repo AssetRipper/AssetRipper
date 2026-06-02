@@ -143,5 +143,14 @@
     "text_asset_format_parse_description": "Düz metin dosyası olarak dışa aktarın, ancak doğru dosya uzantısını tahmin etmeye çalışın (örneğin JSON dosyaları .json uzantısına sahip olur)",
     "text_asset_format_text": "Düz Metin",
     "text_asset_format_text_description": "Düz metin dosyası (.txt) olarak dışa aktar",
-    "welcome_title": "AssetRipper'a Hoşgeldiniz"
+    "welcome_title": "AssetRipper'a Hoşgeldiniz",
+    "an_error_occured_during_decompilation": "Derleme işlemi sırasında bir hata oluştu.",
+    "appreciation_message": "AssetRipper'ı desteklediğiniz için teşekkür ederiz!",
+    "asset_tab_information": "Bilgi",
+    "asset_tab_dependencies": "Bağımlılıklar",
+    "asset_tab_development": "Geliştirme",
+    "asset_tab_font": "Yazı Tipi",
+    "asset_tab_hex": "Hex",
+    "asset_tab_model": "Model",
+    "all": "Hepsi"
 }

@@ -59,7 +59,7 @@
     "csharp_type": "نوع #C",
     "data": "بيانات",
     "default_version": "الإصدار الافتراضي",
-    "donation_message": "إذا أعجبك AssetRipper، يرجى التفكير في التبرع:",
+    "tipping_message": "إذا أعجبك AssetRipper، يرجى التفكير في التبرع:",
     "c_sharp_langage_version_config_7_1": "C# 7.1",
     "c_sharp_langage_version_config_7_2": "C# 7.2",
     "c_sharp_langage_version_config_7_3": "C# 7.3",

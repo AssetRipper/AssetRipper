@@ -147,7 +147,7 @@
     "welcome_title": "Добро пожаловать в AssetRipper",
     "width": "Ширина",
     "game_object": "Игровой объект",
-    "donation_message": "Если Вам понравился Asset Ripper, вы можете поддержать проект:",
+    "tipping_message": "Если Вам понравился Asset Ripper, вы можете поддержать проект:",
     "name": "Имя",
     "no_files_loaded": "Файлы не загружены",
     "shader": "Шейдер",

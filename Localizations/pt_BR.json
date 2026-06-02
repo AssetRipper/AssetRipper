@@ -70,7 +70,7 @@
     "csharp_type": "Tipo do C#",
     "data": "Dados",
     "default_version": "Versão Padrão",
-    "donation_message": "Se você gosta do AssetRipper, por favor, considere fazer uma doação:",
+    "tipping_message": "Se você gosta do AssetRipper, por favor, considere fazer uma doação:",
     "enable_prefab_outlining": "Ativar Contorno de Prefab",
     "enable_static_mesh_separation": "Ativar Separação de Malha Estática",
     "error": "Erro",

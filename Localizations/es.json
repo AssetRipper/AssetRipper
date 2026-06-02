@@ -72,7 +72,7 @@
     "csharp_type": "Tipo de C#",
     "data": "Datos",
     "default_version": "Versión por defecto",
-    "donation_message": "Si te gusta AssetRipper, por favor considera donar:",
+    "tipping_message": "Si te gusta AssetRipper, por favor considera donar:",
     "enable_prefab_outlining": "Habilitar Prefab Outlining",
     "error": "Error",
     "error_exporting_with_reason": "Error al exportar el contenido del juego: {0}",

@@ -58,7 +58,7 @@
     "csharp_type": "C# Type",
     "data": "Data",
     "default_version": "Standaardversie",
-    "donation_message": "Als u AssetRipper handig vondt of de ontwikkelaar wilt steunen, overweeg dan om te doneren:",
+    "tipping_message": "Als u AssetRipper handig vondt of de ontwikkelaar wilt steunen, overweeg dan om te doneren:",
     "enable_prefab_outlining": "Prefab Outlining inschakelen",
     "audio_export_title": "Geluid Exportformaat",
     "c_sharp_langage_version_config_7_3": "C# 7.3",
