@@ -286,14 +286,17 @@ public abstract partial class PlatformGameStructure
 		}
 	}
 
-	protected void CollectAssemblies(string root, Dictionary<string, string> assemblies)
+	protected void CollectAssemblies(string root)
 	{
 		foreach (string file in FileSystem.Directory.EnumerateFiles(root))
 		{
 			string name = FileSystem.Path.GetFileName(file);
 			if (MonoManager.IsMonoAssembly(name))
 			{
-				assemblies.TryAdd(name, file);
+				if (!Assemblies.TryAdd(name, file))
+				{
+					Logger.Log(LogType.Warning, LogCategory.Import, $"Duplicate assemblies found: '{Assemblies[name]}' & '{file}'");
+				}
 			}
 		}
 	}
@@ -306,15 +309,15 @@ public abstract partial class PlatformGameStructure
 		}
 		else if (!string.IsNullOrWhiteSpace(ManagedPath) && FileSystem.Directory.Exists(ManagedPath))
 		{
-			CollectAssemblies(ManagedPath, Assemblies);
+			CollectAssemblies(ManagedPath);
 		}
 		else if (!string.IsNullOrEmpty(GameDataPath))
 		{
 			string libPath = FileSystem.Path.Join(FileSystem.Path.GetFullPath(GameDataPath), LibName);
 			if (FileSystem.Directory.Exists(libPath))
 			{
-				CollectAssemblies(GameDataPath, Assemblies);
-				CollectAssemblies(libPath, Assemblies);
+				CollectAssemblies(GameDataPath);
+				CollectAssemblies(libPath);
 			}
 		}
 	}

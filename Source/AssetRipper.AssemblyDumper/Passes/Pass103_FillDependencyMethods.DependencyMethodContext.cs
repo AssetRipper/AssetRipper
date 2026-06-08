@@ -11,8 +11,8 @@ public static partial class Pass103_FillDependencyMethods
 		{
 			{
 				GenericInstanceTypeSignature tupleSignature = SharedState.Instance.Importer.ImportType(typeof(ValueTuple<,>)).MakeGenericInstanceType(
-					SharedState.Instance.Importer.ImportType(typeof(string)).ToTypeSignature(),
-					SharedState.Instance.Importer.ImportType(typeof(PPtr)).ToTypeSignature());
+					SharedState.Instance.Importer.ImportTypeSignature(typeof(string)),
+					SharedState.Instance.Importer.ImportTypeSignature(typeof(PPtr)));
 				TupleConstructor = MethodUtils.MakeConstructorOnGenericType(SharedState.Instance.Importer, tupleSignature, 2);
 			}
 		}

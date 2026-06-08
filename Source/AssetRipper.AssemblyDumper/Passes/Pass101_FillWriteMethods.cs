@@ -13,7 +13,7 @@ public static class Pass101_FillWriteMethods
 {
 	private static IMethodDefOrRef? alignStreamMethod;
 	private static IMethodDescriptor? writeInt32Method;
-	private static ITypeDefOrRef? assetWriterReference;
+	private static TypeSignature? assetWriterReference;
 
 	private static ITypeDefOrRef? assetDictionaryReference;
 	private static TypeDefinition? assetDictionaryDefinition;
@@ -39,7 +39,7 @@ public static class Pass101_FillWriteMethods
 	{
 		alignStreamMethod = SharedState.Instance.Importer.ImportMethod<EndianWriter>(m => m.Name == nameof(EndianWriter.AlignStream));
 		writeInt32Method = ImportPrimitiveWriteMethod(ElementType.I4);
-		assetWriterReference = SharedState.Instance.Importer.ImportType<AssetWriter>();
+		assetWriterReference = SharedState.Instance.Importer.ImportTypeSignature<AssetWriter>();
 
 		assetDictionaryReference = SharedState.Instance.Importer.ImportType(typeof(AssetDictionary<,>));
 		assetListReference = SharedState.Instance.Importer.ImportType(typeof(AssetList<>));
@@ -674,7 +674,7 @@ public static class Pass101_FillWriteMethods
 		MethodDefinition method = new MethodDefinition($"{WriteMethod}_{uniqueName}", MethodAttributes.Public | MethodAttributes.Static | MethodAttributes.HideBySig, methodSignature);
 		method.CilMethodBody = new CilMethodBody();
 		method.AddParameter(parameter, "value");
-		method.AddParameter(assetWriterReference!.ToTypeSignature(), "writer");
+		method.AddParameter(assetWriterReference!, "writer");
 		method.AddExtensionAttribute(SharedState.Instance.Importer);
 		return method;
 	}

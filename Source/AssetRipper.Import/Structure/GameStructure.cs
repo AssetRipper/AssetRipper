@@ -149,7 +149,7 @@ public sealed class GameStructure : IDisposable
 		}
 		else
 		{
-			string? path = RequestAssembly(assembly);
+			string? path = PlatformStructure?.RequestAssembly(assembly) ?? MixedStructure?.RequestAssembly(assembly);
 			if (path is null)
 			{
 				Logger.Log(LogType.Warning, LogCategory.Import, $"Assembly '{assembly}' hasn't been found");
@@ -158,11 +158,6 @@ public sealed class GameStructure : IDisposable
 			AssemblyManager.Load(path, FileSystem);
 		}
 		Logger.Info(LogCategory.Import, $"Assembly '{assembly}' has been loaded");
-	}
-
-	public string? RequestAssembly(string assembly)
-	{
-		return PlatformStructure?.RequestAssembly(assembly) ?? MixedStructure?.RequestAssembly(assembly);
 	}
 
 	public void Dispose()

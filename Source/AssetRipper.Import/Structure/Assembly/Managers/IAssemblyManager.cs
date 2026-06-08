@@ -8,10 +8,9 @@ namespace AssetRipper.Import.Structure.Assembly.Managers;
 public interface IAssemblyManager : IDisposable
 {
 	void Initialize(PlatformGameStructure gameStructure);
-	void Load(string filePath, FileSystem fileSystem);
+	AssemblyDefinition Load(string filePath, FileSystem fileSystem);
 	void Add(AssemblyDefinition assembly);
-	void Read(Stream stream, string fileName);
-	void Unload(string fileName);
+	AssemblyDefinition Read(Stream stream, string fileName);
 
 	bool IsAssemblyLoaded(string assembly);
 	bool IsPresent(ScriptIdentifier scriptID);
@@ -27,6 +26,7 @@ public interface IAssemblyManager : IDisposable
 	Stream GetStreamForAssembly(AssemblyDefinition assembly);
 	void ClearStreamCache();
 
+	RuntimeContext? RuntimeContext { get; }
 	bool IsSet { get; }
 	ScriptingBackend ScriptingBackend { get; }
 

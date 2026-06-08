@@ -22,11 +22,11 @@ public static class Pass502_FixGuidAndHashYaml
 	{
 		MethodDefinition method = type.AddMethod(nameof(object.ToString), MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.Virtual, type.DeclaringModule!.CorLibTypeFactory.String);
 		MethodDefinition conversionMethod = type.Methods.Single(m => m.Name == "op_Implicit");
-		ITypeDefOrRef commonRef = SharedState.Instance.Importer.ImportType<UnityGuid>();
+		TypeSignature commonRef = SharedState.Instance.Importer.ImportTypeSignature<UnityGuid>();
 		IMethodDefOrRef toStringMethod = SharedState.Instance.Importer.ImportMethod<UnityGuid>(m => m.Name == nameof(UnityGuid.ToString) && m.Parameters.Count == 0);
 
 		CilInstructionCollection instructions = method.GetInstructions();
-		CilLocalVariable local = instructions.AddLocalVariable(commonRef.ToTypeSignature());
+		CilLocalVariable local = instructions.AddLocalVariable(commonRef);
 		instructions.Add(CilOpCodes.Ldarg_0);
 		instructions.Add(CilOpCodes.Call, conversionMethod);
 		instructions.Add(CilOpCodes.Stloc, local);

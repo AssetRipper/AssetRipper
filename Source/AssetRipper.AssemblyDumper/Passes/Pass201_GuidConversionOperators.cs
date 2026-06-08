@@ -16,7 +16,7 @@ public static class Pass201_GuidConversionOperators
 
 	private static void AddImplicitConversion(TypeDefinition guidType)
 	{
-		ITypeDefOrRef commonGuidType = SharedState.Instance.Importer.ImportType<UnityGuid>();
+		TypeSignature commonGuidType = SharedState.Instance.Importer.ImportTypeSignature<UnityGuid>();
 		IMethodDefOrRef constructor = SharedState.Instance.Importer.ImportConstructor<UnityGuid>(4);
 
 		FieldDefinition data0 = guidType.Fields.Single(field => field.Name == "m_Data_0_");
@@ -24,7 +24,7 @@ public static class Pass201_GuidConversionOperators
 		FieldDefinition data2 = guidType.Fields.Single(field => field.Name == "m_Data_2_");
 		FieldDefinition data3 = guidType.Fields.Single(field => field.Name == "m_Data_3_");
 
-		MethodDefinition implicitMethod = guidType.AddMethod("op_Implicit", ConversionAttributes, commonGuidType.ToTypeSignature());
+		MethodDefinition implicitMethod = guidType.AddMethod("op_Implicit", ConversionAttributes, commonGuidType);
 		implicitMethod.AddParameter(guidType.ToTypeSignature(), "value");
 
 		implicitMethod.CilMethodBody!.InitializeLocals = true;
@@ -44,7 +44,7 @@ public static class Pass201_GuidConversionOperators
 
 	private static void AddExplicitConversion(TypeDefinition guidType)
 	{
-		ITypeDefOrRef commonGuidType = SharedState.Instance.Importer.ImportType<UnityGuid>();
+		TypeSignature commonGuidType = SharedState.Instance.Importer.ImportTypeSignature<UnityGuid>();
 		IMethodDefOrRef constructor = guidType.Methods.Single(m => m.IsConstructor && m.Parameters.Count == 0 && !m.IsStatic);
 
 		FieldDefinition data0 = guidType.Fields.Single(field => field.Name == "m_Data_0_");
@@ -58,7 +58,7 @@ public static class Pass201_GuidConversionOperators
 		IMethodDefOrRef getData3 = SharedState.Instance.Importer.ImportMethod<UnityGuid>(m => m.Name == $"get_{nameof(UnityGuid.Data3)}");
 
 		MethodDefinition explicitMethod = guidType.AddMethod("op_Explicit", ConversionAttributes, guidType.ToTypeSignature());
-		Parameter parameter = explicitMethod.AddParameter(commonGuidType.ToTypeSignature(), "value");
+		Parameter parameter = explicitMethod.AddParameter(commonGuidType, "value");
 
 		CilInstructionCollection instructions = explicitMethod.CilMethodBody!.Instructions;
 

@@ -25,7 +25,7 @@ internal static partial class Pass105_CopyValuesMethods
 	private static IMethodDefOrRef ipptrGetFileIDMethod;
 	private static IMethodDefOrRef ipptrGetPathIDMethod;
 
-	private static ITypeDefOrRef pptrConverterType;
+	private static TypeSignature pptrConverterType;
 	private static IMethodDefOrRef pptrConverterGetSourceCollectionMethod;
 	private static IMethodDefOrRef pptrConverterGetTargetCollectionMethod;
 
@@ -47,7 +47,6 @@ internal static partial class Pass105_CopyValuesMethods
 	private static ITypeDefOrRef accessListBase;
 	private static IMethodDefOrRef accessListBaseGetCount;
 	private static IMethodDefOrRef accessListBaseGetItem;
-	private static IMethodDefOrRef accessListBaseSetItem;
 
 	private static ITypeDefOrRef accessDictionaryBase;
 	private static IMethodDefOrRef accessDictionaryBaseGetCount;
@@ -64,7 +63,7 @@ internal static partial class Pass105_CopyValuesMethods
 
 	public static void DoPass()
 	{
-		pptrCommonType = SharedState.Instance.Importer.ImportType<PPtr>().ToTypeSignature();
+		pptrCommonType = SharedState.Instance.Importer.ImportTypeSignature<PPtr>();
 		pptrCommonGetFileIDMethod = SharedState.Instance.Importer.ImportMethod<PPtr>(m => m.Name == $"get_{nameof(PPtr.FileID)}");
 		pptrCommonGetPathIDMethod = SharedState.Instance.Importer.ImportMethod<PPtr>(m => m.Name == $"get_{nameof(PPtr.PathID)}");
 
@@ -73,7 +72,7 @@ internal static partial class Pass105_CopyValuesMethods
 
 		utf8StringGetEmpty = SharedState.Instance.Importer.ImportMethod<Utf8String>(m => m.Name == "get_" + nameof(Utf8String.Empty));
 
-		pptrConverterType = SharedState.Instance.Importer.ImportType<PPtrConverter>();
+		pptrConverterType = SharedState.Instance.Importer.ImportTypeSignature<PPtrConverter>();
 		pptrConverterGetSourceCollectionMethod = SharedState.Instance.Importer.ImportMethod<PPtrConverter>(m => m.Name == "get_" + nameof(PPtrConverter.SourceCollection));
 		pptrConverterGetTargetCollectionMethod = SharedState.Instance.Importer.ImportMethod<PPtrConverter>(m => m.Name == "get_" + nameof(PPtrConverter.TargetCollection));
 		helperType = InjectHelper();
@@ -113,7 +112,7 @@ internal static partial class Pass105_CopyValuesMethods
 				MethodDefinition method = group.Interface.AddMethod(DeepCloneName, InterfaceUtils.InterfaceMethodDeclaration, group.Interface.ToTypeSignature());
 				if (needsConverter)
 				{
-					method.AddParameter(pptrConverterType.ToTypeSignature(), "converter");
+					method.AddParameter(pptrConverterType, "converter");
 				}
 			}
 			foreach (TypeDefinition type in group.Types)
@@ -126,7 +125,7 @@ internal static partial class Pass105_CopyValuesMethods
 				instructions.Add(CilOpCodes.Ldarg_0);
 				if (needsConverter)
 				{
-					method.AddParameter(pptrConverterType.ToTypeSignature(), "converter");
+					method.AddParameter(pptrConverterType, "converter");
 					instructions.Add(CilOpCodes.Ldarg_1);
 				}
 				instructions.Add(CilOpCodes.Call, copyValuesMethod);
@@ -177,7 +176,7 @@ internal static partial class Pass105_CopyValuesMethods
 					Pass063_CreateEmptyMethods.OverrideMethodAttributes,
 					SharedState.Instance.Importer.Void);
 				copyValuesMethod.AddParameter(unityAssetBaseInterfaceRef, "source");
-				copyValuesMethod.AddParameter(pptrConverterType.ToTypeSignature(), "converter");
+				copyValuesMethod.AddParameter(pptrConverterType, "converter");
 				copyValuesMethod.AddNullableContextAttribute(NullableAnnotation.MaybeNull);
 				overridenMethods.Add(type, copyValuesMethod);
 			}
@@ -276,7 +275,7 @@ internal static partial class Pass105_CopyValuesMethods
 			{
 				MethodDefinition method = group.Interface.AddMethod(CopyValuesName, InterfaceUtils.InterfaceMethodDeclaration, SharedState.Instance.Importer.Void);
 				method.AddParameter(group.Interface.ToTypeSignature(), "source");
-				method.AddParameter(pptrConverterType.ToTypeSignature(), "converter");
+				method.AddParameter(pptrConverterType, "converter");
 				method.AddNullableContextAttribute(NullableAnnotation.MaybeNull);
 				singleTypeDictionary.Add(group.Interface.ToTypeSignature(), (method, CopyMethodType.Callvirt | CopyMethodType.HasConverter));
 			}
@@ -284,7 +283,7 @@ internal static partial class Pass105_CopyValuesMethods
 			{
 				MethodDefinition method = type.AddMethod(CopyValuesName, InterfaceUtils.InterfaceMethodImplementation, SharedState.Instance.Importer.Void);
 				method.AddParameter(group.Interface.ToTypeSignature(), "source");
-				Parameter converterParam = method.AddParameter(pptrConverterType.ToTypeSignature(), "converter");
+				Parameter converterParam = method.AddParameter(pptrConverterType, "converter");
 				method.AddNullableContextAttribute(NullableAnnotation.MaybeNull);
 				CilInstructionCollection instructions = method.GetInstructions();
 				CilInstructionLabel returnLabel = new();
@@ -432,7 +431,7 @@ internal static partial class Pass105_CopyValuesMethods
 			{
 				if (needsConverter)
 				{
-					method.AddParameter(pptrConverterType.ToTypeSignature(), "converter");
+					method.AddParameter(pptrConverterType, "converter");
 					singleTypeDictionary.Add(type.ToTypeSignature(), (method, CopyMethodType.HasConverter));
 				}
 				else
@@ -450,7 +449,7 @@ internal static partial class Pass105_CopyValuesMethods
 				}
 				if (needsConverter)
 				{
-					method.AddParameter(pptrConverterType.ToTypeSignature(), "converter");
+					method.AddParameter(pptrConverterType, "converter");
 					singleTypeDictionary.Add(group.Interface.ToTypeSignature(), (method, CopyMethodType.Callvirt | CopyMethodType.HasConverter));
 				}
 				else
@@ -762,7 +761,7 @@ internal static partial class Pass105_CopyValuesMethods
 					(IMethodDescriptor, CopyMethodType) result;
 					if (needsConverter)
 					{
-						method.AddParameter(pptrConverterType.ToTypeSignature(), "converter");
+						method.AddParameter(pptrConverterType, "converter");
 						result = (method, CopyMethodType.HasConverter);
 					}
 					else

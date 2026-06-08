@@ -12,8 +12,13 @@ internal class TypeSignatureNameTests
 	[SetUp]
 	public void Setup()
 	{
-		module = new ModuleDefinition("test", KnownCorLibs.SystemPrivateCoreLib_v5_0_0_0);
-		importer = new ReferenceImporter(module);
+		AssemblyReference corlib = KnownCorLibs.SystemPrivateCoreLib_v10_0_0_0;
+		AssemblyDefinition assembly = new AssemblyDefinition("test", new Version(1, 0, 0, 0));
+		module = new ModuleDefinition("test", corlib);
+		assembly.Modules.Add(module);
+		RuntimeContext runtimeContext = new(DotNetRuntimeInfo.NetCoreApp(corlib.Version), (bool?)null, corlib);
+		runtimeContext.AddAssembly(assembly);
+		importer = module.DefaultImporter;
 	}
 
 	[Test]
@@ -27,7 +32,7 @@ internal class TypeSignatureNameTests
 	public void AsmListTest()
 	{
 		TypeSignature list = importer.ImportTypeSignature(typeof(List<>));
-		GenericInstanceTypeSignature stringList = list.MakeGenericInstanceType(module.CorLibTypeFactory.String);
+		GenericInstanceTypeSignature stringList = list.MakeGenericInstanceType(module.RuntimeContext, module.CorLibTypeFactory.String);
 		Assert.That(stringList.Name, Is.EqualTo("List`1<System.String>"));
 		Assert.That(list.Name, Is.EqualTo("List`1"));
 	}
@@ -50,7 +55,7 @@ internal class TypeSignatureNameTests
 	public void DictionaryInstanceTest()
 	{
 		TypeSignature dictionary = importer.ImportTypeSignature(typeof(Dictionary<,>));
-		GenericInstanceTypeSignature intStringDictionary = dictionary.MakeGenericInstanceType(module.CorLibTypeFactory.Int32, module.CorLibTypeFactory.String);
+		GenericInstanceTypeSignature intStringDictionary = dictionary.MakeGenericInstanceType(module.RuntimeContext, module.CorLibTypeFactory.Int32, module.CorLibTypeFactory.String);
 		Assert.That(GetName(intStringDictionary), Is.EqualTo("Dictionary_Int32_String"));
 	}
 
@@ -58,7 +63,7 @@ internal class TypeSignatureNameTests
 	public void ListInstanceTest()
 	{
 		TypeSignature list = importer.ImportTypeSignature(typeof(List<>));
-		GenericInstanceTypeSignature stringList = list.MakeGenericInstanceType(module.CorLibTypeFactory.String);
+		GenericInstanceTypeSignature stringList = list.MakeGenericInstanceType(module.RuntimeContext, module.CorLibTypeFactory.String);
 		Assert.That(GetName(stringList), Is.EqualTo("List_String"));
 	}
 
@@ -66,12 +71,12 @@ internal class TypeSignatureNameTests
 	public void ListListInstanceTest()
 	{
 		TypeSignature list = importer.ImportTypeSignature(typeof(List<>));
-		GenericInstanceTypeSignature stringList = list.MakeGenericInstanceType(module.CorLibTypeFactory.String);
-		GenericInstanceTypeSignature stringListList = list.MakeGenericInstanceType(stringList);
+		GenericInstanceTypeSignature stringList = list.MakeGenericInstanceType(module.RuntimeContext, module.CorLibTypeFactory.String);
+		GenericInstanceTypeSignature stringListList = list.MakeGenericInstanceType(module.RuntimeContext, stringList);
 		Assert.That(GetName(stringListList), Is.EqualTo("List_List_String"));
 	}
 
-	private static string GetName(TypeSignature type)
+	private string GetName(TypeSignature type)
 	{
 		if (type is CorLibTypeSignature)
 		{
@@ -89,7 +94,7 @@ internal class TypeSignatureNameTests
 		}
 		else if (type is GenericInstanceTypeSignature genericInstanceType)
 		{
-			string baseTypeName = GetName(genericInstanceType.GenericType.ToTypeSignature());
+			string baseTypeName = GetName(genericInstanceType.GenericType.ToTypeSignature(module.RuntimeContext));
 			StringBuilder sb = new StringBuilder();
 			sb.Append(baseTypeName);
 			foreach (TypeSignature typeArgument in genericInstanceType.TypeArguments)
