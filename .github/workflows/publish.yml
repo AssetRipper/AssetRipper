@@ -57,7 +57,7 @@ jobs:
         if: ${{ matrix.config.archive == 'tar' }}
         shell: bash
         working-directory: ./Source/0Bins/AssetRipper.GUI.Free/Release/${{ matrix.config.runtime }}/publish
-        run: tar cvf "AssetRipper_${{ matrix.config.name }}.tar.xz" "${{ matrix.config.executable }}" compile_time.txt $(ls *.{dll,so,dylib} 2>/dev/null)
+        run: tar cvJf "AssetRipper_${{ matrix.config.name }}.tar.xz" "${{ matrix.config.executable }}" compile_time.txt $(ls *.{dll,so,dylib} 2>/dev/null)
       
       - name: Upload Archive (tar)
         if: ${{ matrix.config.archive == 'tar' }}
