@@ -93,7 +93,7 @@ internal static class GeneratedInterfaceUtils
 			|| group.Types.Any(t => t.Name == name);
 	}
 
-	private static IEnumerable<string> GetPublicOrProtectedPropertyNames(Type type)
+	private static IEnumerable<string> GetPublicOrProtectedPropertyNames([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties)] Type type)
 	{
 		foreach (PropertyInfo property in type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
 		{
