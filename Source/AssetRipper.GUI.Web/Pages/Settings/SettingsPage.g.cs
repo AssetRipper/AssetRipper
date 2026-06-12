@@ -54,6 +54,9 @@ partial class SettingsPage
 			case nameof(ExportSettings.TextExportMode):
 				Configuration.ExportSettings.TextExportMode = TryParseEnum<TextExportMode>(value);
 				break;
+			case nameof(ExportSettings.PackageDetectionMode):
+				Configuration.ExportSettings.PackageDetectionMode = TryParseEnum<PackageDetectionMode>(value);
+				break;
 			case nameof(ExportSettings.LanguageCode):
 				Configuration.ExportSettings.LanguageCode = value;
 				break;
@@ -166,6 +169,11 @@ partial class SettingsPage
 	private static void WriteCheckBoxForExportUnreadableAssets(TextWriter writer, string label, bool disabled = false)
 	{
 		WriteCheckBox(writer, label, Configuration.ExportSettings.ExportUnreadableAssets, nameof(ExportSettings.ExportUnreadableAssets), disabled);
+	}
+
+	private static void WriteDropDownForPackageDetectionMode(TextWriter writer)
+	{
+		WriteDropDown(writer, PackageDetectionModeDropDownSetting.Instance, Configuration.ExportSettings.PackageDetectionMode, nameof(ExportSettings.PackageDetectionMode));
 	}
 
 	private static void WriteCheckBoxForSaveSettingsToDisk(TextWriter writer, string label, bool disabled = false)
