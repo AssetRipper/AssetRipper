@@ -539,7 +539,9 @@ public readonly partial struct AnimationClipConverter
 			curve.ClassID = (int)curveData.ClassID;
 			curve.Script.SetAsset(m_clip.Collection, curveData.Script as IMonoScript);
 			curve.Curve.SetDefaultRotationOrderAndCurveLoopType();
-			//Todo: set IFloatCurve.Flags or verify that 0 is an acceptable value.
+			// 0 is the correct value for standard continuous float curves.
+			// See: https://github.com/Unity-Technologies/UnityCsReference/blob/master/Editor/Mono/Animation/EditorCurveBinding.bindings.cs
+			curve.Flags = 0;
 			m_floats.Add(curveData, curve);
 		}
 
