@@ -23,6 +23,11 @@ namespace AssetRipper.Export.Modules.Textures;
 
 public static class TextureConverter
 {
+	private readonly record struct Options(TextureFormat TextureFormat, int Width, int Height, int Depth, int ImageSize, UnityVersion Version)
+	{
+		public bool IsCrunched => TextureFormat.IsCrunched();
+	}
+
 	public static bool TryConvertToBitmap(IImageTexture texture, out DirectBitmap bitmap)
 	{
 		return texture switch
@@ -56,15 +61,17 @@ public static class TextureConverter
 			return false;
 		}
 
-		if (!TryConvertToBitmap(
-			format,
-			texture.Width,
-			texture.Height,
-			texture.Depth,
-			texture.GetCompleteImageSize(),
-			texture.Collection.Version,
-			buffer,
-			out bitmap))
+		Options options = new()
+		{
+			TextureFormat = format,
+			Width = texture.Width,
+			Height = texture.Height,
+			Depth = texture.Depth,
+			ImageSize = texture.GetCompleteImageSize(),
+			Version = texture.Collection.Version,
+		};
+
+		if (!TryConvertToBitmap(options, buffer, out bitmap))
 		{
 			return false;
 		}
@@ -95,15 +102,17 @@ public static class TextureConverter
 			return false;
 		}
 
-		if (!TryConvertToBitmap(
-			format,
-			texture.Width,
-			texture.Height,
-			texture.Depth,
-			texture.GetCompleteImageSize(),
-			texture.Collection.Version,
-			buffer,
-			out bitmap))
+		Options options = new()
+		{
+			TextureFormat = format,
+			Width = texture.Width,
+			Height = texture.Height,
+			Depth = texture.Depth,
+			ImageSize = texture.GetCompleteImageSize(),
+			Version = texture.Collection.Version,
+		};
+
+		if (!TryConvertToBitmap(options, buffer, out bitmap))
 		{
 			return false;
 		}
@@ -128,15 +137,17 @@ public static class TextureConverter
 			return false;
 		}
 
-		if (!TryConvertToBitmap(
-			format,
-			texture.Width,
-			texture.GetHeight(),
-			texture.GetDepth(),
-			texture.GetCompleteImageSize(),
-			texture.Collection.Version,
-			buffer,
-			out bitmap))
+		Options options = new()
+		{
+			TextureFormat = format,
+			Width = texture.Width,
+			Height = texture.GetHeight(),
+			Depth = texture.GetDepth(),
+			ImageSize = texture.GetCompleteImageSize(),
+			Version = texture.Collection.Version,
+		};
+
+		if (!TryConvertToBitmap(options, buffer, out bitmap))
 		{
 			return false;
 		}
@@ -155,15 +166,17 @@ public static class TextureConverter
 			return false;
 		}
 
-		if (!TryConvertToBitmap(
-			texture.Format_C28E,
-			texture.Width_C28,
-			texture.Height_C28,
-			texture.ImageCount_C28,
-			texture.ActualImageSize,
-			texture.Collection.Version,
-			buffer,
-			out bitmap))
+		Options options = new()
+		{
+			TextureFormat = texture.Format_C28E,
+			Width = texture.Width_C28,
+			Height = texture.Height_C28,
+			Depth = texture.ImageCount_C28,
+			ImageSize = texture.ActualImageSize,
+			Version = texture.Collection.Version,
+		};
+
+		if (!TryConvertToBitmap(options, buffer, out bitmap))
 		{
 			return false;
 		}
@@ -183,87 +196,71 @@ public static class TextureConverter
 		return true;
 	}
 
-	private static bool TryConvertToBitmap(
-		TextureFormat textureFormat,
-		int width,
-		int height,
-		int depth,
-		int imageSize,
-		UnityVersion version,
-		byte[] data,
-		out DirectBitmap bitmap)
+	private static bool TryConvertToBitmap(Options options, byte[] data, out DirectBitmap bitmap)
 	{
-		return textureFormat switch
+		return options.TextureFormat switch
 		{
-			TextureFormat.Alpha8 => TryConvertToBitmap<ColorA<byte>, byte>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
-			TextureFormat.ARGB4444 => TryConvertToBitmap<ColorARGB16, byte>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
-			TextureFormat.RGB24 => TryConvertToBitmap<ColorRGB<byte>, byte>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
-			TextureFormat.RGBA32 => TryConvertToBitmap<ColorRGBA<byte>, byte>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
-			TextureFormat.ARGB32 => TryConvertToBitmap<ColorARGB<byte>, byte>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
-			TextureFormat.ARGBFloat => TryConvertToBitmap<ColorARGB<float>, float>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
-			TextureFormat.RGB565 => TryConvertToBitmap<ColorRGB16, byte>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
-			TextureFormat.BGR24 => TryConvertToBitmap<ColorBGR<byte>, byte>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
-			TextureFormat.R16 => TryConvertToBitmap<ColorR<ushort>, ushort>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
-			TextureFormat.RGBA4444 => TryConvertToBitmap<ColorRGBA16, byte>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
-			TextureFormat.BGRA32_14 or TextureFormat.BGRA32_37 => TryConvertToBitmap<ColorBGRA<byte>, byte>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
-			TextureFormat.RHalf => TryConvertToBitmap<ColorR<Half>, Half>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
-			TextureFormat.RGHalf => TryConvertToBitmap<ColorRG<Half>, Half>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
-			TextureFormat.RGBAHalf => TryConvertToBitmap<ColorRGBA<Half>, Half>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
-			TextureFormat.RFloat => TryConvertToBitmap<ColorR<float>, float>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
-			TextureFormat.RGFloat => TryConvertToBitmap<ColorRG<float>, float>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
-			TextureFormat.RGBAFloat => TryConvertToBitmap<ColorRGBA<float>, float>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
-			TextureFormat.RGB9e5Float => TryConvertToBitmap<ColorRGB9e5, double>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
-			TextureFormat.RG16 => TryConvertToBitmap<ColorRG<byte>, byte>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
-			TextureFormat.R8 => TryConvertToBitmap<ColorR<byte>, byte>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
-			TextureFormat.RG32 => TryConvertToBitmap<ColorRG<ushort>, ushort>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
-			TextureFormat.RGB48 => TryConvertToBitmap<ColorRGB<ushort>, ushort>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
-			TextureFormat.RGBA64 => TryConvertToBitmap<ColorRGBA<ushort>, ushort>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
-			TextureFormat.R8_SIGNED => TryConvertToBitmap<ColorR<sbyte>, sbyte>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
-			TextureFormat.RG16_SIGNED => TryConvertToBitmap<ColorRG<sbyte>, sbyte>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
-			TextureFormat.RGB24_SIGNED => TryConvertToBitmap<ColorRGB<sbyte>, sbyte>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
-			TextureFormat.RGBA32_SIGNED => TryConvertToBitmap<ColorRGBA<sbyte>, sbyte>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
-			TextureFormat.R16_SIGNED => TryConvertToBitmap<ColorR<short>, short>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
-			TextureFormat.RG32_SIGNED => TryConvertToBitmap<ColorRG<short>, short>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
-			TextureFormat.RGB48_SIGNED => TryConvertToBitmap<ColorRGB<short>, short>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
-			TextureFormat.RGBA64_SIGNED => TryConvertToBitmap<ColorRGBA<short>, short>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
-			_ => TryConvertToBitmap<ColorRGBA<byte>, byte>(textureFormat, width, height, depth, imageSize, version, data, out bitmap),
+			TextureFormat.Alpha8 => TryConvertToBitmap<ColorA<byte>, byte>(options, data, out bitmap),
+			TextureFormat.ARGB4444 => TryConvertToBitmap<ColorARGB16, byte>(options, data, out bitmap),
+			TextureFormat.RGB24 => TryConvertToBitmap<ColorRGB<byte>, byte>(options, data, out bitmap),
+			TextureFormat.RGBA32 => TryConvertToBitmap<ColorRGBA<byte>, byte>(options, data, out bitmap),
+			TextureFormat.ARGB32 => TryConvertToBitmap<ColorARGB<byte>, byte>(options, data, out bitmap),
+			TextureFormat.ARGBFloat => TryConvertToBitmap<ColorARGB<float>, float>(options, data, out bitmap),
+			TextureFormat.RGB565 => TryConvertToBitmap<ColorRGB16, byte>(options, data, out bitmap),
+			TextureFormat.BGR24 => TryConvertToBitmap<ColorBGR<byte>, byte>(options, data, out bitmap),
+			TextureFormat.R16 => TryConvertToBitmap<ColorR<ushort>, ushort>(options, data, out bitmap),
+			TextureFormat.RGBA4444 => TryConvertToBitmap<ColorRGBA16, byte>(options, data, out bitmap),
+			TextureFormat.BGRA32_14 or TextureFormat.BGRA32_37 => TryConvertToBitmap<ColorBGRA<byte>, byte>(options, data, out bitmap),
+			TextureFormat.RHalf => TryConvertToBitmap<ColorR<Half>, Half>(options, data, out bitmap),
+			TextureFormat.RGHalf => TryConvertToBitmap<ColorRG<Half>, Half>(options, data, out bitmap),
+			TextureFormat.RGBAHalf => TryConvertToBitmap<ColorRGBA<Half>, Half>(options, data, out bitmap),
+			TextureFormat.RFloat => TryConvertToBitmap<ColorR<float>, float>(options, data, out bitmap),
+			TextureFormat.RGFloat => TryConvertToBitmap<ColorRG<float>, float>(options, data, out bitmap),
+			TextureFormat.RGBAFloat => TryConvertToBitmap<ColorRGBA<float>, float>(options, data, out bitmap),
+			TextureFormat.RGB9e5Float => TryConvertToBitmap<ColorRGB9e5, double>(options, data, out bitmap),
+			TextureFormat.RG16 => TryConvertToBitmap<ColorRG<byte>, byte>(options, data, out bitmap),
+			TextureFormat.R8 => TryConvertToBitmap<ColorR<byte>, byte>(options, data, out bitmap),
+			TextureFormat.RG32 => TryConvertToBitmap<ColorRG<ushort>, ushort>(options, data, out bitmap),
+			TextureFormat.RGB48 => TryConvertToBitmap<ColorRGB<ushort>, ushort>(options, data, out bitmap),
+			TextureFormat.RGBA64 => TryConvertToBitmap<ColorRGBA<ushort>, ushort>(options, data, out bitmap),
+			TextureFormat.R8_SIGNED => TryConvertToBitmap<ColorR<sbyte>, sbyte>(options, data, out bitmap),
+			TextureFormat.RG16_SIGNED => TryConvertToBitmap<ColorRG<sbyte>, sbyte>(options, data, out bitmap),
+			TextureFormat.RGB24_SIGNED => TryConvertToBitmap<ColorRGB<sbyte>, sbyte>(options, data, out bitmap),
+			TextureFormat.RGBA32_SIGNED => TryConvertToBitmap<ColorRGBA<sbyte>, sbyte>(options, data, out bitmap),
+			TextureFormat.R16_SIGNED => TryConvertToBitmap<ColorR<short>, short>(options, data, out bitmap),
+			TextureFormat.RG32_SIGNED => TryConvertToBitmap<ColorRG<short>, short>(options, data, out bitmap),
+			TextureFormat.RGB48_SIGNED => TryConvertToBitmap<ColorRGB<short>, short>(options, data, out bitmap),
+			TextureFormat.RGBA64_SIGNED => TryConvertToBitmap<ColorRGBA<short>, short>(options, data, out bitmap),
+			_ => TryConvertToBitmap<ColorRGBA<byte>, byte>(options, data, out bitmap),
 		};
 	}
 
-	private static bool TryConvertToBitmap<TColor, TChannelValue>(
-		TextureFormat textureFormat,
-		int width,
-		int height,
-		int depth,
-		int imageSize,
-		UnityVersion version,
-		byte[] data,
-		out DirectBitmap bitmap)
+	private static bool TryConvertToBitmap<TColor, TChannelValue>(Options options, byte[] data, out DirectBitmap bitmap)
 		where TColor : unmanaged, IColor<TChannelValue>
 		where TChannelValue : unmanaged
 	{
-		if (width <= 0 || height <= 0 || depth <= 0)
+		if (options.Width <= 0 || options.Height <= 0 || options.Depth <= 0)
 		{
-			Logger.Log(LogType.Error, LogCategory.Export, $"Invalid texture dimensions. Width: {width}, Height: {height}, Depth: {depth}.");
+			Logger.Log(LogType.Error, LogCategory.Export, $"Invalid texture dimensions. Width: {options.Width}, Height: {options.Height}, Depth: {options.Depth}.");
 			bitmap = DirectBitmap.Empty;
 			return false;
 		}
 
-		if (1L * width * height * depth * Unsafe.SizeOf<TColor>() > int.MaxValue)
+		if (1L * options.Width * options.Height * options.Depth * Unsafe.SizeOf<TColor>() > int.MaxValue)
 		{
-			Logger.Log(LogType.Error, LogCategory.Export, $"Texture size is too large. Width: {width}, Height: {height}, Depth: {depth}.");
+			Logger.Log(LogType.Error, LogCategory.Export, $"Texture size is too large. Width: {options.Width}, Height: {options.Height}, Depth: {options.Depth}.");
 			bitmap = DirectBitmap.Empty;
 			return false;
 		}
 
 		ReadOnlySpan<byte> uncompressedSpan;
 		int bytesPerLayer;
-		if (textureFormat.IsCrunched())
+		if (options.IsCrunched)
 		{
-			if (CrunchHandler.DecompressCrunch(textureFormat, version, data, out byte[]? decompressedData))
+			if (CrunchHandler.DecompressCrunch(options.TextureFormat, options.Version, data, out byte[]? decompressedData))
 			{
 				uncompressedSpan = decompressedData;
-				bytesPerLayer = decompressedData.Length / depth;
+				bytesPerLayer = decompressedData.Length / options.Depth;
 			}
 			else
 			{
@@ -273,35 +270,35 @@ public static class TextureConverter
 		}
 		else
 		{
-			if (data.Length == imageSize)
+			if (data.Length == options.ImageSize)
 			{
 				// This can happen for Texture3D
 				// For mips, all 3 dimensions get halved with each mip level, unlike Texture2DArray.
 				// https://github.com/AssetRipper/AssetRipper/issues/1886
 				bytesPerLayer = -1;
 			}
-			else if (data.Length < (long)imageSize * depth)
+			else if (data.Length < (long)options.ImageSize * options.Depth)
 			{
-				Logger.Log(LogType.Error, LogCategory.Export, $"Image data length {data.Length} is less than expected {(long)imageSize * depth}. Width: {width}, Height: {height}, Depth: {depth}, Image Size: {imageSize}, Format {textureFormat}.");
+				Logger.Log(LogType.Error, LogCategory.Export, $"Image data length {data.Length} is less than expected {(long)options.ImageSize * options.Depth}. Width: {options.Width}, Height: {options.Height}, Depth: {options.Depth}, Image Size: {options.ImageSize}, Format {options.TextureFormat}.");
 				bitmap = DirectBitmap.Empty;
 				return false;
 			}
 			else
 			{
-				bytesPerLayer = imageSize;
+				bytesPerLayer = options.ImageSize;
 			}
 			uncompressedSpan = data;
 		}
 
-		bitmap = new DirectBitmap<TColor, TChannelValue>(width, height, depth);
-		int outputSize = width * height * bitmap.PixelSize;
+		bitmap = new DirectBitmap<TColor, TChannelValue>(options.Width, options.Height, options.Depth);
+		int outputSize = options.Width * options.Height * bitmap.PixelSize;
 		int inputOffset = 0;
-		for (int i = 0; i < depth; i++)
+		for (int i = 0; i < options.Depth; i++)
 		{
 			ReadOnlySpan<byte> inputSpan = uncompressedSpan.Slice(inputOffset, int.Max(uncompressedSpan.Length - inputOffset, bytesPerLayer));
 			Span<byte> outputSpan = bitmap.Bits.Slice(i * outputSize, outputSize);
 
-			int bytesRead = DecodeTexture<TColor, TChannelValue>(textureFormat, width, height, inputSpan, outputSpan);
+			int bytesRead = DecodeTexture<TColor, TChannelValue>(options, inputSpan, outputSpan);
 			if (bytesRead < 0)
 			{
 				bitmap = DirectBitmap.Empty;
@@ -313,209 +310,93 @@ public static class TextureConverter
 		return true;
 	}
 
-	private static int DecodeTexture<TColor, TChannelValue>(TextureFormat textureFormat, int width, int height, ReadOnlySpan<byte> inputSpan, Span<byte> outputSpan)
+	private static int DecodeTexture<TColor, TChannelValue>(Options options, ReadOnlySpan<byte> inputSpan, Span<byte> outputSpan)
 		where TColor : unmanaged, IColor<TChannelValue>
 		where TChannelValue : unmanaged
 	{
-		switch (textureFormat)
+		int width = options.Width;
+		int height = options.Height;
+		return options.TextureFormat switch
 		{
 			//ASTC
-			case TextureFormat.ASTC_RGB_4x4:
-			case TextureFormat.ASTC_RGBA_4x4:
-				return AstcDecoder.DecodeASTC<TColor, TChannelValue>(inputSpan, width, height, 4, 4, outputSpan);
-
-			case TextureFormat.ASTC_RGB_5x5:
-			case TextureFormat.ASTC_RGBA_5x5:
-				return AstcDecoder.DecodeASTC<TColor, TChannelValue>(inputSpan, width, height, 5, 5, outputSpan);
-
-			case TextureFormat.ASTC_RGB_6x6:
-			case TextureFormat.ASTC_RGBA_6x6:
-				return AstcDecoder.DecodeASTC<TColor, TChannelValue>(inputSpan, width, height, 6, 6, outputSpan);
-
-			case TextureFormat.ASTC_RGB_8x8:
-			case TextureFormat.ASTC_RGBA_8x8:
-				return AstcDecoder.DecodeASTC<TColor, TChannelValue>(inputSpan, width, height, 8, 8, outputSpan);
-
-			case TextureFormat.ASTC_RGB_10x10:
-			case TextureFormat.ASTC_RGBA_10x10:
-				return AstcDecoder.DecodeASTC<TColor, TChannelValue>(inputSpan, width, height, 10, 10, outputSpan);
-
-			case TextureFormat.ASTC_RGB_12x12:
-			case TextureFormat.ASTC_RGBA_12x12:
-				return AstcDecoder.DecodeASTC<TColor, TChannelValue>(inputSpan, width, height, 12, 12, outputSpan);
+			TextureFormat.ASTC_RGB_4x4 or TextureFormat.ASTC_RGBA_4x4 => AstcDecoder.DecodeASTC<TColor, TChannelValue>(inputSpan, width, height, 4, 4, outputSpan),
+			TextureFormat.ASTC_RGB_5x5 or TextureFormat.ASTC_RGBA_5x5 => AstcDecoder.DecodeASTC<TColor, TChannelValue>(inputSpan, width, height, 5, 5, outputSpan),
+			TextureFormat.ASTC_RGB_6x6 or TextureFormat.ASTC_RGBA_6x6 => AstcDecoder.DecodeASTC<TColor, TChannelValue>(inputSpan, width, height, 6, 6, outputSpan),
+			TextureFormat.ASTC_RGB_8x8 or TextureFormat.ASTC_RGBA_8x8 => AstcDecoder.DecodeASTC<TColor, TChannelValue>(inputSpan, width, height, 8, 8, outputSpan),
+			TextureFormat.ASTC_RGB_10x10 or TextureFormat.ASTC_RGBA_10x10 => AstcDecoder.DecodeASTC<TColor, TChannelValue>(inputSpan, width, height, 10, 10, outputSpan),
+			TextureFormat.ASTC_RGB_12x12 or TextureFormat.ASTC_RGBA_12x12 => AstcDecoder.DecodeASTC<TColor, TChannelValue>(inputSpan, width, height, 12, 12, outputSpan),
 
 			//ATC
-			case TextureFormat.ATC_RGB4:
-				return AtcDecoder.DecompressAtcRgb4<TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			case TextureFormat.ATC_RGBA8:
-				return AtcDecoder.DecompressAtcRgba8<TColor, TChannelValue>(inputSpan, width, height, outputSpan);
+			TextureFormat.ATC_RGB4 => AtcDecoder.DecompressAtcRgb4<TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.ATC_RGBA8 => AtcDecoder.DecompressAtcRgba8<TColor, TChannelValue>(inputSpan, width, height, outputSpan),
 
 			//BC
-			case TextureFormat.BC4:
-				return Bc4.Decompress<TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			case TextureFormat.BC5:
-				return Bc5.Decompress<TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			case TextureFormat.BC6H:
-				return Bc6h.Decompress<TColor, TChannelValue>(inputSpan, width, height, false, outputSpan);
-
-			case TextureFormat.BC7:
-				return Bc7.Decompress<TColor, TChannelValue>(inputSpan, width, height, outputSpan);
+			TextureFormat.BC4 => Bc4.Decompress<TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.BC5 => Bc5.Decompress<TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.BC6H => Bc6h.Decompress<TColor, TChannelValue>(inputSpan, width, height, false, outputSpan),
+			TextureFormat.BC7 => Bc7.Decompress<TColor, TChannelValue>(inputSpan, width, height, outputSpan),
 
 			//DXT
-			case TextureFormat.DXT1:
-			case TextureFormat.DXT1Crunched:
-				return DxtDecoder.DecompressDXT1<TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			case TextureFormat.DXT3:
-				return DxtDecoder.DecompressDXT3<TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			case TextureFormat.DXT5:
-			case TextureFormat.DXT5Crunched:
-				return DxtDecoder.DecompressDXT5<TColor, TChannelValue>(inputSpan, width, height, outputSpan);
+			TextureFormat.DXT1 or TextureFormat.DXT1Crunched => DxtDecoder.DecompressDXT1<TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.DXT3 => DxtDecoder.DecompressDXT3<TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.DXT5 or TextureFormat.DXT5Crunched => DxtDecoder.DecompressDXT5<TColor, TChannelValue>(inputSpan, width, height, outputSpan),
 
 			//ETC
-			case TextureFormat.ETC_RGB4:
-			case TextureFormat.ETC_RGB4_3DS:
-			case TextureFormat.ETC_RGB4Crunched:
-				return EtcDecoder.DecompressETC<TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			case TextureFormat.EAC_R:
-				return EtcDecoder.DecompressEACRUnsigned<TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			case TextureFormat.EAC_R_SIGNED:
-				return EtcDecoder.DecompressEACRSigned<TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			case TextureFormat.EAC_RG:
-				return EtcDecoder.DecompressEACRGUnsigned<TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			case TextureFormat.EAC_RG_SIGNED:
-				return EtcDecoder.DecompressEACRGSigned<TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			case TextureFormat.ETC2_RGB:
-				return EtcDecoder.DecompressETC2<TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			case TextureFormat.ETC2_RGBA1:
-				return EtcDecoder.DecompressETC2A1<TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			case TextureFormat.ETC2_RGBA8:
-			case TextureFormat.ETC_RGBA8_3DS:
-			case TextureFormat.ETC2_RGBA8Crunched:
-				return EtcDecoder.DecompressETC2A8<TColor, TChannelValue>(inputSpan, width, height, outputSpan);
+			TextureFormat.ETC_RGB4 or TextureFormat.ETC_RGB4_3DS or TextureFormat.ETC_RGB4Crunched => EtcDecoder.DecompressETC<TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.EAC_R => EtcDecoder.DecompressEACRUnsigned<TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.EAC_R_SIGNED => EtcDecoder.DecompressEACRSigned<TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.EAC_RG => EtcDecoder.DecompressEACRGUnsigned<TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.EAC_RG_SIGNED => EtcDecoder.DecompressEACRGSigned<TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.ETC2_RGB => EtcDecoder.DecompressETC2<TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.ETC2_RGBA1 => EtcDecoder.DecompressETC2A1<TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.ETC2_RGBA8 or TextureFormat.ETC_RGBA8_3DS or TextureFormat.ETC2_RGBA8Crunched => EtcDecoder.DecompressETC2A8<TColor, TChannelValue>(inputSpan, width, height, outputSpan),
 
 			//PVRTC
-			case TextureFormat.PVRTC_RGB2:
-			case TextureFormat.PVRTC_RGBA2:
-				return PvrtcDecoder.DecompressPVRTC<TColor, TChannelValue>(inputSpan, width, height, true, outputSpan);
-
-			case TextureFormat.PVRTC_RGB4:
-			case TextureFormat.PVRTC_RGBA4:
-				return PvrtcDecoder.DecompressPVRTC<TColor, TChannelValue>(inputSpan, width, height, false, outputSpan);
+			TextureFormat.PVRTC_RGB2 or TextureFormat.PVRTC_RGBA2 => PvrtcDecoder.DecompressPVRTC<TColor, TChannelValue>(inputSpan, width, height, true, outputSpan),
+			TextureFormat.PVRTC_RGB4 or TextureFormat.PVRTC_RGBA4 => PvrtcDecoder.DecompressPVRTC<TColor, TChannelValue>(inputSpan, width, height, false, outputSpan),
 
 			//YUY2
-			case TextureFormat.YUY2:
-				return Yuy2Decoder.DecompressYUY2<TColor, TChannelValue>(inputSpan, width, height, outputSpan);
+			TextureFormat.YUY2 => Yuy2Decoder.DecompressYUY2<TColor, TChannelValue>(inputSpan, width, height, outputSpan),
 
 			//RGB
-			case TextureFormat.Alpha8:
-				return RgbConverter.Convert<ColorA<byte>, byte, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
+			TextureFormat.Alpha8 => RgbConverter.Convert<ColorA<byte>, byte, TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.ARGB4444 => RgbConverter.Convert<ColorARGB16, byte, TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.RGBA4444 => RgbConverter.Convert<ColorRGBA16, byte, TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.RGB565 => RgbConverter.Convert<ColorRGB16, byte, TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.R8 => RgbConverter.Convert<ColorR<byte>, byte, TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.RG16 => RgbConverter.Convert<ColorRG<byte>, byte, TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.RGB24 => RgbConverter.Convert<ColorRGB<byte>, byte, TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.RGBA32 => RgbConverter.Convert<ColorRGBA<byte>, byte, TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.ARGB32 => RgbConverter.Convert<ColorARGB<byte>, byte, TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.ARGBFloat => RgbConverter.Convert<ColorARGB<float>, float, TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.BGR24 => RgbConverter.Convert<ColorBGR<byte>, byte, TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.BGRA32_14 or TextureFormat.BGRA32_37 => RgbConverter.Convert<ColorBGRA<byte>, byte, TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.R16 => RgbConverter.Convert<ColorR<ushort>, ushort, TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.RG32 => RgbConverter.Convert<ColorRG<ushort>, ushort, TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.RGB48 => RgbConverter.Convert<ColorRGB<ushort>, ushort, TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.RGBA64 => RgbConverter.Convert<ColorRGBA<ushort>, ushort, TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.RHalf => RgbConverter.Convert<ColorR<Half>, Half, TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.RGHalf => RgbConverter.Convert<ColorRG<Half>, Half, TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.RGBAHalf => RgbConverter.Convert<ColorRGBA<Half>, Half, TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.RFloat => RgbConverter.Convert<ColorR<float>, float, TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.RGFloat => RgbConverter.Convert<ColorRG<float>, float, TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.RGBAFloat => RgbConverter.Convert<ColorRGBA<float>, float, TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.RGB9e5Float => RgbConverter.Convert<ColorRGB9e5, double, TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.R8_SIGNED => RgbConverter.Convert<ColorR<sbyte>, sbyte, TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.RG16_SIGNED => RgbConverter.Convert<ColorRG<sbyte>, sbyte, TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.RGB24_SIGNED => RgbConverter.Convert<ColorRGB<sbyte>, sbyte, TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.RGBA32_SIGNED => RgbConverter.Convert<ColorRGBA<sbyte>, sbyte, TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.R16_SIGNED => RgbConverter.Convert<ColorR<short>, short, TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.RG32_SIGNED => RgbConverter.Convert<ColorRG<short>, short, TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.RGB48_SIGNED => RgbConverter.Convert<ColorRGB<short>, short, TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			TextureFormat.RGBA64_SIGNED => RgbConverter.Convert<ColorRGBA<short>, short, TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+			_ => WarnAboutUnsupportedFormat(options.TextureFormat),
+		};
 
-			case TextureFormat.ARGB4444:
-				return RgbConverter.Convert<ColorARGB16, byte, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			case TextureFormat.RGBA4444:
-				return RgbConverter.Convert<ColorRGBA16, byte, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			case TextureFormat.RGB565:
-				return RgbConverter.Convert<ColorRGB16, byte, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			case TextureFormat.R8:
-				return RgbConverter.Convert<ColorR<byte>, byte, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			case TextureFormat.RG16:
-				return RgbConverter.Convert<ColorRG<byte>, byte, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			case TextureFormat.RGB24:
-				return RgbConverter.Convert<ColorRGB<byte>, byte, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			case TextureFormat.RGBA32:
-				return RgbConverter.Convert<ColorRGBA<byte>, byte, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			case TextureFormat.ARGB32:
-				return RgbConverter.Convert<ColorARGB<byte>, byte, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			case TextureFormat.ARGBFloat:
-				return RgbConverter.Convert<ColorARGB<float>, float, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			case TextureFormat.BGR24:
-				return RgbConverter.Convert<ColorBGR<byte>, byte, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			case TextureFormat.BGRA32_14:
-			case TextureFormat.BGRA32_37:
-				return RgbConverter.Convert<ColorBGRA<byte>, byte, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			case TextureFormat.R16:
-				return RgbConverter.Convert<ColorR<ushort>, ushort, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			case TextureFormat.RG32:
-				return RgbConverter.Convert<ColorRG<ushort>, ushort, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			case TextureFormat.RGB48:
-				return RgbConverter.Convert<ColorRGB<ushort>, ushort, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			case TextureFormat.RGBA64:
-				return RgbConverter.Convert<ColorRGBA<ushort>, ushort, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			case TextureFormat.RHalf:
-				return RgbConverter.Convert<ColorR<Half>, Half, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			case TextureFormat.RGHalf:
-				return RgbConverter.Convert<ColorRG<Half>, Half, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			case TextureFormat.RGBAHalf:
-				return RgbConverter.Convert<ColorRGBA<Half>, Half, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			case TextureFormat.RFloat:
-				return RgbConverter.Convert<ColorR<float>, float, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			case TextureFormat.RGFloat:
-				return RgbConverter.Convert<ColorRG<float>, float, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			case TextureFormat.RGBAFloat:
-				return RgbConverter.Convert<ColorRGBA<float>, float, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			case TextureFormat.RGB9e5Float:
-				return RgbConverter.Convert<ColorRGB9e5, double, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			case TextureFormat.R8_SIGNED:
-				return RgbConverter.Convert<ColorR<sbyte>, sbyte, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			case TextureFormat.RG16_SIGNED:
-				return RgbConverter.Convert<ColorRG<sbyte>, sbyte, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			case TextureFormat.RGB24_SIGNED:
-				return RgbConverter.Convert<ColorRGB<sbyte>, sbyte, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			case TextureFormat.RGBA32_SIGNED:
-				return RgbConverter.Convert<ColorRGBA<sbyte>, sbyte, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			case TextureFormat.R16_SIGNED:
-				return RgbConverter.Convert<ColorR<short>, short, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			case TextureFormat.RG32_SIGNED:
-				return RgbConverter.Convert<ColorRG<short>, short, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			case TextureFormat.RGB48_SIGNED:
-				return RgbConverter.Convert<ColorRGB<short>, short, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			case TextureFormat.RGBA64_SIGNED:
-				return RgbConverter.Convert<ColorRGBA<short>, short, TColor, TChannelValue>(inputSpan, width, height, outputSpan);
-
-			default:
-				Logger.Log(LogType.Error, LogCategory.Export, $"Unsupported texture format '{textureFormat}'");
-				return -1;
+		static int WarnAboutUnsupportedFormat(TextureFormat textureFormat)
+		{
+			Logger.Log(LogType.Error, LogCategory.Export, $"Unsupported texture format '{textureFormat}'");
+			return -1;
 		}
 	}
 
