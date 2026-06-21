@@ -23,7 +23,7 @@ public sealed class MixedGameStructure : PlatformGameStructure
 			}
 			else if (FileSystem.Directory.Exists(path))
 			{
-				CollectFromDirectory(path, Files, Assemblies, dataPaths);
+				CollectFromDirectory(path, Files, dataPaths);
 			}
 			else
 			{
@@ -47,13 +47,13 @@ public sealed class MixedGameStructure : PlatformGameStructure
 		return paths.Select(t => MultiFileStream.GetFilePath(t)).Distinct();
 	}
 
-	private void CollectFromDirectory(string root, List<KeyValuePair<string, string>> files, Dictionary<string, string> assemblies, ISet<string> dataPaths)
+	private void CollectFromDirectory(string root, List<KeyValuePair<string, string>> files, ISet<string> dataPaths)
 	{
 		int count = files.Count;
 		CollectAllSerializedFiles(root, files);
 		CollectWebFiles(root, files);
 		CollectAssetBundles(root, files);
-		CollectAssembliesSafe(root, assemblies);
+		CollectAssemblies(root);
 		if (files.Count != count)
 		{
 			dataPaths.Add(root);
@@ -61,7 +61,7 @@ public sealed class MixedGameStructure : PlatformGameStructure
 
 		foreach (string subDirectory in FileSystem.Directory.EnumerateDirectories(root))
 		{
-			CollectFromDirectory(subDirectory, files, assemblies, dataPaths);
+			CollectFromDirectory(subDirectory, files, dataPaths);
 		}
 	}
 
@@ -90,25 +90,6 @@ public sealed class MixedGameStructure : PlatformGameStructure
 						}
 					}
 					break;
-			}
-		}
-	}
-
-	private void CollectAssembliesSafe(string root, Dictionary<string, string> assemblies)
-	{
-		foreach (string file in FileSystem.Directory.EnumerateFiles(root))
-		{
-			string name = FileSystem.Path.GetFileName(file);
-			if (MonoManager.IsMonoAssembly(name))
-			{
-				if (assemblies.TryGetValue(name, out string? value))
-				{
-					Logger.Log(LogType.Warning, LogCategory.Import, $"Duplicate assemblies found: '{value}' & '{file}'");
-				}
-				else
-				{
-					assemblies.Add(name, file);
-				}
 			}
 		}
 	}

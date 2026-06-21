@@ -8,7 +8,7 @@ public class ReferenceAssembliesTests
 		TypeDefinition customMonoBehaviour = ReferenceAssemblies.GetType<NestedMonoBehaviour>();
 		Assert.That(customMonoBehaviour, Is.Not.Null);
 		Assert.That(customMonoBehaviour.BaseType, Is.Not.Null);
-		TypeDefinition? monoBehaviour = customMonoBehaviour.BaseType?.Resolve();
+		TypeDefinition? monoBehaviour = customMonoBehaviour.BaseType?.Resolve(customMonoBehaviour.DeclaringModule?.RuntimeContext);
 		Assert.That(monoBehaviour, Is.Not.Null);
 		Assert.That(monoBehaviour?.Name?.ToString(), Is.EqualTo(nameof(UnityEngine.MonoBehaviour)));
 	}

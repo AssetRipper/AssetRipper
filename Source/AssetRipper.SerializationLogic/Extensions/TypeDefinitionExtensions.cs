@@ -2,66 +2,24 @@ namespace AssetRipper.SerializationLogic.Extensions;
 
 internal static class TypeDefinitionExtensions
 {
-	public static bool IsSubclassOf(this TypeDefinition type, string ns, string name)
+	public static bool InheritsFromMonoBehaviour(this TypeDefinition type, RuntimeContext? runtimeContext)
 	{
-		ITypeDefOrRef? baseType = type.BaseType;
-		while (baseType != null)
-		{
-			if (baseType.Namespace == ns && baseType.Name == name)
-			{
-				return true;
-			}
-			baseType = baseType.Resolve()?.BaseType;
-		}
-
-		return false;
+		return type.InheritsFrom(EngineTypePredicates.UnityEngineNamespace, EngineTypePredicates.MonoBehaviour, runtimeContext);
 	}
 
-	public static bool IsSubclassOf(this TypeDefinition type, string baseTypeName)
+	public static bool InheritsFromScriptableObject(this TypeDefinition type, RuntimeContext? runtimeContext)
 	{
-		ITypeDefOrRef? baseType = type.BaseType;
-		if (baseType == null)
-		{
-			return false;
-		}
-
-		if (baseType.FullName == baseTypeName)
-		{
-			return true;
-		}
-
-		TypeDefinition? baseTypeDef = baseType.Resolve();
-		if (baseTypeDef == null)
-		{
-			return false;
-		}
-
-		return baseTypeDef.IsSubclassOf(baseTypeName);
+		return type.InheritsFrom(EngineTypePredicates.UnityEngineNamespace, EngineTypePredicates.ScriptableObject, runtimeContext);
 	}
 
-	public static bool InheritsFromMonoBehaviour(this TypeDefinition type)
+	public static bool InheritsFromObject(this TypeDefinition type, RuntimeContext? runtimeContext)
 	{
-		return type.InheritsFrom(EngineTypePredicates.UnityEngineNamespace, EngineTypePredicates.MonoBehaviour);
-	}
-
-	public static bool InheritsFromScriptableObject(this TypeDefinition type)
-	{
-		return type.InheritsFrom(EngineTypePredicates.UnityEngineNamespace, EngineTypePredicates.ScriptableObject);
-	}
-
-	public static bool InheritsFromObject(this TypeDefinition type)
-	{
-		return type.InheritsFrom(EngineTypePredicates.UnityEngineNamespace, "Object");
-	}
-
-	public static TypeDefinition? TryGetBaseClass(this TypeDefinition current)
-	{
-		return current.BaseType?.Resolve();
+		return type.InheritsFrom(EngineTypePredicates.UnityEngineNamespace, "Object", runtimeContext);
 	}
 
 	public static bool TryGetPrimitiveType(this TypeDefinition typeDefinition, out PrimitiveType primitiveType)
 	{
-		if ((typeDefinition.DeclaringModule?.Assembly?.IsCorLib ?? false) && typeDefinition.ToTypeSignature() is CorLibTypeSignature corLibTypeSignature)
+		if ((typeDefinition.DeclaringModule?.Assembly?.IsCorLib() ?? false) && typeDefinition.ToTypeSignature() is CorLibTypeSignature corLibTypeSignature)
 		{
 			primitiveType = corLibTypeSignature.ToPrimitiveType();
 			return primitiveType.IsCSharpPrimitive();
@@ -71,5 +29,10 @@ internal static class TypeDefinitionExtensions
 			primitiveType = PrimitiveType.Complex;
 			return false;
 		}
+	}
+
+	private static bool IsCorLib(this AssemblyDefinition assembly)
+	{
+		return assembly.Name == "mscorlib" || assembly.Name == "System.Runtime";
 	}
 }

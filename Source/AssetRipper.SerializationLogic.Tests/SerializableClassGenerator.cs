@@ -9,7 +9,11 @@ internal static class SerializableClassGenerator
 	public static TypeDefinition CreateEmptySerializableClass(string? @namespace, string? name)
 	{
 		TypeDefinition emptySerializableClass = ReferenceAssemblies.GetType<EmptySerializableClass>();
-		ModuleDefinition module = new("TestModule", ReferenceAssemblies.CorLib);
+		AssemblyDefinition assembly = new AssemblyDefinition("Test", new Version(1, 0, 0, 0));
+		ModuleDefinition module = new("Test", ReferenceAssemblies.CorLib);
+		assembly.Modules.Add(module);
+		RuntimeContext runtimeContext = new(DotNetRuntimeInfo.NetCoreApp(ReferenceAssemblies.CorLib.Version), (bool?)null, ReferenceAssemblies.CorLib);
+		runtimeContext.AddAssembly(assembly);
 		MemberCloner cloner = new(module);
 		cloner.Include(emptySerializableClass);
 		TypeDefinition clonedType = cloner.Clone().ClonedTopLevelTypes.Single();

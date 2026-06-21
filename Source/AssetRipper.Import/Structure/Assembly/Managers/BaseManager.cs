@@ -8,7 +8,7 @@ using AssetRipper.SerializationLogic;
 
 namespace AssetRipper.Import.Structure.Assembly.Managers;
 
-public partial class BaseManager : IAssemblyManager
+public class BaseManager : IAssemblyManager
 {
 	public bool IsSet => ScriptingBackend != ScriptingBackend.Unknown;
 	public virtual ScriptingBackend ScriptingBackend => ScriptingBackend.Unknown;
@@ -20,16 +20,24 @@ public partial class BaseManager : IAssemblyManager
 
 	private event Action<string> m_requestAssemblyCallback;
 	private readonly Dictionary<string, SerializableType> m_serializableTypes = new();
-	private readonly Resolver assemblyResolver;
-	public IAssemblyResolver AssemblyResolver => assemblyResolver;
+
+	public RuntimeContext? RuntimeContext
+	{
+		get
+		{
+			field ??= GetAssemblies().FirstOrDefault(a => a?.RuntimeContext is not null)?.RuntimeContext;
+			return field;
+		}
+	}
 
 	public BaseManager(Action<string> requestAssemblyCallback)
 	{
 		m_requestAssemblyCallback = requestAssemblyCallback ?? throw new ArgumentNullException(nameof(requestAssemblyCallback));
-		assemblyResolver = new Resolver(this);
 	}
 
-	public virtual void Initialize(PlatformGameStructure gameStructure) { }
+	public virtual void Initialize(PlatformGameStructure gameStructure)
+	{
+	}
 
 	protected static string GetUniqueName(ITypeDefOrRef type)
 	{
@@ -37,32 +45,35 @@ public partial class BaseManager : IAssemblyManager
 		return ScriptIdentifier.ToUniqueName(assembly, type.FullName);
 	}
 
-	public virtual void Load(string filePath, FileSystem fileSystem)
+	public AssemblyDefinition Load(string filePath, FileSystem fileSystem)
 	{
 		Stream stream = fileSystem.File.OpenRead(filePath);
-		AssemblyDefinition assembly;
 		try
 		{
-			assembly = AssemblyDefinition.FromStream(stream);
+			return Read(stream, filePath);
 		}
 		catch (BadImageFormatException badImageFormatException)
 		{
 			throw new BadImageFormatException($"Could not read {filePath}", badImageFormatException);
 		}
-
-		string fileName = fileSystem.Path.GetFileNameWithoutExtension(filePath);
-		m_assemblies.Add(fileName, assembly);
-
-		m_assemblyStreams.Add(assembly, stream);
-
-		Add(assembly);
 	}
 
 	public void Add(AssemblyDefinition assembly)
 	{
-		assembly.InitializeResolvers(this);
 		string assemblyName = ToAssemblyName(assembly);
 		m_assemblies[assemblyName] = assembly;
+
+		if (RuntimeContext is null)
+		{
+		}
+		else if (assembly.RuntimeContext is null)
+		{
+			RuntimeContext.AddAssembly(assembly);
+		}
+		else if (assembly.RuntimeContext != RuntimeContext)
+		{
+			throw new InvalidOperationException($"Assembly '{assemblyName}' belongs to a different runtime context");
+		}
 	}
 
 	public Stream GetStreamForAssembly(AssemblyDefinition assembly)
@@ -90,36 +101,22 @@ public partial class BaseManager : IAssemblyManager
 		return SpecialFileNames.RemoveAssemblyFileExtension(assembly.Name?.ToString() ?? "");
 	}
 
-	public virtual void Read(Stream stream, string fileName)
+	public AssemblyDefinition Read(Stream stream, string fileNameOrPath)
 	{
-		AssemblyDefinition assembly = AssemblyDefinition.FromStream(stream);
-		assembly.InitializeResolvers(this);
-		fileName = Path.GetFileNameWithoutExtension(fileName);
-		string assemblyName = ToAssemblyName(assembly);
-		m_assemblies.Add(fileName, assembly);
-		m_assemblies[assemblyName] = assembly;
+		AssemblyDefinition assembly = AssemblyDefinition.FromStream(stream, createRuntimeContext: false);
+		string name = Path.GetFileNameWithoutExtension(fileNameOrPath);
+		m_assemblies.Add(name, assembly);
 		m_assemblyStreams.Add(assembly, stream);
+		Add(assembly);
+		return assembly;
 	}
 
-	public virtual void Unload(string fileName)
-	{
-		if (m_assemblies.TryGetValue(fileName, out AssemblyDefinition? assembly))
-		{
-			m_assemblies.Remove(fileName);
-			if (assembly is not null && m_assemblyStreams.TryGetValue(assembly, out Stream? stream))
-			{
-				m_assemblyStreams.Remove(assembly);
-				stream.Dispose();
-			}
-		}
-	}
-
-	public virtual bool IsAssemblyLoaded(string assembly)
+	public bool IsAssemblyLoaded(string assembly)
 	{
 		return m_assemblies.ContainsKey(assembly);
 	}
 
-	public virtual bool IsPresent(ScriptIdentifier scriptID)
+	public bool IsPresent(ScriptIdentifier scriptID)
 	{
 		if (!IsSet)
 		{
@@ -136,7 +133,7 @@ public partial class BaseManager : IAssemblyManager
 		}
 	}
 
-	public virtual bool IsValid(ScriptIdentifier scriptID)
+	public bool IsValid(ScriptIdentifier scriptID)
 	{
 		if (!IsSet)
 		{
@@ -162,12 +159,12 @@ public partial class BaseManager : IAssemblyManager
 		return true;
 	}
 
-	public virtual TypeDefinition GetTypeDefinition(ScriptIdentifier scriptID)
+	public TypeDefinition GetTypeDefinition(ScriptIdentifier scriptID)
 	{
 		return FindType(scriptID) ?? throw new ArgumentException($"Can't find type {scriptID.UniqueName}");
 	}
 
-	public virtual ScriptIdentifier GetScriptID(string assembly, string @namespace, string name)
+	public ScriptIdentifier GetScriptID(string assembly, string @namespace, string name)
 	{
 		if (!IsSet)
 		{
@@ -202,10 +199,10 @@ public partial class BaseManager : IAssemblyManager
 		}
 		else
 		{
-			FieldSerializer fieldSerializer = new(version);
+			FieldSerializer fieldSerializer = new(version, RuntimeContext);
 			if (!monoTypeCache.TryGetValue(fieldSerializer, out Dictionary<ITypeDefOrRef, SerializableType>? typeCache))
 			{
-				typeCache = new(SignatureComparer.Default);
+				typeCache = new(RuntimeContext?.SignatureComparer);
 				monoTypeCache[fieldSerializer] = typeCache;
 			}
 

@@ -10,7 +10,7 @@ public readonly partial struct FieldSerializer
 		[NotNullWhen(true)] out SerializableType? result,
 		[NotNullWhen(false)] out string? failureReason)
 	{
-		return TryCreateSerializableType(typeDefinition, new(SignatureComparer.Default), out result, out failureReason);
+		return TryCreateSerializableType(typeDefinition, new(runtimeContext?.SignatureComparer), out result, out failureReason);
 	}
 
 	public bool TryCreateSerializableType(
@@ -36,7 +36,7 @@ public readonly partial struct FieldSerializer
 		{
 			return TryCreateSerializableType(genericInstanceType, typeCache, typeStack, out result, out failureReason);
 		}
-		TypeDefinition? typeDefinition = typeSignature.Resolve();
+		TypeDefinition? typeDefinition = typeSignature.Resolve(runtimeContext);
 		if (typeDefinition is null)
 		{
 			result = null;
@@ -86,7 +86,7 @@ public readonly partial struct FieldSerializer
 
 		if (typeDefinition.BaseType is not null)
 		{
-			if (!TryCreateSerializableType(typeDefinition.BaseType.ToTypeSignature(), typeCache, typeStack, out SerializableType? baseType, out failureReason))
+			if (!TryCreateSerializableType(typeDefinition.BaseType.ToTypeSignature(runtimeContext), typeCache, typeStack, out SerializableType? baseType, out failureReason))
 			{
 				typeCache.Remove(typeDefinition);
 				typeStack.Pop();
@@ -160,13 +160,13 @@ public readonly partial struct FieldSerializer
 			}
 			else
 			{
-				fields.EnsureCapacity(baseMonoType.Fields.Count + genericInst.GenericType.Resolve()!.Fields.Count);
+				fields.EnsureCapacity(baseMonoType.Fields.Count + genericInst.GenericType.Resolve(runtimeContext)!.Fields.Count);
 				fields.AddRange(baseMonoType.Fields);
 			}
 		}
 		else
 		{
-			fields.EnsureCapacity(genericInst.GenericType.Resolve()!.Fields.Count);
+			fields.EnsureCapacity(genericInst.GenericType.Resolve(runtimeContext)!.Fields.Count);
 		}
 
 		if (TryCreateSerializableFields(typeStack, monoType, fields, GetFieldsInType(genericInst), typeCache, out failureReason))
@@ -273,7 +273,7 @@ public readonly partial struct FieldSerializer
 		switch (typeSignature)
 		{
 			case TypeDefOrRefSignature typeDefOrRefSignature:
-				TypeDefinition typeDefinition = typeDefOrRefSignature.Type.CheckedResolve();
+				TypeDefinition typeDefinition = typeDefOrRefSignature.Type.CheckedResolve(runtimeContext);
 				SerializableType fieldType;
 				if (typeDefinition.IsEnum)
 				{
@@ -281,7 +281,7 @@ public readonly partial struct FieldSerializer
 					PrimitiveType primitiveType = enumValueType.ToPrimitiveType();
 					fieldType = SerializablePrimitiveType.GetOrCreate(primitiveType);
 				}
-				else if (typeDefinition.InheritsFromObject())
+				else if (typeDefinition.InheritsFromObject(runtimeContext))
 				{
 					fieldType = SerializablePointerType.Shared;
 				}
@@ -313,7 +313,7 @@ public readonly partial struct FieldSerializer
 				return TryCreateSerializableField(typeStack, name, szArrayTypeSignature.BaseType, arrayDepth + 1, typeCache, out result, out failureReason);
 
 			case GenericInstanceTypeSignature genericInstanceTypeSignature:
-				if (genericInstanceTypeSignature.InheritsFromObject())
+				if (genericInstanceTypeSignature.InheritsFromObject(runtimeContext))
 				{
 					result = new Field(SerializablePointerType.Shared, arrayDepth, name, true);
 					failureReason = null;
@@ -347,16 +347,16 @@ public readonly partial struct FieldSerializer
 		}
 	}
 
-	private static bool TryGetBaseType(GenericInstanceTypeSignature genericInstanceType, out TypeSignature? baseType)
+	private bool TryGetBaseType(GenericInstanceTypeSignature genericInstanceType, out TypeSignature? baseType)
 	{
-		TypeDefinition? typeDefinition = genericInstanceType.GenericType.Resolve();
+		TypeDefinition? typeDefinition = genericInstanceType.GenericType.Resolve(runtimeContext);
 		if (typeDefinition is null)
 		{
 			baseType = null;
 			return false;
 		}
 
-		baseType = typeDefinition.BaseType?.ToTypeSignature().InstantiateGenericTypes(new GenericContext(genericInstanceType, null));
+		baseType = typeDefinition.BaseType?.ToTypeSignature(runtimeContext).InstantiateGenericTypes(new GenericContext(genericInstanceType, null));
 		return true;
 	}
 
@@ -369,9 +369,9 @@ public readonly partial struct FieldSerializer
 		});
 	}
 
-	private static IEnumerable<(FieldDefinition, TypeSignature)> GetFieldsInType(GenericInstanceTypeSignature genericInst)
+	private IEnumerable<(FieldDefinition, TypeSignature)> GetFieldsInType(GenericInstanceTypeSignature genericInst)
 	{
-		TypeDefinition? typeDefinition = genericInst.Resolve();
+		TypeDefinition? typeDefinition = genericInst.Resolve(runtimeContext);
 		if (typeDefinition is null)
 		{
 			return [];

@@ -2,7 +2,7 @@ namespace AssetRipper.SerializationLogic.Extensions;
 
 internal static class ResolutionExtensions
 {
-	public static TypeDefinition CheckedResolve(this ITypeDescriptor reference)
+	public static TypeDefinition CheckedResolve(this ITypeDescriptor reference, RuntimeContext? runtimeContext)
 	{
 		if (reference.ContextModule == null)
 		{
@@ -11,13 +11,13 @@ internal static class ResolutionExtensions
 
 		if (reference is not TypeDefinition definition)
 		{
-			definition = reference.Resolve() ?? throw new ResolutionException(reference);
+			definition = reference.Resolve(runtimeContext) ?? throw new ResolutionException(reference);
 		}
 
 		return definition;
 	}
 
-	public static MethodDefinition CheckedResolve(this IMethodDefOrRef reference)
+	public static MethodDefinition CheckedResolve(this IMethodDefOrRef reference, RuntimeContext? runtimeContext)
 	{
 		if (reference.ContextModule == null)
 		{
@@ -26,7 +26,7 @@ internal static class ResolutionExtensions
 
 		if (reference is not MethodDefinition definition)
 		{
-			definition = reference.Resolve() ?? throw new ResolutionException(reference);
+			definition = reference.Resolve(runtimeContext) ?? throw new ResolutionException(reference);
 		}
 
 		return definition;

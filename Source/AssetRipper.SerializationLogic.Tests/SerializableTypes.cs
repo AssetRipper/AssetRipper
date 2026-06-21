@@ -11,7 +11,7 @@ public static class SerializableTypes
 	public static SerializableType Create(TypeDefinition type) => Create(type, DefaultUnityVersion);
 	public static SerializableType Create(TypeDefinition type, UnityVersion version)
 	{
-		FieldSerializer serializer = new(version);
+		FieldSerializer serializer = new(version, type.DeclaringModule?.RuntimeContext);
 		if (serializer.TryCreateSerializableType(type, out SerializableType? serializableType, out string? failureReason))
 		{
 			return serializableType;
@@ -30,8 +30,8 @@ public static class SerializableTypes
 	public static List<SerializableType> CreateMultiple(TypeDefinition type) => CreateMultiple(type, DefaultUnityVersion);
 	public static List<SerializableType> CreateMultiple(TypeDefinition type, UnityVersion version)
 	{
-		FieldSerializer serializer = new(version);
-		Dictionary<ITypeDefOrRef, SerializableType> typeCache = [];
+		FieldSerializer serializer = new(version, type.DeclaringModule?.RuntimeContext);
+		Dictionary<ITypeDefOrRef, SerializableType> typeCache = new(type.DeclaringModule?.RuntimeContext?.SignatureComparer);
 		if (serializer.TryCreateSerializableType(type, typeCache, out _, out string? failureReason))
 		{
 			return typeCache.Values.ToList();

@@ -15,10 +15,10 @@ public static partial class Pass103_FillDependencyMethods
 		FieldDefinition currentField = injectedBaseType.Fields.First(t => t.Name == "_current");
 		MethodDefinition baseConstructor = injectedBaseType.GetDefaultConstructor();
 
-		ITypeDefOrRef commonPPtrTypeRef = SharedState.Instance.Importer.ImportType(typeof(PPtr));
+		TypeSignature commonPPtrTypeRef = SharedState.Instance.Importer.ImportTypeSignature(typeof(PPtr));
 		ITypeDefOrRef ienumerableRef = SharedState.Instance.Importer.ImportType(typeof(IEnumerable<>));
 		ITypeDefOrRef valueTupleRef = SharedState.Instance.Importer.ImportType(typeof(ValueTuple<,>));
-		GenericInstanceTypeSignature tupleGenericInstance = valueTupleRef.MakeGenericInstanceType(SharedState.Instance.Importer.String, commonPPtrTypeRef.ToTypeSignature());
+		GenericInstanceTypeSignature tupleGenericInstance = valueTupleRef.MakeGenericInstanceType(SharedState.Instance.Importer.String, commonPPtrTypeRef);
 		IMethodDescriptor emptyEnumerableMethod = SharedState.Instance.Importer.ImportMethod(typeof(Enumerable), m => m.Name == nameof(Enumerable.Empty))
 			.MakeGenericInstanceMethod(tupleGenericInstance);
 		GenericInstanceTypeSignature returnType = ienumerableRef.MakeGenericInstanceType(tupleGenericInstance);

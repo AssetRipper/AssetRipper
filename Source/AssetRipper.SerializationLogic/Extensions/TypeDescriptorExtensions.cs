@@ -17,11 +17,11 @@ internal static class TypeDescriptorExtensions
 		};
 	}
 
-	public static bool IsAssignableTo(this ITypeDescriptor typeRef, string ns, string name)
+	public static bool IsAssignableTo(this ITypeDescriptor typeRef, string ns, string name, RuntimeContext? runtimeContext)
 	{
-		if (typeRef.ToTypeSignature() is GenericInstanceTypeSignature genericInstanceTypeSignature)
+		if (typeRef.ToTypeSignature(runtimeContext) is GenericInstanceTypeSignature genericInstanceTypeSignature)
 		{
-			return genericInstanceTypeSignature.GenericType.IsAssignableTo(ns, name);
+			return genericInstanceTypeSignature.GenericType.IsAssignableTo(ns, name, runtimeContext);
 		}
 
 		if (typeRef.Namespace == ns && typeRef.Name == name)
@@ -29,49 +29,32 @@ internal static class TypeDescriptorExtensions
 			return true;
 		}
 
-		return typeRef.Resolve()?.IsSubclassOf(ns, name) ?? false;
+		return typeRef.Resolve(runtimeContext)?.InheritsFrom(ns, name, runtimeContext) ?? false;
 		// If we can't resolve our typeref or one of its base types,
 		// let's assume it is not assignable to our target type
 	}
 
-	public static bool IsAssignableTo(this ITypeDescriptor typeRef, string typeName)
+	public static bool InheritsFromObject(this ITypeDescriptor type, RuntimeContext? runtimeContext)
 	{
-		if (typeRef.ToTypeSignature() is GenericInstanceTypeSignature genericInstanceTypeSignature)
-		{
-			return genericInstanceTypeSignature.GenericType.IsAssignableTo(typeName);
-		}
-
-		if (typeRef.FullName == typeName)
-		{
-			return true;
-		}
-
-		return typeRef.Resolve()?.IsSubclassOf(typeName) ?? false;
-		// If we can't resolve our typeref or one of its base types,
-		// let's assume it is not assignable to our target type
+		return type.IsAssignableTo("UnityEngine", "Object", runtimeContext);
 	}
 
-	public static bool InheritsFromObject(this ITypeDescriptor type)
+	public static bool IsEnum(this ITypeDescriptor type, RuntimeContext? runtimeContext)
 	{
-		return type.IsAssignableTo("UnityEngine", "Object");
+		return type.GetIsValueType(runtimeContext) && !type.IsPrimitive(runtimeContext) && type.CheckedResolve(runtimeContext).IsEnum;
 	}
 
-	public static bool IsEnum(this ITypeDescriptor type)
+	public static bool IsStruct(this ITypeDescriptor type, RuntimeContext? runtimeContext)
 	{
-		return type.IsValueType && !type.IsPrimitive() && type.CheckedResolve().IsEnum;
+		return type.GetIsValueType(runtimeContext) && !type.IsPrimitive(runtimeContext) && !type.IsEnum(runtimeContext) && !IsSystemDecimal(type);
 	}
 
-	public static bool IsStruct(this ITypeDescriptor type)
+	public static bool IsPrimitive(this ITypeDescriptor type, RuntimeContext? runtimeContext)
 	{
-		return type.IsValueType && !type.IsPrimitive() && !type.IsEnum() && !IsSystemDecimal(type);
+		return type.ToTypeSignature(runtimeContext) is CorLibTypeSignature;
 	}
 
-	public static bool IsPrimitive(this ITypeDescriptor type)
-	{
-		return type.ToTypeSignature() is CorLibTypeSignature;
-	}
-
-	public static bool IsArray(this ITypeDescriptor type)
+	public static bool IsArray(this ITypeDescriptor type, RuntimeContext? runtimeContext)
 	{
 		if (type is TypeDefinition or TypeReference)
 		{
@@ -79,7 +62,7 @@ internal static class TypeDescriptorExtensions
 			return false;
 		}
 
-		return type.ToTypeSignature() is SzArrayTypeSignature or ArrayTypeSignature;
+		return type.ToTypeSignature(runtimeContext) is SzArrayTypeSignature or ArrayTypeSignature;
 	}
 
 	private static bool IsSystemDecimal(ITypeDescriptor type)

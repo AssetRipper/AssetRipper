@@ -9,25 +9,12 @@ internal static class ModuleExtensions
 		IList<TypeDefinition> types = module.TopLevelTypes;
 		foreach (TypeDefinition type in types)
 		{
-			if ((type.Namespace ?? "") == @namespace && type.Name == name)
+			if ((type.Namespace ?? AsmResolver.Utf8String.Empty) == @namespace && type.Name == name)
 			{
 				return type;
 			}
 		}
 
 		return null;
-	}
-
-	public static void SetResolver(this ModuleDefinition module, IAssemblyResolver assemblyResolver)
-	{
-		module.MetadataResolver = new DefaultMetadataResolver(assemblyResolver);
-	}
-
-	public static void InitializeResolvers(this AssemblyDefinition assembly, BaseManager assemblyManager)
-	{
-		for (int i = 0; i < assembly.Modules.Count; i++)
-		{
-			assembly.Modules[i].SetResolver(assemblyManager.AssemblyResolver);
-		}
 	}
 }

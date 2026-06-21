@@ -114,33 +114,35 @@ internal sealed class SharedState : AssemblyBuilder
 
 	private void AddReferenceModules()
 	{
-		AddLocalReferenceModule("AssetRipper.Assets");
-		AddLocalReferenceModule("AssetRipper.IO.Endian");
-		AddLocalReferenceModule("AssetRipper.IO.Files");
-		AddLocalReferenceModule("AssetRipper.Numerics");
-		AddLocalReferenceModule("AssetRipper.Primitives");
 		AddSystemReferenceModule("System.Runtime");
 		AddSystemReferenceModule("System.Numerics.Vectors");
 		AddSystemReferenceModule("System.Linq");
 		AddSystemReferenceModule("System.Collections");
 		AddSystemReferenceModule("System.Text.Json");
 		AddSystemReferenceModule("System.Threading");
+		AddLocalReferenceModule("AssetRipper.Assets");
+		AddLocalReferenceModule("AssetRipper.IO.Endian");
+		AddLocalReferenceModule("AssetRipper.IO.Files");
+		AddLocalReferenceModule("AssetRipper.Numerics");
+		AddLocalReferenceModule("AssetRipper.Primitives");
 		AddLocalReferenceModule("AssetRipper.AssemblyDumper");//needed for member cloning
 	}
 
 	private void AddLocalReferenceModule(string name)
 	{
-		string path = Path.Combine(AppContext.BaseDirectory, $"{name}.dll");
-		ModuleDefinition module = ModuleDefinition.FromFile(path);
-		Importer.AddReferenceModule(module);
+		string path = Path.Join(AppContext.BaseDirectory, $"{name}.dll");
+		AssemblyDefinition assembly = AssemblyDefinition.FromFile(path, createRuntimeContext: false);
+		RuntimeContext.AddAssembly(assembly);
+		Importer.AddReferenceModule(assembly.ManifestModule!);
 	}
 
 	private void AddSystemReferenceModule(string name)
 	{
 		string fileName = $"{name}.dll";
 		byte[] imageData = Basic.Reference.Assemblies.Net100.ReferenceInfos.AllValues.First(t => t.FileName == fileName).ImageBytes;
-		ModuleDefinition module = ModuleDefinition.FromBytes(imageData);
-		Importer.AddReferenceModule(module);
+		AssemblyDefinition assembly = AssemblyDefinition.FromBytes(imageData, createRuntimeContext: false);
+		RuntimeContext.AddAssembly(assembly);
+		Importer.AddReferenceModule(assembly.ManifestModule!);
 	}
 
 	public static void Clear() => _instance = null;

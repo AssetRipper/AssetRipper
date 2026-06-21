@@ -4,7 +4,7 @@ using AssetRipper.SerializationLogic.Extensions;
 
 namespace AssetRipper.SerializationLogic;
 
-public readonly partial struct FieldSerializer(UnityVersion version)
+public readonly partial struct FieldSerializer(UnityVersion version, RuntimeContext? runtimeContext)
 {
 	/// <summary>
 	/// Not sure about the exact version boundary, structs are supposedly only serializable on 4.5.0 and greater.
@@ -56,7 +56,7 @@ public readonly partial struct FieldSerializer(UnityVersion version)
 
 		// Don't try to resolve types that come from Windows assembly,
 		// as serialization weaver will fail to resolve that (due to it being in platform specific SDKs)
-		if (ShouldNotTryToResolve(fieldDefinition.Signature!.FieldType))
+		if (ShouldNotTryToResolve(fieldType))
 		{
 			return false;
 		}
@@ -86,7 +86,7 @@ public readonly partial struct FieldSerializer(UnityVersion version)
 			return IsValueTypeSerializable(fieldType);
 		}
 
-		if (fieldType is SzArrayTypeSignature || AsmUtils.IsGenericList(fieldType))
+		if (fieldType is SzArrayTypeSignature || AsmUtils.IsGenericList(fieldType, runtimeContext))
 		{
 			if (!fieldDefinition.HasSerializeReferenceAttribute())
 			{
@@ -107,14 +107,14 @@ public readonly partial struct FieldSerializer(UnityVersion version)
 		return true;
 	}
 
-	private static bool IsDelegate(ITypeDescriptor typeReference)
+	private bool IsDelegate(ITypeDescriptor typeReference)
 	{
-		return typeReference.IsAssignableTo("System", "Delegate");
+		return typeReference.IsAssignableTo("System", "Delegate", runtimeContext);
 	}
 
-	private static IEnumerable<FieldDefinition> AllFieldsFor(TypeDefinition definition)
+	private IEnumerable<FieldDefinition> AllFieldsFor(TypeDefinition definition)
 	{
-		TypeDefinition? baseType = definition.BaseType?.Resolve();
+		TypeDefinition? baseType = definition.BaseType?.Resolve(runtimeContext);
 
 		if (baseType != null)
 		{
@@ -130,7 +130,7 @@ public readonly partial struct FieldSerializer(UnityVersion version)
 		}
 	}
 
-	private static bool ShouldNotTryToResolve(ITypeDescriptor typeReference)
+	private bool ShouldNotTryToResolve(ITypeDescriptor typeReference)
 	{
 		if (typeReference is TypeDefinition)
 		{
@@ -146,7 +146,7 @@ public readonly partial struct FieldSerializer(UnityVersion version)
 
 		if (typeReferenceScopeName == "mscorlib")
 		{
-			TypeDefinition? resolved = typeReference.Resolve();
+			TypeDefinition? resolved = typeReference.Resolve(runtimeContext);
 			return resolved == null;
 		}
 
@@ -155,7 +155,7 @@ public readonly partial struct FieldSerializer(UnityVersion version)
 			// but actually there's .winmd file in the current directory. RRW will fix this
 			// at a later step, so we will not try to resolve this type. This is OK, as any
 			// type defined in a winmd cannot be serialized.
-			typeReference.Resolve();
+			typeReference.Resolve(runtimeContext);
 		}
 		catch
 		{
@@ -167,15 +167,15 @@ public readonly partial struct FieldSerializer(UnityVersion version)
 
 	private bool IsValueTypeSerializable(TypeSignature typeReference)
 	{
-		if (typeReference.IsPrimitive())
+		if (typeReference.IsPrimitive(runtimeContext))
 		{
 			return IsSerializablePrimitive((CorLibTypeSignature)typeReference);
 		}
 
-		if (typeReference.IsEnum())
+		if (typeReference.IsEnum(runtimeContext))
 		{
 			// Enums are serializable as long as their underlying type is serializable
-			TypeDefinition typeDefinition = typeReference.CheckedResolve();
+			TypeDefinition typeDefinition = typeReference.CheckedResolve(runtimeContext);
 			CorLibTypeSignature underlyingType = (CorLibTypeSignature)typeDefinition.GetEnumUnderlyingType()!;
 			return IsSerializablePrimitive(underlyingType);
 		}
@@ -192,12 +192,12 @@ public readonly partial struct FieldSerializer(UnityVersion version)
 			return IsSerializablePrimitive(corLibTypeSignature);
 		}
 
-		if (AsmUtils.IsGenericDictionary(fieldType))
+		if (AsmUtils.IsGenericDictionary(fieldType, runtimeContext))
 		{
 			return false;
 		}
 
-		if (EngineTypePredicates.IsUnityEngineObject(fieldType) || EngineTypePredicates.IsSerializableUnityClass(fieldType) || ShouldImplementIDeserializable(fieldType))
+		if (EngineTypePredicates.IsUnityEngineObject(fieldType, runtimeContext) || EngineTypePredicates.IsSerializableUnityClass(fieldType, runtimeContext) || ShouldImplementIDeserializable(fieldType))
 		{
 			return true;
 		}
@@ -236,9 +236,9 @@ public readonly partial struct FieldSerializer(UnityVersion version)
 
 	private bool IsSupportedCollection(TypeSignature fieldType)
 	{
-		if (fieldType is SzArrayTypeSignature || AsmUtils.IsGenericList(fieldType))
+		if (fieldType is SzArrayTypeSignature || AsmUtils.IsGenericList(fieldType, runtimeContext))
 		{
-			return IsTypeSerializable(AsmUtils.ElementTypeOfCollection(fieldType));
+			return IsTypeSerializable(AsmUtils.ElementTypeOfCollection(fieldType, runtimeContext));
 		}
 
 		return false;
@@ -249,30 +249,30 @@ public readonly partial struct FieldSerializer(UnityVersion version)
 		return field.DeclaringType is not null && EngineTypePredicates.IsUnityEngineValueType(field.DeclaringType);
 	}
 
-	private static bool IsNonSerialized([NotNullWhen(false)] ITypeDescriptor? typeDeclaration)
+	private bool IsNonSerialized([NotNullWhen(false)] ITypeDescriptor? typeDeclaration)
 	{
 		if (typeDeclaration == null)
 		{
 			return true;
 		}
 
-		if (typeDeclaration.ToTypeSignature() is GenericInstanceTypeSignature genericInstanceTypeSignature
+		if (typeDeclaration.ToTypeSignature(runtimeContext) is GenericInstanceTypeSignature genericInstanceTypeSignature
 			&& genericInstanceTypeSignature.TypeArguments.Any(t => t is GenericParameterSignature))
 		{
 			return true;
 		}
 
-		if (typeDeclaration.ToTypeSignature() is CorLibTypeSignature { ElementType: ElementType.Object })
+		if (typeDeclaration.ToTypeSignature(runtimeContext) is CorLibTypeSignature { ElementType: ElementType.Object })
 		{
 			return true;
 		}
 
-		if (typeDeclaration.IsArray())
+		if (typeDeclaration.IsArray(runtimeContext))
 		{
 			return true;
 		}
 
-		if (typeDeclaration.IsEnum())
+		if (typeDeclaration.IsEnum(runtimeContext))
 		{
 			return true;
 		}
@@ -304,7 +304,7 @@ public readonly partial struct FieldSerializer(UnityVersion version)
 			return true;
 		}
 
-		TypeDefinition resolvedTypeDeclaration = typeDeclaration.CheckedResolve();
+		TypeDefinition resolvedTypeDeclaration = typeDeclaration.CheckedResolve(runtimeContext);
 
 		bool isSerializable = resolvedTypeDeclaration.IsSerializable;
 
@@ -318,14 +318,14 @@ public readonly partial struct FieldSerializer(UnityVersion version)
 		isSerializable &= !resolvedTypeDeclaration.IsCompilerGenerated();
 
 		//If serializable, also check we're not a generic instance
-		isSerializable &= IsGenericInstanceSerializable || typeDeclaration.ToTypeSignature() is not GenericInstanceTypeSignature;
+		isSerializable &= IsGenericInstanceSerializable || typeDeclaration.ToTypeSignature(runtimeContext) is not GenericInstanceTypeSignature;
 
-		if (typeDeclaration.IsValueType)
+		if (typeDeclaration.GetIsValueType(runtimeContext))
 		{
 			return isSerializable && IsStructSerializable;
 		}
 
 		//Reference types can be serializable, or they can be MB/SO.
-		return isSerializable || resolvedTypeDeclaration.InheritsFromMonoBehaviour() || resolvedTypeDeclaration.InheritsFromScriptableObject();
+		return isSerializable || resolvedTypeDeclaration.InheritsFromMonoBehaviour(runtimeContext) || resolvedTypeDeclaration.InheritsFromScriptableObject(runtimeContext);
 	}
 }

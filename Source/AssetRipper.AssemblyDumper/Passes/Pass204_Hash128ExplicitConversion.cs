@@ -16,8 +16,8 @@ public static class Pass204_Hash128ExplicitConversion
 
 	private static void AddConversion(this TypeDefinition type)
 	{
-		ITypeDefOrRef returnType = SharedState.Instance.Importer.ImportType<Hash128>();
-		MethodDefinition method = type.AddMethod("op_Explicit", ConversionAttributes, returnType.ToTypeSignature());
+		TypeSignature returnType = SharedState.Instance.Importer.ImportTypeSignature<Hash128>();
+		MethodDefinition method = type.AddMethod("op_Explicit", ConversionAttributes, returnType);
 		method.AddParameter(type.ToTypeSignature(), "value");
 		method.CilMethodBody!.InitializeLocals = true;
 

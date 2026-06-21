@@ -10,7 +10,7 @@ internal static class Pass300_NamedInterface
 
 	public static void DoPass()
 	{
-		TypeSignature utf8StringSignature = SharedState.Instance.Importer.ImportType<Utf8String>().ToTypeSignature();
+		TypeSignature utf8StringSignature = SharedState.Instance.Importer.ImportTypeSignature<Utf8String>();
 		ITypeDefOrRef hasNameInterface = SharedState.Instance.Importer.ImportType<INamed>();
 		foreach (ClassGroupBase group in SharedState.Instance.AllGroups)
 		{
@@ -20,7 +20,7 @@ internal static class Pass300_NamedInterface
 
 	private static void DoPassOnGroup(ClassGroupBase group, ITypeDefOrRef hasNameInterface, TypeSignature utf8StringSignature)
 	{
-		if (group.Types.All(t => t.TryGetNameField(true, out var _)))
+		if (group.Types.All(t => t.TryGetNameField(true, out _)))
 		{
 			TypeDefinition groupInterface = group.Interface;
 			groupInterface.AddInterfaceImplementation(hasNameInterface);
