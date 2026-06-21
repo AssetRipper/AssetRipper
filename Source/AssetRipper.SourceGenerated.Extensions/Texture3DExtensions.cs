@@ -68,13 +68,20 @@ public static class Texture3DExtensions
 
 	public static TextureFormat GetTextureFormat(this ITexture3D texture)
 	{
-		if (texture.Has_Format_Int32())
+		try
 		{
-			return ((GraphicsFormat)texture.Format_Int32).ToTextureFormat();
+			if (texture.Has_Format_Int32())
+			{
+				return ((GraphicsFormat)texture.Format_Int32).ToTextureFormat();
+			}
+			else
+			{
+				return ((GraphicsFormat)texture.Format_UInt32).ToTextureFormat();
+			}
 		}
-		else
+		catch
 		{
-			return ((GraphicsFormat)texture.Format_UInt32).ToTextureFormat();
+			return TextureFormat.RGBA32; // Default fallback
 		}
 	}
 
