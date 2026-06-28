@@ -51,6 +51,11 @@ public sealed record class ExportSettings
 
 	public bool ExportUnreadableAssets { get; set; } = false;
 
+	/// <summary>
+	/// Should Unity packages be automatically detected from loaded assemblies?
+	/// </summary>
+	public PackageDetectionMode PackageDetectionMode { get; set; } = PackageDetectionMode.Off;
+
 	public bool SaveSettingsToDisk { get; set; }
 
 	public string? LanguageCode { get; set; }
@@ -66,5 +71,6 @@ public sealed record class ExportSettings
 		Logger.Info(LogCategory.General, $"{nameof(SpriteExportMode)}: {SpriteExportMode}");
 		Logger.Info(LogCategory.General, $"{nameof(TextExportMode)}: {TextExportMode}");
 		Logger.Info(LogCategory.General, $"{nameof(ExportUnreadableAssets)}: {ExportUnreadableAssets}");
+		Logger.Info(LogCategory.General, $"{nameof(PackageDetectionMode)}: {PackageDetectionMode}");
 	}
 }
