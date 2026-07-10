@@ -32,7 +32,7 @@ public sealed class PrefabHierarchyObject : GameObjectHierarchyObject, INamed
 
 	public override IEnumerable<IUnityObjectBase> Assets => base.Assets.Append(Prefab);
 
-	public Utf8String Name { get => Root.Name; set => throw new NotSupportedException(); }
+	public Utf8String Name { get => Root.Name; set => Root.Name = value; }
 
 	public PrefabHierarchyObject(AssetInfo assetInfo, IGameObject root, IPrefabInstance prefab) : base(assetInfo)
 	{
@@ -88,4 +88,14 @@ public sealed class PrefabHierarchyObject : GameObjectHierarchyObject, INamed
 
 		return prefabHierarchy;
 	}
+
+	public override string? OriginalPath { get => Root.OriginalPath; set => Root.OriginalPath = value; }
+	public override string? OverridePath { get => Root.OverridePath; set => Root.OverridePath = value; }
+	public override string? OriginalDirectory { get => Root.OriginalDirectory; set => Root.OriginalDirectory = value; }
+	public override string? OverrideDirectory { get => Root.OverrideDirectory; set => Root.OverrideDirectory = value; }
+	public override string? OriginalName { get => Root.OriginalName; set => Root.OriginalName = value; }
+	public override string? OverrideName { get => Root.OverrideName; set => Root.OverrideName = value; }
+	public override string? OriginalExtension { get => Root.OriginalExtension; set => Root.OriginalExtension = value; }
+	public override string? OverrideExtension { get => Root.OverrideExtension; set => Root.OverrideExtension = value; }
+	public override string? AssetBundleName { get => Root.AssetBundleName; set => Root.AssetBundleName = value; }
 }

@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace AssetRipper.Processing;
 
-public abstract class AssetGroup : UnityObjectBase
+public abstract class AssetGroup : GeneratedObjectBase
 {
 	protected AssetGroup(AssetInfo assetInfo) : base(assetInfo)
 	{
@@ -14,7 +14,6 @@ public abstract class AssetGroup : UnityObjectBase
 
 	public virtual void SetMainAsset()
 	{
-		MainAsset = this;
 		foreach (IUnityObjectBase asset in Assets)
 		{
 			Debug.Assert(asset.MainAsset is null || asset.MainAsset == this, "Asset already has a main asset assigned.");
@@ -23,4 +22,6 @@ public abstract class AssetGroup : UnityObjectBase
 	}
 
 	protected PPtr AssetToPPtr(IUnityObjectBase? asset) => Collection.ForceCreatePPtr(asset);
+
+	public override IUnityObjectBase? MainAsset { get => this; set { } }
 }
