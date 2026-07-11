@@ -21,22 +21,26 @@ public sealed class AudioClipExporter : BinaryAssetExporter
 	{
 		if (asset is IAudioClip audio)
 		{
-			if (AudioClipDecoder.TryDecode(audio, out byte[]? decodedData, out string? fileExtension, out string? message))
+			if (!AudioClipDecoder.TryDecode(audio, out byte[]? decodedData, out string? fileExtension, out string? message))
 			{
-				if (AudioFormat == AudioExportFormat.PreferWav && fileExtension == "ogg")
-				{
-					exportCollection = new AudioClipExportCollection(this, audio, AudioConverter.OggToWav(decodedData), "wav");
-				}
-				else
-				{
-					exportCollection = new AudioClipExportCollection(this, audio, decodedData, fileExtension);
-				}
-
-				return true;
+				Logger.Warning(LogCategory.Export, message);
+			}
+			else if (decodedData.Length == 0)
+			{
+				Logger.Warning(LogCategory.Export, $"Decoded audio data is empty for '{audio.Name}'");
 			}
 			else
 			{
-				Logger.Error(LogCategory.Export, message);
+				if (AudioFormat == AudioExportFormat.PreferWav && fileExtension == "ogg")
+				{
+					exportCollection = new AudioClipExportCollection(this, audio, "wav");
+				}
+				else
+				{
+					exportCollection = new AudioClipExportCollection(this, audio, fileExtension);
+				}
+
+				return true;
 			}
 		}
 
