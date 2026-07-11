@@ -170,11 +170,25 @@ public sealed partial class SettingsPage : DefaultPage
 								}
 								using (new Div(writer).WithClass("col").End())
 								{
-									WriteCheckBoxForSaveSettingsToDisk(writer, Localization.SaveSettingsToDisk);
+									WriteCheckBoxForPreferOriginalTextureExtension(writer, Localization.PreferOriginalTextureExtension);
 								}
 								using (new Div(writer).WithClass("col").End())
 								{
 									WriteCheckBoxForExportUnreadableAssets(writer, Localization.ExportUnreadableAssets);
+								}
+							}
+
+							using (new Div(writer).WithClass("row").End())
+							{
+								using (new Div(writer).WithClass("col").End())
+								{
+								}
+								using (new Div(writer).WithClass("col").End())
+								{
+									WriteCheckBoxForSaveSettingsToDisk(writer, Localization.SaveSettingsToDisk);
+								}
+								using (new Div(writer).WithClass("col").End())
+								{
 								}
 							}
 						}

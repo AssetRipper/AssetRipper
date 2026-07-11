@@ -57,7 +57,7 @@ public class TextureExportCollection : AssetsExportCollection<ITexture2D>
 	{
 		if (m_convert)
 		{
-			return ((TextureAssetExporter)AssetExporter).ImageExportFormat.GetFileExtension();
+			return asset.GetTextureExtension(AssetExporter.PreferOriginalTextureExtension, AssetExporter.ImageExportFormat);
 		}
 		return base.GetExportExtension(asset);
 	}
@@ -197,6 +197,8 @@ public class TextureExportCollection : AssetsExportCollection<ITexture2D>
 			}
 		}
 	}
+
+	private new TextureAssetExporter AssetExporter => (TextureAssetExporter)base.AssetExporter;
 
 	/// <summary>
 	/// If exportSprites is false, we do not generate sprite sheet into texture importer,

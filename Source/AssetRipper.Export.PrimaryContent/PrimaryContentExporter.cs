@@ -6,7 +6,6 @@ using AssetRipper.Export.PrimaryContent.DeletedAssets;
 using AssetRipper.Export.PrimaryContent.Models;
 using AssetRipper.Export.PrimaryContent.Scripts;
 using AssetRipper.Export.PrimaryContent.Textures;
-using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Logging;
 using AssetRipper.Processing;
 using AssetRipper.Processing.Prefabs;
@@ -115,7 +114,7 @@ public sealed class PrimaryContentExporter
 
 		RegisterHandler<IAudioClip>(new AudioContentExtractor());
 
-		RegisterHandler<IImageTexture>(new TextureExporter(settings.ExportSettings.ImageExportFormat));
+		RegisterHandler<IImageTexture>(new TextureExporter(settings.ExportSettings.ImageExportFormat, settings.ExportSettings.PreferOriginalTextureExtension));
 
 		RegisterHandler<IMonoScript>(new ScriptContentExtractor(gameData.AssemblyManager, settings.ExportSettings.ScriptLanguageVersion.ToCSharpLanguageVersion(gameData.ProjectVersion)));
 

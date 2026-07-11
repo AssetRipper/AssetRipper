@@ -150,7 +150,7 @@ internal static class AssetAPI
 	{
 		if (context.Request.Query.TryGetValue(Extension, out extension))
 		{
-			return ImageExportFormatExtensions.TryGetFromExtension(extension, out format);
+			return ImageExportFormat.TryGetFromExtension(extension, out format);
 		}
 		else
 		{

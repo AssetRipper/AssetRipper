@@ -1,4 +1,6 @@
-﻿namespace AssetRipper.Export.Configuration;
+﻿using AssetRipper.Assets;
+
+namespace AssetRipper.Export.Configuration;
 
 public enum ImageExportFormat
 {
@@ -36,34 +38,65 @@ public enum ImageExportFormat
 
 public static class ImageExportFormatExtensions
 {
-	public static string GetFileExtension(this ImageExportFormat _this)
+	extension(ImageExportFormat format)
 	{
-		return _this switch
+		public string GetFileExtension()
 		{
-			ImageExportFormat.Bmp => "bmp",
-			ImageExportFormat.Exr => "exr",
-			ImageExportFormat.Hdr => "hdr",
-			ImageExportFormat.Jpeg => "jpeg",
-			ImageExportFormat.Png => "png",
-			ImageExportFormat.Tga => "tga",
-			_ => throw new ArgumentOutOfRangeException(nameof(_this)),
-		};
+			return format switch
+			{
+				ImageExportFormat.Bmp => "bmp",
+				ImageExportFormat.Exr => "exr",
+				ImageExportFormat.Hdr => "hdr",
+				ImageExportFormat.Jpeg => "jpeg",
+				ImageExportFormat.Png => "png",
+				ImageExportFormat.Tga => "tga",
+				_ => throw new ArgumentOutOfRangeException(nameof(format)),
+			};
+		}
+
 	}
 
-	//When extension types come in C# 13, this will be more convenient to use.
-	public static bool TryGetFromExtension(string extension, out ImageExportFormat format)
+	extension(ImageExportFormat)
 	{
-		format = extension switch
+		public static bool TryGetFromExtension([NotNullWhen(true)] string? extension, out ImageExportFormat format)
 		{
-			"bmp" => ImageExportFormat.Bmp,
-			"exr" => ImageExportFormat.Exr,
-			"hdr" => ImageExportFormat.Hdr,
-			"jpeg" => ImageExportFormat.Jpeg,
-			"jpg" => ImageExportFormat.Jpeg,
-			"png" => ImageExportFormat.Png,
-			"tga" => ImageExportFormat.Tga,
-			_ => (ImageExportFormat)(-1),
-		};
-		return format >= 0;
+			format = extension switch
+			{
+				"bmp" => ImageExportFormat.Bmp,
+				"exr" => ImageExportFormat.Exr,
+				"hdr" => ImageExportFormat.Hdr,
+				"jpeg" => ImageExportFormat.Jpeg,
+				"jpg" => ImageExportFormat.Jpeg,
+				"png" => ImageExportFormat.Png,
+				"tga" => ImageExportFormat.Tga,
+				_ => (ImageExportFormat)(-1),
+			};
+			return format >= 0;
+		}
+	}
+
+	extension(IUnityObjectBase asset)
+	{
+		public string GetTextureExtension(bool preferOriginalTextureExtension, ImageExportFormat imageExportFormat)
+		{
+			if (preferOriginalTextureExtension)
+			{
+				string? originalExtension = asset.GetBestExtension();
+				if (ImageExportFormat.TryGetFromExtension(originalExtension, out _))
+				{
+					return originalExtension;
+				}
+			}
+			return imageExportFormat.GetFileExtension();
+		}
+
+		public ImageExportFormat GetTextureExportFormat(bool preferOriginalTextureExtension, ImageExportFormat imageExportFormat)
+		{
+			if (preferOriginalTextureExtension && ImageExportFormat.TryGetFromExtension(asset.GetBestExtension(), out ImageExportFormat format))
+			{
+				return format;
+			}
+			return imageExportFormat;
+		}
 	}
 }
