@@ -6,16 +6,16 @@ public abstract class ExportCollectionBase
 {
 	public abstract bool Contains(IUnityObjectBase asset);
 	public abstract bool Export(string projectDirectory, FileSystem fileSystem);
-	protected void ExportAsset(IUnityObjectBase asset, string path, string name, FileSystem fileSystem)
+	protected void ExportAsset(IUnityObjectBase asset, string directory, string name, FileSystem fileSystem)
 	{
-		if (!fileSystem.Directory.Exists(path))
+		if (!fileSystem.Directory.Exists(directory))
 		{
-			fileSystem.Directory.Create(path);
+			fileSystem.Directory.Create(directory);
 		}
 
 		string fullName = $"{name}.{ExportExtension}";
-		string uniqueName = fileSystem.GetUniqueName(path, fullName, FileSystem.MaxFileNameLength);
-		string filePath = fileSystem.Path.Join(path, uniqueName);
+		string uniqueName = fileSystem.GetUniqueName(directory, fullName, FileSystem.MaxFileNameLength);
+		string filePath = fileSystem.Path.Join(directory, uniqueName);
 		ContentExtractor.Export(asset, filePath, fileSystem);
 	}
 
