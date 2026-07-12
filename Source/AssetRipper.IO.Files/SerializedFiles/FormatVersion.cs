@@ -77,9 +77,17 @@ public enum FormatVersion
 	/// </summary>
 	StoresTypeDependencies = 21,
 	/// <summary>
-	/// 2020.1 to x
+	/// 2020.1 to 6000.5.0a4
 	/// </summary>
 	LargeFilesSupport = 22,
+	/// <summary>
+	/// 6000.5.0a5 to x<br />
+	/// This adds support for supplying typetrees in a separate bundle from the main data.
+	/// the type tree data in SerializedType is prefixed with (Hash128 treeHash, u32 treeSize) for looking up the hash in the tree cache
+	/// the hash alg is xxh3_128, not sure if thats the same for other hash128s (don't think so though)
+	/// those type tree archives seem to just be assetbundles with each node being one stored typetree
+	/// </summary>
+	ExtractedTypeTreeSupport = 23,
 }
 internal static class FormatVersionExtensions
 {

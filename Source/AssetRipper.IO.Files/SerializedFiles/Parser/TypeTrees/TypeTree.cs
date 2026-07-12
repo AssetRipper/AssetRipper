@@ -6,8 +6,36 @@ namespace AssetRipper.IO.Files.SerializedFiles.Parser.TypeTrees;
 
 public sealed class TypeTree : IEquatable<TypeTree?>
 {
+	/// <summary>
+	/// "tthm"
+	/// </summary>
+	private const uint TypeTreeHeaderMagic = 0x7474686D;
+
+	public void Clear()
+	{
+		Nodes.Clear();
+		StringBuffer = [];
+	}
+
 	internal void Read(SerializedReader reader)
 	{
+		// Header
+		if (reader.Generation >= FormatVersion.ExtractedTypeTreeSupport)
+		{
+			uint magic = reader.ReadUInt32();
+			if (magic != TypeTreeHeaderMagic)
+			{
+				throw new InvalidDataException($"Invalid TypeTreeHeader magic: {magic:X8}");
+			}
+
+			FormatVersion version = (FormatVersion)reader.ReadInt32();
+			if (reader.Generation != version)
+			{
+				throw new InvalidDataException($"Mismatched TypeTreeHeader version: {version}");
+			}
+		}
+
+		// Nodes and string buffer
 		if (TypeTreeNode.IsFormat5(reader.Generation))
 		{
 			int nodesCount = reader.ReadInt32();

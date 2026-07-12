@@ -41,7 +41,15 @@ public abstract partial class SerializedTypeBase
 	/// </summary>
 	public TypeTrees.TypeTree OldType { get; } = new();
 	public Hash128 ScriptID { get; set; }
+	/// <summary>
+	/// md4
+	/// </summary>
 	public Hash128 OldTypeHash { get; set; }
+	/// <summary>
+	/// xxh3_128, ie xxHash128
+	/// </summary>
+	public Hash128 ExtractedTypeTreeHash { get; set; }
+	public bool IsTypeTreeExtracted { get; set; }
 
 	internal void Read(SerializedReader reader, bool hasTypeTree)
 	{
@@ -78,7 +86,27 @@ public abstract partial class SerializedTypeBase
 
 		if (hasTypeTree)
 		{
-			OldType.Read(reader);
+			if (reader.Generation >= FormatVersion.ExtractedTypeTreeSupport)
+			{
+				ExtractedTypeTreeHash = Hash128.Read(reader); // xxh3
+				int typeTreeSize = reader.ReadInt32();
+				if (typeTreeSize != 0)
+				{
+					IsTypeTreeExtracted = false;
+					OldType.Read(reader);
+				}
+				else
+				{
+					IsTypeTreeExtracted = true;
+					OldType.Clear();
+				}
+			}
+			else
+			{
+				ExtractedTypeTreeHash = default;
+				IsTypeTreeExtracted = false;
+				OldType.Read(reader);
+			}
 			if (reader.Generation < FormatVersion.HasTypeTreeHashes)
 			{
 				//OldTypeHash gets recalculated here in a complicated way on 2023.
