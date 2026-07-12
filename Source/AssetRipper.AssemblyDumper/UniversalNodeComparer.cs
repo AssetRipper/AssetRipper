@@ -1,13 +1,7 @@
-﻿using AssetRipper.IO.Files.SerializedFiles;
-
-namespace AssetRipper.AssemblyDumper;
+﻿namespace AssetRipper.AssemblyDumper;
 
 internal class UniversalNodeComparer
 {
-	private const TransferMetaFlags MetaMask = TransferMetaFlags.TreatIntegerValueAsBoolean
-		| TransferMetaFlags.AlignBytes
-		| TransferMetaFlags.TransferUsingFlowMappingStyle;
-
 	public static bool Equals(UniversalNode? left, UniversalNode? right, bool root)
 	{
 		if (left is null || right is null)
@@ -39,8 +33,7 @@ internal class UniversalNodeComparer
 			//Console.WriteLine($"\tInequal because version {left.Version} doesn't match {right.Version}");
 			return false;
 		}
-		if (!root && (left.MetaFlag & MetaMask) != (right.MetaFlag & MetaMask))
-		//if (!root && left.MetaFlag != right.MetaFlag)
+		if (!root && left.MetaFlag != right.MetaFlag)
 		{
 			//Console.WriteLine($"\tInequal because meta flag {left.MetaFlag} doesn't match {right.MetaFlag}");
 			return false;
@@ -56,6 +49,59 @@ internal class UniversalNodeComparer
 			{
 				return false;
 			}
+		}
+		return true;
+	}
+
+	public static bool Equals(UniversalClass? left, UniversalClass? right)
+	{
+		if (left is null || right is null)
+		{
+			return left is null && right is null;
+		}
+		if (left.Name != right.Name)
+		{
+			return false;
+		}
+		if (left.OriginalName != right.OriginalName)
+		{
+			return false;
+		}
+		if (left.TypeID != right.TypeID)
+		{
+			return false;
+		}
+		if (left.OriginalTypeID != right.OriginalTypeID)
+		{
+			return false;
+		}
+		if (left.BaseString != right.BaseString)
+		{
+			return false;
+		}
+		if (left.IsAbstract != right.IsAbstract)
+		{
+			return false;
+		}
+		if (left.IsEditorOnly != right.IsEditorOnly)
+		{
+			return false;
+		}
+		if (left.IsReleaseOnly != right.IsReleaseOnly)
+		{
+			return false;
+		}
+		if (left.IsStripped != right.IsStripped)
+		{
+			return false;
+		}
+		if (!Equals(left.EditorRootNode, right.EditorRootNode, true))
+		{
+			return false;
+		}
+		if (!Equals(left.ReleaseRootNode, right.ReleaseRootNode, true))
+		{
+			return false;
 		}
 		return true;
 	}

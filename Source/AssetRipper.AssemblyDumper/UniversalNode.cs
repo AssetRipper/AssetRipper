@@ -2,7 +2,6 @@
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.Tpk.Shared;
 using AssetRipper.Tpk.TypeTrees;
-using System.Diagnostics;
 
 namespace AssetRipper.AssemblyDumper;
 
@@ -43,6 +42,16 @@ internal sealed class UniversalNode : IEquatable<UniversalNode>, IDeepCloneable<
 	public bool AlignBytes => MetaFlag.IsAlignBytes();
 	public bool TreatIntegerAsBoolean => MetaFlag.IsTreatIntegerValueAsBoolean();
 	private bool TreatIntegerAsChar => MetaFlag.IsCharPropertyMask();
+
+	private const TransferMetaFlags PrimitiveMask =
+		TransferMetaFlags.TreatIntegerValueAsBoolean |
+		TransferMetaFlags.CharPropertyMask |
+		TransferMetaFlags.IgnoreInMetaFiles |
+		TransferMetaFlags.AlignBytes;
+	private const TransferMetaFlags ComplexMask =
+		TransferMetaFlags.AlignBytes |
+		TransferMetaFlags.IgnoreInMetaFiles |
+		TransferMetaFlags.TransferUsingFlowMappingStyle;
 
 	public NodeType NodeType
 	{
@@ -117,6 +126,26 @@ internal sealed class UniversalNode : IEquatable<UniversalNode>, IDeepCloneable<
 		result.SubNodes = tpkNode.SubNodes
 			.Select(nodeIndex => FromTpkUnityNode(nodeBuffer[nodeIndex], stringBuffer, nodeBuffer))
 			.ToList();
+
+		// Remove any flags that are irrelevent to this application.
+		if (result.NodeType.IsPrimitive())
+		{
+			result.MetaFlag &= PrimitiveMask;
+		}
+		else
+		{
+			result.MetaFlag &= ComplexMask;
+		}
+
+		// Only root nodes should be marked as ignored in meta files
+		if (result.IgnoreInMetaFiles && result.SubNodes.Count > 0 && result.SubNodes.All(n => n.IgnoreInMetaFiles))
+		{
+			foreach (UniversalNode node in result.SubNodes)
+			{
+				node.MetaFlag &= ~TransferMetaFlags.IgnoreInMetaFiles;
+			}
+		}
+
 		return result;
 	}
 
