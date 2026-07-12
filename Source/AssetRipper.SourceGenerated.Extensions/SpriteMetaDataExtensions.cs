@@ -10,6 +10,7 @@ using AssetRipper.SourceGenerated.Subclasses.SpriteRenderData;
 using AssetRipper.SourceGenerated.Subclasses.SpriteVertex;
 using AssetRipper.SourceGenerated.Subclasses.SubMesh;
 using AssetRipper.SourceGenerated.Subclasses.Vector2f;
+using AssetRipper.SourceGenerated.Subclasses.Vector2Int;
 using System.Buffers.Binary;
 using System.Drawing;
 using System.Numerics;
@@ -35,9 +36,13 @@ public static class SpriteMetaDataExtensions
 		{
 			GenerateOutline(sprite, atlas, rect, pivot, instance.Outline);
 		}
-		if (instance.Has_PhysicsShape() && sprite.Has_PhysicsShape())
+		if (instance.Has_PhysicsShape())
 		{
 			GeneratePhysicsShape(sprite, atlas, rect, pivot, instance.PhysicsShape);
+		}
+		if (instance.Has_Edges())
+		{
+			GenerateEdges(sprite, atlas, rect, pivot, instance.Edges);
 		}
 		instance.TessellationDetail = 0;
 		if (instance.Has_Bones() && sprite.Has_Bones() && instance.Has_SpriteID())
@@ -130,8 +135,6 @@ public static class SpriteMetaDataExtensions
 			}
 		}
 
-#warning TODO: SpriteConverter does not generate instance.Edges
-
 		if (instance.Has_Weights())
 		{
 			instance.Weights.Clear();
@@ -142,6 +145,79 @@ public static class SpriteMetaDataExtensions
 				{
 					instance.Weights.AddNew().CopyValues(skin[i]);
 				}
+			}
+		}
+	}
+
+	private static void GenerateEdges(
+		ISprite sprite,
+		ISpriteAtlas? atlas,
+		RectangleF rect,
+		Vector2 pivot,
+		AssetList<Vector2Int> edges)
+	{
+		// Generate edges from outline data
+		AssetList<AssetList<Vector2f>> outlines = new AssetList<AssetList<Vector2f>>();
+		GenerateOutline(sprite.RD, sprite.Collection.Version, outlines);
+
+		edges.Clear();
+		edges.Capacity = outlines.Count;
+
+		float pivotShiftX = rect.Width * pivot.X - rect.Width * 0.5f;
+		float pivotShiftY = rect.Height * pivot.Y - rect.Height * 0.5f;
+		Vector2 pivotShift = new Vector2(pivotShiftX, pivotShiftY);
+
+		foreach (AssetList<Vector2f> outline in outlines)
+		{
+			for (int i = 0; i < outline.Count; i++)
+			{
+				Vector2 point = (Vector2)outline[i] * sprite.PixelsToUnits + pivotShift;
+				Vector2Int edge = edges.AddNew();
+				edge.SetValues((int)point.X, (int)point.Y); // Should we round instead of cast to int?
+			}
+		}
+
+		// Apply packing rotation fix if needed
+		GetPacking(sprite, atlas, out bool isPacked, out SpritePackingRotation rotation);
+		if (isPacked)
+		{
+			switch (rotation)
+			{
+				case SpritePackingRotation.FlipHorizontal:
+					{
+						foreach (Vector2Int edge in edges)
+						{
+							edge.SetValues(-edge.X, edge.Y);
+						}
+					}
+					break;
+
+				case SpritePackingRotation.FlipVertical:
+					{
+						foreach (Vector2Int edge in edges)
+						{
+							edge.SetValues(edge.X, -edge.Y);
+						}
+					}
+					break;
+
+				case SpritePackingRotation.Rotate90:
+					{
+						foreach (Vector2Int edge in edges)
+						{
+							edge.SetValues(edge.Y, edge.X);
+						}
+					}
+					break;
+
+				case SpritePackingRotation.Rotate180:
+					{
+						foreach (Vector2Int edge in edges)
+						{
+							edge.SetValues(-edge.X, -edge.Y);
+						}
+					}
+					break;
 			}
 		}
 	}
