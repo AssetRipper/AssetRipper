@@ -29,73 +29,52 @@ public sealed class AnimatorControllerProcessor : IAssetProcessor
 			.SelectMany(c => c.OfType<IAnimatorController>())
 			.ToList();
 
+		if (animatorControllers.Count == 0)
+		{
+			return;
+		}
+
 		ProcessedAssetCollection processedCollection = gameData.AddNewProcessedCollection("Generated AnimatorController Dependencies");
+
+		// Tracks which assets have already been mapped to an earlier AnimatorController
+		HashSet<IUnityObjectBase> globallyClaimedAssets = new();
+
+		// Created outside of the loop to avoid creating a new instance for each AnimatorController
+		Dictionary<IUnityObjectBase, IUnityObjectBase> cloneMap = new();
+		HashSet<IUnityObjectBase> claimedAssets = new();
+
 		foreach (IAnimatorController controller in animatorControllers)
 		{
 			Process(controller, processedCollection);
-		}
 
-		List<HashSet<IUnityObjectBase>> assetSets = [];
-		Dictionary<IUnityObjectBase, List<int>> assetToSetIndices = new();
-		foreach (IAnimatorController controller in animatorControllers)
-		{
-			int setIndex = assetSets.Count;
-			HashSet<IUnityObjectBase> assetSet = [];
-			assetSets.Add(assetSet);
-
-			foreach (IUnityObjectBase dependency in controller.FetchEditorHierarchy().WhereNotNull())
+			// Duplicate any assets that have already been claimed by a previous AnimatorController
 			{
-				assetSet.Add(dependency);
-				if (!assetToSetIndices.TryGetValue(dependency, out List<int>? setIndices))
+				cloneMap.Clear();
+				claimedAssets.Clear();
+
+				claimedAssets.AddRange(controller.FetchEditorHierarchy().WhereNotNull());
+				foreach (IUnityObjectBase asset in claimedAssets)
 				{
-					setIndices = [setIndex];
-					assetToSetIndices.Add(dependency, setIndices);
-				}
-				else if (!setIndices.Contains(setIndex))
-				{
-					setIndices.Add(setIndex);
-				}
-			}
-		}
-
-		foreach ((IUnityObjectBase asset, List<int> setIndices) in assetToSetIndices)
-		{
-			if (setIndices.Count <= 1)
-			{
-				continue;
-			}
-
-			for (int i = 1; i < setIndices.Count; i++)
-			{
-				int currentSetIndex = setIndices[i];
-				HashSet<IUnityObjectBase> currentSet = assetSets[currentSetIndex];
-				currentSet.Remove(asset);
-
-				IUnityObjectBase clonedAsset = processedCollection.CreateAsset(asset.ClassID, AssetFactory.Create);
-				SingleReplacementAssetResolver resolver = new(asset, clonedAsset);
-				clonedAsset.CopyValues(asset, new PPtrConverter(asset.Collection, clonedAsset.Collection, resolver));
-
-				foreach (IUnityObjectBase otherAsset in currentSet)
-				{
-					otherAsset.CopyValues(otherAsset, new PPtrConverter(otherAsset.Collection, otherAsset.Collection, resolver));
+					if (!globallyClaimedAssets.Add(asset))
+					{
+						IUnityObjectBase clonedAsset = processedCollection.CreateAsset(asset.ClassID, AssetFactory.Create);
+						cloneMap.Add(asset, clonedAsset);
+						globallyClaimedAssets.Add(clonedAsset);
+					}
 				}
 
-				Debug.Assert(!currentSet.OfType<IAnimatorController>().First().FetchEditorHierarchy().Contains(asset));
-				Debug.Assert(currentSet.OfType<IAnimatorController>().First().FetchEditorHierarchy().Contains(clonedAsset));
-
-				currentSet.Add(clonedAsset);
+				if (cloneMap.Count > 0)
+				{
+					MultipleReplacementAssetResolver resolver = new(cloneMap);
+					foreach (IUnityObjectBase originalAsset in claimedAssets)
+					{
+						IUnityObjectBase targetAsset = cloneMap.TryGetValue(originalAsset, out IUnityObjectBase? clonedAsset) ? clonedAsset : originalAsset;
+						targetAsset.CopyValues(originalAsset, new PPtrConverter(originalAsset.Collection, targetAsset.Collection, resolver));
+					}
+				}
 			}
-		}
-		assetToSetIndices.Clear();
 
-		Debug.Assert(assetSets.Count == animatorControllers.Count);
-		for (int i = 0; i < animatorControllers.Count; i++)
-		{
-			IAnimatorController controller = animatorControllers[i];
-			HashSet<IUnityObjectBase> assetSet = assetSets[i];
-			Debug.Assert(controller.FetchEditorHierarchy().WhereNotNull().Distinct().Count() == assetSet.Count);
-			Debug.Assert(controller.FetchEditorHierarchy().WhereNotNull().All(assetSet.Contains));
-			foreach (IUnityObjectBase asset in assetSet)
+			foreach (IUnityObjectBase asset in controller.FetchEditorHierarchy().WhereNotNull())
 			{
 				Debug.Assert(asset.MainAsset is null);
 				asset.MainAsset = controller;
