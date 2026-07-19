@@ -19,5 +19,21 @@ public static class SerializedShaderStateExtensions
 		public bool AlphaToMaskValue => state.AlphaToMask.Value is not 0;
 		public bool ConservativeValue => state.Conservative?.Value is not null and not 0;
 		public string LightingValue => state.Lighting ? "On" : "Off";
+
+		public bool StencilRefIsDefault => state.StencilRef.IsZeroAndNameless;
+		public bool StencilReadMaskIsDefault => state.StencilReadMask.IsMaxAndNameless;
+		public bool StencilWriteMaskIsDefault => state.StencilWriteMask.IsMaxAndNameless;
+		public bool StencilIsDefault
+		{
+			get
+			{
+				return state.StencilRefIsDefault
+					&& state.StencilReadMaskIsDefault
+					&& state.StencilWriteMaskIsDefault
+					&& state.StencilOp.IsDefault
+					&& state.StencilOpFront.IsDefault
+					&& state.StencilOpBack.IsDefault;
+			}
+		}
 	}
 }
