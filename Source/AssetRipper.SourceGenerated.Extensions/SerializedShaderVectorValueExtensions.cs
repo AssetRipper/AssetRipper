@@ -4,11 +4,17 @@ namespace AssetRipper.SourceGenerated.Extensions;
 
 public static class SerializedShaderVectorValueExtensions
 {
-	public static bool IsZero(this ISerializedShaderVectorValue value)
+	extension(ISerializedShaderVectorValue value)
 	{
-		return value.X.IsZero()
-			&& value.Y.IsZero()
-			&& value.Z.IsZero()
-			&& value.W.IsZero();
+		public bool IsZero
+		{
+			get
+			{
+				return value.X.IsZero
+					&& value.Y.IsZero
+					&& value.Z.IsZero
+					&& value.W.IsZero;
+			}
+		}
 	}
 }

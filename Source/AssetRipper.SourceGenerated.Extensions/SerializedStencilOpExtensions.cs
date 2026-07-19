@@ -5,15 +5,25 @@ namespace AssetRipper.SourceGenerated.Extensions;
 
 public static class SerializedStencilOpExtensions
 {
-	public static StencilOp PassValue(this ISerializedStencilOp stencilOp) => (StencilOp)stencilOp.Pass.Value;
-	public static StencilOp FailValue(this ISerializedStencilOp stencilOp) => (StencilOp)stencilOp.Fail.Value;
-	public static StencilOp ZFailValue(this ISerializedStencilOp stencilOp) => (StencilOp)stencilOp.ZFail.Value;
-	public static StencilComp CompValue(this ISerializedStencilOp stencilOp) => (StencilComp)stencilOp.Comp.Value;
-	public static bool IsDefault(this ISerializedStencilOp stencilOp)
+	extension(ISerializedStencilOp stencilOp)
 	{
-		return stencilOp.PassValue().IsKeep()
-			&& stencilOp.FailValue().IsKeep()
-			&& stencilOp.ZFailValue().IsKeep()
-			&& stencilOp.CompValue().IsAlways();
+		public StencilOp PassValue => stencilOp.Pass.GetValue<StencilOp>();
+		public Utf8String PassName => stencilOp.Pass.Name;
+		public StencilOp FailValue => stencilOp.Fail.GetValue<StencilOp>();
+		public Utf8String FailName => stencilOp.Fail.Name;
+		public StencilOp ZFailValue => stencilOp.ZFail.GetValue<StencilOp>();
+		public Utf8String ZFailName => stencilOp.ZFail.Name;
+		public StencilComp CompValue => stencilOp.Comp.GetValue<StencilComp>();
+		public Utf8String CompName => stencilOp.Comp.Name;
+		public bool IsDefault
+		{
+			get
+			{
+				return stencilOp.PassValue.IsKeep()
+					&& stencilOp.FailValue.IsKeep()
+					&& stencilOp.ZFailValue.IsKeep()
+					&& stencilOp.CompValue.IsAlways();
+			}
+		}
 	}
 }

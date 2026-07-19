@@ -5,12 +5,19 @@ namespace AssetRipper.SourceGenerated.Extensions;
 
 public static class SerializedShaderStateExtensions
 {
-	public static FogMode FogModeValue(this ISerializedShaderState state) => (FogMode)state.FogMode;
-	public static ZClip ZClipValue(this ISerializedShaderState state) => (ZClip)(state.ZClip?.Value ?? 0);
-	public static ZTest ZTestValue(this ISerializedShaderState state) => (ZTest)state.ZTest.Value;
-	public static ZWrite ZWriteValue(this ISerializedShaderState state) => (ZWrite)state.ZWrite.Value;
-	public static CullMode CullingValue(this ISerializedShaderState state) => (CullMode)state.Culling.Value;
-	public static bool AlphaToMaskValue(this ISerializedShaderState state) => state.AlphaToMask.Value is not 0;
-	public static bool ConservativeValue(this ISerializedShaderState state) => state.Conservative?.Value is not null and not 0;
-	public static string LightingValue(this ISerializedShaderState state) => state.Lighting ? "On" : "Off";
+	extension(ISerializedShaderState state)
+	{
+		public FogMode FogModeValue => (FogMode)state.FogMode;
+		public ZClip ZClipValue => state.ZClip?.GetValue<ZClip>() ?? default;
+		public Utf8String ZClipName => state.ZClip?.Name ?? Utf8String.Empty;
+		public ZTest ZTestValue => state.ZTest.GetValue<ZTest>();
+		public Utf8String ZTestName => state.ZTest.Name;
+		public ZWrite ZWriteValue => state.ZWrite.GetValue<ZWrite>();
+		public Utf8String ZWriteName => state.ZWrite.Name;
+		public CullMode CullingValue => state.Culling.GetValue<CullMode>();
+		public Utf8String CullingName => state.Culling.Name;
+		public bool AlphaToMaskValue => state.AlphaToMask.Value is not 0;
+		public bool ConservativeValue => state.Conservative?.Value is not null and not 0;
+		public string LightingValue => state.Lighting ? "On" : "Off";
+	}
 }
