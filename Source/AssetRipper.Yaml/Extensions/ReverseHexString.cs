@@ -77,4 +77,5 @@ internal static class ReverseHexString
 		return unchecked((char)(x + Zero + ((9 - x) >> 31 & Offset)));
 	}
 	private static char NybbleToLowercaseHexCharacter(long x) => NybbleToLowercaseHexCharacter(unchecked((int)x));
+	private static char NybbleToLowercaseHexCharacter(ulong x) => NybbleToLowercaseHexCharacter(unchecked((int)x));
 }
