@@ -26,7 +26,7 @@ internal static class ReverseHexString
 		}
 		else if (typeof(T) == typeof(int) || typeof(T) == typeof(uint))
 		{
-			int x = Unsafe.As<T, int>(ref value);
+			uint x = Unsafe.As<T, uint>(ref value);
 			buffer[0] = NybbleToLowercaseHexCharacter((x >> 4) & 0x0F);
 			buffer[1] = NybbleToLowercaseHexCharacter(x & 0x0F);
 			buffer[2] = NybbleToLowercaseHexCharacter((x >> 12) & 0x0F);
@@ -38,7 +38,7 @@ internal static class ReverseHexString
 		}
 		else if (typeof(T) == typeof(long) || typeof(T) == typeof(ulong))
 		{
-			long x = Unsafe.As<T, long>(ref value);
+			ulong x = Unsafe.As<T, ulong>(ref value);
 			buffer[0] = NybbleToLowercaseHexCharacter((x >> 4) & 0x0F);
 			buffer[1] = NybbleToLowercaseHexCharacter(x & 0x0F);
 			buffer[2] = NybbleToLowercaseHexCharacter((x >> 12) & 0x0F);
@@ -76,5 +76,5 @@ internal static class ReverseHexString
 		const int Offset = (int)'a' - Zero - 0x0A;
 		return unchecked((char)(x + Zero + ((9 - x) >> 31 & Offset)));
 	}
-	private static char NybbleToLowercaseHexCharacter(long x) => NybbleToLowercaseHexCharacter(unchecked((int)x));
+	private static char NybbleToLowercaseHexCharacter(ulong x) => NybbleToLowercaseHexCharacter(unchecked((int)x));
 }
