@@ -26,19 +26,19 @@ internal static class ReverseHexString
 		}
 		else if (typeof(T) == typeof(int) || typeof(T) == typeof(uint))
 		{
-			int x = Unsafe.As<T, int>(ref value);
+			uint x = Unsafe.As<T, uint>(ref value);
 			buffer[0] = NybbleToLowercaseHexCharacter((x >> 4) & 0x0F);
 			buffer[1] = NybbleToLowercaseHexCharacter(x & 0x0F);
 			buffer[2] = NybbleToLowercaseHexCharacter((x >> 12) & 0x0F);
 			buffer[3] = NybbleToLowercaseHexCharacter((x >> 8) & 0x0F);
 			buffer[4] = NybbleToLowercaseHexCharacter((x >> 20) & 0x0F);
 			buffer[5] = NybbleToLowercaseHexCharacter((x >> 16) & 0x0F);
-			buffer[6] = NybbleToLowercaseHexCharacter((x >> 28) & 0x0F);
+			buffer[6] = NybbleToLowercaseHexCharacter(x >> 28);
 			buffer[7] = NybbleToLowercaseHexCharacter((x >> 24) & 0x0F);
 		}
 		else if (typeof(T) == typeof(long) || typeof(T) == typeof(ulong))
 		{
-			long x = Unsafe.As<T, long>(ref value);
+			ulong x = Unsafe.As<T, ulong>(ref value);
 			buffer[0] = NybbleToLowercaseHexCharacter((x >> 4) & 0x0F);
 			buffer[1] = NybbleToLowercaseHexCharacter(x & 0x0F);
 			buffer[2] = NybbleToLowercaseHexCharacter((x >> 12) & 0x0F);
@@ -53,7 +53,7 @@ internal static class ReverseHexString
 			buffer[11] = NybbleToLowercaseHexCharacter((x >> 40) & 0x0F);
 			buffer[12] = NybbleToLowercaseHexCharacter((x >> 52) & 0x0F);
 			buffer[13] = NybbleToLowercaseHexCharacter((x >> 48) & 0x0F);
-			buffer[14] = NybbleToLowercaseHexCharacter((x >> 60) & 0x0F);
+			buffer[14] = NybbleToLowercaseHexCharacter(x >> 60);
 			buffer[15] = NybbleToLowercaseHexCharacter((x >> 56) & 0x0F);
 		}
 		else if (typeof(T) == typeof(float))
