@@ -42,7 +42,7 @@ public sealed class LicensesGenerator() : IncrementalGenerator(nameof(LicensesGe
 		using (new CurlyBrackets(writer))
 		{
 			List<(string, string)> sourceNames = new(array.Length);
-			foreach ((string name, string license) in array.OrderBy(pair => pair.Name))
+			foreach ((string name, string license) in array.OrderBy(pair => pair.Name, StringComparer.Ordinal))
 			{
 				string sourceName = name.Replace('.', '_').Replace('-', '_');
 				sourceNames.Add((name, sourceName));

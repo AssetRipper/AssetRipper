@@ -178,7 +178,7 @@ public sealed partial class MultiFileStream : Stream
 			}
 		}
 
-		splitFiles = splitFiles.OrderBy(t => t, SplitNameComparer.Instance).ToArray();
+		splitFiles = splitFiles.Order(SplitNameComparer.Instance).ToArray();
 		Stream[] streams = new Stream[splitFiles.Length];
 		try
 		{
