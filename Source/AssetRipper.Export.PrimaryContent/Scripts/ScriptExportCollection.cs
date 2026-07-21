@@ -67,7 +67,7 @@ public sealed class ScriptExportCollection : ExportCollectionBase
 
 			settings.UseNestedDirectoriesForNamespaces = true;
 
-			ILSpyWholeProjectDecompiler decompiler = new(settings, assemblyResolver, null, fileSystem);
+			ILSpyWholeProjectDecompiler decompiler = new(settings, assemblyResolver, NullProjectFileWriter.Instance, fileSystem);
 			decompiler.DecompileProject(assemblyResolver.Resolve(assembly), outputDirectory);
 		}
 
