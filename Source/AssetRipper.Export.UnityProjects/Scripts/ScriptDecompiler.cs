@@ -1,4 +1,5 @@
 ﻿using AsmResolver.DotNet;
+using AssetRipper.Export.Scripts;
 using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly;
@@ -11,16 +12,16 @@ namespace AssetRipper.Export.UnityProjects.Scripts;
 
 internal class ScriptDecompiler
 {
-	private readonly CecilAssemblyResolver assemblyResolver;
+	private readonly ILSpyAssemblyResolver assemblyResolver;
 	public LanguageVersion LanguageVersion { get; set; } = LanguageVersion.CSharp7_3;
 	public ScriptContentLevel ScriptContentLevel { get; set; } = ScriptContentLevel.Level2;
 	public ScriptingBackend ScriptingBackend { get; set; } = ScriptingBackend.Unknown;
 	public bool FullyQualifiedTypeNames { get; set; } = false;
 
-	public ScriptDecompiler(IAssemblyManager assemblyManager) : this(new CecilAssemblyResolver(assemblyManager), assemblyManager.ScriptingBackend) { }
-	private ScriptDecompiler(CecilAssemblyResolver cecilAssemblyResolver, ScriptingBackend scriptingBackend)
+	public ScriptDecompiler(IAssemblyManager assemblyManager) : this(new ILSpyAssemblyResolver(assemblyManager), assemblyManager.ScriptingBackend) { }
+	private ScriptDecompiler(ILSpyAssemblyResolver assemblyResolver, ScriptingBackend scriptingBackend)
 	{
-		assemblyResolver = cecilAssemblyResolver;
+		this.assemblyResolver = assemblyResolver;
 		ScriptingBackend = scriptingBackend;
 	}
 
@@ -58,7 +59,7 @@ internal class ScriptDecompiler
 		}
 	}
 
-	private sealed class CustomWholeProjectDecompiler(DecompilerSettings settings, CecilAssemblyResolver assemblyResolver, FileSystem fileSystem) : WholeProjectDecompiler(settings, assemblyResolver, null, null, null)
+	private sealed class CustomWholeProjectDecompiler(DecompilerSettings settings, ILSpyAssemblyResolver assemblyResolver, FileSystem fileSystem) : WholeProjectDecompiler(settings, assemblyResolver, null, null, null)
 	{
 		protected override void CreateDirectory(string path)
 		{

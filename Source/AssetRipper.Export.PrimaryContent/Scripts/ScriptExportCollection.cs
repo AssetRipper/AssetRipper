@@ -1,11 +1,11 @@
 ﻿using AsmResolver.DotNet;
 using AssetRipper.Assets;
+using AssetRipper.Export.Scripts;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using ICSharpCode.Decompiler;
 using ICSharpCode.Decompiler.CSharp;
 using ICSharpCode.Decompiler.CSharp.ProjectDecompiler;
-using ICSharpCode.Decompiler.Metadata;
 
 namespace AssetRipper.Export.PrimaryContent.Scripts;
 
@@ -17,7 +17,7 @@ public sealed class ScriptExportCollection : ExportCollectionBase
 		LanguageVersion = languageVersion;
 	}
 
-	public override IContentExtractor ContentExtractor { get; }
+	public override ScriptContentExtractor ContentExtractor { get; }
 
 	public LanguageVersion LanguageVersion { get; }
 
@@ -29,13 +29,13 @@ public sealed class ScriptExportCollection : ExportCollectionBase
 
 	public override bool Export(string projectDirectory, FileSystem fileSystem)
 	{
-		IAssemblyManager assemblyManager = ((ScriptContentExtractor)ContentExtractor).AssemblyManager;
+		IAssemblyManager assemblyManager = ContentExtractor.AssemblyManager;
+		ILSpyAssemblyResolver assemblyResolver = new(assemblyManager);
 
 		string assemblyDirectory = fileSystem.Path.Join(projectDirectory, "Assemblies");
 		fileSystem.Directory.Create(assemblyDirectory);
 
 		//Export assemblies
-		List<string> assemblyPaths = new();
 		foreach (AssemblyDefinition assembly in assemblyManager.GetAssemblies())
 		{
 			Stream stream = assemblyManager.GetStreamForAssembly(assembly);
@@ -44,7 +44,6 @@ public sealed class ScriptExportCollection : ExportCollectionBase
 			//Write assembly
 			{
 				string assemblyPath = fileSystem.Path.Join(assemblyDirectory, assembly.Name + ".dll");
-				assemblyPaths.Add(assemblyPath);
 				using Stream fileStream = fileSystem.File.Create(assemblyPath);
 				stream.CopyTo(fileStream);
 				stream.Position = 0;
@@ -53,9 +52,9 @@ public sealed class ScriptExportCollection : ExportCollectionBase
 
 		//Decompile scripts
 		string scriptDirectory = fileSystem.Path.Join(projectDirectory, "Scripts");
-		foreach (string assemblyPath in assemblyPaths)
+		foreach (AssemblyDefinition assembly in assemblyManager.GetAssemblies())
 		{
-			string assemblyName = fileSystem.Path.GetFileNameWithoutExtension(assemblyPath);
+			string assemblyName = assembly.Name ?? throw new InvalidOperationException("Assembly name is null");
 			string outputDirectory = fileSystem.Path.Join(scriptDirectory, assemblyName);
 			fileSystem.Directory.Create(outputDirectory);
 
@@ -68,9 +67,8 @@ public sealed class ScriptExportCollection : ExportCollectionBase
 
 			settings.UseNestedDirectoriesForNamespaces = true;
 
-			WholeProjectDecompiler decompiler = new(settings, new UniversalAssemblyResolver(assemblyPath, false, null), null, null, null);
-			PEFile file = new(assemblyPath);
-			decompiler.DecompileProject(file, outputDirectory);
+			WholeProjectDecompiler decompiler = new(settings, assemblyResolver, null, null, null);
+			decompiler.DecompileProject(assemblyResolver.Resolve(assembly), outputDirectory);
 		}
 
 		return true;
