@@ -5,7 +5,6 @@ using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using ICSharpCode.Decompiler;
 using ICSharpCode.Decompiler.CSharp;
-using ICSharpCode.Decompiler.CSharp.ProjectDecompiler;
 
 namespace AssetRipper.Export.PrimaryContent.Scripts;
 
@@ -67,7 +66,7 @@ public sealed class ScriptExportCollection : ExportCollectionBase
 
 			settings.UseNestedDirectoriesForNamespaces = true;
 
-			ILSpyWholeProjectDecompiler decompiler = new(settings, assemblyResolver, NullProjectFileWriter.Instance, fileSystem);
+			ILSpyWholeProjectDecompiler decompiler = new(settings, assemblyResolver, ProjectFileWriter.Instance, fileSystem);
 			decompiler.DecompileProject(assemblyResolver.Resolve(assembly), outputDirectory);
 		}
 

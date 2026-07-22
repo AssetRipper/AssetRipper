@@ -1,7 +1,6 @@
 ﻿using AssetRipper.IO.Files;
 using ICSharpCode.Decompiler;
 using ICSharpCode.Decompiler.CSharp.ProjectDecompiler;
-using System.Runtime.CompilerServices;
 
 namespace AssetRipper.Export.Scripts;
 
@@ -9,9 +8,8 @@ public class ILSpyWholeProjectDecompiler : WholeProjectDecompiler
 {
 	protected FileSystem FileSystem { get; }
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-	public ILSpyWholeProjectDecompiler(DecompilerSettings settings, ILSpyAssemblyResolver assemblyResolver, IProjectFileWriter? projectFileWriter, FileSystem fileSystem)
-		: base(settings, assemblyResolver, NullProjectFileWriter.Instance, NullAssemblyReferenceClassifier.Instance, null)
+	public ILSpyWholeProjectDecompiler(DecompilerSettings settings, ILSpyAssemblyResolver assemblyResolver, IProjectFileWriter projectFileWriter, FileSystem fileSystem)
+		: base(settings, assemblyResolver, projectFileWriter, NullAssemblyReferenceClassifier.Instance, null)
 	{
 		FileSystem = fileSystem;
 	}
