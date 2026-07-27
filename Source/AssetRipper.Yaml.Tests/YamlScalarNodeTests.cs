@@ -56,7 +56,13 @@ public class YamlScalarNodeTests
 	public void UInt32ListTest() => NumericListTest<uint>([ 0x01020304, 0x05060708 ], "0403020108070605");
 
 	[Test]
+	public void Int32ListTest() => NumericListTest<int>([-1, unchecked((int)0xB0000000), int.MinValue], "ffffffff000000b000000080");
+
+	[Test]
 	public void UInt64ListTest() => NumericListTest<ulong>([ 0x0102030405060708, 0x090A0B0C0D0E0F10 ], "0807060504030201100f0e0d0c0b0a09");
+
+	[Test]
+	public void Int64ListTest() => NumericListTest<long>([-1L, long.MinValue], "ffffffffffffffff0000000000000080");
 
 	private static void NumericListTest<T>(IReadOnlyList<T> list, string expected) where T : unmanaged, INumber<T>
 	{

@@ -30,7 +30,7 @@ public sealed class ViewPage : DefaultPage
 		{
 			new H2(writer).Close(Localization.Assets);
 			
-			var availableClasses = Collection.Select(a => a.ClassName).Distinct().Order().ToList();
+			var availableClasses = Collection.Select(a => a.ClassName).Distinct().Order(StringComparer.Ordinal).ToList();
 			if (availableClasses.Count > 1)
 			{
 				new Label(writer).WithFor("classFilter").WithClass("me-2").Close(Localization.Class);

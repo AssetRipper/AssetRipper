@@ -6,9 +6,9 @@ using ICSharpCode.Decompiler.Metadata;
 using System.Collections.Concurrent;
 using IAssemblyResolver = ICSharpCode.Decompiler.Metadata.IAssemblyResolver;
 
-namespace AssetRipper.Export.UnityProjects.Scripts;
+namespace AssetRipper.Export.Scripts;
 
-internal class CecilAssemblyResolver(IAssemblyManager manager) : IAssemblyResolver
+public sealed class ILSpyAssemblyResolver(IAssemblyManager manager) : IAssemblyResolver
 {
 	/// <remarks>
 	/// In <see cref="ICSharpCode.Decompiler.TypeSystem.DecompilerTypeSystem"/>, it states:<br /><br />

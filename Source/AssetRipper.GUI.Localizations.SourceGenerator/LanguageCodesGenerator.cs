@@ -59,7 +59,7 @@ public sealed partial class LanguageCodesGenerator : IncrementalGenerator
 
 		using (new CurlyBracketsWithSemicolon(writer))
 		{
-			foreach (string file in files.OrderBy(s => s))
+			foreach (string file in files.OrderBy(s => s, StringComparer.Ordinal))
 			{
 				string languageCode = Path.GetFileNameWithoutExtension(file).Replace('_', '-');
 				string languageName = ExtractCultureName(new CultureInfo(languageCode));

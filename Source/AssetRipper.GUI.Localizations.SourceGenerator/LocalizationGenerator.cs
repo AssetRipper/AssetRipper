@@ -35,13 +35,13 @@ public sealed class LocalizationGenerator : IncrementalGenerator
 	private static void GenerateCode(SgfSourceProductionContext context, ImmutableArray<(string, string?)> files)
 	{
 		List<(string, Dictionary<string, string>)> list = new(files.Length);
-		foreach ((string file, string? json) in files.OrderBy(s => s.Item1))
+		foreach ((string file, string? json) in files.OrderBy(s => s.Item1, StringComparer.Ordinal))
 		{
 			string languageCode = Path.GetFileNameWithoutExtension(file).Replace('_', '-');
 			Dictionary<string, string> dictionary = JsonSerializer.Deserialize<Dictionary<string, string>>(json!) ?? throw new();
 			list.Add((languageCode, dictionary));
 		}
-		list = list.OrderBy(pair => pair.Item1).ToList();
+		list = list.OrderBy(pair => pair.Item1, StringComparer.Ordinal).ToList();
 
 		Dictionary<string, string> americanEnglish = list.First(pair => pair.Item1 == "en-US").Item2;
 
@@ -55,7 +55,7 @@ public sealed class LocalizationGenerator : IncrementalGenerator
 		writer.WriteLine("partial class Localization");
 		using (new CurlyBrackets(writer))
 		{
-			foreach (KeyValuePair<string, string> pair in americanEnglish.OrderBy(pair => pair.Key))
+			foreach (KeyValuePair<string, string> pair in americanEnglish.OrderBy(pair => pair.Key, StringComparer.Ordinal))
 			{
 				(string key, string content) = (pair.Key, pair.Value);
 				writer.WriteSummaryDocumentation(content);

@@ -1,4 +1,5 @@
-﻿using AssetRipper.SourceGenerated.Extensions.Enums.Shader.GpuProgramType;
+﻿using AssetRipper.Assets.Generics;
+using AssetRipper.SourceGenerated.Extensions.Enums.Shader.GpuProgramType;
 using AssetRipper.SourceGenerated.Subclasses.SerializedPlayerSubProgram;
 using AssetRipper.SourceGenerated.Subclasses.SerializedProgram;
 using AssetRipper.SourceGenerated.Subclasses.SerializedSubProgram;
@@ -64,6 +65,34 @@ public static class SerializedProgramExtensions
 			}
 		}
 		return [];
+	}
+
+	public static IEnumerable<(ISerializedPlayerSubProgram SubProgram, uint ParameterBlobIndex)> GetPlayerSubProgramsWithParameterBlobIndices(this ISerializedProgram program)
+	{
+		if (!program.Has_PlayerSubPrograms())
+		{
+			yield break;
+		}
+
+		if (program.ParameterBlobIndices.Count != program.PlayerSubPrograms.Count)
+		{
+			yield break;
+		}
+
+		for (int i = 0; i < program.PlayerSubPrograms.Count; i++)
+		{
+			AssetList<SerializedPlayerSubProgram> serializedPlayerSubPrograms = program.PlayerSubPrograms[i];
+			AssetList<uint> playerBlobIndices = program.ParameterBlobIndices[i];
+			if (serializedPlayerSubPrograms.Count != playerBlobIndices.Count)
+			{
+				continue;
+			}
+
+			for (int j = 0; j < serializedPlayerSubPrograms.Count; j++)
+			{
+				yield return (serializedPlayerSubPrograms[j], playerBlobIndices[j]);
+			}
+		}
 	}
 
 	public static int MaxShaderModelVersion(this ISerializedProgram program, UnityVersion version)
