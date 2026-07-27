@@ -4,7 +4,11 @@ https://docs.unity3d.com/Manual/script-Serialization.html
 
 ## `[SerializeReference]`
 
+Supported for type-tree and assembly-backed MonoBehaviour/ScriptableObject layouts.
+
 The biggest indicator of `[SerializeReference]` in type trees is that the last node is `ReferencedObjectData data`.
+
+Referenced object layouts are resolved from the file's `RefTypes` table when present, otherwise from managed assemblies.
 
 > Compiled with 6000.0.0b15
 

@@ -79,6 +79,10 @@ public readonly struct TypeTreeNodeStruct : IReadOnlyList<TypeTreeNodeStruct>, I
 	/// </summary>
 	/// <remarks>
 	/// This was first noticed in a scriptable object where the field was a <see cref="List{T}"/> of a serializable class.
+	/// <para/>
+	/// <c>[SerializeReference] List&lt;T&gt;</c> uses the same outer shape, but the element type is
+	/// <c>managedRefArrayItem</c> (a single <c>rid</c>) rather than matching <see cref="TypeName"/>.
+	/// Without recognizing that form, WalkEditor emits an invalid <c>Array:</c> mapping wrapper that Unity rejects.
 	/// </remarks>
 	public bool IsNamedVector
 	{
@@ -87,7 +91,9 @@ public readonly struct TypeTreeNodeStruct : IReadOnlyList<TypeTreeNodeStruct>, I
 			if (SubNodes.Count == 1 && SubNodes[0].IsArray && SubNodes[0].Name is "Array")
 			{
 				string elementTypeName = SubNodes[0].SubNodes[1].TypeName;
-				return elementTypeName == TypeName || elementTypeName is "Generic Mono";
+				return elementTypeName == TypeName
+					|| elementTypeName is "Generic Mono"
+					|| elementTypeName is "managedRefArrayItem" or "managedReference";
 				//Generic Mono has only been found on Unity 3.
 				//https://github.com/AssetRipper/AssetRipper/issues/1328
 			}

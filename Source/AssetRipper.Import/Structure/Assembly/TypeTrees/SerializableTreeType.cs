@@ -46,6 +46,11 @@ public sealed class SerializableTreeType : SerializableType
 			{
 				serializableType = SerializablePointerType.Shared;
 			}
+			else if (primitiveNode.TypeName is "managedReference" or "managedRefArrayItem")
+			{
+				// [SerializeReference] / list element: single SInt64 rid.
+				serializableType = ManagedReferenceType.Shared;
+			}
 			else
 			{
 				serializableType = FromStructureNode(typeName, primitiveNode, primitiveType);

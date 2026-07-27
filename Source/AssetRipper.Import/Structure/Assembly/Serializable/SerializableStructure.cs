@@ -1,11 +1,14 @@
 using AssetRipper.Assets;
 using AssetRipper.Assets.Cloning;
+using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Assets.Traversal;
 using AssetRipper.Import.Logging;
+using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files.SerializedFiles;
+using AssetRipper.IO.Files.SerializedFiles.Parser;
 using AssetRipper.SerializationLogic;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 
@@ -26,14 +29,56 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 
 	public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags)
 	{
+		Read(ref reader, version, flags, refTypes: [], assemblyManager: null, readingReferencedObject: false);
+	}
+
+	public void ReadReferencedObject(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags)
+	{
+		Read(ref reader, version, flags, refTypes: [], assemblyManager: null, readingReferencedObject: true);
+	}
+
+	public void Read(
+		ref EndianSpanReader reader,
+		UnityVersion version,
+		TransferInstructionFlags flags,
+		IReadOnlyList<SerializedTypeReference> refTypes,
+		IAssemblyManager? assemblyManager,
+		bool readingReferencedObject)
+	{
 		Version = version;
 		for (int i = 0; i < Fields.Length; i++)
 		{
 			SerializableType.Field etalon = Type.Fields[i];
-			if (IsAvailable(etalon))
+			if (!IsAvailable(etalon))
 			{
-				Fields[i].Read(ref reader, version, flags, Depth, etalon);
+				continue;
 			}
+
+			// Nested type trees may include ManagedReferencesRegistry, but only the root asset writes one.
+			if (readingReferencedObject
+				&& etalon.Type.Name is "ManagedReferencesRegistry"
+				&& etalon.Name is "references")
+			{
+				continue;
+			}
+
+			if (etalon.Type.Name is "ManagedReferencesRegistry" && etalon.Name is "references")
+			{
+				Fields[i] = new SerializableValue(0, ManagedReferencesRegistry.Read(
+					ref reader,
+					version,
+					flags,
+					Depth,
+					refTypes,
+					assemblyManager));
+				if (etalon.Align)
+				{
+					reader.Align();
+				}
+				continue;
+			}
+
+			Fields[i].Read(ref reader, version, flags, Depth, etalon);
 		}
 	}
 
@@ -119,16 +164,39 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 
 	public bool TryRead(ref EndianSpanReader reader, IMonoBehaviour monoBehaviour)
 	{
+		return TryRead(ref reader, monoBehaviour, assemblyManager: null);
+	}
+
+	public bool TryRead(ref EndianSpanReader reader, IMonoBehaviour monoBehaviour, IAssemblyManager? assemblyManager)
+	{
+		IReadOnlyList<SerializedTypeReference> refTypes = monoBehaviour.Collection is SerializedAssetCollection serializedCollection
+			? serializedCollection.RefTypes
+			: [];
+
 		try
 		{
-			Read(ref reader, monoBehaviour.Collection.Version, monoBehaviour.Collection.Flags);
+			Read(
+				ref reader,
+				monoBehaviour.Collection.Version,
+				monoBehaviour.Collection.Flags,
+				refTypes,
+				assemblyManager,
+				readingReferencedObject: false);
 		}
 		catch (Exception ex)
 		{
 			LogMonoBehaviorReadException(this, ex);
 			return false;
 		}
-		if (reader.Position != reader.Length)
+		if (reader.Position < reader.Length)
+		{
+			// Script layout is older/smaller than serialized payload (common with URP/package upgrades).
+			// Keep successfully read fields and skip unknown trailing bytes.
+			Logger.Warning(LogCategory.Import,
+				$"MonoBehaviour Structure for script {this} has {reader.Length - reader.Position} unread trailing bytes; keeping partial data (read {reader.Position}, total {reader.Length}).");
+			return true;
+		}
+		if (reader.Position > reader.Length)
 		{
 			LogMonoBehaviourMismatch(this, reader.Position, reader.Length);
 			return false;
@@ -143,7 +211,7 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 
 	private static void LogMonoBehaviorReadException(SerializableStructure structure, Exception ex)
 	{
-		Logger.Error(LogCategory.Import, $"Unable to read MonoBehaviour Structure, because script {structure} layout mismatched binary content ({ex.GetType().Name}).");
+		Logger.Error(LogCategory.Import, $"Unable to read MonoBehaviour Structure, because script {structure} layout mismatched binary content ({ex.GetType().Name}: {ex.Message}).");
 	}
 
 	public int Depth { get; }

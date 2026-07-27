@@ -106,6 +106,7 @@ public readonly partial struct FieldSerializer
 
 		if (TryCreateSerializableFields(typeStack, monoType, fields, GetFieldsInType(typeDefinition), typeCache, out failureReason))
 		{
+			EnsureManagedReferencesRegistry(typeDefinition, fields);
 			monoType.SetDepth();
 			typeStack.Pop();
 			result = monoType;
@@ -171,6 +172,11 @@ public readonly partial struct FieldSerializer
 
 		if (TryCreateSerializableFields(typeStack, monoType, fields, GetFieldsInType(genericInst), typeCache, out failureReason))
 		{
+			TypeDefinition? resolvedGeneric = genericInst.GenericType.Resolve(runtimeContext);
+			if (resolvedGeneric is not null)
+			{
+				EnsureManagedReferencesRegistry(resolvedGeneric, fields);
+			}
 			monoType.SetDepth();
 			typeStack.Pop();
 			result = monoType;
@@ -198,10 +204,22 @@ public readonly partial struct FieldSerializer
 			(FieldDefinition fieldDefinition, TypeSignature fieldType) = pair;
 			if (WillUnitySerialize(fieldDefinition, fieldType))
 			{
-				if (fieldDefinition.HasSerializeReferenceAttribute())
+				// Unity ignores [SerializeReference] on UnityEngine.Object-derived types; they serialize as PPtr.
+				// Misplaced attributes (e.g. SerializeReference on a MonoBehaviour field) must not create a
+				// ManagedReferencesRegistry, or binary layout reading fails with NotSupportedException.
+				if (fieldDefinition.HasSerializeReferenceAttribute()
+					&& !EngineTypePredicates.IsUnityEngineObject(fieldType, runtimeContext))
 				{
-					failureReason = $"{fieldDefinition.DeclaringType?.FullName}.{fieldDefinition.Name} uses the [SerializeReference] attribute, which is currently not supported.";
-					return false;
+					if (!TryCreateSerializeReferenceField(fieldDefinition.Name ?? "", fieldType, out Field serializeReferenceField, out failureReason))
+					{
+						return false;
+					}
+
+					if (!monoType.IsCyclicReference(serializeReferenceField.Type))
+					{
+						fields.Add(serializeReferenceField);
+					}
+					continue;
 				}
 
 				int arrayDepth = 0;
@@ -259,6 +277,68 @@ public readonly partial struct FieldSerializer
 		}
 		failureReason = null;
 		return true;
+	}
+
+	private static bool TryCreateSerializeReferenceField(
+		string name,
+		TypeSignature fieldType,
+		out Field result,
+		[NotNullWhen(false)] out string? failureReason)
+	{
+		int arrayDepth = 0;
+		TypeSignature current = fieldType;
+		while (true)
+		{
+			if (current is CustomModifierTypeSignature customModifierType)
+			{
+				current = customModifierType.BaseType;
+				continue;
+			}
+
+			if (current is SzArrayTypeSignature szArrayTypeSignature)
+			{
+				arrayDepth++;
+				current = szArrayTypeSignature.BaseType;
+				continue;
+			}
+
+			if (current is GenericInstanceTypeSignature genericInstanceTypeSignature
+				&& genericInstanceTypeSignature.GenericType is { Namespace.Value: "System.Collections.Generic", Name.Value: "List`1" })
+			{
+				arrayDepth++;
+				current = genericInstanceTypeSignature.TypeArguments[0];
+				continue;
+			}
+
+			break;
+		}
+
+		result = new Field(ManagedReferenceType.Shared, arrayDepth, name, false);
+		failureReason = null;
+		return true;
+	}
+
+	private void EnsureManagedReferencesRegistry(TypeDefinition typeDefinition, List<Field> fields)
+	{
+		bool hasManagedReference = false;
+		for (int i = fields.Count - 1; i >= 0; i--)
+		{
+			Field field = fields[i];
+			if (field.Type.Name is "ManagedReferencesRegistry" && field.Name is "references")
+			{
+				fields.RemoveAt(i);
+			}
+			else if (field.Type is ManagedReferenceType || field.Type.Name is "managedReference" or "managedRefArrayItem")
+			{
+				hasManagedReference = true;
+			}
+		}
+
+		if (hasManagedReference
+			&& (typeDefinition.InheritsFromMonoBehaviour(runtimeContext) || typeDefinition.InheritsFromScriptableObject(runtimeContext)))
+		{
+			fields.Add(new Field(ManagedReferencesRegistryType.Shared, 0, "references", true));
+		}
 	}
 
 	private bool TryCreateSerializableField(
