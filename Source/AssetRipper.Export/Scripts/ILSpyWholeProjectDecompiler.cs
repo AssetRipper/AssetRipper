@@ -9,7 +9,7 @@ public class ILSpyWholeProjectDecompiler : WholeProjectDecompiler
 	protected FileSystem FileSystem { get; }
 
 	public ILSpyWholeProjectDecompiler(DecompilerSettings settings, ILSpyAssemblyResolver assemblyResolver, IProjectFileWriter projectFileWriter, FileSystem fileSystem)
-		: base(settings, assemblyResolver, projectFileWriter, NullAssemblyReferenceClassifier.Instance, null)
+		: base(settings, Guid.NewGuid(), assemblyResolver, projectFileWriter, NullAssemblyReferenceClassifier.Instance, null)
 	{
 		FileSystem = fileSystem;
 	}

@@ -4,160 +4,70 @@ using System.Xml;
 
 namespace AssetRipper.Export.PrimaryContent.Scripts;
 
-internal sealed class ProjectFileWriter : IProjectFileWriter
+internal sealed class ProjectFileWriter : ProjectFileWriterSdkStyle
 {
 	const string TrueString = "True";
 	const string FalseString = "False";
 
 	public static ProjectFileWriter Instance { get; } = new();
 
-	public void Write(TextWriter target, IProjectInfoProvider project, IEnumerable<ProjectItemInfo> files, MetadataFile module)
+	protected override string GetTargetFrameworkMoniker(MetadataFile module, IProjectInfoProvider project)
 	{
-		using XmlTextWriter xmlWriter = new(target);
-		xmlWriter.Formatting = Formatting.Indented;
-		Write(xmlWriter, project, files, module);
+		// We need to define a target framework for the project, even though the assembly won't actually target the reference assemblies for that framework.
+		return "net10.0";
 	}
 
-	private static void Write(XmlTextWriter xml, IProjectInfoProvider project, IEnumerable<ProjectItemInfo> files, MetadataFile module)
+	protected override IEnumerable<AssemblyReference> GetReferences(MetadataFile module, IProjectInfoProvider project)
 	{
-		xml.WriteStartElement("Project");
+		return module.AssemblyReferences;
+	}
 
-		xml.WriteAttributeString("Sdk", "Microsoft.NET.Sdk");
-
-		PlaceIntoTag("PropertyGroup", xml, () => WriteAssemblyInfo(xml, module));
-		PlaceIntoTag("PropertyGroup", xml, () => WriteFrameworkInfo(xml, module));
-		PlaceIntoTag("PropertyGroup", xml, () => WriteProjectInfo(xml, project));
-		PlaceIntoTag("ItemGroup", xml, () => WriteResources(xml, files));
-		PlaceIntoTag("ItemGroup", xml, () => WriteReferences(xml, module));
-
+	protected override void WriteReference(XmlTextWriter xml, AssemblyReference reference, IProjectInfoProvider project)
+	{
+		xml.WriteStartElement("ProjectReference");
+		xml.WriteAttributeString("Include", $"../{reference.Name}/{reference.Name}.csproj");
 		xml.WriteEndElement();
 	}
 
-	static void PlaceIntoTag(string tagName, XmlTextWriter xml, Action content)
-	{
-		xml.WriteStartElement(tagName);
-		try
-		{
-			content();
-		}
-		finally
-		{
-			xml.WriteEndElement();
-		}
-	}
-
-	static void WriteAssemblyInfo(XmlTextWriter xml, MetadataFile module)
-	{
-		xml.WriteElementString("AssemblyName", module.Name);
-
-		// Since we create AssemblyInfo.cs manually, we need to disable the auto-generation
-		xml.WriteElementString("GenerateAssemblyInfo", FalseString);
-	}
-
-	static void WriteFrameworkInfo(XmlTextWriter xml, MetadataFile module)
+	protected override IEnumerable<(string, string)> GetCustomProperties(IProjectInfoProvider project, IEnumerable<ProjectItemInfo> files, MetadataFile module)
 	{
 		// We need to define a target framework for the project, even though the assembly won't actually target the reference assemblies for that framework.
-		xml.WriteElementString("TargetFramework", "net10.0");
+		yield return ("TargetFramework", "net10.0");
 
 		// https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/advanced#nostandardlib
-		xml.WriteElementString("NoStandardLib", TrueString);
+		yield return ("NoStandardLib", TrueString);
 
 		// https://learn.microsoft.com/en-us/dotnet/core/project-sdk/msbuild-props#appendtargetframeworktooutputpath
-		xml.WriteElementString("AppendTargetFrameworkToOutputPath", FalseString);
+		yield return ("AppendTargetFrameworkToOutputPath", FalseString);
 
 		// https://learn.microsoft.com/en-us/dotnet/core/project-sdk/msbuild-props#appendruntimeidentifiertooutputpath
-		xml.WriteElementString("AppendRuntimeIdentifierToOutputPath", FalseString);
+		yield return ("AppendRuntimeIdentifierToOutputPath", FalseString);
 
 		// https://github.com/dotnet/runtime/blob/72dac24a0e6fa1047002858a762f36c88e53850b/src/coreclr/System.Private.CoreLib/System.Private.CoreLib.csproj#L51
-		xml.WriteElementString("DisableImplicitConfigurationDefines", TrueString);
+		yield return ("DisableImplicitConfigurationDefines", TrueString);
 
 		// https://learn.microsoft.com/en-us/dotnet/core/project-sdk/msbuild-props#disableimplicitframeworkdefines
-		xml.WriteElementString("DisableImplicitFrameworkDefines", TrueString);
+		yield return ("DisableImplicitFrameworkDefines", TrueString);
 
 		// https://learn.microsoft.com/en-us/dotnet/core/project-sdk/msbuild-props#disableimplicitframeworkreferences
-		xml.WriteElementString("DisableImplicitFrameworkReferences", TrueString);
+		yield return ("DisableImplicitFrameworkReferences", TrueString);
 
 		// https://learn.microsoft.com/en-us/dotnet/core/project-sdk/msbuild-props#disabletransitiveprojectreferences
-		xml.WriteElementString("DisableTransitiveProjectReferences", TrueString);
+		yield return ("DisableTransitiveProjectReferences", TrueString);
 
 		// https://learn.microsoft.com/en-us/dotnet/core/project-sdk/msbuild-props#disableimplicitnamespaceimports
-		xml.WriteElementString("DisableImplicitNamespaceImports", TrueString);
+		yield return ("DisableImplicitNamespaceImports", TrueString);
 
 		// https://github.com/dotnet/runtime/blob/72dac24a0e6fa1047002858a762f36c88e53850b/src/coreclr/System.Private.CoreLib/System.Private.CoreLib.csproj#L8
-		xml.WriteElementString("EnsureRuntimePackageDependencies", FalseString);
+		yield return ("EnsureRuntimePackageDependencies", FalseString);
 
 		// https://github.com/dotnet/runtime/blob/72dac24a0e6fa1047002858a762f36c88e53850b/src/coreclr/System.Private.CoreLib/System.Private.CoreLib.csproj#L40-L41
-		xml.WriteElementString("AddAdditionalExplicitAssemblyReferences", FalseString);
+		yield return ("AddAdditionalExplicitAssemblyReferences", FalseString);
 
 		// https://github.com/dotnet/runtime/blob/72dac24a0e6fa1047002858a762f36c88e53850b/src/coreclr/System.Private.CoreLib/System.Private.CoreLib.csproj#L42
 		if (module.Name == "mscorlib")
 		{
-			xml.WriteElementString("RuntimeMetadataVersion", "v4.0.30319");
-		}
-	}
-
-	static void WriteProjectInfo(XmlTextWriter xml, IProjectInfoProvider project)
-	{
-		xml.WriteElementString("LangVersion", project.LanguageVersion.ToString().Replace("CSharp", "").Replace('_', '.'));
-		xml.WriteElementString("AllowUnsafeBlocks", TrueString);
-		xml.WriteElementString("CheckForOverflowUnderflow", project.CheckForOverflowUnderflow ? TrueString : FalseString);
-
-		if (project.StrongNameKeyFile != null)
-		{
-			xml.WriteElementString("SignAssembly", TrueString);
-			xml.WriteElementString("AssemblyOriginatorKeyFile", Path.GetFileName(project.StrongNameKeyFile));
-		}
-	}
-
-	static void WriteResources(XmlTextWriter xml, IEnumerable<ProjectItemInfo> files)
-	{
-		// remove phase
-		foreach (ProjectItemInfo item in files.Where(t => t.ItemType == "EmbeddedResource"))
-		{
-			string buildAction = Path.GetExtension(item.FileName).ToUpperInvariant() switch
-			{
-				".CS" => "Compile",
-				".RESX" => "EmbeddedResource",
-				_ => "None"
-			};
-			if (buildAction == "EmbeddedResource")
-			{
-				continue;
-			}
-
-			xml.WriteStartElement(buildAction);
-			xml.WriteAttributeString("Remove", item.FileName);
-			xml.WriteEndElement();
-		}
-
-		// include phase
-		foreach (ProjectItemInfo item in files.Where(t => t.ItemType == "EmbeddedResource"))
-		{
-			if (Path.GetExtension(item.FileName) == ".resx")
-			{
-				continue;
-			}
-
-			xml.WriteStartElement("EmbeddedResource");
-			xml.WriteAttributeString("Include", item.FileName);
-			if (item.AdditionalProperties != null)
-			{
-				foreach ((string key, string value) in item.AdditionalProperties)
-				{
-					xml.WriteAttributeString(key, value);
-				}
-			}
-			xml.WriteEndElement();
-		}
-	}
-
-	static void WriteReferences(XmlTextWriter xml, MetadataFile module)
-	{
-		foreach (AssemblyReference reference in module.AssemblyReferences)
-		{
-			xml.WriteStartElement("ProjectReference");
-			xml.WriteAttributeString("Include", $"../{reference.Name}/{reference.Name}.csproj");
-			xml.WriteEndElement();
+			yield return ("RuntimeMetadataVersion", "v4.0.30319");
 		}
 	}
 }
