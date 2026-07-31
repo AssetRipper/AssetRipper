@@ -69,13 +69,9 @@ public sealed class SpriteInformationObject : AssetGroup, INamed
 	{
 		if (dictionary.TryGetValue(sprite, out ISpriteAtlas? mappedAtlas))
 		{
-			if (mappedAtlas is null)
+			if (mappedAtlas is null && atlas is not null)
 			{
 				dictionary[sprite] = atlas;
-			}
-			else if (atlas is not null && atlas != mappedAtlas)
-			{
-				throw new Exception($"{nameof(atlas)} is not the same as {nameof(mappedAtlas)}");
 			}
 		}
 		else

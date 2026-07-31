@@ -1,6 +1,7 @@
 using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files.SerializedFiles.IO;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
+using AssetRipper.IO.Files.Streams;
 using AssetRipper.IO.Files.Streams.Smart;
 using System.Diagnostics;
 using System.Numerics;
@@ -78,7 +79,7 @@ public sealed class SerializedFile : FileBase
 
 	public static bool IsSerializedFile(string filePath, FileSystem fileSystem)
 	{
-		using Stream stream = fileSystem.File.OpenRead(filePath);
+		using Stream stream = MultiFileStream.OpenRead(filePath, fileSystem);
 		return IsSerializedFile(stream);
 	}
 
@@ -202,7 +203,7 @@ public sealed class SerializedFile : FileBase
 	public static SerializedFile FromFile(string filePath, FileSystem fileSystem)
 	{
 		string fileName = fileSystem.Path.GetFileName(filePath);
-		SmartStream stream = SmartStream.OpenRead(filePath, fileSystem);
+		SmartStream stream = SmartStream.OpenReadMulti(filePath, fileSystem);
 		return SerializedFileScheme.Default.Read(stream, filePath, fileName);
 	}
 

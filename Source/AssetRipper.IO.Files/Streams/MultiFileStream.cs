@@ -159,8 +159,9 @@ public sealed partial class MultiFileStream : Stream
 			return [];
 		}
 
-		string filePatern = fileName + ".split*";
-		return fileSystem.Directory.GetFiles(dirPath, filePatern);
+		return fileSystem.Directory.EnumerateFiles(dirPath)
+			.Where(path => IsMultiFile(path) && GetFileName(path) == fileName)
+			.ToArray();
 	}
 
 	private static Stream OpenRead(string dirPath, string fileName, FileSystem fileSystem)
