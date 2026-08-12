@@ -12,6 +12,7 @@ using AssetRipper.IO.Files.SerializedFiles.Parser;
 using AssetRipper.SerializationLogic;
 using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
+using AssetRipper.SourceGenerated.Classes.ClassID_141;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
 using AssetRipper.SourceGenerated.Subclasses.AABB;
@@ -194,6 +195,22 @@ public sealed class GameAssetFactory : AssetFactoryBase
 
 	private static IUnityObjectBase? CreateAsset(AssetInfo assetInfo, UnityVersion version)
 	{
+		if (version.Type == UnityVersionType.China && version.Major == 2022)
+		{
+			//Chinese Unity builds (versions with a "c" type, eg 2022.3.20f1c1) are based on a much later engine than
+			//their version number suggests, so their serialized layouts can differ from international builds with the same version number.
+			if (assetInfo.ClassID == (int)ClassIDType.BuildSettings)
+			{
+				//The China build's BuildSettings contains an m_AuthToken field, which international builds only got in 2022.3.52.
+				return new BuildSettings_2022_3_52(assetInfo);
+			}
+			else if (assetInfo.ClassID == (int)ClassIDType.UnityConnectSettings)
+			{
+				//The China build's UnityConnectSettings has extra China-specific URL fields that don't exist in any international layout.
+				return ChinaUnityConnectSettingsTree.Create(assetInfo);
+			}
+		}
+
 		IUnityObjectBase? asset = AssetFactory.CreateSerialized(assetInfo, version);
 		if (asset is null && TypeTreeNodeStruct.TryMakeFromTpk((ClassIDType)assetInfo.ClassID, version, out TypeTreeNodeStruct releaseRoot, out TypeTreeNodeStruct editorRoot))
 		{
