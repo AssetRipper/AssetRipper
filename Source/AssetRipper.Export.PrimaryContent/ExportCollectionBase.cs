@@ -24,15 +24,7 @@ public abstract class ExportCollectionBase
 		string fileName = asset.GetBestName();
 		fileName = FileSystem.RemoveCloneSuffixes(fileName);
 		fileName = FileSystem.RemoveInstanceSuffixes(fileName);
-		fileName = fileName.Trim();
-		if (string.IsNullOrEmpty(fileName))
-		{
-			fileName = asset.ClassName;
-		}
-		else
-		{
-			fileName = FileSystem.FixInvalidFileNameCharacters(fileName);
-		}
+		fileName = FileSystem.GetSafeFileName(fileName.Trim(), $"{asset.ClassName}_{asset.PathID}");
 
 		fileName = $"{fileName}.{ExportExtension}";
 		return GetUniqueFileName(dirPath, fileName, fileSystem);

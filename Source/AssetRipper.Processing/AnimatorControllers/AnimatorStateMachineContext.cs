@@ -1,6 +1,7 @@
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Checksum;
+using AssetRipper.Import.Logging;
 using AssetRipper.SourceGenerated.Classes.ClassID_1101;
 using AssetRipper.SourceGenerated.Classes.ClassID_1102;
 using AssetRipper.SourceGenerated.Classes.ClassID_1107;
@@ -763,16 +764,7 @@ internal sealed class AnimatorStateMachineContext
 		{
 			StateMachineData childStateMachineData = IndexedStateMachines[childIndex];
 			IAnimatorStateMachine childStateMachine = childStateMachineData.StateMachine;
-			IAnimatorStateMachine parentStateMachine;
-			if (childStateMachineData.ParentFullPathID == 0) // Unknown StateMachines without possible parent are assigned to ExtraStateMachine
-			{
-				parentStateMachine = ExtraStateMachine!;
-			}
-			else
-			{
-				int parentIndex = GetStateMachineIndexForId(childStateMachineData.ParentFullPathID);
-				parentStateMachine = IndexedStateMachines[parentIndex].StateMachine;
-			}
+			IAnimatorStateMachine parentStateMachine = GetParentStateMachine(childIndex, childStateMachineData);
 
 			// set Child StateMachine for its found Parent
 			if (parentStateMachine.Has_ChildStateMachines())
@@ -844,6 +836,31 @@ internal sealed class AnimatorStateMachineContext
 		{
 			parent.StateMachine.TrimChildStateMachines();
 		}
+	}
+
+	private IAnimatorStateMachine GetParentStateMachine(int childIndex, StateMachineData childStateMachineData)
+	{
+		if (childStateMachineData.ParentFullPathID == 0)
+		{
+			if (ExtraStateMachine != null)
+			{
+				return ExtraStateMachine;
+			}
+
+			Logger.Warning(LogCategory.Processing,
+				$"Animator state machine #{childIndex} has no resolved parent. Assigning it to the root state machine.");
+			return RootStateMachine;
+		}
+
+		int parentIndex = GetStateMachineIndexForId(childStateMachineData.ParentFullPathID);
+		if (parentIndex >= 0)
+		{
+			return IndexedStateMachines[parentIndex].StateMachine;
+		}
+
+		Logger.Warning(LogCategory.Processing,
+			$"Animator state machine #{childIndex} references missing parent {childStateMachineData.ParentFullPathID}. Assigning it to the root state machine.");
+		return RootStateMachine;
 	}
 
 	private void SetChildrenPositions()

@@ -12,7 +12,7 @@ public class SingleExportCollection<T> : ExportCollectionBase where T : IUnityOb
 
 	public override bool Export(string projectDirectory, FileSystem fileSystem)
 	{
-		string subPath = fileSystem.Path.Join(projectDirectory, FileSystem.FixInvalidPathCharacters(Asset.GetBestDirectory()));
+		string subPath = fileSystem.Path.Join(projectDirectory, FileSystem.GetSafeRelativePath(Asset.GetBestDirectory()));
 		string fileName = GetUniqueFileName(Asset, subPath, fileSystem);
 
 		fileSystem.Directory.Create(subPath);

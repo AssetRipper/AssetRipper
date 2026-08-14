@@ -132,11 +132,18 @@ public sealed class PrimaryContentExporter
 			ExportCollectionBase collection = collections[i];
 			if (collection.Exportable)
 			{
-				Logger.Info(LogCategory.ExportProgress, $"({i + 1}/{collections.Count}) Exporting '{collection.Name}'");
+				IUnityObjectBase? asset = collection.Assets.FirstOrDefault();
+				string fallback = asset is null ? collection.GetType().Name : $"{asset.ClassName}_{asset.PathID}";
+				string displayName = FileSystem.GetSafeFileName(collection.Name, fallback);
+				if (FileSystem.ContainsUnsafeUnicode(collection.Name))
+				{
+					displayName += " [obfuscated]";
+				}
+				Logger.Info(LogCategory.ExportProgress, $"({i + 1}/{collections.Count}) Exporting '{displayName}'");
 				bool exportedSuccessfully = collection.Export(settings.ExportRootPath, fileSystem);
 				if (!exportedSuccessfully)
 				{
-					Logger.Warning(LogCategory.ExportProgress, $"Failed to export '{collection.Name}'");
+					Logger.Warning(LogCategory.ExportProgress, $"Failed to export '{displayName}'");
 				}
 			}
 		}

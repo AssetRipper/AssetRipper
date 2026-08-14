@@ -34,7 +34,7 @@ public sealed class UnreadableExportCollection : ExportCollection
 
 	public override bool Export(IExportContainer container, string projectDirectory, FileSystem fileSystem)
 	{
-		string name = FileSystem.FixInvalidPathCharacters(Asset.Name);
+		string name = FileSystem.GetSafeFileName(Asset.Name, ExportNameUtilities.GetFallbackName(Asset));
 		string resourcePath = fileSystem.Path.Join(projectDirectory, "AssetRipper", "UnreadableAssets", Asset.ClassName, $"{name}.unreadable");
 		string subPath = fileSystem.Path.GetDirectoryName(resourcePath)!;
 		fileSystem.Directory.Create(subPath);

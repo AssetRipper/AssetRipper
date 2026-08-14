@@ -35,7 +35,8 @@ public class SceneExportCollection : ExportCollection, IComparer<IUnityObjectBas
 
 	public override bool Export(IExportContainer container, string projectDirectory, FileSystem fileSystem)
 	{
-		string filePath = fileSystem.Path.Join(projectDirectory, $"{Scene.Path}.{ExportExtension}");
+		string scenePath = FileSystem.GetSafeRelativePath(Scene.Path);
+		string filePath = fileSystem.Path.Join(projectDirectory, $"{scenePath}.{ExportExtension}");
 		string folderPath = fileSystem.Path.GetDirectoryName(filePath)!;
 
 		if (IsSceneDuplicate(container))

@@ -76,6 +76,7 @@ public sealed partial class ProjectExporter
 	{
 		EventExportPreparationStarted?.Invoke();
 		List<IExportCollection> collections = CreateCollections(fileCollection);
+		WriteSanitizedNameMap(collections, options.ProjectRootPath, fileSystem);
 		EventExportPreparationFinished?.Invoke();
 
 		EventExportStarted?.Invoke();
@@ -90,11 +91,12 @@ public sealed partial class ProjectExporter
 			if (collection.Exportable)
 			{
 				currentExportable++;
-				Logger.Info(LogCategory.ExportProgress, $"({currentExportable}/{exportableCount}) Exporting '{collection.Name}'");
+				string displayName = ExportNameUtilities.GetSafeCollectionDisplayName(collection);
+				Logger.Info(LogCategory.ExportProgress, $"({currentExportable}/{exportableCount}) Exporting '{displayName}'");
 				bool exportedSuccessfully = collection.Export(container, options.ProjectRootPath, fileSystem);
 				if (!exportedSuccessfully)
 				{
-					Logger.Warning(LogCategory.ExportProgress, $"Failed to export '{collection.Name}' ({collection.GetType().Name})");
+					Logger.Warning(LogCategory.ExportProgress, $"Failed to export '{displayName}' ({collection.GetType().Name})");
 				}
 			}
 			EventExportProgressUpdated?.Invoke(i, collections.Count);
@@ -121,5 +123,50 @@ public sealed partial class ProjectExporter
 		}
 
 		return collections;
+	}
+
+	private static void WriteSanitizedNameMap(IEnumerable<IExportCollection> collections, string projectDirectory, FileSystem fileSystem)
+	{
+		List<(IUnityObjectBase Asset, string OriginalName, string SafeName)> entries = [];
+		HashSet<IUnityObjectBase> seenAssets = [];
+		foreach (IUnityObjectBase asset in collections.SelectMany(static collection => collection.Assets))
+		{
+			if (!seenAssets.Add(asset))
+			{
+				continue;
+			}
+
+			string originalName = asset.GetBestName();
+			string safeName = ExportNameUtilities.GetSafeAssetName(asset);
+			if (!string.Equals(originalName, safeName, StringComparison.Ordinal))
+			{
+				entries.Add((asset, originalName, safeName));
+			}
+		}
+
+		if (entries.Count == 0)
+		{
+			return;
+		}
+
+		fileSystem.Directory.Create(projectDirectory);
+		string mapPath = fileSystem.Path.Join(projectDirectory, "AssetRipper_NameMap.tsv");
+		using Stream stream = fileSystem.File.Create(mapPath);
+		using InvariantStreamWriter writer = new(stream, new System.Text.UTF8Encoding(false));
+		writer.WriteLine("Class\tPathID\tSafeName\tOriginalNameEscaped");
+		foreach ((IUnityObjectBase asset, string originalName, string safeName) in entries
+			.OrderBy(static entry => entry.Asset.ClassName, StringComparer.Ordinal)
+			.ThenBy(static entry => entry.Asset.PathID))
+		{
+			writer.Write(asset.ClassName);
+			writer.Write('\t');
+			writer.Write(asset.PathID);
+			writer.Write('\t');
+			writer.Write(safeName);
+			writer.Write('\t');
+			writer.WriteLine(FileSystem.EscapeUnsafeUnicode(originalName));
+		}
+
+		Logger.Info(LogCategory.Export, $"Saved {entries.Count} sanitized asset names to AssetRipper_NameMap.tsv");
 	}
 }

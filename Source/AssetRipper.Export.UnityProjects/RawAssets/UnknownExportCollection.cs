@@ -34,7 +34,8 @@ public sealed class UnknownExportCollection : ExportCollection
 
 	public override bool Export(IExportContainer container, string projectDirectory, FileSystem fileSystem)
 	{
-		string resourcePath = fileSystem.Path.Join(projectDirectory, "AssetRipper", "UnknownAssets", Asset.ClassName, $"{Asset.Name}.unknown");
+		string name = FileSystem.GetSafeFileName(Asset.Name, ExportNameUtilities.GetFallbackName(Asset));
+		string resourcePath = fileSystem.Path.Join(projectDirectory, "AssetRipper", "UnknownAssets", Asset.ClassName, $"{name}.unknown");
 		string subPath = fileSystem.Path.GetDirectoryName(resourcePath)!;
 		fileSystem.Directory.Create(subPath);
 		string resFileName = fileSystem.Path.GetFileName(resourcePath);

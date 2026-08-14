@@ -14,7 +14,7 @@ public class AssetExportCollection<T> : ExportCollection where T : IUnityObjectB
 
 	public override bool Export(IExportContainer container, string projectDirectory, FileSystem fileSystem)
 	{
-		string subPath = fileSystem.Path.Join(projectDirectory, FileSystem.FixInvalidPathCharacters(Asset.GetBestDirectory()));
+		string subPath = fileSystem.Path.Join(projectDirectory, FileSystem.GetSafeRelativePath(Asset.GetBestDirectory()));
 		string fileName = GetUniqueFileName(Asset, subPath, fileSystem);
 
 		fileSystem.Directory.Create(subPath);

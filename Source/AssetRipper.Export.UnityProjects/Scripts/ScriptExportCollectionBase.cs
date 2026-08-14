@@ -76,8 +76,8 @@ public abstract class ScriptExportCollectionBase : ExportCollection
 		string assemblyFolder = SpecialFileNames.RemoveAssemblyFileExtension(assembly);
 		string scriptsFolder = GetScriptsFolderName(assemblyFolder);
 		string namespaceFolder = @namespace.Replace('.', Path.DirectorySeparatorChar);
-		folderPath = FileSystem.FixInvalidPathCharacters(Path.Join(scriptsFolder, assemblyFolder, namespaceFolder));
-		fileName = $"{FileSystem.FixInvalidPathCharacters(@class)}.cs";
+		folderPath = FileSystem.GetSafeRelativePath(Path.Join(scriptsFolder, assemblyFolder, namespaceFolder));
+		fileName = $"{FileSystem.GetSafeFileName(@class)}.cs";
 	}
 
 	protected static void GetExportSubPath(IMonoScript script, out string folderPath, out string fileName)
