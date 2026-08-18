@@ -1,11 +1,12 @@
 using AsmResolver.DotNet;
+using AssetRipper.Import.Structure.Assembly.Serializable;
 using AssetRipper.Import.Structure.Platforms;
 using AssetRipper.IO.Files;
 using AssetRipper.SerializationLogic;
 
 namespace AssetRipper.Import.Structure.Assembly.Managers;
 
-public interface IAssemblyManager : IDisposable
+public interface IAssemblyManager : IDisposable, ITypeResolver
 {
 	void Initialize(PlatformGameStructure gameStructure);
 	AssemblyDefinition Load(string filePath, FileSystem fileSystem);
@@ -15,11 +16,6 @@ public interface IAssemblyManager : IDisposable
 	bool IsAssemblyLoaded(string assembly);
 	bool IsPresent(ScriptIdentifier scriptID);
 	bool IsValid(ScriptIdentifier scriptID);
-	bool TryGetSerializableType(
-		ScriptIdentifier scriptID,
-		UnityVersion version,
-		[NotNullWhen(true)] out SerializableType? scriptType,
-		[NotNullWhen(false)] out string? failureReason);
 	TypeDefinition GetTypeDefinition(ScriptIdentifier scriptID);
 	IEnumerable<AssemblyDefinition> GetAssemblies();
 	ScriptIdentifier GetScriptID(string assembly, string @namespace, string name);

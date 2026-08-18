@@ -27,10 +27,10 @@ public sealed class SerializablePair
 		Depth = depth;
 	}
 
-	public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags)
+	public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, ITypeResolver resolver)
 	{
-		First.Read(ref reader, version, flags, Depth, FirstField);
-		Second.Read(ref reader, version, flags, Depth, SecondField);
+		First.Read(ref reader, version, flags, Depth, FirstField, resolver);
+		Second.Read(ref reader, version, flags, Depth, SecondField, resolver);
 	}
 
 	public void Write(AssetWriter writer)

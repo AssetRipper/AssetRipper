@@ -24,7 +24,12 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 		Fields = new SerializableValue[type.Fields.Count];
 	}
 
-	public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags)
+	internal SerializableStructure(SerializableType type, int depth, UnityVersion version) : this(type, depth)
+	{
+		Version = version;
+	}
+
+	public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, ITypeResolver resolver)
 	{
 		Version = version;
 		for (int i = 0; i < Fields.Length; i++)
@@ -32,7 +37,18 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 			SerializableType.Field etalon = Type.Fields[i];
 			if (IsAvailable(etalon))
 			{
-				Fields[i].Read(ref reader, version, flags, Depth, etalon);
+				if (etalon.Type == ManagedReferenceTypes.Registry)
+				{
+					Fields[i].AsAsset = ManagedReferenceRegistryReader.Read(ref reader, version, flags, Depth + 1, resolver);
+					if (etalon.Align)
+					{
+						reader.Align();
+					}
+				}
+				else
+				{
+					Fields[i].Read(ref reader, version, flags, Depth, etalon, resolver);
+				}
 			}
 		}
 	}
@@ -117,11 +133,11 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 		return true;
 	}
 
-	public bool TryRead(ref EndianSpanReader reader, IMonoBehaviour monoBehaviour)
+	public bool TryRead(ref EndianSpanReader reader, IMonoBehaviour monoBehaviour, ITypeResolver resolver)
 	{
 		try
 		{
-			Read(ref reader, monoBehaviour.Collection.Version, monoBehaviour.Collection.Flags);
+			Read(ref reader, monoBehaviour.Collection.Version, monoBehaviour.Collection.Flags, resolver);
 		}
 		catch (Exception ex)
 		{

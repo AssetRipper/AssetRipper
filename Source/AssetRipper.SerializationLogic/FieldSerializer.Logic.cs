@@ -31,6 +31,14 @@ public readonly partial struct FieldSerializer(UnityVersion version, RuntimeCont
 	/// Prior to the first alpha of 2020, System.Collections.Generic.List`1 and UnityEngine.ExposedReference`1 were the only supported generic types.
 	/// </summary>
 	private bool IsGenericInstanceSerializable => version.GreaterThanOrEquals(2020);
+	/// <summary>
+	/// Objects referenced by [SerializeReference] fields got stable identifiers in 2021.2.0a19. Before that, an object's
+	/// identifier was its index, stored as a 32 bit integer instead of the 64 bit integer used afterwards.
+	/// </summary>
+	/// <remarks>
+	/// <see href="https://unity.com/blog/engine-platform/serializereference-improvements-in-unity-2021-lts"/>
+	/// </remarks>
+	private bool HasStableReferenceIds { get; } = version.GreaterThanOrEquals(2021, 2, 0, UnityVersionType.Alpha, 19);
 
 	private bool WillUnitySerialize(FieldDefinition fieldDefinition, TypeSignature fieldType)
 	{
