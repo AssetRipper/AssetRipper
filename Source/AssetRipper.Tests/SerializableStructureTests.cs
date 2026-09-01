@@ -17,7 +17,7 @@ internal class SerializableStructureTests
 		SerializableStructure structure = serializableType.CreateSerializableStructure();
 		byte[] data = new byte[27 * sizeof(float)];
 		EndianSpanReader reader = new(data, EndianType.LittleEndian);
-		structure.Read(ref reader, new UnityVersion(6000), default);
+		structure.Read(ref reader, new UnityVersion(6000), default, ITypeResolver.Null);
 		Assert.That(reader.Position, Is.EqualTo(data.Length));
 	}
 

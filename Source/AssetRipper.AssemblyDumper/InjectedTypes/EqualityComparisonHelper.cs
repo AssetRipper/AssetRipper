@@ -75,6 +75,24 @@ internal static class EqualityComparisonHelper
 		return true;
 	}
 
+	public static bool EquatableListDictionaryEquals<TKey, TValue>(AssetList<AssetDictionary<TKey, TValue>> x, AssetList<AssetDictionary<TKey, TValue>> y)
+		where TKey : notnull, IEquatable<TKey>, new()
+		where TValue : notnull, IEquatable<TValue>, new()
+	{
+		if (x.Count != y.Count)
+		{
+			return false;
+		}
+		for (int i = 0; i < x.Count; i++)
+		{
+			if (!EquatableDictionaryEquals(x[i], y[i]))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public static bool EquatablePairEquals<TKey, TValue>(AssetPair<TKey, TValue> x, AssetPair<TKey, TValue> y)
 		where TKey : notnull, IEquatable<TKey>, new()
 		where TValue : notnull, IEquatable<TValue>, new()
@@ -113,6 +131,26 @@ internal static class EqualityComparisonHelper
 		for (int i = 0; i < x.Count; i++)
 		{
 			if (!x.GetKey(i).Equals(y.GetKey(i)) || !EquatableListEquals(x.GetValue(i), y.GetValue(i)))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public static bool EquatableDictionaryDictionaryEquals<TKey, TValueKey, TValueValue>(AssetDictionary<TKey, AssetDictionary<TValueKey, TValueValue>> x, AssetDictionary<TKey, AssetDictionary<TValueKey, TValueValue>> y)
+		where TKey : notnull, IEquatable<TKey>, new()
+		where TValueKey : notnull, IEquatable<TValueKey>, new()
+		where TValueValue : notnull, IEquatable<TValueValue>, new()
+	{
+		if (x.Count != y.Count)
+		{
+			return false;
+		}
+
+		for (int i = 0; i < x.Count; i++)
+		{
+			if (!x.GetKey(i).Equals(y.GetKey(i)) || !EquatableDictionaryEquals(x.GetValue(i), y.GetValue(i)))
 			{
 				return false;
 			}

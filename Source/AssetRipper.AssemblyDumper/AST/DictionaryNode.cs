@@ -37,4 +37,6 @@ internal sealed class DictionaryNode : SingleNode<PairNode>
 	public IMethodDefOrRef Clear => MethodUtils.MakeMethodOnGenericType(SharedState.Instance.Importer, TypeSignature, clear.Value);
 	public IMethodDefOrRef AddNew => MethodUtils.MakeMethodOnGenericType(SharedState.Instance.Importer, TypeSignature, addNew.Value);
 	public IMethodDefOrRef GetPair => MethodUtils.MakeMethodOnGenericType(SharedState.Instance.Importer, TypeSignature, getPair.Value);
+
+	public override string ToString() => $"Dictionary<{Child.Key}, {Child.Value}>";
 }

@@ -97,7 +97,7 @@ internal class DefaultYamlWalkerTests
 			  subMeshCount: 0
 
 			""";
-		MonoBehaviour_2017_3 monoBehaviour = AssetCreator.CreateUnsafe<MonoBehaviour_2017_3>();
+		MonoBehaviour_5 monoBehaviour = AssetCreator.CreateUnsafe<MonoBehaviour_5>();
 		monoBehaviour.Structure = new StaticBatchInfo();
 		string yamlActual = GenerateYaml(new DefaultYamlWalker(), monoBehaviour);
 		Assert.That(yamlActual, Is.EqualTo(yamlExpected));
@@ -137,7 +137,7 @@ internal class DefaultYamlWalkerTests
 			  subMeshCount: 0
 
 			""";
-		MonoBehaviour_2017_3 monoBehaviour = AssetCreator.CreateUnsafe<MonoBehaviour_2017_3>();
+		MonoBehaviour_5 monoBehaviour = AssetCreator.CreateUnsafe<MonoBehaviour_5>();
 		monoBehaviour.Structure = new StaticBatchInfo();
 		string yamlActual = GenerateYaml(new DefaultYamlWalker(), [(monoBehaviour, 1), (monoBehaviour, 2)]);
 		Assert.That(yamlActual, Is.EqualTo(yamlExpected));

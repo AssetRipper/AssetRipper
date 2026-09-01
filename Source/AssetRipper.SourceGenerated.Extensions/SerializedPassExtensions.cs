@@ -45,6 +45,34 @@ public static class SerializedPassExtensions
 		}
 	}
 
+	public static IEnumerable<(ISerializedProgram, ShaderType)> GetProgramsWithType(this ISerializedPass pass)
+	{
+		if (pass.HasProgram(ShaderType.Vertex))
+		{
+			yield return (pass.ProgVertex, ShaderType.Vertex);
+		}
+		if (pass.HasProgram(ShaderType.Fragment))
+		{
+			yield return (pass.ProgFragment, ShaderType.Fragment);
+		}
+		if (pass.HasProgram(ShaderType.Geometry))
+		{
+			yield return (pass.ProgGeometry, ShaderType.Geometry);
+		}
+		if (pass.HasProgram(ShaderType.Hull))
+		{
+			yield return (pass.ProgHull, ShaderType.Hull);
+		}
+		if (pass.HasProgram(ShaderType.Domain))
+		{
+			yield return (pass.ProgDomain, ShaderType.Domain);
+		}
+		if (pass.HasProgram(ShaderType.RayTracing) && pass.Has_ProgRayTracing())
+		{
+			yield return (pass.ProgRayTracing, ShaderType.RayTracing);
+		}
+	}
+
 	public static int MaxShaderModelVersion(this ISerializedPass pass, UnityVersion version)
 	{
 		int maxVersion = 0;

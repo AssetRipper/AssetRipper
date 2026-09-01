@@ -5,11 +5,11 @@ namespace AssetRipper.SourceGenerated.Extensions;
 
 public static class VectorParameterExtensions
 {
-	public static void SetValues(this IVectorParameter parameter, string name, ShaderParamType type, int index, int columns)
+	public static void SetValues(this IVectorParameter parameter, string name, ShaderParamType type, int offsetInConstantBuffer, int columns)
 	{
 		//parameter.Name = name;//Name doesn't exist
 		parameter.NameIndex = -1;
-		parameter.Index = index;
+		parameter.OffsetInConstantBuffer = offsetInConstantBuffer;
 		parameter.ArraySize = 0;
 		parameter.Type = (sbyte)type;
 		parameter.Dim = (sbyte)columns;

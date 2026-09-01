@@ -5,15 +5,18 @@ namespace AssetRipper.SourceGenerated.Extensions;
 
 public static class SerializedSubProgramExtensions
 {
-	public static ShaderGpuProgramType GetProgramType(this ISerializedSubProgram subProgram, UnityVersion version)
+	extension(ISerializedSubProgram subProgram)
 	{
-		if (ShaderGpuProgramTypeExtensions.GpuProgramType55Relevant(version))
+		public ShaderGpuProgramType GetProgramType(UnityVersion version)
 		{
-			return ((ShaderGpuProgramType55)subProgram.GpuProgramType).ToGpuProgramType();
-		}
-		else
-		{
-			return ((ShaderGpuProgramType53)subProgram.GpuProgramType).ToGpuProgramType();
+			if (ShaderGpuProgramTypeExtensions.GpuProgramType55Relevant(version))
+			{
+				return ((ShaderGpuProgramType55)subProgram.GpuProgramType).ToGpuProgramType();
+			}
+			else
+			{
+				return ((ShaderGpuProgramType53)subProgram.GpuProgramType).ToGpuProgramType();
+			}
 		}
 	}
 }

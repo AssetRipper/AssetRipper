@@ -49,7 +49,7 @@ public sealed class ViewPage : DefaultPage
 		new H2(writer).Close($"{Localization.Results}: {results.Count}");
 
 		// Class filter - only show if there are multiple class types
-		var availableClasses = results.Select(r => r.Asset.ClassName).Distinct().Order().ToList();
+		var availableClasses = results.Select(r => r.Asset.ClassName).Distinct().Order(StringComparer.Ordinal).ToList();
 		if (availableClasses.Count > 1)
 		{
 			new Label(writer).WithFor("classFilter").WithClass("me-2").Close(Localization.Class);

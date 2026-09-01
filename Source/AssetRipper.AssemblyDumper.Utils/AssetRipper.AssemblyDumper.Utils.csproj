@@ -7,7 +7,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="AssetRipper.Primitives" Version="3.2.0" />
-		<PackageReference Include="System.Text.Json" Version="11.0.0-preview.5.26302.115" />
+		<PackageReference Include="System.Text.Json" Version="11.0.0-preview.6.26359.118" />
 	</ItemGroup>
 
 	<ItemGroup>

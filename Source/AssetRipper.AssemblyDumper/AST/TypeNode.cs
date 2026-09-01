@@ -23,4 +23,6 @@ internal sealed class TypeNode : Node
 	/// We generate the equality comparison for the type if it has no PPtrs.
 	/// </summary>
 	public override bool Equatable => !AnyPPtrs;
+
+	public override string ToString() => ClassInstance.Name;
 }

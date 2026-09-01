@@ -13,11 +13,13 @@ namespace AssetRipper.Export.UnityProjects.Textures;
 
 public sealed class TextureArrayAssetExporter : BinaryAssetExporter
 {
-	public ImageExportFormat ImageExportFormat { get; private set; }
+	public ImageExportFormat ImageExportFormat { get; }
+	public bool PreferOriginalTextureExtension { get; }
 
 	public TextureArrayAssetExporter(FullConfiguration configuration)
 	{
 		ImageExportFormat = configuration.ExportSettings.ImageExportFormat;
+		PreferOriginalTextureExtension = configuration.ExportSettings.PreferOriginalTextureExtension;
 	}
 
 	public override bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection)
@@ -76,7 +78,7 @@ public sealed class TextureArrayAssetExporter : BinaryAssetExporter
 		if (success)
 		{
 			using Stream stream = fileSystem.File.Create(path);
-			bitmap.Save(stream, ImageExportFormat);
+			bitmap.Save(stream, asset.GetTextureExportFormat(PreferOriginalTextureExtension, ImageExportFormat));
 			return true;
 		}
 		else

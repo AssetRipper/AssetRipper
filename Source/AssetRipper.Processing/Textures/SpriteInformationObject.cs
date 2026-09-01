@@ -22,7 +22,7 @@ public sealed class SpriteInformationObject : AssetGroup, INamed
 	Utf8String INamed.Name
 	{
 		get => Texture.Name;
-		set { }
+		set => Texture.Name = value;
 	}
 
 	public override IEnumerable<IUnityObjectBase> Assets
@@ -89,4 +89,14 @@ public sealed class SpriteInformationObject : AssetGroup, INamed
 		Debug.Assert(Texture.MainAsset is null);
 		base.SetMainAsset();
 	}
+
+	public override string? OriginalPath { get => Texture.OriginalPath; set => Texture.OriginalPath = value; }
+	public override string? OverridePath { get => Texture.OverridePath; set => Texture.OverridePath = value; }
+	public override string? OriginalDirectory { get => Texture.OriginalDirectory; set => Texture.OriginalDirectory = value; }
+	public override string? OverrideDirectory { get => Texture.OverrideDirectory; set => Texture.OverrideDirectory = value; }
+	public override string? OriginalName { get => Texture.OriginalName; set => Texture.OriginalName = value; }
+	public override string? OverrideName { get => Texture.OverrideName; set => Texture.OverrideName = value; }
+	public override string? OriginalExtension { get => Texture.OriginalExtension; set => Texture.OriginalExtension = value; }
+	public override string? OverrideExtension { get => Texture.OverrideExtension; set => Texture.OverrideExtension = value; }
+	public override string? AssetBundleName { get => Texture.AssetBundleName; set => Texture.AssetBundleName = value; }
 }

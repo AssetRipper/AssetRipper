@@ -17,13 +17,13 @@ public sealed class MixedGameStructure : PlatformGameStructure
 			if (MultiFileStream.Exists(path, FileSystem))
 			{
 				string name = MultiFileStream.GetFileName(path);
-				AddFile(Files, name, path);
+				AddFile(name, MultiFileStream.GetFilePath(path));
 				string directory = FileSystem.Path.GetDirectoryName(path) ?? throw new Exception("Could not get directory name");
 				dataPaths.Add(directory);
 			}
 			else if (FileSystem.Directory.Exists(path))
 			{
-				CollectFromDirectory(path, Files, dataPaths);
+				CollectFromDirectory(path, dataPaths);
 			}
 			else
 			{
@@ -47,25 +47,25 @@ public sealed class MixedGameStructure : PlatformGameStructure
 		return paths.Select(t => MultiFileStream.GetFilePath(t)).Distinct();
 	}
 
-	private void CollectFromDirectory(string root, List<KeyValuePair<string, string>> files, ISet<string> dataPaths)
+	private void CollectFromDirectory(string root, ISet<string> dataPaths)
 	{
-		int count = files.Count;
-		CollectAllSerializedFiles(root, files);
-		CollectWebFiles(root, files);
-		CollectAssetBundles(root, files);
+		int count = Files.Count;
+		CollectAllSerializedFiles(root);
+		CollectWebFiles(root);
+		CollectAssetBundles(root);
 		CollectAssemblies(root);
-		if (files.Count != count)
+		if (Files.Count != count)
 		{
 			dataPaths.Add(root);
 		}
 
 		foreach (string subDirectory in FileSystem.Directory.EnumerateDirectories(root))
 		{
-			CollectFromDirectory(subDirectory, files, dataPaths);
+			CollectFromDirectory(subDirectory, dataPaths);
 		}
 	}
 
-	private void CollectWebFiles(string root, List<KeyValuePair<string, string>> files)
+	private void CollectWebFiles(string root)
 	{
 		foreach (string levelFile in FileSystem.Directory.EnumerateFiles(root))
 		{
@@ -76,7 +76,7 @@ public sealed class MixedGameStructure : PlatformGameStructure
 				case WebGLGameStructure.DataGzExtension:
 					{
 						string name = FileSystem.Path.GetFileNameWithoutExtension(levelFile);
-						AddFile(files, name, levelFile);
+						AddFile(name, levelFile);
 					}
 					break;
 
@@ -86,7 +86,7 @@ public sealed class MixedGameStructure : PlatformGameStructure
 						if (fileName.EndsWith(WebGLGameStructure.DataWebExtension, StringComparison.Ordinal))
 						{
 							string name = fileName.Substring(0, fileName.Length - WebGLGameStructure.DataWebExtension.Length);
-							AddFile(files, name, levelFile);
+							AddFile(name, levelFile);
 						}
 					}
 					break;

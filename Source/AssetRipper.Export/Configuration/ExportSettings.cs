@@ -52,6 +52,11 @@ public sealed record class ExportSettings
 	public bool ExportUnreadableAssets { get; set; } = false;
 
 	/// <summary>
+	/// If true, the original texture extension (when available) will be preferred over the selected <see cref="ImageExportFormat"/>.
+	/// </summary>
+	public bool PreferOriginalTextureExtension { get; set; } = true;
+
+	/// <summary>
 	/// Should Unity packages be automatically detected from loaded assemblies?
 	/// </summary>
 	public PackageDetectionMode PackageDetectionMode { get; set; } = PackageDetectionMode.Off;
@@ -71,6 +76,7 @@ public sealed record class ExportSettings
 		Logger.Info(LogCategory.General, $"{nameof(SpriteExportMode)}: {SpriteExportMode}");
 		Logger.Info(LogCategory.General, $"{nameof(TextExportMode)}: {TextExportMode}");
 		Logger.Info(LogCategory.General, $"{nameof(ExportUnreadableAssets)}: {ExportUnreadableAssets}");
+		Logger.Info(LogCategory.General, $"{nameof(PreferOriginalTextureExtension)}: {PreferOriginalTextureExtension}");
 		Logger.Info(LogCategory.General, $"{nameof(PackageDetectionMode)}: {PackageDetectionMode}");
 	}
 }

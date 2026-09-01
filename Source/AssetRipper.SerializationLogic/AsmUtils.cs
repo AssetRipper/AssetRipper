@@ -6,14 +6,14 @@ internal static class AsmUtils
 {
 	public static IEnumerable<TypeDefinition> AllInterfacesImplementedBy(TypeDefinition typeDefinition, RuntimeContext? runtimeContext)
 	{
-		return TypeAndBaseTypesOf(typeDefinition, runtimeContext).SelectMany(t => t.Interfaces).Select(i => i.Interface!.CheckedResolve(runtimeContext)).Distinct();
+		return TypeAndBaseTypesOf(typeDefinition, runtimeContext).SelectMany(t => t.Interfaces).Select(i => i.Interface!.Resolve(runtimeContext)).Distinct();
 	}
 
 	public static IEnumerable<TypeDefinition> TypeAndBaseTypesOf(ITypeDescriptor? typeReference, RuntimeContext? runtimeContext)
 	{
 		while (typeReference != null)
 		{
-			TypeDefinition typeDefinition = typeReference.CheckedResolve(runtimeContext);
+			TypeDefinition typeDefinition = typeReference.Resolve(runtimeContext);
 			yield return typeDefinition;
 			typeReference = typeDefinition.BaseType;
 		}
