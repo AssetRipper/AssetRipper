@@ -6,36 +6,41 @@ namespace AssetRipper.Export.PrimaryContent.Audio;
 
 public sealed class AudioExportCollection : SingleExportCollection<IAudioClip>
 {
-	private byte[] data;
 	private readonly string extension;
 
-	private AudioExportCollection(AudioContentExtractor contentExtractor, IAudioClip asset, byte[] data, string extension) : base(contentExtractor, asset)
+	private AudioExportCollection(AudioContentExtractor contentExtractor, IAudioClip asset, string extension) : base(contentExtractor, asset)
 	{
-		this.data = data;
 		this.extension = extension;
 	}
 
 	public static bool TryCreate(AudioContentExtractor contentExtractor, IAudioClip asset, [NotNullWhen(true)] out AudioExportCollection? exportCollection)
 	{
-		if (AudioClipDecoder.TryDecode(asset, out byte[]? data, out string? extension, out string? message))
-		{
-			exportCollection = new AudioExportCollection(contentExtractor, asset, data, extension);
-			return true;
-		}
-		else
+		// We decode twice to avoid storing the decoded data in memory.
+
+		if (!AudioClipDecoder.TryDecode(asset, out byte[]? data, out string? extension, out string? message))
 		{
 			Logger.Log(LogType.Warning, LogCategory.Export, message);
 			exportCollection = null;
 			return false;
 		}
+		else if (data.Length == 0)
+		{
+			Logger.Log(LogType.Warning, LogCategory.Export, $"AudioClip '{asset.Name}' has no audio data.");
+			exportCollection = null;
+			return false;
+		}
+		else
+		{
+			exportCollection = new AudioExportCollection(contentExtractor, asset, extension);
+			return true;
+		}
 	}
 
 	protected override bool ExportInner(string filePath, string dirPath, FileSystem fileSystem)
 	{
-		if (data.Length > 0)
+		if (AudioClipDecoder.TryDecode(Asset, out byte[]? data, out _, out _))
 		{
 			fileSystem.File.WriteAllBytes(filePath, data);
-			data = []; // Export is only called once, so we can clear the data.
 			return true;
 		}
 		else

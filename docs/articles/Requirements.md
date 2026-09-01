@@ -2,7 +2,7 @@
 
 ## Running AssetRipper
 
-if you want to run binary files, you need to install:
+If you want to run binary files, you need to install:
 
 ### Unity Editor
 - [Download Unity](https://unity.com/releases/editor/archive)

@@ -36,4 +36,6 @@ internal sealed class PairNode : Node
 	public IMethodDefOrRef GetValue => MethodUtils.MakeMethodOnGenericType(SharedState.Instance.Importer, TypeSignature, getValue.Value);
 	public IMethodDefOrRef SetValue => MethodUtils.MakeMethodOnGenericType(SharedState.Instance.Importer, TypeSignature, setValue.Value);
 	public IMethodDefOrRef ImplicitConversion => MethodUtils.MakeMethodOnGenericType(SharedState.Instance.Importer, TypeSignature, implicitConversion.Value);
+
+	public override string ToString() => $"Pair<{Key}, {Value}>";
 }

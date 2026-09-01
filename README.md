@@ -12,20 +12,24 @@ AssetRipper is a powerful tool for analyzing Unity game files. For example, it e
 * Identify code that could not be inlined or trimmed from their build
 * Find broken asset references that would cause issues in their game
 
-AssetRipper supports Unity versions from `3.5.0` to `6000.5.X`. However, support quality may vary slightly for different Unity versions.
+AssetRipper supports Unity versions from `3.5.0` to `6000.4.X`. However, support quality may vary slightly for different Unity versions.
 
-[Downloads](https://assetripper.github.io/AssetRipper/articles/Downloads.html)
+[Downloads](https://assetripper.com/download.html)
 
 ## Premium Edition
 
-There is a premium edition of AssetRipper. This edition includes additional [features and improvements](https://assetripper.github.io/AssetRipper/articles/PremiumFeatures.html).
+There is a premium edition of AssetRipper. This edition includes additional [features and improvements](https://assetripper.com/premium/features/).
 
 ## Tips
 
 Your support helps maintain and improve AssetRipper. If you find this tool useful, please consider tipping:
 
+* [Ko-fi](https://ko-fi.com/assetripper)
+* [Buy Me a Coffee](https://buymeacoffee.com/assetripper)
 * [GitHub Sponsors](https://github.com/sponsors/ds5678)
 * [PayPal](https://paypal.me/ds5678)
+
+Users can access AssetRipper Premium with an active $10 subscription on any of those 4 platforms.
 
 ## Discord [![](https://img.shields.io/discord/867514400701153281?color=blue&label=AssetRipper)](https://discord.gg/XqXa53W2Yh)
 

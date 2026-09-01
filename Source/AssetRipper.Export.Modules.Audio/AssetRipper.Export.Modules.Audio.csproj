@@ -7,13 +7,13 @@
 
 	<ItemGroup>
 		<PackageReference Include="Fmod5Sharp" Version="3.1.0" />
-		<PackageReference Include="NAudio.Core" Version="2.3.0" />
+		<PackageReference Include="NAudio.Core" Version="3.0.1" />
 		<PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<!-- Fmod5Sharp references Microsoft.Bcl.Memory 9.0.0, which has a security warning. -->
-		<PackageReference Include="Microsoft.Bcl.Memory" Version="10.0.7" />
+		<PackageReference Include="Microsoft.Bcl.Memory" Version="10.0.11" />
 	</ItemGroup>
 
 	<ItemGroup>

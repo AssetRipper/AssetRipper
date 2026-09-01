@@ -27,6 +27,9 @@ public sealed class ScriptLanguageVersionDropDownSetting : DropDownSetting<Scrip
 		ScriptLanguageVersion.CSharp10_0 => Localization.CSharpLangageVersionConfig100,
 		ScriptLanguageVersion.CSharp11_0 => Localization.CSharpLangageVersionConfig110,
 		ScriptLanguageVersion.CSharp12_0 => Localization.CSharpLangageVersionConfig120,
+		ScriptLanguageVersion.CSharp13_0 => Localization.CSharpLangageVersionConfig130,
+		ScriptLanguageVersion.CSharp14_0 => Localization.CSharpLangageVersionConfig140,
+		ScriptLanguageVersion.CSharp15_0 => Localization.CSharpLangageVersionConfig150,
 		ScriptLanguageVersion.Latest => Localization.CSharpLangageVersionConfigLatest,
 		_ => base.GetDisplayName(value),
 	};

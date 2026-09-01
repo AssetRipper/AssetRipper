@@ -11,14 +11,16 @@ namespace AssetRipper.Export.UnityProjects.Textures;
 
 public class TextureAssetExporter : BinaryAssetExporter
 {
-	public ImageExportFormat ImageExportFormat { get; private set; }
-	private SpriteExportMode SpriteExportMode { get; set; }
+	public ImageExportFormat ImageExportFormat { get; }
+	private SpriteExportMode SpriteExportMode { get; }
+	public bool PreferOriginalTextureExtension { get; }
 	private bool ExportSprites => SpriteExportMode is not SpriteExportMode.Yaml;
 
 	public TextureAssetExporter(FullConfiguration configuration)
 	{
 		ImageExportFormat = configuration.ExportSettings.ImageExportFormat;
 		SpriteExportMode = configuration.ExportSettings.SpriteExportMode;
+		PreferOriginalTextureExtension = configuration.ExportSettings.PreferOriginalTextureExtension;
 	}
 
 	public override bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection)
@@ -47,7 +49,7 @@ public class TextureAssetExporter : BinaryAssetExporter
 		if (TextureConverter.TryConvertToBitmap(texture, out DirectBitmap bitmap))
 		{
 			using Stream stream = fileSystem.File.Create(path);
-			bitmap.Save(stream, ImageExportFormat);
+			bitmap.Save(stream, texture.GetTextureExportFormat(PreferOriginalTextureExtension, ImageExportFormat));
 			return true;
 		}
 		else

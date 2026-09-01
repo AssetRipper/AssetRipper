@@ -85,7 +85,8 @@ internal sealed class LinuxGameStructure : PlatformGameStructure
 		string x86Path = fileSystem.Path.Join(rootPath, gameName + x86Extension);
 		string x64Path = fileSystem.Path.Join(rootPath, gameName + x64Extension);
 		string x86_64Path = fileSystem.Path.Join(rootPath, gameName + x86_64Extension);
-		if (fileSystem.File.Exists(x86Path) || fileSystem.File.Exists(x64Path) || fileSystem.File.Exists(x86_64Path))
+		string unsuffixedPath = fileSystem.Path.Join(rootPath, gameName);
+		if (fileSystem.File.Exists(x86Path) || fileSystem.File.Exists(x64Path) || fileSystem.File.Exists(x86_64Path) || fileSystem.File.Exists(unsuffixedPath))
 		{
 			return true;
 		}
@@ -129,7 +130,7 @@ internal sealed class LinuxGameStructure : PlatformGameStructure
 		foreach (string file in fileSystem.Directory.EnumerateFiles(rootDiectory))
 		{
 			string extension = fileSystem.Path.GetExtension(file);
-			if (extension is x86Extension or x64Extension or x86_64Extension)
+			if (extension is x86Extension or x64Extension or x86_64Extension or "")
 			{
 				name = fileSystem.Path.GetFileNameWithoutExtension(file);
 				string dataFolder = $"{name}_{DataFolderName}";

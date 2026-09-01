@@ -16,7 +16,7 @@ internal static class Pass080_PPtrConversions
 #nullable disable
 	private static ITypeDefOrRef pptrTypeImported;
 	private static ITypeDefOrRef commonPPtrTypeGeneric;
-	private static ITypeDefOrRef commonPPtrType;
+	private static TypeSignature commonPPtrType;
 	private static IMethodDefOrRef commonPPtrConstructor;
 	private static IMethodDefOrRef commonPPtrGetFileIDMethod;
 	private static IMethodDefOrRef commonPPtrGetPathIDMethod;
@@ -32,7 +32,7 @@ internal static class Pass080_PPtrConversions
 	{
 		pptrTypeImported = SharedState.Instance.Importer.ImportType(typeof(IPPtr<>));
 		commonPPtrTypeGeneric = SharedState.Instance.Importer.ImportType(typeof(PPtr<>));
-		commonPPtrType = SharedState.Instance.Importer.ImportType(typeof(PPtr));
+		commonPPtrType = SharedState.Instance.Importer.ImportTypeSignature(typeof(PPtr));
 		commonPPtrConstructor = SharedState.Instance.Importer.ImportConstructor<PPtr>(c => c.Parameters.Count == 2);
 		commonPPtrGetFileIDMethod = SharedState.Instance.Importer.ImportMethod<PPtr>(m => m.Name == $"get_{nameof(PPtr.FileID)}");
 		commonPPtrGetPathIDMethod = SharedState.Instance.Importer.ImportMethod<PPtr>(m => m.Name == $"get_{nameof(PPtr.PathID)}");
@@ -120,7 +120,7 @@ internal static class Pass080_PPtrConversions
 		}
 		instance.Type.AddImplicitConversion(parameterType.ToTypeSignature());
 		instance.Type.AddImplicitConversion<IUnityObjectBase>();
-		instance.Type.AddImplicitConversion(commonPPtrType.ToTypeSignature(), commonPPtrConstructor);
+		instance.Type.AddImplicitConversion(commonPPtrType, commonPPtrConstructor);
 	}
 
 	private static void AddPPtrInterfaceImplementation(this TypeDefinition type, TypeDefinition parameterType)
@@ -156,12 +156,12 @@ internal static class Pass080_PPtrConversions
 		MethodDefinition mainMethod;
 		{
 			MethodDefinition method = mainMethod = pptrType.AddMethod(nameof(IPPtr<>.SetAsset), InterfaceUtils.InterfaceMethodImplementation, SharedState.Instance.Importer.Void);
-			method.AddParameter(SharedState.Instance.Importer.ImportType<AssetCollection>().ToTypeSignature(), "collection");
+			method.AddParameter(SharedState.Instance.Importer.ImportTypeSignature<AssetCollection>(), "collection");
 			method.AddParameter(parameterType, "asset").Definition!.AddNullableAttribute(NullableAnnotation.MaybeNull);
 			CilInstructionCollection instructions = method.CilMethodBody!.Instructions;
 
 			//Convert PPtr
-			CilLocalVariable convertedPPtr = instructions.AddLocalVariable(commonPPtrType.ToTypeSignature());
+			CilLocalVariable convertedPPtr = instructions.AddLocalVariable(commonPPtrType);
 			instructions.Add(CilOpCodes.Ldarg_1);
 			instructions.Add(CilOpCodes.Ldarg_2);
 			instructions.Add(CilOpCodes.Call, forceCreatePPtrHelper);
@@ -194,7 +194,7 @@ internal static class Pass080_PPtrConversions
 		if (instanceParameterType is not null)
 		{
 			MethodDefinition method = pptrType.AddMethod(nameof(IPPtr<>.SetAsset), InterfaceUtils.InterfaceMethodImplementation, SharedState.Instance.Importer.Void);
-			method.AddParameter(SharedState.Instance.Importer.ImportType<AssetCollection>().ToTypeSignature(), "collection");
+			method.AddParameter(SharedState.Instance.Importer.ImportTypeSignature<AssetCollection>(), "collection");
 			method.AddParameter(groupParameterType, "asset").Definition!.AddNullableAttribute(NullableAnnotation.MaybeNull);
 			CilInstructionCollection instructions = method.CilMethodBody!.Instructions;
 
@@ -228,7 +228,7 @@ internal static class Pass080_PPtrConversions
 	private static MethodDefinition ImplementTryGetAssetMethod(this TypeDefinition pptrType, TypeSignature parameterType)
 	{
 		MethodDefinition method = pptrType.AddMethod(nameof(IPPtr<>.TryGetAsset), InterfaceUtils.InterfaceMethodImplementation, SharedState.Instance.Importer.Boolean);
-		method.AddParameter(SharedState.Instance.Importer.ImportType<AssetCollection>().ToTypeSignature(), "collection");
+		method.AddParameter(SharedState.Instance.Importer.ImportTypeSignature<AssetCollection>(), "collection");
 		ParameterDefinition outParameter = method.AddParameter(parameterType.MakeByReferenceType(), "asset").Definition!;
 		outParameter.IsOut = true;
 		outParameter.AddNullableAttribute(NullableAnnotation.MaybeNull);

@@ -9,7 +9,16 @@ public static class Pass998_SaveAssembly
 	{
 		AssemblyDefinition assembly = SharedState.Instance.Assembly;
 
-		string filePath = Path.Combine(Environment.CurrentDirectory, assembly.Name!.ToString() + ".dll");
+		// Remove empty method bodies; they're not valid
+		foreach (MethodDefinition method in SharedState.Instance.Module.GetAllTypes().SelectMany(t => t.Methods))
+		{
+			if (method.CilMethodBody is { Instructions.Count: 0 })
+			{
+				method.CilMethodBody = null;
+			}
+		}
+
+		string filePath = Path.Join(Environment.CurrentDirectory, $"{assembly.Name}.dll");
 
 		DotNetDirectoryFactory factory = new();
 		ManagedPEImageBuilder builder = new ManagedPEImageBuilder(factory, ThrowErrorListener.Instance);

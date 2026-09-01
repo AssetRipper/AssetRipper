@@ -456,6 +456,14 @@ public static class Pass002_RenameSubnodes
 		{
 			node.TypeName = "ShaderVariantInfo";
 		}
+		else if (node.TypeName is "MatrixParameter" or "StructParameter" or "VectorParameter")
+		{
+			node.TryRenameSubNode("m_Index", "m_OffsetInConstantBuffer"); // Changed in Unity 6.6
+		}
+		else if (node.TypeName is "Binding")
+		{
+			node.TryRenameSubNode("m_Set", "m_EncodedData"); // m_Set was only used for a couple alpha versions
+		}
 		else if (node.TypeName == "Shader")
 		{
 			node.TryRenameSubNode("m_SubProgramBlob", "m_CompressedBlob");

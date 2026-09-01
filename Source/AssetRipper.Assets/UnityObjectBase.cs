@@ -6,7 +6,7 @@ using System.Diagnostics;
 namespace AssetRipper.Assets;
 
 /// <summary>
-/// The artificial base class for all generated Unity classes which inherit from Object.
+/// The artificial base class for all Unity classes which inherit from Object.
 /// </summary>
 [DebuggerTypeProxy(typeof(UnityObjectBaseProxy))]
 public abstract partial class UnityObjectBase : UnityAssetBase, IUnityObjectBase

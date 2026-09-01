@@ -3,6 +3,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_21;
 using AssetRipper.SourceGenerated.Subclasses.FastPropertyName;
 using AssetRipper.SourceGenerated.Subclasses.UnityPropertySheet;
 using AssetRipper.SourceGenerated.Subclasses.UnityTexEnv;
+using System.Collections;
 
 namespace AssetRipper.SourceGenerated.Extensions;
 
@@ -38,30 +39,64 @@ public static class MaterialExtensions
 		return property is not null;
 	}
 
-	public static IEnumerable<KeyValuePair<Utf8String, IUnityTexEnv>> GetTextureProperties(this IMaterial material)
+	public static IReadOnlyList<KeyValuePair<Utf8String, IUnityTexEnv>> GetTextureProperties(this IMaterial material)
 	{
 		IUnityPropertySheet savedProperties = material.SavedProperties_C21;
 		if (savedProperties.Has_TexEnvs_AssetDictionary_Utf8String_UnityTexEnv_5())
 		{
-			return savedProperties
-				.TexEnvs_AssetDictionary_Utf8String_UnityTexEnv_5
-				.Select((AccessPairBase<Utf8String, UnityTexEnv_5> pair) => new KeyValuePair<Utf8String, IUnityTexEnv>(pair.Key, pair.Value));
+			return new TexEnvsList<Utf8String, UnityTexEnv_5>(savedProperties.TexEnvs_AssetDictionary_Utf8String_UnityTexEnv_5);
 		}
 		else if (savedProperties.Has_TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_5())
 		{
-			return savedProperties
-				.TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_5
-				.Select((AccessPairBase<FastPropertyName, UnityTexEnv_5> pair) => new KeyValuePair<Utf8String, IUnityTexEnv>(pair.Key.Name, pair.Value));
+			return new TexEnvsList<FastPropertyName, UnityTexEnv_5>(savedProperties.TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_5);
 		}
 		else if (savedProperties.Has_TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_3_5())
 		{
-			return savedProperties
-				.TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_3_5
-				.Select((AccessPairBase<FastPropertyName, UnityTexEnv_3_5> pair) => new KeyValuePair<Utf8String, IUnityTexEnv>(pair.Key.Name, pair.Value));
+			return new TexEnvsList<FastPropertyName, UnityTexEnv_3_5>(savedProperties.TexEnvs_AssetDictionary_FastPropertyName_UnityTexEnv_3_5);
 		}
 		else
 		{
-			return Enumerable.Empty<KeyValuePair<Utf8String, IUnityTexEnv>>();
+			return [];
 		}
+	}
+
+	private sealed class TexEnvsList<TString, TTexture>(AssetDictionary<TString, TTexture> dictionary) : IReadOnlyList<KeyValuePair<Utf8String, IUnityTexEnv>>
+		where TString : notnull, new()
+		where TTexture : IUnityTexEnv, new()
+	{
+		public KeyValuePair<Utf8String, IUnityTexEnv> this[int index] => ConvertPair(dictionary.GetPair(index));
+
+		public int Count => dictionary.Count;
+
+		private static Utf8String ConvertKey(TString key)
+		{
+			if (typeof(TString) == typeof(Utf8String))
+			{
+				return (Utf8String)(object)key;
+			}
+			else if (typeof(TString) == typeof(FastPropertyName))
+			{
+				return ((FastPropertyName)(object)key).Name;
+			}
+			else
+			{
+				return Utf8String.Empty; // Unreachable
+			}
+		}
+
+		private static KeyValuePair<Utf8String, IUnityTexEnv> ConvertPair(AccessPairBase<TString, TTexture> pair)
+		{
+			return new(ConvertKey(pair.Key), pair.Value);
+		}
+
+		public IEnumerator<KeyValuePair<Utf8String, IUnityTexEnv>> GetEnumerator()
+		{
+			foreach (AccessPairBase<TString, TTexture> pair in dictionary)
+			{
+				yield return ConvertPair(pair);
+			}
+		}
+
+		IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 	}
 }

@@ -2,10 +2,8 @@ using AsmResolver.DotNet;
 using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Platforms;
-using AssetRipper.IO.Files;
 using Cpp2IL.Core.Api;
 using Cpp2IL.Core.InstructionSets;
-using Cpp2IL.Core.Model.Contexts;
 using Cpp2IL.Core.OutputFormats;
 using Cpp2IL.Core.ProcessingLayers;
 using LibCpp2IL;
@@ -103,40 +101,24 @@ public sealed class IL2CppManager : BaseManager
 
 		foreach (Cpp2IlProcessingLayer cpp2IlProcessingLayer in processingLayers)
 		{
-			cpp2IlProcessingLayer.PreProcess(GetCurrentAppContext(), processingLayers);
+			cpp2IlProcessingLayer.PreProcess(Cpp2IlApi.CurrentAppContext, processingLayers);
 		}
 
 		foreach (Cpp2IlProcessingLayer cpp2IlProcessingLayer in processingLayers)
 		{
-			cpp2IlProcessingLayer.Process(GetCurrentAppContext());
+			cpp2IlProcessingLayer.Process(Cpp2IlApi.CurrentAppContext);
 		}
 
 		AsmResolverDllOutputFormat outputFormat = contentLevel == ScriptContentLevel.Level3
 			? RecoveryOutputFormat ?? DefaultOutputFormat
 			: DefaultOutputFormat;
 
-		List<AssemblyDefinition> assemblies = outputFormat.BuildAssemblies(GetCurrentAppContext());
+		List<AssemblyDefinition> assemblies = outputFormat.BuildAssemblies(Cpp2IlApi.CurrentAppContext);
 
 		foreach (AssemblyDefinition assembly in assemblies)
 		{
-			assembly.InitializeResolvers(this);
-			m_assemblies.Add(assembly.Name ?? throw new NullReferenceException(), assembly);
+			Add(assembly);
 		}
-	}
-
-	private static ApplicationAnalysisContext GetCurrentAppContext()
-	{
-		return Cpp2IlApi.CurrentAppContext ?? throw new NullReferenceException();
-	}
-
-	public override void Load(string filePath, FileSystem fileSystem)
-	{
-		throw new NotSupportedException();
-	}
-
-	public override void Read(Stream stream, string fileName)
-	{
-		throw new NotSupportedException();
 	}
 
 	~IL2CppManager()

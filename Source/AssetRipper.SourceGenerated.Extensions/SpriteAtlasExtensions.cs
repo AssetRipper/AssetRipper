@@ -19,12 +19,15 @@ public static class SpriteAtlasExtensions
 		data.VariantMultiplier = 1;
 		data.BindAsDefault = true;
 
-		data.Packables.Clear();
-		data.Packables.Capacity = atlas.PackedSprites.Count;
-		PPtrAccessList<PPtr_Object_5, IObject> packables = data.Packables.ToPPtrAccessList<PPtr_Object_5, IObject>(atlas.Collection);
-		foreach (ISprite? sprite in atlas.PackedSpritesP)
+		if (atlas.Has_PackedSprites())
 		{
-			packables.Add(sprite);
+			data.Packables.Clear();
+			data.Packables.Capacity = atlas.PackedSprites.Count;
+			PPtrAccessList<PPtr_Object_5, IObject> packables = data.Packables.ToPPtrAccessList<PPtr_Object_5, IObject>(atlas.Collection);
+			foreach (ISprite? sprite in atlas.PackedSpritesP)
+			{
+				packables.Add(sprite);
+			}
 		}
 	}
 }

@@ -23,15 +23,15 @@ internal static class Pass400_EqualityComparison
 	{
 		TypeDefinition equalityComparisonHelper = SharedState.Instance.InjectHelperType(typeof(EqualityComparisonHelper));
 
-		ITypeDefOrRef hashCodeType = SharedState.Instance.Importer.ImportType<HashCode>();
+		TypeSignature hashCodeType = SharedState.Instance.Importer.ImportTypeSignature<HashCode>();
 		IMethodDefOrRef addMethod = SharedState.Instance.Importer.ImportMethod<HashCode>(
 			m => m.Name == nameof(HashCode.Add) && m.Parameters.Count == 1 && m.Signature!.GenericParameterCount == 1);
 		IMethodDefOrRef toHashCodeMethod = SharedState.Instance.Importer.ImportMethod<HashCode>(m => m.Name == nameof(HashCode.ToHashCode));
 
 		ITypeDefOrRef equatableInterface = SharedState.Instance.Importer.ImportType(typeof(IEquatable<>));
 
-		ITypeDefOrRef iunityAssetBase = SharedState.Instance.Importer.ImportType<IUnityAssetBase>();
-		ITypeDefOrRef assetEqualityComparer = SharedState.Instance.Importer.ImportType<AssetEqualityComparer>();
+		TypeSignature iunityAssetBase = SharedState.Instance.Importer.ImportTypeSignature<IUnityAssetBase>();
+		TypeSignature assetEqualityComparer = SharedState.Instance.Importer.ImportTypeSignature<AssetEqualityComparer>();
 
 		TypeSignature trileanTypeSignature = equalityComparisonHelper.GetMethodByName(nameof(EqualityComparisonHelper.ToTrilean)).Signature!.ReturnType;
 
@@ -135,15 +135,15 @@ internal static class Pass400_EqualityComparison
 		addToEqualityComparerMethods.Clear();
 	}
 
-	private static void GenerateAddToEqualityComparer(TypeDefinition equalityComparisonHelper, ITypeDefOrRef iunityAssetBase, ITypeDefOrRef assetEqualityComparer, TypeSignature trileanTypeSignature, GeneratedClassInstance instance, TypeNode root)
+	private static void GenerateAddToEqualityComparer(TypeDefinition equalityComparisonHelper, TypeSignature iunityAssetBase, TypeSignature assetEqualityComparer, TypeSignature trileanTypeSignature, GeneratedClassInstance instance, TypeNode root)
 	{
 		TypeDefinition type = instance.Type;
 		MethodDefinition method = type.AddMethod(
 			nameof(UnityAssetBase.AddToEqualityComparer),
 			Pass063_CreateEmptyMethods.OverrideMethodAttributes,
 			trileanTypeSignature);
-		method.AddParameter(iunityAssetBase.ToTypeSignature(), "other");
-		method.AddParameter(assetEqualityComparer.ToTypeSignature(), "comparer");
+		method.AddParameter(iunityAssetBase, "other");
+		method.AddParameter(assetEqualityComparer, "comparer");
 
 		MethodDefinition getTrueMethod = equalityComparisonHelper.GetMethodByName(nameof(EqualityComparisonHelper.GetTrue));
 		MethodDefinition getFalseMethod = equalityComparisonHelper.GetMethodByName(nameof(EqualityComparisonHelper.GetFalse));
@@ -246,15 +246,15 @@ internal static class Pass400_EqualityComparison
 		instructions.Add(CilOpCodes.Ret);
 	}
 
-	private static void OverrideAddToEqualityComparer(GeneratedClassInstance instance, MethodDefinition objectEqualsMethod, ITypeDefOrRef iunityAssetBase, ITypeDefOrRef assetEqualityComparer, TypeDefinition equalityComparisonHelper)
+	private static void OverrideAddToEqualityComparer(GeneratedClassInstance instance, MethodDefinition objectEqualsMethod, TypeSignature iunityAssetBase, TypeSignature assetEqualityComparer, TypeDefinition equalityComparisonHelper)
 	{
 		TypeDefinition type = instance.Type;
 		MethodDefinition method = type.AddMethod(
 			nameof(UnityAssetBase.AddToEqualityComparer),
 			Pass063_CreateEmptyMethods.OverrideMethodAttributes,
 			equalityComparisonHelper.GetMethodByName(nameof(EqualityComparisonHelper.GetTrue)).Signature!.ReturnType);
-		method.AddParameter(iunityAssetBase.ToTypeSignature(), "other");
-		method.AddParameter(assetEqualityComparer.ToTypeSignature(), "comparer");
+		method.AddParameter(iunityAssetBase, "other");
+		method.AddParameter(assetEqualityComparer, "comparer");
 		CilInstructionCollection instructions = method.GetInstructions();
 
 		instructions.Add(CilOpCodes.Ldarg_0);
@@ -326,6 +326,12 @@ internal static class Pass400_EqualityComparison
 							.GetMethodByName(nameof(EqualityComparisonHelper.EquatableDictionaryListEquals))
 							.MakeGenericInstanceMethod(dictionary.KeyTypeSignature, listValue.ElementTypeSignature);
 					}
+					else if (dictionary.Child.Key.Equatable && dictionary.Child.Value.Child is DictionaryNode dictionaryValue && dictionaryValue.Child.Key.Equatable && dictionaryValue.Child.Value.Equatable)
+					{
+						cachedMethod = equalityComparisonHelper
+							.GetMethodByName(nameof(EqualityComparisonHelper.EquatableDictionaryDictionaryEquals))
+							.MakeGenericInstanceMethod(dictionary.KeyTypeSignature, dictionaryValue.KeyTypeSignature, dictionaryValue.ValueTypeSignature);
+					}
 					else
 					{
 						throw new NotImplementedException();
@@ -333,26 +339,27 @@ internal static class Pass400_EqualityComparison
 
 					break;
 				case ListNode list:
-					if (list.Child is ListNode childList)
+					if (list.Child is ListNode childList && childList.Child.Equatable)
 					{
-						if (!childList.Child.Equatable)
-						{
-							throw new NotImplementedException();
-						}
-
 						cachedMethod = equalityComparisonHelper
 							.GetMethodByName(nameof(EqualityComparisonHelper.EquatableListListEquals))
 							.MakeGenericInstanceMethod(childList.ElementTypeSignature);
 					}
-					else if (!list.Child.Equatable)
+					else if (list.Child is DictionaryNode childDictionary && childDictionary.Child.Key.Equatable && childDictionary.Child.Value.Equatable)
 					{
-						throw new NotImplementedException();
+						cachedMethod = equalityComparisonHelper
+							.GetMethodByName(nameof(EqualityComparisonHelper.EquatableListDictionaryEquals))
+							.MakeGenericInstanceMethod(childDictionary.KeyTypeSignature, childDictionary.ValueTypeSignature);
 					}
-					else
+					else if (list.Child.Equatable)
 					{
 						cachedMethod = equalityComparisonHelper
 							.GetMethodByName(nameof(EqualityComparisonHelper.EquatableListEquals))
 							.MakeGenericInstanceMethod(list.ElementTypeSignature);
+					}
+					else
+					{
+						throw new NotImplementedException();
 					}
 					break;
 				case PairNode pair:
@@ -481,7 +488,7 @@ internal static class Pass400_EqualityComparison
 		return method;
 	}
 
-	private static void OverrideGetHashCode(GeneratedClassInstance instance, TypeNode root, ITypeDefOrRef hashCodeType, IMethodDefOrRef addMethod, IMethodDefOrRef toHashCodeMethod)
+	private static void OverrideGetHashCode(GeneratedClassInstance instance, TypeNode root, TypeSignature hashCodeType, IMethodDefOrRef addMethod, IMethodDefOrRef toHashCodeMethod)
 	{
 		TypeDefinition type = instance.Type;
 		MethodDefinition method = type.AddMethod(
@@ -490,10 +497,10 @@ internal static class Pass400_EqualityComparison
 			SharedState.Instance.Importer.Int32);
 		CilInstructionCollection instructions = method.GetInstructions();
 
-		CilLocalVariable variable = instructions.AddLocalVariable(hashCodeType.ToTypeSignature());
+		CilLocalVariable variable = instructions.AddLocalVariable(hashCodeType);
 
 		instructions.Add(CilOpCodes.Ldloca, variable);
-		instructions.Add(CilOpCodes.Initobj, hashCodeType);
+		instructions.Add(CilOpCodes.Initobj, hashCodeType.ToTypeDefOrRef());
 
 		foreach (FieldNode field in root.Children)
 		{

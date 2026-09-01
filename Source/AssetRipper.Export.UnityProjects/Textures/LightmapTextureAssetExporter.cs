@@ -10,11 +10,13 @@ namespace AssetRipper.Export.UnityProjects.Textures;
 
 public class LightmapTextureAssetExporter : BinaryAssetExporter
 {
-	public ImageExportFormat ImageExportFormat { get; private set; }
+	public ImageExportFormat ImageExportFormat { get; }
+	public bool PreferOriginalTextureExtension { get; }
 
-	public LightmapTextureAssetExporter(ImageExportFormat imageExportFormat)
+	public LightmapTextureAssetExporter(ImageExportFormat imageExportFormat, bool preferOriginalTextureExtension)
 	{
 		ImageExportFormat = imageExportFormat;
+		PreferOriginalTextureExtension = preferOriginalTextureExtension;
 	}
 
 	public override bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection)
@@ -43,7 +45,7 @@ public class LightmapTextureAssetExporter : BinaryAssetExporter
 		if (TextureConverter.TryConvertToBitmap(texture, out DirectBitmap bitmap))
 		{
 			using Stream stream = fileSystem.File.Create(path);
-			bitmap.Save(stream, ImageExportFormat);
+			bitmap.Save(stream, texture.GetTextureExportFormat(PreferOriginalTextureExtension, ImageExportFormat));
 			return true;
 		}
 		else
@@ -55,9 +57,10 @@ public class LightmapTextureAssetExporter : BinaryAssetExporter
 
 	private sealed class LightmapExportCollection(LightmapTextureAssetExporter exporter, ITexture2D lightmap) : AssetExportCollection<ITexture2D>(exporter, lightmap)
 	{
+		private new LightmapTextureAssetExporter AssetExporter => (LightmapTextureAssetExporter)base.AssetExporter;
 		protected override string GetExportExtension(IUnityObjectBase asset)
 		{
-			return ((LightmapTextureAssetExporter)AssetExporter).ImageExportFormat.GetFileExtension();
+			return asset.GetTextureExtension(AssetExporter.PreferOriginalTextureExtension, AssetExporter.ImageExportFormat);
 		}
 
 		protected override IUnityObjectBase CreateImporter(IExportContainer container)

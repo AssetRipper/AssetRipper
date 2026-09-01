@@ -7,22 +7,25 @@ public enum ScriptLanguageVersion
 {
 	AutoExperimental = -2,
 	AutoSafe = -1,
-	CSharp1 = 1,
-	CSharp2 = 2,
-	CSharp3 = 3,
-	CSharp4 = 4,
-	CSharp5 = 5,
-	CSharp6 = 6,
-	CSharp7 = 7,
-	CSharp7_1 = 701,
-	CSharp7_2 = 702,
-	CSharp7_3 = 703,
-	CSharp8_0 = 800,
-	CSharp9_0 = 900,
-	CSharp10_0 = 1000,
-	CSharp11_0 = 1100,
-	CSharp12_0 = 1200,
-	Latest = int.MaxValue
+	CSharp1 = LanguageVersion.CSharp1,
+	CSharp2 = LanguageVersion.CSharp2,
+	CSharp3 = LanguageVersion.CSharp3,
+	CSharp4 = LanguageVersion.CSharp4,
+	CSharp5 = LanguageVersion.CSharp5,
+	CSharp6 = LanguageVersion.CSharp6,
+	CSharp7 = LanguageVersion.CSharp7,
+	CSharp7_1 = LanguageVersion.CSharp7_1,
+	CSharp7_2 = LanguageVersion.CSharp7_2,
+	CSharp7_3 = LanguageVersion.CSharp7_3,
+	CSharp8_0 = LanguageVersion.CSharp8_0,
+	CSharp9_0 = LanguageVersion.CSharp9_0,
+	CSharp10_0 = LanguageVersion.CSharp10_0,
+	CSharp11_0 = LanguageVersion.CSharp11_0,
+	CSharp12_0 = LanguageVersion.CSharp12_0,
+	CSharp13_0 = LanguageVersion.CSharp13_0,
+	CSharp14_0 = LanguageVersion.CSharp14_0,
+	CSharp15_0 = LanguageVersion.CSharp15_0,
+	Latest = LanguageVersion.Latest
 }
 
 public static class ScriptLanguageVersionExtensions
@@ -33,23 +36,16 @@ public static class ScriptLanguageVersionExtensions
 		{
 			ScriptLanguageVersion.AutoExperimental => GetAutomaticCSharpLanguageVersion(unityVersion, true),
 			ScriptLanguageVersion.AutoSafe => GetAutomaticCSharpLanguageVersion(unityVersion, false),
-			ScriptLanguageVersion.CSharp1 => LanguageVersion.CSharp1,
-			ScriptLanguageVersion.CSharp2 => LanguageVersion.CSharp2,
-			ScriptLanguageVersion.CSharp3 => LanguageVersion.CSharp3,
-			ScriptLanguageVersion.CSharp4 => LanguageVersion.CSharp4,
-			ScriptLanguageVersion.CSharp5 => LanguageVersion.CSharp5,
-			ScriptLanguageVersion.CSharp6 => LanguageVersion.CSharp6,
-			ScriptLanguageVersion.CSharp7 => LanguageVersion.CSharp7,
-			ScriptLanguageVersion.CSharp7_1 => LanguageVersion.CSharp7_1,
-			ScriptLanguageVersion.CSharp7_2 => LanguageVersion.CSharp7_2,
-			ScriptLanguageVersion.CSharp7_3 => LanguageVersion.CSharp7_3,
-			ScriptLanguageVersion.CSharp8_0 => LanguageVersion.CSharp8_0,
-			ScriptLanguageVersion.CSharp9_0 => LanguageVersion.CSharp9_0,
-			ScriptLanguageVersion.CSharp10_0 => LanguageVersion.CSharp10_0,
-			ScriptLanguageVersion.CSharp11_0 => LanguageVersion.CSharp11_0,
-			ScriptLanguageVersion.CSharp12_0 => LanguageVersion.CSharp12_0,
-			ScriptLanguageVersion.Latest => LanguageVersion.Latest,
-			_ => throw new ArgumentOutOfRangeException(nameof(scriptLanguageVersion), $"{scriptLanguageVersion}"),
+			_ => (LanguageVersion)scriptLanguageVersion,
+		};
+	}
+
+	public static LanguageVersion ToCSharpLanguageVersion(this ScriptLanguageVersion scriptLanguageVersion)
+	{
+		return scriptLanguageVersion switch
+		{
+			ScriptLanguageVersion.AutoExperimental or ScriptLanguageVersion.AutoSafe => LanguageVersion.Latest,
+			_ => (LanguageVersion)scriptLanguageVersion,
 		};
 	}
 

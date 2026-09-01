@@ -14,7 +14,7 @@ internal static class Pass507_InjectedProperties
 	private static void SceneAssetTargetScene()
 	{
 		ClassGroup group = SharedState.Instance.ClassGroups[1032]; //SceneAsset
-		TypeSignature propertyType = SharedState.Instance.Importer.ImportType<SceneDefinition>().ToTypeSignature();
+		TypeSignature propertyType = SharedState.Instance.Importer.ImportTypeSignature<SceneDefinition>();
 		PropertyInjector.InjectFullProperty(group, propertyType, TargetSceneName, true);
 	}
 }

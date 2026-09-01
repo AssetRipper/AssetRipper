@@ -9,9 +9,11 @@ public sealed class TextureArrayAssetExportCollection : AssetExportCollection<IU
 	{
 	}
 
+	private new TextureArrayAssetExporter AssetExporter => (TextureArrayAssetExporter)base.AssetExporter;
+
 	protected override string GetExportExtension(IUnityObjectBase asset)
 	{
-		return ((TextureArrayAssetExporter)AssetExporter).ImageExportFormat.GetFileExtension();
+		return asset.GetTextureExtension(AssetExporter.PreferOriginalTextureExtension, AssetExporter.ImageExportFormat);
 	}
 
 	protected override IUnityObjectBase CreateImporter(IExportContainer container)

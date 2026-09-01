@@ -33,4 +33,6 @@ internal sealed class ListNode : SingleNode<Node>
 	public IMethodDefOrRef Clear => MethodUtils.MakeMethodOnGenericType(SharedState.Instance.Importer, TypeSignature, clear.Value);
 	public IMethodDefOrRef Add => MethodUtils.MakeMethodOnGenericType(SharedState.Instance.Importer, TypeSignature, add.Value);
 	public IMethodDefOrRef AddNew => MethodUtils.MakeMethodOnGenericType(SharedState.Instance.Importer, TypeSignature, addNew.Value);
+
+	public override string ToString() => $"List<{Child}>";
 }

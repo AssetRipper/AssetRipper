@@ -80,7 +80,7 @@ public static class NodeTypeExtensions
 			NodeType.UInt64 => SharedState.Instance.Importer.UInt64,
 			NodeType.Single => SharedState.Instance.Importer.Single,
 			NodeType.Double => SharedState.Instance.Importer.Double,
-			NodeType.String => SharedState.Instance.Importer.ImportType<Utf8String>().ToTypeSignature(),
+			NodeType.String => SharedState.Instance.Importer.ImportTypeSignature<Utf8String>(),
 			_ => throw new NotSupportedException(type.ToString()),
 		};
 	}

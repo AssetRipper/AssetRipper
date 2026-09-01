@@ -28,5 +28,10 @@ public static class GlbWriter
 			errorMessage = "Could not allocate enough contiguous memory to export the model as GLB.";
 			return false;
 		}
+		catch (Exception ex)
+		{
+			errorMessage = $"An unexpected error occurred while exporting the model as GLB:\n{ex}";
+			return false;
+		}
 	}
 }

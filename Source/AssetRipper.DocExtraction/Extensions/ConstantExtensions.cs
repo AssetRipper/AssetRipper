@@ -21,13 +21,8 @@ public static class ConstantExtensions
 		};
 	}
 
-	public static object InterpretData(this Constant constant)
+	public static T? InterpretData<T>(this Constant constant)
 	{
-		return constant.Value!.InterpretData(constant.Type);
-	}
-
-	public static T InterpretData<T>(this Constant constant)
-	{
-		return (T)constant.InterpretData();
+		return (T?)constant.InterpretData();
 	}
 }

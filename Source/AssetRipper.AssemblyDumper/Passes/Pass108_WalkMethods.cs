@@ -487,7 +487,7 @@ internal static class Pass108_WalkMethods
 
 	private static void Initialize()
 	{
-		assetWalkerType = SharedState.Instance.Importer.ImportType<AssetWalker>().ToTypeSignature();
+		assetWalkerType = SharedState.Instance.Importer.ImportTypeSignature<AssetWalker>();
 
 		enterAssetMethod = ImportWalkerMethod(nameof(AssetWalker.EnterAsset));
 		divideAssetMethod = ImportWalkerMethod(nameof(AssetWalker.DivideAsset));

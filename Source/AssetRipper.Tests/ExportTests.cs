@@ -2,6 +2,7 @@
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Export.UnityProjects;
+using AssetRipper.Import.Platforms;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.IO.Files;
 using AssetRipper.Primitives;
@@ -127,13 +128,13 @@ internal class ExportTests
 	{
 		(string assemblyName, string assemblyGuid) = pair;
 		MonoManager assemblyManager = CreateAssemblyManager();
+		assemblyManager.Initialize(new MixedGameStructure([], LocalFileSystem.Instance));
 		const string TypeName = "ExampleBehaviour";
 		{
-			assemblyManager.Load(typeof(UnityEngine.Object).Assembly.Location, LocalFileSystem.Instance);
-			ModuleDefinition unityEngineModule = assemblyManager.GetAssemblies().Single().ManifestModule!;
+			ModuleDefinition unityEngineModule = assemblyManager.Load(typeof(UnityEngine.Object).Assembly.Location, LocalFileSystem.Instance).ManifestModule!;
 			TypeDefinition monoBehaviourType = unityEngineModule.TopLevelTypes.Single(t => t.Name == "MonoBehaviour");
 			AssemblyDefinition newAssembly = new(assemblyName, new());
-			ModuleDefinition newModule = new(assemblyName, unityEngineModule.AssemblyReferences.First(a => a.IsCorLib));
+			ModuleDefinition newModule = new(assemblyName, unityEngineModule.AssemblyReferences.First(a => a.Name == "System.Runtime"));
 			newAssembly.Modules.Add(newModule);
 			TypeDefinition newType = new(null, TypeName, monoBehaviourType.Attributes, newModule.DefaultImporter.ImportType(monoBehaviourType));
 			newModule.TopLevelTypes.Add(newType);

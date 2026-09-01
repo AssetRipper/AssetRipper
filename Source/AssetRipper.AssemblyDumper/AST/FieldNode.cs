@@ -15,4 +15,6 @@ internal sealed class FieldNode : SingleNode<Node>
 
 	public FieldDefinition Field => Property.BackingField!;
 	public override TypeSignature TypeSignature => Field.Signature!.FieldType;
+
+	public override string ToString() => $"{Child} {Field.Name}";
 }

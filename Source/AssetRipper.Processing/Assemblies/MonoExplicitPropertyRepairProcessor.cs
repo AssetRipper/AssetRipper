@@ -44,18 +44,17 @@ public sealed class MonoExplicitPropertyRepairProcessor : IAssetProcessor
 						continue;
 					}
 
-					MethodDefinition? interfaceMethodResolved = interfaceMethod.Resolve();
-					if (interfaceMethodResolved != null)
+					if (interfaceMethod.TryResolve(manager.RuntimeContext, out MethodDefinition? interfaceMethodResolved))
 					{
 						if (interfaceMethodResolved.IsGetMethod)
 						{
 							PropertyDefinition interfacePropertyResolved = interfaceMethodResolved.DeclaringType!.Properties.First(p => p.Semantics.Contains(interfaceMethodResolved.Semantics));
-							getMethodsToCreate.Add((interfacePropertyResolved, interfaceMethod.DeclaringType!.ToTypeSignature(), method));
+							getMethodsToCreate.Add((interfacePropertyResolved, interfaceMethod.DeclaringType!.ToTypeSignature(manager.RuntimeContext), method));
 						}
 						else if (interfaceMethodResolved.IsSetMethod)
 						{
 							PropertyDefinition interfacePropertyResolved = interfaceMethodResolved.DeclaringType!.Properties.First(p => p.Semantics.Contains(interfaceMethodResolved.Semantics));
-							setMethodsToCreate.Add((interfacePropertyResolved, interfaceMethod.DeclaringType!.ToTypeSignature(), method));
+							setMethodsToCreate.Add((interfacePropertyResolved, interfaceMethod.DeclaringType!.ToTypeSignature(manager.RuntimeContext), method));
 						}
 					}
 				}

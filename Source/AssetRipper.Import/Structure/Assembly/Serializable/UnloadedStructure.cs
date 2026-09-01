@@ -71,7 +71,7 @@ public sealed class UnloadedStructure : UnityAssetBase, IDeepCloneable
 		if (structure is not null)
 		{
 			EndianSpanReader reader = new EndianSpanReader(StructureData, MonoBehaviour.Collection.EndianType);
-			if (structure.TryRead(ref reader, MonoBehaviour))
+			if (structure.TryRead(ref reader, MonoBehaviour, AssemblyManager))
 			{
 				MonoBehaviour.Structure = structure;
 				return structure;

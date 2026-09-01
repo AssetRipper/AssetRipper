@@ -50,7 +50,12 @@ public sealed class PremiumFeaturesPage : DefaultPage
 
 	private static bool ShaderDecompilationSupported(IShader shader)
 	{
-		return shader.GetPlatforms()?.Any(platform => platform is GPUPlatform.Vulkan || (platform.IsDirectX() && OperatingSystem.IsWindows())) ?? false;
+		return shader.GetPlatforms()?.Any(ShaderDecompilationSupported) ?? false;
+	}
+
+	private static bool ShaderDecompilationSupported(GPUPlatform platform)
+	{
+		return platform is GPUPlatform.Vulkan || (platform.IsDirectX() && OperatingSystem.IsWindows()) || platform.IsOpenGL();
 	}
 
 	private static FeatureStatus GetFeatureStatus<T>(Func<T, bool>? needsFeatureFunction, Func<T, bool>? isSupportedFunction)
