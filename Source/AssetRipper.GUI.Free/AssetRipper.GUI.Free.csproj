@@ -27,6 +27,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\AssetRipper.GUI.Web\AssetRipper.GUI.Web.csproj" />
+		<ProjectReference Include="..\AssetRipper.Processing.Extended\AssetRipper.Processing.Extended.csproj" />
 	</ItemGroup>
 
 </Project>
