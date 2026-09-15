@@ -25,18 +25,25 @@ public sealed class SpriteInformationObject : AssetGroup, INamed
 		set => Texture.Name = value;
 	}
 
+	/// <summary>
+	/// The assets this group owns, for the purpose of assigning <see cref="IUnityObjectBase.MainAsset"/>.
+	/// </summary>
+	/// <remarks>
+	/// Sprite atlases are deliberately excluded. An atlas commonly packs its sprites across
+	/// several texture pages, and each page gets its own <see cref="SpriteInformationObject"/>,
+	/// so no single group owns the atlas. Including it made every group after the first assert
+	/// in <see cref="AssetGroup.SetMainAsset"/>. The atlas is still reachable through
+	/// <see cref="Sprites"/> and is still reported by <see cref="FetchDependencies"/>; nothing
+	/// reads an atlas's <see cref="IUnityObjectBase.MainAsset"/>.
+	/// </remarks>
 	public override IEnumerable<IUnityObjectBase> Assets
 	{
 		get
 		{
 			yield return Texture;
-			foreach ((ISprite sprite, ISpriteAtlas? atlas) in dictionary)
+			foreach (ISprite sprite in dictionary.Keys)
 			{
 				yield return sprite;
-				if (atlas is not null)
-				{
-					yield return atlas;
-				}
 			}
 		}
 	}
