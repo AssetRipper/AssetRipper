@@ -6,9 +6,11 @@ using AssetRipper.Export.UnityProjects.EngineAssets;
 using AssetRipper.Export.UnityProjects.Project;
 using AssetRipper.Mining.PredefinedAssets;
 using AssetRipper.Processing.Extended.Deduplication;
+using AssetRipper.Processing.Extended.Outlining;
 using AssetRipper.Processing.Extended.PathOverrides;
 using AssetRipper.Processing.Extended.UnityPackages;
 using AssetRipper.Processing.Editor;
+using AssetRipper.Processing.Prefabs;
 using AssetRipper.Processing.Scenes;
 
 namespace AssetRipper.Processing.Extended;
@@ -44,6 +46,12 @@ public sealed class ExtendedExportHandler : ExportHandler
 			}
 
 			yield return processor;
+
+			// After: outlining consumes the hierarchies PrefabProcessor generates.
+			if (processor is PrefabProcessor && Settings.ProcessingSettings.EnablePrefabOutlining)
+			{
+				yield return new PrefabOutliningProcessor(deduplicationMap);
+			}
 
 			// After: overrides must win over the paths OriginalPathProcessor just assigned.
 			if (processor is OriginalPathProcessor
