@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<IsPackable>false</IsPackable>
+		<OutputPath>..\0Bins\Other\AssetRipper.Processing.Extended.Tests\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.Processing.Extended.Tests\$(Configuration)\</IntermediateOutputPath>
+		<IsAotCompatible>false</IsAotCompatible>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.9.0" />
+		<PackageReference Include="NUnit" Version="4.6.1" />
+		<PackageReference Include="NUnit3TestAdapter" Version="6.2.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\AssetRipper.Processing.Extended\AssetRipper.Processing.Extended.csproj" />
+	</ItemGroup>
+
+</Project>

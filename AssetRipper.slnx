@@ -93,6 +93,8 @@
   <Project Path="Source/AssetRipper.IO.Files/AssetRipper.IO.Files.csproj" />
   <Project Path="Source/AssetRipper.Numerics.Tests/AssetRipper.Numerics.Tests.csproj" />
   <Project Path="Source/AssetRipper.Numerics/AssetRipper.Numerics.csproj" />
+  <Project Path="Source/AssetRipper.Processing.Extended.Tests/AssetRipper.Processing.Extended.Tests.csproj" />
+  <Project Path="Source/AssetRipper.Processing.Extended/AssetRipper.Processing.Extended.csproj" />
   <Project Path="Source/AssetRipper.Processing.SourceGenerator/AssetRipper.Processing.SourceGenerator.csproj" />
   <Project Path="Source/AssetRipper.Processing/AssetRipper.Processing.csproj" />
   <Project Path="Source/AssetRipper.SerializationLogic.Tests/AssetRipper.SerializationLogic.Tests.csproj" />
