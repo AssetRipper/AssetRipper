@@ -5,8 +5,10 @@ using AssetRipper.Export.UnityProjects;
 using AssetRipper.Export.UnityProjects.EngineAssets;
 using AssetRipper.Export.UnityProjects.Project;
 using AssetRipper.Mining.PredefinedAssets;
+using AssetRipper.Processing.Extended.Deduplication;
 using AssetRipper.Processing.Extended.PathOverrides;
 using AssetRipper.Processing.Extended.UnityPackages;
+using AssetRipper.Processing.Editor;
 using AssetRipper.Processing.Scenes;
 
 namespace AssetRipper.Processing.Extended;
@@ -20,6 +22,8 @@ public sealed class ExtendedExportHandler : ExportHandler
 	public const string PathOverridesKey = "PathOverrides";
 	public const string PackageDataKey = "PackageData";
 
+	private readonly DeduplicationMap deduplicationMap = new();
+
 	public ExtendedExportHandler(FullConfiguration settings) : base(settings)
 	{
 		settings.SingletonData.Add(PathOverridesKey, new JsonDataInstance<PathOverrideData>(PathOverrideDataContext.Default.PathOverrideData));
@@ -28,8 +32,17 @@ public sealed class ExtendedExportHandler : ExportHandler
 
 	protected override IEnumerable<IAssetProcessor> GetProcessors()
 	{
+		// A fresh run must not inherit the previous run's decisions.
+		deduplicationMap.Clear();
+
 		foreach (IAssetProcessor processor in base.GetProcessors())
 		{
+			// Before: deduplicate so every later processor sees the canonical assets.
+			if (processor is EditorFormatProcessor && Settings.ProcessingSettings.EnableAssetDeduplication)
+			{
+				yield return new AssetDeduplicationProcessor(deduplicationMap);
+			}
+
 			yield return processor;
 
 			// After: overrides must win over the paths OriginalPathProcessor just assigned.
@@ -52,6 +65,11 @@ public sealed class ExtendedExportHandler : ExportHandler
 		foreach (UnityPackageData package in LoadPackages())
 		{
 			projectExporter.OverrideExporter<IUnityObjectBase>(new EngineAssetsExporter(PackageAssetCacheFactory.Create(package)));
+		}
+
+		if (deduplicationMap.Count > 0)
+		{
+			projectExporter.OverrideExporter<IUnityObjectBase>(new DeduplicationExporter(deduplicationMap));
 		}
 	}
 
