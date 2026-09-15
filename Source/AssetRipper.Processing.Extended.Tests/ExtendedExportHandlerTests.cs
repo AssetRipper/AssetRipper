@@ -35,4 +35,24 @@ public class ExtendedExportHandlerTests
 		Assert.That(settings.SingletonData.TryGetStoredValue(ExtendedExportHandler.PathOverridesKey, out PathOverrideData? data), Is.True);
 		Assert.That(data!.Files, Is.Empty);
 	}
+
+	[Test]
+	public void RegistersThePackageDataConfigurationSlot()
+	{
+		FullConfiguration settings = new();
+
+		_ = new ExtendedExportHandler(settings);
+
+		Assert.That(settings.ListData.Keys, Contains.Item(ExtendedExportHandler.PackageDataKey));
+	}
+
+	[Test]
+	public void PackageDataStartsEmpty()
+	{
+		FullConfiguration settings = new();
+
+		_ = new ExtendedExportHandler(settings);
+
+		Assert.That(settings.ListData[ExtendedExportHandler.PackageDataKey]!.Count, Is.Zero);
+	}
 }

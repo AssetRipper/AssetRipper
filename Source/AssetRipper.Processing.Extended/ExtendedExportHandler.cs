@@ -1,7 +1,12 @@
+using AssetRipper.Assets;
 using AssetRipper.Configuration;
 using AssetRipper.Export.Configuration;
 using AssetRipper.Export.UnityProjects;
+using AssetRipper.Export.UnityProjects.EngineAssets;
+using AssetRipper.Export.UnityProjects.Project;
+using AssetRipper.Mining.PredefinedAssets;
 using AssetRipper.Processing.Extended.PathOverrides;
+using AssetRipper.Processing.Extended.UnityPackages;
 using AssetRipper.Processing.Scenes;
 
 namespace AssetRipper.Processing.Extended;
@@ -13,10 +18,12 @@ namespace AssetRipper.Processing.Extended;
 public sealed class ExtendedExportHandler : ExportHandler
 {
 	public const string PathOverridesKey = "PathOverrides";
+	public const string PackageDataKey = "PackageData";
 
 	public ExtendedExportHandler(FullConfiguration settings) : base(settings)
 	{
 		settings.SingletonData.Add(PathOverridesKey, new JsonDataInstance<PathOverrideData>(PathOverrideDataContext.Default.PathOverrideData));
+		settings.ListData.Add(PackageDataKey, new List<string>());
 	}
 
 	protected override IEnumerable<IAssetProcessor> GetProcessors()
@@ -33,5 +40,36 @@ public sealed class ExtendedExportHandler : ExportHandler
 				yield return new PathOverrideProcessor(pathOverrides);
 			}
 		}
+	}
+
+	/// <remarks>
+	/// Runs before <c>DoFinalOverrides</c>, and the exporter stack tries the most recently
+	/// registered handler first. The stock engine-asset exporter therefore still wins and
+	/// user packages act as the fallback, which is the precedence we want.
+	/// </remarks>
+	protected override void BeforeExport(ProjectExporter projectExporter)
+	{
+		foreach (UnityPackageData package in LoadPackages())
+		{
+			projectExporter.OverrideExporter<IUnityObjectBase>(new EngineAssetsExporter(PackageAssetCacheFactory.Create(package)));
+		}
+	}
+
+	protected override IEnumerable<IPostExporter> GetPostExporters()
+	{
+		List<UnityPackageData> packages = LoadPackages();
+		foreach (IPostExporter postExporter in base.GetPostExporters())
+		{
+			// Replace the stock manifest exporter with one that knows about user packages.
+			yield return postExporter is PackageManifestPostExporter
+				? new ExtendedPackageManifestPostExporter(packages)
+				: postExporter;
+		}
+	}
+
+	private List<UnityPackageData> LoadPackages()
+	{
+		DataSet? set = Settings.ListData[PackageDataKey];
+		return set is null ? [] : UnityPackageLoader.Load(set.Strings);
 	}
 }
