@@ -110,13 +110,13 @@ internal static class ZipExtractor
 		string directory = fileSystem.Path.GetDirectoryName(entry.Key ?? throw new NullReferenceException("Entry Key is null")) ?? throw new NullReferenceException("Directory is null");
 		string fullDirectory = fileSystem.Path.GetFullPath(fileSystem.Path.Join(fullOutputDirectory, directory));
 
+		if (!IsPathWithinDirectory(fullDirectory, fullOutputDirectory, fileSystem))
+		{
+			throw new ExtractionException("Entry is trying to create a directory outside of the destination directory.");
+		}
+
 		if (!fileSystem.Directory.Exists(fullDirectory))
 		{
-			if (!fullDirectory.StartsWith(fullOutputDirectory, StringComparison.Ordinal))
-			{
-				throw new ExtractionException("Entry is trying to create a directory outside of the destination directory.");
-			}
-
 			fileSystem.Directory.Create(fullDirectory);
 		}
 		filePath = fileSystem.Path.Join(fullDirectory, fileName);
@@ -125,7 +125,7 @@ internal static class ZipExtractor
 		{
 			filePath = fileSystem.Path.GetFullPath(filePath);
 
-			if (!filePath.StartsWith(fullOutputDirectory,StringComparison.Ordinal))
+			if (!IsPathWithinDirectory(filePath, fullOutputDirectory, fileSystem))
 			{
 				throw new ExtractionException("Entry is trying to write a file outside of the destination directory.");
 			}
@@ -137,6 +137,17 @@ internal static class ZipExtractor
 		{
 			fileSystem.Directory.Create(filePath);
 		}
+	}
+
+	internal static bool IsPathWithinDirectory(string path, string directory, FileSystem fileSystem)
+	{
+		string relativePath = fileSystem.Path.GetRelativePath(
+			fileSystem.Path.GetFullPath(directory),
+			fileSystem.Path.GetFullPath(path));
+		return !fileSystem.Path.IsPathRooted(relativePath)
+			&& relativePath != ".."
+			&& !relativePath.StartsWith($"..{Path.DirectorySeparatorChar}", StringComparison.Ordinal)
+			&& !relativePath.StartsWith($"..{Path.AltDirectorySeparatorChar}", StringComparison.Ordinal);
 	}
 
 	private static string? GetFileExtension(string path, FileSystem fileSystem)

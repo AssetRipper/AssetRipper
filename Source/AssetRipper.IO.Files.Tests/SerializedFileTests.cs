@@ -100,6 +100,39 @@ internal class SerializedFileTests
 		AssertReadingAndWritingAreConsistent(original);
 	}
 
+	[Test]
+	public void SplitSerializedFileCanBeDetectedAndRead()
+	{
+		SerializedFileBuilder builder = new()
+		{
+			Generation = FormatVersion.LargeFilesSupport,
+			Version = new(2020, 3, 48),
+			Platform = BuildTarget.Android,
+		};
+		SerializedFile original = builder.Build();
+		using MemoryStream stream = new();
+		original.Write(stream);
+		byte[] data = stream.ToArray();
+
+		VirtualFileSystem fileSystem = new();
+		const string directory = "/game";
+		const string path = $"{directory}/globalgamemanagers";
+		fileSystem.Directory.Create(directory);
+		int splitPosition = data.Length / 2;
+		fileSystem.File.WriteAllBytes($"{path}.split0", data[..splitPosition]);
+		fileSystem.File.WriteAllBytes($"{path}.split1", data[splitPosition..]);
+
+		SerializedFile read = SerializedFile.FromFile(path, fileSystem);
+		using (Assert.EnterMultipleScope())
+		{
+			Assert.That(SerializedFile.IsSerializedFile(path, fileSystem), Is.True);
+			Assert.That(SerializedFile.IsSerializedFile($"{path}.split0", fileSystem), Is.True);
+			Assert.That(read.Generation, Is.EqualTo(original.Generation));
+			Assert.That(read.Version, Is.EqualTo(original.Version));
+			Assert.That(read.Platform, Is.EqualTo(original.Platform));
+		}
+	}
+
 	[Theory]
 	public void SerializeFileHeaderReadingMatchesWriting(FormatVersion generation)
 	{

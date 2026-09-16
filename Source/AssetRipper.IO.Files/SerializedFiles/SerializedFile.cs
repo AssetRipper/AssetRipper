@@ -203,7 +203,7 @@ public sealed class SerializedFile : FileBase
 	public static SerializedFile FromFile(string filePath, FileSystem fileSystem)
 	{
 		string fileName = fileSystem.Path.GetFileName(filePath);
-		SmartStream stream = SmartStream.OpenRead(filePath, fileSystem);
+		SmartStream stream = SmartStream.OpenReadMulti(filePath, fileSystem);
 		return SerializedFileScheme.Default.Read(stream, filePath, fileName);
 	}
 

@@ -66,7 +66,7 @@ public abstract record class BundleHeader : IEndianWritable
 
 	public static bool IsBundleHeader(string path, FileSystem fileSystem)
 	{
-		using SmartStream stream = SmartStream.OpenRead(path, fileSystem);
+		using SmartStream stream = SmartStream.OpenReadMulti(path, fileSystem);
 		using EndianReader reader = new EndianReader(stream, EndianType.BigEndian);
 		return FileStreamBundleHeader.IsBundleHeader(reader)
 			|| RawBundleHeader.IsBundleHeader(reader)

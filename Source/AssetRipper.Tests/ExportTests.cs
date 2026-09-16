@@ -1,10 +1,13 @@
 ﻿using AsmResolver.DotNet;
+using AssetRipper.Assets;
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
+using AssetRipper.Export.Configuration;
 using AssetRipper.Export.UnityProjects;
 using AssetRipper.Import.Platforms;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.IO.Files;
+using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.Primitives;
 using AssetRipper.Processing;
 using AssetRipper.Processing.ScriptableObject;
@@ -83,6 +86,21 @@ internal class ExportTests
 		group.SetMainAsset();
 
 		Assert.DoesNotThrow(() => Export(collection));
+	}
+
+	[Test]
+	public void DuplicateAssetCollectionsUseTheFirstCollection()
+	{
+		ProcessedAssetCollection collection = AssetCreator.CreateCollection(UnityVersion.V_2022);
+		IMonoBehaviour asset = collection.CreateMonoBehaviour();
+		DuplicateAssetCollection first = new(asset, 1);
+		DuplicateAssetCollection second = new(asset, 2);
+		FullConfiguration configuration = new();
+		configuration.SetProjectSettings(collection.Version);
+
+		ProjectAssetContainer container = new(new ProjectExporter(configuration, new BaseManager(_ => { })), configuration, [asset], [first, second]);
+
+		Assert.That(container.GetExportID(asset), Is.EqualTo(1));
 	}
 
 	[Test]
@@ -179,5 +197,17 @@ internal class ExportTests
 	private static MonoManager CreateAssemblyManager()
 	{
 		return new MonoManager((str) => { });
+	}
+
+	private sealed class DuplicateAssetCollection(IUnityObjectBase asset, long exportID) : IExportCollection
+	{
+		public bool Export(IExportContainer container, string projectDirectory, FileSystem fileSystem) => true;
+		public bool Contains(IUnityObjectBase candidate) => candidate == asset;
+		public long GetExportID(IExportContainer container, IUnityObjectBase candidate) => exportID;
+		public MetaPtr CreateExportPointer(IExportContainer container, IUnityObjectBase candidate, bool isLocal) => throw new NotSupportedException();
+		public AssetCollection File => asset.Collection;
+		public TransferInstructionFlags Flags => default;
+		public IEnumerable<IUnityObjectBase> Assets => [asset];
+		public string Name => nameof(DuplicateAssetCollection);
 	}
 }

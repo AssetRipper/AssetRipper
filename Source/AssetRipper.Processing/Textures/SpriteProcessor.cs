@@ -18,6 +18,7 @@ public sealed partial class SpriteProcessor : IAssetProcessor
 	public void Process(GameData gameData)
 	{
 		ObjectFactory factory = new ObjectFactory(gameData);
+		List<ISpriteAtlas> atlases = [];
 		foreach (IUnityObjectBase asset in gameData.GameBundle
 			.FetchAssetCollections()
 			.Where(c => !SpecialFileNames.IsDefaultResourceOrBuiltinExtra(c.Name))
@@ -44,13 +45,17 @@ public sealed partial class SpriteProcessor : IAssetProcessor
 			}
 			else if (asset is ISpriteAtlas atlas && atlas.RenderDataMap.Count > 0)
 			{
-				foreach (ISprite packedSprite in atlas.PackedSpritesP.WhereNotNull())
+				atlases.Add(atlas);
+			}
+		}
+		foreach (ISpriteAtlas atlas in atlases)
+		{
+			foreach (ISprite packedSprite in atlas.PackedSpritesP.WhereNotNull())
+			{
+				if (TryGetPackedSpriteTexture(atlas, packedSprite, out ITexture2D? spriteTexture))
 				{
-					if (TryGetPackedSpriteTexture(atlas, packedSprite, out ITexture2D? spriteTexture))
-					{
-						SpriteInformationObject spriteInformationObject = factory.GetOrCreate(spriteTexture);
-						spriteInformationObject.AddToDictionary(packedSprite, atlas);
-					}
+					SpriteInformationObject spriteInformationObject = factory.GetOrCreate(spriteTexture);
+					spriteInformationObject.AddToDictionary(packedSprite, atlas);
 				}
 			}
 		}

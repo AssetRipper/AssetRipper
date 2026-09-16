@@ -217,7 +217,7 @@ public abstract partial class PlatformGameStructure
 	/// </remarks>
 	protected void CollectAllSerializedFiles(string root)
 	{
-		foreach (string path in FileSystem.Directory.EnumerateFiles(root))
+		foreach (string path in EnumerateUniqueFilePaths(root))
 		{
 			if (SerializedFile.IsSerializedFile(path, FileSystem))
 			{
@@ -250,7 +250,7 @@ public abstract partial class PlatformGameStructure
 	/// </summary>
 	protected void CollectAssetBundles(string root)
 	{
-		foreach (string file in FileSystem.Directory.EnumerateFiles(root))
+		foreach (string file in EnumerateUniqueFilePaths(root))
 		{
 			if (BundleHeader.IsBundleHeader(file, FileSystem))
 			{
@@ -258,6 +258,13 @@ public abstract partial class PlatformGameStructure
 				AddAssetBundle(name, file);
 			}
 		}
+	}
+
+	private IEnumerable<string> EnumerateUniqueFilePaths(string root)
+	{
+		return FileSystem.Directory.EnumerateFiles(root)
+			.Select(MultiFileStream.GetFilePath)
+			.Distinct();
 	}
 
 	/// <summary>
@@ -359,7 +366,7 @@ public abstract partial class PlatformGameStructure
 
 	protected UnityVersion GetUnityVersionFromBundleFile(string filePath)
 	{
-		using Stream stream = FileSystem.File.OpenRead(filePath);
+		using Stream stream = MultiFileStream.OpenRead(filePath, FileSystem);
 		FileStreamBundleHeader header = new();
 		header.Read(stream);
 		return UnityVersion.Parse(header.UnityWebMinimumRevision);
