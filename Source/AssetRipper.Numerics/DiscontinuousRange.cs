@@ -307,7 +307,7 @@ public readonly struct DiscontinuousRange<T> : IEquatable<DiscontinuousRange<T>>
 
 			for (int i = 0; i < Count - 1; i++)
 			{
-				newRangeList.Add(new Range<T>(RangeList[i].End, RangeList[i].Start));
+				newRangeList.Add(new Range<T>(RangeList[i].End, RangeList[i + 1].Start));
 			}
 
 			T end = RangeList[Count - 1].End;

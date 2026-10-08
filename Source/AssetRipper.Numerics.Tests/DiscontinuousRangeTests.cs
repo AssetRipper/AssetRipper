@@ -79,6 +79,15 @@ public class DiscontinuousRangeTests
 	}
 
 	[Test]
+	public void NegationWithMultipleRangesIncludesGapsBetweenRanges()
+	{
+		DiscontinuousRange<int> range = new(new Range<int>(0, 2), new Range<int>(4, 6));
+		DiscontinuousRange<int> expected = new(new Range<int>(int.MinValue, 0), new Range<int>(2, 4), new Range<int>(6, int.MaxValue));
+
+		AssertEqual(range.Negate(int.MinValue, int.MaxValue), expected);
+	}
+
+	[Test]
 	public void SubtractMiddleTest()
 	{
 		DiscontinuousRange<float> range1 = new(MinToMax);
