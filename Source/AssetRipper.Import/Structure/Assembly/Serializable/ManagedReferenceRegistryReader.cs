@@ -75,8 +75,14 @@ internal static class ManagedReferenceRegistryReader
 	private static IUnityAssetBase[] ReadCountedObjects(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, int depth, ITypeResolver resolver)
 	{
 		int count = reader.ReadInt32();
+		if (count < 0)
+		{
+			throw new InvalidDataException($"The managed reference registry has a negative object count: {count}.");
+		}
+
 		long remainingBytes = reader.Length - reader.Position;
-		if (remainingBytes < count)
+		const int MinimumEntrySize = sizeof(long) + 3 * sizeof(int); // ReferenceId + ClassName + Namespace + AssemblyName
+		if (count > remainingBytes / MinimumEntrySize)
 		{
 			throw new EndOfStreamException($"The stream only has {remainingBytes} bytes remaining, so {count} referenced objects cannot be read.");
 		}
