@@ -243,7 +243,7 @@ public sealed partial class MultiFileStream : Stream
 				Position += offset;
 				break;
 			case SeekOrigin.End:
-				Position = Length - offset;
+				Position = Length + offset;
 				break;
 		}
 		return Position;

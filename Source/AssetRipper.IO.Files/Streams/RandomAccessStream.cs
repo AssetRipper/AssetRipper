@@ -61,7 +61,7 @@ internal sealed class RandomAccessStream : Stream
 
 	public override int Read(Span<byte> buffer)
 	{
-		long toRead = Math.Min(buffer.Length, Length - Position);
+		long toRead = Math.Max(Math.Min(buffer.Length, Length - Position), 0);
 		int read = RandomAccess.Read(Handle, buffer[..(int)toRead], position);
 		position += read;
 		return read;
@@ -96,7 +96,7 @@ internal sealed class RandomAccessStream : Stream
 				Position = offset;
 				break;
 			case SeekOrigin.End:
-				position = (Length - offset) + BaseOffset;
+				position = (Length + offset) + BaseOffset;
 				break;
 		}
 		return Position;

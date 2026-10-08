@@ -46,7 +46,7 @@ public sealed class PartialStream : Stream
 	}
 
 	public override int ReadByte()
-		=> m_stream.ReadByte();
+		=> Position >= Length ? -1 : m_stream.ReadByte();
 
 	/// <inheritdoc/>
 	public override long Seek(long offset, SeekOrigin origin)
