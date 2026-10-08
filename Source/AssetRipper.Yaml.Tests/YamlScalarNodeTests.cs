@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using System.Globalization;
 using System.Numerics;
 
 namespace AssetRipper.Yaml.Tests;
@@ -43,6 +44,30 @@ public class YamlScalarNodeTests
 			Assert.That(node.NodeType, Is.EqualTo(YamlNodeType.Scalar));
 			Assert.That(node.Style, Is.EqualTo(ScalarStyle.Plain));
 			Assert.That(node.EmitToString(), Is.EqualTo(asciiCharacters));
+		}
+	}
+
+	[Test]
+	public void HashAfterWhitespaceIsQuoted()
+	{
+		YamlScalarNode node = YamlScalarNode.Create("a #b");
+
+		Assert.That(node.EmitToString(), Is.EqualTo("'a #b'"));
+	}
+
+	[Test]
+	public void FloatUsesInvariantDecimalSeparator()
+	{
+		CultureInfo previousCulture = CultureInfo.CurrentCulture;
+		try
+		{
+			CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo("de-DE");
+			Assert.That(YamlScalarNode.Create(1.5f).EmitToString(), Is.EqualTo("1.5"));
+			Assert.That(YamlScalarNode.Create(1.5d).EmitToString(), Is.EqualTo("1.5"));
+		}
+		finally
+		{
+			CultureInfo.CurrentCulture = previousCulture;
 		}
 	}
 

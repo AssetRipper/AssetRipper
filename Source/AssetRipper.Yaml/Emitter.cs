@@ -1,4 +1,5 @@
 using System.Buffers;
+using System.Globalization;
 
 namespace AssetRipper.Yaml;
 
@@ -107,14 +108,14 @@ internal sealed class Emitter
 	public Emitter Write(float value)
 	{
 		WriteDelayed();
-		m_stream.Write(value);
+		WriteInvariant(value);
 		return this;
 	}
 
 	public Emitter Write(double value)
 	{
 		WriteDelayed();
-		m_stream.Write(value);
+		WriteInvariant(value);
 		return this;
 	}
 
@@ -220,6 +221,16 @@ internal sealed class Emitter
 			m_stream.Write(' ');
 			m_isNeedWhitespace = false;
 		}
+	}
+
+	private void WriteInvariant<T>(T value) where T : ISpanFormattable
+	{
+		Span<char> buffer = stackalloc char[32];
+		if (!value.TryFormat(buffer, out int charsWritten, "R", CultureInfo.InvariantCulture))
+		{
+			throw new InvalidOperationException("The formatted number did not fit in the buffer.");
+		}
+		m_stream.Write(buffer[..charsWritten]);
 	}
 
 	private void WriteIndent()
