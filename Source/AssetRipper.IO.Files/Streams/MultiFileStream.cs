@@ -321,14 +321,18 @@ public sealed partial class MultiFileStream : Stream
 
 	private void NextStream()
 	{
-		int nextStreamIndex = m_streamIndex + 1;
-		if (nextStreamIndex < m_streams.Count)
+		while (m_streamIndex + 1 < m_streams.Count)
 		{
 			m_currentBegin += m_currentStream.Length;
-			m_streamIndex = nextStreamIndex;
+			m_streamIndex++;
 			m_currentStream = m_streams[m_streamIndex];
 			m_currentStream.Position = 0;
 			m_currentEnd += m_currentStream.Length;
+			if (m_currentEnd > m_position)
+			{
+				// The current stream is non-empty
+				return;
+			}
 		}
 	}
 
