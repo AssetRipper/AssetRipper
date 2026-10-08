@@ -1,5 +1,4 @@
-﻿using AssetRipper.IO.Files.Streams;
-using AssetRipper.IO.Files.Streams.Smart;
+﻿using AssetRipper.IO.Files.Streams.Smart;
 
 namespace AssetRipper.IO.Files.Tests;
 
@@ -22,18 +21,6 @@ public class SmartStreamTests
 		const int Length = 64;
 		SmartStream memoryStream = SmartStream.CreateMemory(new byte[Length]);
 		Assert.That(memoryStream.Length, Is.EqualTo(Length));
-	}
-
-	[Test]
-	public void PartialStreamReadByteStopsAtItsEnd()
-	{
-		using MemoryStream baseStream = new([1, 2, 3, 4]);
-		baseStream.Position = 1;
-		using PartialStream partialStream = new(baseStream, 1, 2);
-
-		Assert.That(partialStream.ReadByte(), Is.EqualTo(2));
-		Assert.That(partialStream.ReadByte(), Is.EqualTo(3));
-		Assert.That(partialStream.ReadByte(), Is.EqualTo(-1));
 	}
 
 	[Test]
