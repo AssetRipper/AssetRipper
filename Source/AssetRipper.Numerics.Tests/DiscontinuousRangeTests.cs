@@ -54,6 +54,14 @@ public class DiscontinuousRangeTests
 	}
 
 	[Test]
+	public void MergingRangeAcrossMultipleExistingRangesKeepsTheFullUnion()
+	{
+		DiscontinuousRange<int> range = new(new Range<int>(0, 2), new Range<int>(4, 6), new Range<int>(1, 5));
+
+		AssertEqual(range, new DiscontinuousRange<int>(new Range<int>(0, 6)));
+	}
+
+	[Test]
 	public void UnionTest()
 	{
 		DiscontinuousRange<float> range1 = new(TwentyToMax, ZeroToTen);
@@ -109,6 +117,27 @@ public class DiscontinuousRangeTests
 		DiscontinuousRange<float> range2 = new(MinToZero, ZeroToTwenty);
 		DiscontinuousRange<float> expected = new(TwentyToMax);
 		AssertEqual(range1.Subtract(range2), expected);
+	}
+
+	[Test]
+	public void SubtractKeepsRangesAfterOtherRangesAreExhausted()
+	{
+		DiscontinuousRange<int> range = new(new Range<int>(0, 10), new Range<int>(12, 14));
+		DiscontinuousRange<int> other = new(new Range<int>(2, 4));
+		DiscontinuousRange<int> expected = new(new Range<int>(0, 2), new Range<int>(4, 10), new Range<int>(12, 14));
+
+		Assert.That(range.Subtract(other), Is.EqualTo(expected));
+	}
+
+	[Test]
+	public void DefaultRangeBehavesLikeEmpty()
+	{
+		DiscontinuousRange<int> range = default;
+
+		Assert.That(range.Count, Is.Zero);
+		Assert.That(range.Contains(0), Is.False);
+		Assert.That(range.ToArray(), Is.Empty);
+		Assert.That(range.Union(default), Is.EqualTo(DiscontinuousRange<int>.Empty));
 	}
 
 	[Test]

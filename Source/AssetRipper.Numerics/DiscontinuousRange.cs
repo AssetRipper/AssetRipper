@@ -10,28 +10,28 @@ namespace AssetRipper.Numerics;
 public readonly struct DiscontinuousRange<T> : IEquatable<DiscontinuousRange<T>>, IEquatable<Range<T>>, IReadOnlyList<Range<T>>
 	where T : notnull, IComparable<T>, IEquatable<T>
 {
-	private static readonly List<Range<T>> defaultRangeList = new List<Range<T>>(0);
-	private readonly List<Range<T>> rangeList;
+	private static readonly List<Range<T>> defaultRangeList = [];
+	private List<Range<T>> RangeList => field ?? defaultRangeList;
 
 	public static DiscontinuousRange<T> Empty { get; } = new();
 
 	public DiscontinuousRange()
 	{
-		rangeList = defaultRangeList;
+		RangeList = defaultRangeList;
 	}
 
 	public DiscontinuousRange(Range<T> range)
 	{
-		rangeList = new List<Range<T>>(1) { range };
+		RangeList = [range];
 	}
 
 	public DiscontinuousRange(IEnumerable<Range<T>> ranges)
 	{
-		rangeList = new();
+		RangeList = new();
 		Add(ranges);
-		if (rangeList.Count == 0)
+		if (RangeList.Count == 0)
 		{
-			rangeList = defaultRangeList;
+			RangeList = defaultRangeList;
 		}
 	}
 
@@ -39,18 +39,18 @@ public readonly struct DiscontinuousRange<T> : IEquatable<DiscontinuousRange<T>>
 	{
 		if (ranges.Count == 0)
 		{
-			rangeList = defaultRangeList;
+			RangeList = defaultRangeList;
 		}
 		else
 		{
-			rangeList = new List<Range<T>>(ranges.Count);
+			RangeList = new List<Range<T>>(ranges.Count);
 			Add(ranges);
 		}
 	}
 
 	public DiscontinuousRange(params Range<T>[] ranges)
 	{
-		rangeList = new List<Range<T>>(ranges.Length);
+		RangeList = new List<Range<T>>(ranges.Length);
 		Add(ranges);
 	}
 
@@ -60,7 +60,7 @@ public readonly struct DiscontinuousRange<T> : IEquatable<DiscontinuousRange<T>>
 	/// <param name="ranges"></param>
 	private DiscontinuousRange(List<Range<T>> rangeList)
 	{
-		this.rangeList = rangeList;
+		RangeList = rangeList;
 	}
 
 	/// <summary>
@@ -72,23 +72,23 @@ public readonly struct DiscontinuousRange<T> : IEquatable<DiscontinuousRange<T>>
 	{
 		if (range1.Count == 0)
 		{
-			rangeList = range2.rangeList;//prevent unnecessary allocation of an additional list
+			RangeList = range2.RangeList;//prevent unnecessary allocation of an additional list
 		}
 		else if (range2.Count == 0)
 		{
-			rangeList = range1.rangeList;//prevent unnecessary allocation of an additional list
+			RangeList = range1.RangeList;//prevent unnecessary allocation of an additional list
 		}
 		else
 		{
-			rangeList = new List<Range<T>>(range1.Count);
-			rangeList.AddRange(range1.rangeList);//Copy the elements of range1
-			Add(range2.rangeList);//Add the elements of range2
+			RangeList = new List<Range<T>>(range1.Count);
+			RangeList.AddRange(range1.RangeList);//Copy the elements of range1
+			Add(range2.RangeList);//Add the elements of range2
 		}
 	}
 
-	public int Count => rangeList.Count;
+	public int Count => RangeList.Count;
 
-	public Range<T> this[int index] => rangeList[index];
+	public Range<T> this[int index] => RangeList[index];
 
 	public override bool Equals(object? obj)
 	{
@@ -108,7 +108,7 @@ public readonly struct DiscontinuousRange<T> : IEquatable<DiscontinuousRange<T>>
 			return false;
 		}
 
-		for (int i = 0; i < rangeList.Count; i++)
+		for (int i = 0; i < RangeList.Count; i++)
 		{
 			if (!this[i].Equals(other[i]))
 			{
@@ -121,17 +121,17 @@ public readonly struct DiscontinuousRange<T> : IEquatable<DiscontinuousRange<T>>
 
 	public bool Contains(T point)
 	{
-		return rangeList.Any(r => r.Contains(point));
+		return RangeList.Any(r => r.Contains(point));
 	}
 
 	public bool Contains(Range<T> range)
 	{
-		return rangeList.Any(r => r.Contains(range));
+		return RangeList.Any(r => r.Contains(range));
 	}
 
 	public bool Contains(DiscontinuousRange<T> other)
 	{
-		foreach (Range<T> range in other.rangeList)
+		foreach (Range<T> range in other.RangeList)
 		{
 			if (!Contains(range))
 			{
@@ -143,7 +143,7 @@ public readonly struct DiscontinuousRange<T> : IEquatable<DiscontinuousRange<T>>
 
 	public bool Intersects(Range<T> range)
 	{
-		return rangeList.Any(r => r.Intersects(range));
+		return RangeList.Any(r => r.Intersects(range));
 	}
 
 	public bool Intersects(DiscontinuousRange<T> other)
@@ -202,23 +202,28 @@ public readonly struct DiscontinuousRange<T> : IEquatable<DiscontinuousRange<T>>
 			{
 				break;
 			}
-			else if (rangeList[i].IsStrictlyGreater(range))
+			else if (RangeList[i].IsStrictlyGreater(range))
 			{
-				rangeList.Insert(i, range);
+				RangeList.Insert(i, range);
 				return;
 			}
 		}
 
 		if (firstUnionIndex == Count)
 		{
-			rangeList.Add(range);
+			RangeList.Add(range);
 		}
 		else
 		{
-			rangeList[firstUnionIndex] = rangeList[firstUnionIndex].MakeUnion(range);
+			Range<T> union = RangeList[firstUnionIndex].MakeUnion(range);
+			for (int i = firstUnionIndex + 1; i <= lastUnionIndex; i++)
+			{
+				union = union.MakeUnion(RangeList[i]);
+			}
+			RangeList[firstUnionIndex] = union;
 			if (firstUnionIndex < lastUnionIndex)
 			{
-				rangeList.RemoveRange(firstUnionIndex + 1, lastUnionIndex - firstUnionIndex);
+				RangeList.RemoveRange(firstUnionIndex + 1, lastUnionIndex - firstUnionIndex);
 			}
 		}
 	}
@@ -294,7 +299,7 @@ public readonly struct DiscontinuousRange<T> : IEquatable<DiscontinuousRange<T>>
 		{
 			List<Range<T>> newRangeList = new List<Range<T>>(Count + 1);//Count + 1 is the maximum possible size of this list.
 
-			T start = rangeList[0].Start;
+			T start = RangeList[0].Start;
 			if (!start.Equals(minimum))
 			{
 				newRangeList.Add(new Range<T>(minimum, start));
@@ -302,10 +307,10 @@ public readonly struct DiscontinuousRange<T> : IEquatable<DiscontinuousRange<T>>
 
 			for (int i = 0; i < Count - 1; i++)
 			{
-				newRangeList.Add(new Range<T>(rangeList[i].End, rangeList[i].Start));
+				newRangeList.Add(new Range<T>(RangeList[i].End, RangeList[i].Start));
 			}
 
-			T end = rangeList[Count - 1].End;
+			T end = RangeList[Count - 1].End;
 			if (!end.Equals(maximum))
 			{
 				newRangeList.Add(new Range<T>(end, maximum));
@@ -315,7 +320,7 @@ public readonly struct DiscontinuousRange<T> : IEquatable<DiscontinuousRange<T>>
 		}
 	}
 
-	public IEnumerator<Range<T>> GetEnumerator() => rangeList.GetEnumerator();
+	public IEnumerator<Range<T>> GetEnumerator() => RangeList.GetEnumerator();
 
 	IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
@@ -389,60 +394,38 @@ public readonly struct DiscontinuousRange<T> : IEquatable<DiscontinuousRange<T>>
 	public DiscontinuousRange<T> Subtract(DiscontinuousRange<T> other)
 	{
 		List<Range<T>> ranges = new();
-		int i = 0;
 		int j = 0;
-		bool endedInside = false;
-		T? nextStartingPoint = default;
-		while (i < Count && j < other.Count)
+		for (int i = 0; i < Count; i++)
 		{
 			Range<T> thisRange = this[i];
-			Range<T> otherRange = other[j];
-			if (thisRange.IsStrictlyLess(otherRange))
-			{
-				if (endedInside)
-				{
-					ranges.Add(new Range<T>(nextStartingPoint!, thisRange.End));
-					endedInside = false;
-					nextStartingPoint = default;
-				}
-				i++;
-			}
-			else if (thisRange.IsStrictlyGreater(otherRange))
+			while (j < other.Count && other[j].End.CompareTo(thisRange.Start) <= 0)
 			{
 				j++;
 			}
-			else
+
+			T remainingStart = thisRange.Start;
+			int k = j;
+			while (k < other.Count && other[k].Start.CompareTo(thisRange.End) < 0)
 			{
-				if (thisRange.Start.IsLess(otherRange.Start))
+				Range<T> otherRange = other[k];
+				if (remainingStart.CompareTo(otherRange.Start) < 0)
 				{
-					if (endedInside)
-					{
-						ranges.Add(new Range<T>(nextStartingPoint!, otherRange.Start));
-						endedInside = false;
-						nextStartingPoint = default;
-					}
-					else
-					{
-						ranges.Add(new Range<T>(thisRange.Start, otherRange.Start));
-					}
+					ranges.Add(new Range<T>(remainingStart, otherRange.Start));
 				}
-				if (thisRange.End.IsLessEqual(otherRange.End))
+				if (remainingStart.CompareTo(otherRange.End) < 0)
 				{
-					i++;
+					remainingStart = otherRange.End;
 				}
-				else
-				{
-					if (j < other.Count - 1)
-					{
-						endedInside = true;
-						nextStartingPoint = otherRange.End;
-					}
-					else
-					{
-						ranges.Add(new Range<T>(otherRange.End, thisRange.End));
-					}
-					j++;
-				}
+				k++;
+			}
+			if (remainingStart.CompareTo(thisRange.End) < 0)
+			{
+				ranges.Add(new Range<T>(remainingStart, thisRange.End));
+			}
+
+			while (j < other.Count && other[j].End.CompareTo(thisRange.End) <= 0)
+			{
+				j++;
 			}
 		}
 		return new DiscontinuousRange<T>(ranges);
