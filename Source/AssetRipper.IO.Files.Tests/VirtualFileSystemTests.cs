@@ -26,6 +26,14 @@ public class VirtualFileSystemTests
 		Assert.That(new VirtualFileSystem().Directory.Exists(null), Is.True);
 	}
 
+	[TestCase("")]
+	[TestCase("/")]
+	[TestCase(null)]
+	public void FileDoesNotExistAtRoot(string? path)
+	{
+		Assert.That(new VirtualFileSystem().File.Exists(path), Is.False);
+	}
+
 	[Test]
 	public void NonexistentDirectoryDoesNotExist()
 	{

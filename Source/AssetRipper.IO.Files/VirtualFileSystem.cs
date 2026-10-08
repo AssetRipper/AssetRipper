@@ -251,6 +251,11 @@ public partial class VirtualFileSystem : FileSystem
 		public override bool Exists(string? path)
 		{
 			string[] pathParts = Path.GetPathParts(path);
+			if (pathParts.Length == 0)
+			{
+				return false;
+			}
+
 			ReadOnlySpan<string> directoryParts = pathParts.AsSpan(0, pathParts.Length - 1);
 			string fileName = pathParts[^1];
 
