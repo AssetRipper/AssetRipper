@@ -1,6 +1,7 @@
 ﻿using AssetRipper.AssemblyDumper.Utils;
 using AssetRipper.Tpk;
 using AssetRipper.Tpk.TypeTrees;
+using System.Diagnostics;
 
 namespace AssetRipper.AssemblyDumper.Passes;
 
@@ -79,10 +80,11 @@ internal static class Pass000_ProcessTpk
 				}
 			}
 
-			while (classInfo.Classes[0].Value is null)
+			while (classInfo.Classes.Count > 0 && classInfo.Classes[0].Value is null)
 			{
 				classInfo.Classes.RemoveAt(0);
 			}
+			Debug.Assert(classInfo.Classes.Count > 0, $"Class {classInfo.ID} has no data after processing.");
 		}
 		return blob;
 

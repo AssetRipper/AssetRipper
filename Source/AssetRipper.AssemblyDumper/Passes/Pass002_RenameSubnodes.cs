@@ -647,17 +647,17 @@ public static class Pass002_RenameSubnodes
 			}
 		}
 
-		if (node.Name.StartsWith("m_Dst", StringComparison.Ordinal) && char.IsUpper(node.Name[5]))
+		if (node.Name.StartsWith("m_Dst", StringComparison.Ordinal) && node.Name.Length > 5 && char.IsUpper(node.Name[5]))
 		{
 			string suffix = node.Name.Substring(5);
 			node.Name = "m_Destination" + suffix;
 		}
-		else if (node.Name.StartsWith("m_Dest", StringComparison.Ordinal) && char.IsUpper(node.Name[6]))
+		else if (node.Name.StartsWith("m_Dest", StringComparison.Ordinal) && node.Name.Length > 6 && char.IsUpper(node.Name[6]))
 		{
 			string suffix = node.Name.Substring(6);
 			node.Name = "m_Destination" + suffix;
 		}
-		else if (node.Name.StartsWith("m_Src", StringComparison.Ordinal) && char.IsUpper(node.Name[5]))
+		else if (node.Name.StartsWith("m_Src", StringComparison.Ordinal) && node.Name.Length > 5 && char.IsUpper(node.Name[5]))
 		{
 			string suffix = node.Name.Substring(5);
 			node.Name = "m_Source" + suffix;
