@@ -121,4 +121,6 @@ public sealed class ILSpyAssemblyResolver(IAssemblyManager manager) : IAssemblyR
 			return result;
 		}
 	}
+
+	IDisposable? IAssemblyResolver.BeginSnapshot() => null;
 }
