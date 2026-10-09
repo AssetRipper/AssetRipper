@@ -133,7 +133,16 @@ public sealed class PrimaryContentExporter
 			if (collection.Exportable)
 			{
 				Logger.Info(LogCategory.ExportProgress, $"({i + 1}/{collections.Count}) Exporting '{collection.Name}'");
-				bool exportedSuccessfully = collection.Export(settings.ExportRootPath, fileSystem);
+				bool exportedSuccessfully;
+				try
+				{
+					exportedSuccessfully = collection.Export(settings.ExportRootPath, fileSystem);
+				}
+				catch (Exception ex)
+				{
+					Logger.Error(LogCategory.ExportProgress, $"An exception was thrown while exporting '{collection.Name}'", ex);
+					exportedSuccessfully = false;
+				}
 				if (!exportedSuccessfully)
 				{
 					Logger.Warning(LogCategory.ExportProgress, $"Failed to export '{collection.Name}'");
