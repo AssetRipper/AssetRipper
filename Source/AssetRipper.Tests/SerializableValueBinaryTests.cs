@@ -15,9 +15,15 @@ public class SerializableValueBinaryTests
 		foreach (PrimitiveType type in new[] { PrimitiveType.Bool, PrimitiveType.Char, PrimitiveType.Byte, PrimitiveType.SByte,
 			PrimitiveType.Short, PrimitiveType.UShort, PrimitiveType.Int, PrimitiveType.UInt, PrimitiveType.Long, PrimitiveType.ULong,
 			PrimitiveType.Single, PrimitiveType.Double })
-		foreach (EndianType endian in new[] { EndianType.LittleEndian, EndianType.BigEndian })
-		foreach (int count in new[] { 0, 3, 5001 })
-			 yield return new(type, endian, count);
+		{
+			foreach (EndianType endian in new[] { EndianType.LittleEndian, EndianType.BigEndian })
+			{
+				foreach (int count in new[] { 0, 3, 5001 })
+				{
+					yield return new(type, endian, count);
+				}
+			}
+		}
 	}
 
 	[TestCaseSource(nameof(PrimitiveArrays))]
@@ -30,25 +36,54 @@ public class SerializableValueBinaryTests
 			writer.Write(count);
 			for (int i = 0; i < count; i++)
 			{
-				switch (type)
-				{
-					case PrimitiveType.Bool: writer.Write(i % 2 == 0); break;
-					case PrimitiveType.Char: writer.Write((ushort)(0x4E00 + i)); break;
-					case PrimitiveType.Byte: writer.Write(unchecked((byte)i)); break;
-					case PrimitiveType.SByte: writer.Write(unchecked((sbyte)i)); break;
-					case PrimitiveType.Short: writer.Write((short)(i - 2500)); break;
-					case PrimitiveType.UShort: writer.Write((ushort)i); break;
-					case PrimitiveType.Int: writer.Write(i - 2500); break;
-					case PrimitiveType.UInt: writer.Write((uint)i); break;
-					case PrimitiveType.Long: writer.Write((long)i << 33); break;
-					case PrimitiveType.ULong: writer.Write((ulong)i << 33); break;
-					case PrimitiveType.Single: writer.Write(i + 0.125f); break;
-					case PrimitiveType.Double: writer.Write(i + 0.125); break;
-				}
+				WritePrimitiveValue(writer, type, i);
 			}
 			writer.AlignStream();
 		}
 		AssertRoundTrip(input.ToArray(), collection, new(SerializablePrimitiveType.GetOrCreate(type), 1, "array", true));
+	}
+
+	private static void WritePrimitiveValue(EndianWriter writer, PrimitiveType type, int index)
+	{
+		switch (type)
+		{
+			case PrimitiveType.Bool:
+				writer.Write(index % 2 == 0);
+				break;
+			case PrimitiveType.Char:
+				writer.Write((ushort)(0x4E00 + index));
+				break;
+			case PrimitiveType.Byte:
+				writer.Write(unchecked((byte)index));
+				break;
+			case PrimitiveType.SByte:
+				writer.Write(unchecked((sbyte)index));
+				break;
+			case PrimitiveType.Short:
+				writer.Write((short)(index - 2500));
+				break;
+			case PrimitiveType.UShort:
+				writer.Write((ushort)index);
+				break;
+			case PrimitiveType.Int:
+				writer.Write(index - 2500);
+				break;
+			case PrimitiveType.UInt:
+				writer.Write((uint)index);
+				break;
+			case PrimitiveType.Long:
+				writer.Write((long)index << 33);
+				break;
+			case PrimitiveType.ULong:
+				writer.Write((ulong)index << 33);
+				break;
+			case PrimitiveType.Single:
+				writer.Write(index + 0.125f);
+				break;
+			case PrimitiveType.Double:
+				writer.Write(index + 0.125);
+				break;
+		}
 	}
 
 	[Test]

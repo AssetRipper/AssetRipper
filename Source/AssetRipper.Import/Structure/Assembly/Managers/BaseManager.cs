@@ -201,7 +201,7 @@ public class BaseManager : IAssemblyManager
 				return false;
 			}
 			string fullName = string.IsNullOrEmpty(scriptID.Namespace) ? scriptID.Name : $"{scriptID.Namespace}.{scriptID.Name}";
-			var signature = TypeNameParser.Parse(module, $"{fullName.Replace('/', '+')}, {scriptID.Assembly}");
+			TypeSignature signature = TypeNameParser.Parse(module, $"{fullName.Replace('/', '+')}, {scriptID.Assembly}");
 			return new FieldSerializer(version, RuntimeContext).TryCreateSerializableType(signature, out scriptType, out failureReason);
 		}
 		TypeDefinition? type = FindType(scriptID);

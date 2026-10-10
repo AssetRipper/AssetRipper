@@ -1,5 +1,8 @@
-using AssetRipper.Assets.Collections;
+using AsmResolver.DotNet;
+using AsmResolver.DotNet.Signatures;
+using AsmResolver.PE.DotNet.Metadata.Tables;
 using AssetRipper.Assets.Cloning;
+using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Import.Structure.Assembly;
@@ -9,9 +12,6 @@ using AssetRipper.IO.Endian;
 using AssetRipper.Primitives;
 using AssetRipper.SerializationLogic;
 using AssetRipper.SourceGenerated.Extensions;
-using AsmResolver.DotNet;
-using AsmResolver.DotNet.Signatures;
-using AsmResolver.PE.DotNet.Metadata.Tables;
 
 namespace AssetRipper.Tests;
 
@@ -27,7 +27,7 @@ public class ManagedReferenceRegistryTests
 		module.TopLevelTypes.Add(outer);
 		TypeDefinition inner = new("", "Inner", TypeAttributes.NestedPublic);
 		outer.NestedTypes.Add(inner);
-		var id = manager.GetScriptID("Fixture", "Tests", name);
+		ScriptIdentifier id = manager.GetScriptID("Fixture", "Tests", name);
 		Assert.That(id.Name, Is.EqualTo(name));
 		Assert.That(manager.GetTypeDefinition(id), Is.SameAs(inner));
 	}
@@ -44,7 +44,7 @@ public class ManagedReferenceRegistryTests
 		facadeModule.AssemblyReferences.Add(reference);
 		facadeModule.ExportedTypes.Add(new(reference, "Tests", "Example") { Attributes = TypeAttributes.Public | TypeAttributes.Forwarder });
 		manager.Add(facade);
-		var id = manager.GetScriptID("Facade", "Tests", "Example");
+		ScriptIdentifier id = manager.GetScriptID("Facade", "Tests", "Example");
 		Assert.That(id.IsDefault, Is.False);
 		Assert.That(manager.GetTypeDefinition(id), Is.SameAs(implementation.ManifestModule!.TopLevelTypes.Single(t => t.Name == "Example")));
 	}
@@ -58,15 +58,15 @@ public class ManagedReferenceRegistryTests
 		module.TopLevelTypes.Add(box);
 		box.GenericParameters.Add(new GenericParameter("T"));
 		box.Fields.Add(new("item", FieldAttributes.Public, new GenericParameterSignature(module, GenericParameterType.Type, 0)));
-		var id = new ScriptIdentifier("Fixture", "Tests", "Box`1[[Tests.Example, Fixture]]");
-		Assert.That(manager.TryGetSerializableType(id, UnityVersion.Parse("6000.5.10f1"), out var type, out var reason), Is.True, reason);
+		ScriptIdentifier id = new("Fixture", "Tests", "Box`1[[Tests.Example, Fixture]]");
+		Assert.That(manager.TryGetSerializableType(id, UnityVersion.Parse("6000.5.10f1"), out SerializableType? type, out string? reason), Is.True, reason);
 		Assert.That(type!.Fields.Single().Type.Fields.Select(f => f.Name), Is.EqualTo(new[] { "value", "label" }));
 	}
 
 	[Test]
 	public void EmptyReferenceArraysCanOmitTheTrailingRegistry()
 	{
-		var collection = AssetCreator.CreateCollection(UnityVersion.Parse("6000.5.10f1"));
+		ProcessedAssetCollection collection = AssetCreator.CreateCollection(UnityVersion.Parse("6000.5.10f1"));
 		SerializableStructure host = new RegistryHostType(includeArray: true).CreateSerializableStructure();
 		byte[] bytes = new byte[4];
 		EndianSpanReader reader = new(bytes, collection.EndianType);
@@ -92,9 +92,13 @@ public class ManagedReferenceRegistryTests
 			writer.Write(2);
 			writer.Write(2);
 			writer.Write(-2L);
-			WriteString(writer, ""); WriteString(writer, ""); WriteString(writer, "");
+			WriteString(writer, "");
+			WriteString(writer, "");
+			WriteString(writer, "");
 			writer.Write(1000L);
-			WriteString(writer, "Example"); WriteString(writer, "Tests"); WriteString(writer, "Fixture");
+			WriteString(writer, "Example");
+			WriteString(writer, "Tests");
+			WriteString(writer, "Fixture");
 			writer.Write(73);
 			WriteString(writer, "hello");
 			bytes = stream.ToArray();
@@ -103,12 +107,12 @@ public class ManagedReferenceRegistryTests
 		SerializableStructure host = new RegistryHostType().CreateSerializableStructure();
 		host.Read(ref reader, collection.Version, collection.Flags, manager);
 		SerializableStructure registry = (SerializableStructure)host["references"].AsAsset;
-		var entries = registry["RefIds"].AsAssetArray.Cast<SerializableStructure>().ToArray();
+		SerializableStructure[] entries = registry["RefIds"].AsAssetArray.Cast<SerializableStructure>().ToArray();
 		Assert.That(reader.Position, Is.EqualTo(bytes.Length));
 		Assert.That(entries[0]["rid"].AsInt64, Is.EqualTo(-2));
 		Assert.That(((SerializableStructure)entries[0]["data"].AsAsset).Fields, Is.Empty);
 		Assert.That(entries[1]["rid"].AsInt64, Is.EqualTo(1000));
-		var data = (SerializableStructure)entries[1]["data"].AsAsset;
+		SerializableStructure data = (SerializableStructure)entries[1]["data"].AsAsset;
 		Assert.That(data["value"].AsInt32, Is.EqualTo(73));
 		Assert.That(data["label"].AsString, Is.EqualTo("hello"));
 		using MemoryStream output = new();
@@ -116,8 +120,8 @@ public class ManagedReferenceRegistryTests
 		registry.WriteRelease(assetWriter);
 		Assert.That(output.ToArray(), Is.EqualTo(bytes));
 		SerializableStructure clone = registry.DeepClone(new PPtrConverter(collection, collection));
-		var clonedEntry = (SerializableStructure)clone["RefIds"].AsAssetArray[1];
-		var clonedData = (SerializableStructure)clonedEntry["data"].AsAsset;
+		SerializableStructure clonedEntry = (SerializableStructure)clone["RefIds"].AsAssetArray[1];
+		SerializableStructure clonedData = (SerializableStructure)clonedEntry["data"].AsAsset;
 		Assert.That(clonedData, Is.Not.SameAs(data));
 		Assert.That(clonedData["value"].AsInt32, Is.EqualTo(73));
 	}
@@ -126,7 +130,7 @@ public class ManagedReferenceRegistryTests
 	[TestCase(true)]
 	public void ResetClearsTheManagedReferenceArrayAndRegistry(bool copyFromNull)
 	{
-		var collection = AssetCreator.CreateCollection(UnityVersion.Parse("6000.5.10f1"));
+		ProcessedAssetCollection collection = AssetCreator.CreateCollection(UnityVersion.Parse("6000.5.10f1"));
 		byte[] bytes;
 		using (MemoryStream stream = new())
 		{
@@ -136,7 +140,9 @@ public class ManagedReferenceRegistryTests
 			writer.Write(2);
 			writer.Write(1);
 			writer.Write(-2L);
-			WriteString(writer, ""); WriteString(writer, ""); WriteString(writer, "");
+			WriteString(writer, "");
+			WriteString(writer, "");
+			WriteString(writer, "");
 			bytes = stream.ToArray();
 		}
 		SerializableStructure host = new RegistryHostType(includeArray: true).CreateSerializableStructure();
@@ -169,7 +175,7 @@ public class ManagedReferenceRegistryTests
 		byte[] bytes = new byte[8];
 		System.Buffers.Binary.BinaryPrimitives.WriteInt32LittleEndian(bytes, 2);
 		System.Buffers.Binary.BinaryPrimitives.WriteInt32LittleEndian(bytes.AsSpan(4), count);
-		var collection = AssetCreator.CreateCollection(UnityVersion.Parse("6000.5.10f1"));
+		ProcessedAssetCollection collection = AssetCreator.CreateCollection(UnityVersion.Parse("6000.5.10f1"));
 		Assert.That(() =>
 		{
 			EndianSpanReader reader = new(bytes, EndianType.LittleEndian);
