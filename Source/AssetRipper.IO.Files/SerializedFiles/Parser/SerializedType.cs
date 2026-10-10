@@ -39,6 +39,8 @@ public sealed class SerializedType : SerializedTypeBase, IEquatable<SerializedTy
 			&& OldType.Equals(other.OldType)
 			&& ScriptID == other.ScriptID
 			&& OldTypeHash == other.OldTypeHash
+			&& ExtractedTypeTreeHash == other.ExtractedTypeTreeHash
+			&& IsTypeTreeExtracted == other.IsTypeTreeExtracted
 			&& TypeDependencies.AsSpan().SequenceEqual(other.TypeDependencies);
 	}
 
@@ -51,6 +53,8 @@ public sealed class SerializedType : SerializedTypeBase, IEquatable<SerializedTy
 		hash.Add(OldType);
 		hash.Add(ScriptID);
 		hash.Add(OldTypeHash);
+		hash.Add(ExtractedTypeTreeHash);
+		hash.Add(IsTypeTreeExtracted);
 		foreach (int i in TypeDependencies)
 		{
 			hash.Add(i);

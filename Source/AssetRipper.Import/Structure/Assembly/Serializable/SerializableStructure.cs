@@ -39,6 +39,12 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 			{
 				if (etalon.Type == ManagedReferenceTypes.Registry)
 				{
+					// Unity can omit the trailing registry when all managed references are empty.
+					if (i == Fields.Length - 1 && reader.Position == reader.Length)
+					{
+						Fields[i] = default;
+						continue;
+					}
 					Fields[i].AsAsset = ManagedReferenceRegistryReader.Read(ref reader, version, flags, Depth + 1, resolver);
 					if (etalon.Align)
 					{
@@ -58,7 +64,7 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 		for (int i = 0; i < Fields.Length; i++)
 		{
 			SerializableType.Field etalon = Type.Fields[i];
-			if (IsAvailable(etalon))
+			if (IsAvailable(etalon) && IsPresent(i))
 			{
 				Fields[i].Write(writer, etalon);
 			}
@@ -75,7 +81,7 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 			for (int i = 0; i < Fields.Length; i++)
 			{
 				SerializableType.Field etalon = Type.Fields[i];
-				if (IsAvailable(etalon))
+				if (IsAvailable(etalon) && IsPresent(i))
 				{
 					if (hasEmittedFirstField)
 					{
@@ -104,7 +110,7 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 		for (int i = 0; i < Fields.Length; i++)
 		{
 			SerializableType.Field etalon = Type.Fields[i];
-			if (IsAvailable(etalon))
+			if (IsAvailable(etalon) && IsPresent(i))
 			{
 				foreach ((string, PPtr) pair in Fields[i].FetchDependencies(etalon))
 				{
@@ -115,6 +121,8 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 	}
 
 	public override string ToString() => Type.FullName;
+
+	private bool IsPresent(int index) => Type.Fields[index].Type != ManagedReferenceTypes.Registry || Fields[index].CValue is not null;
 
 	private bool IsAvailable(in SerializableType.Field field)
 	{
@@ -159,7 +167,7 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 
 	private static void LogMonoBehaviorReadException(SerializableStructure structure, Exception ex)
 	{
-		Logger.Error(LogCategory.Import, $"Unable to read MonoBehaviour Structure, because script {structure} layout mismatched binary content ({ex.GetType().Name}).");
+		Logger.Error(LogCategory.Import, $"Unable to read MonoBehaviour Structure, because script {structure} layout mismatched binary content ({ex.GetType().Name}: {ex.Message}).");
 	}
 
 	public int Depth { get; }

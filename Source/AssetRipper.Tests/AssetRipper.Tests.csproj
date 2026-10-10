@@ -18,6 +18,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<EmbeddedResource Include="Fixtures/Unity6000_5_10f1/*.bin" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="..\AssetRipper.Export.PrimaryContent\AssetRipper.Export.PrimaryContent.csproj" />
 		<ProjectReference Include="..\AssetRipper.Export.UnityProjects\AssetRipper.Export.UnityProjects.csproj" />
 		<ProjectReference Include="..\UnityEngine\UnityEngine.csproj" />

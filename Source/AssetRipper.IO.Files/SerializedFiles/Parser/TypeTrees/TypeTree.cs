@@ -120,6 +120,11 @@ public sealed class TypeTree : IEquatable<TypeTree?>
 
 	internal void Write(SerializedWriter writer)
 	{
+		if (writer.Generation >= FormatVersion.ExtractedTypeTreeSupport)
+		{
+			writer.Write(TypeTreeHeaderMagic);
+			writer.Write((int)writer.Generation);
+		}
 		if (TypeTreeNode.IsFormat5(writer.Generation))
 		{
 			writer.Write(Nodes.Count);
@@ -135,6 +140,13 @@ public sealed class TypeTree : IEquatable<TypeTree?>
 			int index = 0;
 			WriteTreeNode(writer, ref index);
 		}
+	}
+
+	internal int GetSerializedSize(FormatVersion generation)
+	{
+		return generation >= FormatVersion.ExtractedTypeTreeSupport
+			? checked(16 + Nodes.Count * 32 + StringBuffer.Length)
+			: throw new NotSupportedException();
 	}
 
 	private static void ReadTreeNode(SerializedReader reader, ICollection<TypeTreeNode> nodes, byte depth)

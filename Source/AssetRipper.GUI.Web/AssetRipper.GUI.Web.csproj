@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<OutputPath>..\0Bins\Other\AssetRipper.GUI.Web\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.GUI.Web\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>

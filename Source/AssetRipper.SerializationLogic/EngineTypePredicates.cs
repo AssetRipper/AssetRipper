@@ -16,6 +16,7 @@ internal static class EngineTypePredicates
 		"Color",
 		"Color32",
 		"LayerMask",
+		"RenderingLayerMask",
 		"Bounds",
 		"BoundsInt",
 		"Vector3Int",

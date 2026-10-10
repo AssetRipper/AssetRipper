@@ -1,6 +1,7 @@
 using AssetRipper.Assets;
 using AssetRipper.Export.Configuration;
 using AssetRipper.Export.Modules.Textures;
+using AssetRipper.Export.UnityProjects.Project;
 using AssetRipper.Import.Logging;
 using AssetRipper.Processing.Textures;
 using AssetRipper.SourceGenerated.Classes.ClassID_213;
@@ -27,7 +28,14 @@ public class TextureAssetExporter : BinaryAssetExporter
 	{
 		if (asset.MainAsset is SpriteInformationObject spriteInformationObject && (ExportSprites || asset is not ISprite))
 		{
-			exportCollection = new TextureExportCollection(this, spriteInformationObject, ExportSprites);
+			ITexture2D texture = spriteInformationObject.Texture;
+			// Dynamic font atlases can be serialized before they have any pixels.
+			// Preserve these as native assets rather than attempting a zero-sized bitmap.
+			exportCollection = texture.Width_C28 == 0 && texture.Height_C28 == 0
+				&& texture.ImageData_C28.Length == 0 && (texture.StreamData_C28?.Size ?? 0) == 0
+				&& spriteInformationObject.Sprites.Count == 0
+				? new EmptyTextureExportCollection(spriteInformationObject)
+				: new TextureExportCollection(this, spriteInformationObject, ExportSprites);
 			return true;
 		}
 		else
@@ -57,5 +65,21 @@ public class TextureAssetExporter : BinaryAssetExporter
 			Logger.Log(LogType.Warning, LogCategory.Export, $"Unable to convert '{texture.Name}' to bitmap");
 			return false;
 		}
+	}
+
+	private sealed class EmptyTextureExportCollection : AssetsExportCollection<ITexture2D>
+	{
+		public EmptyTextureExportCollection(SpriteInformationObject spriteInformationObject)
+			: base(new DefaultYamlExporter(), spriteInformationObject.Texture)
+		{
+			AddAsset(spriteInformationObject);
+		}
+
+		protected override bool ExportInner(IExportContainer container, string filePath, string dirPath, FileSystem fileSystem)
+		{
+			return AssetExporter.Export(container, Asset, filePath, fileSystem);
+		}
+
+		protected override string GetExportExtension(IUnityObjectBase asset) => "asset";
 	}
 }

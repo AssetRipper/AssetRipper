@@ -76,7 +76,7 @@ public sealed class GameAssetFactory : AssetFactoryBase
 			if (type is not null && TypeTreeNodeStruct.TryMakeFromTypeTree(type.OldType, out TypeTreeNodeStruct rootNode))
 			{
 				structure = SerializableTreeType.FromRootNode(rootNode, true).CreateSerializableStructure();
-				if (structure.TryRead(ref reader, monoBehaviour, TypeTreeResolver.Create(referenceTypes)))
+				if (structure.TryRead(ref reader, monoBehaviour, TypeTreeResolver.Create(referenceTypes, assemblyManager)))
 				{
 					monoBehaviour.Structure = structure;
 				}
@@ -189,7 +189,9 @@ public sealed class GameAssetFactory : AssetFactoryBase
 
 	private static IUnityObjectBase? CreateAsset(AssetInfo assetInfo, UnityVersion version)
 	{
-		IUnityObjectBase? asset = AssetFactory.CreateSerialized(assetInfo, version);
+		IUnityObjectBase? asset = assetInfo.ClassID == (int)ClassIDType.PhysicsManager && Unity6TypeTreeOverrides.NeedsPhysicsOverride(version)
+			? null
+			: AssetFactory.CreateSerialized(assetInfo, version);
 		if (asset is null && TypeTreeNodeStruct.TryMakeFromTpk((ClassIDType)assetInfo.ClassID, version, out TypeTreeNodeStruct releaseRoot, out TypeTreeNodeStruct editorRoot))
 		{
 			//Engine assets cannot have [SerializeReference] fields, so they never need a type resolver.
@@ -258,7 +260,7 @@ public sealed class GameAssetFactory : AssetFactoryBase
 			//This is the new Gradient. The old one was (most likely) not exposed to user code.
 			MonoUtils.GradientName => Gradient.Create(version),
 			MonoUtils.RectOffsetName => RectOffset.Create(),
-			MonoUtils.GUIStyleName => GUIStyle.Create(version),
+			MonoUtils.GUIStyleName => version.GreaterThanOrEquals(6000, 5) ? new GUIStyleAsset(version) : GUIStyle.Create(version),
 			MonoUtils.PropertyNameName => PropertyName.Create(version),
 			MonoUtils.SphericalHarmonicsL2Name => SphericalHarmonicsL2.Create(version),
 			_ => throw new NotSupportedException(name),
