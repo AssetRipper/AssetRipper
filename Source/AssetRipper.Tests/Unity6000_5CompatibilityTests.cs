@@ -24,7 +24,7 @@ public class Unity6000_5CompatibilityTests
 		var collection = AssetCreator.CreateCollection(Version);
 		collection.SetLayout(Version, BuildTarget.StandaloneWin64Player, TransferInstructionFlags.SerializeGameRelease);
 		using MonoManager manager = new(_ => { });
-		var asset = new GameAssetFactory(manager).ReadAsset(new AssetInfo(collection, 1, classID), new ReadOnlyArraySegment<byte>(bytes), null);
+		var asset = new GameAssetFactory(manager).ReadAsset(new AssetInfo(collection, 1, classID), new ReadOnlyArraySegment<byte>(bytes), null, []);
 		Assert.That(asset, Is.InstanceOf<TypeTreeObject>());
 		var settings = (TypeTreeObject)asset!;
 		if (classID == 129)

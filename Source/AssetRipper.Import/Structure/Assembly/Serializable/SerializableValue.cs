@@ -1017,6 +1017,13 @@ public record struct SerializableValue([property: DebuggerBrowsable(DebuggerBrow
 			case 0:
 				if (etalon.Type.Type == PrimitiveType.Complex)
 				{
+					if (etalon.Type == ManagedReferenceTypes.ReferencedObjectData && source.CValue is SerializableStructure referencedData)
+					{
+						// The registry declares an empty placeholder; preserve the resolved payload type.
+						PValue = default;
+						CValue = referencedData.DeepClone(converter);
+						break;
+					}
 					IUnityAssetBase thisStructure = etalon.Type.CreateInstance(depth + 1, converter.TargetCollection.Version);
 					if (source.CValue is IUnityAssetBase sourceStructure)
 					{

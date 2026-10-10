@@ -1,6 +1,7 @@
 ﻿using AsmResolver.DotNet;
 using AsmResolver.DotNet.Builder;
 using AsmResolver.DotNet.Signatures;
+using AsmResolver.DotNet.Signatures.Parsing;
 using AsmResolver.PE.Builder;
 using AssetRipper.Import.Structure.Platforms;
 using AssetRipper.IO.Files;
@@ -189,6 +190,19 @@ public class BaseManager : IAssemblyManager
 		{
 			failureReason = null;
 			return true;
+		}
+		if (scriptID.Name.Contains('['))
+		{
+			ModuleDefinition? module = FindAssembly(scriptID.Assembly)?.ManifestModule;
+			if (module is null)
+			{
+				scriptType = null;
+				failureReason = $"Can't find assembly: {scriptID.Assembly}";
+				return false;
+			}
+			string fullName = string.IsNullOrEmpty(scriptID.Namespace) ? scriptID.Name : $"{scriptID.Namespace}.{scriptID.Name}";
+			var signature = TypeNameParser.Parse(module, $"{fullName.Replace('/', '+')}, {scriptID.Assembly}");
+			return new FieldSerializer(version, RuntimeContext).TryCreateSerializableType(signature, out scriptType, out failureReason);
 		}
 		TypeDefinition? type = FindType(scriptID);
 		if (type is null)

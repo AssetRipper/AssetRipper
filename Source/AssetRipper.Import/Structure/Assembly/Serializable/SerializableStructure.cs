@@ -284,9 +284,16 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 
 	public override void Reset()
 	{
-		foreach (SerializableValue field in Fields)
+		for (int i = 0; i < Fields.Length; i++)
 		{
-			field.Reset();
+			if (Type.Fields[i].Type == ManagedReferenceTypes.Registry)
+			{
+				Fields[i] = default;
+			}
+			else
+			{
+				Fields[i].Reset();
+			}
 		}
 	}
 
