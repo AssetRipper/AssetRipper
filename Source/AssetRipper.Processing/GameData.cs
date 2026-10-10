@@ -12,6 +12,8 @@ public record GameData(
 	IAssemblyManager AssemblyManager,
 	PlatformGameStructure? PlatformStructure)
 {
+	public PackageDetectionResult? PackageDetection { get; set; }
+
 	public ProcessedAssetCollection AddNewProcessedCollection(string name)
 	{
 		return GameBundle.AddNewProcessedCollection(name, ProjectVersion);
