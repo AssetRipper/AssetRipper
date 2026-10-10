@@ -12,15 +12,17 @@ internal sealed class TypeTreeResolver : ITypeResolver
 {
 	private static readonly TypeTreeResolver empty = new([]);
 	private readonly IReadOnlyList<SerializedTypeReference> referenceTypes;
+	private readonly ITypeResolver? fallback;
 
-	private TypeTreeResolver(IReadOnlyList<SerializedTypeReference> referenceTypes)
+	private TypeTreeResolver(IReadOnlyList<SerializedTypeReference> referenceTypes, ITypeResolver? fallback = null)
 	{
 		this.referenceTypes = referenceTypes;
+		this.fallback = fallback;
 	}
 
-	public static TypeTreeResolver Create(IReadOnlyList<SerializedTypeReference> referenceTypes)
+	public static TypeTreeResolver Create(IReadOnlyList<SerializedTypeReference> referenceTypes, ITypeResolver? fallback = null)
 	{
-		return referenceTypes.Count == 0 ? empty : new TypeTreeResolver(referenceTypes);
+		return referenceTypes.Count == 0 && fallback is null ? empty : new TypeTreeResolver(referenceTypes, fallback);
 	}
 
 	public bool TryGetSerializableType(
@@ -45,12 +47,12 @@ internal sealed class TypeTreeResolver : ITypeResolver
 				failureReason = null;
 				return true;
 			}
-			else
-			{
-				scriptType = null;
-				failureReason = "Failed to create nodes from the type tree.";
-				return false;
-			}
+			break;
+		}
+
+		if (fallback is not null)
+		{
+			return fallback.TryGetSerializableType(scriptID, version, out scriptType, out failureReason);
 		}
 
 		scriptType = null;

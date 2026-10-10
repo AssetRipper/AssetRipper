@@ -82,7 +82,7 @@ public class SerializableValueBinaryTests
 	{
 		EndianSpanReader reader = new(bytes, collection.EndianType);
 		SerializableValue value = default;
-		value.Read(ref reader, collection.Version, collection.Flags, 0, field);
+		value.Read(ref reader, collection.Version, collection.Flags, 0, field, ITypeResolver.Null);
 		Assert.That(reader.Position, Is.EqualTo(bytes.Length));
 		using MemoryStream output = new();
 		using AssetWriter writer = new(output, collection);

@@ -54,7 +54,8 @@ public abstract class SerializableType
 
 	private static bool ContainsManagedReferences(SerializableType type, HashSet<SerializableType> visited)
 	{
-		return type is SerializableManagedReferenceType || visited.Add(type)
+		return type == ManagedReferenceTypes.ManagedReference || type == ManagedReferenceTypes.IndexedManagedReference
+			|| type == ManagedReferenceTypes.Registry || visited.Add(type)
 			&& type.Fields.Any(field => ContainsManagedReferences(field.Type, visited));
 	}
 	/// <summary>

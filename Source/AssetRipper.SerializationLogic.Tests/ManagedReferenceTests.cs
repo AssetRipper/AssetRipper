@@ -30,10 +30,11 @@ public class ManagedReferenceTests
 	{
 		SerializableType type = SerializableTypes.Create<Host>();
 		Assert.That(type.HasManagedReferences, Is.True);
-		Assert.That(type.Fields.Select(f => f.ArrayDepth), Is.EqualTo(new[] { 0, 1, 1 }));
-		foreach (var field in type.Fields)
+		Assert.That(type.Fields.Select(f => f.ArrayDepth), Is.EqualTo(new[] { 0, 1, 1, 0 }));
+		Assert.That(type.Fields[^1].Type, Is.SameAs(ManagedReferenceTypes.Registry));
+		foreach (var field in type.Fields.Take(3))
 		{
-			Assert.That(field.Type, Is.SameAs(SerializableManagedReferenceType.Instance));
+			Assert.That(field.Type, Is.SameAs(ManagedReferenceTypes.ManagedReference));
 			Assert.That(field.Type.Fields.Single().Name, Is.EqualTo("rid"));
 			Assert.That(field.Type.Fields.Single().Type.Type, Is.EqualTo(PrimitiveType.Long));
 		}

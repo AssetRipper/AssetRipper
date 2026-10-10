@@ -31,13 +31,13 @@ internal sealed class GUIStyleAsset : UnityAssetBase
 
 	public override void ReadRelease(ref EndianSpanReader reader)
 	{
-		releaseFields.Read(ref reader, version, TransferInstructionFlags.SerializeGameRelease);
+		releaseFields.Read(ref reader, version, TransferInstructionFlags.SerializeGameRelease, ITypeResolver.Null);
 		CopyMatchingFields(releaseFields, editorFields);
 	}
 
 	public override void ReadEditor(ref EndianSpanReader reader)
 	{
-		editorFields.Read(ref reader, version, TransferInstructionFlags.NoTransferInstructionFlags);
+		editorFields.Read(ref reader, version, TransferInstructionFlags.NoTransferInstructionFlags, ITypeResolver.Null);
 		CopyMatchingFields(editorFields, releaseFields);
 	}
 
