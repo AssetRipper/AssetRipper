@@ -4,7 +4,6 @@ using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Assets.Traversal;
 using AssetRipper.Import.Logging;
-using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.SerializationLogic;
@@ -15,7 +14,6 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable;
 public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 {
 	private UnityVersion Version { get; set; }
-	public ManagedReferenceRegistry? ManagedReferences { get; private set; }
 	public override int SerializedVersion => Type.Version;
 	public override bool FlowMappedInYaml => Type.FlowMappedInYaml;
 
@@ -26,16 +24,37 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 		Fields = new SerializableValue[type.Fields.Count];
 	}
 
-	public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags)
+	internal SerializableStructure(SerializableType type, int depth, UnityVersion version) : this(type, depth)
 	{
 		Version = version;
-		ManagedReferences = null;
+	}
+
+	public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, ITypeResolver resolver)
+	{
+		Version = version;
 		for (int i = 0; i < Fields.Length; i++)
 		{
 			SerializableType.Field etalon = Type.Fields[i];
 			if (IsAvailable(etalon))
 			{
-				Fields[i].Read(ref reader, version, flags, Depth, etalon);
+				if (etalon.Type == ManagedReferenceTypes.Registry)
+				{
+					// Unity can omit the trailing registry when all managed references are empty.
+					if (i == Fields.Length - 1 && reader.Position == reader.Length)
+					{
+						Fields[i] = default;
+						continue;
+					}
+					Fields[i].AsAsset = ManagedReferenceRegistryReader.Read(ref reader, version, flags, Depth + 1, resolver);
+					if (etalon.Align)
+					{
+						reader.Align();
+					}
+				}
+				else
+				{
+					Fields[i].Read(ref reader, version, flags, Depth, etalon, resolver);
+				}
 			}
 		}
 	}
@@ -45,12 +64,11 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 		for (int i = 0; i < Fields.Length; i++)
 		{
 			SerializableType.Field etalon = Type.Fields[i];
-			if (IsAvailable(etalon))
+			if (IsAvailable(etalon) && IsPresent(i))
 			{
 				Fields[i].Write(writer, etalon);
 			}
 		}
-		ManagedReferences?.WriteRelease(writer);
 	}
 	public override void WriteEditor(AssetWriter writer) => Write(writer);
 	public override void WriteRelease(AssetWriter writer) => Write(writer);
@@ -63,7 +81,7 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 			for (int i = 0; i < Fields.Length; i++)
 			{
 				SerializableType.Field etalon = Type.Fields[i];
-				if (IsAvailable(etalon))
+				if (IsAvailable(etalon) && IsPresent(i))
 				{
 					if (hasEmittedFirstField)
 					{
@@ -80,18 +98,6 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 					}
 				}
 			}
-			if (ManagedReferences is not null)
-			{
-				if (hasEmittedFirstField)
-				{
-					walker.DivideAsset(this);
-				}
-				if (walker.EnterField(this, "references"))
-				{
-					ManagedReferences.WalkEditor(walker);
-					walker.ExitField(this, "references");
-				}
-			}
 			walker.ExitAsset(this);
 		}
 	}
@@ -104,7 +110,7 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 		for (int i = 0; i < Fields.Length; i++)
 		{
 			SerializableType.Field etalon = Type.Fields[i];
-			if (IsAvailable(etalon))
+			if (IsAvailable(etalon) && IsPresent(i))
 			{
 				foreach ((string, PPtr) pair in Fields[i].FetchDependencies(etalon))
 				{
@@ -112,16 +118,11 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 				}
 			}
 		}
-		if (ManagedReferences is not null)
-		{
-			foreach (var dependency in ManagedReferences.FetchDependencies())
-			{
-				yield return dependency;
-			}
-		}
 	}
 
 	public override string ToString() => Type.FullName;
+
+	private bool IsPresent(int index) => Type.Fields[index].Type != ManagedReferenceTypes.Registry || Fields[index].CValue is not null;
 
 	private bool IsAvailable(in SerializableType.Field field)
 	{
@@ -140,15 +141,11 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 		return true;
 	}
 
-	public bool TryRead(ref EndianSpanReader reader, IMonoBehaviour monoBehaviour, IAssemblyManager? assemblyManager = null)
+	public bool TryRead(ref EndianSpanReader reader, IMonoBehaviour monoBehaviour, ITypeResolver resolver)
 	{
 		try
 		{
-			Read(ref reader, monoBehaviour.Collection.Version, monoBehaviour.Collection.Flags);
-			if (Type.HasManagedReferences && reader.Position < reader.Length)
-			{
-				ManagedReferences = ManagedReferenceRegistry.Read(ref reader, monoBehaviour.Collection, assemblyManager);
-			}
+			Read(ref reader, monoBehaviour.Collection.Version, monoBehaviour.Collection.Flags, resolver);
 		}
 		catch (Exception ex)
 		{
@@ -242,7 +239,6 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 			throw new ArgumentException($"Depth {source.Depth} doesn't match with {Depth}", nameof(source));
 		}
 		Version = source.Version;
-		ManagedReferences = source.ManagedReferences?.DeepClone(converter);
 		if (source.Type == Type)
 		{
 			for (int i = 0; i < Fields.Length; i++)
@@ -288,7 +284,6 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 
 	public override void Reset()
 	{
-		ManagedReferences = null;
 		foreach (SerializableValue field in Fields)
 		{
 			field.Reset();

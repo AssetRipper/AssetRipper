@@ -44,8 +44,7 @@ public sealed class MonoExplicitPropertyRepairProcessor : IAssetProcessor
 						continue;
 					}
 
-					MethodDefinition? interfaceMethodResolved = interfaceMethod.Resolve(manager.RuntimeContext);
-					if (interfaceMethodResolved != null)
+					if (interfaceMethod.TryResolve(manager.RuntimeContext, out MethodDefinition? interfaceMethodResolved))
 					{
 						if (interfaceMethodResolved.IsGetMethod)
 						{

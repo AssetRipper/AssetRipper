@@ -9,7 +9,7 @@ internal class SortDocumentPathsTransformer : IOpenApiDocumentTransformer
 	{
 		OpenApiPaths newPaths = new();
 		newPaths.Extensions = document.Paths.Extensions;
-		foreach ((string key, IOpenApiPathItem value) in document.Paths.OrderBy(pair => pair.Key))
+		foreach ((string key, IOpenApiPathItem value) in document.Paths.OrderBy(pair => pair.Key, StringComparer.Ordinal))
 		{
 			newPaths.Add(key, value);
 		}

@@ -13,6 +13,14 @@ internal sealed class MonoType : SerializableType
 		Fields = fields;
 	}
 
+	/// <summary>
+	/// True if this type, or any type it contains, has a field with the [SerializeReference] attribute.
+	/// </summary>
+	/// <remarks>
+	/// This is accumulated while the fields are being created, so that it is available on cached types.
+	/// </remarks>
+	internal bool ContainsSerializeReference { get; set; }
+
 	internal void SetDepth()
 	{
 		Debug.Assert(IsMaxDepthKnown == false, "The depth of this type is already known.");

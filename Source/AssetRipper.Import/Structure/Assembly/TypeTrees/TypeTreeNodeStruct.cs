@@ -86,10 +86,12 @@ public readonly struct TypeTreeNodeStruct : IReadOnlyList<TypeTreeNodeStruct>, I
 		{
 			if (SubNodes.Count == 1 && SubNodes[0].IsArray && SubNodes[0].Name is "Array")
 			{
-				string elementTypeName = SubNodes[0].SubNodes[1].TypeName;
-				return elementTypeName == TypeName || elementTypeName is "Generic Mono";
+				TypeTreeNodeStruct elementNode = SubNodes[0].SubNodes[1];
+				return elementNode.TypeName == TypeName || elementNode.TypeName is "Generic Mono" || elementNode.IsManagedReference;
 				//Generic Mono has only been found on Unity 3.
 				//https://github.com/AssetRipper/AssetRipper/issues/1328
+				//An array or list with the [SerializeReference] attribute is named after its element type,
+				//but its elements are managedRefArrayItem nodes.
 			}
 			return false;
 		}
@@ -121,7 +123,7 @@ public readonly struct TypeTreeNodeStruct : IReadOnlyList<TypeTreeNodeStruct>, I
 	{
 		get
 		{
-			return TypeName is "ManagedReferencesRegistry" && Name is "references" && SubNodes.Count > 1;
+			return TypeName is ManagedReferenceTypes.RegistryName && Name is ManagedReferenceTypes.RegistryFieldName && SubNodes.Count > 1;
 		}
 	}
 
@@ -135,9 +137,31 @@ public readonly struct TypeTreeNodeStruct : IReadOnlyList<TypeTreeNodeStruct>, I
 	{
 		get
 		{
-			return TypeName is "ReferencedObjectData" && Name is "data" && SubNodes.Count is 0;
+			return TypeName is ManagedReferenceTypes.ReferencedObjectDataName && Name is ManagedReferenceTypes.DataFieldName && SubNodes.Count is 0;
 		}
 	}
+
+	/// <summary>
+	/// This is a field with the [SerializeReference] attribute, or an element of an array or list with that attribute.
+	/// </summary>
+	/// <remarks>
+	/// It holds the identifier of an object in the <see cref="IsManagedReferencesRegistry"/> node instead of the object itself.
+	/// Before referenced objects got stable identifiers, that was a 32 bit index named "id" instead of a 64 bit "rid".
+	/// </remarks>
+	public bool IsManagedReference
+	{
+		get
+		{
+			return TypeName is ManagedReferenceTypes.ManagedReferenceName or ManagedReferenceTypes.ManagedReferenceArrayItemName
+				&& SubNodes.Count is 1
+				&& SubNodes[0].Name is ManagedReferenceTypes.ReferenceIdFieldName or ManagedReferenceTypes.IndexFieldName;
+		}
+	}
+
+	/// <summary>
+	/// This is a managed reference from before referenced objects got stable identifiers.
+	/// </summary>
+	public bool IsIndexedManagedReference => IsManagedReference && SubNodes[0].Name is ManagedReferenceTypes.IndexFieldName;
 
 	public bool IsByte
 	{

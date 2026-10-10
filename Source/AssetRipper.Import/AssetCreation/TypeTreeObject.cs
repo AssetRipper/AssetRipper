@@ -67,31 +67,33 @@ public abstract class TypeTreeObject : NullObject
 
 	public sealed override void WalkEditor(AssetWalker walker) => EditorFields.WalkEditor(walker);
 
-	public static TypeTreeObject Create(AssetInfo assetInfo, TypeTreeNodeStruct root) => new SingleTypeTreeObject(assetInfo, root);
+	public static TypeTreeObject Create(AssetInfo assetInfo, TypeTreeNodeStruct root, ITypeResolver resolver) => new SingleTypeTreeObject(assetInfo, root, resolver);
 
-	public static TypeTreeObject Create(AssetInfo assetInfo, TypeTreeNodeStruct releaseRoot, TypeTreeNodeStruct editorRoot) => new DoubleTypeTreeObject(assetInfo, releaseRoot, editorRoot);
+	public static TypeTreeObject Create(AssetInfo assetInfo, TypeTreeNodeStruct releaseRoot, TypeTreeNodeStruct editorRoot, ITypeResolver resolver) => new DoubleTypeTreeObject(assetInfo, releaseRoot, editorRoot, resolver);
 
 	private string GetDebuggerDisplay() => ClassName;
 
 	private sealed class SingleTypeTreeObject : TypeTreeObject
 	{
+		private readonly ITypeResolver resolver;
 		public SerializableStructure Fields { get; }
 		public override SerializableStructure ReleaseFields => Fields;
 		public override SerializableStructure EditorFields => Fields;
 
-		public SingleTypeTreeObject(AssetInfo assetInfo, TypeTreeNodeStruct root) : base(assetInfo)
+		public SingleTypeTreeObject(AssetInfo assetInfo, TypeTreeNodeStruct root, ITypeResolver resolver) : base(assetInfo)
 		{
+			this.resolver = resolver;
 			Fields = SerializableTreeType.FromRootNode(root).CreateSerializableStructure();
 		}
 
 		public override void ReadRelease(ref EndianSpanReader reader)
 		{
-			Fields.Read(ref reader, Collection.Version, Collection.Flags);
+			Fields.Read(ref reader, Collection.Version, Collection.Flags, resolver);
 		}
 
 		public override void ReadEditor(ref EndianSpanReader reader)
 		{
-			Fields.Read(ref reader, Collection.Version, Collection.Flags);
+			Fields.Read(ref reader, Collection.Version, Collection.Flags, resolver);
 		}
 
 		public override void WalkStandard(AssetWalker walker)
@@ -112,11 +114,13 @@ public abstract class TypeTreeObject : NullObject
 
 	private sealed class DoubleTypeTreeObject : TypeTreeObject
 	{
+		private readonly ITypeResolver resolver;
 		public override SerializableStructure ReleaseFields { get; }
 		public override SerializableStructure EditorFields { get; }
 
-		public DoubleTypeTreeObject(AssetInfo assetInfo, TypeTreeNodeStruct releaseRoot, TypeTreeNodeStruct editorRoot) : base(assetInfo)
+		public DoubleTypeTreeObject(AssetInfo assetInfo, TypeTreeNodeStruct releaseRoot, TypeTreeNodeStruct editorRoot, ITypeResolver resolver) : base(assetInfo)
 		{
+			this.resolver = resolver;
 			ReleaseFields = SerializableTreeType.FromRootNode(releaseRoot).CreateSerializableStructure();
 			EditorFields = SerializableTreeType.FromRootNode(editorRoot).CreateSerializableStructure();
 		}
@@ -124,7 +128,7 @@ public abstract class TypeTreeObject : NullObject
 		public override void ReadRelease(ref EndianSpanReader reader)
 		{
 			playerSettingsRuntimeWord = null;
-			ReleaseFields.Read(ref reader, Collection.Version, Collection.Flags);
+			ReleaseFields.Read(ref reader, Collection.Version, Collection.Flags, resolver);
 			CompletePlayerSettingsRead(ref reader);
 			ConvertFields(ReleaseFields, EditorFields);
 		}
@@ -132,7 +136,7 @@ public abstract class TypeTreeObject : NullObject
 		public override void ReadEditor(ref EndianSpanReader reader)
 		{
 			playerSettingsRuntimeWord = null;
-			EditorFields.Read(ref reader, Collection.Version, Collection.Flags);
+			EditorFields.Read(ref reader, Collection.Version, Collection.Flags, resolver);
 			ConvertFields(EditorFields, ReleaseFields);
 		}
 

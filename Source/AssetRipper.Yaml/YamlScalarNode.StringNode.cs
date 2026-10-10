@@ -136,7 +136,7 @@ public abstract partial class YamlScalarNode
 			return false;
 		}
 
-		[GeneratedRegex("""(^\s)|(^-\s)|(^-$)|(^[\:\[\]'"*&!@#%{}?<>,\`])|([:@]\s)|([\n\r])|([:\s]$)""", RegexOptions.Compiled)]
+		[GeneratedRegex("""(^\s)|(^-\s)|(^-$)|(^[\:\[\]'"*&!@#%{}?<>,\`])|([:@]\s)|(\s#)|([\n\r])|([:\s]$)""", RegexOptions.Compiled)]
 		private static partial Regex IllegalStringsRegex();
 	}
 }

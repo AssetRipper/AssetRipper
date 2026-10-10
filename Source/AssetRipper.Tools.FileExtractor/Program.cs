@@ -54,7 +54,7 @@ internal class Program
 			foreach (ResourceFile resourceFile in container.ResourceFiles)
 			{
 				string path = Path.Join(outputDirectory, resourceFile.NameFixed);
-				using FileStream fileStream = File.OpenWrite(path);
+				using FileStream fileStream = File.Create(path);
 				resourceFile.Write(fileStream);
 				Console.WriteLine($"\t{path}");
 			}
@@ -62,7 +62,7 @@ internal class Program
 		else if (file is CompressedFile compressedFile && compressedFile.UncompressedFile is ResourceFile uncompressedFile)
 		{
 			string path = Path.Join(outputDirectory, uncompressedFile.NameFixed);
-			using FileStream fileStream = File.OpenWrite(path);
+			using FileStream fileStream = File.Create(path);
 			uncompressedFile.Write(fileStream);
 			Console.WriteLine($"\t{path}");
 		}

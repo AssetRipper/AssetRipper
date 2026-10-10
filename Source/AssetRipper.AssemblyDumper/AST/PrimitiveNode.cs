@@ -15,4 +15,12 @@ internal sealed class PrimitiveNode : Node
 	/// Byte arrays do not implement <see cref="IEquatable{T}"/>, but other primitive types do.
 	/// </summary>
 	public override bool Equatable => TypeSignature is not SzArrayTypeSignature;
+
+	public override string ToString() => TypeSignature switch
+	{
+		CorLibTypeSignature corLibTypeSignature => corLibTypeSignature.Name!,
+		SzArrayTypeSignature szArrayTypeSignature => $"{((CorLibTypeSignature)szArrayTypeSignature.BaseType).Name}[]",
+		TypeDefOrRefSignature typeDefOrRefSignature => typeDefOrRefSignature.Name, // Utf8String
+		_ => base.ToString(), // Unreachable
+	};
 }

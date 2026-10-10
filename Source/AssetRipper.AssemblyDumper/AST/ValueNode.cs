@@ -8,4 +8,6 @@ internal sealed class ValueNode : SingleNode<Node>
 	}
 
 	public override TypeSignature TypeSignature => Child.TypeSignature;
+
+	public override string ToString() => Child.ToString();
 }

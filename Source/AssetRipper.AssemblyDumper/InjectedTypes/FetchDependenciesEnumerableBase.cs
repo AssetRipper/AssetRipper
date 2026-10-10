@@ -9,7 +9,9 @@ internal abstract class FetchDependenciesEnumerableBase : IEnumerable<(string, P
 {
 	private bool _hasBeenUsed;
 
+#pragma warning disable CS0649 // Field 'FetchDependenciesEnumerableBase._current' is never assigned to, and will always have its default value
 	protected (string, PPtr) _current;
+#pragma warning restore CS0649
 
 	private readonly int _initialThreadId;
 

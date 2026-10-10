@@ -40,7 +40,6 @@ public readonly struct PathChecksumCache
 		if (avatar != null)
 		{
 			AddAvatarTOS(avatar);
-			return;
 		}
 
 		if (animator.Has_HasTransformHierarchy() && !animator.HasTransformHierarchy)

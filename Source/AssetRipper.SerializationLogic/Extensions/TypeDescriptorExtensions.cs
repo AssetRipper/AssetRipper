@@ -29,7 +29,7 @@ internal static class TypeDescriptorExtensions
 			return true;
 		}
 
-		return typeRef.Resolve(runtimeContext)?.InheritsFrom(ns, name, runtimeContext) ?? false;
+		return typeRef.TryResolve(runtimeContext)?.InheritsFrom(ns, name, runtimeContext) ?? false;
 		// If we can't resolve our typeref or one of its base types,
 		// let's assume it is not assignable to our target type
 	}
@@ -41,7 +41,7 @@ internal static class TypeDescriptorExtensions
 
 	public static bool IsEnum(this ITypeDescriptor type, RuntimeContext? runtimeContext)
 	{
-		return type.GetIsValueType(runtimeContext) && !type.IsPrimitive(runtimeContext) && type.CheckedResolve(runtimeContext).IsEnum;
+		return type.GetIsValueType(runtimeContext) && !type.IsPrimitive(runtimeContext) && type.Resolve(runtimeContext).IsEnum;
 	}
 
 	public static bool IsStruct(this ITypeDescriptor type, RuntimeContext? runtimeContext)

@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using System.Globalization;
 using System.Numerics;
 
 namespace AssetRipper.Yaml.Tests;
@@ -47,6 +48,30 @@ public class YamlScalarNodeTests
 	}
 
 	[Test]
+	public void HashAfterWhitespaceIsQuoted()
+	{
+		YamlScalarNode node = YamlScalarNode.Create("a #b");
+
+		Assert.That(node.EmitToString(), Is.EqualTo("'a #b'"));
+	}
+
+	[Test]
+	public void FloatUsesInvariantDecimalSeparator()
+	{
+		CultureInfo previousCulture = CultureInfo.CurrentCulture;
+		try
+		{
+			CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo("de-DE");
+			Assert.That(YamlScalarNode.Create(1.5f).EmitToString(), Is.EqualTo("1.5"));
+			Assert.That(YamlScalarNode.Create(1.5d).EmitToString(), Is.EqualTo("1.5"));
+		}
+		finally
+		{
+			CultureInfo.CurrentCulture = previousCulture;
+		}
+	}
+
+	[Test]
 	public void ByteListTest() => NumericListTest<byte>([ 0x01, 0x02, 0x03 ], "010203");
 
 	[Test]
@@ -56,7 +81,13 @@ public class YamlScalarNodeTests
 	public void UInt32ListTest() => NumericListTest<uint>([ 0x01020304, 0x05060708 ], "0403020108070605");
 
 	[Test]
+	public void Int32ListTest() => NumericListTest<int>([-1, unchecked((int)0xB0000000), int.MinValue], "ffffffff000000b000000080");
+
+	[Test]
 	public void UInt64ListTest() => NumericListTest<ulong>([ 0x0102030405060708, 0x090A0B0C0D0E0F10 ], "0807060504030201100f0e0d0c0b0a09");
+
+	[Test]
+	public void Int64ListTest() => NumericListTest<long>([-1L, long.MinValue], "ffffffffffffffff0000000000000080");
 
 	private static void NumericListTest<T>(IReadOnlyList<T> list, string expected) where T : unmanaged, INumber<T>
 	{

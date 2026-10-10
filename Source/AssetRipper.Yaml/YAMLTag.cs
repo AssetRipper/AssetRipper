@@ -18,7 +18,7 @@ public readonly struct YamlTag
 		return IsEmpty ? string.Empty : $"{Handle} {Content}";
 	}
 
-	public bool IsEmpty => string.IsNullOrEmpty(Handle);
+	public bool IsEmpty => string.IsNullOrEmpty(Content);
 
 	public string Handle { get; }
 	public string Content { get; }

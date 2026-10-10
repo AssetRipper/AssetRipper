@@ -159,8 +159,10 @@ public sealed partial class MultiFileStream : Stream
 			return [];
 		}
 
-		string filePatern = fileName + ".split*";
-		return fileSystem.Directory.GetFiles(dirPath, filePatern);
+		string splitFileName = fileName + ".split";
+		return fileSystem.Directory.EnumerateFiles(dirPath, "*", SearchOption.TopDirectoryOnly)
+			.Where(path => fileSystem.Path.GetFileName(path).StartsWith(splitFileName, StringComparison.Ordinal) && SplitFileRegex.IsMatch(path))
+			.ToArray();
 	}
 
 	private static Stream OpenRead(string dirPath, string fileName, FileSystem fileSystem)
@@ -178,7 +180,7 @@ public sealed partial class MultiFileStream : Stream
 			}
 		}
 
-		splitFiles = splitFiles.OrderBy(t => t, SplitNameComparer.Instance).ToArray();
+		splitFiles = splitFiles.Order(SplitNameComparer.Instance).ToArray();
 		Stream[] streams = new Stream[splitFiles.Length];
 		try
 		{
@@ -243,7 +245,7 @@ public sealed partial class MultiFileStream : Stream
 				Position += offset;
 				break;
 			case SeekOrigin.End:
-				Position = Length - offset;
+				Position = Length + offset;
 				break;
 		}
 		return Position;
@@ -319,14 +321,18 @@ public sealed partial class MultiFileStream : Stream
 
 	private void NextStream()
 	{
-		int nextStreamIndex = m_streamIndex + 1;
-		if (nextStreamIndex < m_streams.Count)
+		while (m_streamIndex + 1 < m_streams.Count)
 		{
 			m_currentBegin += m_currentStream.Length;
-			m_streamIndex = nextStreamIndex;
+			m_streamIndex++;
 			m_currentStream = m_streams[m_streamIndex];
 			m_currentStream.Position = 0;
 			m_currentEnd += m_currentStream.Length;
+			if (m_currentEnd > m_position)
+			{
+				// The current stream is non-empty
+				return;
+			}
 		}
 	}
 

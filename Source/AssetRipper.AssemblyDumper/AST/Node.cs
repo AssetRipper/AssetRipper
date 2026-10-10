@@ -58,4 +58,6 @@ internal abstract class Node
 	{
 		return SharedState.Instance.Importer.ImportMethod(type, m => m.Name == name);
 	}
+
+	public override string ToString() => GetType().Name;
 }

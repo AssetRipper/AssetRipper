@@ -42,7 +42,7 @@ public sealed class DirectBitmap<TColor, TChannel> : DirectBitmap
 	{
 		int totalRows = Height * Depth;
 		Span<TColor> pixels = Pixels;
-		for (int row = 0; row < totalRows; row += Height)
+		for (int row = 0; row < totalRows; row++)
 		{
 			Span<TColor> pixelsRow = pixels.Slice(row * Width, Width);
 			pixelsRow.Reverse();
@@ -84,8 +84,11 @@ public sealed class DirectBitmap<TColor, TChannel> : DirectBitmap
 				int first = offset + i;
 				int ci = i % Width;
 				int ri = i / Width;
-				int second = offset + ci * Width + ri;
-				(pixels[first], pixels[second]) = (pixels[second], pixels[first]);
+				if (ri < ci)
+				{
+					int second = offset + ci * Width + ri;
+					(pixels[first], pixels[second]) = (pixels[second], pixels[first]);
+				}
 			}
 		}
 	}

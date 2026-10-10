@@ -7,8 +7,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AsmResolver.DotNet" Version="6.0.0" />
-		<PackageReference Include="AsmResolver.Symbols.Pdb" Version="6.0.0" />
+		<PackageReference Include="AsmResolver.DotNet" Version="6.0.1" />
+		<PackageReference Include="AsmResolver.Symbols.Pdb" Version="6.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>

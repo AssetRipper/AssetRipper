@@ -43,7 +43,7 @@ public readonly partial struct FieldSerializer
 		{
 			return TryCreateSerializableType(genericInstanceType, typeCache, typeStack, out result, out failureReason);
 		}
-		TypeDefinition? typeDefinition = typeSignature.Resolve(runtimeContext);
+		TypeDefinition? typeDefinition = typeSignature.TryResolve(runtimeContext);
 		if (typeDefinition is null)
 		{
 			result = null;
@@ -103,7 +103,7 @@ public readonly partial struct FieldSerializer
 			else
 			{
 				fields.EnsureCapacity(baseType.Fields.Count + typeDefinition.Fields.Count);
-				fields.AddRange(baseType.Fields);
+				AddInheritedFields(fields, baseType, monoType);
 			}
 		}
 		else
@@ -113,6 +113,11 @@ public readonly partial struct FieldSerializer
 
 		if (TryCreateSerializableFields(typeStack, monoType, fields, GetFieldsInType(typeDefinition), typeCache, out failureReason))
 		{
+			if (monoType.ContainsSerializeReference
+				&& (typeDefinition.InheritsFromMonoBehaviour(runtimeContext) || typeDefinition.InheritsFromScriptableObject(runtimeContext)))
+			{
+				fields.Add(ManagedReferenceTypes.RegistryField);
+			}
 			monoType.SetDepth();
 			typeStack.Pop();
 			result = monoType;
@@ -167,13 +172,13 @@ public readonly partial struct FieldSerializer
 			}
 			else
 			{
-				fields.EnsureCapacity(baseMonoType.Fields.Count + genericInst.GenericType.Resolve(runtimeContext)!.Fields.Count);
-				fields.AddRange(baseMonoType.Fields);
+				fields.EnsureCapacity(baseMonoType.Fields.Count + genericInst.GenericType.Resolve(runtimeContext).Fields.Count);
+				AddInheritedFields(fields, baseMonoType, monoType);
 			}
 		}
 		else
 		{
-			fields.EnsureCapacity(genericInst.GenericType.Resolve(runtimeContext)!.Fields.Count);
+			fields.EnsureCapacity(genericInst.GenericType.Resolve(runtimeContext).Fields.Count);
 		}
 
 		if (TryCreateSerializableFields(typeStack, monoType, fields, GetFieldsInType(genericInst), typeCache, out failureReason))
@@ -207,8 +212,12 @@ public readonly partial struct FieldSerializer
 			{
 				if (fieldDefinition.HasSerializeReferenceAttribute())
 				{
-					int referenceArrayDepth = fieldType is SzArrayTypeSignature || AsmUtils.IsGenericList(fieldType, runtimeContext) ? 1 : 0;
-					fields.Add(new(SerializableManagedReferenceType.Instance, referenceArrayDepth, fieldDefinition.Name ?? "", false));
+					//The object itself is stored in the managed reference registry, so the field only holds its identifier.
+					SerializableType managedReferenceType = HasStableReferenceIds
+						? ManagedReferenceTypes.ManagedReference
+						: ManagedReferenceTypes.IndexedManagedReference;
+					fields.Add(new Field(managedReferenceType, GetManagedReferenceArrayDepth(fieldType), fieldDefinition.Name ?? "", false));
+					monoType.ContainsSerializeReference = true;
 					continue;
 				}
 
@@ -256,6 +265,10 @@ public readonly partial struct FieldSerializer
 					}
 					else
 					{
+						if (field.Type is MonoType { ContainsSerializeReference: true })
+						{
+							monoType.ContainsSerializeReference = true;
+						}
 						fields.Add(field);
 					}
 				}
@@ -267,6 +280,59 @@ public readonly partial struct FieldSerializer
 		}
 		failureReason = null;
 		return true;
+	}
+
+	/// <summary>
+	/// Add the fields of a base type, excluding its managed reference registry.
+	/// </summary>
+	/// <remarks>
+	/// The registry is always the last field of the most derived type, so a derived type adds its own instead of inheriting one.
+	/// </remarks>
+	private static void AddInheritedFields(List<Field> fields, SerializableType baseType, MonoType monoType)
+	{
+		if (baseType is MonoType { ContainsSerializeReference: true })
+		{
+			monoType.ContainsSerializeReference = true;
+		}
+
+		IReadOnlyList<Field> baseFields = baseType.Fields;
+		int count = baseFields.Count;
+		if (count > 0 && baseFields[count - 1].Type == ManagedReferenceTypes.Registry)
+		{
+			count--;
+		}
+		for (int i = 0; i < count; i++)
+		{
+			fields.Add(baseFields[i]);
+		}
+	}
+
+	/// <summary>
+	/// Get the array depth of a field with the [SerializeReference] attribute.
+	/// </summary>
+	/// <remarks>
+	/// Unity stores an identifier for each referenced object, so the element type is irrelevant.
+	/// </remarks>
+	private int GetManagedReferenceArrayDepth(TypeSignature typeSignature)
+	{
+		int arrayDepth = 0;
+		while (true)
+		{
+			if (typeSignature is SzArrayTypeSignature szArrayTypeSignature)
+			{
+				arrayDepth++;
+				typeSignature = szArrayTypeSignature.BaseType;
+			}
+			else if (typeSignature is GenericInstanceTypeSignature genericInstanceTypeSignature && AsmUtils.IsGenericList(genericInstanceTypeSignature, runtimeContext))
+			{
+				arrayDepth++;
+				typeSignature = genericInstanceTypeSignature.TypeArguments[0];
+			}
+			else
+			{
+				return arrayDepth;
+			}
+		}
 	}
 
 	private bool TryCreateSerializableField(
@@ -281,7 +347,7 @@ public readonly partial struct FieldSerializer
 		switch (typeSignature)
 		{
 			case TypeDefOrRefSignature typeDefOrRefSignature:
-				TypeDefinition typeDefinition = typeDefOrRefSignature.Type.CheckedResolve(runtimeContext);
+				TypeDefinition typeDefinition = typeDefOrRefSignature.Type.Resolve(runtimeContext);
 				SerializableType fieldType;
 				if (typeDefinition.IsEnum)
 				{
@@ -358,7 +424,7 @@ public readonly partial struct FieldSerializer
 
 	private bool TryGetBaseType(GenericInstanceTypeSignature genericInstanceType, out TypeSignature? baseType)
 	{
-		TypeDefinition? typeDefinition = genericInstanceType.GenericType.Resolve(runtimeContext);
+		TypeDefinition? typeDefinition = genericInstanceType.GenericType.TryResolve(runtimeContext);
 		if (typeDefinition is null)
 		{
 			baseType = null;
@@ -380,7 +446,7 @@ public readonly partial struct FieldSerializer
 
 	private IEnumerable<(FieldDefinition, TypeSignature)> GetFieldsInType(GenericInstanceTypeSignature genericInst)
 	{
-		TypeDefinition? typeDefinition = genericInst.Resolve(runtimeContext);
+		TypeDefinition? typeDefinition = genericInst.TryResolve(runtimeContext);
 		if (typeDefinition is null)
 		{
 			return [];

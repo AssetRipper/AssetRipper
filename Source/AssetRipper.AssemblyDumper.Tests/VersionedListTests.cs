@@ -37,6 +37,20 @@ internal class VersionedListTests
 	}
 
 	[Test]
+	public void DividingAtMaxVersionDoesNotAddAnInvalidRange()
+	{
+		VersionedList<int> integers = new()
+		{
+			{ new UnityVersion(1), 1 },
+		};
+
+		integers.Divide(UnityVersion.MaxVersion);
+
+		Assert.That(integers, Has.Count.EqualTo(1));
+		Assert.That(integers.GetRange(0).End, Is.EqualTo(UnityVersion.MaxVersion));
+	}
+
+	[Test]
 	public void MergeTest1()
 	{
 		VersionedList<string> list1 = new()

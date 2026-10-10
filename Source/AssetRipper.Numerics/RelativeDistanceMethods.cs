@@ -20,6 +20,11 @@ public static class RelativeDistanceMethods
 	//between zero and positive infinity
 	public static float RelativeDistance2(float x1, float x2)
 	{
+		if (x1 == x2)
+		{
+			return 0;
+		}
+
 		float ratio = (x1 - x2) / (x1 + x2);
 		return ratio * ratio;
 	}
@@ -31,6 +36,11 @@ public static class RelativeDistanceMethods
 
 	public static float RelativeDistance2(Vector2 v1, Vector2 v2)
 	{
+		if (v1 == v2)
+		{
+			return 0;
+		}
+
 		return Vector2.DistanceSquared(v1, v2) / (v1 + v2).LengthSquared();
 	}
 

@@ -1,6 +1,7 @@
 ﻿using AssetRipper.AssemblyDumper.Utils;
 using AssetRipper.Tpk;
 using AssetRipper.Tpk.TypeTrees;
+using System.Diagnostics;
 
 namespace AssetRipper.AssemblyDumper.Passes;
 
@@ -30,6 +31,11 @@ internal static class Pass000_ProcessTpk
 				if (pair.Value is not null)
 				{
 					UniversalClass universalClass = UniversalClass.FromTpkUnityClass(pair.Value, id, blob.StringBuffer, blob.NodeBuffer);
+					if (classList.Count > 0 && UniversalNodeComparer.Equals(classList[^1].Value, universalClass))
+					{
+						//The class is identical to the previous version, so we don't need to add it again.
+						continue;
+					}
 					classList.Add(pair.Key, universalClass);
 				}
 				else
@@ -38,9 +44,8 @@ internal static class Pass000_ProcessTpk
 				}
 			}
 		}
-		UniversalCommonString commonString = UniversalCommonString.FromBlob(blob);
 		UnityVersion[] usedVersions = blob.Versions.Where(v => v >= MinimumVersion).ToArray();
-		SharedState.Initialize(usedVersions, classes, commonString, WriteTpkFile(blob));
+		SharedState.Initialize(usedVersions, classes, WriteTpkFile(blob));
 	}
 
 	private static TpkTypeTreeBlob ReadAndProcessTpkFile(string tpkPath)
@@ -75,10 +80,11 @@ internal static class Pass000_ProcessTpk
 				}
 			}
 
-			while (classInfo.Classes[0].Value is null)
+			while (classInfo.Classes.Count > 0 && classInfo.Classes[0].Value is null)
 			{
 				classInfo.Classes.RemoveAt(0);
 			}
+			Debug.Assert(classInfo.Classes.Count > 0, $"Class {classInfo.ID} has no data after processing.");
 		}
 		return blob;
 
