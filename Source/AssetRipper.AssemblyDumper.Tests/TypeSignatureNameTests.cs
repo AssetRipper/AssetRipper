@@ -32,7 +32,7 @@ internal class TypeSignatureNameTests
 	public void AsmListTest()
 	{
 		TypeSignature list = importer.ImportTypeSignature(typeof(List<>));
-		GenericInstanceTypeSignature stringList = list.MakeGenericInstanceType(module.RuntimeContext, module.CorLibTypeFactory.String);
+		GenericInstanceTypeSignature stringList = list.MakeGenericInstanceType(module.RuntimeContext, [module.CorLibTypeFactory.String]);
 		Assert.That(stringList.Name, Is.EqualTo("List`1<System.String>"));
 		Assert.That(list.Name, Is.EqualTo("List`1"));
 	}
@@ -55,7 +55,7 @@ internal class TypeSignatureNameTests
 	public void DictionaryInstanceTest()
 	{
 		TypeSignature dictionary = importer.ImportTypeSignature(typeof(Dictionary<,>));
-		GenericInstanceTypeSignature intStringDictionary = dictionary.MakeGenericInstanceType(module.RuntimeContext, module.CorLibTypeFactory.Int32, module.CorLibTypeFactory.String);
+		GenericInstanceTypeSignature intStringDictionary = dictionary.MakeGenericInstanceType(module.RuntimeContext, [module.CorLibTypeFactory.Int32, module.CorLibTypeFactory.String]);
 		Assert.That(GetName(intStringDictionary), Is.EqualTo("Dictionary_Int32_String"));
 	}
 
@@ -63,7 +63,7 @@ internal class TypeSignatureNameTests
 	public void ListInstanceTest()
 	{
 		TypeSignature list = importer.ImportTypeSignature(typeof(List<>));
-		GenericInstanceTypeSignature stringList = list.MakeGenericInstanceType(module.RuntimeContext, module.CorLibTypeFactory.String);
+		GenericInstanceTypeSignature stringList = list.MakeGenericInstanceType(module.RuntimeContext, [module.CorLibTypeFactory.String]);
 		Assert.That(GetName(stringList), Is.EqualTo("List_String"));
 	}
 
@@ -71,8 +71,8 @@ internal class TypeSignatureNameTests
 	public void ListListInstanceTest()
 	{
 		TypeSignature list = importer.ImportTypeSignature(typeof(List<>));
-		GenericInstanceTypeSignature stringList = list.MakeGenericInstanceType(module.RuntimeContext, module.CorLibTypeFactory.String);
-		GenericInstanceTypeSignature stringListList = list.MakeGenericInstanceType(module.RuntimeContext, stringList);
+		GenericInstanceTypeSignature stringList = list.MakeGenericInstanceType(module.RuntimeContext, [module.CorLibTypeFactory.String]);
+		GenericInstanceTypeSignature stringListList = list.MakeGenericInstanceType(module.RuntimeContext, [stringList]);
 		Assert.That(GetName(stringListList), Is.EqualTo("List_List_String"));
 	}
 

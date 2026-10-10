@@ -24,7 +24,12 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 		Fields = new SerializableValue[type.Fields.Count];
 	}
 
-	public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags)
+	internal SerializableStructure(SerializableType type, int depth, UnityVersion version) : this(type, depth)
+	{
+		Version = version;
+	}
+
+	public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, ITypeResolver resolver)
 	{
 		Version = version;
 		for (int i = 0; i < Fields.Length; i++)
@@ -32,7 +37,24 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 			SerializableType.Field etalon = Type.Fields[i];
 			if (IsAvailable(etalon))
 			{
-				Fields[i].Read(ref reader, version, flags, Depth, etalon);
+				if (etalon.Type == ManagedReferenceTypes.Registry)
+				{
+					// Unity can omit the trailing registry when all managed references are empty.
+					if (i == Fields.Length - 1 && reader.Position == reader.Length)
+					{
+						Fields[i] = default;
+						continue;
+					}
+					Fields[i].AsAsset = ManagedReferenceRegistryReader.Read(ref reader, version, flags, Depth + 1, resolver);
+					if (etalon.Align)
+					{
+						reader.Align();
+					}
+				}
+				else
+				{
+					Fields[i].Read(ref reader, version, flags, Depth, etalon, resolver);
+				}
 			}
 		}
 	}
@@ -42,7 +64,7 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 		for (int i = 0; i < Fields.Length; i++)
 		{
 			SerializableType.Field etalon = Type.Fields[i];
-			if (IsAvailable(etalon))
+			if (IsAvailable(etalon) && IsPresent(i))
 			{
 				Fields[i].Write(writer, etalon);
 			}
@@ -59,7 +81,7 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 			for (int i = 0; i < Fields.Length; i++)
 			{
 				SerializableType.Field etalon = Type.Fields[i];
-				if (IsAvailable(etalon))
+				if (IsAvailable(etalon) && IsPresent(i))
 				{
 					if (hasEmittedFirstField)
 					{
@@ -88,7 +110,7 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 		for (int i = 0; i < Fields.Length; i++)
 		{
 			SerializableType.Field etalon = Type.Fields[i];
-			if (IsAvailable(etalon))
+			if (IsAvailable(etalon) && IsPresent(i))
 			{
 				foreach ((string, PPtr) pair in Fields[i].FetchDependencies(etalon))
 				{
@@ -99,6 +121,8 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 	}
 
 	public override string ToString() => Type.FullName;
+
+	private bool IsPresent(int index) => Type.Fields[index].Type != ManagedReferenceTypes.Registry || Fields[index].CValue is not null;
 
 	private bool IsAvailable(in SerializableType.Field field)
 	{
@@ -117,11 +141,11 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 		return true;
 	}
 
-	public bool TryRead(ref EndianSpanReader reader, IMonoBehaviour monoBehaviour)
+	public bool TryRead(ref EndianSpanReader reader, IMonoBehaviour monoBehaviour, ITypeResolver resolver)
 	{
 		try
 		{
-			Read(ref reader, monoBehaviour.Collection.Version, monoBehaviour.Collection.Flags);
+			Read(ref reader, monoBehaviour.Collection.Version, monoBehaviour.Collection.Flags, resolver);
 		}
 		catch (Exception ex)
 		{
@@ -143,7 +167,7 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 
 	private static void LogMonoBehaviorReadException(SerializableStructure structure, Exception ex)
 	{
-		Logger.Error(LogCategory.Import, $"Unable to read MonoBehaviour Structure, because script {structure} layout mismatched binary content ({ex.GetType().Name}).");
+		Logger.Error(LogCategory.Import, $"Unable to read MonoBehaviour Structure, because script {structure} layout mismatched binary content ({ex.GetType().Name}: {ex.Message}).");
 	}
 
 	public int Depth { get; }
@@ -260,9 +284,16 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 
 	public override void Reset()
 	{
-		foreach (SerializableValue field in Fields)
+		for (int i = 0; i < Fields.Length; i++)
 		{
-			field.Reset();
+			if (Type.Fields[i].Type == ManagedReferenceTypes.Registry)
+			{
+				Fields[i] = default;
+			}
+			else
+			{
+				Fields[i].Reset();
+			}
 		}
 	}
 

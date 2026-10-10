@@ -10,10 +10,6 @@ public class MultipleReplacementAssetResolver : IAssetResolver
 	{
 		Replacements = replacements.ToFrozenDictionary();
 	}
-	public MultipleReplacementAssetResolver()
-	{
-		Replacements = FrozenDictionary<IUnityObjectBase, IUnityObjectBase>.Empty;
-	}
 
 	public T? Resolve<T>(IUnityObjectBase? asset) where T : IUnityObjectBase
 	{

@@ -385,7 +385,7 @@ public static class WebApplicationLauncher
 
 		FileInfo[] logFiles = new DirectoryInfo(directory)
 			.GetFiles("AssetRipper_*.log")
-			.OrderBy(f => f.Name)
+			.OrderBy(f => f.Name, StringComparer.Ordinal)
 			.ToArray();
 
 		for (int i = 0; i <= logFiles.Length - MaxLogFiles; i++)

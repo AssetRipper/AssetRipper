@@ -63,7 +63,7 @@ internal sealed class AndroidGameStructure : PlatformGameStructure
 	public override void CollectFiles(bool skipStreamingAssets)
 	{
 		base.CollectFiles(skipStreamingAssets);
-		CollectApkAssetBundles(Files);
+		CollectApkAssetBundles();
 	}
 
 	public static bool IsAndroidStructure(string path, FileSystem fileSystem)
@@ -125,18 +125,18 @@ internal sealed class AndroidGameStructure : PlatformGameStructure
 		return matches;
 	}
 
-	private void CollectApkAssetBundles(List<KeyValuePair<string, string>> files)
+	private void CollectApkAssetBundles()
 	{
 		string assetPath = FileSystem.Path.Join(RootPath, AssetName);
 
-		CollectAssetBundles(assetPath, files);
+		CollectAssetBundles(assetPath);
 		foreach (string subDirectory in FileSystem.Directory.EnumerateDirectories(assetPath))
 		{
 			if (FileSystem.Path.GetFileName(subDirectory) == BinName)
 			{
 				continue;
 			}
-			CollectAssetBundlesRecursively(subDirectory, files);
+			CollectAssetBundlesRecursively(subDirectory);
 		}
 	}
 

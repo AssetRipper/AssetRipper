@@ -24,6 +24,19 @@ public class SmartStreamTests
 	}
 
 	[Test]
+	public void RandomAccessPartialStreamSeeksRelativeToEnd()
+	{
+		using SmartStream baseStream = SmartStream.CreateTemp();
+		baseStream.Write([1, 2, 3, 4]);
+		using SmartStream partialStream = baseStream.CreatePartial(1, 2);
+
+		Assert.That(partialStream.Seek(-1, SeekOrigin.End), Is.EqualTo(1));
+		Assert.That(partialStream.ReadByte(), Is.EqualTo(3));
+		Assert.That(partialStream.Seek(1, SeekOrigin.End), Is.EqualTo(3));
+		Assert.That(partialStream.Read(new byte[1]), Is.Zero);
+	}
+
+	[Test]
 	public void ToArrayMakesAPerfectCopyForMemorySmartStreams()
 	{
 		const int Length = 87;

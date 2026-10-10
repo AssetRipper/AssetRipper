@@ -46,23 +46,21 @@ public sealed class PartialStream : Stream
 	}
 
 	public override int ReadByte()
-		=> m_stream.ReadByte();
+		=> Position >= Length ? -1 : m_stream.ReadByte();
 
 	/// <inheritdoc/>
 	public override long Seek(long offset, SeekOrigin origin)
 	{
-		if (origin == SeekOrigin.Begin)
+		long position = origin switch
 		{
-			return m_stream.Seek(m_baseOffset + offset, SeekOrigin.Begin) - m_baseOffset;
-		}
-		else if (origin == SeekOrigin.End)
-		{
-			return m_stream.Seek(m_baseOffset + Length + offset, SeekOrigin.Begin) - m_baseOffset;
-		}
-		else
-		{
-			return m_stream.Seek(offset, origin) - m_baseOffset;
-		}
+			SeekOrigin.Begin => offset,
+			SeekOrigin.Current => Position + offset,
+			SeekOrigin.End => Length + offset,
+			_ => throw new ArgumentException("Invalid seek origin.", nameof(origin)),
+		};
+		ArgumentOutOfRangeException.ThrowIfNegative(position);
+		ArgumentOutOfRangeException.ThrowIfGreaterThan(position, Length);
+		return m_stream.Seek(m_baseOffset + position, SeekOrigin.Begin) - m_baseOffset;
 	}
 
 	/// <inheritdoc/>

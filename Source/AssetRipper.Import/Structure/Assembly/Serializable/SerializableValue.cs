@@ -8,6 +8,8 @@ using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.SerializationLogic;
 using System.Collections;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace AssetRipper.Import.Structure.Assembly.Serializable;
 
@@ -34,7 +36,7 @@ public record struct SerializableValue([property: DebuggerBrowsable(DebuggerBrow
 	public char AsChar
 	{
 		readonly get => unchecked((char)PValue);
-		set => SetPrimitive(unchecked((byte)value));
+		set => SetPrimitive(unchecked((ushort)value));
 	}
 
 	[DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -430,7 +432,7 @@ public record struct SerializableValue([property: DebuggerBrowsable(DebuggerBrow
 		return result;
 	}
 
-	public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, int depth, in SerializableType.Field etalon)
+	public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, int depth, in SerializableType.Field etalon, ITypeResolver resolver)
 	{
 		switch (etalon.ArrayDepth)
 		{
@@ -477,13 +479,13 @@ public record struct SerializableValue([property: DebuggerBrowsable(DebuggerBrow
 						AsString = reader.ReadUtf8StringAligned().String;
 						break;
 					case PrimitiveType.Complex:
-						AsAsset = CreateAndReadComplexStructure(ref reader, version, flags, depth, etalon);
+						AsAsset = CreateAndReadComplexStructure(ref reader, version, flags, depth, etalon, resolver);
 						break;
 					case PrimitiveType.Pair:
 					case PrimitiveType.MapPair:
 						{
 							SerializablePair pair = new(etalon.Type, depth + 1);
-							pair.Read(ref reader, version, flags);
+							pair.Read(ref reader, version, flags, resolver);
 							AsPair = pair;
 						}
 						break;
@@ -548,7 +550,7 @@ public record struct SerializableValue([property: DebuggerBrowsable(DebuggerBrow
 							for (int i = 0; i < count; i++)
 							{
 								SerializablePair pair = new(etalon.Type, depth + 1);
-								pair.Read(ref reader, version, flags);
+								pair.Read(ref reader, version, flags, resolver);
 								pairs[i] = pair;
 							}
 
@@ -563,7 +565,7 @@ public record struct SerializableValue([property: DebuggerBrowsable(DebuggerBrow
 							IUnityAssetBase[] structures = CreateArray<IUnityAssetBase>(count);
 							for (int i = 0; i < count; i++)
 							{
-								structures[i] = CreateAndReadComplexStructure(ref reader, version, flags, depth, etalon);
+								structures[i] = CreateAndReadComplexStructure(ref reader, version, flags, depth, etalon, resolver);
 							}
 							AsAssetArray = structures;
 						}
@@ -628,7 +630,7 @@ public record struct SerializableValue([property: DebuggerBrowsable(DebuggerBrow
 								IUnityAssetBase[] structures = CreateArray<IUnityAssetBase>(innerCount);
 								for (int j = 0; j < innerCount; j++)
 								{
-									structures[j] = CreateAndReadComplexStructure(ref reader, version, flags, depth, etalon);
+									structures[j] = CreateAndReadComplexStructure(ref reader, version, flags, depth, etalon, resolver);
 								}
 								result[i] = structures;
 
@@ -654,12 +656,12 @@ public record struct SerializableValue([property: DebuggerBrowsable(DebuggerBrow
 			reader.Align();
 		}
 
-		static IUnityAssetBase CreateAndReadComplexStructure(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, int depth, SerializableType.Field etalon)
+		static IUnityAssetBase CreateAndReadComplexStructure(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags, int depth, SerializableType.Field etalon, ITypeResolver resolver)
 		{
 			IUnityAssetBase asset = etalon.Type.CreateInstance(depth + 1, version);
 			if (asset is SerializableStructure structure)
 			{
-				structure.Read(ref reader, version, flags);
+				structure.Read(ref reader, version, flags, resolver);
 			}
 			else
 			{
@@ -690,7 +692,7 @@ public record struct SerializableValue([property: DebuggerBrowsable(DebuggerBrow
 						writer.Write(AsBoolean);
 						break;
 					case PrimitiveType.Char:
-						writer.Write(AsChar);
+						writer.Write((ushort)AsChar);
 						break;
 					case PrimitiveType.SByte:
 						writer.Write(AsSByte);
@@ -723,7 +725,8 @@ public record struct SerializableValue([property: DebuggerBrowsable(DebuggerBrow
 						writer.Write(AsDouble);
 						break;
 					case PrimitiveType.String:
-						writer.Write(AsString);
+						writer.Write((Utf8String)AsString);
+						writer.AlignStream();
 						break;
 					case PrimitiveType.Complex:
 						AsAsset.Write(writer);
@@ -740,43 +743,48 @@ public record struct SerializableValue([property: DebuggerBrowsable(DebuggerBrow
 				switch (etalon.Type.Type)
 				{
 					case PrimitiveType.Bool:
-						writer.WriteArray(AsBooleanArray);
+						WritePrimitiveArray(writer, AsBooleanArray);
 						break;
 					case PrimitiveType.Char:
-						writer.WriteArray(AsCharArray);
+						WritePrimitiveArray(writer, AsCharArray);
 						break;
 					case PrimitiveType.SByte:
-						writer.WriteArray(AsSByteArray);
+						WritePrimitiveArray(writer, AsSByteArray);
 						break;
 					case PrimitiveType.Byte:
-						writer.WriteArray(AsByteArray);
+						WritePrimitiveArray(writer, AsByteArray);
 						break;
 					case PrimitiveType.Short:
-						writer.WriteArray(AsInt16Array);
+						WritePrimitiveArray(writer, AsInt16Array);
 						break;
 					case PrimitiveType.UShort:
-						writer.WriteArray(AsUInt16Array);
+						WritePrimitiveArray(writer, AsUInt16Array);
 						break;
 					case PrimitiveType.Int:
-						writer.WriteArray(AsInt32Array);
+						WritePrimitiveArray(writer, AsInt32Array);
 						break;
 					case PrimitiveType.UInt:
-						writer.WriteArray(AsUInt32Array);
+						WritePrimitiveArray(writer, AsUInt32Array);
 						break;
 					case PrimitiveType.Long:
-						writer.WriteArray(AsInt64Array);
+						WritePrimitiveArray(writer, AsInt64Array);
 						break;
 					case PrimitiveType.ULong:
-						writer.WriteArray(AsUInt64Array);
+						WritePrimitiveArray(writer, AsUInt64Array);
 						break;
 					case PrimitiveType.Single:
-						writer.WriteArray(AsSingleArray);
+						WritePrimitiveArray(writer, AsSingleArray);
 						break;
 					case PrimitiveType.Double:
-						writer.WriteArray(AsDoubleArray);
+						WritePrimitiveArray(writer, AsDoubleArray);
 						break;
 					case PrimitiveType.String:
-						writer.WriteArray(AsStringArray);
+						writer.Write(AsStringArray.Length);
+						foreach (string value in AsStringArray)
+						{
+							writer.Write((Utf8String)value);
+							writer.AlignStream();
+						}
 						break;
 					case PrimitiveType.Complex:
 						writer.WriteAssetArray(AsAssetArray);
@@ -802,6 +810,46 @@ public record struct SerializableValue([property: DebuggerBrowsable(DebuggerBrow
 				throw new NotSupportedException(etalon.ArrayDepth.ToString());
 		}
 		if (etalon.Align)
+		{
+			writer.AlignStream();
+		}
+	}
+
+	private static void WritePrimitiveArray<T>(AssetWriter writer, T[] values) where T : unmanaged
+	{
+		writer.Write(values.Length);
+		ReadOnlySpan<byte> bytes = MemoryMarshal.AsBytes(values.AsSpan());
+		if (writer.EndianType is EndianType.LittleEndian || Unsafe.SizeOf<T>() == 1)
+		{
+			writer.Write(bytes);
+		}
+		else
+		{
+			switch (Unsafe.SizeOf<T>())
+			{
+				case 2:
+					foreach (ushort value in MemoryMarshal.Cast<byte, ushort>(bytes))
+					{
+						writer.Write(value);
+					}
+					break;
+				case 4:
+					foreach (uint value in MemoryMarshal.Cast<byte, uint>(bytes))
+					{
+						writer.Write(value);
+					}
+					break;
+				case 8:
+					foreach (ulong value in MemoryMarshal.Cast<byte, ulong>(bytes))
+					{
+						writer.Write(value);
+					}
+					break;
+				default:
+					throw new NotSupportedException(typeof(T).FullName);
+			}
+		}
+		if (writer.AssetCollection.Version.GreaterThanOrEquals(2017))
 		{
 			writer.AlignStream();
 		}
@@ -981,6 +1029,13 @@ public record struct SerializableValue([property: DebuggerBrowsable(DebuggerBrow
 			case 0:
 				if (etalon.Type.Type == PrimitiveType.Complex)
 				{
+					if (etalon.Type == ManagedReferenceTypes.ReferencedObjectData && source.CValue is SerializableStructure referencedData)
+					{
+						// The registry declares an empty placeholder; preserve the resolved payload type.
+						PValue = default;
+						CValue = referencedData.DeepClone(converter);
+						break;
+					}
 					IUnityAssetBase thisStructure = etalon.Type.CreateInstance(depth + 1, converter.TargetCollection.Version);
 					if (source.CValue is IUnityAssetBase sourceStructure)
 					{

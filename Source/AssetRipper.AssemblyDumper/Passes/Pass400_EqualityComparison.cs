@@ -326,6 +326,12 @@ internal static class Pass400_EqualityComparison
 							.GetMethodByName(nameof(EqualityComparisonHelper.EquatableDictionaryListEquals))
 							.MakeGenericInstanceMethod(dictionary.KeyTypeSignature, listValue.ElementTypeSignature);
 					}
+					else if (dictionary.Child.Key.Equatable && dictionary.Child.Value.Child is DictionaryNode dictionaryValue && dictionaryValue.Child.Key.Equatable && dictionaryValue.Child.Value.Equatable)
+					{
+						cachedMethod = equalityComparisonHelper
+							.GetMethodByName(nameof(EqualityComparisonHelper.EquatableDictionaryDictionaryEquals))
+							.MakeGenericInstanceMethod(dictionary.KeyTypeSignature, dictionaryValue.KeyTypeSignature, dictionaryValue.ValueTypeSignature);
+					}
 					else
 					{
 						throw new NotImplementedException();
@@ -333,26 +339,27 @@ internal static class Pass400_EqualityComparison
 
 					break;
 				case ListNode list:
-					if (list.Child is ListNode childList)
+					if (list.Child is ListNode childList && childList.Child.Equatable)
 					{
-						if (!childList.Child.Equatable)
-						{
-							throw new NotImplementedException();
-						}
-
 						cachedMethod = equalityComparisonHelper
 							.GetMethodByName(nameof(EqualityComparisonHelper.EquatableListListEquals))
 							.MakeGenericInstanceMethod(childList.ElementTypeSignature);
 					}
-					else if (!list.Child.Equatable)
+					else if (list.Child is DictionaryNode childDictionary && childDictionary.Child.Key.Equatable && childDictionary.Child.Value.Equatable)
 					{
-						throw new NotImplementedException();
+						cachedMethod = equalityComparisonHelper
+							.GetMethodByName(nameof(EqualityComparisonHelper.EquatableListDictionaryEquals))
+							.MakeGenericInstanceMethod(childDictionary.KeyTypeSignature, childDictionary.ValueTypeSignature);
 					}
-					else
+					else if (list.Child.Equatable)
 					{
 						cachedMethod = equalityComparisonHelper
 							.GetMethodByName(nameof(EqualityComparisonHelper.EquatableListEquals))
 							.MakeGenericInstanceMethod(list.ElementTypeSignature);
+					}
+					else
+					{
+						throw new NotImplementedException();
 					}
 					break;
 				case PairNode pair:

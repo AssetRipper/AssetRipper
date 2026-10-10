@@ -128,4 +128,14 @@ public class RelativeDistanceTests
 			Assert.That(RelativeDistanceMethods.RelativeDistance(Vector4.Zero, Vector4.Zero), Is.Zero, () => $"4D distance between zero was not zero.");
 		}
 	}
+
+	[Test]
+	public void SquaredDistanceBetweenEqualZeroValuesIsZero()
+	{
+		using (Assert.EnterMultipleScope())
+		{
+			Assert.That(RelativeDistanceMethods.RelativeDistance2(0f, 0f), Is.Zero);
+			Assert.That(RelativeDistanceMethods.RelativeDistance2(Vector2.Zero, Vector2.Zero), Is.Zero);
+		}
+	}
 }

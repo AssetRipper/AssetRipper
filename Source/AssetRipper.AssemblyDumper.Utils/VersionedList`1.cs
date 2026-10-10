@@ -184,6 +184,10 @@ public sealed class VersionedList<T> : IList<KeyValuePair<UnityVersion, T?>>, IR
 		{
 			throw new InvalidOperationException();
 		}
+		if (divisionPoint == UnityVersion.MaxVersion)
+		{
+			return;
+		}
 
 		if (divisionPoint < this[0].Key)
 		{

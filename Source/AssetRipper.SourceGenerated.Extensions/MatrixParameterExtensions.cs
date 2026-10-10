@@ -5,11 +5,11 @@ namespace AssetRipper.SourceGenerated.Extensions;
 
 public static class MatrixParameterExtensions
 {
-	public static void SetValues(this IMatrixParameter parameter, string name, ShaderParamType type, int index, int rowCount, int columnCount)
+	public static void SetValues(this IMatrixParameter parameter, string name, ShaderParamType type, int offsetInConstantBuffer, int rowCount, int columnCount)
 	{
 		//parameter.Name = name;//Name doesn't exist
 		parameter.NameIndex = -1;
-		parameter.Index = index;
+		parameter.OffsetInConstantBuffer = offsetInConstantBuffer;
 		parameter.ArraySize = 0;
 		parameter.Type = (sbyte)type;
 		parameter.RowCount = (sbyte)rowCount;

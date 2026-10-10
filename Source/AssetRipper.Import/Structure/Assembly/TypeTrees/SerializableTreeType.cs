@@ -17,6 +17,23 @@ public sealed class SerializableTreeType : SerializableType
 
 	public static SerializableTreeType FromRootNode(TypeTreeNodeStruct rootNode, bool monoBehaviourStructure = false)
 	{
+		return FromRootNode(rootNode, monoBehaviourStructure, true);
+	}
+
+	/// <summary>
+	/// Create the type of an object stored in a managed reference registry.
+	/// </summary>
+	/// <remarks>
+	/// Unity emits a registry node into the type tree of every type that has managed references, including the types of
+	/// the referenced objects themselves. Only an asset's root type actually stores one, so the nested node is skipped.
+	/// </remarks>
+	public static SerializableTreeType FromReferencedObjectNode(TypeTreeNodeStruct rootNode)
+	{
+		return FromRootNode(rootNode, false, false);
+	}
+
+	private static SerializableTreeType FromRootNode(TypeTreeNodeStruct rootNode, bool monoBehaviourStructure, bool includeManagedReferenceRegistry)
+	{
 		ToPrimititeType(rootNode, out string typeName, out PrimitiveType primitiveType, out int arrayDepth, out _, out TypeTreeNodeStruct primitiveNode);
 		Debug.Assert(arrayDepth == 0, "Array depth should be 0 for root node");
 		Debug.Assert(primitiveNode == rootNode, "Primitive node should be the same as root node");
@@ -28,7 +45,12 @@ public sealed class SerializableTreeType : SerializableType
 		int startIndex = monoBehaviourStructure ? FindStartingIndexForMonoBehaviour(rootNode) : 0;
 		for (int i = startIndex; i < rootNode.SubNodes.Count; i++)
 		{
-			AddNode(rootNode.SubNodes[i], fields);
+			TypeTreeNodeStruct subNode = rootNode.SubNodes[i];
+			if (!includeManagedReferenceRegistry && subNode.IsManagedReferencesRegistry)
+			{
+				continue;
+			}
+			AddNode(subNode, fields);
 		}
 		serializableTreeType.Fields = fields;
 		serializableTreeType.SetMaxDepth();
@@ -37,10 +59,23 @@ public sealed class SerializableTreeType : SerializableType
 
 	private static void AddNode(TypeTreeNodeStruct node, List<Field> fields)
 	{
+		if (node.IsManagedReferencesRegistry)
+		{
+			fields.Add(ManagedReferenceTypes.RegistryField);
+			return;
+		}
+
 		ToPrimititeType(node, out string typeName, out PrimitiveType primitiveType, out int arrayDepth, out bool alignBytes, out TypeTreeNodeStruct primitiveNode);
 
 		SerializableType serializableType;
-		if (primitiveType is PrimitiveType.Complex or PrimitiveType.Pair or PrimitiveType.MapPair)
+		if (primitiveNode.IsManagedReference)
+		{
+			//The referenced object is stored in the registry, so the field only holds its identifier.
+			serializableType = primitiveNode.IsIndexedManagedReference
+				? ManagedReferenceTypes.IndexedManagedReference
+				: ManagedReferenceTypes.ManagedReference;
+		}
+		else if (primitiveType is PrimitiveType.Complex or PrimitiveType.Pair or PrimitiveType.MapPair)
 		{
 			if (primitiveNode.IsPPtr)
 			{

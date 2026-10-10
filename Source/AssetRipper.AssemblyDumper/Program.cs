@@ -232,10 +232,6 @@ public static class Program
 		{
 			Pass510_FixComponentPairWalking.DoPass();
 		}
-		using (new TimingCookie("Pass 555: Create Common String"))
-		{
-			Pass555_CreateCommonString.DoPass();
-		}
 		using (new TimingCookie("Pass 556: Create ClassIDType Enum"))
 		{
 			Pass556_CreateClassIDTypeEnum.DoPass();

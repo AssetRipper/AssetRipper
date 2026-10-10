@@ -1,6 +1,7 @@
 ﻿using AsmResolver.DotNet;
 using AsmResolver.DotNet.Builder;
 using AsmResolver.DotNet.Signatures;
+using AsmResolver.DotNet.Signatures.Parsing;
 using AsmResolver.PE.Builder;
 using AssetRipper.Import.Structure.Platforms;
 using AssetRipper.IO.Files;
@@ -176,7 +177,7 @@ public class BaseManager : IAssemblyManager
 		{
 			return default;
 		}
-		return new ScriptIdentifier(assembly, type.Namespace ?? "", type.Name ?? "");
+		return new ScriptIdentifier(assembly, @namespace, name);
 	}
 
 	public bool TryGetSerializableType(
@@ -189,6 +190,19 @@ public class BaseManager : IAssemblyManager
 		{
 			failureReason = null;
 			return true;
+		}
+		if (scriptID.Name.Contains('['))
+		{
+			ModuleDefinition? module = FindAssembly(scriptID.Assembly)?.ManifestModule;
+			if (module is null)
+			{
+				scriptType = null;
+				failureReason = $"Can't find assembly: {scriptID.Assembly}";
+				return false;
+			}
+			string fullName = string.IsNullOrEmpty(scriptID.Namespace) ? scriptID.Name : $"{scriptID.Namespace}.{scriptID.Name}";
+			TypeSignature signature = TypeNameParser.Parse(module, $"{fullName.Replace('/', '+')}, {scriptID.Assembly}");
+			return new FieldSerializer(version, RuntimeContext).TryCreateSerializableType(signature, out scriptType, out failureReason);
 		}
 		TypeDefinition? type = FindType(scriptID);
 		if (type is null)
@@ -255,15 +269,38 @@ public class BaseManager : IAssemblyManager
 			return null;
 		}
 
+		string[] names = name.Replace('+', '/').Split('/');
 		foreach (ModuleDefinition module in definition.Modules)
 		{
-			TypeDefinition? type = module.GetType(@namespace, name);
+			TypeDefinition? type = FindNestedType(module.GetType(@namespace, names[0]));
 			if (type != null)
 			{
 				return type;
 			}
+			// Unity's facade assemblies forward engine types to their module assemblies.
+			foreach (ExportedType exportedType in module.ExportedTypes)
+			{
+				if (exportedType.Namespace == @namespace && exportedType.Name == names[0])
+				{
+					exportedType.Resolve(RuntimeContext, out type);
+					type = FindNestedType(type);
+					if (type is not null)
+					{
+						return type;
+					}
+				}
+			}
 		}
 		return null;
+
+		TypeDefinition? FindNestedType(TypeDefinition? type)
+		{
+			foreach (string nestedName in names.Skip(1))
+			{
+				type = type?.NestedTypes.FirstOrDefault(t => t.Name == nestedName);
+			}
+			return type;
+		}
 	}
 
 	protected TypeDefinition? FindType(ScriptIdentifier scriptID)

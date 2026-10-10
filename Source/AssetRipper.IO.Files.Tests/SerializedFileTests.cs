@@ -1,12 +1,45 @@
 ﻿using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.IO.Files.SerializedFiles.Parser;
+using AssetRipper.IO.Files.SerializedFiles.Parser.TypeTrees;
+using AssetRipper.Primitives;
+using System.Text;
 using AssetRipper.IO.Files.Streams.Smart;
 
 namespace AssetRipper.IO.Files.Tests;
 
 internal class SerializedFileTests
 {
+	[TestCase(false)]
+	[TestCase(true)]
+	public void Version23TypeTreesRoundTrip(bool extracted)
+	{
+		SerializedFileBuilder builder = new()
+		{
+			Generation = FormatVersion.ExtractedTypeTreeSupport,
+			Version = UnityVersion.Parse("6000.5.10f1"),
+			Platform = BuildTarget.StandaloneWin64Player,
+			HasTypeTree = true,
+		};
+		SerializedType type = new() { TypeID = 1, ScriptTypeIndex = -1, IsTypeTreeExtracted = extracted };
+		SerializedTypeReference reference = new() { TypeID = 114, ScriptTypeIndex = 0, ClassName = "Example", Namespace = "Tests", AsmName = "Assembly-CSharp", IsTypeTreeExtracted = extracted };
+		type.ExtractedTypeTreeHash = new(1, 2, 3, 4);
+		reference.ExtractedTypeTreeHash = type.ExtractedTypeTreeHash;
+		if (!extracted)
+		{
+			foreach (TypeTree tree in new[] { type.OldType, reference.OldType })
+			{
+				tree.StringBuffer = Encoding.UTF8.GetBytes("Root\0Base\0int\0value\0");
+				tree.Nodes.Add(new TypeTreeNode("Root", "Base", 0, false) { Version = 1, TypeStrOffset = 0, NameStrOffset = 5, ByteSize = -1 });
+				tree.Nodes.Add(new TypeTreeNode("int", "value", 1, false) { Version = 1, TypeStrOffset = 10, NameStrOffset = 14, ByteSize = 4, Index = 1 });
+			}
+		}
+		builder.Types.Add(type);
+		builder.RefTypes.Add(reference);
+		builder.Objects.Add(new(type) { FileID = 42, ObjectData = [1, 2, 3, 4] });
+		AssertReadingAndWritingAreConsistent(builder.Build());
+	}
+
 	[Theory]
 	public void WritingSerializedFileDoesNotThrow(FormatVersion generation)
 	{

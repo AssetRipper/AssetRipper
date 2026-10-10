@@ -50,6 +50,14 @@ public abstract class SerializableType
 	public IReadOnlyList<Field> Fields { get; protected set; } = [];
 	public virtual int Version => 1;
 	public virtual bool FlowMappedInYaml => false;
+	public virtual bool HasManagedReferences => ContainsManagedReferences(this, []);
+
+	private static bool ContainsManagedReferences(SerializableType type, HashSet<SerializableType> visited)
+	{
+		return type == ManagedReferenceTypes.ManagedReference || type == ManagedReferenceTypes.IndexedManagedReference
+			|| type == ManagedReferenceTypes.Registry || visited.Add(type)
+			&& type.Fields.Any(field => ContainsManagedReferences(field.Type, visited));
+	}
 	/// <summary>
 	/// The maximum depth of the structure.
 	/// </summary>

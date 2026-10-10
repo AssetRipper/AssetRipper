@@ -27,7 +27,14 @@ public class TextureAssetExporter : BinaryAssetExporter
 	{
 		if (asset.MainAsset is SpriteInformationObject spriteInformationObject && (ExportSprites || asset is not ISprite))
 		{
-			exportCollection = new TextureExportCollection(this, spriteInformationObject, ExportSprites);
+			ITexture2D texture = spriteInformationObject.Texture;
+			// Dynamic font atlases can be serialized before they have any pixels.
+			// Preserve these as native assets rather than attempting a zero-sized bitmap.
+			exportCollection = texture.Width_C28 == 0 && texture.Height_C28 == 0
+				&& texture.ImageData_C28.Length == 0 && (texture.StreamData_C28?.Size ?? 0) == 0
+				&& spriteInformationObject.Sprites.Count == 0
+				? new EmptyTextureExportCollection(spriteInformationObject)
+				: new TextureExportCollection(this, spriteInformationObject, ExportSprites);
 			return true;
 		}
 		else

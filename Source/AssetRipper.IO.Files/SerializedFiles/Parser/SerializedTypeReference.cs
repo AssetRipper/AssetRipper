@@ -57,6 +57,8 @@ public sealed class SerializedTypeReference : SerializedTypeBase, IEquatable<Ser
 			&& OldType.Equals(other.OldType)
 			&& ScriptID == other.ScriptID
 			&& OldTypeHash == other.OldTypeHash
+			&& ExtractedTypeTreeHash == other.ExtractedTypeTreeHash
+			&& IsTypeTreeExtracted == other.IsTypeTreeExtracted
 			&& ClassName == other.ClassName
 			&& Namespace == other.Namespace
 			&& AsmName == other.AsmName;
@@ -71,6 +73,8 @@ public sealed class SerializedTypeReference : SerializedTypeBase, IEquatable<Ser
 		hash.Add(OldType);
 		hash.Add(ScriptID);
 		hash.Add(OldTypeHash);
+		hash.Add(ExtractedTypeTreeHash);
+		hash.Add(IsTypeTreeExtracted);
 		hash.Add(ClassName);
 		hash.Add(Namespace);
 		hash.Add(AsmName);

@@ -409,4 +409,108 @@ public class FieldSerializationTests
 		SerializableType serializableType = SerializableTypes.Create<DerivedClassWithSerializableAttribute>();
 		Assert.That(serializableType.Fields, Has.Count.EqualTo(2));
 	}
+
+	private interface IReferencedInterface
+	{
+	}
+
+	[Serializable]
+	private class ClassWithReferenceField
+	{
+		[UnityEngine.SerializeReference]
+		public IReferencedInterface? reference;
+	}
+
+	private class CustomMonoBehaviourWithReferenceFields : UnityEngine.MonoBehaviour
+	{
+		[UnityEngine.SerializeReference]
+		public IReferencedInterface? single;
+
+		[UnityEngine.SerializeReference]
+		public List<IReferencedInterface>? list;
+
+		[UnityEngine.SerializeReference]
+		public IReferencedInterface[]? array;
+	}
+
+	private class DerivedMonoBehaviourWithReferenceFields : CustomMonoBehaviourWithReferenceFields
+	{
+		public int derivedField;
+	}
+
+	private class CustomMonoBehaviourWithNestedReferenceField : UnityEngine.MonoBehaviour
+	{
+		public ClassWithReferenceField? nested;
+	}
+
+	[Test]
+	public void ReferenceFieldsHoldAnIdentifierInsteadOfTheObject()
+	{
+		SerializableType serializableType = SerializableTypes.Create<CustomMonoBehaviourWithReferenceFields>();
+		using (Assert.EnterMultipleScope())
+		{
+			Assert.That(serializableType.Fields, Has.Count.EqualTo(4));
+			Assert.That(serializableType.Fields[0].Type, Is.SameAs(ManagedReferenceTypes.ManagedReference));
+			Assert.That(serializableType.Fields[0].ArrayDepth, Is.EqualTo(0));
+			Assert.That(serializableType.Fields[1].Type, Is.SameAs(ManagedReferenceTypes.ManagedReference));
+			Assert.That(serializableType.Fields[1].ArrayDepth, Is.EqualTo(1));
+			Assert.That(serializableType.Fields[2].Type, Is.SameAs(ManagedReferenceTypes.ManagedReference));
+			Assert.That(serializableType.Fields[2].ArrayDepth, Is.EqualTo(1));
+			Assert.That(serializableType.Fields[3].Type, Is.SameAs(ManagedReferenceTypes.Registry));
+		}
+	}
+
+	[Test]
+	public void ReferenceFieldsHoldAnIndexBeforeStableIdentifiersWereIntroduced()
+	{
+		SerializableType serializableType = SerializableTypes.Create<CustomMonoBehaviourWithReferenceFields>(new UnityVersion(2019, 4));
+		using (Assert.EnterMultipleScope())
+		{
+			Assert.That(serializableType.Fields, Has.Count.EqualTo(4));
+			Assert.That(serializableType.Fields[0].Type, Is.SameAs(ManagedReferenceTypes.IndexedManagedReference));
+			Assert.That(serializableType.Fields[1].Type, Is.SameAs(ManagedReferenceTypes.IndexedManagedReference));
+			Assert.That(serializableType.Fields[2].Type, Is.SameAs(ManagedReferenceTypes.IndexedManagedReference));
+			Assert.That(serializableType.Fields[3].Type, Is.SameAs(ManagedReferenceTypes.Registry));
+		}
+	}
+
+	[Test]
+	public void OnlyTheMostDerivedTypeHasAManagedReferenceRegistry()
+	{
+		SerializableType serializableType = SerializableTypes.Create<DerivedMonoBehaviourWithReferenceFields>();
+		using (Assert.EnterMultipleScope())
+		{
+			Assert.That(serializableType.Fields.Count(field => field.Type == ManagedReferenceTypes.Registry), Is.EqualTo(1));
+			Assert.That(serializableType.Fields[^1].Type, Is.SameAs(ManagedReferenceTypes.Registry));
+			Assert.That(serializableType.Fields[^2].Name, Is.EqualTo(nameof(DerivedMonoBehaviourWithReferenceFields.derivedField)));
+		}
+	}
+
+	[Test]
+	public void TypesWithoutReferenceFieldsHaveNoManagedReferenceRegistry()
+	{
+		SerializableType serializableType = SerializableTypes.Create<CustomMonoBehaviourWithPublicFields>();
+		Assert.That(serializableType.Fields.Any(field => field.Type == ManagedReferenceTypes.Registry), Is.False);
+	}
+
+	[Test]
+	public void NestedTypesWithReferenceFieldsAreNotRootTypes()
+	{
+		SerializableType serializableType = SerializableTypes.Create<ClassWithReferenceField>();
+		Assert.That(serializableType.Fields.Any(field => field.Type == ManagedReferenceTypes.Registry), Is.False);
+	}
+
+	[Test]
+	public void ManagedReferenceRegistryIsAddedWhenTheNestedTypeWasAlreadyCached()
+	{
+		TypeDefinition nestedType = ReferenceAssemblies.GetType<ClassWithReferenceField>();
+		TypeDefinition behaviourType = ReferenceAssemblies.GetType<CustomMonoBehaviourWithNestedReferenceField>();
+		RuntimeContext? runtimeContext = nestedType.DeclaringModule?.RuntimeContext;
+		FieldSerializer serializer = new(new UnityVersion(6000), runtimeContext);
+		Dictionary<ITypeDefOrRef, SerializableType> typeCache = new(runtimeContext?.SignatureComparer);
+
+		Assert.That(serializer.TryCreateSerializableType(nestedType, typeCache, out _, out string? nestedFailure), Is.True, nestedFailure);
+		Assert.That(serializer.TryCreateSerializableType(behaviourType, typeCache, out SerializableType? serializableType, out string? failure), Is.True, failure);
+		Assert.That(serializableType!.Fields[^1].Type, Is.SameAs(ManagedReferenceTypes.Registry));
+	}
 }

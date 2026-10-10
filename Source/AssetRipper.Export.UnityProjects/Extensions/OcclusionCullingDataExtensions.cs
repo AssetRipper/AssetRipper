@@ -80,9 +80,13 @@ internal static class OcclusionCullingDataExtensions
 			}
 		}
 
-		int maxRenderer = occlusionCullingData.Scenes.Max(j => j.IndexRenderers + j.SizeRenderers);
+		int maxRenderer = occlusionCullingData.Scenes.Count == 0
+			? 0
+			: occlusionCullingData.Scenes.Max(j => j.IndexRenderers + j.SizeRenderers);
 		occlusionCullingData.StaticRenderers.InitializeList(maxRenderer);
-		int maxPortal = occlusionCullingData.Scenes.Max(j => j.IndexPortals + j.SizePortals);
+		int maxPortal = occlusionCullingData.Scenes.Count == 0
+			? 0
+			: occlusionCullingData.Scenes.Max(j => j.IndexPortals + j.SizePortals);
 		occlusionCullingData.Portals.InitializeList(maxPortal);
 
 		foreach (IOcclusionCullingSettings cullingSetting in cullingSettings)

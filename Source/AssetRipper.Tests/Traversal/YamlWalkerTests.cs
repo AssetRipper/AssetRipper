@@ -11,7 +11,7 @@ internal class YamlWalkerTests
 	[Test]
 	public void MonoBehaviourTest()
 	{
-		MonoBehaviour_2017_3 asset = AssetCreator.CreateUnsafe<MonoBehaviour_2017_3>();
+		MonoBehaviour_5 asset = AssetCreator.CreateUnsafe<MonoBehaviour_5>();
 		new YamlWalker().ExportYamlDocument(asset, 1);
 	}
 

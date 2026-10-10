@@ -88,18 +88,7 @@ public abstract partial class SerializedTypeBase
 		{
 			if (reader.Generation >= FormatVersion.ExtractedTypeTreeSupport)
 			{
-				ExtractedTypeTreeHash = Hash128.Read(reader); // xxh3
-				int typeTreeSize = reader.ReadInt32();
-				if (typeTreeSize != 0)
-				{
-					IsTypeTreeExtracted = false;
-					OldType.Read(reader);
-				}
-				else
-				{
-					IsTypeTreeExtracted = true;
-					OldType.Clear();
-				}
+				ReadExtractedTypeTree(reader);
 			}
 			else
 			{
@@ -115,6 +104,29 @@ public abstract partial class SerializedTypeBase
 			{
 				ReadTypeDependencies(reader);
 			}
+		}
+	}
+
+	private void ReadExtractedTypeTree(SerializedReader reader)
+	{
+		ExtractedTypeTreeHash = Hash128.Read(reader);
+		int typeTreeSize = reader.ReadInt32();
+		if (typeTreeSize < 0)
+		{
+			throw new InvalidDataException($"Type tree size cannot be negative: {typeTreeSize}.");
+		}
+		IsTypeTreeExtracted = typeTreeSize == 0;
+		if (IsTypeTreeExtracted)
+		{
+			OldType.Clear();
+			return;
+		}
+
+		long start = reader.BaseStream.Position;
+		OldType.Read(reader);
+		if (reader.BaseStream.Position - start != typeTreeSize)
+		{
+			throw new InvalidDataException($"Type tree size mismatch: expected {typeTreeSize}, read {reader.BaseStream.Position - start}.");
 		}
 	}
 
@@ -149,7 +161,15 @@ public abstract partial class SerializedTypeBase
 
 		if (hasTypeTree)
 		{
-			OldType.Write(writer);
+			if (writer.Generation >= FormatVersion.ExtractedTypeTreeSupport)
+			{
+				ExtractedTypeTreeHash.Write(writer);
+				writer.Write(IsTypeTreeExtracted ? 0 : OldType.GetSerializedSize(writer.Generation));
+			}
+			if (writer.Generation < FormatVersion.ExtractedTypeTreeSupport || !IsTypeTreeExtracted)
+			{
+				OldType.Write(writer);
+			}
 			if (HasTypeDependencies(writer.Generation))
 			{
 				WriteTypeDependencies(writer);

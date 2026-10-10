@@ -11,6 +11,7 @@ namespace AssetRipper.Assets.Collections;
 /// </summary>
 public sealed class SerializedAssetCollection : AssetCollection
 {
+	public IReadOnlyList<SerializedTypeReference> ReferenceTypes { get; private set; } = [];
 	private FileIdentifier[]? DependencyIdentifiers { get; set; }
 
 	private SerializedAssetCollection(Bundle bundle) : base(bundle)
@@ -61,6 +62,7 @@ public sealed class SerializedAssetCollection : AssetCollection
 			Platform = file.Platform,
 			Flags = file.Flags,
 			EndianType = file.EndianType,
+			ReferenceTypes = file.RefTypes.ToArray(),
 		};
 		ReadOnlySpan<FileIdentifier> fileDependencies = file.Dependencies;
 		if (fileDependencies.Length > 0)
@@ -73,11 +75,12 @@ public sealed class SerializedAssetCollection : AssetCollection
 
 	private static void ReadData(SerializedAssetCollection collection, SerializedFile file, AssetFactoryBase factory)
 	{
+		SerializedTypeReference[] referenceTypes = file.RefTypes.ToArray();
 		foreach (ObjectInfo objectInfo in file.Objects)
 		{
 			int classID = objectInfo.TypeID < 0 ? 114 : objectInfo.TypeID;
 			AssetInfo assetInfo = new AssetInfo(collection, objectInfo.FileID, classID);
-			IUnityObjectBase? asset = factory.ReadAsset(assetInfo, objectInfo.ObjectData, objectInfo.Type);
+			IUnityObjectBase? asset = factory.ReadAsset(assetInfo, objectInfo.ObjectData, objectInfo.Type, referenceTypes);
 			if (asset is not null)
 			{
 				collection.AddAsset(asset);

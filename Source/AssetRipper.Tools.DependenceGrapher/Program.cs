@@ -42,7 +42,7 @@ internal static class Program
 		if (File.Exists(arguments.CabMapPath))
 		{
 			using FileStream cabMapStream = File.OpenRead(arguments.CabMapPath);
-			cabMap = JsonSerializer.Deserialize(arguments.CabMapPath, DictionarySerializerContext.Default.DictionaryStringString) ?? new();
+			cabMap = JsonSerializer.Deserialize(cabMapStream, DictionarySerializerContext.Default.DictionaryStringString) ?? new();
 		}
 		else
 		{

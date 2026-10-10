@@ -58,8 +58,6 @@ internal sealed class BundleFileBlockReader : IDisposable
 		// copy data of all blocks used by current entry to new stream
 		while (left > 0)
 		{
-			byte[]? rentedArray;
-
 			long blockStreamOffset;
 			Stream blockStream;
 			StorageBlock block = m_blocksInfo.StorageBlocks[blockIndex];
@@ -69,7 +67,6 @@ internal sealed class BundleFileBlockReader : IDisposable
 				// so we don't need to unpack it once again. Instead we can use cached stream
 				blockStreamOffset = 0;
 				blockStream = m_cachedBlockStream;
-				rentedArray = null;
 				m_stream.Position += block.CompressedSize;
 			}
 			else
@@ -79,13 +76,17 @@ internal sealed class BundleFileBlockReader : IDisposable
 				{
 					blockStreamOffset = m_dataOffset + blockCompressedOffset;
 					blockStream = m_stream;
-					rentedArray = null;
 				}
 				else
 				{
 					blockStreamOffset = 0;
+					if (m_cachedBlockArray != null)
+					{
+						ArrayPool<byte>.Shared.Return(m_cachedBlockArray);
+						m_cachedBlockArray = null;
+					}
 					m_cachedBlockIndex = blockIndex;
-					m_cachedBlockStream.Move(CreateTemporaryStream(block.UncompressedSize, out rentedArray));
+					m_cachedBlockStream.Move(CreateTemporaryStream(block.UncompressedSize, out m_cachedBlockArray));
 					switch (compressType)
 					{
 						case CompressionType.Lzma:
@@ -148,10 +149,6 @@ internal sealed class BundleFileBlockReader : IDisposable
 			blockCompressedOffset += block.CompressedSize;
 			left -= size;
 
-			if (rentedArray != null)
-			{
-				ArrayPool<byte>.Shared.Return(rentedArray);
-			}
 		}
 		if (left < 0)
 		{
@@ -165,6 +162,11 @@ internal sealed class BundleFileBlockReader : IDisposable
 	{
 		m_isDisposed = true;
 		m_cachedBlockStream.FreeReference();
+		if (m_cachedBlockArray != null)
+		{
+			ArrayPool<byte>.Shared.Return(m_cachedBlockArray);
+			m_cachedBlockArray = null;
+		}
 	}
 
 	private static SmartStream CreateStream(long decompressedSize)
@@ -212,6 +214,7 @@ internal sealed class BundleFileBlockReader : IDisposable
 	private readonly long m_dataOffset;
 
 	private readonly SmartStream m_cachedBlockStream = SmartStream.CreateNull();
+	private byte[]? m_cachedBlockArray;
 	private int m_cachedBlockIndex = -1;
 
 	private bool m_isDisposed = false;

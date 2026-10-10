@@ -1,3 +1,5 @@
+using AssetRipper.SerializationLogic.Extensions;
+
 namespace AssetRipper.SerializationLogic;
 
 public static class MonoUtils
@@ -264,14 +266,14 @@ public static class MonoUtils
 	#region Helpers
 	public static PrimitiveType ToPrimitiveType(ITypeDefOrRef? type, RuntimeContext? runtimeContext)
 	{
-		TypeDefinition? definition = type?.Resolve(runtimeContext);
+		TypeDefinition? definition = type?.TryResolve(runtimeContext);
 		if (definition?.IsEnum ?? false)
 		{
 			foreach (FieldDefinition field in definition.Fields)
 			{
 				if (field.Name == EnumValueFieldName)
 				{
-					type = field.Signature?.FieldType.ToTypeDefOrRef().Resolve(runtimeContext);
+					type = field.Signature?.FieldType.ToTypeDefOrRef().TryResolve(runtimeContext);
 					break;
 				}
 			}
