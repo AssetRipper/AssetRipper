@@ -4,6 +4,7 @@ using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Assets.Traversal;
 using AssetRipper.Import.Logging;
+using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.IO.Endian;
 using AssetRipper.IO.Files.SerializedFiles;
 using AssetRipper.SerializationLogic;
@@ -14,6 +15,7 @@ namespace AssetRipper.Import.Structure.Assembly.Serializable;
 public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 {
 	private UnityVersion Version { get; set; }
+	public ManagedReferenceRegistry? ManagedReferences { get; private set; }
 	public override int SerializedVersion => Type.Version;
 	public override bool FlowMappedInYaml => Type.FlowMappedInYaml;
 
@@ -27,6 +29,7 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 	public void Read(ref EndianSpanReader reader, UnityVersion version, TransferInstructionFlags flags)
 	{
 		Version = version;
+		ManagedReferences = null;
 		for (int i = 0; i < Fields.Length; i++)
 		{
 			SerializableType.Field etalon = Type.Fields[i];
@@ -47,6 +50,7 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 				Fields[i].Write(writer, etalon);
 			}
 		}
+		ManagedReferences?.WriteRelease(writer);
 	}
 	public override void WriteEditor(AssetWriter writer) => Write(writer);
 	public override void WriteRelease(AssetWriter writer) => Write(writer);
@@ -76,6 +80,18 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 					}
 				}
 			}
+			if (ManagedReferences is not null)
+			{
+				if (hasEmittedFirstField)
+				{
+					walker.DivideAsset(this);
+				}
+				if (walker.EnterField(this, "references"))
+				{
+					ManagedReferences.WalkEditor(walker);
+					walker.ExitField(this, "references");
+				}
+			}
 			walker.ExitAsset(this);
 		}
 	}
@@ -94,6 +110,13 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 				{
 					yield return pair;
 				}
+			}
+		}
+		if (ManagedReferences is not null)
+		{
+			foreach (var dependency in ManagedReferences.FetchDependencies())
+			{
+				yield return dependency;
 			}
 		}
 	}
@@ -117,11 +140,15 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 		return true;
 	}
 
-	public bool TryRead(ref EndianSpanReader reader, IMonoBehaviour monoBehaviour)
+	public bool TryRead(ref EndianSpanReader reader, IMonoBehaviour monoBehaviour, IAssemblyManager? assemblyManager = null)
 	{
 		try
 		{
 			Read(ref reader, monoBehaviour.Collection.Version, monoBehaviour.Collection.Flags);
+			if (Type.HasManagedReferences && reader.Position < reader.Length)
+			{
+				ManagedReferences = ManagedReferenceRegistry.Read(ref reader, monoBehaviour.Collection, assemblyManager);
+			}
 		}
 		catch (Exception ex)
 		{
@@ -143,7 +170,7 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 
 	private static void LogMonoBehaviorReadException(SerializableStructure structure, Exception ex)
 	{
-		Logger.Error(LogCategory.Import, $"Unable to read MonoBehaviour Structure, because script {structure} layout mismatched binary content ({ex.GetType().Name}).");
+		Logger.Error(LogCategory.Import, $"Unable to read MonoBehaviour Structure, because script {structure} layout mismatched binary content ({ex.GetType().Name}: {ex.Message}).");
 	}
 
 	public int Depth { get; }
@@ -215,6 +242,7 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 			throw new ArgumentException($"Depth {source.Depth} doesn't match with {Depth}", nameof(source));
 		}
 		Version = source.Version;
+		ManagedReferences = source.ManagedReferences?.DeepClone(converter);
 		if (source.Type == Type)
 		{
 			for (int i = 0; i < Fields.Length; i++)
@@ -260,6 +288,7 @@ public sealed class SerializableStructure : UnityAssetBase, IDeepCloneable
 
 	public override void Reset()
 	{
+		ManagedReferences = null;
 		foreach (SerializableValue field in Fields)
 		{
 			field.Reset();

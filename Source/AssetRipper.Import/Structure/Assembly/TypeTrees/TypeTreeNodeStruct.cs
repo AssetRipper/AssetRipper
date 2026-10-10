@@ -233,6 +233,8 @@ public readonly struct TypeTreeNodeStruct : IReadOnlyList<TypeTreeNodeStruct>, I
 			TpkUnityClass @class = GetItemForVersion(classInformation.Classes, version);
 			releaseTree = FromTpkNode(blob.NodeBuffer[@class.ReleaseRootNode], blob.StringBuffer, blob.NodeBuffer);
 			editorTree = FromTpkNode(blob.NodeBuffer[@class.EditorRootNode], blob.StringBuffer, blob.NodeBuffer);
+			releaseTree = Unity6TypeTreeOverrides.Apply(classID, version, releaseTree);
+			editorTree = Unity6TypeTreeOverrides.Apply(classID, version, editorTree);
 			return true;
 		}
 

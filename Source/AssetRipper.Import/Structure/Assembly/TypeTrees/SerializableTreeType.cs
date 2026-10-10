@@ -6,14 +6,17 @@ namespace AssetRipper.Import.Structure.Assembly.TypeTrees;
 
 public sealed class SerializableTreeType : SerializableType
 {
-	private SerializableTreeType(string name, PrimitiveType type, int version, bool flowMappedInYaml) : base(null, type, name)
+	private SerializableTreeType(string name, PrimitiveType type, int version, bool flowMappedInYaml, bool hasManagedReferenceRegistry = false) : base(null, type, name)
 	{
 		Version = version;
 		FlowMappedInYaml = flowMappedInYaml;
+		this.hasManagedReferenceRegistry = hasManagedReferenceRegistry;
 	}
+	private readonly bool hasManagedReferenceRegistry;
 
 	public override int Version { get; }
 	public override bool FlowMappedInYaml { get; }
+	public override bool HasManagedReferences => hasManagedReferenceRegistry || base.HasManagedReferences;
 
 	public static SerializableTreeType FromRootNode(TypeTreeNodeStruct rootNode, bool monoBehaviourStructure = false)
 	{
@@ -22,13 +25,17 @@ public sealed class SerializableTreeType : SerializableType
 		Debug.Assert(primitiveNode == rootNode, "Primitive node should be the same as root node");
 		Debug.Assert(!monoBehaviourStructure || primitiveType is PrimitiveType.Complex, "MonoBehaviour structure should be complex type");
 
-		SerializableTreeType serializableTreeType = new SerializableTreeType(typeName, primitiveType, rootNode.Version, rootNode.FlowMappedInYaml);
+		SerializableTreeType serializableTreeType = new SerializableTreeType(typeName, primitiveType, rootNode.Version, rootNode.FlowMappedInYaml,
+			rootNode.SubNodes.Any(node => node.IsManagedReferencesRegistry));
 
 		List<Field> fields = new();
 		int startIndex = monoBehaviourStructure ? FindStartingIndexForMonoBehaviour(rootNode) : 0;
 		for (int i = startIndex; i < rootNode.SubNodes.Count; i++)
 		{
-			AddNode(rootNode.SubNodes[i], fields);
+			if (!rootNode.SubNodes[i].IsManagedReferencesRegistry)
+			{
+				AddNode(rootNode.SubNodes[i], fields);
+			}
 		}
 		serializableTreeType.Fields = fields;
 		serializableTreeType.SetMaxDepth();
@@ -42,7 +49,11 @@ public sealed class SerializableTreeType : SerializableType
 		SerializableType serializableType;
 		if (primitiveType is PrimitiveType.Complex or PrimitiveType.Pair or PrimitiveType.MapPair)
 		{
-			if (primitiveNode.IsPPtr)
+			if (primitiveNode.TypeName is "managedReference" or "managedRefArrayItem")
+			{
+				serializableType = SerializableManagedReferenceType.Instance;
+			}
+			else if (primitiveNode.IsPPtr)
 			{
 				serializableType = SerializablePointerType.Shared;
 			}

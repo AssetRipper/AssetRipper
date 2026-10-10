@@ -13,7 +13,9 @@ namespace AssetRipper.Import.AssetCreation;
 [DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
 public abstract class TypeTreeObject : NullObject
 {
+	private uint? playerSettingsRuntimeWord;
 	public bool IsPlayerSettings => ClassID == 129;
+	public bool IsGlobalGameManager => IsPlayerSettings || ClassID == 55;
 	public abstract SerializableStructure ReleaseFields { get; }
 	public abstract SerializableStructure EditorFields { get; }
 	public sealed override bool FlowMappedInYaml => EditorFields.FlowMappedInYaml;
@@ -24,7 +26,40 @@ public abstract class TypeTreeObject : NullObject
 	{
 	}
 
-	public sealed override void WriteRelease(AssetWriter writer) => ReleaseFields.WriteRelease(writer);
+	public sealed override void WriteRelease(AssetWriter writer)
+	{
+		if (playerSettingsRuntimeWord is not uint runtimeWord)
+		{
+			ReleaseFields.WriteRelease(writer);
+			return;
+		}
+		for (int i = 0; i < ReleaseFields.Type.Fields.Count; i++)
+		{
+			var field = ReleaseFields.Type.Fields[i];
+			if (field.Name == "allowedHttpConnections") writer.Write(runtimeWord);
+			ReleaseFields.Fields[i].Write(writer, field);
+		}
+	}
+
+	private void CompletePlayerSettingsRead(ref EndianSpanReader reader)
+	{
+		// The 6000.5.10f1 player stream contains an additional word immediately
+		// before allowedHttpConnections that is absent from its generated type tree.
+		// Keep it independently of the editor fields so binary writing is lossless.
+		if (IsPlayerSettings && Collection.Version == UnityVersion.Parse("6000.5.10f1")
+			&& reader.Length - reader.Position == sizeof(int)
+			&& ReleaseFields.Type.Fields[^1].Name == "allowedHttpConnections")
+		{
+			ref SerializableValue value = ref ReleaseFields["allowedHttpConnections"];
+			int connections = reader.ReadInt32();
+			if (value.AsInt32 != 0 || connections is < 0 or > 3)
+			{
+				throw new InvalidDataException("Unexpected Unity 6000.5.10f1 PlayerSettings runtime extension.");
+			}
+			playerSettingsRuntimeWord = value.AsUInt32;
+			value.AsInt32 = connections;
+		}
+	}
 
 	public sealed override void WriteEditor(AssetWriter writer) => EditorFields.WriteEditor(writer);
 
@@ -88,12 +123,15 @@ public abstract class TypeTreeObject : NullObject
 
 		public override void ReadRelease(ref EndianSpanReader reader)
 		{
+			playerSettingsRuntimeWord = null;
 			ReleaseFields.Read(ref reader, Collection.Version, Collection.Flags);
+			CompletePlayerSettingsRead(ref reader);
 			ConvertFields(ReleaseFields, EditorFields);
 		}
 
 		public override void ReadEditor(ref EndianSpanReader reader)
 		{
+			playerSettingsRuntimeWord = null;
 			EditorFields.Read(ref reader, Collection.Version, Collection.Flags);
 			ConvertFields(EditorFields, ReleaseFields);
 		}
@@ -119,6 +157,7 @@ public abstract class TypeTreeObject : NullObject
 
 		public override void Reset()
 		{
+			playerSettingsRuntimeWord = null;
 			ReleaseFields.Reset();
 			EditorFields.Reset();
 		}

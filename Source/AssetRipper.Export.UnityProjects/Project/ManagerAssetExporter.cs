@@ -9,7 +9,7 @@ public class ManagerAssetExporter : YamlExporterBase
 {
 	public override bool TryCreateCollection(IUnityObjectBase asset, [NotNullWhen(true)] out IExportCollection? exportCollection)
 	{
-		if (asset is IGlobalGameManager or TypeTreeObject { IsPlayerSettings: true })
+		if (asset is IGlobalGameManager or TypeTreeObject { IsGlobalGameManager: true })
 		{
 			exportCollection = asset is IEditorBuildSettings editorBuildSettings
 				? new EditorBuildSettingsExportCollection(this, editorBuildSettings)

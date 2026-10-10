@@ -6,6 +6,13 @@ namespace AssetRipper.SerializationLogic;
 
 public readonly partial struct FieldSerializer
 {
+	public bool TryCreateSerializableType(TypeSignature signature,
+		[NotNullWhen(true)] out SerializableType? result,
+		[NotNullWhen(false)] out string? failureReason)
+	{
+		return TryCreateSerializableType(signature, new(runtimeContext?.SignatureComparer), new(), out result, out failureReason);
+	}
+
 	public bool TryCreateSerializableType(TypeDefinition typeDefinition,
 		[NotNullWhen(true)] out SerializableType? result,
 		[NotNullWhen(false)] out string? failureReason)
@@ -200,8 +207,9 @@ public readonly partial struct FieldSerializer
 			{
 				if (fieldDefinition.HasSerializeReferenceAttribute())
 				{
-					failureReason = $"{fieldDefinition.DeclaringType?.FullName}.{fieldDefinition.Name} uses the [SerializeReference] attribute, which is currently not supported.";
-					return false;
+					int referenceArrayDepth = fieldType is SzArrayTypeSignature || AsmUtils.IsGenericList(fieldType, runtimeContext) ? 1 : 0;
+					fields.Add(new(SerializableManagedReferenceType.Instance, referenceArrayDepth, fieldDefinition.Name ?? "", false));
+					continue;
 				}
 
 				int arrayDepth = 0;
@@ -313,7 +321,8 @@ public readonly partial struct FieldSerializer
 				return TryCreateSerializableField(typeStack, name, szArrayTypeSignature.BaseType, arrayDepth + 1, typeCache, out result, out failureReason);
 
 			case GenericInstanceTypeSignature genericInstanceTypeSignature:
-				if (genericInstanceTypeSignature.InheritsFromObject(runtimeContext))
+				if (genericInstanceTypeSignature.GenericType is { Namespace.Value: "UnityEngine", Name.Value: "LazyLoadReference`1" }
+					|| genericInstanceTypeSignature.InheritsFromObject(runtimeContext))
 				{
 					result = new Field(SerializablePointerType.Shared, arrayDepth, name, true);
 					failureReason = null;

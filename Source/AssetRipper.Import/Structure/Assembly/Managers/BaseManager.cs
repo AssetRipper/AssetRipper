@@ -176,7 +176,7 @@ public class BaseManager : IAssemblyManager
 		{
 			return default;
 		}
-		return new ScriptIdentifier(assembly, type.Namespace ?? "", type.Name ?? "");
+		return new ScriptIdentifier(assembly, @namespace, name);
 	}
 
 	public bool TryGetSerializableType(
@@ -255,15 +255,38 @@ public class BaseManager : IAssemblyManager
 			return null;
 		}
 
+		string[] names = name.Replace('+', '/').Split('/');
 		foreach (ModuleDefinition module in definition.Modules)
 		{
-			TypeDefinition? type = module.GetType(@namespace, name);
+			TypeDefinition? type = FindNestedType(module.GetType(@namespace, names[0]));
 			if (type != null)
 			{
 				return type;
 			}
+			// Unity's facade assemblies forward engine types to their module assemblies.
+			foreach (ExportedType exportedType in module.ExportedTypes)
+			{
+				if (exportedType.Namespace == @namespace && exportedType.Name == names[0])
+				{
+					exportedType.Resolve(RuntimeContext, out type);
+					type = FindNestedType(type);
+					if (type is not null)
+					{
+						return type;
+					}
+				}
+			}
 		}
 		return null;
+
+		TypeDefinition? FindNestedType(TypeDefinition? type)
+		{
+			foreach (string nestedName in names.Skip(1))
+			{
+				type = type?.NestedTypes.FirstOrDefault(t => t.Name == nestedName);
+			}
+			return type;
+		}
 	}
 
 	protected TypeDefinition? FindType(ScriptIdentifier scriptID)
