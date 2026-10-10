@@ -6,6 +6,7 @@ using AssetRipper.Assets.Traversal;
 using AssetRipper.Import.Structure.Assembly.Serializable;
 using AssetRipper.Import.Structure.Assembly.TypeTrees;
 using AssetRipper.IO.Endian;
+using AssetRipper.SerializationLogic;
 using System.Diagnostics;
 
 namespace AssetRipper.Import.AssetCreation;
@@ -35,8 +36,11 @@ public abstract class TypeTreeObject : NullObject
 		}
 		for (int i = 0; i < ReleaseFields.Type.Fields.Count; i++)
 		{
-			var field = ReleaseFields.Type.Fields[i];
-			if (field.Name == "allowedHttpConnections") writer.Write(runtimeWord);
+			SerializableType.Field field = ReleaseFields.Type.Fields[i];
+			if (field.Name == "allowedHttpConnections")
+			{
+				writer.Write(runtimeWord);
+			}
 			ReleaseFields.Fields[i].Write(writer, field);
 		}
 	}

@@ -1,4 +1,5 @@
 using AssetRipper.Assets;
+using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Generics;
 using AssetRipper.Assets.IO.Writing;
 using AssetRipper.Assets.Metadata;
@@ -18,15 +19,15 @@ public class Unity6000_5CompatibilityTests
 
 	[TestCase(129, "PlayerSettings")]
 	[TestCase(55, "PhysicsManager")]
-	public void NativePlayerSettingsPreserveTheExactEditorFixture(int classID, string name)
+	public void NativeManagersPreserveTheExactEditorFixture(int classID, string name)
 	{
 		byte[] bytes = ReadFixture(name + ".release.bin");
-		var collection = AssetCreator.CreateCollection(Version);
+		ProcessedAssetCollection collection = AssetCreator.CreateCollection(Version);
 		collection.SetLayout(Version, BuildTarget.StandaloneWin64Player, TransferInstructionFlags.SerializeGameRelease);
 		using MonoManager manager = new(_ => { });
-		var asset = new GameAssetFactory(manager).ReadAsset(new AssetInfo(collection, 1, classID), new ReadOnlyArraySegment<byte>(bytes), null, []);
+		IUnityObjectBase? asset = new GameAssetFactory(manager).ReadAsset(new AssetInfo(collection, 1, classID), new ReadOnlyArraySegment<byte>(bytes), null, []);
 		Assert.That(asset, Is.InstanceOf<TypeTreeObject>());
-		var settings = (TypeTreeObject)asset!;
+		TypeTreeObject settings = (TypeTreeObject)asset!;
 		if (classID == 129)
 		{
 			Assert.That(settings.EditorFields["cloudEnabled"].AsBoolean, Is.True);
@@ -54,7 +55,7 @@ public class Unity6000_5CompatibilityTests
 		EndianSpanReader reader = new(bytes, EndianType.LittleEndian);
 		style.ReadEditor(ref reader);
 		Assert.That(reader.Position, Is.EqualTo(bytes.Length));
-		var collection = AssetCreator.CreateCollection(Version);
+		ProcessedAssetCollection collection = AssetCreator.CreateCollection(Version);
 		using MemoryStream output = new();
 		using AssetWriter writer = new(output, collection);
 		style.WriteEditor(writer);

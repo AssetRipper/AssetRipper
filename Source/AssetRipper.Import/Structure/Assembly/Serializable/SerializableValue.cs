@@ -828,19 +828,31 @@ public record struct SerializableValue([property: DebuggerBrowsable(DebuggerBrow
 			switch (Unsafe.SizeOf<T>())
 			{
 				case 2:
-					foreach (ushort value in MemoryMarshal.Cast<byte, ushort>(bytes)) writer.Write(value);
+					foreach (ushort value in MemoryMarshal.Cast<byte, ushort>(bytes))
+					{
+						writer.Write(value);
+					}
 					break;
 				case 4:
-					foreach (uint value in MemoryMarshal.Cast<byte, uint>(bytes)) writer.Write(value);
+					foreach (uint value in MemoryMarshal.Cast<byte, uint>(bytes))
+					{
+						writer.Write(value);
+					}
 					break;
 				case 8:
-					foreach (ulong value in MemoryMarshal.Cast<byte, ulong>(bytes)) writer.Write(value);
+					foreach (ulong value in MemoryMarshal.Cast<byte, ulong>(bytes))
+					{
+						writer.Write(value);
+					}
 					break;
 				default:
 					throw new NotSupportedException(typeof(T).FullName);
 			}
 		}
-		if (writer.AssetCollection.Version.GreaterThanOrEquals(2017)) writer.AlignStream();
+		if (writer.AssetCollection.Version.GreaterThanOrEquals(2017))
+		{
+			writer.AlignStream();
+		}
 	}
 
 	public readonly void WalkEditor(AssetWalker walker, in SerializableType.Field etalon)
