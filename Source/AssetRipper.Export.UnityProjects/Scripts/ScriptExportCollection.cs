@@ -1,5 +1,6 @@
 using AsmResolver.DotNet;
 using AssetRipper.Assets;
+using AssetRipper.Export.Configuration;
 using AssetRipper.Export.UnityProjects.Scripts.AssemblyDefinitions;
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure.Assembly;
@@ -59,6 +60,11 @@ public sealed class ScriptExportCollection : ScriptExportCollectionBase
 		Dictionary<string, AssemblyDefinitionDetails> assemblyDefinitionDetailsDictionary = new();
 
 		string pluginsFolder = fileSystem.Path.Join(assetsDirectoryPath, "Plugins");
+		if (AssetExporter.ExportMode is ScriptExportMode.Hybrid)
+		{
+			UnityScriptAssemblyProcessor.Process(AssetExporter.AssemblyManager);
+			UnityRendererAssemblyProcessor.Process(AssetExporter.AssemblyManager);
+		}
 
 		foreach (AssemblyDefinition assembly in AssetExporter.AssemblyManager.GetAssemblies())
 		{

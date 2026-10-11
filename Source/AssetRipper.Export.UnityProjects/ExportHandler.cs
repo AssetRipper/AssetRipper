@@ -1,4 +1,4 @@
-﻿using AssetRipper.Assets.Bundles;
+using AssetRipper.Assets.Bundles;
 using AssetRipper.Export.Configuration;
 using AssetRipper.Export.UnityProjects.PathIdMapping;
 using AssetRipper.Export.UnityProjects.Project;
@@ -85,6 +85,7 @@ public class ExportHandler
 		yield return new AnimatorControllerProcessor();
 		yield return new AudioMixerProcessor();
 		yield return new EditorFormatProcessor(Settings.ProcessingSettings.BundledAssetsExportMode);
+		yield return new RenderPipelineSettingsProcessor();
 		//Static mesh separation goes here
 		yield return new LightingDataProcessor();//Needs to be after static mesh separation
 		yield return new PrefabProcessor();

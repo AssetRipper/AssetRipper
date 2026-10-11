@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace AssetRipper.Export.UnityProjects.Project;
@@ -56,7 +56,10 @@ public record class PackageManifest([property: JsonPropertyName("dependencies")]
 		Dependencies.TryAdd("com.unity.modules.unitywebrequestwww", "1.0.0");
 		Dependencies.TryAdd("com.unity.modules.vehicles", "1.0.0");
 		Dependencies.TryAdd("com.unity.modules.video", "1.0.0");
-		Dependencies.TryAdd("com.unity.modules.vr", "1.0.0");
+		if (version.LessThan(6000, 5))
+		{
+			Dependencies.TryAdd("com.unity.modules.vr", "1.0.0");
+		}
 		Dependencies.TryAdd("com.unity.modules.wind", "1.0.0");
 		Dependencies.TryAdd("com.unity.modules.xr", "1.0.0");
 	}

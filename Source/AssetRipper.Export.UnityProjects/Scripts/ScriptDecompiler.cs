@@ -1,4 +1,4 @@
-﻿using AsmResolver.DotNet;
+using AsmResolver.DotNet;
 using AssetRipper.Export.Scripts;
 using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Logging;
@@ -7,6 +7,7 @@ using AssetRipper.Import.Structure.Assembly.Managers;
 using ICSharpCode.Decompiler;
 using ICSharpCode.Decompiler.CSharp;
 using ICSharpCode.Decompiler.CSharp.ProjectDecompiler;
+using ICSharpCode.Decompiler.TypeSystem;
 
 namespace AssetRipper.Export.UnityProjects.Scripts;
 
@@ -61,6 +62,14 @@ internal class ScriptDecompiler
 
 	private sealed class CustomWholeProjectDecompiler(DecompilerSettings settings, ILSpyAssemblyResolver assemblyResolver, FileSystem fileSystem) : ILSpyWholeProjectDecompiler(settings, assemblyResolver, NullProjectFileWriter.Instance, fileSystem)
 	{
+		protected override CSharpDecompiler CreateDecompiler(DecompilerTypeSystem typeSystem)
+		{
+			CSharpDecompiler decompiler = base.CreateDecompiler(typeSystem);
+			decompiler.AstTransforms.Add(new UnityScriptTransform());
+			decompiler.AstTransforms.Add(new UnityIlPostProcessingTransform());
+			return decompiler;
+		}
+
 		protected override TextWriter CreateFile(string path)
 		{
 			if (FileSystem.Path.GetFileName(path) is "UnitySourceGeneratedAssemblyMonoScriptTypes_v1.cs")
