@@ -9,6 +9,7 @@ using AssetRipper.Export.UnityProjects.Miscellaneous;
 using AssetRipper.Export.UnityProjects.Project;
 using AssetRipper.Export.UnityProjects.RawAssets;
 using AssetRipper.Export.UnityProjects.Scripts;
+using AssetRipper.Export.UnityProjects.Scripts.UnityPackages;
 using AssetRipper.Export.UnityProjects.Shaders;
 using AssetRipper.Export.UnityProjects.Terrains;
 using AssetRipper.Export.UnityProjects.Textures;
@@ -146,6 +147,12 @@ partial class ProjectExporter
 			_ => new DummyShaderTextExporter(),
 		});
 		OverrideExporter<IShader>(new SimpleShaderExporter());
+		if (settings.ExportSettings.ReferenceUnityPackages
+			&& assemblyManager.IsSet
+			&& UnityPackageIndex.GetForProject(settings.Version, settings.ExportSettings.UnityEditorPath) is { } packageIndex)
+		{
+			OverrideExporter<IShader>(new PackageShaderExporter(packageIndex, packageIndex.GetReferencedPackageNames(assemblyManager.GetAssemblies())));
+		}
 
 		//Audio exporters
 		OverrideExporter<IAudioClip>(new YamlAudioExporter());

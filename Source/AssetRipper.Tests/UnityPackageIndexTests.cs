@@ -9,6 +9,7 @@ internal class UnityPackageIndexTests
 	private const string ReferencedScriptGuid = "fedcba9876543210fedcba9876543210";
 	private const string SampleScriptGuid = "00112233445566778899aabbccddeeff";
 	private const string AssemblyDefinitionGuid = "aaaabbbbccccddddeeeeffff00001111";
+	private const string ShaderGuid = "11112222333344445555666677778888";
 
 	private string editorDirectory = "";
 
@@ -33,6 +34,14 @@ internal class UnityPackageIndexTests
 		Write(package, "Samples~/Example.Samples.asmdef", """{ "name": "Example.Samples" }""");
 		Write(package, "Samples~/SampleBehaviour.cs", "public class SampleBehaviour : UnityEngine.MonoBehaviour { }\n");
 		Write(package, "Samples~/SampleBehaviour.cs.meta", $"fileFormatVersion: 2\nguid: {SampleScriptGuid}\n");
+
+		Write(package, "Shaders/Lit.shader", "// Shader \"Commented/Out\"\nShader \"Example/Lit\"\n{\n\tSubShader { Pass { } }\n}\n");
+		Write(package, "Shaders/Lit.shader.meta", $"fileFormatVersion: 2\nguid: {ShaderGuid}\n");
+		// Two files declaring the same name
+		Write(package, "Shaders/Copy1.shader", "Shader \"Example/Duplicate\" { }\n");
+		Write(package, "Shaders/Copy1.shader.meta", $"fileFormatVersion: 2\nguid: {SampleScriptGuid}\n");
+		Write(package, "Shaders/Copy2.shader", "Shader \"Example/Duplicate\" { }\n");
+		Write(package, "Shaders/Copy2.shader.meta", $"fileFormatVersion: 2\nguid: {ReferencedScriptGuid}\n");
 
 		static void Write(string root, string relativePath, string text)
 		{
@@ -85,5 +94,25 @@ internal class UnityPackageIndexTests
 	{
 		UnityPackageIndex index = UnityPackageIndex.Load(editorDirectory, new UnityVersion(6000, 3));
 		Assert.That(index.TryGetAssembly("Example.Samples", out _), Is.False);
+	}
+
+	[Test]
+	public void ShadersAreMappedByTheNameTheyDeclare()
+	{
+		UnityPackageIndex index = UnityPackageIndex.Load(editorDirectory, new UnityVersion(6000, 3));
+		Assert.That(index.TryGetShader("Example/Lit", out PackageShader? shader), Is.True);
+		using (Assert.EnterMultipleScope())
+		{
+			Assert.That(shader!.Guid, Is.EqualTo(UnityGuid.Parse(ShaderGuid)));
+			Assert.That(shader.PackageName, Is.EqualTo("com.example.package"));
+			Assert.That(index.TryGetShader("Commented/Out", out _), Is.False);
+		}
+	}
+
+	[Test]
+	public void ShaderNamesDeclaredTwiceAreNotMapped()
+	{
+		UnityPackageIndex index = UnityPackageIndex.Load(editorDirectory, new UnityVersion(6000, 3));
+		Assert.That(index.TryGetShader("Example/Duplicate", out _), Is.False);
 	}
 }

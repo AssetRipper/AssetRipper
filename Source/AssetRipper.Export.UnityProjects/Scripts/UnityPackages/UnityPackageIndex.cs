@@ -12,6 +12,8 @@ namespace AssetRipper.Export.UnityProjects.Scripts.UnityPackages;
 /// <remarks>
 /// Each assembly defined by a package is mapped to the package and to the guids of its script files,
 /// so that game assemblies built from a package can be replaced with a reference to that package.
+/// Shader files are indexed by the shader name they declare, so that game shaders compiled from a package
+/// can be replaced in the same way.
 /// </remarks>
 public sealed partial class UnityPackageIndex
 {
@@ -20,6 +22,10 @@ public sealed partial class UnityPackageIndex
 	/// The package assembly declaring each type, by full name. Nested types are included as if they were top level.
 	/// </summary>
 	private readonly Dictionary<string, PackageAssembly> typeOwners = new();
+	/// <summary>
+	/// The package shader declaring each shader name, or null if several packages declare it.
+	/// </summary>
+	private readonly Dictionary<string, PackageShader?> shaders;
 
 	/// <summary>
 	/// The directory of the editor installation that the packages were read from.
@@ -28,11 +34,12 @@ public sealed partial class UnityPackageIndex
 
 	public UnityVersion EditorVersion { get; }
 
-	private UnityPackageIndex(string editorDirectory, UnityVersion editorVersion, Dictionary<string, PackageAssembly> assemblies)
+	private UnityPackageIndex(string editorDirectory, UnityVersion editorVersion, Dictionary<string, PackageAssembly> assemblies, Dictionary<string, PackageShader?> shaders)
 	{
 		EditorDirectory = editorDirectory;
 		EditorVersion = editorVersion;
 		this.assemblies = assemblies;
+		this.shaders = shaders;
 		foreach (PackageAssembly assembly in assemblies.Values)
 		{
 			foreach (string typeName in assembly.DeclaredTypes)
@@ -45,6 +52,23 @@ public sealed partial class UnityPackageIndex
 	public bool TryGetAssembly(string assemblyName, [NotNullWhen(true)] out PackageAssembly? assembly)
 	{
 		return assemblies.TryGetValue(assemblyName, out assembly);
+	}
+
+	/// <summary>
+	/// Get the package shader file that declares a shader name, if exactly one package declares it.
+	/// </summary>
+	public bool TryGetShader(string shaderName, [NotNullWhen(true)] out PackageShader? shader)
+	{
+		shader = shaders.GetValueOrDefault(shaderName);
+		return shader is not null;
+	}
+
+	/// <summary>
+	/// Get the names of the packages whose assemblies replace any of these game assemblies.
+	/// </summary>
+	public HashSet<string> GetReferencedPackageNames(IEnumerable<AsmResolver.DotNet.AssemblyDefinition> gameAssemblies)
+	{
+		return gameAssemblies.SelectMany(GetReplacements).Select(a => a.PackageName).ToHashSet();
 	}
 
 	/// <summary>
@@ -116,12 +140,13 @@ public sealed partial class UnityPackageIndex
 			?? throw new DirectoryNotFoundException($"No package manager directory was found in '{editorDirectory}'.");
 
 		Dictionary<string, PackageAssembly> assemblies = new();
+		Dictionary<string, PackageShader?> shaders = new();
 		string builtInDirectory = Path.Join(packageManagerDirectory, "BuiltInPackages");
 		if (Directory.Exists(builtInDirectory))
 		{
 			foreach (string packageDirectory in Directory.EnumerateDirectories(builtInDirectory))
 			{
-				AddPackage(assemblies, ReadDirectory(packageDirectory));
+				AddPackage(assemblies, shaders, ReadDirectory(packageDirectory));
 			}
 		}
 		string archiveDirectory = Path.Join(packageManagerDirectory, "Editor");
@@ -131,7 +156,7 @@ public sealed partial class UnityPackageIndex
 			{
 				try
 				{
-					AddPackage(assemblies, ReadArchive(archivePath));
+					AddPackage(assemblies, shaders, ReadArchive(archivePath));
 				}
 				catch (Exception ex) when (ex is IOException or InvalidDataException or JsonException)
 				{
@@ -139,7 +164,7 @@ public sealed partial class UnityPackageIndex
 				}
 			}
 		}
-		return new UnityPackageIndex(editorDirectory, editorVersion, assemblies);
+		return new UnityPackageIndex(editorDirectory, editorVersion, assemblies, shaders);
 	}
 
 	/// <summary>
@@ -157,7 +182,7 @@ public sealed partial class UnityPackageIndex
 		return candidates.FirstOrDefault(c => Directory.Exists(Path.Join(c, "BuiltInPackages")) || Directory.Exists(Path.Join(c, "Editor")) && Path.GetFileName(c) == "PackageManager");
 	}
 
-	private static void AddPackage(Dictionary<string, PackageAssembly> assemblies, PackageContents? contents)
+	private static void AddPackage(Dictionary<string, PackageAssembly> assemblies, Dictionary<string, PackageShader?> shaders, PackageContents? contents)
 	{
 		if (contents is null)
 		{
@@ -167,6 +192,11 @@ public sealed partial class UnityPackageIndex
 		{
 			// Assembly names are unique within an editor, so a duplicate means a malformed package.
 			assemblies.TryAdd(assembly.AssemblyName, assembly);
+		}
+		foreach (PackageShader shader in contents.CreateShaders())
+		{
+			// A name declared by more than one file is ambiguous, so it isn't used.
+			shaders[shader.Name] = shaders.ContainsKey(shader.Name) ? null : shader;
 		}
 	}
 
@@ -220,8 +250,9 @@ public sealed partial class UnityPackageIndex
 		private readonly Dictionary<string, string> scripts = new(); // path => source
 		private readonly Dictionary<string, UnityGuid> metaGuids = new(); // asset path => guid
 		private readonly Dictionary<string, string> assemblyDefinitionPaths = new(); // path => assembly name
+		private readonly Dictionary<string, string> shaderNames = new(); // path => shader name
 
-		public bool IsValid => packageName is not null && packageVersion is not null && assemblyDefinitions.Count > 0;
+		public bool IsValid => packageName is not null && packageVersion is not null && (assemblyDefinitions.Count > 0 || shaderNames.Count > 0);
 
 		public static bool IsRelevant(string path)
 		{
@@ -235,6 +266,8 @@ public sealed partial class UnityPackageIndex
 				|| path.EndsWith(".asmdef", StringComparison.Ordinal)
 				|| path.EndsWith(".asmdef.meta", StringComparison.Ordinal)
 				|| path.EndsWith(".asmref", StringComparison.Ordinal)
+				|| path.EndsWith(".shader", StringComparison.Ordinal)
+				|| path.EndsWith(".shader.meta", StringComparison.Ordinal)
 				|| path.EndsWith("package.json", StringComparison.Ordinal);
 		}
 
@@ -273,9 +306,28 @@ public sealed partial class UnityPackageIndex
 					metaGuids[relativePath[..^".meta".Length]] = guid;
 				}
 			}
+			else if (relativePath.EndsWith(".shader", StringComparison.Ordinal))
+			{
+				Match match = ShaderNameRegex().Match(text);
+				if (match.Success)
+				{
+					shaderNames[relativePath] = match.Groups[1].Value;
+				}
+			}
 			else
 			{
 				scripts[relativePath] = text;
+			}
+		}
+
+		public IEnumerable<PackageShader> CreateShaders()
+		{
+			foreach ((string path, string name) in shaderNames)
+			{
+				if (metaGuids.TryGetValue(path, out UnityGuid guid))
+				{
+					yield return new PackageShader(name, guid, packageName!, packageVersion!);
+				}
 			}
 		}
 
@@ -422,6 +474,12 @@ public sealed partial class UnityPackageIndex
 
 	[GeneratedRegex(@"^guid:\s*([0-9a-fA-F]{32})", RegexOptions.Multiline)]
 	private static partial Regex MetaGuidRegex();
+
+	/// <summary>
+	/// The name declared at the start of a shader file. Lines of comments before it don't match, because they start with a slash.
+	/// </summary>
+	[GeneratedRegex(@"^\s*Shader\s+""([^""]+)""", RegexOptions.Multiline)]
+	private static partial Regex ShaderNameRegex();
 
 	[GeneratedRegex(@"^\s*namespace\s+([\w.]+)", RegexOptions.Multiline)]
 	private static partial Regex NamespaceRegex();
