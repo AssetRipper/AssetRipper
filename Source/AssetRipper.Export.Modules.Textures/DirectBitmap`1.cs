@@ -122,6 +122,29 @@ public sealed class DirectBitmap<TColor, TChannel> : DirectBitmap
 		return new DirectBitmap<TColor, TChannel>(xLength, yLength, zLength, croppedData);
 	}
 
+	public override DirectBitmap<TColor, TChannel> ArrangeLayersInGrid(int columns, int rows)
+	{
+		ArgumentOutOfRangeException.ThrowIfLessThan(columns, 1);
+		ArgumentOutOfRangeException.ThrowIfLessThan(rows, 1);
+		ArgumentOutOfRangeException.ThrowIfLessThan(1L * columns * rows, Depth);
+
+		int gridWidth = Width * columns;
+		DirectBitmap<TColor, TChannel> grid = new(gridWidth, Height * rows, 1);
+		int rowBytes = Width * PixelSize;
+		for (int layer = 0; layer < Depth; layer++)
+		{
+			int cellX = layer % columns * Width;
+			int cellY = layer / columns * Height;
+			for (int y = 0; y < Height; y++)
+			{
+				int sourceIndex = (layer * Height + y) * Width;
+				int destinationIndex = (cellY + y) * gridWidth + cellX;
+				Buffer.BlockCopy(Data, sourceIndex * PixelSize, grid.Data, destinationIndex * PixelSize, rowBytes);
+			}
+		}
+		return grid;
+	}
+
 	public override DirectBitmap<TColor, TChannel> DeepClone()
 	{
 		byte[] data = new byte[Data.Length];

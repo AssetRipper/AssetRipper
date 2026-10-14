@@ -28,6 +28,8 @@ internal sealed class EmptyDirectBitmap : DirectBitmap
 
 	public override EmptyDirectBitmap DeepClone() => this;
 
+	public override EmptyDirectBitmap ArrangeLayersInGrid(int columns, int rows) => this;
+
 	public override void SaveAsBmp(Stream stream)
 	{
 	}

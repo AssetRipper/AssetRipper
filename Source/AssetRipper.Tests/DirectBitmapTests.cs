@@ -26,6 +26,27 @@ public class DirectBitmapTests
 		Assert.That(bitmap.Bits.ToArray(), Is.EqualTo(CreatePixelData(0, 2, 1, 3)));
 	}
 
+	[Test]
+	public void ArrangeLayersInGridPlacesLayersLeftToRightThenTopToBottom()
+	{
+		// Three 1x2 layers, each filled with its own value, in a 2x2 grid with one empty cell.
+		DirectBitmap<ColorRGBA<byte>, byte> bitmap = new(1, 2, 3, CreatePixelData(1, 1, 2, 2, 3, 3));
+
+		DirectBitmap grid = bitmap.ArrangeLayersInGrid(2, 2);
+
+		using (Assert.EnterMultipleScope())
+		{
+			Assert.That(grid.Width, Is.EqualTo(2));
+			Assert.That(grid.Height, Is.EqualTo(4));
+			Assert.That(grid.Depth, Is.EqualTo(1));
+			Assert.That(grid.Bits.ToArray(), Is.EqualTo(CreatePixelData(
+				1, 2,
+				1, 2,
+				3, 0,
+				3, 0)));
+		}
+	}
+
 	private static byte[] CreatePixelData(params byte[] pixelValues)
 	{
 		byte[] data = new byte[pixelValues.Length * Unsafe.SizeOf<ColorRGBA<byte>>()];

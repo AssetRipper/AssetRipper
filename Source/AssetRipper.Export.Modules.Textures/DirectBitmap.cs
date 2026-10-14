@@ -84,6 +84,15 @@ public abstract class DirectBitmap
 
 	public abstract DirectBitmap DeepClone();
 
+	/// <summary>
+	/// Arrange the layers in a grid of a single layer, from left to right and then top to bottom.
+	/// </summary>
+	/// <remarks>
+	/// This is the layout that Unity's texture importer reads as flipbook columns and rows.
+	/// Cells without a layer are left transparent black.
+	/// </remarks>
+	public abstract DirectBitmap ArrangeLayersInGrid(int columns, int rows);
+
 	public void Save(Stream stream, ImageExportFormat format)
 	{
 		switch (format)

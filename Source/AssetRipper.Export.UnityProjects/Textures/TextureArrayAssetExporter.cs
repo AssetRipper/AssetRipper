@@ -26,10 +26,38 @@ public sealed class TextureArrayAssetExporter : BinaryAssetExporter
 	{
 		exportCollection = asset switch
 		{
-			IImageTexture texture when texture.CheckAssetIntegrity() && texture.MainAsset is null => new TextureArrayAssetExportCollection(this, texture),
+			IImageTexture texture when texture.CheckAssetIntegrity() && texture.MainAsset is null && CanBeImported(texture) => new TextureArrayAssetExportCollection(this, texture),
 			_ => null,
 		};
 		return exportCollection is not null;
+	}
+
+	/// <summary>
+	/// Whether the layers fit in an image that Unity can import. If they don't, the texture is exported as a native asset instead.
+	/// </summary>
+	private static bool CanBeImported(IImageTexture texture)
+	{
+		return !TryGetLayerSize(texture, out int width, out int height, out int depth)
+			|| FlipbookLayout.TryCreate(width, height, depth, out _);
+	}
+
+	/// <summary>
+	/// Get the size of each layer and the number of layers, for textures that are imported from a flipbook.
+	/// </summary>
+	internal static bool TryGetLayerSize(IUnityObjectBase asset, out int width, out int height, out int depth)
+	{
+		switch (asset)
+		{
+			case ITexture2DArray texture2DArray:
+				(width, height, depth) = (texture2DArray.Width, texture2DArray.Height, texture2DArray.Depth);
+				return true;
+			case ITexture3D texture3D:
+				(width, height, depth) = (texture3D.Width, texture3D.Height, texture3D.Depth);
+				return true;
+			default:
+				(width, height, depth) = (0, 0, 0);
+				return false;
+		}
 	}
 
 	public override bool Export(IExportContainer container, IUnityObjectBase asset, string path, FileSystem fileSystem)
@@ -73,6 +101,14 @@ public sealed class TextureArrayAssetExporter : BinaryAssetExporter
 					Logger.Log(LogType.Error, LogCategory.Export, $"Texture array '{asset}' has unsupported type '{asset.GetType().Name}'");
 				}
 				return false;
+		}
+
+		if (success && TryGetLayerSize(asset, out int layerWidth, out int layerHeight, out int layerCount)
+			&& FlipbookLayout.TryCreate(layerWidth, layerHeight, layerCount, out FlipbookLayout layout)
+			&& layout.Columns > 1)
+		{
+			// A single column would be too tall for Unity to import.
+			bitmap = bitmap.ArrangeLayersInGrid(layout.Columns, layout.Rows);
 		}
 
 		if (success)
