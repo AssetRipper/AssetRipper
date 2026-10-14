@@ -128,4 +128,27 @@ internal class SerializedFileTests
 			Assert.That(readHeader, Is.EqualTo(header));
 		}
 	}
+
+	[TestCase(0, true)]
+	[TestCase(1000, true)]
+	[TestCase(-1, false)]
+	public void SerializedFileHeaderIsDetectedWhenTheFileHasTrailingData(int extraBytes, bool expected)
+	{
+		const int HeaderDefinedFileSize = 4096;
+		SerializedFileHeader header = new()
+		{
+			Version = FormatVersion.LargeFilesSupport,
+			MetadataSize = 256,
+			FileSize = HeaderDefinedFileSize,
+		};
+		using MemoryStream stream = new();
+		using (EndianWriter writer = new(stream, EndianType.BigEndian))
+		{
+			header.Write(writer);
+		}
+		stream.SetLength(HeaderDefinedFileSize + extraBytes);
+		stream.Position = 0;
+
+		Assert.That(SerializedFile.IsSerializedFile(stream), Is.EqualTo(expected));
+	}
 }

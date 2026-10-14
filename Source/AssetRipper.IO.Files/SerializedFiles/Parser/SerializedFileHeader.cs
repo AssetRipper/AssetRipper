@@ -81,10 +81,14 @@ public sealed record class SerializedFileHeader
 
 		reader.BaseStream.Position = initialPosition;
 
+		// The file may be longer than the header says. Unity reads only the size in the header, so trailing data doesn't
+		// stop a game from working. It's left behind, for example, when an update writes a smaller version of a file over
+		// a larger one without truncating it.
 		return metadataSize >= MetadataMinSize
 			&& headerDefinedFileSize >= HeaderMinSize + MetadataMinSize
+			&& (ulong)metadataSize < headerDefinedFileSize
 			&& fileSize >= 0
-			&& headerDefinedFileSize == (ulong)fileSize;
+			&& headerDefinedFileSize <= (ulong)fileSize;
 	}
 
 	public void Read(Stream stream)
