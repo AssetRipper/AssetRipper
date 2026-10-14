@@ -500,6 +500,29 @@ public class FieldSerializationTests
 		Assert.That(serializableType.Fields.Any(field => field.Type == ManagedReferenceTypes.Registry), Is.False);
 	}
 
+	private class CustomMonoBehaviourWithObjectReferenceFields : UnityEngine.MonoBehaviour
+	{
+		[UnityEngine.SerializeReference]
+		public UnityEngine.MonoBehaviour? single;
+
+		[UnityEngine.SerializeReference]
+		public DerivedObject[]? array;
+	}
+
+	[Test]
+	public void ReferenceAttributeIsIgnoredForEngineObjects()
+	{
+		SerializableType serializableType = SerializableTypes.Create<CustomMonoBehaviourWithObjectReferenceFields>();
+		using (Assert.EnterMultipleScope())
+		{
+			Assert.That(serializableType.Fields, Has.Count.EqualTo(2));
+			Assert.That(serializableType.Fields[0].Type, Is.SameAs(SerializablePointerType.Shared));
+			Assert.That(serializableType.Fields[0].ArrayDepth, Is.EqualTo(0));
+			Assert.That(serializableType.Fields[1].Type, Is.SameAs(SerializablePointerType.Shared));
+			Assert.That(serializableType.Fields[1].ArrayDepth, Is.EqualTo(1));
+		}
+	}
+
 	[Serializable]
 	private class ClassWithRenderingLayerMaskField
 	{

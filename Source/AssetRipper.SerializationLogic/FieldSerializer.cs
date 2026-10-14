@@ -203,13 +203,14 @@ public readonly partial struct FieldSerializer
 			(FieldDefinition fieldDefinition, TypeSignature fieldType) = pair;
 			if (WillUnitySerialize(fieldDefinition, fieldType))
 			{
-				if (fieldDefinition.HasSerializeReferenceAttribute())
+				if (fieldDefinition.HasSerializeReferenceAttribute()
+					&& !GetManagedReferenceElementType(fieldType, out int managedReferenceArrayDepth).InheritsFromObject(runtimeContext))
 				{
 					//The object itself is stored in the managed reference registry, so the field only holds its identifier.
 					SerializableType managedReferenceType = HasStableReferenceIds
 						? ManagedReferenceTypes.ManagedReference
 						: ManagedReferenceTypes.IndexedManagedReference;
-					fields.Add(new Field(managedReferenceType, GetManagedReferenceArrayDepth(fieldType), fieldDefinition.Name ?? "", false));
+					fields.Add(new Field(managedReferenceType, managedReferenceArrayDepth, fieldDefinition.Name ?? "", false));
 					monoType.ContainsSerializeReference = true;
 					continue;
 				}
@@ -301,14 +302,15 @@ public readonly partial struct FieldSerializer
 	}
 
 	/// <summary>
-	/// Get the array depth of a field with the [SerializeReference] attribute.
+	/// Get the element type and array depth of a field with the [SerializeReference] attribute.
 	/// </summary>
 	/// <remarks>
-	/// Unity stores an identifier for each referenced object, so the element type is irrelevant.
+	/// Unity stores an identifier for each referenced object, so the element type only matters for
+	/// <c>UnityEngine.Object</c> types, which ignore the attribute and are serialized as normal object references.
 	/// </remarks>
-	private int GetManagedReferenceArrayDepth(TypeSignature typeSignature)
+	private TypeSignature GetManagedReferenceElementType(TypeSignature typeSignature, out int arrayDepth)
 	{
-		int arrayDepth = 0;
+		arrayDepth = 0;
 		while (true)
 		{
 			if (typeSignature is SzArrayTypeSignature szArrayTypeSignature)
@@ -323,7 +325,7 @@ public readonly partial struct FieldSerializer
 			}
 			else
 			{
-				return arrayDepth;
+				return typeSignature;
 			}
 		}
 	}
