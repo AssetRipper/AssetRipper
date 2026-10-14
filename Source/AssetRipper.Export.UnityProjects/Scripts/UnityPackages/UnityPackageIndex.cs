@@ -16,6 +16,10 @@ namespace AssetRipper.Export.UnityProjects.Scripts.UnityPackages;
 public sealed partial class UnityPackageIndex
 {
 	private readonly Dictionary<string, PackageAssembly> assemblies;
+	/// <summary>
+	/// The package assembly declaring each type, by full name. Nested types are included as if they were top level.
+	/// </summary>
+	private readonly Dictionary<string, PackageAssembly> typeOwners = new();
 
 	/// <summary>
 	/// The directory of the editor installation that the packages were read from.
@@ -29,12 +33,55 @@ public sealed partial class UnityPackageIndex
 		EditorDirectory = editorDirectory;
 		EditorVersion = editorVersion;
 		this.assemblies = assemblies;
+		foreach (PackageAssembly assembly in assemblies.Values)
+		{
+			foreach (string typeName in assembly.DeclaredTypes)
+			{
+				typeOwners.TryAdd(typeName, assembly);
+			}
+		}
 	}
 
 	public bool TryGetAssembly(string assemblyName, [NotNullWhen(true)] out PackageAssembly? assembly)
 	{
 		return assemblies.TryGetValue(assemblyName, out assembly);
 	}
+
+	/// <summary>
+	/// Get the package assemblies that replace a game assembly, or an empty list if it doesn't come from a package.
+	/// </summary>
+	/// <remarks>
+	/// Usually this is the package assembly with the same name. However, packages sometimes move types into differently
+	/// named assemblies in newer versions. A game assembly whose types are mostly declared by packages is replaced by the
+	/// package assemblies that declare them, since keeping it would define those types twice (error CS0433).
+	/// </remarks>
+	public IReadOnlyList<PackageAssembly> GetReplacements(AsmResolver.DotNet.AssemblyDefinition assembly)
+	{
+		if (assembly.Name?.Value is not { } name || ReferenceAssemblies.IsPredefinedAssembly(name))
+		{
+			return [];
+		}
+		if (assemblies.TryGetValue(name, out PackageAssembly? sameName))
+		{
+			return [sameName];
+		}
+
+		string[] typeNames = assembly.ManifestModule?.TopLevelTypes
+			.Where(t => t.Name?.Value is { } n && n != "<Module>" && !n.StartsWith('<') && !n.StartsWith("__", StringComparison.Ordinal))
+			.Select(t => GetFullName(t.Namespace?.Value ?? "", t.Name!.Value))
+			.ToArray() ?? [];
+		if (typeNames.Length == 0)
+		{
+			return [];
+		}
+		PackageAssembly[] owners = typeNames.Select(t => typeOwners.GetValueOrDefault(t)).OfType<PackageAssembly>().ToArray();
+		const double RequiredFraction = 0.5;
+		return owners.Length >= typeNames.Length * RequiredFraction
+			? owners.Distinct().ToArray()
+			: [];
+	}
+
+	private static string GetFullName(string @namespace, string name) => @namespace.Length == 0 ? name : $"{@namespace}.{name}";
 
 	private static readonly Dictionary<string, UnityPackageIndex> cache = new();
 
@@ -250,9 +297,18 @@ public sealed partial class UnityPackageIndex
 
 			foreach ((string path, string source) in scripts)
 			{
-				if (!metaGuids.TryGetValue(path, out UnityGuid guid)
-					|| GetOwningAssembly(GetDirectory(path)) is not { } assemblyName
+				if (GetOwningAssembly(GetDirectory(path)) is not { } assemblyName
 					|| !result.TryGetValue(assemblyName, out PackageAssembly? assembly))
+				{
+					continue;
+				}
+
+				foreach (string typeName in FindDeclaredTypes(source))
+				{
+					assembly.AddDeclaredType(typeName);
+				}
+
+				if (!metaGuids.TryGetValue(path, out UnityGuid guid))
 				{
 					continue;
 				}
@@ -338,6 +394,31 @@ public sealed partial class UnityPackageIndex
 		}
 		return true;
 	}
+
+	/// <summary>
+	/// Find the full names of the types declared in a source file.
+	/// </summary>
+	/// <remarks>
+	/// Like <see cref="TryFindNamespace"/>, this is a lightweight scan. Each type is given the last namespace declared before it,
+	/// and nested types are treated as top level. It's only used to estimate how much of an assembly a package declares.
+	/// </remarks>
+	private static IEnumerable<string> FindDeclaredTypes(string source)
+	{
+		MatchCollection namespaces = NamespaceRegex().Matches(source);
+		int namespaceIndex = -1;
+		foreach (Match type in TypeDeclarationRegex().Matches(source))
+		{
+			while (namespaceIndex + 1 < namespaces.Count && namespaces[namespaceIndex + 1].Index < type.Index)
+			{
+				namespaceIndex++;
+			}
+			string @namespace = namespaceIndex >= 0 ? namespaces[namespaceIndex].Groups[1].Value : "";
+			yield return GetFullName(@namespace, type.Groups[1].Value);
+		}
+	}
+
+	[GeneratedRegex(@"\b(?:class|struct|interface|enum|record)\s+(\w+)")]
+	private static partial Regex TypeDeclarationRegex();
 
 	[GeneratedRegex(@"^guid:\s*([0-9a-fA-F]{32})", RegexOptions.Multiline)]
 	private static partial Regex MetaGuidRegex();

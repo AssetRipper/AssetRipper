@@ -37,11 +37,14 @@ public class PackageManifestPostExporter : IPostExporter
 		{
 			return;
 		}
-		foreach (string assemblyName in gameData.AssemblyManager.GetAssemblies().Select(a => a.Name?.ToString()).OfType<string>().Order())
+		foreach (AsmResolver.DotNet.AssemblyDefinition gameAssembly in gameData.AssemblyManager.GetAssemblies().OrderBy(a => a.Name?.Value))
 		{
-			if (index.TryGetAssembly(assemblyName, out PackageAssembly? assembly) && manifest.Dependencies.TryAdd(assembly.PackageName, assembly.PackageVersion))
+			foreach (PackageAssembly assembly in index.GetReplacements(gameAssembly))
 			{
-				Logger.Info(LogCategory.Export, $"Referencing package {assembly.PackageName} {assembly.PackageVersion}");
+				if (manifest.Dependencies.TryAdd(assembly.PackageName, assembly.PackageVersion))
+				{
+					Logger.Info(LogCategory.Export, $"Referencing package {assembly.PackageName} {assembly.PackageVersion}");
+				}
 			}
 		}
 		Logger.Info(LogCategory.Export, $"The package versions match Unity {index.EditorVersion}. Open the project with that version.");

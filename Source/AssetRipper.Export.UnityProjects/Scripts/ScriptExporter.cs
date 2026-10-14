@@ -30,6 +30,17 @@ public class ScriptExporter : IAssetExporter
 			{
 				Logger.Warning(LogCategory.Export, $"No Unity editor installation was found for {configuration.Version}, so package assemblies will be exported as plugins.");
 			}
+			else
+			{
+				foreach (AsmResolver.DotNet.AssemblyDefinition assembly in AssemblyManager.GetAssemblies())
+				{
+					IReadOnlyList<PackageAssembly> replacements = PackageIndex.GetReplacements(assembly);
+					if (replacements.Count > 0)
+					{
+						packageReplacements[assembly.Name!] = replacements;
+					}
+				}
+			}
 		}
 	}
 
@@ -39,6 +50,10 @@ public class ScriptExporter : IAssetExporter
 	/// The packages that assemblies can be replaced with, or null if packages aren't referenced.
 	/// </summary>
 	public UnityPackageIndex? PackageIndex { get; }
+	/// <summary>
+	/// The package assemblies replacing each game assembly that comes from a package.
+	/// </summary>
+	private readonly Dictionary<string, IReadOnlyList<PackageAssembly>> packageReplacements = new();
 	private readonly HashSet<string> missingPackageScripts = new();
 	internal ScriptDecompiler Decompiler { get; }
 	internal Dictionary<string, UnityGuid> ReferenceAssemblyDictionary { get; }
@@ -93,13 +108,16 @@ public class ScriptExporter : IAssetExporter
 	private MetaPtr CreatePackageExportPointer(IMonoScript script)
 	{
 		string assemblyName = script.GetAssemblyNameFixed();
-		PackageAssembly assembly = PackageIndex!.TryGetAssembly(assemblyName, out PackageAssembly? a) ? a : throw new InvalidOperationException();
+		IReadOnlyList<PackageAssembly> replacements = packageReplacements[assemblyName];
 		string @namespace = script.Namespace.String;
 		string className = script.GetNonGenericClassName();
-		if (assembly.TryGetScriptGuid(@namespace, className, out UnityGuid guid))
+		foreach (PackageAssembly assembly in replacements)
 		{
-			// Like decompiled scripts, a script file in a package has the main object of the MonoScript class.
-			return new(MonoScriptDecompiledFileID, guid, AssetType.Meta);
+			if (assembly.TryGetScriptGuid(@namespace, className, out UnityGuid guid))
+			{
+				// Like decompiled scripts, a script file in a package has the main object of the MonoScript class.
+				return new(MonoScriptDecompiledFileID, guid, AssetType.Meta);
+			}
 		}
 
 		lock (missingPackageScripts)
@@ -107,7 +125,8 @@ public class ScriptExporter : IAssetExporter
 			if (missingPackageScripts.Add($"{assemblyName}:{@namespace}.{className}"))
 			{
 				// Builds contain a MonoScript for many types that are never used as components, so this is usually harmless.
-				Logger.Info(LogCategory.Export, $"Script {@namespace}.{className} was not found in {assembly.PackageName} {assembly.PackageVersion}. Any component using it will have a missing script.");
+				string packages = string.Join(", ", replacements.Select(a => $"{a.PackageName} {a.PackageVersion}").Distinct());
+				Logger.Info(LogCategory.Export, $"Script {@namespace}.{className} was not found in {packages}. Any component using it will have a missing script.");
 			}
 		}
 		return new(ScriptHashing.CalculateScriptFileID(script), ScriptHashing.CalculateAssemblyGuid(script), AssetType.Meta);
@@ -119,7 +138,7 @@ public class ScriptExporter : IAssetExporter
 		{
 			return AssemblyExportType.Skip;
 		}
-		else if (PackageIndex is not null && PackageIndex.TryGetAssembly(assemblyName, out _))
+		else if (packageReplacements.ContainsKey(assemblyName))
 		{
 			return AssemblyExportType.Package;
 		}

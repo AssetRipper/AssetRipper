@@ -13,6 +13,15 @@ public sealed class PackageAssembly(string assemblyName, string packageName, str
 	public string PackageVersion { get; } = packageVersion;
 	public int ScriptCount => scripts.Count;
 
+	private readonly HashSet<string> declaredTypes = new();
+
+	/// <summary>
+	/// The full names of the types declared in this assembly's source files.
+	/// </summary>
+	public IReadOnlyCollection<string> DeclaredTypes => declaredTypes;
+
+	internal void AddDeclaredType(string fullName) => declaredTypes.Add(fullName);
+
 	internal void AddScript(string @namespace, string className, UnityGuid guid)
 	{
 		scripts.TryAdd((@namespace, className), guid);
