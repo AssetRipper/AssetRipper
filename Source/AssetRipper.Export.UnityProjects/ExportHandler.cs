@@ -1,4 +1,4 @@
-using AssetRipper.Assets.Bundles;
+﻿using AssetRipper.Assets.Bundles;
 using AssetRipper.Export.Configuration;
 using AssetRipper.Export.UnityProjects.PathIdMapping;
 using AssetRipper.Export.UnityProjects.Project;
@@ -68,6 +68,11 @@ public class ExportHandler
 		yield return new NullRefReturnProcessor(Settings.ImportSettings.ScriptContentLevel);
 		yield return new UnmanagedConstraintRecoveryProcessor();
 		yield return new MisplacedSerializeFieldRemovalProcessor();
+		if (Settings.ProcessingSettings.ReverseFusionWeaving)
+		{
+			bool decompileAll = Settings.ExportSettings.ScriptExportMode is ScriptExportMode.Decompiled;
+			yield return new FusionWeavingReversalProcessor(name => decompileAll || ReferenceAssemblies.IsPredefinedAssembly(name));
+		}
 		if (Settings.ProcessingSettings.RemoveNullableAttributes)
 		{
 			yield return new NullableRemovalProcessor();
