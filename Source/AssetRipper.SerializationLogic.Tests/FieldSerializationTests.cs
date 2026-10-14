@@ -500,6 +500,26 @@ public class FieldSerializationTests
 		Assert.That(serializableType.Fields.Any(field => field.Type == ManagedReferenceTypes.Registry), Is.False);
 	}
 
+	[Serializable]
+	private class ClassWithRenderingLayerMaskField
+	{
+		public UnityEngine.RenderingLayerMask mask;
+	}
+
+	[Test]
+	public void RenderingLayerMaskPrivateFieldIsSerialized()
+	{
+		SerializableType serializableType = SerializableTypes.Create<ClassWithRenderingLayerMaskField>();
+		Assert.That(serializableType.Fields, Has.Count.EqualTo(1));
+		SerializableType maskType = serializableType.Fields[0].Type;
+		Assert.That(maskType.Fields, Has.Count.EqualTo(1));
+		using (Assert.EnterMultipleScope())
+		{
+			Assert.That(maskType.Fields[0].Name, Is.EqualTo("m_Bits"));
+			Assert.That(maskType.Fields[0].Type.Type, Is.EqualTo(PrimitiveType.UInt));
+		}
+	}
+
 	[Test]
 	public void ManagedReferenceRegistryIsAddedWhenTheNestedTypeWasAlreadyCached()
 	{
