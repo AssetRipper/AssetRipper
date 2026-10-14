@@ -67,6 +67,12 @@ public sealed record class ExportSettings
 	/// </summary>
 	public string? UnityEditorPath { get; set; }
 
+	/// <summary>
+	/// The names of extra assemblies that are decompiled to scripts in <see cref="ScriptExportMode.Hybrid"/> mode,
+	/// in addition to predefined assemblies like Assembly-CSharp.
+	/// </summary>
+	public string[] DecompiledAssemblies { get; set; } = [];
+
 	public bool SaveSettingsToDisk { get; set; }
 
 	public string? LanguageCode { get; set; }
@@ -85,5 +91,6 @@ public sealed record class ExportSettings
 		Logger.Info(LogCategory.General, $"{nameof(PreferOriginalTextureExtension)}: {PreferOriginalTextureExtension}");
 		Logger.Info(LogCategory.General, $"{nameof(ReferenceUnityPackages)}: {ReferenceUnityPackages}");
 		Logger.Info(LogCategory.General, $"{nameof(UnityEditorPath)}: {UnityEditorPath ?? "(automatic)"}");
+		Logger.Info(LogCategory.General, $"{nameof(DecompiledAssemblies)}: {(DecompiledAssemblies.Length > 0 ? string.Join(", ", DecompiledAssemblies) : "(none)")}");
 	}
 }

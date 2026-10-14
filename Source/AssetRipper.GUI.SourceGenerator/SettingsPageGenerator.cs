@@ -39,7 +39,8 @@ internal static class SettingsPageGenerator
 				writer.WriteLine("switch (key)");
 				using (new CurlyBrackets(writer))
 				{
-					foreach (PropertyData property in properties.Where(p => !p.IsBoolean))
+					// Other types, such as lists, can only be set in the settings file.
+					foreach (PropertyData property in properties.Where(p => p.IsUnityVersion || p.IsEnum || p.IsString))
 					{
 						writer.WriteLine($"case {property.NameOfString}:");
 						using (new Indented(writer))
@@ -59,7 +60,6 @@ internal static class SettingsPageGenerator
 							}
 							else
 							{
-								Debug.Assert(property.IsString);
 								writer.WriteLine("value;");
 							}
 							writer.WriteLine("break;");

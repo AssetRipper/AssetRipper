@@ -5,7 +5,11 @@ namespace AssetRipper.Export.UnityProjects.Scripts.AssemblyDefinitions;
 
 public static class AssemblyDefinitionExporter
 {
-	public static void Export(AssemblyDefinitionDetails details, FileSystem fileSystem, Dictionary<string, UnityGuid> referenceAssemblies)
+	/// <param name="getReferenceNames">
+	/// Gets the assembly definition names to reference for an assembly that the exported one references.
+	/// Engine assemblies and plugins are referenced automatically, so they have none.
+	/// </param>
+	public static void Export(AssemblyDefinitionDetails details, FileSystem fileSystem, Func<string, IEnumerable<string>> getReferenceNames)
 	{
 		string assetPath = fileSystem.Path.Join(details.OutputFolder, $"{details.AssemblyName}.asmdef");
 
@@ -15,12 +19,18 @@ public static class AssemblyDefinitionExporter
 		{
 			foreach (AssemblyReference reference in module.AssemblyReferences)
 			{
-				if (reference.Name is null || referenceAssemblies.ContainsKey(reference.Name))
+				if (reference.Name is null)
 				{
 					continue;
 				}
 
-				asset.References.Add(reference.Name);
+				foreach (string name in getReferenceNames(reference.Name))
+				{
+					if (!asset.References.Contains(name))
+					{
+						asset.References.Add(name);
+					}
+				}
 			}
 		}
 

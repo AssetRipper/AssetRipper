@@ -1,0 +1,228 @@
+using AsmResolver.DotNet;
+using AssetRipper.Export.Configuration;
+using AssetRipper.Import.Logging;
+using AssetRipper.Import.Structure.Assembly;
+using AssetRipper.Import.Structure.Assembly.Managers;
+using AssetRipper.Processing;
+using AssetRipper.SourceGenerated.Classes.ClassID_114;
+using AssetRipper.SourceGenerated.Classes.ClassID_115;
+using AssetRipper.SourceGenerated.Extensions;
+using System.Text;
+
+namespace AssetRipper.Export.UnityProjects.Scripts;
+
+/// <summary>
+/// Writes a report of the assemblies that the exported project depends on, and how each one was exported.
+/// </summary>
+/// <remarks>
+/// Assemblies kept as plugins are usually third-party libraries, which can often be replaced with an official release.
+/// The report shows what each one is and how much the project uses it, so it's clear which are worth replacing.
+/// </remarks>
+public class DependencyReportPostExporter : IPostExporter
+{
+	public const string FileName = "Dependencies.md";
+
+	public void DoPostExport(GameData gameData, FullConfiguration settings, FileSystem fileSystem)
+	{
+		IAssemblyManager assemblyManager = gameData.AssemblyManager;
+		if (!assemblyManager.IsSet)
+		{
+			return;
+		}
+
+		Logger.Info(LogCategory.Export, "Writing dependency report...");
+		ScriptExporter scriptExporter = new(assemblyManager, settings);
+		List<AssemblyDefinition> assemblies = assemblyManager.GetAssemblies().OrderBy(a => a.Name?.Value, StringComparer.OrdinalIgnoreCase).ToList();
+		Dictionary<string, AssemblyUsage> usages = GetUsages(gameData, assemblies);
+		Dictionary<string, AssemblyExportType> exportTypes = assemblies.ToDictionary(a => a.Name!.Value, a => scriptExporter.GetExportType(a.Name!));
+		HashSet<string> neededAssemblies = GetNeededAssemblies(assemblies, usages, exportTypes);
+
+		string text = CreateReport(assemblies, usages, exportTypes, neededAssemblies, scriptExporter);
+		fileSystem.Directory.Create(settings.ProjectRootPath);
+		fileSystem.File.WriteAllText(fileSystem.Path.Join(settings.ProjectRootPath, FileName), text);
+	}
+
+	private static Dictionary<string, AssemblyUsage> GetUsages(GameData gameData, List<AssemblyDefinition> assemblies)
+	{
+		Dictionary<string, AssemblyUsage> usages = assemblies.ToDictionary(a => a.Name!.Value, _ => new AssemblyUsage());
+		foreach (IMonoBehaviour monoBehaviour in gameData.GameBundle.FetchAssets().OfType<IMonoBehaviour>())
+		{
+			if (monoBehaviour.TryGetScript(out IMonoScript? script) && usages.TryGetValue(script.GetAssemblyNameFixed(), out AssemblyUsage? usage))
+			{
+				if (monoBehaviour.GameObjectP is null)
+				{
+					usage.Assets++;
+				}
+				else
+				{
+					usage.Components++;
+				}
+				usage.Classes.Add(script.GetFullName());
+			}
+		}
+		foreach (AssemblyDefinition assembly in assemblies)
+		{
+			foreach (AssemblyReference reference in assembly.ManifestModule?.AssemblyReferences ?? [])
+			{
+				if (reference.Name is not null && usages.TryGetValue(reference.Name, out AssemblyUsage? usage))
+				{
+					usage.ReferencedBy.Add(assembly.Name!);
+				}
+			}
+		}
+		return usages;
+	}
+
+	/// <summary>
+	/// Finds the assemblies that the project needs: those whose scripts are used by assets, those exported as scripts,
+	/// and everything they reference.
+	/// </summary>
+	/// <remarks>
+	/// An assembly can also be loaded by reflection, which this can't see.
+	/// </remarks>
+	private static HashSet<string> GetNeededAssemblies(List<AssemblyDefinition> assemblies, Dictionary<string, AssemblyUsage> usages, Dictionary<string, AssemblyExportType> exportTypes)
+	{
+		Dictionary<string, AssemblyDefinition> byName = assemblies.ToDictionary(a => a.Name!.Value);
+		HashSet<string> needed = new();
+		Stack<string> pending = new(assemblies
+			.Select(a => a.Name!.Value)
+			.Where(name => usages[name].Components + usages[name].Assets > 0 || exportTypes[name] is AssemblyExportType.Decompile));
+		while (pending.TryPop(out string? name))
+		{
+			if (!needed.Add(name))
+			{
+				continue;
+			}
+			foreach (AssemblyReference reference in byName[name].ManifestModule?.AssemblyReferences ?? [])
+			{
+				if (reference.Name is not null && byName.ContainsKey(reference.Name))
+				{
+					pending.Push(reference.Name);
+				}
+			}
+		}
+		return needed;
+	}
+
+	private static string CreateReport(
+		List<AssemblyDefinition> assemblies,
+		Dictionary<string, AssemblyUsage> usages,
+		Dictionary<string, AssemblyExportType> exportTypes,
+		HashSet<string> neededAssemblies,
+		ScriptExporter scriptExporter)
+	{
+		List<AssemblyDefinition> plugins = assemblies.Where(a => exportTypes[a.Name!] is AssemblyExportType.Save).ToList();
+		List<AssemblyDefinition> decompiled = assemblies.Where(a => exportTypes[a.Name!] is AssemblyExportType.Decompile).ToList();
+		List<AssemblyDefinition> packaged = assemblies.Where(a => exportTypes[a.Name!] is AssemblyExportType.Package).ToList();
+		int engineCount = assemblies.Count(a => exportTypes[a.Name!] is AssemblyExportType.Skip);
+
+		StringBuilder sb = new();
+		sb.AppendLine("# Dependencies");
+		sb.AppendLine();
+		sb.AppendLine("Generated by AssetRipper. This lists the assemblies the game was built with and how each one was exported.");
+		sb.AppendLine();
+		sb.AppendLine($"- {decompiled.Count} decompiled to scripts");
+		sb.AppendLine($"- {packaged.Count} replaced with Unity packages");
+		sb.AppendLine($"- {plugins.Count} kept as plugins in `Assets/Plugins`");
+		sb.AppendLine($"- {engineCount} provided by the Unity editor and .NET");
+
+		sb.AppendLine();
+		sb.AppendLine("## Plugins");
+		sb.AppendLine();
+		sb.AppendLine("These are kept as compiled DLLs. Most are third-party libraries, which can be replaced with an official release of the same library.");
+		sb.AppendLine("Swapping one changes the GUIDs of its scripts, so components using them must be remapped or they become missing scripts.");
+		sb.AppendLine();
+		sb.AppendLine("- **Components** and **Assets** count the scene and prefab components, and the asset files, that use the plugin's scripts.");
+		sb.AppendLine("- **Referenced by** lists the assemblies that call into it.");
+		sb.AppendLine("- **Unused** plugins have no scripts in use and nothing needed references them. They can probably be removed, unless the game loads them by reflection.");
+		sb.AppendLine();
+		sb.AppendLine("| Assembly | Version | Product | Company | Components | Assets | Referenced by |");
+		sb.AppendLine("|---|---|---|---|---:|---:|---|");
+		foreach (AssemblyDefinition assembly in plugins)
+		{
+			string name = assembly.Name!;
+			AssemblyUsage usage = usages[name];
+			string displayName = neededAssemblies.Contains(name) ? $"`{name}`" : $"`{name}` (unused)";
+			sb.AppendLine($"| {displayName} | {GetVersion(assembly)} | {Escape(GetAttribute(assembly, "AssemblyProductAttribute"))} | {Escape(GetAttribute(assembly, "AssemblyCompanyAttribute"))} | {usage.Components} | {usage.Assets} | {FormatReferences(usage.ReferencedBy)} |");
+		}
+
+		sb.AppendLine();
+		sb.AppendLine("## Decompiled");
+		sb.AppendLine();
+		sb.AppendLine("These are exported as editable scripts in `Assets/Scripts`.");
+		sb.AppendLine();
+		sb.AppendLine("| Assembly | Version | Components | Assets | Classes in use |");
+		sb.AppendLine("|---|---|---:|---:|---:|");
+		foreach (AssemblyDefinition assembly in decompiled)
+		{
+			AssemblyUsage usage = usages[assembly.Name!];
+			sb.AppendLine($"| `{assembly.Name}` | {GetVersion(assembly)} | {usage.Components} | {usage.Assets} | {usage.Classes.Count} |");
+		}
+
+		sb.AppendLine();
+		sb.AppendLine("## Unity packages");
+		sb.AppendLine();
+		sb.AppendLine("These are replaced with the packages listed in `Packages/manifest.json`.");
+		sb.AppendLine();
+		sb.AppendLine("| Assembly | Package | Components | Assets |");
+		sb.AppendLine("|---|---|---:|---:|");
+		foreach (AssemblyDefinition assembly in packaged)
+		{
+			AssemblyUsage usage = usages[assembly.Name!];
+			string packages = string.Join(", ", scriptExporter.GetPackageReplacements(assembly.Name!).Select(a => $"{a.PackageName} {a.PackageVersion}").Distinct());
+			sb.AppendLine($"| `{assembly.Name}` | {packages} | {usage.Components} | {usage.Assets} |");
+		}
+
+		return sb.ToString();
+	}
+
+	private static string GetVersion(AssemblyDefinition assembly)
+	{
+		string? informationalVersion = GetAttribute(assembly, "AssemblyInformationalVersionAttribute");
+		if (!string.IsNullOrEmpty(informationalVersion))
+		{
+			// Some build tools append the commit hash after a plus sign.
+			int plusIndex = informationalVersion.IndexOf('+');
+			return Escape(plusIndex > 0 ? informationalVersion[..plusIndex] : informationalVersion);
+		}
+		return assembly.Version.ToString();
+	}
+
+	private static string? GetAttribute(AssemblyDefinition assembly, string attributeName)
+	{
+		foreach (CustomAttribute attribute in assembly.CustomAttributes)
+		{
+			if (attribute.Constructor?.DeclaringType is { Namespace.Value: "System.Reflection" } type
+				&& type.Name == attributeName
+				&& attribute.Signature?.FixedArguments is [{ Element: { } value }, ..])
+			{
+				return value.ToString()?.Trim();
+			}
+		}
+		return null;
+	}
+
+	private static string FormatReferences(SortedSet<string> references)
+	{
+		const int MaxShown = 5;
+		if (references.Count == 0)
+		{
+			return "";
+		}
+		string shown = string.Join(", ", references.Take(MaxShown).Select(r => $"`{r}`"));
+		return references.Count > MaxShown ? $"{shown} and {references.Count - MaxShown} more" : shown;
+	}
+
+	private static string Escape(string? text)
+	{
+		return string.IsNullOrEmpty(text) ? "" : text.Replace("|", "\\|").ReplaceLineEndings(" ");
+	}
+
+	private sealed class AssemblyUsage
+	{
+		public int Components { get; set; }
+		public int Assets { get; set; }
+		public HashSet<string> Classes { get; } = new();
+		public SortedSet<string> ReferencedBy { get; } = new(StringComparer.OrdinalIgnoreCase);
+	}
+}

@@ -22,6 +22,7 @@ public class ScriptExporter : IAssetExporter
 			FullyQualifiedTypeNames = configuration.ExportSettings.ScriptTypesFullyQualified,
 		};
 		ExportMode = configuration.ExportSettings.ScriptExportMode;
+		DecompiledAssemblies = configuration.ExportSettings.DecompiledAssemblies.ToHashSet();
 		ReferenceAssemblyDictionary = ReferenceAssemblies.GetReferenceAssemblies(AssemblyManager, configuration.Version);
 		if (configuration.ExportSettings.ReferenceUnityPackages && AssemblyManager.IsSet)
 		{
@@ -46,6 +47,10 @@ public class ScriptExporter : IAssetExporter
 
 	public IAssemblyManager AssemblyManager { get; }
 	public ScriptExportMode ExportMode { get; }
+	/// <summary>
+	/// Extra assemblies that are decompiled in <see cref="ScriptExportMode.Hybrid"/> mode.
+	/// </summary>
+	public IReadOnlySet<string> DecompiledAssemblies { get; }
 	/// <summary>
 	/// The packages that assemblies can be replaced with, or null if packages aren't referenced.
 	/// </summary>
@@ -152,7 +157,7 @@ public class ScriptExporter : IAssetExporter
 		}
 		else if (ExportMode is ScriptExportMode.Hybrid)
 		{
-			return ReferenceAssemblies.IsPredefinedAssembly(assemblyName)
+			return ReferenceAssemblies.IsPredefinedAssembly(assemblyName) || DecompiledAssemblies.Contains(assemblyName)
 				? AssemblyExportType.Decompile
 				: AssemblyExportType.Save;
 		}
@@ -160,6 +165,29 @@ public class ScriptExporter : IAssetExporter
 		{
 			return AssemblyExportType.Save;
 		}
+	}
+
+	/// <summary>
+	/// Gets the package assemblies that replace the game assembly <paramref name="assemblyName"/>.
+	/// </summary>
+	public IReadOnlyList<PackageAssembly> GetPackageReplacements(string assemblyName)
+	{
+		return packageReplacements.TryGetValue(assemblyName, out IReadOnlyList<PackageAssembly>? replacements) ? replacements : [];
+	}
+
+	/// <summary>
+	/// Gets the assembly definitions that a decompiled assembly references in place of the game assembly <paramref name="assemblyName"/>.
+	/// </summary>
+	public IEnumerable<string> GetAssemblyDefinitionReferences(string assemblyName)
+	{
+		return GetExportType(assemblyName) switch
+		{
+			// Predefined assemblies like Assembly-CSharp can't be referenced by an assembly definition.
+			AssemblyExportType.Decompile when !ReferenceAssemblies.IsPredefinedAssembly(assemblyName) => [assemblyName],
+			AssemblyExportType.Package => packageReplacements[assemblyName].Select(a => a.AssemblyName).Distinct(),
+			// Engine assemblies and plugins are referenced automatically.
+			_ => [],
+		};
 	}
 
 	AssetType IAssetExporter.ToExportType(IUnityObjectBase asset) => AssetType.Meta;

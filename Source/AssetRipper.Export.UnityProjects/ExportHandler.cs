@@ -71,7 +71,8 @@ public class ExportHandler
 		if (Settings.ProcessingSettings.ReverseFusionWeaving)
 		{
 			bool decompileAll = Settings.ExportSettings.ScriptExportMode is ScriptExportMode.Decompiled;
-			yield return new FusionWeavingReversalProcessor(name => decompileAll || ReferenceAssemblies.IsPredefinedAssembly(name));
+			HashSet<string> decompiledAssemblies = Settings.ExportSettings.DecompiledAssemblies.ToHashSet();
+			yield return new FusionWeavingReversalProcessor(name => decompileAll || ReferenceAssemblies.IsPredefinedAssembly(name) || decompiledAssemblies.Contains(name));
 		}
 		if (Settings.ProcessingSettings.RemoveNullableAttributes)
 		{
@@ -142,6 +143,7 @@ public class ExportHandler
 		yield return new PackageManifestPostExporter();
 		yield return new StreamingAssetsPostExporter();
 		yield return new DllPostExporter();
+		yield return new DependencyReportPostExporter();
 		yield return new PathIdMapExporter();
 	}
 
