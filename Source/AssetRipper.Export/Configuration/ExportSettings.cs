@@ -56,6 +56,17 @@ public sealed record class ExportSettings
 	/// </summary>
 	public bool PreferOriginalTextureExtension { get; set; } = true;
 
+	/// <summary>
+	/// If true, assemblies that come from Unity packages are replaced with references to those packages,
+	/// using the packages bundled with an installed Unity editor.
+	/// </summary>
+	public bool ReferenceUnityPackages { get; set; } = true;
+
+	/// <summary>
+	/// The Unity editor installation whose bundled packages are referenced, or null to find one automatically.
+	/// </summary>
+	public string? UnityEditorPath { get; set; }
+
 	public bool SaveSettingsToDisk { get; set; }
 
 	public string? LanguageCode { get; set; }
@@ -72,5 +83,7 @@ public sealed record class ExportSettings
 		Logger.Info(LogCategory.General, $"{nameof(TextExportMode)}: {TextExportMode}");
 		Logger.Info(LogCategory.General, $"{nameof(ExportUnreadableAssets)}: {ExportUnreadableAssets}");
 		Logger.Info(LogCategory.General, $"{nameof(PreferOriginalTextureExtension)}: {PreferOriginalTextureExtension}");
+		Logger.Info(LogCategory.General, $"{nameof(ReferenceUnityPackages)}: {ReferenceUnityPackages}");
+		Logger.Info(LogCategory.General, $"{nameof(UnityEditorPath)}: {UnityEditorPath ?? "(automatic)"}");
 	}
 }

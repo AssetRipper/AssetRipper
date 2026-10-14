@@ -14,4 +14,8 @@ public enum AssemblyExportType
 	/// The assembly is a framework assembly and should be skipped.
 	/// </summary>
 	Skip,
+	/// <summary>
+	/// The assembly comes from a Unity package, which is referenced in the package manifest instead.
+	/// </summary>
+	Package,
 }
