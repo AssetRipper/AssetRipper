@@ -66,7 +66,8 @@ public static class SerializedPropertyExtensions
 			6 => "CubeArray",
 			_ => throw new NotSupportedException("Texture dimension isn't supported"),
 		},
-		SerializedPropertyType.Int => "Int",
+		// "Int" declares a float property in ShaderLab. "Integer" is the integer type that this value comes from.
+		SerializedPropertyType.Int => "Integer",
 		_ => throw new NotSupportedException($"Serialized property type {property.Type} isn't supported"),
 	};
 
