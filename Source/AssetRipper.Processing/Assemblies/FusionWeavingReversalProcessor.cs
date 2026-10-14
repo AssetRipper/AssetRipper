@@ -18,9 +18,9 @@ namespace AssetRipper.Processing.Assemblies;
 /// <list type="bullet">
 /// <item>removes the <c>Fusion.CodeGen</c> types and every member marked with <c>[WeaverGenerated]</c>,</item>
 /// <item>restores woven <c>[Networked]</c> properties to their source form: auto-properties, or <c>=> default</c> for read-only ones,</item>
+/// <item>removes the code inserted at the start of RPC methods to send them,</item>
 /// <item>removes the attributes marking types and properties as woven, so that the Fusion weaver processes them again if it's installed.</item>
 /// </list>
-/// RPC methods are left as woven, since that code compiles.
 /// Only assemblies that will be decompiled are processed. Assemblies exported as compiled files keep their woven code, which works as is.
 /// </remarks>
 /// <param name="shouldProcess">Whether an assembly, identified by name, will be decompiled.</param>
@@ -46,8 +46,9 @@ public sealed class FusionWeavingReversalProcessor(Func<string, bool> shouldProc
 				clearedCache = true;
 			}
 			int propertyCount = RestoreNetworkedProperties(module);
+			int rpcCount = RemoveRpcSendCode(module);
 			int memberCount = RemoveGeneratedMembers(module);
-			Logger.Info(LogCategory.Processing, $"Reversed Photon Fusion weaving in {module.Name}: restored {propertyCount} networked properties and removed {memberCount} generated types and members.");
+			Logger.Info(LogCategory.Processing, $"Reversed Photon Fusion weaving in {module.Name}: restored {propertyCount} networked properties and {rpcCount} RPCs, and removed {memberCount} generated types and members.");
 		}
 	}
 
@@ -143,6 +144,61 @@ public sealed class FusionWeavingReversalProcessor(Func<string, bool> shouldProc
 		{
 			body.Instructions.Add(CilOpCodes.Ldnull);
 			body.Instructions.Add(CilOpCodes.Ret);
+		}
+	}
+
+	/// <summary>
+	/// Remove the code that the weaver inserts at the start of RPC methods to send them over the network.
+	/// </summary>
+	/// <remarks>
+	/// A woven RPC starts with <c>if (InvokeRpc) { InvokeRpc = false; } else { /* send the RPC */ }</c>, followed by the original body.
+	/// For static RPCs, the original body is inside the first branch. The check and the reset are replaced with no-ops,
+	/// so the first branch always runs and the sending branch becomes unreachable, which the decompiler leaves out.
+	/// The <c>InvokeRpc</c> fields are internal to Fusion, so this code can't be compiled from source.
+	/// </remarks>
+	private static int RemoveRpcSendCode(ModuleDefinition module)
+	{
+		int count = 0;
+		foreach (MethodDefinition method in module.GetAllTypes().Where(t => !IsCodeGenType(t)).SelectMany(t => t.Methods))
+		{
+			if (method.CilMethodBody is not { } body || !method.CustomAttributes.Any(a => IsFusionAttribute(a, "RpcAttribute")))
+			{
+				continue;
+			}
+
+			CilInstructionCollection instructions = body.Instructions;
+			int check = FindInvokeRpcAccess(instructions, CilCode.Ldfld, CilCode.Ldsfld, 0, 3);
+			if (check < 0 || instructions[check + 1].OpCode.FlowControl != CilFlowControl.ConditionalBranch)
+			{
+				continue;
+			}
+			int reset = FindInvokeRpcAccess(instructions, CilCode.Stfld, CilCode.Stsfld, check + 2, 4);
+			if (reset < 0)
+			{
+				continue;
+			}
+
+			for (int i = 0; i <= reset; i++)
+			{
+				instructions[i].OpCode = CilOpCodes.Nop;
+				instructions[i].Operand = null;
+			}
+			count++;
+		}
+		return count;
+
+		static int FindInvokeRpcAccess(CilInstructionCollection instructions, CilCode instanceCode, CilCode staticCode, int start, int maxCount)
+		{
+			for (int i = start; i < instructions.Count && i < start + maxCount; i++)
+			{
+				CilInstruction instruction = instructions[i];
+				if ((instruction.OpCode.Code == instanceCode || instruction.OpCode.Code == staticCode)
+					&& instruction.Operand is IFieldDescriptor { Name.Value: "InvokeRpc" })
+				{
+					return i;
+				}
+			}
+			return -1;
 		}
 	}
 
