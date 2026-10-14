@@ -26,6 +26,10 @@ public sealed partial class UnityPackageIndex
 	/// The package shader declaring each shader name, or null if several packages declare it.
 	/// </summary>
 	private readonly Dictionary<string, PackageShader?> shaders;
+	/// <summary>
+	/// The packages containing each plugin file name, such as a native library, ignoring case.
+	/// </summary>
+	private readonly Dictionary<string, HashSet<string>> pluginPackages;
 
 	/// <summary>
 	/// The directory of the editor installation that the packages were read from.
@@ -34,12 +38,13 @@ public sealed partial class UnityPackageIndex
 
 	public UnityVersion EditorVersion { get; }
 
-	private UnityPackageIndex(string editorDirectory, UnityVersion editorVersion, Dictionary<string, PackageAssembly> assemblies, Dictionary<string, PackageShader?> shaders)
+	private UnityPackageIndex(string editorDirectory, UnityVersion editorVersion, Dictionary<string, PackageAssembly> assemblies, Dictionary<string, PackageShader?> shaders, Dictionary<string, HashSet<string>> pluginPackages)
 	{
 		EditorDirectory = editorDirectory;
 		EditorVersion = editorVersion;
 		this.assemblies = assemblies;
 		this.shaders = shaders;
+		this.pluginPackages = pluginPackages;
 		foreach (PackageAssembly assembly in assemblies.Values)
 		{
 			foreach (string typeName in assembly.DeclaredTypes)
@@ -61,6 +66,14 @@ public sealed partial class UnityPackageIndex
 	{
 		shader = shaders.GetValueOrDefault(shaderName);
 		return shader is not null;
+	}
+
+	/// <summary>
+	/// Whether one of <paramref name="packageNames"/> contains a plugin file named <paramref name="fileName"/>.
+	/// </summary>
+	public bool HasPluginFile(string fileName, IReadOnlySet<string> packageNames)
+	{
+		return pluginPackages.TryGetValue(fileName, out HashSet<string>? packages) && packages.Overlaps(packageNames);
 	}
 
 	/// <summary>
@@ -141,12 +154,13 @@ public sealed partial class UnityPackageIndex
 
 		Dictionary<string, PackageAssembly> assemblies = new();
 		Dictionary<string, PackageShader?> shaders = new();
+		Dictionary<string, HashSet<string>> pluginPackages = new(StringComparer.OrdinalIgnoreCase);
 		string builtInDirectory = Path.Join(packageManagerDirectory, "BuiltInPackages");
 		if (Directory.Exists(builtInDirectory))
 		{
 			foreach (string packageDirectory in Directory.EnumerateDirectories(builtInDirectory))
 			{
-				AddPackage(assemblies, shaders, ReadDirectory(packageDirectory));
+				AddPackage(assemblies, shaders, pluginPackages, ReadDirectory(packageDirectory));
 			}
 		}
 		string archiveDirectory = Path.Join(packageManagerDirectory, "Editor");
@@ -156,7 +170,7 @@ public sealed partial class UnityPackageIndex
 			{
 				try
 				{
-					AddPackage(assemblies, shaders, ReadArchive(archivePath));
+					AddPackage(assemblies, shaders, pluginPackages, ReadArchive(archivePath));
 				}
 				catch (Exception ex) when (ex is IOException or InvalidDataException or JsonException)
 				{
@@ -164,7 +178,7 @@ public sealed partial class UnityPackageIndex
 				}
 			}
 		}
-		return new UnityPackageIndex(editorDirectory, editorVersion, assemblies, shaders);
+		return new UnityPackageIndex(editorDirectory, editorVersion, assemblies, shaders, pluginPackages);
 	}
 
 	/// <summary>
@@ -182,11 +196,19 @@ public sealed partial class UnityPackageIndex
 		return candidates.FirstOrDefault(c => Directory.Exists(Path.Join(c, "BuiltInPackages")) || Directory.Exists(Path.Join(c, "Editor")) && Path.GetFileName(c) == "PackageManager");
 	}
 
-	private static void AddPackage(Dictionary<string, PackageAssembly> assemblies, Dictionary<string, PackageShader?> shaders, PackageContents? contents)
+	private static void AddPackage(Dictionary<string, PackageAssembly> assemblies, Dictionary<string, PackageShader?> shaders, Dictionary<string, HashSet<string>> pluginPackages, PackageContents? contents)
 	{
 		if (contents is null)
 		{
 			return;
+		}
+		foreach (string fileName in contents.PluginFileNames)
+		{
+			if (!pluginPackages.TryGetValue(fileName, out HashSet<string>? packages))
+			{
+				pluginPackages.Add(fileName, packages = new());
+			}
+			packages.Add(contents.PackageName);
 		}
 		foreach (PackageAssembly assembly in contents.CreateAssemblies())
 		{
@@ -209,6 +231,10 @@ public sealed partial class UnityPackageIndex
 			{
 				string relativePath = Path.GetRelativePath(packageDirectory, path).Replace('\\', '/');
 				contents.Add(relativePath, File.ReadAllText(path));
+			}
+			else if (PackageContents.IsPluginFile(path))
+			{
+				contents.AddPluginFile(path);
 			}
 		}
 		return contents.IsValid ? contents : null;
@@ -233,6 +259,10 @@ public sealed partial class UnityPackageIndex
 				using StreamReader streamReader = new(entry.DataStream);
 				contents.Add(relativePath, streamReader.ReadToEnd());
 			}
+			else if (PackageContents.IsPluginFile(entry.Name))
+			{
+				contents.AddPluginFile(entry.Name);
+			}
 		}
 		return contents.IsValid ? contents : null;
 	}
@@ -251,6 +281,11 @@ public sealed partial class UnityPackageIndex
 		private readonly Dictionary<string, UnityGuid> metaGuids = new(); // asset path => guid
 		private readonly Dictionary<string, string> assemblyDefinitionPaths = new(); // path => assembly name
 		private readonly Dictionary<string, string> shaderNames = new(); // path => shader name
+		private readonly HashSet<string> pluginFileNames = new(StringComparer.OrdinalIgnoreCase);
+
+		public string PackageName => packageName!;
+
+		public IReadOnlyCollection<string> PluginFileNames => pluginFileNames;
 
 		public bool IsValid => packageName is not null && packageVersion is not null && (assemblyDefinitions.Count > 0 || shaderNames.Count > 0);
 
@@ -269,6 +304,20 @@ public sealed partial class UnityPackageIndex
 				|| path.EndsWith(".shader", StringComparison.Ordinal)
 				|| path.EndsWith(".shader.meta", StringComparison.Ordinal)
 				|| path.EndsWith("package.json", StringComparison.Ordinal);
+		}
+
+		/// <summary>
+		/// Whether the file is a library a package can ship as a plugin, such as a native library.
+		/// </summary>
+		public static bool IsPluginFile(string path)
+		{
+			return !path.Replace('\\', '/').Split('/').Any(segment => segment.EndsWith('~'))
+				&& Path.GetExtension(path).ToLowerInvariant() is ".dll" or ".so" or ".dylib" or ".bundle";
+		}
+
+		public void AddPluginFile(string path)
+		{
+			pluginFileNames.Add(Path.GetFileName(path.Replace('\\', '/')));
 		}
 
 		public void Add(string relativePath, string text)

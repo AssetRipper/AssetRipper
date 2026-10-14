@@ -43,6 +43,9 @@ internal class UnityPackageIndexTests
 		Write(package, "Shaders/Copy2.shader", "Shader \"Example/Duplicate\" { }\n");
 		Write(package, "Shaders/Copy2.shader.meta", $"fileFormatVersion: 2\nguid: {ReferencedScriptGuid}\n");
 
+		Write(package, "Runtime/Plugins/x86_64/ExampleNative.dll", "");
+		Write(package, "Samples~/Plugins/SampleNative.dll", "");
+
 		static void Write(string root, string relativePath, string text)
 		{
 			string path = Path.Join(root, relativePath);
@@ -106,6 +109,18 @@ internal class UnityPackageIndexTests
 			Assert.That(shader!.Guid, Is.EqualTo(UnityGuid.Parse(ShaderGuid)));
 			Assert.That(shader.PackageName, Is.EqualTo("com.example.package"));
 			Assert.That(index.TryGetShader("Commented/Out", out _), Is.False);
+		}
+	}
+
+	[Test]
+	public void PluginFilesAreFoundOnlyInTheirPackage()
+	{
+		UnityPackageIndex index = UnityPackageIndex.Load(editorDirectory, new UnityVersion(6000, 3));
+		using (Assert.EnterMultipleScope())
+		{
+			Assert.That(index.HasPluginFile("examplenative.dll", new HashSet<string> { "com.example.package" }), Is.True);
+			Assert.That(index.HasPluginFile("ExampleNative.dll", new HashSet<string> { "com.other.package" }), Is.False);
+			Assert.That(index.HasPluginFile("SampleNative.dll", new HashSet<string> { "com.example.package" }), Is.False);
 		}
 	}
 

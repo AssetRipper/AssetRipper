@@ -142,6 +142,7 @@ public class ExportHandler
 		yield return new ProjectVersionPostExporter();
 		yield return new PackageManifestPostExporter();
 		yield return new StreamingAssetsPostExporter();
+		yield return new NativePluginsPostExporter();
 		yield return new DllPostExporter();
 		yield return new DependencyReportPostExporter();
 		yield return new PathIdMapExporter();
