@@ -108,9 +108,13 @@ public abstract partial class YamlScalarNode
 
 		private static ScalarStyle GetStringStyle(string value)
 		{
-			if (string.IsNullOrEmpty(value))
+			if (value == null)
 			{
 				return ScalarStyle.Plain;
+			}
+			if (value.Length == 0 || MatchOtherTypesRegex().IsMatch(value))
+			{
+				return ScalarStyle.SingleQuoted;
 			}
 			else if (ContainsControlCharacter(value))
 			{
@@ -120,7 +124,6 @@ public abstract partial class YamlScalarNode
 			{
 				return value.Contains("\n ") ? ScalarStyle.DoubleQuoted : ScalarStyle.SingleQuoted;
 			}
-
 			return ScalarStyle.Plain;
 		}
 
@@ -138,5 +141,8 @@ public abstract partial class YamlScalarNode
 
 		[GeneratedRegex("""(^\s)|(^-\s)|(^-$)|(^[\:\[\]'"*&!@#%{}?<>,\`])|([:@]\s)|(\s#)|([\n\r])|([:\s]$)""", RegexOptions.Compiled)]
 		private static partial Regex IllegalStringsRegex();
+
+		[GeneratedRegex("""^(?:~|[nN]ull|NULL|[yY](?:es)?|YES|[nN]o|NO|[tT]rue|TRUE|[fF]alse|FALSE|[oO](?:n|ff)|ON|OFF|[-+]?0b[0-1_]+|[-+]?0[0-7_]+|[-+]?(?:0|[1-9][0-9_]*)|[-+]?0x[0-9a-fA-F_]+|[-+]?[1-9][0-9_]*(?::[0-5]?[0-9])+|[-+]?(?:[0-9][0-9_]*)?\.[0-9_]*(?:[eE][-+][0-9]+)?|[-+]?[0-9][0-9_]*(?::[0-5]?[0-9])+\.[0-9_]*|[-+]?\.(?:inf|Inf|INF)|\.(?:nan|NaN|NAN))$""", RegexOptions.Compiled)]
+		private static partial Regex MatchOtherTypesRegex();
 	}
 }
