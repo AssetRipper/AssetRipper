@@ -1,13 +1,11 @@
-﻿using NUnit.Framework;
-
-namespace AssetRipper.Yaml.Tests;
+﻿namespace AssetRipper.Yaml.Tests;
 
 internal class HexTests
 {
 	[Test]
-	public void OneFloatTest()
+	public async Task OneFloatTest()
 	{
 		YamlScalarNode node = YamlScalarNode.CreateHex(1f);
-		Assert.That(node.ToString(), Is.EqualTo("0x3f800000(1)"));
+		await Assert.That(node.ToString()).IsEqualTo("0x3f800000(1)");
 	}
 }
