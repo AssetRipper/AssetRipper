@@ -1,4 +1,4 @@
-﻿using AssetRipper.Assets;
+using AssetRipper.Assets;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Export.UnityProjects;
 using AssetRipper.Primitives;
@@ -17,14 +17,15 @@ namespace AssetRipper.Tests.Traversal;
 
 internal class DefaultYamlWalkerTests
 {
-	[TestCaseSource(nameof(GetObjectTypes))]
-	public static void SerializedObjectIsConsistent(Type type, string yamlExpected)
+	[Test]
+	[MethodDataSource(nameof(GetObjectTypes))]
+	public async Task SerializedObjectIsConsistent(Type type, string yamlExpected)
 	{
 		UnityObjectBase asset = AssetCreator.CreateUnsafe(type);
-		using (Assert.EnterMultipleScope())
+
 		{
 			string yamlActual = GenerateYaml(new DefaultYamlWalker(), asset);
-			Assert.That(yamlActual, Is.EqualTo(yamlExpected));
+			await Assert.That(yamlActual).IsEqualTo(yamlExpected);
 		}
 	}
 
@@ -47,7 +48,7 @@ internal class DefaultYamlWalkerTests
 		return stringWriter.ToString();
 	}
 
-	private static object?[][] GetObjectTypes() =>
+	public static object?[][] GetObjectTypes() =>
 	[
 		[typeof(ComponentListObject), ComponentListObject.Yaml],
 		[typeof(DictionaryObject), DictionaryObject.Yaml],
@@ -77,7 +78,7 @@ internal class DefaultYamlWalkerTests
 	}
 
 	[Test]
-	public void MonoBehaviourStructureSerializationTest()
+	public async Task MonoBehaviourStructureSerializationTest()
 	{
 		const string yamlExpected = """
 			%YAML 1.1
@@ -100,11 +101,11 @@ internal class DefaultYamlWalkerTests
 		MonoBehaviour_5 monoBehaviour = AssetCreator.CreateUnsafe<MonoBehaviour_5>();
 		monoBehaviour.Structure = new StaticBatchInfo();
 		string yamlActual = GenerateYaml(new DefaultYamlWalker(), monoBehaviour);
-		Assert.That(yamlActual, Is.EqualTo(yamlExpected));
+		await Assert.That(yamlActual).IsEqualTo(yamlExpected);
 	}
 
 	[Test]
-	public void MultipleMonoBehaviourStructureSerializationTest()
+	public async Task MultipleMonoBehaviourStructureSerializationTest()
 	{
 		const string yamlExpected = """
 			%YAML 1.1
@@ -140,11 +141,11 @@ internal class DefaultYamlWalkerTests
 		MonoBehaviour_5 monoBehaviour = AssetCreator.CreateUnsafe<MonoBehaviour_5>();
 		monoBehaviour.Structure = new StaticBatchInfo();
 		string yamlActual = GenerateYaml(new DefaultYamlWalker(), [(monoBehaviour, 1), (monoBehaviour, 2)]);
-		Assert.That(yamlActual, Is.EqualTo(yamlExpected));
+		await Assert.That(yamlActual).IsEqualTo(yamlExpected);
 	}
 
 	[Test]
-	public void MaterialSerializationTest_3_5()
+	public async Task MaterialSerializationTest_3_5()
 	{
 		const string yamlExpected = """
 			%YAML 1.1
@@ -193,11 +194,11 @@ internal class DefaultYamlWalkerTests
 		}
 
 		string yamlActual = GenerateYaml(new DefaultYamlWalker().WithUnityVersion(new UnityVersion(3, 5, 6)), material);
-		Assert.That(yamlActual, Is.EqualTo(yamlExpected));
+		await Assert.That(yamlActual).IsEqualTo(yamlExpected);
 	}
 
 	[Test]
-	public void MaterialSerializationTest_5_3_8()
+	public async Task MaterialSerializationTest_5_3_8()
 	{
 		const string yamlExpected = """
 			%YAML 1.1
@@ -250,11 +251,11 @@ internal class DefaultYamlWalkerTests
 		}
 
 		string yamlActual = GenerateYaml(new DefaultYamlWalker().WithUnityVersion(new UnityVersion(5, 3, 8)), material);
-		Assert.That(yamlActual, Is.EqualTo(yamlExpected));
+		await Assert.That(yamlActual).IsEqualTo(yamlExpected);
 	}
 
 	[Test]
-	public void MaterialSerializationTest_5_4()
+	public async Task MaterialSerializationTest_5_4()
 	{
 		const string yamlExpected = """
 			%YAML 1.1
@@ -305,11 +306,11 @@ internal class DefaultYamlWalkerTests
 		}
 
 		string yamlActual = GenerateYaml(new DefaultYamlWalker().WithUnityVersion(new UnityVersion(5, 4)), material);
-		Assert.That(yamlActual, Is.EqualTo(yamlExpected));
+		await Assert.That(yamlActual).IsEqualTo(yamlExpected);
 	}
 
 	[Test]
-	public void PlayableDirectorSerializationTest()
+	public async Task PlayableDirectorSerializationTest()
 	{
 		// Based on:
 		// https://github.com/Unity-Technologies/Timeline-MessageMarker/blob/711db46387de66c746e9027090c2de786fe99855/Assets/TestScene.unity#L210-L231
@@ -349,6 +350,6 @@ internal class DefaultYamlWalkerTests
 		director.ExposedReferences_C320.References_Editor.AddNew().Key = "ec546beecf692a4419584c0b9cc42a29";
 
 		string yamlActual = GenerateYaml(new DefaultYamlWalker().WithUnityVersion(new UnityVersion(2019)), director);
-		Assert.That(yamlActual, Is.EqualTo(yamlExpected));
+		await Assert.That(yamlActual).IsEqualTo(yamlExpected);
 	}
 }

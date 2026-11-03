@@ -5,38 +5,48 @@ namespace AssetRipper.Tests;
 
 internal class ScriptHashingTests
 {
-	[TestCase("AssetRipper.Examples", "ExampleBehaviour", -218309758)]
-	[TestCase("UnityEngine", "Component", 468326297)]
-	[TestCase("UnityEngine", "GameObject", -1741091355)]
-	[TestCase("UnityEngine", "MonoBehaviour", 888015496)]
-	[TestCase("UnityEngine", "Object", 350709172)]
-	public static void VerifyCorrectness(string @namespace, string name, int expected)
+	[Test]
+	[Arguments("AssetRipper.Examples", "ExampleBehaviour", -218309758)]
+	[Arguments("UnityEngine", "Component", 468326297)]
+	[Arguments("UnityEngine", "GameObject", -1741091355)]
+	[Arguments("UnityEngine", "MonoBehaviour", 888015496)]
+	[Arguments("UnityEngine", "Object", 350709172)]
+	public async Task VerifyCorrectness(string @namespace, string name, int expected)
 	{
 		int calculated = ScriptHashing.CalculateScriptFileID(@namespace, name);
-		Assert.That(calculated, Is.EqualTo(expected));
+		await Assert.That(calculated).IsEqualTo(expected);
 	}
 
-	[TestCaseSource(nameof(GetRandomFullNames), new object[] { 10 })]
-	public static void VerifyConsistency(string @namespace, string name)
+	[Test]
+	[MethodDataSource(nameof(GetRandomFullNames))]
+	public async Task VerifyConsistency(string @namespace, string name)
 	{
 		int value1 = ScriptHashing.CalculateScriptFileID(@namespace, name);
 		int value2 = ScriptHashing.CalculateScriptFileID(Encoding.UTF8.GetBytes(@namespace), Encoding.UTF8.GetBytes(name));
-		Assert.That(value2, Is.EqualTo(value1));
+		await Assert.That(value2).IsEqualTo(value1);
 	}
 
-	private static IEnumerable<string[]> GetRandomFullNames(int count)
+	public static IEnumerable<(string Namespace, string Name)> GetRandomFullNames()
 	{
+		const int count = 100;
+		Random random = new(42);
 		for (int i = 0; i < count; i++)
 		{
-			string @namespace = GetRandomString(5, 50);
-			string className = GetRandomString(5, 15);
-			yield return new[] { @namespace, className };
+			string @namespace = GetRandomString(random, 5, 50);
+			string className = GetRandomString(random, 5, 15);
+			yield return (@namespace, className);
 		}
 	}
 
-	private static string GetRandomString(int minLength, int maxLength)
+	private static string GetRandomString(Random random, int minLength, int maxLength)
 	{
-		int length = TestContext.CurrentContext.Random.Next(minLength, maxLength);
-		return TestContext.CurrentContext.Random.GetString(length);
+		const string Characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+		int length = random.Next(minLength, maxLength);
+		char[] characters = new char[length];
+		for (int i = 0; i < characters.Length; i++)
+		{
+			characters[i] = Characters[random.Next(Characters.Length)];
+		}
+		return new string(characters);
 	}
 }

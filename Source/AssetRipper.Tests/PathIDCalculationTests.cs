@@ -10,13 +10,13 @@ namespace AssetRipper.Tests;
 internal class PathIDCalculationTests
 {
 	[Test]
-	public void BinocularsOverlay()
+	public async Task BinocularsOverlay()
 	{
 		const long ExpectedPathID = -3447896943880403800;
 		UnityGuid guid = UnityGuid.Parse("01e291bf376af4b4994f5015f73d2fe0");
 		AssetType type = AssetType.Meta;
 		long fileID = ExportIdHandler.GetMainExportID(28);
-		Assert.That(Compute64BitHash(guid, type, fileID), Is.EqualTo(ExpectedPathID));
+		await Assert.That(Compute64BitHash(guid, type, fileID)).IsEqualTo(ExpectedPathID);
 	}
 
 	private static long Compute64BitHash(UnityGuid guid, AssetType type, long fileID)

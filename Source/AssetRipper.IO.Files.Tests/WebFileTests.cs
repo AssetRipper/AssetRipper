@@ -1,4 +1,4 @@
-﻿using AssetRipper.IO.Files.ResourceFiles;
+using AssetRipper.IO.Files.ResourceFiles;
 using AssetRipper.IO.Files.Streams.Smart;
 using AssetRipper.IO.Files.WebFiles;
 
@@ -7,7 +7,7 @@ namespace AssetRipper.IO.Files.Tests;
 public class WebFileTests
 {
 	[Test]
-	public void ReadIsSymmetricToWriteForFileWithNoEntries()
+	public async Task ReadIsSymmetricToWriteForFileWithNoEntries()
 	{
 		WebFileScheme scheme = new();
 		WebFile bundle = new();
@@ -16,22 +16,22 @@ public class WebFileTests
 		bundle.Write(stream);
 		long positionAfterWrite = stream.Position;
 		stream.Position = 0;
-		using (Assert.EnterMultipleScope())
+
 		{
-			Assert.That(positionAfterWrite, Is.GreaterThan(0));
-			Assert.That(scheme.CanRead(stream));
+			await Assert.That(positionAfterWrite).IsGreaterThan(0);
+			await Assert.That(scheme.CanRead(stream)).IsTrue();
 		}
 
 		WebFile readBundle = scheme.Read(stream, bundle.FilePath, bundle.Name);
 		long positionAfterRead = stream.Position;
-		using (Assert.EnterMultipleScope())
+
 		{
-			Assert.That(positionAfterRead, Is.EqualTo(positionAfterWrite));
+			await Assert.That(positionAfterRead).IsEqualTo(positionAfterWrite);
 		}
 	}
 
 	[Test]
-	public void ReadIsSymmetricToWriteForFileWithOneEntry()
+	public async Task ReadIsSymmetricToWriteForFileWithOneEntry()
 	{
 		const int ResourceFileSize = 23;
 		const string ResourceFilePath = "Test/Resource.resource";
@@ -45,19 +45,19 @@ public class WebFileTests
 		bundle.Write(stream);
 		long positionAfterWrite = stream.Position;
 		stream.Position = 0;
-		using (Assert.EnterMultipleScope())
+
 		{
-			Assert.That(positionAfterWrite, Is.GreaterThan(0));
-			Assert.That(scheme.CanRead(stream));
+			await Assert.That(positionAfterWrite).IsGreaterThan(0);
+			await Assert.That(scheme.CanRead(stream)).IsTrue();
 		}
 
 		WebFile readBundle = scheme.Read(stream, bundle.FilePath, bundle.Name);
 		long positionAfterRead = stream.Position;
-		using (Assert.EnterMultipleScope())
+
 		{
-			Assert.That(positionAfterRead, Is.EqualTo(positionAfterWrite), () => "Incorrect end position");
-			Assert.That(readBundle.ResourceFiles, Has.Count.EqualTo(1), () => "Incorrect count");
+			await Assert.That(positionAfterRead).IsEqualTo(positionAfterWrite).Because("Incorrect end position");
+			await Assert.That(readBundle.ResourceFiles).Count().IsEqualTo(1).Because("Incorrect count");
 		}
-		Assert.That(readBundle.ResourceFiles[0].Stream, Has.Length.EqualTo(ResourceFileSize));
+		await Assert.That(readBundle.ResourceFiles[0].Stream.Length).IsEqualTo(ResourceFileSize);
 	}
 }

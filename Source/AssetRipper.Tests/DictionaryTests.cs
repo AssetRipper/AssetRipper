@@ -1,4 +1,4 @@
-﻿using AssetRipper.Assets.Generics;
+using AssetRipper.Assets.Generics;
 using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Subclasses.FastPropertyName;
 
@@ -7,7 +7,7 @@ namespace AssetRipper.Tests;
 public class DictionaryTests
 {
 	[Test]
-	public void SimpleIntegerDictionaryTests()
+	public async Task SimpleIntegerDictionaryTests()
 	{
 		AssetDictionary<int, int> dictionary = new()
 		{
@@ -16,16 +16,16 @@ public class DictionaryTests
 			{ 4, 4 }
 		};
 
-		using (Assert.EnterMultipleScope())
+
 		{
-			Assert.That(dictionary.ContainsKey(1));
-			Assert.That(!dictionary.ContainsKey(2));
-			Assert.That(dictionary[3], Is.EqualTo(4));
+			await Assert.That(dictionary.ContainsKey(1)).IsTrue();
+			await Assert.That(!dictionary.ContainsKey(2)).IsTrue();
+			await Assert.That(dictionary[3]).IsEqualTo(4);
 		}
 	}
 
 	[Test]
-	public void Utf8DictionaryTests()
+	public async Task Utf8DictionaryTests()
 	{
 		AssetDictionary<Utf8String, int> dictionary = new()
 		{
@@ -34,55 +34,49 @@ public class DictionaryTests
 			{ Cast("Three"), 3 }
 		};
 
-		using (Assert.EnterMultipleScope())
+
 		{
-			Assert.That(dictionary, Has.Count.EqualTo(3));
-			Assert.That(dictionary.ContainsKey(Cast("One")));
-			Assert.That(dictionary.ContainsKey(Cast("Three")));
-			Assert.That(!dictionary.ContainsKey(Cast("Four")));
-#pragma warning disable NUnit2009 // The same value has been provided as both the actual and the expected argument
-			Assert.That(Cast("Three").GetHashCode(), Is.EqualTo(Cast("Three").GetHashCode()));
-#pragma warning restore NUnit2009 // The same value has been provided as both the actual and the expected argument
-			Assert.That(Cast("Three").Equals(Cast("Three")));
-			Assert.That(dictionary[Cast("Three")], Is.EqualTo(3));
+			await Assert.That(dictionary.Count).IsEqualTo(3);
+			await Assert.That(dictionary.ContainsKey(Cast("One"))).IsTrue();
+			await Assert.That(dictionary.ContainsKey(Cast("Three"))).IsTrue();
+			await Assert.That(!dictionary.ContainsKey(Cast("Four"))).IsTrue();
+			await Assert.That(Cast("Three").GetHashCode()).IsEqualTo(Cast("Three").GetHashCode());
+			await Assert.That(Cast("Three").Equals(Cast("Three"))).IsTrue();
+			await Assert.That(dictionary[Cast("Three")]).IsEqualTo(3);
 		}
 	}
 
 	[Test]
-	public void Utf8StringTests()
+	public async Task Utf8StringTests()
 	{
-		using (Assert.EnterMultipleScope())
+
 		{
-#pragma warning disable NUnit2009 // The same value has been provided as both the actual and the expected argument
-			Assert.That(Cast(""), Is.EqualTo(Cast("")));
-			Assert.That(Cast("One"), Is.EqualTo(Cast("One")));
-			Assert.That(Cast("Two"), Is.EqualTo(Cast("Two")));
-			Assert.That(Cast("Three"), Is.EqualTo(Cast("Three")));
-#pragma warning restore NUnit2009 // The same value has been provided as both the actual and the expected argument
+			await Assert.That(Cast("")).IsEqualTo(Cast(""));
+			await Assert.That(Cast("One")).IsEqualTo(Cast("One"));
+			await Assert.That(Cast("Two")).IsEqualTo(Cast("Two"));
+			await Assert.That(Cast("Three")).IsEqualTo(Cast("Three"));
 		}
 	}
 
 	private static Utf8String Cast(string str) => str;
 
 	[Test]
-	public void FastPropertyNameDictionaryTests()
+	public async Task FastPropertyNameDictionaryTests()
 	{
 		AssetDictionary<FastPropertyName, int> dictionary = new();
 		AddFastPropertyName(dictionary, "One", 1);
 		AddFastPropertyName(dictionary, "Two", 2);
 		AddFastPropertyName(dictionary, "Three", 3);
 
-		using (Assert.EnterMultipleScope())
+
 		{
-			Assert.That(dictionary, Has.Count.EqualTo(3));
-			Assert.That(dictionary.ContainsKey(MakeFastPropertyName("One")));
-			Assert.That(dictionary.ContainsKey(MakeFastPropertyName("Three")));
-			Assert.That(!dictionary.ContainsKey(MakeFastPropertyName("Four")));
-#pragma warning disable NUnit2009 // The same value has been provided as both the actual and the expected argument
-			Assert.That(MakeFastPropertyName("Three").GetHashCode(), Is.EqualTo(MakeFastPropertyName("Three").GetHashCode()));
-#pragma warning restore NUnit2009 // The same value has been provided as both the actual and the expected argument
-			Assert.That(MakeFastPropertyName("Three").Equals(MakeFastPropertyName("Three")));
-			Assert.That(dictionary[MakeFastPropertyName("Three")], Is.EqualTo(3));
+			await Assert.That(dictionary.Count).IsEqualTo(3);
+			await Assert.That(dictionary.ContainsKey(MakeFastPropertyName("One"))).IsTrue();
+			await Assert.That(dictionary.ContainsKey(MakeFastPropertyName("Three"))).IsTrue();
+			await Assert.That(!dictionary.ContainsKey(MakeFastPropertyName("Four"))).IsTrue();
+			await Assert.That(MakeFastPropertyName("Three").GetHashCode()).IsEqualTo(MakeFastPropertyName("Three").GetHashCode());
+			await Assert.That(MakeFastPropertyName("Three").Equals(MakeFastPropertyName("Three"))).IsTrue();
+			await Assert.That(dictionary[MakeFastPropertyName("Three")]).IsEqualTo(3);
 		}
 
 		static FastPropertyName MakeFastPropertyName(string str) => new() { Name = str };

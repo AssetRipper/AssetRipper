@@ -1,4 +1,4 @@
-﻿using AssetRipper.Assets.Cloning;
+using AssetRipper.Assets.Cloning;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated;
@@ -11,19 +11,19 @@ namespace AssetRipper.Assets.Tests;
 internal class AssetEqualityTests
 {
 	[Test]
-	public void DefaultGameObjectEqualityTest()
+	public async Task DefaultGameObjectEqualityTest()
 	{
 		IGameObject gameObject1 = AssetCreator.CreateGameObject(new UnityVersion(2017));
 		IGameObject gameObject2 = AssetCreator.CreateGameObject(new UnityVersion(2017));
-		Assert.That(gameObject1, Is.EqualTo(gameObject2).Using(new AssetEqualityComparer()));
+		await Assert.That(new AssetEqualityComparer().Equals(gameObject1, gameObject2)).IsTrue();
 	}
 
 	[Test]
-	public void GameObjectWithTransformEqualityTest()
+	public async Task GameObjectWithTransformEqualityTest()
 	{
 		IGameObject gameObject1 = CreateGameObject();
 		IGameObject gameObject2 = CreateGameObject();
-		Assert.That(gameObject1, Is.EqualTo(gameObject2).Using(new AssetEqualityComparer()));
+		await Assert.That(new AssetEqualityComparer().Equals(gameObject1, gameObject2)).IsTrue();
 
 		static IGameObject CreateGameObject()
 		{
@@ -37,11 +37,11 @@ internal class AssetEqualityTests
 	}
 
 	[Test]
-	public void GameObjectWithTransformInequalityTest()
+	public async Task GameObjectWithTransformInequalityTest()
 	{
 		IGameObject gameObject1 = CreateGameObject(0, 0, 0);
 		IGameObject gameObject2 = CreateGameObject(1, 1, 1);
-		Assert.That(gameObject1, Is.Not.EqualTo(gameObject2).Using(new AssetEqualityComparer()));
+		await Assert.That(new AssetEqualityComparer().Equals(gameObject1, gameObject2)).IsFalse();
 
 		static IGameObject CreateGameObject(float x, float y, float z)
 		{

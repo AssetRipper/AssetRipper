@@ -12,3 +12,4 @@ bin
 *.blend1
 launchSettings.json
 .DS_Store
+TestResults/

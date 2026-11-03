@@ -7,23 +7,23 @@ namespace AssetRipper.Tests;
 public class DirectBitmapTests
 {
 	[Test]
-	public void FlipXReversesEveryRowInEveryLayer()
+	public async Task FlipXReversesEveryRowInEveryLayer()
 	{
 		DirectBitmap<ColorRGBA<byte>, byte> bitmap = new(2, 2, 2, CreatePixelData(0, 1, 2, 3, 4, 5, 6, 7));
 
 		bitmap.FlipX();
 
-		Assert.That(bitmap.Bits.ToArray(), Is.EqualTo(CreatePixelData(1, 0, 3, 2, 5, 4, 7, 6)));
+		await Assert.That(bitmap.Bits.ToArray().SequenceEqual(CreatePixelData(1, 0, 3, 2, 5, 4, 7, 6))).IsTrue();
 	}
 
 	[Test]
-	public void TransposeSwapsEachOffDiagonalPairOnce()
+	public async Task TransposeSwapsEachOffDiagonalPairOnce()
 	{
 		DirectBitmap<ColorRGBA<byte>, byte> bitmap = new(2, 2, 1, CreatePixelData(0, 1, 2, 3));
 
 		bitmap.Transpose();
 
-		Assert.That(bitmap.Bits.ToArray(), Is.EqualTo(CreatePixelData(0, 2, 1, 3)));
+		await Assert.That(bitmap.Bits.ToArray().SequenceEqual(CreatePixelData(0, 2, 1, 3))).IsTrue();
 	}
 
 	private static byte[] CreatePixelData(params byte[] pixelValues)

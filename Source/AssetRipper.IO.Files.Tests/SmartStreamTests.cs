@@ -1,103 +1,103 @@
-﻿using AssetRipper.IO.Files.Streams.Smart;
+using AssetRipper.IO.Files.Streams.Smart;
 
 namespace AssetRipper.IO.Files.Tests;
 
 public class SmartStreamTests
 {
 	[Test]
-	public void StreamsHaveTheCorrectStreamType()
+	public async Task StreamsHaveTheCorrectStreamType()
 	{
-		using (Assert.EnterMultipleScope())
+
 		{
-			Assert.That(SmartStream.CreateNull().StreamType, Is.EqualTo(SmartStreamType.Null));
-			Assert.That(SmartStream.CreateTemp().StreamType, Is.EqualTo(SmartStreamType.File));
-			Assert.That(SmartStream.CreateMemory().StreamType, Is.EqualTo(SmartStreamType.Memory));
+			await Assert.That(SmartStream.CreateNull().StreamType).IsEqualTo(SmartStreamType.Null);
+			await Assert.That(SmartStream.CreateTemp().StreamType).IsEqualTo(SmartStreamType.File);
+			await Assert.That(SmartStream.CreateMemory().StreamType).IsEqualTo(SmartStreamType.Memory);
 		}
 	}
 
 	[Test]
-	public void MemoryStreamMaintainTheirLength()
+	public async Task MemoryStreamMaintainTheirLength()
 	{
 		const int Length = 64;
 		SmartStream memoryStream = SmartStream.CreateMemory(new byte[Length]);
-		Assert.That(memoryStream.Length, Is.EqualTo(Length));
+		await Assert.That(memoryStream.Length).IsEqualTo(Length);
 	}
 
 	[Test]
-	public void RandomAccessPartialStreamSeeksRelativeToEnd()
+	public async Task RandomAccessPartialStreamSeeksRelativeToEnd()
 	{
 		using SmartStream baseStream = SmartStream.CreateTemp();
 		baseStream.Write([1, 2, 3, 4]);
 		using SmartStream partialStream = baseStream.CreatePartial(1, 2);
 
-		Assert.That(partialStream.Seek(-1, SeekOrigin.End), Is.EqualTo(1));
-		Assert.That(partialStream.ReadByte(), Is.EqualTo(3));
-		Assert.That(partialStream.Seek(1, SeekOrigin.End), Is.EqualTo(3));
-		Assert.That(partialStream.Read(new byte[1]), Is.Zero);
+		await Assert.That(partialStream.Seek(-1, SeekOrigin.End)).IsEqualTo(1);
+		await Assert.That(partialStream.ReadByte()).IsEqualTo(3);
+		await Assert.That(partialStream.Seek(1, SeekOrigin.End)).IsEqualTo(3);
+		await Assert.That(partialStream.Read(new byte[1])).IsZero();
 	}
 
 	[Test]
-	public void ToArrayMakesAPerfectCopyForMemorySmartStreams()
+	public async Task ToArrayMakesAPerfectCopyForMemorySmartStreams()
 	{
 		const int Length = 87;
-		byte[] randomData = RandomData.MakeRandomData(Length);
+		byte[] randomData = new Random(42).NextBytes(Length);
 		SmartStream memoryStream = SmartStream.CreateMemory(randomData);
-		Assert.That(memoryStream.ToArray(), Is.EqualTo(randomData));
+		await Assert.That(memoryStream.ToArray().SequenceEqual(randomData)).IsTrue();
 	}
 
 	[Test]
-	public void FreedStreamsMustBeNull()
+	public async Task FreedStreamsMustBeNull()
 	{
 		SmartStream stream = SmartStream.CreateMemory();
-		using (Assert.EnterMultipleScope())
+
 		{
-			Assert.That(stream.RefCount, Is.EqualTo(1));
-			Assert.That(stream.IsNull, Is.False);
-			Assert.That(stream.StreamType, Is.EqualTo(SmartStreamType.Memory));
+			await Assert.That(stream.RefCount).IsEqualTo(1);
+			await Assert.That(stream.IsNull).IsFalse();
+			await Assert.That(stream.StreamType).IsEqualTo(SmartStreamType.Memory);
 		}
 		stream.FreeReference();
-		using (Assert.EnterMultipleScope())
+
 		{
-			Assert.That(stream.RefCount, Is.Zero);
-			Assert.That(stream.IsNull, Is.True);
-			Assert.That(stream.StreamType, Is.EqualTo(SmartStreamType.Null));
+			await Assert.That(stream.RefCount).IsZero();
+			await Assert.That(stream.IsNull).IsTrue();
+			await Assert.That(stream.StreamType).IsEqualTo(SmartStreamType.Null);
 		}
 	}
 
 	[Test]
-	public void NullStreamIsNullAndHasRefCountZero()
+	public async Task NullStreamIsNullAndHasRefCountZero()
 	{
-		using (Assert.EnterMultipleScope())
+
 		{
-			Assert.That(SmartStream.CreateNull().RefCount, Is.Zero);
-			Assert.That(SmartStream.CreateNull().IsNull);
+			await Assert.That(SmartStream.CreateNull().RefCount).IsZero();
+			await Assert.That(SmartStream.CreateNull().IsNull).IsTrue();
 		}
 	}
 
 	[Test]
-	public void DisposedStreamThrowsForManyMembers()
+	public async Task DisposedStreamThrowsForManyMembers()
 	{
-		using (Assert.EnterMultipleScope())
+
 		{
-			Assert.DoesNotThrow(() => SmartStream.CreateNull().Flush());
-			Assert.DoesNotThrow(() => _ = SmartStream.CreateNull().CanRead);
-			Assert.DoesNotThrow(() => _ = SmartStream.CreateNull().CanSeek);
-			Assert.DoesNotThrow(() => _ = SmartStream.CreateNull().CanWrite);
-			Assert.DoesNotThrow(() => _ = SmartStream.CreateNull().Position);
-			Assert.DoesNotThrow(() => _ = SmartStream.CreateNull().Length);
-			Assert.DoesNotThrow(() => _ = SmartStream.CreateNull().RefCount);
-			Assert.DoesNotThrow(() => _ = SmartStream.CreateNull().IsNull);
-			Assert.DoesNotThrow(() => _ = SmartStream.CreateNull().StreamType);
+			await Assert.That(() => SmartStream.CreateNull().Flush()).ThrowsNothing();
+			await Assert.That(() => _ = SmartStream.CreateNull().CanRead).ThrowsNothing();
+			await Assert.That(() => _ = SmartStream.CreateNull().CanSeek).ThrowsNothing();
+			await Assert.That(() => _ = SmartStream.CreateNull().CanWrite).ThrowsNothing();
+			await Assert.That(() => _ = SmartStream.CreateNull().Position).ThrowsNothing();
+			await Assert.That(() => _ = SmartStream.CreateNull().Length).ThrowsNothing();
+			await Assert.That(() => _ = SmartStream.CreateNull().RefCount).ThrowsNothing();
+			await Assert.That(() => _ = SmartStream.CreateNull().IsNull).ThrowsNothing();
+			await Assert.That(() => _ = SmartStream.CreateNull().StreamType).ThrowsNothing();
 
 			//Count should match up with the number of references to ThrowIfNull
-			Assert.Throws<NullReferenceException>(() => SmartStream.CreateNull().ReadExactly(new byte[2], 1, 1));
-			Assert.Throws<NullReferenceException>(() => SmartStream.CreateNull().ReadExactly(new byte[2]));
-			Assert.Throws<NullReferenceException>(() => SmartStream.CreateNull().ReadByte());
-			Assert.Throws<NullReferenceException>(() => SmartStream.CreateNull().Seek(0, SeekOrigin.Begin));
-			Assert.Throws<NullReferenceException>(() => SmartStream.CreateNull().SetLength(2));
-			Assert.Throws<NullReferenceException>(() => SmartStream.CreateNull().Write(new byte[2], 1, 1));
-			Assert.Throws<NullReferenceException>(() => SmartStream.CreateNull().Position = default);
-			Assert.Throws<NullReferenceException>(() => SmartStream.CreateNull().ToArray());
+			await Assert.ThrowsAsync<NullReferenceException>(() => Task.Run(() => SmartStream.CreateNull().ReadExactly(new byte[2], 1, 1)));
+			await Assert.ThrowsAsync<NullReferenceException>(() => Task.Run(() => SmartStream.CreateNull().ReadExactly(new byte[2])));
+			await Assert.ThrowsAsync<NullReferenceException>(() => Task.Run(() => SmartStream.CreateNull().ReadByte()));
+			await Assert.ThrowsAsync<NullReferenceException>(() => Task.Run(() => SmartStream.CreateNull().Seek(0, SeekOrigin.Begin)));
+			await Assert.ThrowsAsync<NullReferenceException>(() => Task.Run(() => SmartStream.CreateNull().SetLength(2)));
+			await Assert.ThrowsAsync<NullReferenceException>(() => Task.Run(() => SmartStream.CreateNull().Write(new byte[2], 1, 1)));
+			await Assert.ThrowsAsync<NullReferenceException>(() => Task.Run(() => SmartStream.CreateNull().Position = default));
+			await Assert.ThrowsAsync<NullReferenceException>(() => Task.Run(() => SmartStream.CreateNull().ToArray()));
 		}
 	}
 }

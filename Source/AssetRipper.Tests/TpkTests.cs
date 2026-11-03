@@ -8,18 +8,18 @@ namespace AssetRipper.Tests;
 internal class TpkTests
 {
 	[Test]
-	public void EngineAssetsTpkSuccessfullyExtracts()
+	public async Task EngineAssetsTpkSuccessfullyExtracts()
 	{
 		TpkFile tpk = TpkFile.FromStream(EngineAssetsTpk.GetStream());
 		TpkEngineAssetsBlob blob = (TpkEngineAssetsBlob)tpk.GetDataBlob();
-		Assert.That(blob.Data, Is.Not.Empty);
+		await Assert.That(blob.Data).IsNotEmpty();
 	}
 
 	[Test]
-	public void TypeTreeTpkSuccessfullyExtracts()
+	public async Task TypeTreeTpkSuccessfullyExtracts()
 	{
 		TpkFile tpk = TpkFile.FromStream(SourceTpk.GetStream());
 		TpkTypeTreeBlob blob = (TpkTypeTreeBlob)tpk.GetDataBlob();
-		Assert.That(blob.ClassInformation, Is.Not.Empty);
+		await Assert.That(blob.ClassInformation).IsNotEmpty();
 	}
 }

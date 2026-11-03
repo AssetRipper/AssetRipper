@@ -1,19 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
+		<OutputType>Exe</OutputType>
 		<IsPackable>false</IsPackable>
 		<OutputPath>..\0Bins\Other\AssetRipper.IO.Files.Tests\$(Configuration)\</OutputPath>
 		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.IO.Files.Tests\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.10.1" />
-		<PackageReference Include="NUnit" Version="5.0.0" />
-		<PackageReference Include="NUnit3TestAdapter" Version="6.3.0" />
-		<PackageReference Include="NUnit.Analyzers" Version="4.15.0">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
+		<PackageReference Include="TUnit" Version="1.78.0" />
 	</ItemGroup>
 
 	<ItemGroup>

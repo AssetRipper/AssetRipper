@@ -1,4 +1,4 @@
-﻿using AsmResolver.DotNet;
+using AsmResolver.DotNet;
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Export.UnityProjects;
@@ -12,14 +12,13 @@ using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Extensions;
-using NUnit.Framework.Internal;
 
 namespace AssetRipper.Tests;
 
 internal class ExportTests
 {
 	[Test]
-	public void NamedScriptableObjectIsExported()
+	public async Task NamedScriptableObjectIsExported()
 	{
 		ProcessedAssetCollection collection = AssetCreator.CreateCollection(UnityVersion.V_2022);
 
@@ -28,11 +27,11 @@ internal class ExportTests
 
 		VirtualFileSystem fileSystem = Export(collection);
 
-		Assert.That(fileSystem.File.Exists("/output/ExportedProject/Assets/MonoBehaviour/Name.asset"));
+		await Assert.That(fileSystem.File.Exists("/output/ExportedProject/Assets/MonoBehaviour/Name.asset")).IsTrue();
 	}
 
 	[Test]
-	public void NamelessScriptableObjectIsExported()
+	public async Task NamelessScriptableObjectIsExported()
 	{
 		ProcessedAssetCollection collection = AssetCreator.CreateCollection(UnityVersion.V_2022);
 
@@ -40,11 +39,11 @@ internal class ExportTests
 
 		VirtualFileSystem fileSystem = Export(collection);
 
-		Assert.That(fileSystem.File.Exists("/output/ExportedProject/Assets/MonoBehaviour/MonoBehaviour.asset"));
+		await Assert.That(fileSystem.File.Exists("/output/ExportedProject/Assets/MonoBehaviour/MonoBehaviour.asset")).IsTrue();
 	}
 
 	[Test]
-	public void ScriptableObjectGroupIsExported_1()
+	public async Task ScriptableObjectGroupIsExported_1()
 	{
 		ProcessedAssetCollection collection = AssetCreator.CreateCollection(UnityVersion.V_2022);
 
@@ -54,11 +53,11 @@ internal class ExportTests
 		group.Children.Add(behaviour2);
 		group.SetMainAsset();
 
-		Assert.DoesNotThrow(() => Export(collection));
+		await Assert.That(() => Export(collection)).ThrowsNothing();
 	}
 
 	[Test]
-	public void ScriptableObjectGroupIsExported_2()
+	public async Task ScriptableObjectGroupIsExported_2()
 	{
 		ProcessedAssetCollection collection = AssetCreator.CreateCollection(UnityVersion.V_2022);
 
@@ -68,11 +67,11 @@ internal class ExportTests
 		group.Children.Add(behaviour1);
 		group.SetMainAsset();
 
-		Assert.DoesNotThrow(() => Export(collection));
+		await Assert.That(() => Export(collection)).ThrowsNothing();
 	}
 
 	[Test]
-	public void ScriptableObjectGroupIsExported_3()
+	public async Task ScriptableObjectGroupIsExported_3()
 	{
 		ProcessedAssetCollection collection = AssetCreator.CreateCollection(UnityVersion.V_2022);
 
@@ -82,11 +81,11 @@ internal class ExportTests
 		group.Children.Add(behaviour2);
 		group.SetMainAsset();
 
-		Assert.DoesNotThrow(() => Export(collection));
+		await Assert.That(() => Export(collection)).ThrowsNothing();
 	}
 
 	[Test]
-	public void EmptyMeshIsExported()
+	public async Task EmptyMeshIsExported()
 	{
 		ProcessedAssetCollection collection = AssetCreator.CreateCollection(UnityVersion.V_2022);
 
@@ -94,11 +93,11 @@ internal class ExportTests
 
 		VirtualFileSystem fileSystem = Export(collection);
 
-		Assert.That(fileSystem.File.Exists("/output/ExportedProject/Assets/Mesh/Mesh.asset"));
+		await Assert.That(fileSystem.File.Exists("/output/ExportedProject/Assets/Mesh/Mesh.asset")).IsTrue();
 	}
 
 	[Test]
-	public void CompressedMeshIsExported()
+	public async Task CompressedMeshIsExported()
 	{
 		ProcessedAssetCollection collection = AssetCreator.CreateCollection(UnityVersion.V_2022);
 
@@ -107,14 +106,14 @@ internal class ExportTests
 
 		VirtualFileSystem fileSystem = Export(collection);
 
-		Assert.That(fileSystem.File.Exists("/output/ExportedProject/Assets/Mesh/Mesh.asset"));
+		await Assert.That(fileSystem.File.Exists("/output/ExportedProject/Assets/Mesh/Mesh.asset")).IsTrue();
 	}
 
-	static readonly (string AssemblyName, string AssemblyGuid)[] AssemblyGuidTestCases =
+	public static IEnumerable<(string AssemblyName, string AssemblyGuid)> AssemblyGuidTestCases() =>
 	[
 		("UnityEngine.UI", "f5f67c52d1564df4a8936ccd202a3bd8"),
 	];
-	static readonly UnityVersion[] AssemblyGuidTestVersions =
+	public static IEnumerable<UnityVersion> AssemblyGuidTestVersions() =>
 	[
 		UnityVersion.V_5_3,
 		UnityVersion.V_5_4,
@@ -123,8 +122,9 @@ internal class ExportTests
 		UnityVersion.V_2017,
 		UnityVersion.V_2018,
 	];
-	[Theory]
-	public void AssembliesHaveCorrectGuid([ValueSource(nameof(AssemblyGuidTestCases))] (string, string) pair, [ValueSource(nameof(AssemblyGuidTestVersions))] UnityVersion version)
+	[Test]
+	[CombinedDataSources]
+	public async Task AssembliesHaveCorrectGuid([MethodDataSource(nameof(AssemblyGuidTestCases))] (string, string) pair, [MethodDataSource(nameof(AssemblyGuidTestVersions))] UnityVersion version)
 	{
 		(string assemblyName, string assemblyGuid) = pair;
 		MonoManager assemblyManager = CreateAssemblyManager();
@@ -156,12 +156,12 @@ internal class ExportTests
 
 		VirtualFileSystem fileSystem = Export(collection, assemblyManager: assemblyManager);
 
-		using (Assert.EnterMultipleScope())
+
 		{
-			Assert.That(fileSystem.File.Exists("/output/ExportedProject/Assets/MonoBehaviour/TestBehaviour.asset"));
-			Assert.That(fileSystem.File.Exists("/output/ExportedProject/Assets/MonoBehaviour/TestBehaviour.asset.meta"));
+			await Assert.That(fileSystem.File.Exists("/output/ExportedProject/Assets/MonoBehaviour/TestBehaviour.asset")).IsTrue();
+			await Assert.That(fileSystem.File.Exists("/output/ExportedProject/Assets/MonoBehaviour/TestBehaviour.asset.meta")).IsTrue();
 		}
-		Assert.That(fileSystem.File.ReadAllText("/output/ExportedProject/Assets/MonoBehaviour/TestBehaviour.asset"), Does.Contain(assemblyGuid));
+		await Assert.That(fileSystem.File.ReadAllText("/output/ExportedProject/Assets/MonoBehaviour/TestBehaviour.asset")).Contains(assemblyGuid);
 	}
 
 	private static VirtualFileSystem Export(ProcessedAssetCollection collection, string outputPath = "output", IAssemblyManager? assemblyManager = null, VirtualFileSystem? fileSystem = null)

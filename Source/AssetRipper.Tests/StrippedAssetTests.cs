@@ -9,14 +9,13 @@ using AssetRipper.SourceGenerated.Classes.ClassID_1001;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.Yaml;
-using NUnit.Framework.Internal;
 
 namespace AssetRipper.Tests;
 
 public class StrippedAssetTests
 {
 	[Test]
-	public void IsStrippedReturnsTrueForStrippedAsset()
+	public async Task IsStrippedReturnsTrueForStrippedAsset()
 	{
 		ProcessedAssetCollection collection = CreateCollection(new UnityVersion(2020, 1));
 		IGameObject root = collection.CreateGameObject();
@@ -27,11 +26,11 @@ public class StrippedAssetTests
 
 		hierarchy.StrippedAssets.Add(root);
 
-		Assert.That(root.IsStripped(), Is.True);
+		await Assert.That(root.IsStripped()).IsTrue();
 	}
 
 	[Test]
-	public void StrippedGameObjectYamlContent()
+	public async Task StrippedGameObjectYamlContent()
 	{
 		ProcessedAssetCollection collection = CreateCollection(new UnityVersion(2020, 1));
 		SceneDefinition scene = SceneDefinition.FromName("TestScene");
@@ -55,11 +54,11 @@ public class StrippedAssetTests
 
 			""";
 
-		Assert.That(yaml.ReplaceLineEndings(), Is.EqualTo(expected.ReplaceLineEndings()));
+		await Assert.That(yaml.ReplaceLineEndings()).IsEqualTo(expected.ReplaceLineEndings());
 	}
 
 	[Test]
-	public void StrippedMonoBehaviourYamlContent()
+	public async Task StrippedMonoBehaviourYamlContent()
 	{
 		ProcessedAssetCollection collection = CreateCollection(new UnityVersion(2020, 1));
 		SceneDefinition scene = SceneDefinition.FromName("TestScene");
@@ -93,7 +92,7 @@ public class StrippedAssetTests
 		// AssetRipper does not currently add a trailing space, which might be a bug in its serialization.
 		// However, that's unrelated to stripping, and there doesn't seem to be any issues arising from the difference.
 
-		Assert.That(yaml.ReplaceLineEndings(), Is.EqualTo(expected.ReplaceLineEndings()));
+		await Assert.That(yaml.ReplaceLineEndings()).IsEqualTo(expected.ReplaceLineEndings());
 	}
 
 	private static string GetYamlForAsset(IUnityObjectBase asset)

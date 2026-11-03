@@ -8,19 +8,20 @@ namespace AssetRipper.Tests.Traversal;
 
 internal class DefaultJsonWalkerTests
 {
-	[TestCaseSource(nameof(GetObjectTypes))]
-	public static void SerializedCustomObjectIsValidJson(Type type)
+	[Test]
+	[MethodDataSource(nameof(GetObjectTypes))]
+	public async Task SerializedCustomObjectIsValidJson(Type type)
 	{
 		UnityObjectBase asset = AssetCreator.CreateUnsafe(type);
 		StringWriter stringWriter = new(CultureInfo.InvariantCulture) { NewLine = "\n" };
 		asset.WalkStandard(new DefaultJsonWalker(stringWriter));
 		string json = stringWriter.ToString();
 		JsonNode? node = JsonNode.Parse(json);
-		Assert.That(node, Is.Not.Null);
-		Assert.That(node, Is.TypeOf<JsonObject>());
+		await Assert.That(node).IsNotNull();
+		await Assert.That(node).IsTypeOf<JsonObject>();
 	}
 
-	private static Type[] GetObjectTypes() =>
+	public static Type[] GetObjectTypes() =>
 	[
 		typeof(SimpleObject),
 		typeof(ParentObject),

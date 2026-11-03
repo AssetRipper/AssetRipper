@@ -1,4 +1,4 @@
-﻿using AssetRipper.SourceGenerated.Extensions;
+using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.PackedBitVector_Single;
 
 namespace AssetRipper.Tests.PackedBitVectorTests;
@@ -22,36 +22,37 @@ public class FloatVectorTests
 	}
 
 	[Test]
-	public void BitSize24ProducesHighlyAccurateResults()
+	public async Task BitSize24ProducesHighlyAccurateResults()
 	{
 		PackedBitVector_Single packedVector = new();
 		packedVector.Pack(floats, 24, false);
 		float[] unpackedValues = packedVector.Unpack();
-		Assert.That(unpackedValues, Is.EqualTo(floats).Within(0.000001f));
+		await AssertEqualWithin(unpackedValues, floats, 0.000001f);
 	}
 
 	[Test]
-	public void BitSizeAdjustmentAlsoProducesUsableResults()
+	public async Task BitSizeAdjustmentAlsoProducesUsableResults()
 	{
 		PackedBitVector_Single packedVector = new();
 		packedVector.Pack(floats, 8, true);
 		float[] unpackedValues = packedVector.Unpack();
-		Assert.That(unpackedValues, Is.EqualTo(floats).Within(0.01f));
+		await AssertEqualWithin(unpackedValues, floats, 0.01f);
 	}
 
-	[Theory]
-	public void PackingAndUnpackingDoesNotThrowAndGivesCorrectLength([Range(1, 32)] int bitSize)
+	[Test]
+	[MatrixDataSource]
+	public async Task PackingAndUnpackingDoesNotThrowAndGivesCorrectLength([MatrixRange<int>(1, 32)] int bitSize)
 	{
 		PackedBitVector_Single packedVector = new();
 		packedVector.Pack(floats, bitSize, false);
 		float[] unpackedValues = packedVector.Unpack();
-		Assert.That(unpackedValues, Has.Length.EqualTo(floats.Length));
+		await Assert.That(unpackedValues.Length).IsEqualTo(floats.Length);
 	}
 
 	[Test]
-	public void DifferingChunkStrideAndChunkSizeWorks()
+	public async Task DifferingChunkStrideAndChunkSizeWorks()
 	{
-		Assert.That(floats.Length % 4 == 0);
+		await Assert.That(floats.Length % 4 == 0).IsTrue();
 		PackedBitVector_Single packedVector = new();
 		packedVector.Pack(floats);
 		float[] actual = packedVector.Unpack(3, 4);
@@ -63,6 +64,16 @@ public class FloatVectorTests
 				expected[chunk * 3 + i] = floats[chunk * 4 + i];
 			}
 		}
-		Assert.That(actual, Is.EqualTo(expected).Within(0.000001f));
+		await AssertEqualWithin(actual, expected, 0.000001f);
+	}
+
+	private static async Task AssertEqualWithin(float[] actual, float[] expected, float tolerance)
+	{
+		await Assert.That(actual.Length).IsEqualTo(expected.Length);
+		for (int i = 0; i < actual.Length; i++)
+		{
+			await Assert.That(MathF.Abs(actual[i] - expected[i]) <= tolerance).IsTrue()
+				.Because($"Values at index {i} differ by more than {tolerance}.");
+		}
 	}
 }

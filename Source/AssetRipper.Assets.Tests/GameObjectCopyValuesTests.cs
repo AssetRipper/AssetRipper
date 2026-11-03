@@ -8,27 +8,27 @@ internal class GameObjectCopyValuesTests
 {
 	private IGameObject gameObject;
 
-	[SetUp]
+	[Before(HookType.Test)]
 	public void Setup()
 	{
 		gameObject = AssetCreator.CreateGameObject(new UnityVersion(2017));
 	}
 
 	[Test]
-	public void CopyingSelfDoesNotClearPrimitives()
+	public async Task CopyingSelfDoesNotClearPrimitives()
 	{
 		gameObject.Layer = 1;
 		gameObject.CopyValues(gameObject);
-		Assert.That(gameObject.Layer, Is.EqualTo(1));
+		await Assert.That(gameObject.Layer).IsEqualTo(1);
 	}
 
 	[Test]
-	public void CopyingSelfDoesNotClearLists()
+	public async Task CopyingSelfDoesNotClearLists()
 	{
 		IGameObject gameObject = AssetCreator.CreateGameObject(new UnityVersion(2017));
 		gameObject.Components.AddNew();
-		Assert.That(gameObject.Components, Has.Count.EqualTo(1));
+		await Assert.That(gameObject.Components).Count().IsEqualTo(1);
 		gameObject.CopyValues(gameObject);
-		Assert.That(gameObject.Components, Has.Count.EqualTo(1));
+		await Assert.That(gameObject.Components).Count().IsEqualTo(1);
 	}
 }

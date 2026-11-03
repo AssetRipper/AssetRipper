@@ -2,10 +2,10 @@
 
 internal static class RandomData
 {
-	public static byte[] MakeRandomData(int size)
+	public static byte[] NextBytes(this Random random, int size)
 	{
 		byte[] data = new byte[size];
-		TestContext.CurrentContext.Random.NextBytes(data);
+		random.NextBytes(data);
 		return data;
 	}
 }
