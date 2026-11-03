@@ -110,7 +110,7 @@ public sealed class ViewPage : DefaultPage
 	protected override void WriteScriptReferences(TextWriter writer)
 	{
 		base.WriteScriptReferences(writer);
-		
+
 		// Add client-side filtering script
 		using (new Script(writer).End())
 		{

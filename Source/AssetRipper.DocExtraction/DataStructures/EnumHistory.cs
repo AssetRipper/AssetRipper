@@ -5,6 +5,7 @@ using AssetRipper.DocExtraction.MetaData;
 using AssetRipper.Primitives;
 
 namespace AssetRipper.DocExtraction.DataStructures;
+
 public sealed class EnumHistory : TypeHistory<EnumMemberHistory, EnumMemberDocumentation>
 {
 	public VersionedList<ElementType> ElementType { get; set; } = new();

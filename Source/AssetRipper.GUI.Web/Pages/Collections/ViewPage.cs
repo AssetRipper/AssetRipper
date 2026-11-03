@@ -29,7 +29,7 @@ public sealed class ViewPage : DefaultPage
 		if (Collection.Count > 0)
 		{
 			new H2(writer).Close(Localization.Assets);
-			
+
 			var availableClasses = Collection.Select(a => a.ClassName).Distinct().Order(StringComparer.Ordinal).ToList();
 			if (availableClasses.Count > 1)
 			{
@@ -54,7 +54,7 @@ public sealed class ViewPage : DefaultPage
 			}
 
 			CreatePageOption(writer);
-				
+
 			using (new Table(writer).WithClass("table").End())
 			{
 				using (new Thead(writer).End())
@@ -124,7 +124,7 @@ public sealed class ViewPage : DefaultPage
 	protected override void WriteScriptReferences(TextWriter writer)
 	{
 		base.WriteScriptReferences(writer);
-		
+
 		// Add client-side filtering script
 		using (new Script(writer).End())
 		{

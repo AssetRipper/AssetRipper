@@ -1,5 +1,3 @@
-using AssetRipper.Assets;
-using AssetRipper.Assets.Collections;
 using AssetRipper.GUI.Web.Paths;
 using AssetRipper.Web.Extensions;
 using Microsoft.AspNetCore.Http;
@@ -24,7 +22,7 @@ internal static class SearchAPI
 	public static Task GetView(HttpContext context)
 	{
 		context.Response.DisableCaching();
-		
+
 		if (!GameFileLoader.IsLoaded)
 		{
 			return context.Response.NotFound("No files loaded.");

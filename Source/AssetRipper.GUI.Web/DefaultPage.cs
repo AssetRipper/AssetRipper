@@ -1,10 +1,10 @@
 ﻿using AssetRipper.GUI.Web.Documentation;
 using AssetRipper.GUI.Web.Pages;
-using AssetRipper.GUI.Web.Pages.Search;
 using AssetRipper.GUI.Web.Paths;
 using AssetRipper.Web.Content;
 
 namespace AssetRipper.GUI.Web;
+
 public abstract class DefaultPage : HtmlPage
 {
 	public sealed override void Write(TextWriter writer)

@@ -10,7 +10,6 @@ using AssetRipper.Processing.AnimationClips;
 using AssetRipper.Processing.Configuration;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_142;
-using AssetRipper.SourceGenerated.Classes.ClassID_147;
 using AssetRipper.SourceGenerated.Classes.ClassID_157;
 using AssetRipper.SourceGenerated.Classes.ClassID_19;
 using AssetRipper.SourceGenerated.Classes.ClassID_196;

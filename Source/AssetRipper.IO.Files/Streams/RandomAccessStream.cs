@@ -1,5 +1,4 @@
-﻿using AssetRipper.IO.Files.Streams.Smart;
-using Microsoft.Win32.SafeHandles;
+﻿using Microsoft.Win32.SafeHandles;
 
 namespace AssetRipper.IO.Files.Streams;
 

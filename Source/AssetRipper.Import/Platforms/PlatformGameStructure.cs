@@ -338,7 +338,7 @@ public abstract partial class PlatformGameStructure
 	/// </summary>
 	protected void AddFile(string name, string path)
 	{
-		if(Files.Add(name, path))
+		if (Files.Add(name, path))
 		{
 			Logger.Info(LogCategory.Import, $"Game file '{name}' has been found");
 		}
@@ -346,7 +346,7 @@ public abstract partial class PlatformGameStructure
 
 	protected void AddAssetBundle(string name, string path)
 	{
-		if(Files.Add(name, path))
+		if (Files.Add(name, path))
 		{
 			Logger.Info(LogCategory.Import, $"Asset bundle '{name}' has been found");
 		}

@@ -2,7 +2,6 @@
 using AssetRipper.AssemblyDumper.Types;
 using AssetRipper.Assets;
 using AssetRipper.Assets.Generics;
-using AssetRipper.Assets.Metadata;
 
 namespace AssetRipper.AssemblyDumper.Passes;
 

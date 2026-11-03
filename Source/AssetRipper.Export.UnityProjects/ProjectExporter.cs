@@ -2,7 +2,6 @@
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Logging;
-using AssetRipper.SourceGenerated;
 
 namespace AssetRipper.Export.UnityProjects;
 

@@ -37,7 +37,7 @@ public static class Texture3DExtensions
 		}
 	}
 
-	extension (ITexture3D texture)
+	extension(ITexture3D texture)
 	{
 		public int Format
 		{

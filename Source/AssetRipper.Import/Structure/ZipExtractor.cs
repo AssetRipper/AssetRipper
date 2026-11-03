@@ -125,7 +125,7 @@ internal static class ZipExtractor
 		{
 			filePath = fileSystem.Path.GetFullPath(filePath);
 
-			if (!filePath.StartsWith(fullOutputDirectory,StringComparison.Ordinal))
+			if (!filePath.StartsWith(fullOutputDirectory, StringComparison.Ordinal))
 			{
 				throw new ExtractionException("Entry is trying to write a file outside of the destination directory.");
 			}

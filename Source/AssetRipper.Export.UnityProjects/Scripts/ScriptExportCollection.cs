@@ -11,6 +11,7 @@ using AssetRipper.SourceGenerated.Subclasses.PlatformSettingsData_Plugin;
 using System.Diagnostics;
 
 namespace AssetRipper.Export.UnityProjects.Scripts;
+
 public sealed class ScriptExportCollection : ScriptExportCollectionBase
 {
 	public ScriptExportCollection(ScriptExporter assetExporter, IMonoScript firstScript) : base(assetExporter, firstScript)
