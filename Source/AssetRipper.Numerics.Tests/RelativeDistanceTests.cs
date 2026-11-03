@@ -2,13 +2,7 @@ namespace AssetRipper.Numerics.Tests;
 
 public class RelativeDistanceTests
 {
-	private float[] randomFloats;
-
-	[Before(HookType.Test)]
-	public void Setup()
-	{
-		randomFloats = MakeFloats(60);
-	}
+	private readonly float[] randomFloats = MakeFloats(60);
 
 	private static float[] MakeFloats(int count)
 	{

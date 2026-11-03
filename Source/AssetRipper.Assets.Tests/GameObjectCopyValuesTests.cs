@@ -6,20 +6,13 @@ namespace AssetRipper.Assets.Tests;
 
 internal class GameObjectCopyValuesTests
 {
-	private IGameObject gameObject;
-
-	[Before(HookType.Test)]
-	public void Setup()
-	{
-		gameObject = AssetCreator.CreateGameObject(new UnityVersion(2017));
-	}
-
 	[Test]
 	public async Task CopyingSelfDoesNotClearPrimitives()
 	{
+		IGameObject gameObject = AssetCreator.CreateGameObject(new UnityVersion(2017));
 		gameObject.Layer = 1;
 		gameObject.CopyValues(gameObject);
-		await Assert.That(gameObject.Layer).IsEqualTo(1);
+		await Assert.That(gameObject.Layer).IsEqualTo(1u);
 	}
 
 	[Test]

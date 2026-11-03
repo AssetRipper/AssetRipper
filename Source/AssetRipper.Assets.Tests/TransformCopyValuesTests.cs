@@ -8,13 +8,7 @@ namespace AssetRipper.Assets.Tests;
 
 internal class TransformCopyValuesTests
 {
-	private ITransform transform;
-
-	[Before(HookType.Test)]
-	public void Setup()
-	{
-		transform = AssetCreator.CreateTransform(new UnityVersion(2017));
-	}
+	private readonly ITransform transform = AssetCreator.CreateTransform(new UnityVersion(2017));
 
 	[Test]
 	public async Task CopyingSelfDoesNotClearPosition()

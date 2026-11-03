@@ -75,11 +75,11 @@ internal class VersionedListTests
 		await Assert.That(merged[0].Key).IsEqualTo(new UnityVersion(3));
 		await Assert.That(merged[0].Value).IsEqualTo("");
 		await Assert.That(merged[1].Key).IsEqualTo(new UnityVersion(4));
-		await Assert.That(merged[1].Value).IsEqualTo(null);
+		await Assert.That(merged[1].Value).IsNull();
 		await Assert.That(merged[2].Key).IsEqualTo(new UnityVersion(4, 5));
 		await Assert.That(merged[2].Value).IsEqualTo("");
 		await Assert.That(merged[3].Key).IsEqualTo(new UnityVersion(4, 7));
-		await Assert.That(merged[3].Value).IsEqualTo(null);
+		await Assert.That(merged[3].Value).IsNull();
 		await Assert.That(merged[4].Key).IsEqualTo(new UnityVersion(5));
 		await Assert.That(merged[4].Value).IsEqualTo("Five");
 		await Assert.That(merged[5].Key).IsEqualTo(new UnityVersion(2017));

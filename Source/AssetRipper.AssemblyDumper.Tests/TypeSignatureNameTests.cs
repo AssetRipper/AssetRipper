@@ -6,11 +6,10 @@ namespace AssetRipper.AssemblyDumper.Tests;
 
 internal class TypeSignatureNameTests
 {
-	private ModuleDefinition module;
-	private ReferenceImporter importer;
+	private readonly ModuleDefinition module;
+	private readonly ReferenceImporter importer;
 
-	[Before(HookType.Test)]
-	public void Setup()
+	public TypeSignatureNameTests()
 	{
 		AssemblyReference corlib = KnownCorLibs.SystemPrivateCoreLib_v10_0_0_0;
 		AssemblyDefinition assembly = new AssemblyDefinition("test", new Version(1, 0, 0, 0));
