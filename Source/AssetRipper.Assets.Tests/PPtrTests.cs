@@ -5,7 +5,7 @@ namespace AssetRipper.Assets.Tests;
 public class PPtrTests
 {
 	[Test]
-	public void PPtr_ReturnsCorrectValues()
+	public async Task PPtr_ReturnsCorrectValues()
 	{
 		// Arrange
 		int fileID = 1;
@@ -15,15 +15,15 @@ public class PPtrTests
 		PPtr pptr = new PPtr(fileID, pathID);
 
 		// Assert
-		using (Assert.EnterMultipleScope())
+
 		{
-			Assert.That(pptr.FileID, Is.EqualTo(fileID));
-			Assert.That(pptr.PathID, Is.EqualTo(pathID));
+			await Assert.That(pptr.FileID).IsEqualTo(fileID);
+			await Assert.That(pptr.PathID).IsEqualTo(pathID);
 		}
 	}
 
 	[Test]
-	public void PPtr_ImplicitOperator_ReturnsCorrectType()
+	public async Task PPtr_ImplicitOperator_ReturnsCorrectType()
 	{
 		// Arrange
 		int fileID = 1;
@@ -34,15 +34,15 @@ public class PPtrTests
 		PPtr convertedPptr = pptr;
 
 		// Assert
-		using (Assert.EnterMultipleScope())
+
 		{
-			Assert.That(convertedPptr.FileID, Is.EqualTo(fileID));
-			Assert.That(convertedPptr.PathID, Is.EqualTo(pathID));
+			await Assert.That(convertedPptr.FileID).IsEqualTo(fileID);
+			await Assert.That(convertedPptr.PathID).IsEqualTo(pathID);
 		}
 	}
 
 	[Test]
-	public void PPtrT_ReturnsCorrectValues()
+	public async Task PPtrT_ReturnsCorrectValues()
 	{
 		// Arrange
 		int fileID = 1;
@@ -52,15 +52,15 @@ public class PPtrTests
 		PPtr<IDerivedUnityObjectInterface> pptr = new PPtr<IDerivedUnityObjectInterface>(fileID, pathID);
 
 		// Assert
-		using (Assert.EnterMultipleScope())
+
 		{
-			Assert.That(pptr.FileID, Is.EqualTo(fileID));
-			Assert.That(pptr.PathID, Is.EqualTo(pathID));
+			await Assert.That(pptr.FileID).IsEqualTo(fileID);
+			await Assert.That(pptr.PathID).IsEqualTo(pathID);
 		}
 	}
 
 	[Test]
-	public void PPtrT_ExplicitOperator_ReturnsCorrectType()
+	public async Task PPtrT_ExplicitOperator_ReturnsCorrectType()
 	{
 		// Arrange
 		int fileID = 1;
@@ -71,15 +71,15 @@ public class PPtrTests
 		PPtr<IDerivedUnityObjectInterface> convertedPptr = (PPtr<IDerivedUnityObjectInterface>)pptr;
 
 		// Assert
-		using (Assert.EnterMultipleScope())
+
 		{
-			Assert.That(convertedPptr.FileID, Is.EqualTo(fileID));
-			Assert.That(convertedPptr.PathID, Is.EqualTo(pathID));
+			await Assert.That(convertedPptr.FileID).IsEqualTo(fileID);
+			await Assert.That(convertedPptr.PathID).IsEqualTo(pathID);
 		}
 	}
 
 	[Test]
-	public void PPtrT_ImplicitOperator_ReturnsCorrectType()
+	public async Task PPtrT_ImplicitOperator_ReturnsCorrectType()
 	{
 		// Arrange
 		int fileID = 1;
@@ -90,15 +90,15 @@ public class PPtrTests
 		PPtr<IUnityObjectBase> convertedPptr = pptr;
 
 		// Assert
-		using (Assert.EnterMultipleScope())
+
 		{
-			Assert.That(convertedPptr.FileID, Is.EqualTo(fileID));
-			Assert.That(convertedPptr.PathID, Is.EqualTo(pathID));
+			await Assert.That(convertedPptr.FileID).IsEqualTo(fileID);
+			await Assert.That(convertedPptr.PathID).IsEqualTo(pathID);
 		}
 	}
 
 	[Test]
-	public void PPtrT_ExplicitOperator_FromIUnityObjectBase_ReturnsCorrectType()
+	public async Task PPtrT_ExplicitOperator_FromIUnityObjectBase_ReturnsCorrectType()
 	{
 		// Arrange
 		int fileID = 1;
@@ -109,10 +109,10 @@ public class PPtrTests
 		PPtr<IDerivedUnityObjectInterface> convertedPptr = (PPtr<IDerivedUnityObjectInterface>)pptr;
 
 		// Assert
-		using (Assert.EnterMultipleScope())
+
 		{
-			Assert.That(convertedPptr.FileID, Is.EqualTo(fileID));
-			Assert.That(convertedPptr.PathID, Is.EqualTo(pathID));
+			await Assert.That(convertedPptr.FileID).IsEqualTo(fileID);
+			await Assert.That(convertedPptr.PathID).IsEqualTo(pathID);
 		}
 	}
 

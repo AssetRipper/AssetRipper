@@ -28,47 +28,47 @@ public class LinuxGameStructureTests
 	}
 
 	[Test]
-	public void ExtensionlessExecutableIsDetectedAsLinux()
+	public async Task ExtensionlessExecutableIsDetectedAsLinux()
 	{
 		const string root = "/game";
 		VirtualFileSystem fs = CreateFileSystem(root, GameName); // no extension
 		PlatformGameStructure? platform = Detect(fs, root);
 
-		using (Assert.EnterMultipleScope())
+
 		{
-			Assert.That(platform, Is.Not.Null);
-			Assert.That(platform!.GetType().Name, Is.EqualTo("LinuxGameStructure"));
-			Assert.That(platform.StreamingAssetsPath, Is.EqualTo(fs.Path.Join(root, DataFolder, "StreamingAssets")));
+			await Assert.That(platform).IsNotNull();
+			await Assert.That(platform!.GetType().Name).IsEqualTo("LinuxGameStructure");
+			await Assert.That(platform.StreamingAssetsPath).IsEqualTo(fs.Path.Join(root, DataFolder, "StreamingAssets"));
 		}
 	}
 
 	[Test]
-	public void OldX86_64ExecutableIsDetectedAsLinux()
+	public async Task OldX86_64ExecutableIsDetectedAsLinux()
 	{
 		const string root = "/game";
 		VirtualFileSystem fs = CreateFileSystem(root, $"{GameName}.x86_64");
 		PlatformGameStructure? platform = Detect(fs, root);
 
-		using (Assert.EnterMultipleScope())
+
 		{
-			Assert.That(platform, Is.Not.Null);
-			Assert.That(platform!.GetType().Name, Is.EqualTo("LinuxGameStructure"));
-			Assert.That(platform.StreamingAssetsPath, Is.EqualTo(fs.Path.Join(root, DataFolder, "StreamingAssets")));
+			await Assert.That(platform).IsNotNull();
+			await Assert.That(platform!.GetType().Name).IsEqualTo("LinuxGameStructure");
+			await Assert.That(platform.StreamingAssetsPath).IsEqualTo(fs.Path.Join(root, DataFolder, "StreamingAssets"));
 		}
 	}
 
 	[Test]
-	public void DataDirectoryGivenDirectlyIsDetectedAsLinux()
+	public async Task DataDirectoryGivenDirectlyIsDetectedAsLinux()
 	{
 		const string root = "/game";
 		VirtualFileSystem fs = CreateFileSystem(root, GameName); // no extension
 		PlatformGameStructure? platform = Detect(fs, fs.Path.Join(root, DataFolder));
 
-		using (Assert.EnterMultipleScope())
+
 		{
-			Assert.That(platform, Is.Not.Null);
-			Assert.That(platform!.GetType().Name, Is.EqualTo("LinuxGameStructure"));
-			Assert.That(platform.StreamingAssetsPath, Is.EqualTo(fs.Path.Join(root, DataFolder, "StreamingAssets")));
+			await Assert.That(platform).IsNotNull();
+			await Assert.That(platform!.GetType().Name).IsEqualTo("LinuxGameStructure");
+			await Assert.That(platform.StreamingAssetsPath).IsEqualTo(fs.Path.Join(root, DataFolder, "StreamingAssets"));
 		}
 	}
 }

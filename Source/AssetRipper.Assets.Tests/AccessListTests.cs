@@ -1,20 +1,20 @@
-﻿using AssetRipper.Assets.Generics;
+using AssetRipper.Assets.Generics;
 
 namespace AssetRipper.Assets.Tests;
 
 internal class AccessListTests
 {
 	[Test]
-	public void EmptyListToArray()
+	public async Task EmptyListToArray()
 	{
 		AssetList<int> list = new();
 		AccessList<int, int> accessList = new(list);
 		int[] array = accessList.ToArray();
-		Assert.That(array, Is.Empty);
+		await Assert.That(array).IsEmpty();
 	}
 
 	[Test]
-	public void NonemptyListToArray()
+	public async Task NonemptyListToArray()
 	{
 		AssetList<int> list = new()
 		{
@@ -23,6 +23,6 @@ internal class AccessListTests
 		};
 		AccessList<int, int> accessList = new(list);
 		int[] array = accessList.ToArray();
-		Assert.That(array, Has.Length.EqualTo(2));
+		await Assert.That(array.Length).IsEqualTo(2);
 	}
 }

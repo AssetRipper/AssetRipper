@@ -2,89 +2,89 @@
 
 namespace AssetRipper.IO.Files.Tests;
 
-public static class LzmaCompressionTests
+public class LzmaCompressionTests
 {
 	[Test]
-	public static void LzmaStreamSymmetryTest()
+	public async Task LzmaStreamSymmetryTest()
 	{
 		const int UncompressedSize = 4075;
-		byte[] randomData = RandomData.MakeRandomData(UncompressedSize);
+		byte[] randomData = new Random(42).NextBytes(UncompressedSize);
 
 		MemoryStream uncompressedStream = new MemoryStream(randomData);
 		MemoryStream compressedStream = new();
 		long compressedSize = LzmaCompression.CompressLzmaStream(uncompressedStream, UncompressedSize, compressedStream);
-		Assert.That(uncompressedStream.Position, Is.EqualTo(UncompressedSize));
+		await Assert.That(uncompressedStream.Position).IsEqualTo(UncompressedSize);
 
 		compressedStream.Position = 0;
 		MemoryStream decompressedStream = new();
 		LzmaCompression.DecompressLzmaStream(compressedStream, compressedSize, decompressedStream, UncompressedSize);
 		byte[] decompressedData = decompressedStream.ToArray();
 
-		Assert.That(decompressedData, Is.EqualTo(randomData));
+		await Assert.That(decompressedData.SequenceEqual(randomData)).IsTrue();
 	}
 
 	[Test]
-	public static void LzmaStreamSymmetryTestForPartialInputStream()
+	public async Task LzmaStreamSymmetryTestForPartialInputStream()
 	{
 		const int UncompressedSize = 4077;
 		const int InitialOffset = 34;
 		const int TrailingCount = 50;
-		byte[] randomData = RandomData.MakeRandomData(InitialOffset + UncompressedSize + TrailingCount);
+		byte[] randomData = new Random(42).NextBytes(InitialOffset + UncompressedSize + TrailingCount);
 
 		MemoryStream uncompressedStream = new MemoryStream(randomData);
 		uncompressedStream.Position += InitialOffset;
 
 		MemoryStream compressedStream = new();
 		long compressedSize = LzmaCompression.CompressLzmaStream(uncompressedStream, UncompressedSize, compressedStream);
-		Assert.That(uncompressedStream.Position, Is.EqualTo(InitialOffset + UncompressedSize));
+		await Assert.That(uncompressedStream.Position).IsEqualTo(InitialOffset + UncompressedSize);
 
 		compressedStream.Position = 0;
 		MemoryStream decompressedStream = new();
 		LzmaCompression.DecompressLzmaStream(compressedStream, compressedSize, decompressedStream, UncompressedSize);
 		byte[] decompressedData = decompressedStream.ToArray();
 
-		Assert.That((ArraySegment<byte>)decompressedData, Is.EqualTo(new ArraySegment<byte>(randomData, InitialOffset, UncompressedSize)));
+		await Assert.That(decompressedData.AsSpan().SequenceEqual(randomData.AsSpan(InitialOffset, UncompressedSize))).IsTrue();
 	}
 
 	[Test]
-	public static void LzmaSizeStreamSymmetryTest()
+	public async Task LzmaSizeStreamSymmetryTest()
 	{
 		const int UncompressedSize = 4067;
-		byte[] randomData = RandomData.MakeRandomData(UncompressedSize);
+		byte[] randomData = new Random(42).NextBytes(UncompressedSize);
 
 		MemoryStream uncompressedStream = new MemoryStream(randomData);
 		MemoryStream compressedStream = new();
 		long compressedSize = LzmaCompression.CompressLzmaSizeStream(uncompressedStream, UncompressedSize, compressedStream);
-		Assert.That(uncompressedStream.Position, Is.EqualTo(UncompressedSize));
+		await Assert.That(uncompressedStream.Position).IsEqualTo(UncompressedSize);
 
 		compressedStream.Position = 0;
 		MemoryStream decompressedStream = new();
 		LzmaCompression.DecompressLzmaSizeStream(compressedStream, compressedSize, decompressedStream);
 		byte[] decompressedData = decompressedStream.ToArray();
 
-		Assert.That(decompressedData, Is.EqualTo(randomData));
+		await Assert.That(decompressedData.SequenceEqual(randomData)).IsTrue();
 	}
 
 	[Test]
-	public static void LzmaSizeStreamSymmetryTestForPartialInputStream()
+	public async Task LzmaSizeStreamSymmetryTestForPartialInputStream()
 	{
 		const int UncompressedSize = 4087;
 		const int InitialOffset = 44;
 		const int TrailingCount = 40;
-		byte[] randomData = RandomData.MakeRandomData(InitialOffset + UncompressedSize + TrailingCount);
+		byte[] randomData = new Random(42).NextBytes(InitialOffset + UncompressedSize + TrailingCount);
 
 		MemoryStream uncompressedStream = new MemoryStream(randomData);
 		uncompressedStream.Position += InitialOffset;
 
 		MemoryStream compressedStream = new();
 		long compressedSize = LzmaCompression.CompressLzmaSizeStream(uncompressedStream, UncompressedSize, compressedStream);
-		Assert.That(uncompressedStream.Position, Is.EqualTo(InitialOffset + UncompressedSize));
+		await Assert.That(uncompressedStream.Position).IsEqualTo(InitialOffset + UncompressedSize);
 
 		compressedStream.Position = 0;
 		MemoryStream decompressedStream = new();
 		LzmaCompression.DecompressLzmaSizeStream(compressedStream, compressedSize, decompressedStream);
 		byte[] decompressedData = decompressedStream.ToArray();
 
-		Assert.That((ArraySegment<byte>)decompressedData, Is.EqualTo(new ArraySegment<byte>(randomData, InitialOffset, UncompressedSize)));
+		await Assert.That(decompressedData.AsSpan().SequenceEqual(randomData.AsSpan(InitialOffset, UncompressedSize))).IsTrue();
 	}
 }

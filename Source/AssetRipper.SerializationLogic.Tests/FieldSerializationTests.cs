@@ -14,12 +14,12 @@ public class FieldSerializationTests
 	}
 
 	[Test]
-	public void PrivateFieldsAreCorrectlyDiscriminated()
+	public async Task PrivateFieldsAreCorrectlyDiscriminated()
 	{
 		SerializableType serializableType = SerializableTypes.Create<CustomMonoBehaviourWithPrivateFields>();
-		Assert.That(serializableType.Fields, Has.Count.EqualTo(1));
+		await Assert.That(serializableType.Fields.Count).IsEqualTo(1);
 		SerializableType.Field field = serializableType.Fields[0];
-		Assert.That(field.Name, Is.EqualTo("field1"));
+		await Assert.That(field.Name).IsEqualTo("field1");
 	}
 
 	private class CustomMonoBehaviourWithPublicFields : UnityEngine.MonoBehaviour
@@ -31,12 +31,12 @@ public class FieldSerializationTests
 	}
 
 	[Test]
-	public void PublicFieldsAreCorrectlyDiscriminated()
+	public async Task PublicFieldsAreCorrectlyDiscriminated()
 	{
 		SerializableType serializableType = SerializableTypes.Create<CustomMonoBehaviourWithPublicFields>();
-		Assert.That(serializableType.Fields, Has.Count.EqualTo(1));
+		await Assert.That(serializableType.Fields.Count).IsEqualTo(1);
 		SerializableType.Field field = serializableType.Fields[0];
-		Assert.That(field.Name, Is.EqualTo(nameof(CustomMonoBehaviourWithPublicFields.field2)));
+		await Assert.That(field.Name).IsEqualTo(nameof(CustomMonoBehaviourWithPublicFields.field2));
 	}
 
 	private class CustomMonoBehaviourWithListField : UnityEngine.MonoBehaviour
@@ -45,16 +45,15 @@ public class FieldSerializationTests
 	}
 
 	[Test]
-	public void ResolutionForUnityTypesWorksAsExpected()
+	public async Task ResolutionForUnityTypesWorksAsExpected()
 	{
 		SerializableType serializableType = SerializableTypes.Create<CustomMonoBehaviourWithListField>();
-		Assert.That(serializableType.Fields, Has.Count.EqualTo(1));
+		await Assert.That(serializableType.Fields.Count).IsEqualTo(1);
 		SerializableType.Field field = serializableType.Fields[0];
-		using (Assert.EnterMultipleScope())
 		{
-			Assert.That(field.Name, Is.EqualTo(nameof(CustomMonoBehaviourWithListField.listOfStrings)));
-			Assert.That(field.Type.Type, Is.EqualTo(PrimitiveType.String));
-			Assert.That(field.ArrayDepth, Is.EqualTo(1));
+			await Assert.That(field.Name).IsEqualTo(nameof(CustomMonoBehaviourWithListField.listOfStrings));
+			await Assert.That(field.Type.Type).IsEqualTo(PrimitiveType.String);
+			await Assert.That(field.ArrayDepth).IsEqualTo(1);
 		}
 	}
 
@@ -70,102 +69,100 @@ public class FieldSerializationTests
 	}
 
 	[Test]
-	public void DeserializationSupportsGenericTypes()
+	public async Task DeserializationSupportsGenericTypes()
 	{
 		SerializableType serializableType = SerializableTypes.Create<CustomMonoBehaviourWithGenericField>();
 
-		Assert.That(serializableType.Fields, Has.Count.EqualTo(1));
+		await Assert.That(serializableType.Fields.Count).IsEqualTo(1);
 		SerializableType.Field field = serializableType.Fields[0];
-		using (Assert.EnterMultipleScope())
 		{
-			Assert.That(field.Name, Is.EqualTo(nameof(CustomMonoBehaviourWithGenericField.testGenericClass)));
-			Assert.That(field.Type.Type, Is.EqualTo(PrimitiveType.Complex));
-			Assert.That(field.ArrayDepth, Is.Zero);
-			Assert.That(field.Type.Fields, Has.Count.EqualTo(1));
+			await Assert.That(field.Name).IsEqualTo(nameof(CustomMonoBehaviourWithGenericField.testGenericClass));
+			await Assert.That(field.Type.Type).IsEqualTo(PrimitiveType.Complex);
+			await Assert.That(field.ArrayDepth).IsEqualTo(0);
+			await Assert.That(field.Type.Fields.Count).IsEqualTo(1);
 		}
 		SerializableType.Field subField = field.Type.Fields[0];
-		using (Assert.EnterMultipleScope())
 		{
-			Assert.That(subField.Name, Is.EqualTo(nameof(TestGenericClass<>.listOfT)));
-			Assert.That(subField.Type.Type, Is.EqualTo(PrimitiveType.String));
-			Assert.That(subField.ArrayDepth, Is.EqualTo(1));
+			await Assert.That(subField.Name).IsEqualTo(nameof(TestGenericClass<>.listOfT));
+			await Assert.That(subField.Type.Type).IsEqualTo(PrimitiveType.String);
+			await Assert.That(subField.ArrayDepth).IsEqualTo(1);
 		}
 	}
 
-	[TestCase("2019.4", false)]
-	[TestCase("2020.1.0a3", true)]
-	public void GenericInstanceSerializationStartedWithUnity2020(string version, bool serialize)
+	[Test]
+	[Arguments("2019.4", false)]
+	[Arguments("2020.1.0a3", true)]
+	public async Task GenericInstanceSerializationStartedWithUnity2020(string version, bool serialize)
 	{
 		// https://github.com/AssetRipper/AssetRipper/issues/1792
 		SerializableType serializableType = SerializableTypes.Create<CustomMonoBehaviourWithGenericField>(UnityVersion.Parse(version));
 		if (serialize)
 		{
-			Assert.That(serializableType.Fields, Has.Count.EqualTo(1));
+			await Assert.That(serializableType.Fields.Count).IsEqualTo(1);
 			SerializableType.Field field = serializableType.Fields[0];
-			using (Assert.EnterMultipleScope())
 			{
-				Assert.That(field.Name, Is.EqualTo(nameof(CustomMonoBehaviourWithGenericField.testGenericClass)));
-				Assert.That(field.Type.Type, Is.EqualTo(PrimitiveType.Complex));
-				Assert.That(field.ArrayDepth, Is.Zero);
+				await Assert.That(field.Name).IsEqualTo(nameof(CustomMonoBehaviourWithGenericField.testGenericClass));
+				await Assert.That(field.Type.Type).IsEqualTo(PrimitiveType.Complex);
+				await Assert.That(field.ArrayDepth).IsEqualTo(0);
 			}
 		}
 		else
 		{
-			Assert.That(serializableType.Fields, Has.Count.EqualTo(0));
+			await Assert.That(serializableType.Fields.Count).IsEqualTo(0);
 		}
 	}
 
-	private class DerivedObject : UnityEngine.Object
+	internal class DerivedObject : UnityEngine.Object
 	{
 	}
 
-	private class CustomMonoBehaviourWithObjectField : UnityEngine.MonoBehaviour
+	internal class CustomMonoBehaviourWithObjectField : UnityEngine.MonoBehaviour
 	{
 		public UnityEngine.Object? pptr;
 	}
 
-	private class CustomMonoBehaviourWithDerivedObjectField : UnityEngine.MonoBehaviour
+	internal class CustomMonoBehaviourWithDerivedObjectField : UnityEngine.MonoBehaviour
 	{
 		public DerivedObject? pptr;
 	}
 
-	private class CustomMonoBehaviourWithMonoBehaviourField : UnityEngine.MonoBehaviour
+	internal class CustomMonoBehaviourWithMonoBehaviourField : UnityEngine.MonoBehaviour
 	{
 		public UnityEngine.Object? pptr;
 	}
 
-	private abstract class GenericAbstractMonoBehaviour<T> : UnityEngine.MonoBehaviour
+	internal abstract class GenericAbstractMonoBehaviour<T> : UnityEngine.MonoBehaviour
 	{
 	}
 
-	private class NonGenericDerivedMonoBehaviour : GenericAbstractMonoBehaviour<int>
+	internal class NonGenericDerivedMonoBehaviour : GenericAbstractMonoBehaviour<int>
 	{
 	}
 
-	private class CustomMonoBehaviourWithNonGenericDerivedMonoBehaviourField : UnityEngine.MonoBehaviour
+	internal class CustomMonoBehaviourWithNonGenericDerivedMonoBehaviourField : UnityEngine.MonoBehaviour
 	{
 		public NonGenericDerivedMonoBehaviour? pptr;
 	}
 
-	private class CustomMonoBehaviourWithGenericAbstractMonoBehaviourField : UnityEngine.MonoBehaviour
+	internal class CustomMonoBehaviourWithGenericAbstractMonoBehaviourField : UnityEngine.MonoBehaviour
 	{
 		public GenericAbstractMonoBehaviour<int>? pptr;
 	}
 
-	[TestCase(typeof(CustomMonoBehaviourWithObjectField))]
-	[TestCase(typeof(CustomMonoBehaviourWithDerivedObjectField))]
-	[TestCase(typeof(CustomMonoBehaviourWithMonoBehaviourField))]
-	[TestCase(typeof(CustomMonoBehaviourWithNonGenericDerivedMonoBehaviourField))]
-	[TestCase(typeof(CustomMonoBehaviourWithGenericAbstractMonoBehaviourField))]
-	public void DeserializationSupportsPPtrFields(Type type)
+	[Test]
+	[Arguments(typeof(CustomMonoBehaviourWithObjectField))]
+	[Arguments(typeof(CustomMonoBehaviourWithDerivedObjectField))]
+	[Arguments(typeof(CustomMonoBehaviourWithMonoBehaviourField))]
+	[Arguments(typeof(CustomMonoBehaviourWithNonGenericDerivedMonoBehaviourField))]
+	[Arguments(typeof(CustomMonoBehaviourWithGenericAbstractMonoBehaviourField))]
+	public async Task DeserializationSupportsPPtrFields(Type type)
 	{
 		SerializableType serializableType = SerializableTypes.Create(type);
-		Assert.That(serializableType.Fields, Has.Count.EqualTo(1));
+		await Assert.That(serializableType.Fields.Count).IsEqualTo(1);
 		SerializableType.Field field = serializableType.Fields[0];
-		using (Assert.EnterMultipleScope())
 		{
-			Assert.That(field.Type, Is.EqualTo(SerializablePointerType.Shared));
-			Assert.That(field.ArrayDepth, Is.Zero);
+			await Assert.That(field.Type).IsEqualTo(SerializablePointerType.Shared);
+			await Assert.That(field.ArrayDepth).IsEqualTo(0);
 		}
 	}
 
@@ -175,28 +172,28 @@ public class FieldSerializationTests
 		public long value;
 	}
 
-	[TestCase("4.4", false)]
-	[TestCase("5.3", false)]
-	[TestCase("5.9", false)]
-	[TestCase("2017.1", true)]
-	public void LongIntegerSerializationStartedWithUnity2017(string version, bool serialize)
+	[Test]
+	[Arguments("4.4", false)]
+	[Arguments("5.3", false)]
+	[Arguments("5.9", false)]
+	[Arguments("2017.1", true)]
+	public async Task LongIntegerSerializationStartedWithUnity2017(string version, bool serialize)
 	{
 		// https://github.com/AssetRipper/AssetRipper/issues/647
 		SerializableType serializableType = SerializableTypes.Create<ClassWithLongField>(UnityVersion.Parse(version));
 		if (serialize)
 		{
-			Assert.That(serializableType.Fields, Has.Count.EqualTo(1));
+			await Assert.That(serializableType.Fields.Count).IsEqualTo(1);
 			SerializableType.Field field = serializableType.Fields[0];
-			using (Assert.EnterMultipleScope())
 			{
-				Assert.That(field.Name, Is.EqualTo(nameof(ClassWithLongField.value)));
-				Assert.That(field.Type.Type, Is.EqualTo(PrimitiveType.Long));
-				Assert.That(field.ArrayDepth, Is.Zero);
+				await Assert.That(field.Name).IsEqualTo(nameof(ClassWithLongField.value));
+				await Assert.That(field.Type.Type).IsEqualTo(PrimitiveType.Long);
+				await Assert.That(field.ArrayDepth).IsEqualTo(0);
 			}
 		}
 		else
 		{
-			Assert.That(serializableType.Fields, Has.Count.EqualTo(0));
+			await Assert.That(serializableType.Fields.Count).IsEqualTo(0);
 		}
 	}
 
@@ -207,16 +204,15 @@ public class FieldSerializationTests
 	}
 
 	[Test]
-	public void DeserializationSupportsStructsWithIntField()
+	public async Task DeserializationSupportsStructsWithIntField()
 	{
 		SerializableType serializableType = SerializableTypes.Create<StructWithIntField>();
-		Assert.That(serializableType.Fields, Has.Count.EqualTo(1));
+		await Assert.That(serializableType.Fields.Count).IsEqualTo(1);
 		SerializableType.Field field = serializableType.Fields[0];
-		using (Assert.EnterMultipleScope())
 		{
-			Assert.That(field.Name, Is.EqualTo(nameof(StructWithIntField.value)));
-			Assert.That(field.Type.Type, Is.EqualTo(PrimitiveType.Int));
-			Assert.That(field.ArrayDepth, Is.Zero);
+			await Assert.That(field.Name).IsEqualTo(nameof(StructWithIntField.value));
+			await Assert.That(field.Type.Type).IsEqualTo(PrimitiveType.Int);
+			await Assert.That(field.ArrayDepth).IsEqualTo(0);
 		}
 	}
 
@@ -227,16 +223,15 @@ public class FieldSerializationTests
 	}
 
 	[Test]
-	public void DeserializationSupportsStructsWithFixedSizeBuffer()
+	public async Task DeserializationSupportsStructsWithFixedSizeBuffer()
 	{
 		SerializableType serializableType = SerializableTypes.Create<StructWithFixedSizeBuffer>();
-		Assert.That(serializableType.Fields, Has.Count.EqualTo(1));
+		await Assert.That(serializableType.Fields.Count).IsEqualTo(1);
 		SerializableType.Field field = serializableType.Fields[0];
-		using (Assert.EnterMultipleScope())
 		{
-			Assert.That(field.Name, Is.EqualTo(nameof(StructWithFixedSizeBuffer.values)));
-			Assert.That(field.Type.Type, Is.EqualTo(PrimitiveType.Int));
-			Assert.That(field.ArrayDepth, Is.EqualTo(1));
+			await Assert.That(field.Name).IsEqualTo(nameof(StructWithFixedSizeBuffer.values));
+			await Assert.That(field.Type.Type).IsEqualTo(PrimitiveType.Int);
+			await Assert.That(field.ArrayDepth).IsEqualTo(1);
 		}
 	}
 
@@ -246,26 +241,26 @@ public class FieldSerializationTests
 		public StructWithIntField value;
 	}
 
-	[TestCase("4.4", false)]
-	[TestCase("4.6", true)]
-	public void StructSerializationStartedWithUnity4_5(string version, bool serialize)
+	[Test]
+	[Arguments("4.4", false)]
+	[Arguments("4.6", true)]
+	public async Task StructSerializationStartedWithUnity4_5(string version, bool serialize)
 	{
 		// https://github.com/AssetRipper/AssetRipper/issues/1534
 		SerializableType serializableType = SerializableTypes.Create<ClassWithStructField>(UnityVersion.Parse(version));
 		if (serialize)
 		{
-			Assert.That(serializableType.Fields, Has.Count.EqualTo(1));
+			await Assert.That(serializableType.Fields.Count).IsEqualTo(1);
 			SerializableType.Field field = serializableType.Fields[0];
-			using (Assert.EnterMultipleScope())
 			{
-				Assert.That(field.Name, Is.EqualTo(nameof(ClassWithStructField.value)));
-				Assert.That(field.Type.Type, Is.EqualTo(PrimitiveType.Complex));
-				Assert.That(field.ArrayDepth, Is.Zero);
+				await Assert.That(field.Name).IsEqualTo(nameof(ClassWithStructField.value));
+				await Assert.That(field.Type.Type).IsEqualTo(PrimitiveType.Complex);
+				await Assert.That(field.ArrayDepth).IsEqualTo(0);
 			}
 		}
 		else
 		{
-			Assert.That(serializableType.Fields, Has.Count.EqualTo(0));
+			await Assert.That(serializableType.Fields.Count).IsEqualTo(0);
 		}
 	}
 
@@ -276,48 +271,48 @@ public class FieldSerializationTests
 	}
 
 	[Test]
-	public void DeserializationSupportsFieldsWithSameName()
+	public async Task DeserializationSupportsFieldsWithSameName()
 	{
 		SerializableType serializableType = SerializableTypes.Create<DerivedClassWithNewField>();
-		Assert.That(serializableType.Fields, Has.Count.EqualTo(2));
+		await Assert.That(serializableType.Fields.Count).IsEqualTo(2);
 		SerializableType.Field field1 = serializableType.Fields[0];
 		SerializableType.Field field2 = serializableType.Fields[1];
-		using (Assert.EnterMultipleScope())
 		{
-			Assert.That(field1.Name, Is.EqualTo(field2.Name));
+			await Assert.That(field1.Name).IsEqualTo(field2.Name);
 
-			Assert.That(field1.Name, Is.EqualTo(nameof(ClassWithLongField.value)));
-			Assert.That(field1.Type.Type, Is.EqualTo(PrimitiveType.Long));
-			Assert.That(field1.ArrayDepth, Is.Zero);
+			await Assert.That(field1.Name).IsEqualTo(nameof(ClassWithLongField.value));
+			await Assert.That(field1.Type.Type).IsEqualTo(PrimitiveType.Long);
+			await Assert.That(field1.ArrayDepth).IsEqualTo(0);
 
-			Assert.That(field2.Name, Is.EqualTo(nameof(DerivedClassWithNewField.value)));
-			Assert.That(field2.Type.Type, Is.EqualTo(PrimitiveType.Single));
-			Assert.That(field2.ArrayDepth, Is.Zero);
+			await Assert.That(field2.Name).IsEqualTo(nameof(DerivedClassWithNewField.value));
+			await Assert.That(field2.Type.Type).IsEqualTo(PrimitiveType.Single);
+			await Assert.That(field2.ArrayDepth).IsEqualTo(0);
 		}
 	}
 
-	[TestCase(typeof(UnityEngine.Vector2))]
-	[TestCase(typeof(UnityEngine.Vector3))]
-	[TestCase(typeof(UnityEngine.Vector4))]
-	[TestCase(typeof(UnityEngine.Rect))]
-	[TestCase(typeof(UnityEngine.RectInt))]
-	[TestCase(typeof(UnityEngine.Quaternion))]
-	[TestCase(typeof(UnityEngine.Matrix4x4))]
-	[TestCase(typeof(UnityEngine.Color))]
-	[TestCase(typeof(UnityEngine.Color32))]
-	[TestCase(typeof(UnityEngine.LayerMask))]
-	[TestCase(typeof(UnityEngine.Bounds))]
-	[TestCase(typeof(UnityEngine.BoundsInt))]
-	[TestCase(typeof(UnityEngine.Vector3Int))]
-	[TestCase(typeof(UnityEngine.Vector2Int))]
-	public void DeserializationSupportsEngineStructsWithoutSerializableAttributeOnUnity4(Type type)
+	[Test]
+	[Arguments(typeof(UnityEngine.Vector2))]
+	[Arguments(typeof(UnityEngine.Vector3))]
+	[Arguments(typeof(UnityEngine.Vector4))]
+	[Arguments(typeof(UnityEngine.Rect))]
+	[Arguments(typeof(UnityEngine.RectInt))]
+	[Arguments(typeof(UnityEngine.Quaternion))]
+	[Arguments(typeof(UnityEngine.Matrix4x4))]
+	[Arguments(typeof(UnityEngine.Color))]
+	[Arguments(typeof(UnityEngine.Color32))]
+	[Arguments(typeof(UnityEngine.LayerMask))]
+	[Arguments(typeof(UnityEngine.Bounds))]
+	[Arguments(typeof(UnityEngine.BoundsInt))]
+	[Arguments(typeof(UnityEngine.Vector3Int))]
+	[Arguments(typeof(UnityEngine.Vector2Int))]
+	public async Task DeserializationSupportsEngineStructsWithoutSerializableAttributeOnUnity4(Type type)
 	{
 		TypeDefinition typeDefinition = SerializableClassGenerator.CreateEmptySerializableClass();
 		FieldDefinition fieldDefinition = new("engineStructField", FieldAttributes.Public, new FieldSignature(ReferenceAssemblies.GetType(type).ToTypeSignature()));
 		typeDefinition.Fields.Add(fieldDefinition);
 
 		SerializableType serializableType = SerializableTypes.Create(typeDefinition, new(4));
-		Assert.That(serializableType.Fields, Has.Count.EqualTo(1));
+		await Assert.That(serializableType.Fields.Count).IsEqualTo(1);
 	}
 
 	[Serializable]
@@ -327,16 +322,15 @@ public class FieldSerializationTests
 	}
 
 	[Test]
-	public void DeserializationSupportsVolatileFields()
+	public async Task DeserializationSupportsVolatileFields()
 	{
 		SerializableType serializableType = SerializableTypes.Create<ClassWithVolatileField>();
-		Assert.That(serializableType.Fields, Has.Count.EqualTo(1));
+		await Assert.That(serializableType.Fields.Count).IsEqualTo(1);
 		SerializableType.Field field = serializableType.Fields[0];
-		using (Assert.EnterMultipleScope())
 		{
-			Assert.That(field.Name, Is.EqualTo(nameof(ClassWithVolatileField.value)));
-			Assert.That(field.Type.Type, Is.EqualTo(PrimitiveType.Bool));
-			Assert.That(field.ArrayDepth, Is.Zero);
+			await Assert.That(field.Name).IsEqualTo(nameof(ClassWithVolatileField.value));
+			await Assert.That(field.Type.Type).IsEqualTo(PrimitiveType.Bool);
+			await Assert.That(field.ArrayDepth).IsEqualTo(0);
 		}
 	}
 
@@ -353,10 +347,10 @@ public class FieldSerializationTests
 	}
 
 	[Test]
-	public void FieldsWithAbstractTypesShouldNotBeSerialized()
+	public async Task FieldsWithAbstractTypesShouldNotBeSerialized()
 	{
 		SerializableType serializableType = SerializableTypes.Create<ClassWithAbstractField>();
-		Assert.That(serializableType.Fields, Has.Count.EqualTo(0));
+		await Assert.That(serializableType.Fields.Count).IsEqualTo(0);
 	}
 
 	[Serializable]
@@ -366,10 +360,10 @@ public class FieldSerializationTests
 	}
 
 	[Test]
-	public void ListFieldsWithAbstractTypesShouldNotBeSerialized()
+	public async Task ListFieldsWithAbstractTypesShouldNotBeSerialized()
 	{
 		SerializableType serializableType = SerializableTypes.Create<ClassWithAbstractListField>();
-		Assert.That(serializableType.Fields, Has.Count.EqualTo(0));
+		await Assert.That(serializableType.Fields.Count).IsEqualTo(0);
 	}
 
 	[Serializable]
@@ -386,10 +380,10 @@ public class FieldSerializationTests
 	}
 
 	[Test]
-	public void FieldWhoseTypeIsBaseShouldBeSerialized()
+	public async Task FieldWhoseTypeIsBaseShouldBeSerialized()
 	{
 		SerializableType serializableType = SerializableTypes.Create<DerivedClassWithBaseClassField>();
-		Assert.That(serializableType.Fields, Has.Count.EqualTo(2));
+		await Assert.That(serializableType.Fields.Count).IsEqualTo(2);
 	}
 
 	private class BaseClassWithoutSerializableAttribute
@@ -404,10 +398,10 @@ public class FieldSerializationTests
 	}
 
 	[Test]
-	public void FieldsFromBaseTypesAreStillSerializedEvenWithoutSerializableAttributeOnBaseType()
+	public async Task FieldsFromBaseTypesAreStillSerializedEvenWithoutSerializableAttributeOnBaseType()
 	{
 		SerializableType serializableType = SerializableTypes.Create<DerivedClassWithSerializableAttribute>();
-		Assert.That(serializableType.Fields, Has.Count.EqualTo(2));
+		await Assert.That(serializableType.Fields.Count).IsEqualTo(2);
 	}
 
 	private interface IReferencedInterface
@@ -444,64 +438,61 @@ public class FieldSerializationTests
 	}
 
 	[Test]
-	public void ReferenceFieldsHoldAnIdentifierInsteadOfTheObject()
+	public async Task ReferenceFieldsHoldAnIdentifierInsteadOfTheObject()
 	{
 		SerializableType serializableType = SerializableTypes.Create<CustomMonoBehaviourWithReferenceFields>();
-		using (Assert.EnterMultipleScope())
 		{
-			Assert.That(serializableType.Fields, Has.Count.EqualTo(4));
-			Assert.That(serializableType.Fields[0].Type, Is.SameAs(ManagedReferenceTypes.ManagedReference));
-			Assert.That(serializableType.Fields[0].ArrayDepth, Is.EqualTo(0));
-			Assert.That(serializableType.Fields[1].Type, Is.SameAs(ManagedReferenceTypes.ManagedReference));
-			Assert.That(serializableType.Fields[1].ArrayDepth, Is.EqualTo(1));
-			Assert.That(serializableType.Fields[2].Type, Is.SameAs(ManagedReferenceTypes.ManagedReference));
-			Assert.That(serializableType.Fields[2].ArrayDepth, Is.EqualTo(1));
-			Assert.That(serializableType.Fields[3].Type, Is.SameAs(ManagedReferenceTypes.Registry));
+			await Assert.That(serializableType.Fields.Count).IsEqualTo(4);
+			await Assert.That(serializableType.Fields[0].Type).IsSameReferenceAs(ManagedReferenceTypes.ManagedReference);
+			await Assert.That(serializableType.Fields[0].ArrayDepth).IsEqualTo(0);
+			await Assert.That(serializableType.Fields[1].Type).IsSameReferenceAs(ManagedReferenceTypes.ManagedReference);
+			await Assert.That(serializableType.Fields[1].ArrayDepth).IsEqualTo(1);
+			await Assert.That(serializableType.Fields[2].Type).IsSameReferenceAs(ManagedReferenceTypes.ManagedReference);
+			await Assert.That(serializableType.Fields[2].ArrayDepth).IsEqualTo(1);
+			await Assert.That(serializableType.Fields[3].Type).IsSameReferenceAs(ManagedReferenceTypes.Registry);
 		}
 	}
 
 	[Test]
-	public void ReferenceFieldsHoldAnIndexBeforeStableIdentifiersWereIntroduced()
+	public async Task ReferenceFieldsHoldAnIndexBeforeStableIdentifiersWereIntroduced()
 	{
 		SerializableType serializableType = SerializableTypes.Create<CustomMonoBehaviourWithReferenceFields>(new UnityVersion(2019, 4));
-		using (Assert.EnterMultipleScope())
 		{
-			Assert.That(serializableType.Fields, Has.Count.EqualTo(4));
-			Assert.That(serializableType.Fields[0].Type, Is.SameAs(ManagedReferenceTypes.IndexedManagedReference));
-			Assert.That(serializableType.Fields[1].Type, Is.SameAs(ManagedReferenceTypes.IndexedManagedReference));
-			Assert.That(serializableType.Fields[2].Type, Is.SameAs(ManagedReferenceTypes.IndexedManagedReference));
-			Assert.That(serializableType.Fields[3].Type, Is.SameAs(ManagedReferenceTypes.Registry));
+			await Assert.That(serializableType.Fields.Count).IsEqualTo(4);
+			await Assert.That(serializableType.Fields[0].Type).IsSameReferenceAs(ManagedReferenceTypes.IndexedManagedReference);
+			await Assert.That(serializableType.Fields[1].Type).IsSameReferenceAs(ManagedReferenceTypes.IndexedManagedReference);
+			await Assert.That(serializableType.Fields[2].Type).IsSameReferenceAs(ManagedReferenceTypes.IndexedManagedReference);
+			await Assert.That(serializableType.Fields[3].Type).IsSameReferenceAs(ManagedReferenceTypes.Registry);
 		}
 	}
 
 	[Test]
-	public void OnlyTheMostDerivedTypeHasAManagedReferenceRegistry()
+	public async Task OnlyTheMostDerivedTypeHasAManagedReferenceRegistry()
 	{
 		SerializableType serializableType = SerializableTypes.Create<DerivedMonoBehaviourWithReferenceFields>();
-		using (Assert.EnterMultipleScope())
 		{
-			Assert.That(serializableType.Fields.Count(field => field.Type == ManagedReferenceTypes.Registry), Is.EqualTo(1));
-			Assert.That(serializableType.Fields[^1].Type, Is.SameAs(ManagedReferenceTypes.Registry));
-			Assert.That(serializableType.Fields[^2].Name, Is.EqualTo(nameof(DerivedMonoBehaviourWithReferenceFields.derivedField)));
+			await Assert.That(serializableType.Fields.Count(field => field.Type == ManagedReferenceTypes.Registry)).IsEqualTo(1);
+			await Assert.That(serializableType.Fields[^1].Type).IsSameReferenceAs(ManagedReferenceTypes.Registry);
+			await Assert.That(serializableType.Fields[^2].Name).IsEqualTo(nameof(DerivedMonoBehaviourWithReferenceFields.derivedField));
 		}
 	}
 
 	[Test]
-	public void TypesWithoutReferenceFieldsHaveNoManagedReferenceRegistry()
+	public async Task TypesWithoutReferenceFieldsHaveNoManagedReferenceRegistry()
 	{
 		SerializableType serializableType = SerializableTypes.Create<CustomMonoBehaviourWithPublicFields>();
-		Assert.That(serializableType.Fields.Any(field => field.Type == ManagedReferenceTypes.Registry), Is.False);
+		await Assert.That(serializableType.Fields.Any(field => field.Type == ManagedReferenceTypes.Registry)).IsFalse();
 	}
 
 	[Test]
-	public void NestedTypesWithReferenceFieldsAreNotRootTypes()
+	public async Task NestedTypesWithReferenceFieldsAreNotRootTypes()
 	{
 		SerializableType serializableType = SerializableTypes.Create<ClassWithReferenceField>();
-		Assert.That(serializableType.Fields.Any(field => field.Type == ManagedReferenceTypes.Registry), Is.False);
+		await Assert.That(serializableType.Fields.Any(field => field.Type == ManagedReferenceTypes.Registry)).IsFalse();
 	}
 
 	[Test]
-	public void ManagedReferenceRegistryIsAddedWhenTheNestedTypeWasAlreadyCached()
+	public async Task ManagedReferenceRegistryIsAddedWhenTheNestedTypeWasAlreadyCached()
 	{
 		TypeDefinition nestedType = ReferenceAssemblies.GetType<ClassWithReferenceField>();
 		TypeDefinition behaviourType = ReferenceAssemblies.GetType<CustomMonoBehaviourWithNestedReferenceField>();
@@ -509,8 +500,10 @@ public class FieldSerializationTests
 		FieldSerializer serializer = new(new UnityVersion(6000), runtimeContext);
 		Dictionary<ITypeDefOrRef, SerializableType> typeCache = new(runtimeContext?.SignatureComparer);
 
-		Assert.That(serializer.TryCreateSerializableType(nestedType, typeCache, out _, out string? nestedFailure), Is.True, nestedFailure);
-		Assert.That(serializer.TryCreateSerializableType(behaviourType, typeCache, out SerializableType? serializableType, out string? failure), Is.True, failure);
-		Assert.That(serializableType!.Fields[^1].Type, Is.SameAs(ManagedReferenceTypes.Registry));
+		if (!serializer.TryCreateSerializableType(nestedType, typeCache, out _, out string? nestedFailure))
+			throw new InvalidOperationException(nestedFailure);
+		if (!serializer.TryCreateSerializableType(behaviourType, typeCache, out SerializableType? serializableType, out string? failure))
+			throw new InvalidOperationException(failure);
+		await Assert.That(serializableType!.Fields[^1].Type).IsSameReferenceAs(ManagedReferenceTypes.Registry);
 	}
 }

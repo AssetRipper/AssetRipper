@@ -2,23 +2,22 @@
 using AssetRipper.IO.Endian;
 using AssetRipper.Primitives;
 using AssetRipper.SerializationLogic;
-using AssetRipper.SourceGenerated.Extensions;
 
 namespace AssetRipper.Tests;
 
 internal class SerializableStructureTests
 {
 	[Test]
-	public void SphericalHarmonicsL2CanBeRead()
+	public async Task SphericalHarmonicsL2CanBeRead()
 	{
 		// https://github.com/AssetRipper/AssetRipper/issues/1970
 		SerializableType serializableType = new ParentType();
-		Assert.That(serializableType.Fields, Has.Count.EqualTo(1));
+		await Assert.That(serializableType.Fields).Count().IsEqualTo(1);
 		SerializableStructure structure = serializableType.CreateSerializableStructure();
 		byte[] data = new byte[27 * sizeof(float)];
 		EndianSpanReader reader = new(data, EndianType.LittleEndian);
 		structure.Read(ref reader, new UnityVersion(6000), default, ITypeResolver.Null);
-		Assert.That(reader.Position, Is.EqualTo(data.Length));
+		await Assert.That(reader.Position).IsEqualTo(data.Length);
 	}
 
 	private class ParentType : SerializableType

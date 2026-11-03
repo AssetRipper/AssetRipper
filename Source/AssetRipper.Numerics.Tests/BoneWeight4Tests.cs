@@ -1,18 +1,18 @@
-﻿namespace AssetRipper.Numerics.Tests;
+namespace AssetRipper.Numerics.Tests;
 
 public class BoneWeight4Tests
 {
 	[Test]
-	public void DefaultCanBeNormalized()
+	public async Task DefaultCanBeNormalized()
 	{
 		BoneWeight4 boneWeight = new BoneWeight4().NormalizeWeights();
-		using (Assert.EnterMultipleScope())
+
 		{
-			Assert.That(boneWeight.Weight0, Is.EqualTo(0.25f));
-			Assert.That(boneWeight.Weight1, Is.EqualTo(0.25f));
-			Assert.That(boneWeight.Weight2, Is.EqualTo(0.25f));
-			Assert.That(boneWeight.Weight3, Is.EqualTo(0.25f));
-			Assert.That(boneWeight.Normalized);
+			await Assert.That(boneWeight.Weight0).IsEqualTo(0.25f);
+			await Assert.That(boneWeight.Weight1).IsEqualTo(0.25f);
+			await Assert.That(boneWeight.Weight2).IsEqualTo(0.25f);
+			await Assert.That(boneWeight.Weight3).IsEqualTo(0.25f);
+			await Assert.That(boneWeight.Normalized).IsTrue();
 		}
 	}
 }

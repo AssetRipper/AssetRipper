@@ -6,24 +6,24 @@ namespace AssetRipper.IO.Files.Tests;
 public class BrotliFileSchemeTests
 {
 	[Test]
-	public void CanRead_ReturnsFalse_OnEmptyStream()
+	public async Task CanRead_ReturnsFalse_OnEmptyStream()
 	{
 		SmartStream stream = SmartStream.CreateMemory(Array.Empty<byte>());
 		BrotliFileScheme scheme = new();
 
 		bool result = scheme.CanRead(stream);
 
-		Assert.That(result, Is.False);
+		await Assert.That(result).IsFalse();
 	}
 
 	[Test]
-	public void CanRead_ReturnsFalse_OnNonBrotliFile()
+	public async Task CanRead_ReturnsFalse_OnNonBrotliFile()
 	{
 		SmartStream stream = SmartStream.CreateMemory(new byte[32]);
 		BrotliFileScheme scheme = new();
 
 		bool result = scheme.CanRead(stream);
 
-		Assert.That(result, Is.False);
+		await Assert.That(result).IsFalse();
 	}
 }

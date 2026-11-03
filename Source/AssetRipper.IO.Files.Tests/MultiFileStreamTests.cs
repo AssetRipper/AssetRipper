@@ -5,7 +5,7 @@ namespace AssetRipper.IO.Files.Tests;
 public class MultiFileStreamTests
 {
 	[Test]
-	public void OpenReadIgnoresFilesThatAreNotSplitParts()
+	public async Task OpenReadIgnoresFilesThatAreNotSplitParts()
 	{
 		VirtualFileSystem fileSystem = new();
 		fileSystem.Directory.Create("/data");
@@ -18,11 +18,11 @@ public class MultiFileStreamTests
 		using MemoryStream result = new();
 		stream.CopyTo(result);
 
-		Assert.That(result.ToArray(), Is.EqualTo(new byte[] { 1, 2 }));
+		await Assert.That(result.ToArray().SequenceEqual(new byte[] { 1, 2 })).IsTrue();
 	}
 
 	[Test]
-	public void ReadByteSkipsEmptySplitParts()
+	public async Task ReadByteSkipsEmptySplitParts()
 	{
 		VirtualFileSystem fileSystem = new();
 		fileSystem.Directory.Create("/data");
@@ -33,8 +33,8 @@ public class MultiFileStreamTests
 
 		using Stream stream = MultiFileStream.OpenRead(path, fileSystem);
 
-		Assert.That(stream.ReadByte(), Is.EqualTo(1));
-		Assert.That(stream.ReadByte(), Is.EqualTo(2));
-		Assert.That(stream.ReadByte(), Is.EqualTo(-1));
+		await Assert.That(stream.ReadByte()).IsEqualTo(1);
+		await Assert.That(stream.ReadByte()).IsEqualTo(2);
+		await Assert.That(stream.ReadByte()).IsEqualTo(-1);
 	}
 }

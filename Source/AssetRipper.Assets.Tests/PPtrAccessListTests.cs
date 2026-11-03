@@ -1,37 +1,28 @@
-﻿using ObjectPPtrAccessList = AssetRipper.Assets.Generics.PPtrAccessList<AssetRipper.Assets.Metadata.IPPtr<AssetRipper.Assets.IUnityObjectBase>, AssetRipper.Assets.IUnityObjectBase>;
+using ObjectPPtrAccessList = AssetRipper.Assets.Generics.PPtrAccessList<AssetRipper.Assets.Metadata.IPPtr<AssetRipper.Assets.IUnityObjectBase>, AssetRipper.Assets.IUnityObjectBase>;
 
 namespace AssetRipper.Assets.Tests;
 
 internal class PPtrAccessListTests
 {
 	[Test]
-	public void EmptyListIsImmutable()
+	public async Task EmptyListIsImmutable()
 	{
-		using (Assert.EnterMultipleScope())
+
 		{
-			Assert.Throws<NotSupportedException>(() =>
-			{
-				ObjectPPtrAccessList.Empty.Add(null);
-			});
-			Assert.Throws<NotSupportedException>(() =>
-			{
-				ObjectPPtrAccessList.Empty.AddNew();
-			});
+			await Assert.ThrowsAsync<NotSupportedException>(() => Task.Run(() => ObjectPPtrAccessList.Empty.Add(null)));
+			await Assert.ThrowsAsync<NotSupportedException>(() => Task.Run(() => ObjectPPtrAccessList.Empty.AddNew()));
 		}
 	}
 
 	[Test]
-	public void EmptyListIsEmpty()
+	public async Task EmptyListIsEmpty()
 	{
-		Assert.That(ObjectPPtrAccessList.Empty, Is.Empty);
+		await Assert.That(ObjectPPtrAccessList.Empty).IsEmpty();
 	}
 
 	[Test]
-	public void EmptyListThrowsForAccessingFirstElement()
+	public async Task EmptyListThrowsForAccessingFirstElement()
 	{
-		Assert.Throws<ArgumentOutOfRangeException>(() =>
-		{
-			_ = ObjectPPtrAccessList.Empty[0];
-		});
+		await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => Task.Run(() => ObjectPPtrAccessList.Empty[0]));
 	}
 }

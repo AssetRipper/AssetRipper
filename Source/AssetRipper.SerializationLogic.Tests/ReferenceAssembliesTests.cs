@@ -3,14 +3,14 @@
 public class ReferenceAssembliesTests
 {
 	[Test]
-	public void ResolutionForUnityTypesWorksAsExpected()
+	public async Task ResolutionForUnityTypesWorksAsExpected()
 	{
 		TypeDefinition customMonoBehaviour = ReferenceAssemblies.GetType<NestedMonoBehaviour>();
-		Assert.That(customMonoBehaviour, Is.Not.Null);
-		Assert.That(customMonoBehaviour.BaseType, Is.Not.Null);
+		await Assert.That(customMonoBehaviour).IsNotNull();
+		await Assert.That(customMonoBehaviour.BaseType).IsNotNull();
 		customMonoBehaviour.BaseType.TryResolve(customMonoBehaviour.DeclaringModule?.RuntimeContext, out TypeDefinition? monoBehaviour);
-		Assert.That(monoBehaviour, Is.Not.Null);
-		Assert.That(monoBehaviour?.Name?.ToString(), Is.EqualTo(nameof(UnityEngine.MonoBehaviour)));
+		await Assert.That(monoBehaviour).IsNotNull();
+		await Assert.That(monoBehaviour?.Name?.ToString()).IsEqualTo(nameof(UnityEngine.MonoBehaviour));
 	}
 
 	private class NestedMonoBehaviour : UnityEngine.MonoBehaviour

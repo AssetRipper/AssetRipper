@@ -10,29 +10,29 @@ namespace AssetRipper.Tests;
 public class ExportIdHandlerTests
 {
 	[Test]
-	public void GetMainExportID_ValueGreaterThan100100AndNonZero_ExceptionThrown()
+	public async Task GetMainExportID_ValueGreaterThan100100AndNonZero_ExceptionThrown()
 	{
 		// Arrange
 		const int classID = 100500;
 		const uint value = 1u;
 
 		// Act & Assert
-		Assert.Throws<ArgumentException>(() => ExportIdHandler.GetMainExportID(classID, value));
+		await Assert.ThrowsAsync<ArgumentException>(() => Task.Run(() => ExportIdHandler.GetMainExportID(classID, value)));
 	}
 
 	[Test]
-	public void GetMainExportID_ValueGreaterThan100000_DebugAssertFails()
+	public async Task GetMainExportID_ValueGreaterThan100000_DebugAssertFails()
 	{
 		// Arrange
 		const int classID = 0;
 		const uint value = 100001u;
 
 		// Act & Assert
-		Assert.That(() => ExportIdHandler.GetMainExportID(MockObject.Create(classID), value), Throws.Exception);
+		await Assert.ThrowsAsync<Exception>(() => Task.Run(() => ExportIdHandler.GetMainExportID(MockObject.Create(classID), value)));
 	}
 
 	[Test]
-	public void GetMainExportID_ValueLessThan100000_ReturnValue()
+	public async Task GetMainExportID_ValueLessThan100000_ReturnValue()
 	{
 		// Arrange
 		const int classID = 0;
@@ -43,11 +43,11 @@ public class ExportIdHandlerTests
 		long actualResult = ExportIdHandler.GetMainExportID(MockObject.Create(classID), value);
 
 		// Assert
-		Assert.That(actualResult, Is.EqualTo(expectedResult));
+		await Assert.That(actualResult).IsEqualTo(expectedResult);
 	}
 
 	[Test]
-	public void GetMainExportID_ClassIDGreaterThan100100_ReturnClassID()
+	public async Task GetMainExportID_ClassIDGreaterThan100100_ReturnClassID()
 	{
 		// Arrange
 		const int classID = 100101;
@@ -57,11 +57,11 @@ public class ExportIdHandlerTests
 		long actualResult = ExportIdHandler.GetMainExportID(MockObject.Create(classID));
 
 		// Assert
-		Assert.That(actualResult, Is.EqualTo(expectedValue));
+		await Assert.That(actualResult).IsEqualTo(expectedValue);
 	}
 
 	[Test]
-	public void GetMainExportID_ClassIDLessThan100101_ReturnCompositeID()
+	public async Task GetMainExportID_ClassIDLessThan100101_ReturnCompositeID()
 	{
 		// Arrange
 		const int classID = 42;
@@ -72,23 +72,23 @@ public class ExportIdHandlerTests
 		long actualResult = ExportIdHandler.GetMainExportID(MockObject.Create(classID), value);
 
 		// Assert
-		Assert.That(actualResult, Is.EqualTo(expectedResult));
+		await Assert.That(actualResult).IsEqualTo(expectedResult);
 	}
 
 	[Test]
-	public void GetPseudoRandomValue_NoConflictsInFirstMillionValues()
+	public async Task GetPseudoRandomValue_NoConflictsInFirstMillionValues()
 	{
 		const int Count = 1_000_000;
 		HashSet<long> generatedIds = new(Count);
 		for (int i = 0; i < Count; i++)
 		{
 			long exportId = ExportIdHandler.GetPseudoRandomValue64(i);
-			Assert.That(generatedIds.Add(exportId), Is.True, $"Duplicate export ID generated: {exportId}");
+			await Assert.That(generatedIds.Add(exportId)).IsTrue().Because($"Duplicate export ID generated: {exportId}");
 		}
 	}
 
 	[Test]
-	public void GetPseudoRandomExportID_NoConflictsInFirstMillionValues()
+	public async Task GetPseudoRandomExportID_NoConflictsInFirstMillionValues()
 	{
 		const int classID = 42;
 		MockObject asset = MockObject.Create(classID);
@@ -98,7 +98,7 @@ public class ExportIdHandlerTests
 		for (int i = 0; i < Count; i++)
 		{
 			long exportId = ExportIdHandler.GetPseudoRandomExportId(asset, i);
-			Assert.That(generatedIds.Add(exportId), Is.True, $"Duplicate export ID generated: {exportId}");
+			await Assert.That(generatedIds.Add(exportId)).IsTrue().Because($"Duplicate export ID generated: {exportId}");
 		}
 	}
 

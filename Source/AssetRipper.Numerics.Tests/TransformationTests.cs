@@ -1,24 +1,24 @@
-﻿namespace AssetRipper.Numerics.Tests;
+namespace AssetRipper.Numerics.Tests;
 
 internal class TransformationTests
 {
 	[Test]
-	public void MoveThenScale()
+	public async Task MoveThenScale()
 	{
 		Transformation transformation1 = new Transformation(new Vector3(0, .5f, 0), Quaternion.Identity, Vector3.One);
 		Transformation transformation2 = new Transformation(Vector3.Zero, Quaternion.Identity, new Vector3(1, 2, 1));
 		Transformation expectedResult = new Transformation(new Vector3(0, 1, 0), Quaternion.Identity, new Vector3(1, 2, 1));
-		Assert.That(transformation1 * transformation2, Is.EqualTo(expectedResult));
+		await Assert.That(transformation1 * transformation2).IsEqualTo(expectedResult);
 	}
 
 	[Test]
-	public void MoveAndRotateThenScale()
+	public async Task MoveAndRotateThenScale()
 	{
 		Transformation transformation1 = new Transformation(new Vector3(0, .5f, 0), new Quaternion(0, 0, MathF.Sqrt(2) / 2, MathF.Sqrt(2) / 2), Vector3.One);
 		Transformation transformation2 = new Transformation(Vector3.Zero, Quaternion.Identity, new Vector3(1, 2, 1));
 		Transformation expectedResult = new Transformation(new Vector3(0, 1, 0), new Quaternion(0, 0, MathF.Sqrt(2) / 2, MathF.Sqrt(2) / 2), new Vector3(2, 1, 1));
 		AssertApproximatelyEqual(transformation1 * transformation2, expectedResult, 0.00001f);
-		Assert.That(!ApproximatelyEqual(transformation2 * transformation1, expectedResult, 0.00001f));
+		await Assert.That(!ApproximatelyEqual(transformation2 * transformation1, expectedResult, 0.00001f)).IsTrue();
 	}
 
 	[Test]
@@ -103,7 +103,7 @@ internal class TransformationTests
 
 	private static void AssertApproximatelyEqual(Matrix4x4 actual, Matrix4x4 expected, float maxDeviation)
 	{
-		using (Assert.EnterMultipleScope())
+
 		{
 			AssertApproximatelyEqual(actual.M11, expected.M11, maxDeviation, nameof(Matrix4x4.M11));
 			AssertApproximatelyEqual(actual.M12, expected.M12, maxDeviation, nameof(Matrix4x4.M12));
@@ -128,7 +128,7 @@ internal class TransformationTests
 	{
 		if (ApproximatelyEqual(actual, expected, maxDeviation))
 		{
-			Assert.Fail($"{name}\nExpected: {expected}\nActual: {actual}");
+			Fail.Test($"{name}\nExpected: {expected}\nActual: {actual}");
 		}
 	}
 
@@ -163,7 +163,7 @@ internal class TransformationTests
 	}
 
 	[Test]
-	public void VectorMultiplicationTest()
+	public async Task VectorMultiplicationTest()
 	{
 		//Arrange
 		Vector3 vector = new Vector3(2, 4, 6);
@@ -178,11 +178,11 @@ internal class TransformationTests
 		Vector3 actual = vector * transformation;
 
 		//Assert
-		Assert.That(actual, Is.EqualTo(expected));
+		await Assert.That(actual).IsEqualTo(expected);
 	}
 
 	[Test]
-	public void MultiplyTransformationsTest()
+	public async Task MultiplyTransformationsTest()
 	{
 		//Arrange
 		Transformation t1 = Transformation.Identity;
@@ -200,11 +200,11 @@ internal class TransformationTests
 		Transformation actual = t1 * t2;
 
 		//Assert
-		Assert.That(actual, Is.EqualTo(expected));
+		await Assert.That(actual).IsEqualTo(expected);
 	}
 
 	[Test]
-	public void CreateInverseTest()
+	public async Task CreateInverseTest()
 	{
 		//Arrange
 		Vector3 translation = new Vector3(1, 2, 3);
@@ -218,7 +218,7 @@ internal class TransformationTests
 		Matrix4x4 actual = inverse.Matrix;
 
 		//Assert
-		Assert.That(actual, Is.EqualTo(expected));
+		await Assert.That(actual).IsEqualTo(expected);
 
 		static Matrix4x4 Invert(Matrix4x4 matrix)
 		{
@@ -227,7 +227,7 @@ internal class TransformationTests
 	}
 
 	[Test]
-	public void TransposeTest()
+	public async Task TransposeTest()
 	{
 		//Arrange
 		Matrix4x4 matrix = new Matrix4x4(1, 2, 3, 4,
@@ -241,11 +241,11 @@ internal class TransformationTests
 		Transformation actual = transformation.Transpose();
 
 		//Assert
-		Assert.That(actual.Matrix, Is.EqualTo(expected.Matrix));
+		await Assert.That(actual.Matrix).IsEqualTo(expected.Matrix);
 	}
 
 	[Test]
-	public void RemoveTranslationTest()
+	public async Task RemoveTranslationTest()
 	{
 		//Arrange
 		Vector3 translation = new Vector3(1, 2, 3);
@@ -258,11 +258,11 @@ internal class TransformationTests
 		Transformation actual = transform.RemoveTranslation();
 
 		//Assert
-		Assert.That(actual.Matrix, Is.EqualTo(expected.Matrix));
+		await Assert.That(actual.Matrix).IsEqualTo(expected.Matrix);
 	}
 
 	[Test]
-	public void ConvertToMatrixTest()
+	public async Task ConvertToMatrixTest()
 	{
 		//Arrange
 		Vector3 translation = new Vector3(1, 2, 3);
@@ -274,6 +274,6 @@ internal class TransformationTests
 		Transformation actual = new Transformation(translation, rotation, scale);
 
 		//Assert
-		Assert.That(actual, Is.EqualTo(expected));
+		await Assert.That(actual).IsEqualTo(expected);
 	}
 }

@@ -10,89 +10,89 @@ public class RangeTests
 	private static readonly Range<int> ZeroToTwenty = new Range<int>(0, 20);
 
 	[Test]
-	public void IntersectionTest1()
+	public async Task IntersectionTest1()
 	{
-		Assert.That(OneToTen, Is.EqualTo(ZeroToTen.MakeIntersection(OneToEleven)));
+		await Assert.That(OneToTen).IsEqualTo(ZeroToTen.MakeIntersection(OneToEleven));
 	}
 
 	[Test]
-	public void IntersectingUnionTest()
+	public async Task IntersectingUnionTest()
 	{
-		Assert.That(ZeroToEleven, Is.EqualTo(ZeroToTen.MakeUnion(OneToEleven)));
+		await Assert.That(ZeroToEleven).IsEqualTo(ZeroToTen.MakeUnion(OneToEleven));
 	}
 
 	[Test]
-	public void NonintersectingUnionTest()
+	public async Task NonintersectingUnionTest()
 	{
-		Assert.That(ZeroToTwenty, Is.EqualTo(ZeroToTen.MakeUnion(TenToTwenty)));
+		await Assert.That(ZeroToTwenty).IsEqualTo(ZeroToTen.MakeUnion(TenToTwenty));
 	}
 
 	[Test]
-	public void ContainsItself()
+	public async Task ContainsItself()
 	{
-		Assert.That(ZeroToTen.Contains(ZeroToTen));
+		await Assert.That(ZeroToTen.Contains(ZeroToTen)).IsTrue();
 	}
 
 	[Test]
-	public void ContainsStart()
+	public async Task ContainsStart()
 	{
-		Assert.That(ZeroToTen.Contains(0));
+		await Assert.That(ZeroToTen.Contains(0)).IsTrue();
 	}
 
 	[Test]
-	public void ContainsMiddle()
+	public async Task ContainsMiddle()
 	{
-		Assert.That(ZeroToTen.Contains(5));
+		await Assert.That(ZeroToTen.Contains(5)).IsTrue();
 	}
 
 	[Test]
-	public void DoesNotContainEnd()
+	public async Task DoesNotContainEnd()
 	{
-		Assert.That(!ZeroToTen.Contains(10));
+		await Assert.That(!ZeroToTen.Contains(10)).IsTrue();
 	}
 
 	[Test]
-	public void DoesNotContainLess()
+	public async Task DoesNotContainLess()
 	{
-		Assert.That(!ZeroToTen.Contains(-10));
+		await Assert.That(!ZeroToTen.Contains(-10)).IsTrue();
 	}
 
 	[Test]
-	public void DoesNotContainMore()
+	public async Task DoesNotContainMore()
 	{
-		Assert.That(!ZeroToTen.Contains(100));
+		await Assert.That(!ZeroToTen.Contains(100)).IsTrue();
 	}
 
 	[Test]
-	public void EndBeforeStartThrows()
+	public async Task EndBeforeStartThrows()
 	{
-		Assert.Throws<ArgumentException>(() => new Range<int>(4, 3));
+		await Assert.ThrowsAsync<ArgumentException>(() => Task.Run(() => new Range<int>(4, 3)));
 	}
 
 	[Test]
-	public void EndEqualsStartThrows()
+	public async Task EndEqualsStartThrows()
 	{
-		Assert.Throws<ArgumentException>(() => new Range<int>(4, 4));
+		await Assert.ThrowsAsync<ArgumentException>(() => Task.Run(() => new Range<int>(4, 4)));
 	}
 
 	[Test]
-	public void StrictComparisons()
+	public async Task StrictComparisons()
 	{
-		using (Assert.EnterMultipleScope())
+
 		{
 			//Correct
-			Assert.That(ZeroToTen.IsStrictlyLess(TenToTwenty));
-			Assert.That(TenToTwenty.IsStrictlyGreater(ZeroToTen));
+			await Assert.That(ZeroToTen.IsStrictlyLess(TenToTwenty)).IsTrue();
+			await Assert.That(TenToTwenty.IsStrictlyGreater(ZeroToTen)).IsTrue();
 
 			//Reversed
-			Assert.That(!TenToTwenty.IsStrictlyLess(ZeroToTen));
-			Assert.That(!ZeroToTen.IsStrictlyGreater(TenToTwenty));
+			await Assert.That(!TenToTwenty.IsStrictlyLess(ZeroToTen)).IsTrue();
+			await Assert.That(!ZeroToTen.IsStrictlyGreater(TenToTwenty)).IsTrue();
 
 			//Overlapping
-			Assert.That(!TenToTwenty.IsStrictlyLess(ZeroToEleven));
-			Assert.That(!ZeroToEleven.IsStrictlyLess(TenToTwenty));
-			Assert.That(!TenToTwenty.IsStrictlyGreater(ZeroToEleven));
-			Assert.That(!ZeroToEleven.IsStrictlyGreater(TenToTwenty));
+			await Assert.That(!TenToTwenty.IsStrictlyLess(ZeroToEleven)).IsTrue();
+			await Assert.That(!ZeroToEleven.IsStrictlyLess(TenToTwenty)).IsTrue();
+			await Assert.That(!TenToTwenty.IsStrictlyGreater(ZeroToEleven)).IsTrue();
+			await Assert.That(!ZeroToEleven.IsStrictlyGreater(TenToTwenty)).IsTrue();
 		}
 	}
 }

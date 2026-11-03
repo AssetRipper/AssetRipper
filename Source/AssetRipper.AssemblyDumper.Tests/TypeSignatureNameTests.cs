@@ -6,11 +6,10 @@ namespace AssetRipper.AssemblyDumper.Tests;
 
 internal class TypeSignatureNameTests
 {
-	private ModuleDefinition module;
-	private ReferenceImporter importer;
+	private readonly ModuleDefinition module;
+	private readonly ReferenceImporter importer;
 
-	[SetUp]
-	public void Setup()
+	public TypeSignatureNameTests()
 	{
 		AssemblyReference corlib = KnownCorLibs.SystemPrivateCoreLib_v10_0_0_0;
 		AssemblyDefinition assembly = new AssemblyDefinition("test", new Version(1, 0, 0, 0));
@@ -22,58 +21,58 @@ internal class TypeSignatureNameTests
 	}
 
 	[Test]
-	public void AsmByteArrayName()
+	public async Task AsmByteArrayName()
 	{
 		TypeSignature type = module.CorLibTypeFactory.Byte.MakeSzArrayType();
-		Assert.That(type.Name, Is.EqualTo("Byte[]"));
+		await Assert.That(type.Name).IsEqualTo("Byte[]");
 	}
 
 	[Test]
-	public void AsmListTest()
+	public async Task AsmListTest()
 	{
 		TypeSignature list = importer.ImportTypeSignature(typeof(List<>));
 		GenericInstanceTypeSignature stringList = list.MakeGenericInstanceType(module.RuntimeContext, [module.CorLibTypeFactory.String]);
-		Assert.That(stringList.Name, Is.EqualTo("List`1<System.String>"));
-		Assert.That(list.Name, Is.EqualTo("List`1"));
+		await Assert.That(stringList.Name).IsEqualTo("List`1<System.String>");
+		await Assert.That(list.Name).IsEqualTo("List`1");
 	}
 
 	[Test]
-	public void ByteArrayTest()
+	public async Task ByteArrayTest()
 	{
 		TypeSignature type = module.CorLibTypeFactory.Byte.MakeSzArrayType();
-		Assert.That(GetName(type), Is.EqualTo("Byte_Array"));
+		await Assert.That(GetName(type)).IsEqualTo("Byte_Array");
 	}
 
 	[Test]
-	public void DictionaryTest()
+	public async Task DictionaryTest()
 	{
 		TypeSignature dictionary = importer.ImportTypeSignature(typeof(Dictionary<,>));
-		Assert.That(GetName(dictionary), Is.EqualTo("Dictionary"));
+		await Assert.That(GetName(dictionary)).IsEqualTo("Dictionary");
 	}
 
 	[Test]
-	public void DictionaryInstanceTest()
+	public async Task DictionaryInstanceTest()
 	{
 		TypeSignature dictionary = importer.ImportTypeSignature(typeof(Dictionary<,>));
 		GenericInstanceTypeSignature intStringDictionary = dictionary.MakeGenericInstanceType(module.RuntimeContext, [module.CorLibTypeFactory.Int32, module.CorLibTypeFactory.String]);
-		Assert.That(GetName(intStringDictionary), Is.EqualTo("Dictionary_Int32_String"));
+		await Assert.That(GetName(intStringDictionary)).IsEqualTo("Dictionary_Int32_String");
 	}
 
 	[Test]
-	public void ListInstanceTest()
+	public async Task ListInstanceTest()
 	{
 		TypeSignature list = importer.ImportTypeSignature(typeof(List<>));
 		GenericInstanceTypeSignature stringList = list.MakeGenericInstanceType(module.RuntimeContext, [module.CorLibTypeFactory.String]);
-		Assert.That(GetName(stringList), Is.EqualTo("List_String"));
+		await Assert.That(GetName(stringList)).IsEqualTo("List_String");
 	}
 
 	[Test]
-	public void ListListInstanceTest()
+	public async Task ListListInstanceTest()
 	{
 		TypeSignature list = importer.ImportTypeSignature(typeof(List<>));
 		GenericInstanceTypeSignature stringList = list.MakeGenericInstanceType(module.RuntimeContext, [module.CorLibTypeFactory.String]);
 		GenericInstanceTypeSignature stringListList = list.MakeGenericInstanceType(module.RuntimeContext, [stringList]);
-		Assert.That(GetName(stringListList), Is.EqualTo("List_List_String"));
+		await Assert.That(GetName(stringListList)).IsEqualTo("List_List_String");
 	}
 
 	private string GetName(TypeSignature type)

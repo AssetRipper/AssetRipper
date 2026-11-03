@@ -18,8 +18,7 @@ public static class SerializableTypes
 		}
 		else
 		{
-			Assert.Fail($"Failed to create serializable type: {failureReason}");
-			return default!;
+			throw new InvalidOperationException($"Failed to create serializable type: {failureReason}");
 		}
 	}
 
@@ -38,8 +37,7 @@ public static class SerializableTypes
 		}
 		else
 		{
-			Assert.Fail($"Failed to create serializable type: {failureReason}");
-			return [];
+			throw new InvalidOperationException($"Failed to create serializable type: {failureReason}");
 		}
 	}
 

@@ -13,33 +13,33 @@ public class IntVectorTests
 	private static readonly ushort[] shorts = MakeShorts(20);
 
 	[Test]
-	public void UnpackedIntsAreTheSameAsTheOriginals()
+	public async Task UnpackedIntsAreTheSameAsTheOriginals()
 	{
 		PackedBitVector_Int32 packedVector = new();
 		packedVector.PackUInts(ints);
 		uint[] unpackedInts = packedVector.UnpackUInts();
 
-		Assert.That(unpackedInts, Is.EqualTo(ints));
+		await Assert.That(unpackedInts.SequenceEqual(ints)).IsTrue();
 	}
 
 	[Test]
-	public void UnpackedShortsAreTheSameAsTheOriginals()
+	public async Task UnpackedShortsAreTheSameAsTheOriginals()
 	{
 		PackedBitVector_Int32 packedVector = new();
 		packedVector.PackUShorts(shorts);
 		ushort[] unpackedShorts = packedVector.UnpackUShorts();
 
-		Assert.That(unpackedShorts, Is.EqualTo(shorts));
+		await Assert.That(unpackedShorts.SequenceEqual(shorts)).IsTrue();
 	}
 
 	[Test]
-	public void OldUnpackMethodIsConsistent()
+	public async Task OldUnpackMethodIsConsistent()
 	{
 		PackedBitVector_Int32 packedVector = new();
 		packedVector.PackUInts(ints);
 		uint[] unpackedInts = packedVector.UnpackInts().Select(x => unchecked((uint)x)).ToArray();
 
-		Assert.That(unpackedInts, Is.EqualTo(ints));
+		await Assert.That(unpackedInts.SequenceEqual(ints)).IsTrue();
 	}
 
 	private static uint[] MakeInts(int count)

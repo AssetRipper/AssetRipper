@@ -1,4 +1,4 @@
-﻿using AssetRipper.Assets.Bundles;
+using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Metadata;
 using AssetRipper.Primitives;
@@ -8,24 +8,23 @@ namespace AssetRipper.Assets.Tests;
 public class AssetResolutionTests
 {
 	[Test]
-	public void ResolvingNullObjects()
+	public async Task ResolvingNullObjects()
 	{
 		ProcessedAssetCollection collection = Create();
 		SealedNullObject asset = collection.CreateAsset(-1, (assetInfo) => new SealedNullObject(assetInfo));
 
-		using (Assert.EnterMultipleScope())
 		{
 			//NullObject is not a real asset, so we should not be able to get it under normal conditions.
-			Assert.That(collection.TryGetAsset(asset.PathID), Is.Null);
-			Assert.That(collection.TryGetAsset(0, asset.PathID), Is.Null);
-			Assert.That(collection.TryGetAsset<IUnityObjectBase>(asset.PathID), Is.Null);
-			Assert.That(collection.TryGetAsset<IUnityObjectBase>(0, asset.PathID), Is.Null);
+			await Assert.That(collection.TryGetAsset(asset.PathID)).IsNull();
+			await Assert.That(collection.TryGetAsset(0, asset.PathID)).IsNull();
+			await Assert.That(collection.TryGetAsset<IUnityObjectBase>(asset.PathID)).IsNull();
+			await Assert.That(collection.TryGetAsset<IUnityObjectBase>(0, asset.PathID)).IsNull();
 
 			//We are explicitly looking for a NullObject, so we should get it.
-			Assert.That(collection.TryGetAsset<NullObject>(asset.PathID), Is.EqualTo(asset));
-			Assert.That(collection.TryGetAsset<NullObject>(0, asset.PathID), Is.EqualTo(asset));
-			Assert.That(collection.TryGetAsset<SealedNullObject>(asset.PathID), Is.EqualTo(asset));
-			Assert.That(collection.TryGetAsset<SealedNullObject>(0, asset.PathID), Is.EqualTo(asset));
+			await Assert.That(collection.TryGetAsset<NullObject>(asset.PathID)).IsEqualTo(asset);
+			await Assert.That(collection.TryGetAsset<NullObject>(0, asset.PathID)).IsEqualTo(asset);
+			await Assert.That(collection.TryGetAsset<SealedNullObject>(asset.PathID)).IsEqualTo(asset);
+			await Assert.That(collection.TryGetAsset<SealedNullObject>(0, asset.PathID)).IsEqualTo(asset);
 		}
 	}
 

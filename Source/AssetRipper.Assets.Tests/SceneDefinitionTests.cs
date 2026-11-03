@@ -7,45 +7,45 @@ namespace AssetRipper.Assets.Tests;
 public class SceneDefinitionTests
 {
 	[Test]
-	public void FromName_CreatesSceneDefinitionWithName()
+	public async Task FromName_CreatesSceneDefinitionWithName()
 	{
 		SceneDefinition sceneDefinition = SceneDefinition.FromName("testScene");
-		Assert.That(sceneDefinition.Name, Is.EqualTo("testScene"));
+		await Assert.That(sceneDefinition.Name).IsEqualTo("testScene");
 	}
 
 	[Test]
-	public void FromName_CreatesSceneDefinitionWithGuid()
+	public async Task FromName_CreatesSceneDefinitionWithGuid()
 	{
 		SceneDefinition sceneDefinition = SceneDefinition.FromName("testScene");
-		Assert.That(sceneDefinition.GUID, Is.Not.EqualTo(UnityGuid.Zero));
+		await Assert.That(sceneDefinition.GUID).IsNotEqualTo(UnityGuid.Zero);
 	}
 
 	[Test]
-	public void FromPath_CreatesSceneDefinitionWithPath()
+	public async Task FromPath_CreatesSceneDefinitionWithPath()
 	{
 		SceneDefinition sceneDefinition = SceneDefinition.FromPath("Assets/Scenes/testScene");
-		Assert.That(sceneDefinition.Path, Is.EqualTo("Assets/Scenes/testScene"));
+		await Assert.That(sceneDefinition.Path).IsEqualTo("Assets/Scenes/testScene");
 	}
 
 	[Test]
-	public void FromPath_CreatesSceneDefinitionWithGuid()
+	public async Task FromPath_CreatesSceneDefinitionWithGuid()
 	{
 		SceneDefinition sceneDefinition = SceneDefinition.FromPath("Assets/Scenes/testScene");
-		Assert.That(sceneDefinition.GUID, Is.Not.EqualTo(UnityGuid.Zero));
+		await Assert.That(sceneDefinition.GUID).IsNotEqualTo(UnityGuid.Zero);
 	}
 
 	[Test]
-	public void AddCollection_AddsCollectionToSceneDefinition()
+	public async Task AddCollection_AddsCollectionToSceneDefinition()
 	{
 		SceneDefinition sceneDefinition = SceneDefinition.FromName("testScene");
 		AssetCollection mockAssetCollection = CreateCollection();
 		sceneDefinition.AddCollection(mockAssetCollection);
-		Assert.That(sceneDefinition.Collections, Has.Count.EqualTo(1));
-		Assert.That(sceneDefinition.Collections[0], Is.EqualTo(mockAssetCollection));
+		await Assert.That(sceneDefinition.Collections).Count().IsEqualTo(1);
+		await Assert.That(sceneDefinition.Collections[0]).IsEqualTo(mockAssetCollection);
 	}
 
 	[Test]
-	public void AddCollection_ThrowsWhenAssetCollectionIsPartOfDifferentScene()
+	public async Task AddCollection_ThrowsWhenAssetCollectionIsPartOfDifferentScene()
 	{
 		SceneDefinition sceneDefinition1 = SceneDefinition.FromName("testScene1");
 		AssetCollection mockAssetCollection1 = CreateCollection();
@@ -55,12 +55,12 @@ public class SceneDefinitionTests
 		AssetCollection mockAssetCollection2 = CreateCollection();
 		sceneDefinition2.AddCollection(mockAssetCollection2);
 
-		Assert.Throws<InvalidOperationException>(() =>
-			sceneDefinition1.AddCollection(mockAssetCollection2));
+		await Assert.ThrowsAsync<InvalidOperationException>(() =>
+			Task.Run(() => sceneDefinition1.AddCollection(mockAssetCollection2)));
 	}
 
 	[Test]
-	public void RemoveCollection_RemovesCollectionFromSceneDefinition()
+	public async Task RemoveCollection_RemovesCollectionFromSceneDefinition()
 	{
 		SceneDefinition sceneDefinition = SceneDefinition.FromName("testScene");
 		AssetCollection mockAssetCollection = CreateCollection();
@@ -68,11 +68,11 @@ public class SceneDefinitionTests
 
 		sceneDefinition.RemoveCollection(mockAssetCollection);
 
-		Assert.That(sceneDefinition.Collections, Is.Empty);
+		await Assert.That(sceneDefinition.Collections).IsEmpty();
 	}
 
 	[Test]
-	public void RemoveCollection_ThrowsWhenCollectionNotPartOfSceneDefinition()
+	public async Task RemoveCollection_ThrowsWhenCollectionNotPartOfSceneDefinition()
 	{
 		SceneDefinition sceneDefinition = SceneDefinition.FromName("testScene");
 		AssetCollection mockAssetCollection1 = CreateCollection();
@@ -80,13 +80,13 @@ public class SceneDefinitionTests
 
 		sceneDefinition.AddCollection(mockAssetCollection1);
 
-		Assert.Throws<ArgumentException>(() =>
-			sceneDefinition.RemoveCollection(mockAssetCollection2));
+		await Assert.ThrowsAsync<ArgumentException>(() =>
+			Task.Run(() => sceneDefinition.RemoveCollection(mockAssetCollection2)));
 
 	}
 
 	[Test]
-	public void RemoveCollection_DeletesAssetCollectionSceneReference()
+	public async Task RemoveCollection_DeletesAssetCollectionSceneReference()
 	{
 		SceneDefinition sceneDefinition = SceneDefinition.FromName("testScene");
 		AssetCollection mockAssetCollection = CreateCollection();
@@ -94,7 +94,7 @@ public class SceneDefinitionTests
 
 		sceneDefinition.RemoveCollection(mockAssetCollection);
 
-		Assert.That(mockAssetCollection.Scene, Is.Null);
+		await Assert.That(mockAssetCollection.Scene).IsNull();
 	}
 
 	private static AssetCollection CreateCollection()

@@ -6,7 +6,7 @@ namespace AssetRipper.AssemblyDumper.Tests;
 internal class VersionedListTests
 {
 	[Test]
-	public void DivisionTest()
+	public async Task DivisionTest()
 	{
 		VersionedList<int> integers = new()
 		{
@@ -15,29 +15,29 @@ internal class VersionedListTests
 			{ new UnityVersion(5), 5 },
 			{ new UnityVersion(2017), 7 },
 		};
-		Assert.That(integers.Count, Is.EqualTo(4));
-		Assert.That(integers[2].Key, Is.EqualTo(new UnityVersion(5)));
-		Assert.That(integers[3].Key, Is.EqualTo(new UnityVersion(2017)));
+		await Assert.That(integers.Count).IsEqualTo(4);
+		await Assert.That(integers[2].Key).IsEqualTo(new UnityVersion(5));
+		await Assert.That(integers[3].Key).IsEqualTo(new UnityVersion(2017));
 
 		integers.Divide(new UnityVersion(5));
-		Assert.That(integers.Count, Is.EqualTo(4));
-		Assert.That(integers[2].Key, Is.EqualTo(new UnityVersion(5)));
-		Assert.That(integers[3].Key, Is.EqualTo(new UnityVersion(2017)));
+		await Assert.That(integers.Count).IsEqualTo(4);
+		await Assert.That(integers[2].Key).IsEqualTo(new UnityVersion(5));
+		await Assert.That(integers[3].Key).IsEqualTo(new UnityVersion(2017));
 
 		integers.Divide(new UnityVersion(2017));
-		Assert.That(integers.Count, Is.EqualTo(4));
-		Assert.That(integers[2].Key, Is.EqualTo(new UnityVersion(5)));
-		Assert.That(integers[3].Key, Is.EqualTo(new UnityVersion(2017)));
+		await Assert.That(integers.Count).IsEqualTo(4);
+		await Assert.That(integers[2].Key).IsEqualTo(new UnityVersion(5));
+		await Assert.That(integers[3].Key).IsEqualTo(new UnityVersion(2017));
 
 		integers.Divide(new UnityVersion(6));
-		Assert.That(integers.Count, Is.EqualTo(5));
-		Assert.That(integers[2].Key, Is.EqualTo(new UnityVersion(5)));
-		Assert.That(integers[3].Key, Is.EqualTo(new UnityVersion(6)));
-		Assert.That(integers[4].Key, Is.EqualTo(new UnityVersion(2017)));
+		await Assert.That(integers.Count).IsEqualTo(5);
+		await Assert.That(integers[2].Key).IsEqualTo(new UnityVersion(5));
+		await Assert.That(integers[3].Key).IsEqualTo(new UnityVersion(6));
+		await Assert.That(integers[4].Key).IsEqualTo(new UnityVersion(2017));
 	}
 
 	[Test]
-	public void DividingAtMaxVersionDoesNotAddAnInvalidRange()
+	public async Task DividingAtMaxVersionDoesNotAddAnInvalidRange()
 	{
 		VersionedList<int> integers = new()
 		{
@@ -46,12 +46,12 @@ internal class VersionedListTests
 
 		integers.Divide(UnityVersion.MaxVersion);
 
-		Assert.That(integers, Has.Count.EqualTo(1));
-		Assert.That(integers.GetRange(0).End, Is.EqualTo(UnityVersion.MaxVersion));
+		await Assert.That(integers).Count().IsEqualTo(1);
+		await Assert.That(integers.GetRange(0).End).IsEqualTo(UnityVersion.MaxVersion);
 	}
 
 	[Test]
-	public void MergeTest1()
+	public async Task MergeTest1()
 	{
 		VersionedList<string> list1 = new()
 		{
@@ -71,18 +71,18 @@ internal class VersionedListTests
 
 		VersionedList<string> merged = VersionedList.Merge(list1, list2);
 
-		Assert.That(merged.Count, Is.EqualTo(6));
-		Assert.That(merged[0].Key, Is.EqualTo(new UnityVersion(3)));
-		Assert.That(merged[0].Value, Is.EqualTo(""));
-		Assert.That(merged[1].Key, Is.EqualTo(new UnityVersion(4)));
-		Assert.That(merged[1].Value, Is.EqualTo(null));
-		Assert.That(merged[2].Key, Is.EqualTo(new UnityVersion(4, 5)));
-		Assert.That(merged[2].Value, Is.EqualTo(""));
-		Assert.That(merged[3].Key, Is.EqualTo(new UnityVersion(4, 7)));
-		Assert.That(merged[3].Value, Is.EqualTo(null));
-		Assert.That(merged[4].Key, Is.EqualTo(new UnityVersion(5)));
-		Assert.That(merged[4].Value, Is.EqualTo("Five"));
-		Assert.That(merged[5].Key, Is.EqualTo(new UnityVersion(2017)));
-		Assert.That(merged[5].Value, Is.EqualTo("Seven"));
+		await Assert.That(merged.Count).IsEqualTo(6);
+		await Assert.That(merged[0].Key).IsEqualTo(new UnityVersion(3));
+		await Assert.That(merged[0].Value).IsEqualTo("");
+		await Assert.That(merged[1].Key).IsEqualTo(new UnityVersion(4));
+		await Assert.That(merged[1].Value).IsNull();
+		await Assert.That(merged[2].Key).IsEqualTo(new UnityVersion(4, 5));
+		await Assert.That(merged[2].Value).IsEqualTo("");
+		await Assert.That(merged[3].Key).IsEqualTo(new UnityVersion(4, 7));
+		await Assert.That(merged[3].Value).IsNull();
+		await Assert.That(merged[4].Key).IsEqualTo(new UnityVersion(5));
+		await Assert.That(merged[4].Value).IsEqualTo("Five");
+		await Assert.That(merged[5].Key).IsEqualTo(new UnityVersion(2017));
+		await Assert.That(merged[5].Value).IsEqualTo("Seven");
 	}
 }

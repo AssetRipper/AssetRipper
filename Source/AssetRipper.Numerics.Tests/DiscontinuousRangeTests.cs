@@ -18,23 +18,23 @@ public class DiscontinuousRangeTests
 	private static readonly Range<float> MinToMax = new(float.MinValue, float.MaxValue);
 
 	[Test]
-	public void DisjointConstructionSucceedsAndHasCorrectCount()
+	public async Task DisjointConstructionSucceedsAndHasCorrectCount()
 	{
 		DiscontinuousRange<float> range = new(ZeroToThree, SevenToNine, FourToFive);
-		Assert.That(range, Has.Count.EqualTo(3));
+		await Assert.That(range).Count().IsEqualTo(3);
 	}
 
 	[Test]
-	public void OverlappingConstructionSucceedsAndHasCorrectCount()
+	public async Task OverlappingConstructionSucceedsAndHasCorrectCount()
 	{
 		DiscontinuousRange<float> range = new(ZeroToThree, SevenToNine, ZeroToEleven, FourToFive);
-		Assert.That(range, Has.Count.EqualTo(1));
+		await Assert.That(range).Count().IsEqualTo(1);
 	}
 
 	[Test]
-	public void EmptyHasCountZero()
+	public async Task EmptyHasCountZero()
 	{
-		Assert.That(DiscontinuousRange<float>.Empty.Count, Is.Zero);
+		await Assert.That(DiscontinuousRange<float>.Empty.Count).IsZero();
 	}
 
 	[Test]
@@ -129,24 +129,24 @@ public class DiscontinuousRangeTests
 	}
 
 	[Test]
-	public void SubtractKeepsRangesAfterOtherRangesAreExhausted()
+	public async Task SubtractKeepsRangesAfterOtherRangesAreExhausted()
 	{
 		DiscontinuousRange<int> range = new(new Range<int>(0, 10), new Range<int>(12, 14));
 		DiscontinuousRange<int> other = new(new Range<int>(2, 4));
 		DiscontinuousRange<int> expected = new(new Range<int>(0, 2), new Range<int>(4, 10), new Range<int>(12, 14));
 
-		Assert.That(range.Subtract(other), Is.EqualTo(expected));
+		await Assert.That(range.Subtract(other)).IsEqualTo(expected);
 	}
 
 	[Test]
-	public void DefaultRangeBehavesLikeEmpty()
+	public async Task DefaultRangeBehavesLikeEmpty()
 	{
 		DiscontinuousRange<int> range = default;
 
-		Assert.That(range.Count, Is.Zero);
-		Assert.That(range.Contains(0), Is.False);
-		Assert.That(range.ToArray(), Is.Empty);
-		Assert.That(range.Union(default), Is.EqualTo(DiscontinuousRange<int>.Empty));
+		await Assert.That(range.Count).IsZero();
+		await Assert.That(range.Contains(0)).IsFalse();
+		await Assert.That(range.ToArray()).IsEmpty();
+		await Assert.That(range.Union(default)).IsEqualTo(DiscontinuousRange<int>.Empty);
 	}
 
 	[Test]
@@ -168,7 +168,7 @@ public class DiscontinuousRangeTests
 	}
 
 	/// <summary>
-	/// Because NUnit refuses to call ToString()
+	/// Includes the range contents in the failure message.
 	/// </summary>
 	/// <param name="actual"></param>
 	/// <param name="expected"></param>
@@ -176,7 +176,7 @@ public class DiscontinuousRangeTests
 	{
 		if (!actual.Equals(expected))
 		{
-			Assert.Fail($"Expected: {expected}\nBut was: {actual}");
+			Fail.Test($"Expected: {expected}\nBut was: {actual}");
 		}
 	}
 }

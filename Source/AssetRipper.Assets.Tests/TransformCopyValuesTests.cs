@@ -1,4 +1,4 @@
-﻿using AssetRipper.Assets.Cloning;
+using AssetRipper.Assets.Cloning;
 using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
 using AssetRipper.SourceGenerated.Classes.ClassID_4;
@@ -8,45 +8,39 @@ namespace AssetRipper.Assets.Tests;
 
 internal class TransformCopyValuesTests
 {
-	private ITransform transform;
-
-	[SetUp]
-	public void Setup()
-	{
-		transform = AssetCreator.CreateTransform(new UnityVersion(2017));
-	}
+	private readonly ITransform transform = AssetCreator.CreateTransform(new UnityVersion(2017));
 
 	[Test]
-	public void CopyingSelfDoesNotClearPosition()
+	public async Task CopyingSelfDoesNotClearPosition()
 	{
 		transform.LocalPosition_C4.SetValues(1, 2, 3);
 		transform.CopyValues(transform);
-		using (Assert.EnterMultipleScope())
+
 		{
-			Assert.That(transform.LocalPosition_C4.X, Is.EqualTo(1));
-			Assert.That(transform.LocalPosition_C4.Y, Is.EqualTo(2));
-			Assert.That(transform.LocalPosition_C4.Z, Is.EqualTo(3));
+			await Assert.That(transform.LocalPosition_C4.X).IsEqualTo(1);
+			await Assert.That(transform.LocalPosition_C4.Y).IsEqualTo(2);
+			await Assert.That(transform.LocalPosition_C4.Z).IsEqualTo(3);
 		}
 	}
 
 	[Test]
-	public void CopyingSelfDoesNotClearGameObject()
+	public async Task CopyingSelfDoesNotClearGameObject()
 	{
 		IGameObject gameObject = AssetCreator.CreateGameObject(new UnityVersion(2017));
 		transform.GameObject_C4P = gameObject;
 		transform.CopyValues(transform);
-		Assert.That(transform.GameObject_C4P, Is.SameAs(gameObject));
+		await Assert.That(transform.GameObject_C4P).IsSameReferenceAs(gameObject);
 	}
 
 	[Test]
-	public void ReplacingChildSucceeds()
+	public async Task ReplacingChildSucceeds()
 	{
 		ITransform child = AssetCreator.CreateTransform(new UnityVersion(2017));
 		transform.Children_C4P.Add(child);
 		ITransform newChild = AssetCreator.CreateTransform(new UnityVersion(2017));
 		SingleReplacementAssetResolver resolver = new(child, newChild);
 		transform.CopyValues(transform, new PPtrConverter(transform.Collection, transform.Collection, resolver));
-		Assert.That(transform.Children_C4P, Has.Count.EqualTo(1));
-		Assert.That(transform.Children_C4P[0], Is.SameAs(newChild));
+		await Assert.That(transform.Children_C4P).Count().IsEqualTo(1);
+		await Assert.That(transform.Children_C4P[0]).IsSameReferenceAs(newChild);
 	}
 }

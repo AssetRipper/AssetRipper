@@ -5,28 +5,28 @@ namespace AssetRipper.Tests;
 internal class MeshDataTests
 {
 	[Test]
-	public void AccessingNullUV2DoesNotThrow()
+	public async Task AccessingNullUV2DoesNotThrow()
 	{
 		MeshData meshData = MeshData.CreateTriangleMesh() with
 		{
 			UV2 = null
 		};
-		Assert.DoesNotThrow(() =>
+		await Assert.That(() =>
 		{
 			meshData.TryGetUV2AtIndex(0);
-		});
+		}).ThrowsNothing();
 	}
 
 	[Test]
-	public void AccessingEmptyUV2DoesNotThrow()
+	public async Task AccessingEmptyUV2DoesNotThrow()
 	{
 		MeshData meshData = MeshData.CreateTriangleMesh() with
 		{
 			UV2 = []
 		};
-		Assert.DoesNotThrow(() =>
+		await Assert.That(() =>
 		{
 			meshData.TryGetUV2AtIndex(0);
-		});
+		}).ThrowsNothing();
 	}
 }

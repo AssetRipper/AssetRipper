@@ -5,7 +5,7 @@ namespace AssetRipper.Assets.Tests;
 public class ProcessedBundleTests
 {
 	[Test]
-	public void ProcessedBundle_DefaultConstructor_NameShouldNotBeEmpty()
+	public async Task ProcessedBundle_DefaultConstructor_NameShouldNotBeEmpty()
 	{
 		// Arrange
 		ProcessedBundle bundle = new();
@@ -13,11 +13,11 @@ public class ProcessedBundleTests
 		// Act
 
 		// Assert
-		Assert.That(bundle.Name, Is.Not.Empty);
+		await Assert.That(bundle.Name).IsNotEmpty();
 	}
 
 	[Test]
-	public void ProcessedBundle_ArgumentConstructor_Null_ShouldNotThrowException()
+	public async Task ProcessedBundle_ArgumentConstructor_Null_ShouldNotThrowException()
 	{
 		// Arrange
 		string? name = null;
@@ -25,11 +25,11 @@ public class ProcessedBundleTests
 		// Act
 
 		// Assert
-		Assert.DoesNotThrow(() => new ProcessedBundle(name));
+		await Assert.That(() => new ProcessedBundle(name)).ThrowsNothing();
 	}
 
 	[Test]
-	public void ProcessedBundle_ArgumentConstructor_EmptyString_ShouldNotThrowException()
+	public async Task ProcessedBundle_ArgumentConstructor_EmptyString_ShouldNotThrowException()
 	{
 		// Arrange
 		string name = string.Empty;
@@ -37,11 +37,11 @@ public class ProcessedBundleTests
 		// Act
 
 		// Assert
-		Assert.DoesNotThrow(() => new ProcessedBundle(name));
+		await Assert.That(() => new ProcessedBundle(name)).ThrowsNothing();
 	}
 
 	[Test]
-	public void ProcessedBundle_ArgumentConstructor_ValidName_ShouldNotBeNull()
+	public async Task ProcessedBundle_ArgumentConstructor_ValidName_ShouldNotBeNull()
 	{
 		// Arrange
 		string name = "TestBundleName";
@@ -50,7 +50,7 @@ public class ProcessedBundleTests
 		ProcessedBundle bundle = new ProcessedBundle(name);
 
 		// Assert
-		Assert.That(bundle, Is.Not.Null);
-		Assert.That(bundle.Name, Is.EqualTo(name));
+		await Assert.That(bundle).IsNotNull();
+		await Assert.That(bundle.Name).IsEqualTo(name);
 	}
 }
