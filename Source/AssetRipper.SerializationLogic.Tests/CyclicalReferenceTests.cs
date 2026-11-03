@@ -9,10 +9,10 @@ public class CyclicalReferenceTests
 	}
 
 	[Test]
-	public void CyclicalReferenceClassIsHandled_D1()
+	public async Task CyclicalReferenceClassIsHandled_D1()
 	{
 		SerializableType serializableType = SerializableTypes.Create<SelfReferencingClass>();
-		Assert.That(serializableType.Fields, Has.Count.EqualTo(0)); // Infinite recursion disqualifies a field from serialization
+		await Assert.That(serializableType.Fields).Count().IsEqualTo(0); // Infinite recursion disqualifies a field from serialization
 	}
 
 	[Serializable]
@@ -28,15 +28,12 @@ public class CyclicalReferenceTests
 	}
 
 	[Test]
-	public void CyclicalReferenceClassIsHandled_D2()
+	public async Task CyclicalReferenceClassIsHandled_D2()
 	{
 		List<SerializableType> serializableType = SerializableTypes.CreateMultiple<CyclicalReferenceClass_C1_D2>();
-		using (Assert.EnterMultipleScope())
+		foreach (SerializableType type in serializableType)
 		{
-			foreach (SerializableType type in serializableType)
-			{
-				Assert.That(type.Fields, Has.Count.EqualTo(0), $"{type.Name} should have no fields.");
-			}
+			await Assert.That(type.Fields).Count().IsEqualTo(0);
 		}
 	}
 
@@ -59,15 +56,12 @@ public class CyclicalReferenceTests
 	}
 
 	[Test]
-	public void CyclicalReferenceClassIsHandled_D3()
+	public async Task CyclicalReferenceClassIsHandled_D3()
 	{
 		List<SerializableType> serializableType = SerializableTypes.CreateMultiple<CyclicalReferenceClass_C1_D3>();
-		using (Assert.EnterMultipleScope())
+		foreach (SerializableType type in serializableType)
 		{
-			foreach (SerializableType type in serializableType)
-			{
-				Assert.That(type.Fields, Has.Count.EqualTo(0), $"{type.Name} should have no fields.");
-			}
+			await Assert.That(type.Fields).Count().IsEqualTo(0);
 		}
 	}
 
@@ -96,15 +90,12 @@ public class CyclicalReferenceTests
 	}
 
 	[Test]
-	public void CyclicalReferenceClassIsHandled_D4()
+	public async Task CyclicalReferenceClassIsHandled_D4()
 	{
 		List<SerializableType> serializableType = SerializableTypes.CreateMultiple<CyclicalReferenceClass_C1_D4>();
-		using (Assert.EnterMultipleScope())
+		foreach (SerializableType type in serializableType)
 		{
-			foreach (SerializableType type in serializableType)
-			{
-				Assert.That(type.Fields, Has.Count.EqualTo(0), $"{type.Name} should have no fields.");
-			}
+			await Assert.That(type.Fields).Count().IsEqualTo(0);
 		}
 	}
 
@@ -128,16 +119,13 @@ public class CyclicalReferenceTests
 	}
 
 	[Test]
-	public void CyclicalReferenceClassIsHandled_D3_V1()
+	public async Task CyclicalReferenceClassIsHandled_D3_V1()
 	{
 		// Variant 1: Two references to the same class
 		List<SerializableType> serializableType = SerializableTypes.CreateMultiple<CyclicalReferenceClass_C1_D3_V1>();
-		using (Assert.EnterMultipleScope())
+		foreach (SerializableType type in serializableType)
 		{
-			foreach (SerializableType type in serializableType)
-			{
-				Assert.That(type.Fields, Has.Count.EqualTo(0), $"{type.Name} should have no fields.");
-			}
+			await Assert.That(type.Fields).Count().IsEqualTo(0);
 		}
 	}
 
@@ -161,16 +149,13 @@ public class CyclicalReferenceTests
 	}
 
 	[Test]
-	public void CyclicalReferenceClassIsHandled_D3_V2()
+	public async Task CyclicalReferenceClassIsHandled_D3_V2()
 	{
 		// Variant 2: Reference to child class, then reference to parent class
 		List<SerializableType> serializableType = SerializableTypes.CreateMultiple<CyclicalReferenceClass_C1_D3_V2>();
-		using (Assert.EnterMultipleScope())
+		foreach (SerializableType type in serializableType)
 		{
-			foreach (SerializableType type in serializableType)
-			{
-				Assert.That(type.Fields, Has.Count.EqualTo(0), $"{type.Name} should have no fields.");
-			}
+			await Assert.That(type.Fields).Count().IsEqualTo(0);
 		}
 	}
 
@@ -194,16 +179,13 @@ public class CyclicalReferenceTests
 	}
 
 	[Test]
-	public void CyclicalReferenceClassIsHandled_D3_V3()
+	public async Task CyclicalReferenceClassIsHandled_D3_V3()
 	{
 		// Variant 3: Reference to parent class, then reference to child class
 		List<SerializableType> serializableType = SerializableTypes.CreateMultiple<CyclicalReferenceClass_C1_D3_V3>();
-		using (Assert.EnterMultipleScope())
+		foreach (SerializableType type in serializableType)
 		{
-			foreach (SerializableType type in serializableType)
-			{
-				Assert.That(type.Fields, Has.Count.EqualTo(0), $"{type.Name} should have no fields.");
-			}
+			await Assert.That(type.Fields).Count().IsEqualTo(0);
 		}
 	}
 
@@ -223,11 +205,11 @@ public class CyclicalReferenceTests
 	}
 
 	[Test]
-	public void CyclicalReferenceGenericClassIsHandled()
+	public async Task CyclicalReferenceGenericClassIsHandled()
 	{
 		SerializableType serializableType1 = SerializableTypes.Create<DerivedClass1>();
-		Assert.That(serializableType1.Fields, Has.Count.EqualTo(2)); // No cycles, both fields are serialized
+		await Assert.That(serializableType1.Fields).Count().IsEqualTo(2); // No cycles, both fields are serialized
 		SerializableType serializableType2 = SerializableTypes.Create<DerivedClass2>();
-		Assert.That(serializableType2.Fields, Has.Count.EqualTo(1)); // One cycle, only field1 is serialized
+		await Assert.That(serializableType2.Fields).Count().IsEqualTo(1); // One cycle, only field1 is serialized
 	}
 }
