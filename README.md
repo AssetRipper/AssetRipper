@@ -22,14 +22,7 @@ There is a premium edition of AssetRipper. This edition includes additional [fea
 
 ## Tips
 
-Your support helps maintain and improve AssetRipper. If you find this tool useful, please consider tipping:
-
-* [Ko-fi](https://ko-fi.com/assetripper)
-* [Buy Me a Coffee](https://buymeacoffee.com/assetripper)
-* [GitHub Sponsors](https://github.com/sponsors/ds5678)
-* [PayPal](https://paypal.me/ds5678)
-
-Users can access AssetRipper Premium with an active $10 subscription on any of those 4 platforms.
+If you find this tool useful, please consider [tipping](https://assetripper.com/premium/get/) to support development and gain access to [AssetRipper Premium](https://assetripper.com/premium/features/).
 
 ## Discord [![](https://img.shields.io/discord/867514400701153281?color=blue&label=AssetRipper)](https://discord.gg/XqXa53W2Yh)
 

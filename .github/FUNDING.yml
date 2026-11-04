@@ -10,4 +10,4 @@ liberapay: # Replace with a single Liberapay username
 issuehunt: # Replace with a single IssueHunt username
 polar: # Replace with a single Polar username
 buy_me_a_coffee: assetripper # Replace with a single Buy Me a Coffee username
-custom: ['https://paypal.me/ds5678'] # Replace with up to 4 custom sponsorship URLs e.g., ['link1', 'link2']
+custom: ['https://assetripper.com/premium/get/'] # Replace with up to 4 custom sponsorship URLs e.g., ['link1', 'link2']
