@@ -28,6 +28,13 @@ public sealed class CommandsPage : VuePage
 					new Button(writer).WithCustomAttribute("@click", "handleSelectLoadFile").WithClass("btn btn-success").Close(Localization.SelectFile);
 					new Button(writer).WithCustomAttribute("@click", "handleSelectLoadFolder").WithClass("btn btn-success").Close(Localization.SelectFolder);
 				}
+
+				// Metro (UWP) packages keep their managed DLLs in the package root instead of Data/Managed.
+				using (new Div(writer).WithClass("form-text text-muted mt-2").End())
+				{
+					writer.Write("Dumped Windows Store (Metro/UWP) game? Select the package folder itself. " +
+						"The managed DLLs (Assembly-CSharp.dll, UnityEngine.dll, ...) are read from that root folder, not from Data/Managed.");
+				}
 			}
 		}
 		else

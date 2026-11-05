@@ -11,7 +11,13 @@ public static class PlatformChecker
 		platformStructure = null;
 		mixedStructure = null;
 
-		if (CheckWindows(paths, fileSystem, out WindowsGameStructure? pcGameStructure))
+		// Metro must be checked before Windows. A dumped UWP package also has an executable and a "Data" folder,
+		// so the Windows check would claim it and look for assemblies in Data/Managed instead of the package root.
+		if (CheckMetro(paths, fileSystem, out MetroGameStructure? metroGameStructure))
+		{
+			platformStructure = metroGameStructure;
+		}
+		else if (CheckWindows(paths, fileSystem, out WindowsGameStructure? pcGameStructure))
 		{
 			platformStructure = pcGameStructure;
 		}
@@ -64,6 +70,22 @@ public static class PlatformChecker
 		return platformStructure != null || mixedStructure != null;
 	}
 
+
+	private static bool CheckMetro(List<string> paths, FileSystem fileSystem, [NotNullWhen(true)] out MetroGameStructure? gameStructure)
+	{
+		foreach (string path in paths)
+		{
+			if (MetroGameStructure.Exists(path, fileSystem))
+			{
+				gameStructure = new MetroGameStructure(path, fileSystem);
+				paths.Remove(path);
+				Logger.Info(LogCategory.Import, $"Metro (UWP) game structure has been found at '{path}'");
+				return true;
+			}
+		}
+		gameStructure = null;
+		return false;
+	}
 
 	private static bool CheckWindows(List<string> paths, FileSystem fileSystem, [NotNullWhen(true)] out WindowsGameStructure? gameStructure)
 	{
