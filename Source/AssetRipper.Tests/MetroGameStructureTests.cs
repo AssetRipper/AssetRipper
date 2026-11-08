@@ -70,6 +70,38 @@ public class MetroGameStructureTests
 	}
 
 	[Test]
+	public void AppxManifestAndDataFolderAloneAreNotEnoughForMetroDetection()
+	{
+		VirtualFileSystem fs = new();
+		fs.Directory.Create(Root);
+		fs.Directory.Create(fs.Path.Join(Root, "Data"));
+		fs.File.WriteAllBytes(fs.Path.Join(Root, "Template.exe"), [0]);
+		fs.File.WriteAllBytes(fs.Path.Join(Root, "AppxManifest.xml"), [0]);
+
+		Assert.That(MetroGameStructure.Exists(Root, fs), Is.False);
+	}
+
+	[Test]
+	public void Il2CppMetroPackageWithoutManifestIsDetected()
+	{
+		VirtualFileSystem fs = new();
+		fs.Directory.Create(fs.Path.Join(Root, "Data", "il2cpp_data", "Metadata"));
+		fs.File.WriteAllBytes(fs.Path.Join(Root, "Template.exe"), [0]);
+		fs.File.WriteAllBytes(fs.Path.Join(Root, "UnityPlayer.dll"), [0]);
+		fs.File.WriteAllBytes(fs.Path.Join(Root, "GameAssembly.dll"), [0]);
+		fs.File.WriteAllBytes(fs.Path.Join(Root, "Data", "il2cpp_data", "Metadata", "global-metadata.dat"), [0]);
+
+		PlatformGameStructure? platform = Detect(fs, Root);
+
+		using (Assert.EnterMultipleScope())
+		{
+			Assert.That(platform, Is.Not.Null);
+			Assert.That(platform!.GetType().Name, Is.EqualTo("MetroGameStructure"));
+			Assert.That(platform.Backend, Is.EqualTo(ScriptingBackend.IL2Cpp));
+		}
+	}
+
+	[Test]
 	public void ExecutableGivenDirectlyIsDetectedAsMetro()
 	{
 		VirtualFileSystem fs = CreateMetroFileSystem(includeManifest: true);
