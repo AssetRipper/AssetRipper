@@ -10,7 +10,11 @@ using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Classes.ClassID_2;
 using AssetRipper.SourceGenerated.Classes.ClassID_25;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
+using AssetRipper.SourceGenerated.Classes.ClassID_43;
+using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.ComponentPair;
+using AssetRipper.SourceGenerated.Subclasses.VertexData;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace AssetRipper.Import.Structure;
@@ -47,7 +51,7 @@ internal sealed partial record class GameInitializer
 					}
 
 					replacement.CopyValues(original);
-					HandleDifferingFields(original, replacement);
+					HandleDifferingFields(original, replacement, targetVersion);
 					collection.ReplaceAsset(replacement);
 				}
 
@@ -55,7 +59,7 @@ internal sealed partial record class GameInitializer
 			}
 		}
 
-		private static void HandleDifferingFields(IUnityObjectBase original, IUnityObjectBase replacement)
+		private static void HandleDifferingFields(IUnityObjectBase original, IUnityObjectBase replacement, UnityVersion targetVersion)
 		{
 			if (original is IRenderer renderer)
 			{
@@ -126,6 +130,32 @@ internal sealed partial record class GameInitializer
 						}
 					}
 				}
+			}
+			else if (original is IMesh mesh)
+			{
+				IMesh newMesh = (IMesh)replacement;
+				Debug.Assert(mesh.Collection == newMesh.Collection);
+				if (mesh.VertexData.Data.Length > 0)
+				{
+					// Todo: handle StreamData
+
+					VertexDataBlob originalBlob = VertexDataBlob.Create(mesh);
+					VertexDataBlob newBlob = VertexDataBlob.Create(originalBlob.ToMeshData(), targetVersion, newMesh.Collection.EndianType);
+					IVertexData vertexData = newMesh.VertexData;
+					vertexData.Data = newBlob.Data;
+					vertexData.VertexCount = (uint)newBlob.VertexCount;
+					if (vertexData.Has_Channels())
+					{
+						vertexData.Channels.Clear();
+						vertexData.Channels.AddRange(newBlob.Channels);
+					}
+					else
+					{
+						vertexData.SetStreams(newBlob.Streams);
+					}
+				}
+
+				// Todo: handle other fields
 			}
 			else if (original is ITexture2D texture)
 			{

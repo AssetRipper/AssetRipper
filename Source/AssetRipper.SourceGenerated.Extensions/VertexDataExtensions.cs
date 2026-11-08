@@ -42,6 +42,40 @@ public static class VertexDataExtensions
 		}
 	}
 
+	public static void SetStreams(this IVertexData instance, IReadOnlyList<IStreamInfo> streams)
+	{
+		if (instance.Has_Streams())
+		{
+			instance.Streams.Clear();
+			foreach (IStreamInfo stream in streams)
+			{
+				instance.Streams.AddNew().CopyValues(stream);
+			}
+		}
+		else if (instance.Has_Streams_0_())
+		{
+			CopyStream(instance.Streams_0_, streams, 0);
+			CopyStream(instance.Streams_1_, streams, 1);
+			CopyStream(instance.Streams_2_, streams, 2);
+			CopyStream(instance.Streams_3_, streams, 3);
+		}
+		else
+		{
+		}
+
+		static void CopyStream(StreamInfo_3_5 target, IReadOnlyList<IStreamInfo> sourceList, int index)
+		{
+			if (index < sourceList.Count)
+			{
+				target.CopyValues(sourceList[index]);
+			}
+			else
+			{
+				target.Reset();
+			}
+		}
+	}
+
 	public static uint GetCurrentChannels(this IVertexData instance)
 	{
 		if (instance.Has_CurrentChannels_Int32())
