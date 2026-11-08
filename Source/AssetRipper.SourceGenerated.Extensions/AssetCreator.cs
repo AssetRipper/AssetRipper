@@ -2,6 +2,7 @@
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Assets.Metadata;
+using AssetRipper.SourceGenerated.Extensions.Attributes;
 using System.Reflection;
 
 namespace AssetRipper.SourceGenerated.Extensions;
@@ -9,6 +10,7 @@ namespace AssetRipper.SourceGenerated.Extensions;
 /// <summary>
 /// A helper class for creating assets, generally for unit testing.
 /// </summary>
+[AttributeCreatorMarker(typeof(ClassIDType))]
 public static partial class AssetCreator
 {
 	public static T Create<T>(ClassIDType classID, UnityVersion version, Func<AssetInfo, T> factory) where T : IUnityObjectBase
