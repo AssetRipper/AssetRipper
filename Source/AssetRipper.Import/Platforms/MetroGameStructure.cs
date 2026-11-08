@@ -143,13 +143,27 @@ internal sealed class MetroGameStructure : PlatformGameStructure
 			return false;
 		}
 
+		bool hasManagedAssemblies = HasManagedUnityAssemblies(directory, fileSystem);
+		bool hasIl2CppFiles =
+			fileSystem.File.Exists(fileSystem.Path.Join(directory, DefaultGameAssemblyName)) &&
+			fileSystem.File.Exists(fileSystem.Path.Join(directory, DataFolderName, "il2cpp_data", MetadataName, DefaultGlobalMetadataName));
+		bool hasUnityRuntime =
+			fileSystem.File.Exists(fileSystem.Path.Join(directory, DefaultUnityPlayerName)) ||
+			fileSystem.File.Exists(fileSystem.Path.Join(directory, DefaultGameAssemblyName)) ||
+			hasManagedAssemblies;
+
+		if (!hasUnityRuntime)
+		{
+			return false;
+		}
+
 		if (HasAppxManifest(directory, fileSystem))
 		{
 			return true;
 		}
 
-		return HasManagedUnityAssemblies(directory, fileSystem)
-			&& !fileSystem.Directory.Exists(fileSystem.Path.Join(directory, DataFolderName, ManagedName));
+		return hasManagedAssemblies && !fileSystem.Directory.Exists(fileSystem.Path.Join(directory, DataFolderName, ManagedName))
+			|| hasIl2CppFiles;
 	}
 
 	private static bool HasAppxManifest(string directory, FileSystem fileSystem)
