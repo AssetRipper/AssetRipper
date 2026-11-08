@@ -1,7 +1,6 @@
 using AssetRipper.IO.Endian;
 using AssetRipper.Primitives;
 using AssetRipper.SourceGenerated.Extensions;
-using System.Collections;
 using System.Runtime.CompilerServices;
 
 namespace AssetRipper.Tests;
@@ -10,7 +9,7 @@ internal class VertexDataBlobTests
 {
 	[Test]
 	[MatrixDataSource]
-	public async Task TriangleMeshIsPreserved([Matrix("3.5", "4", "5", "2017", "2018", "2018.4")] string versionString, EndianType endianType)
+	public async Task TriangleMeshIsPreserved([Matrix("3.5", "4", "5", "2017", "2018", "2018.2", "2018.4")] string versionString, EndianType endianType)
 	{
 		MeshData meshData = MeshData.CreateTriangleMesh();
 		UnityVersion version = UnityVersion.Parse(versionString);
@@ -91,9 +90,9 @@ internal class VertexDataBlobTests
 		}
 	}
 
-	private static async Task AssertEquivalence(
-		IEnumerable? actual,
-		IEnumerable? expected,
+	private static async Task AssertEquivalence<T>(
+		IEnumerable<T>? actual,
+		IEnumerable<T>? expected,
 		[CallerArgumentExpression(nameof(expected))] string constraintExpression = "",
 		[CallerArgumentExpression(nameof(actual))] string actualExpression = "")
 	{
@@ -104,7 +103,7 @@ internal class VertexDataBlobTests
 			return;
 		}
 
-		await Assert.That(actual.Cast<object?>().SequenceEqual(expected.Cast<object?>())).IsTrue()
+		await Assert.That(actual.SequenceEqual(expected)).IsTrue()
 			.Because($"{actualExpression} should be equivalent to {constraintExpression}");
 	}
 }

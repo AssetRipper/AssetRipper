@@ -41,12 +41,18 @@ internal static class MeshDataExtensions
 				new Vector2(1.0f, 0.0f),
 				new Vector2(0.0f, 1.0f),
 			];
+			BoneWeight4[] skin =
+			[
+				new BoneWeight4(0.1f, 0.2f, 0.3f, 0.4f, 1, 2, 3, 4),
+				new BoneWeight4(0.4f, 0.3f, 0.2f, 0.1f, 5, 6, 7, 8),
+				new BoneWeight4(0.25f, 0.25f, 0.25f, 0.25f, 9, 10, 11, 12),
+			];
 			uint[] processedIndexBuffer = [0, 1, 2];
 			SubMeshData[] subMeshes =
 			[
 				new SubMeshData(0, 0, 0, processedIndexBuffer.Length, 1, 3, MeshTopology.Triangles, new Bounds(new Vector3(0.5f, 0.5f, 0.0f), new Vector3(0.5f, 0.5f, 0.0f)))
 			];
-			return new MeshData(vertices, normals, tangents, colors, uv.ToArray(), uv.ToArray(), uv.ToArray(), uv.ToArray(), uv.ToArray(), uv.ToArray(), uv.ToArray(), uv.ToArray(), null, null, processedIndexBuffer, subMeshes);
+			return new MeshData(vertices, normals, tangents, colors, uv.ToArray(), uv.ToArray(), uv.ToArray(), uv.ToArray(), uv.ToArray(), uv.ToArray(), uv.ToArray(), uv.ToArray(), skin, null, processedIndexBuffer, subMeshes);
 		}
 	}
 }
