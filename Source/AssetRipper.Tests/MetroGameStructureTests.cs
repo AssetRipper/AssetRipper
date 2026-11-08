@@ -78,7 +78,8 @@ public class MetroGameStructureTests
 		fs.File.WriteAllBytes(fs.Path.Join(Root, "Template.exe"), [0]);
 		fs.File.WriteAllBytes(fs.Path.Join(Root, "AppxManifest.xml"), [0]);
 
-		Assert.That(MetroGameStructure.Exists(Root, fs), Is.False);
+		PlatformGameStructure? platform = Detect(fs, Root);
+		Assert.That(platform?.GetType().Name, Is.Not.EqualTo("MetroGameStructure"));
 	}
 
 	[Test]
