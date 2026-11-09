@@ -229,6 +229,7 @@ public readonly record struct VertexDataBlob(
 
 						foreach (BoneWeight4 boneWeight in meshData.Skin)
 						{
+							// Encoded as UInt32
 							writer.Write(boneWeight.Index0);
 							writer.Write(boneWeight.Index1);
 							writer.Write(boneWeight.Index2);
@@ -386,12 +387,11 @@ public readonly record struct VertexDataBlob(
 
 	private static ChannelInfo CreateChannelInfoForIntegerVector(byte dimension, byte streamIndex, UnityVersion version)
 	{
-		// Note: SInt32 is only supported in Unity 2017 and later
 		return new ChannelInfo()
 		{
 			Dimension = dimension,
 			Offset = 0,
-			Format = (byte)MeshHelper.ToChannelFormat(MeshHelper.VertexFormat.kVertexFormatSInt32, version),
+			Format = (byte)MeshHelper.ToChannelFormat(MeshHelper.VertexFormat.kVertexFormatUInt32, version),
 			Stream = streamIndex,
 		};
 	}
