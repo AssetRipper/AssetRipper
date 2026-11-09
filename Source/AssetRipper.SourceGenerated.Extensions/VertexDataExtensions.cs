@@ -15,6 +15,35 @@ public static class VertexDataExtensions
 {
 	private const int VertexStreamAlign = 16;
 
+	extension(IVertexData instance)
+	{
+		public int CurrentChannels
+		{
+			get
+			{
+				if (instance.Has_CurrentChannels_Int32())
+				{
+					return instance.CurrentChannels_Int32;
+				}
+				else
+				{
+					return unchecked((int)instance.CurrentChannels_UInt32);
+				}
+			}
+			set
+			{
+				if (instance.Has_CurrentChannels_Int32())
+				{
+					instance.CurrentChannels_Int32 = value;
+				}
+				else
+				{
+					instance.CurrentChannels_UInt32 = unchecked((uint)value);
+				}
+			}
+		}
+	}
+
 	public static bool IsSet(this IVertexData instance, IStreamingInfo? streamingInfo)
 	{
 		return instance.VertexCount > 0 && (instance.Data.Length > 0 || streamingInfo is not null && streamingInfo.IsSet());
@@ -73,30 +102,6 @@ public static class VertexDataExtensions
 			{
 				target.Reset();
 			}
-		}
-	}
-
-	public static uint GetCurrentChannels(this IVertexData instance)
-	{
-		if (instance.Has_CurrentChannels_Int32())
-		{
-			return unchecked((uint)instance.CurrentChannels_Int32);
-		}
-		else
-		{
-			return instance.CurrentChannels_UInt32;
-		}
-	}
-
-	public static void SetCurrentChannels(this IVertexData instance, uint value)
-	{
-		if (instance.Has_CurrentChannels_Int32())
-		{
-			instance.CurrentChannels_Int32 = unchecked((int)value);
-		}
-		else
-		{
-			instance.CurrentChannels_UInt32 = value;
 		}
 	}
 

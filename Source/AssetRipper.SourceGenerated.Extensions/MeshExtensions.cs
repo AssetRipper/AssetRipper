@@ -167,7 +167,7 @@ public static partial class MeshExtensions
 			mesh.CookingOptions = (int)SourceGenerated.NativeEnums.Global.MeshColliderCookingOptions.DefaultCookingFlags;
 			//I copied 30 from a vanilla compressed mesh (with MeshCompression.Low), and it aligned with this enum.
 			mesh.SetMeshOptimizationFlags(MeshOptimizationFlags.Everything);
-			mesh.SetMeshCompression(ModelImporterMeshCompression.Low);
+			mesh.MeshCompressionE = ModelImporterMeshCompression.Low;
 
 			AccessListBase<ISubMesh> subMeshList = mesh.SubMeshes;
 			foreach (SubMeshData subMesh in meshData.SubMeshes)
@@ -251,7 +251,7 @@ public static partial class MeshExtensions
 			}
 			else
 			{
-				return default;
+				return MeshOptimizationFlags.PolygonOrder;
 			}
 		}
 
@@ -265,16 +265,6 @@ public static partial class MeshExtensions
 			{
 				mesh.MeshOptimized = value == MeshOptimizationFlags.Everything;
 			}
-		}
-
-		public ModelImporterMeshCompression GetMeshCompression()
-		{
-			return (ModelImporterMeshCompression)mesh.MeshCompression;
-		}
-
-		public void SetMeshCompression(ModelImporterMeshCompression meshCompression)
-		{
-			mesh.MeshCompression = (byte)meshCompression;
 		}
 
 		public byte[] GetVertexDataBytes()

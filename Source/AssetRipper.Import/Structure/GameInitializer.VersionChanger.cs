@@ -186,6 +186,8 @@ internal sealed partial record class GameInitializer
 				}
 
 				// Todo: handle other fields
+				newMesh.SetMeshOptimizationFlags(mesh.GetMeshOptimizationFlags());
+				newMesh.VertexData.CurrentChannels = mesh.VertexData.CurrentChannels;
 			}
 			else if (original is ITexture2D texture)
 			{
