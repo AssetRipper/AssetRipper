@@ -17,8 +17,7 @@ public readonly record struct Color32(byte R, byte G, byte B, byte A)
 	{
 		get
 		{
-			Color32 color = this;
-			return Unsafe.As<Color32, uint>(ref color);
+			return Unsafe.BitCast<Color32, uint>(this);
 		}
 	}
 
@@ -29,7 +28,7 @@ public readonly record struct Color32(byte R, byte G, byte B, byte A)
 	/// <returns>The resulting color.</returns>
 	public static Color32 FromRgba(uint rgba)
 	{
-		return Unsafe.As<uint, Color32>(ref rgba);
+		return Unsafe.BitCast<uint, Color32>(rgba);
 	}
 
 	/// <summary>
