@@ -453,7 +453,7 @@ public static class CompressedMeshExtensions
 			{
 				return MeshHelper.FloatArrayToColorFloat(compressedMesh.FloatColors.Unpack(1, 1));
 			}
-			else if (compressedMesh.Has_Colors())
+			else
 			{
 				compressedMesh.Colors.NumItems *= 4;
 				compressedMesh.Colors.BitSize /= 4;
@@ -467,10 +467,6 @@ public static class CompressedMeshExtensions
 				compressedMesh.Colors.BitSize *= 4;
 				return colors;
 			}
-			else
-			{
-				return [];
-			}
 		}
 
 		public void SetFloatColors(ReadOnlySpan<ColorFloat> colors)
@@ -479,7 +475,7 @@ public static class CompressedMeshExtensions
 			{
 				compressedMesh.FloatColors.Pack(colors);
 			}
-			else if (compressedMesh.Has_Colors())
+			else
 			{
 				Color32[] buffer = ArrayPool<Color32>.Shared.Rent(colors.Length);
 				for (int i = 0; i < colors.Length; i++)

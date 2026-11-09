@@ -14,6 +14,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Extensions;
 using AssetRipper.SourceGenerated.Subclasses.ChannelInfo;
 using AssetRipper.SourceGenerated.Subclasses.ComponentPair;
+using AssetRipper.SourceGenerated.Subclasses.CompressedMesh;
 using AssetRipper.SourceGenerated.Subclasses.VertexData;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
@@ -166,6 +167,21 @@ internal sealed partial record class GameInitializer
 					{
 						newMesh.MeshMetrics_0_ = meshData.CalculateMeshMetric(0);
 						newMesh.MeshMetrics_1_ = meshData.CalculateMeshMetric(1);
+					}
+				}
+
+				// Compressed mesh data
+				{
+					ICompressedMesh originalCompressedMesh = mesh.CompressedMesh;
+					ICompressedMesh newCompressedMesh = newMesh.CompressedMesh;
+
+					if (originalCompressedMesh.Has_Colors() && newCompressedMesh.Has_FloatColors())
+					{
+						newCompressedMesh.SetFloatColors(originalCompressedMesh.GetFloatColors());
+					}
+					else if (originalCompressedMesh.Has_FloatColors() && newCompressedMesh.Has_Colors())
+					{
+						newCompressedMesh.SetFloatColors(originalCompressedMesh.GetFloatColors());
 					}
 				}
 
