@@ -141,7 +141,12 @@ internal sealed partial record class GameInitializer
 					// Todo: handle StreamData
 
 					VertexDataBlob originalBlob = VertexDataBlob.Create(mesh);
-					VertexDataBlob newBlob = VertexDataBlob.Create(originalBlob.ToMeshData(), targetVersion, newMesh.Collection.EndianType);
+					MeshData meshData = originalBlob.ToMeshData();
+					if (mesh.Has_Skin() && !newMesh.Has_Skin())
+					{
+						meshData = meshData with { Skin = mesh.Skin.Select(b => b.ToCommonClass()).ToArray() };
+					}
+					VertexDataBlob newBlob = VertexDataBlob.Create(meshData, targetVersion, newMesh.Collection.EndianType);
 					IVertexData vertexData = newMesh.VertexData;
 					vertexData.Data = newBlob.Data;
 					vertexData.VertexCount = (uint)newBlob.VertexCount;
