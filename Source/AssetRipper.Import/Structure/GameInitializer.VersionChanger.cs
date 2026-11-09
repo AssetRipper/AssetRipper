@@ -12,6 +12,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_25;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
 using AssetRipper.SourceGenerated.Extensions;
+using AssetRipper.SourceGenerated.Subclasses.ChannelInfo;
 using AssetRipper.SourceGenerated.Subclasses.ComponentPair;
 using AssetRipper.SourceGenerated.Subclasses.VertexData;
 using System.Diagnostics;
@@ -147,7 +148,10 @@ internal sealed partial record class GameInitializer
 					if (vertexData.Has_Channels())
 					{
 						vertexData.Channels.Clear();
-						vertexData.Channels.AddRange(newBlob.Channels);
+						foreach (ChannelInfo channel in newBlob.Channels)
+						{
+							vertexData.Channels.AddNew().CopyValues(channel);
+						}
 					}
 					else
 					{
