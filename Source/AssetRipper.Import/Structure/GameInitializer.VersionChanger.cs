@@ -136,7 +136,9 @@ internal sealed partial record class GameInitializer
 			{
 				IMesh newMesh = (IMesh)replacement;
 				Debug.Assert(mesh.Collection == newMesh.Collection);
-				if (mesh.VertexData.Data.Length > 0)
+
+				// Vertex data
+				if (mesh.VertexData.Data.Length > 0 && (targetVersion.LessThan(2018, 2) || mesh.Collection.Version.LessThan(2018, 2)))
 				{
 					// Todo: handle StreamData
 
