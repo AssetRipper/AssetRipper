@@ -153,9 +153,12 @@ internal sealed partial record class GameInitializer
 							vertexData.Channels.AddNew().CopyValues(channel);
 						}
 					}
-					else
+					vertexData.SetStreams(newBlob.Streams);
+
+					if (newMesh.Has_MeshMetrics_0_() && !mesh.Has_MeshMetrics_0_())
 					{
-						vertexData.SetStreams(newBlob.Streams);
+						newMesh.MeshMetrics_0_ = meshData.CalculateMeshMetric(0);
+						newMesh.MeshMetrics_1_ = meshData.CalculateMeshMetric(1);
 					}
 				}
 

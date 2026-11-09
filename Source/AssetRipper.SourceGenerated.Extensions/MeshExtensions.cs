@@ -161,8 +161,8 @@ public static partial class MeshExtensions
 
 			mesh.KeepIndices = true;//Not sure about this. Seems to be for animated meshes
 			mesh.KeepVertices = true;//Not sure about this. Seems to be for animated meshes
-			mesh.MeshMetrics_0_ = CalculateMeshMetric(meshData.Vertices, meshData.UV0, meshData.ProcessedIndexBuffer, meshData.SubMeshes, 0);
-			mesh.MeshMetrics_1_ = CalculateMeshMetric(meshData.Vertices, meshData.UV1, meshData.ProcessedIndexBuffer, meshData.SubMeshes, 1);
+			mesh.MeshMetrics_0_ = meshData.CalculateMeshMetric(0);
+			mesh.MeshMetrics_1_ = meshData.CalculateMeshMetric(1);
 			mesh.MeshUsageFlags = (int)SourceGenerated.NativeEnums.Global.MeshUsageFlags.MeshUsageFlagNone;
 			mesh.CookingOptions = (int)SourceGenerated.NativeEnums.Global.MeshColliderCookingOptions.DefaultCookingFlags;
 			//I copied 30 from a vanilla compressed mesh (with MeshCompression.Low), and it aligned with this enum.
@@ -402,58 +402,6 @@ public static partial class MeshExtensions
 				}
 			}
 		}
-	}
-
-	private static float CalculateMeshMetric(ReadOnlySpan<Vector3> vertexBuffer, ReadOnlySpan<Vector2> uvBuffer, uint[] indexBuffer, SubMeshData[] subMeshList, int uvSetIndex, float uvAreaThreshold = 1e-9f)
-	{
-		//https://docs.unity3d.com/ScriptReference/Mesh.GetUVDistributionMetric.html
-		//https://docs.unity3d.com/ScriptReference/Mesh.RecalculateUVDistributionMetric.html
-		//https://docs.unity3d.com/ScriptReference/Mesh.RecalculateUVDistributionMetrics.html
-
-		const float DefaultMetric = 1.0f;
-		if (vertexBuffer.Length == 0 || uvBuffer.Length == 0 || uvSetIndex >= subMeshList.Length)
-		{
-			return DefaultMetric;
-		}
-
-		int n = 0;
-		float vertexAreaSum = 0.0f;
-		float uvAreaSum = 0.0f;
-		foreach ((uint ia, uint ib, uint ic) in new TriangleEnumerable(subMeshList[uvSetIndex], indexBuffer))
-		{
-			(Vector2 uva, Vector2 uvb, Vector2 uvc) = (uvBuffer[(int)ia], uvBuffer[(int)ib], uvBuffer[(int)ic]);
-			float uvArea = TriangleArea(uva, uvb, uvc);
-			if (uvArea < uvAreaThreshold)
-			{
-				continue;
-			}
-
-			(Vector3 va, Vector3 vb, Vector3 vc) = (vertexBuffer[(int)ia], vertexBuffer[(int)ib], vertexBuffer[(int)ic]);
-			float vertexArea = TriangleArea(va, vb, vc);
-			vertexAreaSum += vertexArea;
-			uvAreaSum += uvArea;
-			n++;
-		}
-
-		if (n is 0 || uvAreaSum == 0.0f)
-		{
-			return DefaultMetric;
-		}
-		else
-		{
-			//Average of triangle area divided by uv area.
-			return vertexAreaSum / n / uvAreaSum;
-		}
-	}
-
-	private static float TriangleArea(Vector2 a, Vector2 b, Vector2 c)
-	{
-		return TriangleArea(a.AsVector3(), b.AsVector3(), c.AsVector3());
-	}
-
-	private static float TriangleArea(Vector3 a, Vector3 b, Vector3 c)
-	{
-		return Vector3.Cross(b - a, c - a).Length() * 0.5f;
 	}
 
 	private static void UShortToUInt(ushort[] sourceArray, uint[] destinationArray, int indexCount)
