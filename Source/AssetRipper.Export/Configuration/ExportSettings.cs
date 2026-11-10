@@ -56,6 +56,11 @@ public sealed record class ExportSettings
 	/// </summary>
 	public bool PreferOriginalTextureExtension { get; set; } = true;
 
+	/// <summary>
+	/// Should Unity packages be automatically detected from loaded assemblies?
+	/// </summary>
+	public PackageDetectionMode PackageDetectionMode { get; set; } = PackageDetectionMode.Off;
+
 	public bool SaveSettingsToDisk { get; set; }
 
 	public string? LanguageCode { get; set; }
@@ -72,5 +77,6 @@ public sealed record class ExportSettings
 		Logger.Info(LogCategory.General, $"{nameof(TextExportMode)}: {TextExportMode}");
 		Logger.Info(LogCategory.General, $"{nameof(ExportUnreadableAssets)}: {ExportUnreadableAssets}");
 		Logger.Info(LogCategory.General, $"{nameof(PreferOriginalTextureExtension)}: {PreferOriginalTextureExtension}");
+		Logger.Info(LogCategory.General, $"{nameof(PackageDetectionMode)}: {PackageDetectionMode}");
 	}
 }

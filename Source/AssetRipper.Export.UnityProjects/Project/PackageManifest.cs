@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using AssetRipper.Processing;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace AssetRipper.Export.UnityProjects.Project;
@@ -14,11 +15,23 @@ public record class PackageManifest([property: JsonPropertyName("dependencies")]
 		JsonSerializer.Serialize(stream, this, PackageManifestSerializerContext.Default.PackageManifest);
 	}
 
-	public static PackageManifest CreateDefault(UnityVersion version)
+	public static PackageManifest CreateDefault(UnityVersion version, PackageDetectionResult? packageDetection = null)
 	{
 		PackageManifest manifest = new();
 		manifest.AddDefaultDependencies(version);
+		if (packageDetection is not null)
+		{
+			manifest.AddDetectedPackages(packageDetection.Packages);
+		}
 		return manifest;
+	}
+
+	public void AddDetectedPackages(IReadOnlyDictionary<string, string> packages)
+	{
+		foreach ((string name, string version) in packages)
+		{
+			Dependencies.TryAdd(name, version);
+		}
 	}
 
 	public void AddDefaultDependencies(UnityVersion version)
