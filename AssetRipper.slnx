@@ -3,7 +3,6 @@
     <File Path=".github/CONTRIBUTING.md" />
     <File Path=".gitignore" />
     <File Path="LICENSE.md" />
-    <File Path="nuget.config" />
     <File Path="README.md" />
     <File Path="Source/.editorconfig" />
     <File Path="Source/Directory.Build.props" />
