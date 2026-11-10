@@ -6,8 +6,4 @@
 		<IntermediateOutputPath>..\0Bins\obj\AssetRipper.AssemblyDumper.Downloader\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 
-	<ItemGroup>
-		<PackageReference Include="SharpCompress" Version="0.50.4" />
-	</ItemGroup>
-
 </Project>
