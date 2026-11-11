@@ -40,6 +40,11 @@ public sealed class IL2CppManager : BaseManager
 
 	public static AsmResolverDllOutputFormatDefault DefaultOutputFormat { get; } = new();
 
+	/// <summary>
+	/// Cpp2IL output format that analyzes native methods and reconstructs their CIL bodies.
+	/// </summary>
+	public static AsmResolverDllOutputFormatIlRecovery Il2CppRecoveryOutputFormat { get; } = new();
+
 	public static List<Cpp2IlProcessingLayer>? RecoveryProcessingLayers { get; set; }
 
 	public static AsmResolverDllOutputFormat? RecoveryOutputFormat { get; set; }
@@ -52,7 +57,7 @@ public sealed class IL2CppManager : BaseManager
 	public string? MetaDataPath { get; private set; }
 	public UnityVersion UnityVersion { get; private set; }
 	/// <summary>
-	/// For when analysis is reimplimented in Cpp2IL.
+	/// Controls the amount of IL2CPP script recovery performed during initialization.
 	/// </summary>
 	private readonly ScriptContentLevel contentLevel;
 
@@ -95,7 +100,9 @@ public sealed class IL2CppManager : BaseManager
 
 		Logger.SendStatusChange("loading_step_generate_dummy_dll");
 
-		List<Cpp2IlProcessingLayer> processingLayers = contentLevel == ScriptContentLevel.Level3
+		bool useRecoveryPipeline = contentLevel is ScriptContentLevel.Level3 or ScriptContentLevel.LevelIL2CPP;
+
+		List<Cpp2IlProcessingLayer> processingLayers = useRecoveryPipeline
 			? RecoveryProcessingLayers ?? DefaultProcessingLayers
 			: DefaultProcessingLayers;
 
@@ -109,9 +116,12 @@ public sealed class IL2CppManager : BaseManager
 			cpp2IlProcessingLayer.Process(Cpp2IlApi.CurrentAppContext);
 		}
 
-		AsmResolverDllOutputFormat outputFormat = contentLevel == ScriptContentLevel.Level3
-			? RecoveryOutputFormat ?? DefaultOutputFormat
-			: DefaultOutputFormat;
+		AsmResolverDllOutputFormat outputFormat = contentLevel switch
+		{
+			ScriptContentLevel.LevelIL2CPP => Il2CppRecoveryOutputFormat,
+			ScriptContentLevel.Level3 => RecoveryOutputFormat ?? DefaultOutputFormat,
+			_ => DefaultOutputFormat,
+		};
 
 		List<AssemblyDefinition> assemblies = outputFormat.BuildAssemblies(Cpp2IlApi.CurrentAppContext);
 
