@@ -14,9 +14,9 @@ permissions:
   contents: read
 
 jobs:
-  build-test-publish:
-    name: Build, test, and publish Windows x64
-    runs-on: windows-latest
+  test:
+    name: Build and test
+    runs-on: ubuntu-latest
     timeout-minutes: 45
 
     steps:
@@ -28,16 +28,26 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
-      - name: Restore dependencies
-        run: dotnet restore
+      - name: Build
+        run: dotnet build
 
-      - name: Build Release
-        run: dotnet build --no-restore --configuration Release
+      - name: Run tests
+        run: dotnet test
 
-      # Some existing tests explicitly verify Debug.Assert behavior.
-      # Debug.Assert calls are conditional and are omitted from Release builds.
-      - name: Run tests (Debug)
-        run: dotnet test --configuration Debug
+  publish-windows:
+    name: Publish Windows x64
+    runs-on: windows-latest
+    needs: test
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 10.0.x
 
       - name: Publish Windows x64
         run: dotnet publish -c Release -r win-x64
@@ -47,8 +57,6 @@ jobs:
         shell: pwsh
         run: Get-Date -AsUTC -Format o | Out-File ./Source/0Bins/AssetRipper.GUI.Free/Release/win-x64/publish/compile_time.txt
 
-      # Match the repository's Publish workflow: upload the published app,
-      # not the intermediate project/build directories.
       - name: Upload Windows x64 application
         uses: actions/upload-artifact@v7
         with:
