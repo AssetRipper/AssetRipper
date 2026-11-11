@@ -95,7 +95,9 @@ public sealed class IL2CppManager : BaseManager
 
 		Logger.SendStatusChange("loading_step_generate_dummy_dll");
 
-		List<Cpp2IlProcessingLayer> processingLayers = contentLevel == ScriptContentLevel.Level3
+		bool useRecoveryPipeline = contentLevel is ScriptContentLevel.Level3 or ScriptContentLevel.LevelIL2CPP;
+
+		List<Cpp2IlProcessingLayer> processingLayers = useRecoveryPipeline
 			? RecoveryProcessingLayers ?? DefaultProcessingLayers
 			: DefaultProcessingLayers;
 
@@ -109,7 +111,7 @@ public sealed class IL2CppManager : BaseManager
 			cpp2IlProcessingLayer.Process(Cpp2IlApi.CurrentAppContext);
 		}
 
-		AsmResolverDllOutputFormat outputFormat = contentLevel == ScriptContentLevel.Level3
+		AsmResolverDllOutputFormat outputFormat = useRecoveryPipeline
 			? RecoveryOutputFormat ?? DefaultOutputFormat
 			: DefaultOutputFormat;
 
