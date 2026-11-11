@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   build-and-test:
-    name: Build and test (.NET 10)
+    name: Build, test, and package (.NET 10)
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -38,3 +38,13 @@ jobs:
       # Debug.Assert calls are conditional and are omitted from Release builds.
       - name: Run tests (Debug)
         run: dotnet test --configuration Debug
+
+      # GitHub stores uploaded artifacts as downloadable ZIP archives.
+      - name: Upload Release build
+        uses: actions/upload-artifact@v4
+        with:
+          name: AssetRipper-Level-IL2CPP-Release
+          path: Source/0Bins/Other/**/Release/
+          if-no-files-found: error
+          compression-level: 6
+          retention-days: 14
