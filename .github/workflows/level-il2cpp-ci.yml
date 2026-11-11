@@ -14,10 +14,10 @@ permissions:
   contents: read
 
 jobs:
-  build-and-test:
-    name: Build, test, and package (.NET 10)
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
+  build-test-publish:
+    name: Build, test, and publish Windows x64
+    runs-on: windows-latest
+    timeout-minutes: 45
 
     steps:
       - name: Checkout repository
@@ -39,12 +39,25 @@ jobs:
       - name: Run tests (Debug)
         run: dotnet test --configuration Debug
 
-      # GitHub stores uploaded artifacts as downloadable ZIP archives.
-      - name: Upload Release build
-        uses: actions/upload-artifact@v4
+      - name: Publish Windows x64
+        run: dotnet publish -c Release -r win-x64
+        working-directory: ./Source/AssetRipper.GUI.Free/
+
+      - name: Add build timestamp
+        shell: pwsh
+        run: Get-Date -AsUTC -Format o | Out-File ./Source/0Bins/AssetRipper.GUI.Free/Release/win-x64/publish/compile_time.txt
+
+      # Match the repository's Publish workflow: upload the published app,
+      # not the intermediate project/build directories.
+      - name: Upload Windows x64 application
+        uses: actions/upload-artifact@v7
         with:
-          name: AssetRipper-Level-IL2CPP-Release
-          path: Source/0Bins/Other/**/Release/
+          name: AssetRipper-Level-IL2CPP-win_x64
+          path: |
+            ./Source/0Bins/AssetRipper.GUI.Free/Release/win-x64/publish/AssetRipper.GUI.Free.exe
+            ./Source/0Bins/AssetRipper.GUI.Free/Release/win-x64/publish/*.dll
+            ./Source/0Bins/AssetRipper.GUI.Free/Release/win-x64/publish/*.so
+            ./Source/0Bins/AssetRipper.GUI.Free/Release/win-x64/publish/*.dylib
+            ./Source/0Bins/AssetRipper.GUI.Free/Release/win-x64/publish/compile_time.txt
           if-no-files-found: error
-          compression-level: 6
           retention-days: 14
