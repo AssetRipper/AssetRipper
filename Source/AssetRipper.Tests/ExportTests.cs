@@ -43,6 +43,21 @@ internal class ExportTests
 	}
 
 	[Test]
+	public async Task WindowsReservedAssetNamesAreRenamedDuringExport()
+	{
+		ProcessedAssetCollection collection = AssetCreator.CreateCollection(UnityVersion.V_2022);
+
+		IMonoBehaviour monoBehaviour = collection.CreateMonoBehaviour();
+		monoBehaviour.Name = "Aux";
+		monoBehaviour.OriginalDirectory = "Assets/Aux";
+
+		VirtualFileSystem fileSystem = Export(collection);
+
+		await Assert.That(fileSystem.File.Exists("/output/ExportedProject/Assets/Aux_/Aux_.asset")).IsTrue();
+		await Assert.That(fileSystem.File.Exists("/output/ExportedProject/Assets/Aux_/Aux_.asset.meta")).IsTrue();
+	}
+
+	[Test]
 	public async Task ScriptableObjectGroupIsExported_1()
 	{
 		ProcessedAssetCollection collection = AssetCreator.CreateCollection(UnityVersion.V_2022);
