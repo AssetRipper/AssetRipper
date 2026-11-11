@@ -57,7 +57,7 @@ public sealed class IL2CppManager : BaseManager
 	public string? MetaDataPath { get; private set; }
 	public UnityVersion UnityVersion { get; private set; }
 	/// <summary>
-	/// For when analysis is reimplimented in Cpp2IL.
+	/// Controls the amount of IL2CPP script recovery performed during initialization.
 	/// </summary>
 	private readonly ScriptContentLevel contentLevel;
 
