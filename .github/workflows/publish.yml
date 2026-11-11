@@ -18,7 +18,6 @@ jobs:
           - { name: win_arm64, os: windows-latest, runtime: win-arm64, executable: AssetRipper.GUI.Free.exe, archive: zip }
           - { name: linux_x64, os: ubuntu-22.04, runtime: linux-x64, executable: AssetRipper.GUI.Free, archive: tar }
           - { name: linux_arm64, os: ubuntu-22.04-arm, runtime: linux-arm64, executable: AssetRipper.GUI.Free, archive: tar }
-          - { name: mac_x64, os: macos-15, runtime: osx-x64, executable: AssetRipper.GUI.Free, archive: tar }
           - { name: mac_arm64, os: macos-15, runtime: osx-arm64, executable: AssetRipper.GUI.Free, archive: tar }
 
     steps:

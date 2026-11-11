@@ -8,10 +8,9 @@ Get the latest stable version of AssetRipper for your platform:
 |---------------|-----------------------------------------------------------------------------------------------------------|
 | Windows x64   | [Download](https://github.com/AssetRipper/AssetRipper/releases/latest/download/AssetRipper_win_x64.zip)   |
 | Windows Arm64 | [Download](https://github.com/AssetRipper/AssetRipper/releases/latest/download/AssetRipper_win_arm64.zip) |
-| Mac x64       | [Download](https://github.com/AssetRipper/AssetRipper/releases/latest/download/AssetRipper_mac_x64.zip)   |
-| Mac Arm64     | [Download](https://github.com/AssetRipper/AssetRipper/releases/latest/download/AssetRipper_mac_arm64.zip) |
-| Linux x64     | [Download](https://github.com/AssetRipper/AssetRipper/releases/latest/download/AssetRipper_linux_x64.zip) |
-| Linux Arm64     | [Download](https://github.com/AssetRipper/AssetRipper/releases/latest/download/AssetRipper_linux_arm64.zip) |
+| Mac Arm64     | [Download](https://github.com/AssetRipper/AssetRipper/releases/latest/download/AssetRipper_mac_arm64.tar.xz) |
+| Linux x64     | [Download](https://github.com/AssetRipper/AssetRipper/releases/latest/download/AssetRipper_linux_x64.tar.xz) |
+| Linux Arm64   | [Download](https://github.com/AssetRipper/AssetRipper/releases/latest/download/AssetRipper_linux_arm64.tar.xz) |
 
 📝 [Release Notes](https://github.com/AssetRipper/AssetRipper/releases/latest)
 
@@ -29,10 +28,9 @@ For advanced users, every commit triggers an automatic "nightly" build via Githu
 |---------------|-------------------------------------------------------------------------------------------------------------|
 | Windows x64   | [Download](https://nightly.link/AssetRipper/AssetRipper/workflows/publish/master/AssetRipper_win_x64.zip)   |
 | Windows Arm64 | [Download](https://nightly.link/AssetRipper/AssetRipper/workflows/publish/master/AssetRipper_win_arm64.zip) |
-| Mac x64       | [Download](https://nightly.link/AssetRipper/AssetRipper/workflows/publish/master/AssetRipper_mac_x64.zip)   |
-| Mac Arm64     | [Download](https://nightly.link/AssetRipper/AssetRipper/workflows/publish/master/AssetRipper_mac_arm64.zip) |
-| Linux x64     | [Download](https://nightly.link/AssetRipper/AssetRipper/workflows/publish/master/AssetRipper_linux_x64.zip) |
-| Linux Arm64     | [Download](https://nightly.link/AssetRipper/AssetRipper/workflows/publish/master/AssetRipper_linux_arm64.zip) |
+| Mac Arm64     | [Download](https://nightly.link/AssetRipper/AssetRipper/workflows/publish/master/AssetRipper_mac_arm64.tar.xz) |
+| Linux x64     | [Download](https://nightly.link/AssetRipper/AssetRipper/workflows/publish/master/AssetRipper_linux_x64.tar.xz) |
+| Linux Arm64   | [Download](https://nightly.link/AssetRipper/AssetRipper/workflows/publish/master/AssetRipper_linux_arm64.tar.xz) |
 
 ⚠️ Nightly builds are highly experimental and may contain bugs or unfinished features.
 
