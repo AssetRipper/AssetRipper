@@ -40,6 +40,11 @@ public sealed class IL2CppManager : BaseManager
 
 	public static AsmResolverDllOutputFormatDefault DefaultOutputFormat { get; } = new();
 
+	/// <summary>
+	/// Cpp2IL output format that analyzes native methods and reconstructs their CIL bodies.
+	/// </summary>
+	public static AsmResolverDllOutputFormatIlRecovery Il2CppRecoveryOutputFormat { get; } = new();
+
 	public static List<Cpp2IlProcessingLayer>? RecoveryProcessingLayers { get; set; }
 
 	public static AsmResolverDllOutputFormat? RecoveryOutputFormat { get; set; }
@@ -111,9 +116,12 @@ public sealed class IL2CppManager : BaseManager
 			cpp2IlProcessingLayer.Process(Cpp2IlApi.CurrentAppContext);
 		}
 
-		AsmResolverDllOutputFormat outputFormat = useRecoveryPipeline
-			? RecoveryOutputFormat ?? DefaultOutputFormat
-			: DefaultOutputFormat;
+		AsmResolverDllOutputFormat outputFormat = contentLevel switch
+		{
+			ScriptContentLevel.LevelIL2CPP => Il2CppRecoveryOutputFormat,
+			ScriptContentLevel.Level3 => RecoveryOutputFormat ?? DefaultOutputFormat,
+			_ => DefaultOutputFormat,
+		};
 
 		List<AssemblyDefinition> assemblies = outputFormat.BuildAssemblies(Cpp2IlApi.CurrentAppContext);
 
