@@ -158,7 +158,7 @@
     "script_content_level_3": "Nivel 3",
     "script_content_level_3_description": "Los métodos IL2Cpp son recuperados de forma segura, donde sea posible.",
     "script_content_level_il2cpp": "Level-IL2CPP (Cpp2IL)",
-    "script_content_level_il2cpp_description": "Utiliza el pipeline de recuperación de Cpp2IL para recuperar métodos IL2CPP cuando está configurado.",
+    "script_content_level_il2cpp_description": "Utiliza el pipeline de recuperación de Cpp2IL e ILSpy para reconstruir y exportar los métodos IL2CPP como código fuente C#.",
     "script_content_level_4": "Nivel 4",
     "script_content_level_4_description": "Los métodos IL2Cpp son recuperados sin considerar seguridad.",
     "script_content_level_title": "Nivel de contenido de scripts",
