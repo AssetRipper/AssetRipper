@@ -199,6 +199,8 @@
     "script_content_level_2_description": "Default. This exports full methods for Mono games and dummy methods for IL2Cpp games.",
     "script_content_level_3": "Level 3",
     "script_content_level_3_description": "IL2Cpp methods are safely recovered where possible.",
+    "script_content_level_il2cpp": "Level-IL2CPP (Cpp2IL)",
+    "script_content_level_il2cpp_description": "Uses the Cpp2IL recovery pipeline to recover IL2CPP methods where configured.",
     "script_content_level_4": "Level 4",
     "script_content_level_4_description": "IL2Cpp methods are recovered without regard to safety.",
     "script_content_level_title": "Script Content Level",
