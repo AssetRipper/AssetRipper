@@ -31,8 +31,10 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
 
-      - name: Build solution
+      - name: Build Release
         run: dotnet build --no-restore --configuration Release
 
-      - name: Run tests
-        run: dotnet test --no-build --configuration Release
+      # Some existing tests explicitly verify Debug.Assert behavior.
+      # Debug.Assert calls are conditional and are omitted from Release builds.
+      - name: Run tests (Debug)
+        run: dotnet test --configuration Debug
