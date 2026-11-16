@@ -1,4 +1,5 @@
 ﻿using AssetRipper.Assets;
+using AssetRipper.Import.AssetCreation;
 using AssetRipper.SourceGenerated.Classes.ClassID_128;
 using AssetRipper.SourceGenerated.Classes.ClassID_152;
 using AssetRipper.SourceGenerated.Classes.ClassID_329;
@@ -18,6 +19,7 @@ public sealed class BinaryAssetContentExtractor : IContentExtractor
 			IFont font => FontExportCollection.Create(font),
 			IMovieTexture movieTexture => MovieTextureExportCollection.Create(movieTexture),
 			IVideoClip videoClip => VideoClipExportCollection.Create(videoClip),
+			RawDataObject rawDataObject => RawDataExportCollection.Create(rawDataObject),
 			_ => null,
 		};
 		return exportCollection is not null;
@@ -121,6 +123,31 @@ public sealed class BinaryAssetContentExtractor : IContentExtractor
 			if (asset.CheckIntegrity())
 			{
 				return new VideoClipExportCollection(asset);
+			}
+			return null;
+		}
+	}
+
+	private sealed class RawDataExportCollection : BinaryAssetExportCollection<RawDataObject>
+	{
+		public RawDataExportCollection(RawDataObject asset) : base(asset)
+		{
+		}
+
+		protected override ReadOnlySpan<byte> Data => Asset.RawData;
+
+		protected override string ExportExtension => Asset switch
+		{
+			UnreadableObject => "unreadable",
+			UnknownObject => "unknown",
+			_ => "raw",
+		};
+
+		public static RawDataExportCollection? Create(RawDataObject asset)
+		{
+			if (asset.RawData.Length > 0)
+			{
+				return new RawDataExportCollection(asset);
 			}
 			return null;
 		}
