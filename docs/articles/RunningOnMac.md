@@ -9,7 +9,7 @@ This guide will help you run AssetRipper on macOS. Before proceeding, ensure you
 ### Step 1: Download AssetRipper
 
 1. Download the GUI release from the [AssetRipper downloads page](https://assetripper.github.io/AssetRipper/articles/Downloads.html).
-2. Choose `AssetRipper_mac_arm64.tar.xz`.
+2. Choose `AssetRipper_mac_x64.tar.xz` for Intel Macs or `AssetRipper_mac_arm64.tar.xz` for Apple silicon Macs.
 
    ![Download AssetRipper](images/RunningOnMac/001.png)
 
