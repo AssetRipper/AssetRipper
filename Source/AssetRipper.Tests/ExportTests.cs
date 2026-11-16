@@ -1,13 +1,17 @@
 using AsmResolver.DotNet;
 using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
+using AssetRipper.Export.Configuration;
+using AssetRipper.Export.PrimaryContent;
 using AssetRipper.Export.UnityProjects;
+using AssetRipper.Import.AssetCreation;
 using AssetRipper.Import.Platforms;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.IO.Files;
 using AssetRipper.Primitives;
 using AssetRipper.Processing;
 using AssetRipper.Processing.ScriptableObject;
+using AssetRipper.SourceGenerated;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
 using AssetRipper.SourceGenerated.Classes.ClassID_115;
 using AssetRipper.SourceGenerated.Classes.ClassID_43;
@@ -177,6 +181,29 @@ internal class ExportTests
 			await Assert.That(fileSystem.File.Exists("/output/ExportedProject/Assets/MonoBehaviour/TestBehaviour.asset.meta")).IsTrue();
 		}
 		await Assert.That(fileSystem.File.ReadAllText("/output/ExportedProject/Assets/MonoBehaviour/TestBehaviour.asset")).Contains(assemblyGuid);
+	}
+
+	[Test]
+	[Arguments(false)]
+	[Arguments(true)]
+	public async Task PrimaryContentUnreadableAssetsRespectSetting(bool exportUnreadableAssets)
+	{
+		ProcessedAssetCollection collection = AssetCreator.CreateCollection(UnityVersion.V_2022);
+		UnreadableObject unreadable = collection.CreateAsset((int)ClassIDType.Texture2D, (assetInfo) => new UnreadableObject(assetInfo, [1, 2, 3, 4]));
+		UnknownObject unknown = collection.CreateAsset(-1, (assetInfo) => new UnknownObject(assetInfo, [5, 6, 7, 8]));
+
+		FullConfiguration settings = new();
+		settings.ExportRootPath = "/output";
+		settings.ExportSettings.ExportUnreadableAssets = exportUnreadableAssets;
+
+		VirtualFileSystem fileSystem = new();
+		GameData gameData = CreateGameData(collection);
+		PrimaryContentExporter.CreateDefault(gameData, settings).Export(gameData.GameBundle, settings, fileSystem);
+
+		await Assert.That(fileSystem.File.Exists($"/output/Assets/{unreadable.ClassName}/{unreadable.Name}.unreadable")).IsEqualTo(exportUnreadableAssets);
+		await Assert.That(fileSystem.File.Exists($"/output/Assets/{unknown.ClassName}/{unknown.Name}.unknown")).IsEqualTo(exportUnreadableAssets);
+		await Assert.That(fileSystem.File.Exists($"/output/Assets/{unreadable.ClassName}/{unreadable.Name}.json")).IsFalse();
+		await Assert.That(fileSystem.File.Exists($"/output/Assets/{unknown.ClassName}/{unknown.Name}.json")).IsFalse();
 	}
 
 	private static VirtualFileSystem Export(ProcessedAssetCollection collection, string outputPath = "output", IAssemblyManager? assemblyManager = null, VirtualFileSystem? fileSystem = null)
