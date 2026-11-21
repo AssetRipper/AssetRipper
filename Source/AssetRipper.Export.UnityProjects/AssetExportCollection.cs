@@ -75,7 +75,7 @@ public class AssetExportCollection<T> : ExportCollection where T : IUnityObjectB
 		return importer;
 	}
 
-	public override UnityGuid GUID { get; } = UnityGuid.NewGuid();
+	public override UnityGuid GUID { get; } = new(RandomGuid.Next());
 	public override IAssetExporter AssetExporter { get; }
 	public override AssetCollection File => Asset.Collection;
 	public override IEnumerable<IUnityObjectBase> Assets
