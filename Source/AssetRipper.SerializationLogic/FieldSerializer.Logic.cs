@@ -84,6 +84,11 @@ public readonly partial struct FieldSerializer(UnityVersion version, RuntimeCont
 			fieldType = customModifierType.BaseType;
 		}
 
+		if (fieldType is ArrayTypeSignature or ByReferenceTypeSignature or PointerTypeSignature)
+		{
+			return false;
+		}
+
 		if (fieldType is CorLibTypeSignature corLibTypeSignature && corLibTypeSignature.ElementType == ElementType.String)
 		{
 			return true;
@@ -96,9 +101,18 @@ public readonly partial struct FieldSerializer(UnityVersion version, RuntimeCont
 
 		if (fieldType is SzArrayTypeSignature || AsmUtils.IsGenericList(fieldType, runtimeContext))
 		{
-			if (!fieldDefinition.HasSerializeReferenceAttribute())
+			TypeSignature elementType = AsmUtils.ElementTypeOfCollection(fieldType, runtimeContext);
+			if (elementType is CustomModifierTypeSignature customModifierElementType)
 			{
-				return IsSupportedCollection(fieldType);
+				elementType = customModifierElementType.BaseType;
+			}
+			if (fieldDefinition.HasSerializeReferenceAttribute())
+			{
+				return elementType is CorLibTypeSignature or GenericInstanceTypeSignature or TypeDefOrRefSignature;
+			}
+			else
+			{
+				return IsTypeSerializable(elementType);
 			}
 		}
 
@@ -115,7 +129,7 @@ public readonly partial struct FieldSerializer(UnityVersion version, RuntimeCont
 		return true;
 	}
 
-	private bool IsDelegate(ITypeDescriptor typeReference)
+	private bool IsDelegate(TypeSignature typeReference)
 	{
 		return typeReference.IsAssignableTo("System", "Delegate", runtimeContext);
 	}
@@ -240,16 +254,6 @@ public readonly partial struct FieldSerializer(UnityVersion version, RuntimeCont
 			ElementType.Boolean or ElementType.U1 or ElementType.I4 or ElementType.R4 or ElementType.R8 or ElementType.String => true,
 			_ => false,
 		};
-	}
-
-	private bool IsSupportedCollection(TypeSignature fieldType)
-	{
-		if (fieldType is SzArrayTypeSignature || AsmUtils.IsGenericList(fieldType, runtimeContext))
-		{
-			return IsTypeSerializable(AsmUtils.ElementTypeOfCollection(fieldType, runtimeContext));
-		}
-
-		return false;
 	}
 
 	private static bool ShouldHaveHadAllFieldsPublic(FieldDefinition field)

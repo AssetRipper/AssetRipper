@@ -51,7 +51,7 @@ internal static class EngineTypePredicates
 		"UnityEngine.PropertyName",
 	];
 
-	public static bool IsSerializableUnityClass(ITypeDescriptor type, RuntimeContext? runtimeContext)
+	public static bool IsSerializableUnityClass(TypeSignature type, RuntimeContext? runtimeContext)
 	{
 		foreach (string unityClasses in serializableClasses)
 		{
@@ -84,7 +84,7 @@ internal static class EngineTypePredicates
 		return false;
 	}
 
-	public static bool IsUnityEngineObject(ITypeDescriptor type, RuntimeContext? runtimeContext)
+	public static bool IsUnityEngineObject(TypeSignature type, RuntimeContext? runtimeContext)
 	{
 		return type.IsAssignableTo(UnityEngineNamespace, nameof(Object), runtimeContext);
 	}
