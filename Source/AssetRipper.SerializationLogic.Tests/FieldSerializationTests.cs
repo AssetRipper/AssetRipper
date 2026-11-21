@@ -44,6 +44,25 @@ public class FieldSerializationTests
 		public List<string>? listOfStrings;
 	}
 
+	[Serializable]
+	private class ClassWithArrayFields
+	{
+		public int[]? singleDimensional;
+		public int[][]? jagged;
+		public int[,]? multidimensional;
+	}
+
+	[Test]
+	public async Task JaggedAndMultidimensionalArraysAreNotSerialized()
+	{
+		SerializableType serializableType = SerializableTypes.Create<ClassWithArrayFields>();
+		await Assert.That(serializableType.Fields.Count).IsEqualTo(1);
+		SerializableType.Field field = serializableType.Fields[0];
+		await Assert.That(field.Name).IsEqualTo(nameof(ClassWithArrayFields.singleDimensional));
+		await Assert.That(field.Type.Type).IsEqualTo(PrimitiveType.Int);
+		await Assert.That(field.ArrayDepth).IsEqualTo(1);
+	}
+
 	[Test]
 	public async Task ResolutionForUnityTypesWorksAsExpected()
 	{
