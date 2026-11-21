@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Export.Configuration;
+using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Structure.Assembly;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.SourceGenerated;
@@ -81,6 +82,13 @@ public class ScriptExporter : IAssetExporter
 		}
 		else if (!AssemblyManager.IsSet)
 		{
+			return AssemblyExportType.Decompile;
+		}
+		else if (Decompiler.ScriptingBackend is ScriptingBackend.IL2Cpp
+			&& Decompiler.ScriptContentLevel is ScriptContentLevel.LevelIL2CPP)
+		{
+			// Level-IL2CPP produces recovered IL2CPP method bodies. Always pass these
+			// assemblies through the existing ILSpy pipeline so the export contains C# source.
 			return AssemblyExportType.Decompile;
 		}
 		else if (ExportMode is ScriptExportMode.Decompiled)
