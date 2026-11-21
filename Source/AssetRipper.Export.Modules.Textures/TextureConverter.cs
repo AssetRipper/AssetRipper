@@ -306,12 +306,12 @@ public static class TextureConverter
 			? options.TextureFormat switch
 			{
 				//ASTC
-				TextureFormat.ASTC_RGB_4x4 or TextureFormat.ASTC_RGBA_4x4 => AstcDecoder.DecodeASTC<TColor, TChannelValue>(inputSpan, width, height, 4, 4, outputSpan),
-				TextureFormat.ASTC_RGB_5x5 or TextureFormat.ASTC_RGBA_5x5 => AstcDecoder.DecodeASTC<TColor, TChannelValue>(inputSpan, width, height, 5, 5, outputSpan),
-				TextureFormat.ASTC_RGB_6x6 or TextureFormat.ASTC_RGBA_6x6 => AstcDecoder.DecodeASTC<TColor, TChannelValue>(inputSpan, width, height, 6, 6, outputSpan),
-				TextureFormat.ASTC_RGB_8x8 or TextureFormat.ASTC_RGBA_8x8 => AstcDecoder.DecodeASTC<TColor, TChannelValue>(inputSpan, width, height, 8, 8, outputSpan),
-				TextureFormat.ASTC_RGB_10x10 or TextureFormat.ASTC_RGBA_10x10 => AstcDecoder.DecodeASTC<TColor, TChannelValue>(inputSpan, width, height, 10, 10, outputSpan),
-				TextureFormat.ASTC_RGB_12x12 or TextureFormat.ASTC_RGBA_12x12 => AstcDecoder.DecodeASTC<TColor, TChannelValue>(inputSpan, width, height, 12, 12, outputSpan),
+				TextureFormat.ASTC_RGB_4x4 or TextureFormat.ASTC_RGBA_4x4 or TextureFormat.ASTC_HDR_4x4 => AstcDecoder.DecodeASTC<TColor, TChannelValue>(inputSpan, width, height, 4, 4, outputSpan),
+				TextureFormat.ASTC_RGB_5x5 or TextureFormat.ASTC_RGBA_5x5 or TextureFormat.ASTC_HDR_5x5 => AstcDecoder.DecodeASTC<TColor, TChannelValue>(inputSpan, width, height, 5, 5, outputSpan),
+				TextureFormat.ASTC_RGB_6x6 or TextureFormat.ASTC_RGBA_6x6 or TextureFormat.ASTC_HDR_6x6 => AstcDecoder.DecodeASTC<TColor, TChannelValue>(inputSpan, width, height, 6, 6, outputSpan),
+				TextureFormat.ASTC_RGB_8x8 or TextureFormat.ASTC_RGBA_8x8 or TextureFormat.ASTC_HDR_8x8 => AstcDecoder.DecodeASTC<TColor, TChannelValue>(inputSpan, width, height, 8, 8, outputSpan),
+				TextureFormat.ASTC_RGB_10x10 or TextureFormat.ASTC_RGBA_10x10 or TextureFormat.ASTC_HDR_10x10 => AstcDecoder.DecodeASTC<TColor, TChannelValue>(inputSpan, width, height, 10, 10, outputSpan),
+				TextureFormat.ASTC_RGB_12x12 or TextureFormat.ASTC_RGBA_12x12 or TextureFormat.ASTC_HDR_12x12 => AstcDecoder.DecodeASTC<TColor, TChannelValue>(inputSpan, width, height, 12, 12, outputSpan),
 
 				//ATC
 				TextureFormat.ATC_RGB4 => AtcDecoder.DecompressAtcRgb4<TColor, TChannelValue>(inputSpan, width, height, outputSpan),
@@ -498,6 +498,13 @@ public static class TextureConverter
 				GraphicsFormat.RGBA_ASTC10X10_UNorm => AstcDecoder.DecodeASTC<TColor, TChannelValue>(inputSpan, width, height, 10, 10, outputSpan),
 				GraphicsFormat.RGBA_ASTC12X12_SRGB => AstcDecoder.DecodeASTC<TColor, TChannelValue>(inputSpan, width, height, 12, 12, outputSpan),
 				GraphicsFormat.RGBA_ASTC12X12_UNorm => AstcDecoder.DecodeASTC<TColor, TChannelValue>(inputSpan, width, height, 12, 12, outputSpan),
+				GraphicsFormat.YUV2 => Yuy2Decoder.DecompressYUY2<TColor, TChannelValue>(inputSpan, width, height, outputSpan),
+				GraphicsFormat.RGBA_ASTC4X4_UFloat => AstcDecoder.DecodeASTC<TColor, TChannelValue>(inputSpan, width, height, 4, 4, outputSpan),
+				GraphicsFormat.RGBA_ASTC5X5_UFloat => AstcDecoder.DecodeASTC<TColor, TChannelValue>(inputSpan, width, height, 5, 5, outputSpan),
+				GraphicsFormat.RGBA_ASTC6X6_UFloat => AstcDecoder.DecodeASTC<TColor, TChannelValue>(inputSpan, width, height, 6, 6, outputSpan),
+				GraphicsFormat.RGBA_ASTC8X8_UFloat => AstcDecoder.DecodeASTC<TColor, TChannelValue>(inputSpan, width, height, 8, 8, outputSpan),
+				GraphicsFormat.RGBA_ASTC10X10_UFloat => AstcDecoder.DecodeASTC<TColor, TChannelValue>(inputSpan, width, height, 10, 10, outputSpan),
+				GraphicsFormat.RGBA_ASTC12X12_UFloat => AstcDecoder.DecodeASTC<TColor, TChannelValue>(inputSpan, width, height, 12, 12, outputSpan),
 				_ => WarnAboutUnsupportedFormat(options.GraphicsFormat),
 			};
 	}

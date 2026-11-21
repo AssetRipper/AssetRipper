@@ -157,7 +157,7 @@ public static class GraphicsFormatExtensions
 		GraphicsFormat.RGBA_ASTC10X10_UNorm => TextureFormat.ASTC_10x10,
 		GraphicsFormat.RGBA_ASTC12X12_SRGB => TextureFormat.ASTC_12x12,
 		GraphicsFormat.RGBA_ASTC12X12_UNorm => TextureFormat.ASTC_12x12,
-		GraphicsFormat.YUV2 => throw new NotSupportedException(),
+		GraphicsFormat.YUV2 => TextureFormat.YUY2,
 		GraphicsFormat.DepthAuto => throw new NotSupportedException(),
 		GraphicsFormat.ShadowAuto => throw new NotSupportedException(),
 		GraphicsFormat.VideoAuto => throw new NotSupportedException(),
