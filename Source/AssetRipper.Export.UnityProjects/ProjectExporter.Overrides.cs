@@ -15,6 +15,7 @@ using AssetRipper.Export.UnityProjects.Textures;
 using AssetRipper.Import.AssetCreation;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.Mining.PredefinedAssets;
+using AssetRipper.Processing;
 using AssetRipper.Processing.ScriptableObject;
 using AssetRipper.Processing.Textures;
 using AssetRipper.SourceGenerated.Classes.ClassID_1;
@@ -58,7 +59,7 @@ namespace AssetRipper.Export.UnityProjects;
 
 partial class ProjectExporter
 {
-	public ProjectExporter(FullConfiguration settings, IAssemblyManager assemblyManager)
+	public ProjectExporter(FullConfiguration settings, IAssemblyManager assemblyManager, PackageDetectionResult? packageDetection = null)
 	{
 		OverrideExporter<IUnityObjectBase>(new DefaultYamlExporter(), true);
 
@@ -171,7 +172,7 @@ partial class ProjectExporter
 		OverrideExporter<ITexture2D>(terrainYamlExporter);
 
 		//Script exporter
-		OverrideExporter<IMonoScript>(new ScriptExporter(assemblyManager, settings));
+		OverrideExporter<IMonoScript>(new ScriptExporter(assemblyManager, settings, packageDetection));
 
 		//Animator Controller
 		OverrideExporter<IUnityObjectBase>(new AnimatorControllerExporter());
