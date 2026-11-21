@@ -44,6 +44,31 @@ public class FieldSerializationTests
 		public List<string>? listOfStrings;
 	}
 
+	[Serializable]
+	private class ClassWithArrayFields
+	{
+		public int[]? singleDimensional1;
+		public int[][]? jagged1;
+		public int[,]? multidimensional1;
+		public UnityEngine.Object[]? singleDimensional2;
+		public UnityEngine.Object[][]? jagged2;
+		public UnityEngine.Object[,]? multidimensional2;
+	}
+
+	[Test]
+	public async Task JaggedAndMultidimensionalArraysAreNotSerialized()
+	{
+		SerializableType serializableType = SerializableTypes.Create<ClassWithArrayFields>();
+		await Assert.That(serializableType.Fields.Count).IsEqualTo(2);
+		SerializableType.Field field = serializableType.Fields[0];
+		await Assert.That(field.Name).IsEqualTo(nameof(ClassWithArrayFields.singleDimensional1));
+		await Assert.That(field.Type.Type).IsEqualTo(PrimitiveType.Int);
+		await Assert.That(field.ArrayDepth).IsEqualTo(1);
+		await Assert.That(serializableType.Fields[1].Name).IsEqualTo(nameof(ClassWithArrayFields.singleDimensional2));
+		await Assert.That(serializableType.Fields[1].Type.Type).IsEqualTo(PrimitiveType.Complex);
+		await Assert.That(serializableType.Fields[1].ArrayDepth).IsEqualTo(1);
+	}
+
 	[Test]
 	public async Task ResolutionForUnityTypesWorksAsExpected()
 	{
@@ -406,6 +431,29 @@ public class FieldSerializationTests
 
 	private interface IReferencedInterface
 	{
+	}
+
+	private class CustomMonoBehaviourWithNestedReferenceArrays : UnityEngine.MonoBehaviour
+	{
+		[UnityEngine.SerializeReference]
+		public IReferencedInterface[]? singleDimensional;
+
+		[UnityEngine.SerializeReference]
+		public IReferencedInterface[][]? jagged;
+
+		[UnityEngine.SerializeReference]
+		public IReferencedInterface[,]? multidimensional;
+	}
+
+	[Test]
+	public async Task NestedReferenceArraysAreNotSerialized()
+	{
+		SerializableType serializableType = SerializableTypes.Create<CustomMonoBehaviourWithNestedReferenceArrays>();
+		await Assert.That(serializableType.Fields.Count).IsEqualTo(2);
+		await Assert.That(serializableType.Fields[0].Name).IsEqualTo(nameof(CustomMonoBehaviourWithNestedReferenceArrays.singleDimensional));
+		await Assert.That(serializableType.Fields[0].Type).IsSameReferenceAs(ManagedReferenceTypes.ManagedReference);
+		await Assert.That(serializableType.Fields[0].ArrayDepth).IsEqualTo(1);
+		await Assert.That(serializableType.Fields[1].Type).IsSameReferenceAs(ManagedReferenceTypes.Registry);
 	}
 
 	[Serializable]

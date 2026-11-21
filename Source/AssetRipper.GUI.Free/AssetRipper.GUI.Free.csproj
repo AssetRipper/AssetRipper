@@ -25,6 +25,11 @@
 		<DebuggerSupport>false</DebuggerSupport>
 	</PropertyGroup>
 
+	<!-- https://github.com/dotnet/runtime/issues/136007 -->
+	<ItemGroup Condition="'$(RuntimeIdentifier)' == 'osx-x64'">
+		<LinkerArg Include="-Wl,-no_fixup_chains" />
+	</ItemGroup>
+
 	<ItemGroup>
 		<ProjectReference Include="..\AssetRipper.GUI.Web\AssetRipper.GUI.Web.csproj" />
 	</ItemGroup>

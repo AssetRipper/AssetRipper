@@ -1,9 +1,4 @@
-﻿using SharpCompress.Archives;
-using SharpCompress.Archives.Zip;
-using SharpCompress.Common;
-using SharpCompress.Readers;
-using SharpCompress.Readers.Zip;
-using SharpCompress.Writers.Zip;
+﻿using System.IO.Compression;
 using System.Xml.Linq;
 
 namespace AssetRipper.AssemblyDumper.NuGetFixer;
@@ -64,21 +59,12 @@ internal static class Program
 
 	private static void CreateZip(string zipFilePath, string sourceDirectory)
 	{
-		using IWritableArchive<ZipWriterOptions> archive = ZipArchive.CreateArchive();
-		using FileStream stream = File.Create(zipFilePath);
-		archive.AddAllFromDirectory(sourceDirectory);
-		archive.SaveTo(stream, new ZipWriterOptions(CompressionType.Deflate));
+		ZipFile.CreateFromDirectory(sourceDirectory, zipFilePath, CompressionLevel.Optimal, includeBaseDirectory: false);
 	}
 
 	private static void ExtractZip(string zipFilePath, string targetDirectory)
 	{
-		using FileStream stream = File.OpenRead(zipFilePath);
-		using IReader reader = ZipReader.OpenReader(stream);
-		reader.WriteAllToDirectory(targetDirectory, new ExtractionOptions()
-		{
-			ExtractFullPath = true,
-			Overwrite = true,
-		});
+		ZipFile.ExtractToDirectory(zipFilePath, targetDirectory, overwriteFiles: true);
 	}
 
 	private static XElement GetChild(this XContainer parent, string localName)

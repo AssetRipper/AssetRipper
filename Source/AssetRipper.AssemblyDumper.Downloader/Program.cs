@@ -1,6 +1,4 @@
-﻿using SharpCompress.Archives;
-using SharpCompress.Archives.Zip;
-using SharpCompress.Writers.Zip;
+﻿using System.IO.Compression;
 using System.Diagnostics;
 using System.Net.Http;
 
@@ -26,7 +24,7 @@ internal static class Program
 		foreach ((string fileName, string url) in files)
 		{
 			Console.WriteLine($"Downloading {fileName}...");
-			MemoryStream stream = await Download(url);
+			using MemoryStream stream = await Download(url);
 			Console.WriteLine($"Decompressing {fileName}...");
 			byte[] data = DecompressZipFile(stream);
 			Debug.Assert(data.Length > 0, "Decompressed data is empty.");
@@ -57,10 +55,11 @@ internal static class Program
 
 	private static byte[] DecompressZipFile(Stream inputStream)
 	{
-		using IWritableArchive<ZipWriterOptions> archive = ZipArchive.OpenArchive(inputStream);
-		IArchiveEntry entry = archive.Entries.Single(entry => !entry.IsDirectory);
+		using ZipArchive archive = new(inputStream, ZipArchiveMode.Read, leaveOpen: true);
+		ZipArchiveEntry entry = archive.Entries.Single(entry => entry.Name.Length > 0);
 		using MemoryStream outputStream = new();
-		entry.WriteTo(outputStream);
+		using Stream entryStream = entry.Open();
+		entryStream.CopyTo(outputStream);
 		return outputStream.ToArray();
 	}
 }

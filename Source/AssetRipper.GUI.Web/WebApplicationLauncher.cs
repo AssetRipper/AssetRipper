@@ -1,4 +1,5 @@
 using AssetRipper.GUI.Web.Documentation;
+using AssetRipper.GUI.Web.MCP;
 using AssetRipper.GUI.Web.Pages;
 using AssetRipper.GUI.Web.Pages.Assets;
 using AssetRipper.GUI.Web.Pages.Bundles;
@@ -116,6 +117,9 @@ public static class WebApplicationLauncher
 		});
 
 		builder.Services.AddEndpointsApiExplorer();
+		builder.Services.AddMcpServer()
+			.WithHttpTransport(options => options.Stateless = true)
+			.WithTools<BuildTools>(AppJsonSerializerContext.Default.Options);
 
 		builder.Logging.ConfigureLoggingLevel();
 
@@ -143,6 +147,8 @@ public static class WebApplicationLauncher
 			// Point to the static OpenAPI file
 			c.SwaggerEndpoint(DocumentationPaths.OpenApi, "AssetRipper API");
 		});
+
+		app.MapMcp("/mcp");
 
 		//Static files
 		app.MapStaticFile("/favicon.ico", "image/x-icon");

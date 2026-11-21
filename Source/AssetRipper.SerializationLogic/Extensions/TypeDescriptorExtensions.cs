@@ -17,11 +17,15 @@ internal static class TypeDescriptorExtensions
 		};
 	}
 
-	public static bool IsAssignableTo(this ITypeDescriptor typeRef, string ns, string name, RuntimeContext? runtimeContext)
+	public static bool IsAssignableTo(this TypeSignature typeRef, string ns, string name, RuntimeContext? runtimeContext)
 	{
-		if (typeRef.ToTypeSignature(runtimeContext) is GenericInstanceTypeSignature genericInstanceTypeSignature)
+		if (typeRef is GenericInstanceTypeSignature genericInstanceTypeSignature)
 		{
-			return genericInstanceTypeSignature.GenericType.IsAssignableTo(ns, name, runtimeContext);
+			return genericInstanceTypeSignature.GenericType.ToTypeSignature(runtimeContext).IsAssignableTo(ns, name, runtimeContext);
+		}
+		else if (typeRef is ArrayBaseTypeSignature or BoxedTypeSignature or ByReferenceTypeSignature or GenericParameterSignature or PinnedTypeSignature or PointerTypeSignature or SentinelTypeSignature)
+		{
+			return false;
 		}
 
 		if (typeRef.Namespace == ns && typeRef.Name == name)
@@ -34,7 +38,7 @@ internal static class TypeDescriptorExtensions
 		// let's assume it is not assignable to our target type
 	}
 
-	public static bool InheritsFromObject(this ITypeDescriptor type, RuntimeContext? runtimeContext)
+	public static bool InheritsFromObject(this TypeSignature type, RuntimeContext? runtimeContext)
 	{
 		return type.IsAssignableTo("UnityEngine", "Object", runtimeContext);
 	}
