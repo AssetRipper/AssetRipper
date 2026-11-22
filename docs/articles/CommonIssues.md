@@ -48,6 +48,14 @@ Modified assemblies almost always cause read errors when used in AssetRipper. He
 * Attribute removal can also change field deserialization.
 * Modified method bodies can cause decompiler errors.
 
+## Tuanjie and Chinese Unity builds
+
+AssetRipper targets the global Unity version and does not directly support Tuanjie or the Chinese version of Unity. Their serialized type trees can differ from the ones AssetRipper expects, which may cause import errors when reading files such as `globalgamemanagers`.
+
+The maintainers recommend converting these serialized files to the global Unity format with [TypeTreeConversion](https://github.com/AssetRipper/TypeTreeConversion) before importing them. See [issue 2405](https://github.com/AssetRipper/AssetRipper/issues/2405) for a reported example.
+
+
+
 ## Too many open files
 
 ```text
