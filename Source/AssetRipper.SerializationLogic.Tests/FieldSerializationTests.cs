@@ -554,4 +554,23 @@ public class FieldSerializationTests
 			throw new InvalidOperationException(failure);
 		await Assert.That(serializableType!.Fields[^1].Type).IsSameReferenceAs(ManagedReferenceTypes.Registry);
 	}
+
+	private class CustomMonoBehaviourWithSerializeReferenceDictionary : UnityEngine.MonoBehaviour
+	{
+		[UnityEngine.SerializeReference]
+		public Dictionary<string, IReferencedInterface>? dictionary;
+
+		[UnityEngine.SerializeReference]
+		public List<Dictionary<string, IReferencedInterface>>? dictionaryList;
+
+		public int serializedField;
+	}
+
+	[Test]
+	public async Task SerializeReferenceDictionariesAreNotSerialized()
+	{
+		SerializableType serializableType = SerializableTypes.Create<CustomMonoBehaviourWithSerializeReferenceDictionary>();
+		await Assert.That(serializableType.Fields.Count).IsEqualTo(1);
+		await Assert.That(serializableType.Fields[0].Name).IsEqualTo(nameof(CustomMonoBehaviourWithSerializeReferenceDictionary.serializedField));
+	}
 }

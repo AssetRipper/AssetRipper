@@ -89,6 +89,12 @@ public readonly partial struct FieldSerializer(UnityVersion version, RuntimeCont
 			return false;
 		}
 
+		// Unity cannot serialize dictionaries, not even with [SerializeReference].
+		if (AsmUtils.IsGenericDictionary(fieldType, runtimeContext))
+		{
+			return false;
+		}
+
 		if (fieldType is CorLibTypeSignature corLibTypeSignature && corLibTypeSignature.ElementType == ElementType.String)
 		{
 			return true;
@@ -108,6 +114,11 @@ public readonly partial struct FieldSerializer(UnityVersion version, RuntimeCont
 			}
 			if (fieldDefinition.HasSerializeReferenceAttribute())
 			{
+				// Unity cannot serialize dictionaries, not even as managed references.
+				if (AsmUtils.IsGenericDictionary(elementType, runtimeContext))
+				{
+					return false;
+				}
 				return elementType is CorLibTypeSignature or GenericInstanceTypeSignature or TypeDefOrRefSignature;
 			}
 			else
