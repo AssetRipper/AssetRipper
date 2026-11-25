@@ -52,8 +52,12 @@ public class YamlScalarNodeTests
 		try
 		{
 			CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo("de-DE");
-			await Assert.That(YamlScalarNode.Create(1.5f).EmitToString()).IsEqualTo("1.5");
-			await Assert.That(YamlScalarNode.Create(1.5d).EmitToString()).IsEqualTo("1.5");
+			YamlScalarNode floatNode = YamlScalarNode.Create(1.5f);
+			await Assert.That(floatNode.Value).IsEqualTo("1.5");
+			await Assert.That(floatNode.EmitToString()).IsEqualTo("1.5");
+			YamlScalarNode doubleNode = YamlScalarNode.Create(1.5d);
+			await Assert.That(doubleNode.Value).IsEqualTo("1.5");
+			await Assert.That(doubleNode.EmitToString()).IsEqualTo("1.5");
 		}
 		finally
 		{
@@ -78,6 +82,22 @@ public class YamlScalarNodeTests
 
 	[Test]
 	public async Task Int64ListTest() => await NumericListTest<long>([-1L, long.MinValue], "ffffffffffffffff0000000000000080");
+
+	[Test]
+	public async Task CharListValueMatchesEmittedHex()
+	{
+		YamlScalarNode node = YamlScalarNode.CreateHex(['A', 'B']);
+		await Assert.That(node.Value).IsEqualTo("41004200");
+		await Assert.That(node.EmitToString()).IsEqualTo("41004200");
+	}
+
+	[Test]
+	public async Task BoolListValueMatchesEmittedHex()
+	{
+		YamlScalarNode node = YamlScalarNode.CreateHex([true, false]);
+		await Assert.That(node.Value).IsEqualTo("0100");
+		await Assert.That(node.EmitToString()).IsEqualTo("0100");
+	}
 
 	private static async Task NumericListTest<T>(IReadOnlyList<T> list, string expected) where T : unmanaged, INumber<T>
 	{

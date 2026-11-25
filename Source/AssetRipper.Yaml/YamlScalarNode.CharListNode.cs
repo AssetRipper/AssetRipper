@@ -16,6 +16,19 @@ public abstract partial class YamlScalarNode
 			}
 		}
 
-		public override string Value => list.ToString() ?? "";
+		public override string Value
+		{
+			get
+			{
+				StringWriter sb = new();
+				Span<char> buffer = stackalloc char[ReverseHexString.GetHexStringLength<ushort>()];
+				for (int i = 0; i < list.Count; i++)
+				{
+					ReverseHexString.WriteReverseHexString((ushort)list[i], buffer);
+					sb.Write(buffer);
+				}
+				return sb.ToString();
+			}
+		}
 	}
 }

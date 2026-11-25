@@ -28,7 +28,7 @@ public abstract partial class YamlScalarNode
 			}
 		}
 
-		public override string Value => value.ToString() ?? "";
+		public override string Value => value.ToString(CultureInfo.InvariantCulture) ?? "";
 
 		private static bool IsSigned => typeof(T) == typeof(sbyte) || typeof(T) == typeof(short) || typeof(T) == typeof(int) || typeof(T) == typeof(long);
 	}
