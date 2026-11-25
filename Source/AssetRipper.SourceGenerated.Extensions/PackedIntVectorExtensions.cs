@@ -110,7 +110,7 @@ public static class PackedIntVectorExtensions
 					bitIndex = 0;
 				}
 			}
-			buffer[i] &= unchecked((1 << packedVector.BitSize) - 1);
+			buffer[i] &= packedVector.BitSize == 32 ? -1 : unchecked((1 << packedVector.BitSize) - 1);
 		}
 		return buffer;
 	}
@@ -136,7 +136,7 @@ public static class PackedIntVectorExtensions
 					bitIndex = 0;
 				}
 			}
-			buffer[i] &= (1U << packedVector.BitSize) - 1;
+			buffer[i] &= packedVector.BitSize == 32 ? uint.MaxValue : (1U << packedVector.BitSize) - 1;
 		}
 		return buffer;
 	}
