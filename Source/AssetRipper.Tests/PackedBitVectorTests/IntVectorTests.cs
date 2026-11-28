@@ -42,6 +42,28 @@ public class IntVectorTests
 		await Assert.That(unpackedInts.SequenceEqual(ints)).IsTrue();
 	}
 
+	[Test]
+	public async Task FullWidthUIntsRoundTrip()
+	{
+		uint[] values = [uint.MaxValue, 0, uint.MaxValue, 1u << 31];
+		PackedBitVector_Int32 packedVector = new();
+		packedVector.PackUInts(values);
+
+		await Assert.That(packedVector.BitSize).IsEqualTo((byte)32);
+		await Assert.That(packedVector.UnpackUInts().SequenceEqual(values)).IsTrue();
+	}
+
+	[Test]
+	public async Task FullWidthIntsRoundTrip()
+	{
+		int[] values = [-1, 0, int.MinValue, int.MaxValue];
+		PackedBitVector_Int32 packedVector = new();
+		packedVector.PackInts(values);
+
+		await Assert.That(packedVector.BitSize).IsEqualTo((byte)32);
+		await Assert.That(packedVector.UnpackInts().SequenceEqual(values)).IsTrue();
+	}
+
 	private static uint[] MakeInts(int count)
 	{
 		uint[] result = new uint[count];
