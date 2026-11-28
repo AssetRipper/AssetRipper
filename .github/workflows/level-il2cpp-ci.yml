@@ -1,0 +1,71 @@
+name: Level-IL2CPP CI
+
+on:
+  push:
+    branches:
+      - metro-game-structure
+      - feature/level-il2cpp
+  pull_request:
+    branches:
+      - metro-game-structure
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Build and test
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Build
+        run: dotnet build
+
+      - name: Run tests
+        run: dotnet test
+
+  publish-windows:
+    name: Publish Windows x64
+    runs-on: windows-latest
+    needs: test
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Publish Windows x64
+        run: dotnet publish -c Release -r win-x64
+        working-directory: ./Source/AssetRipper.GUI.Free/
+
+      - name: Add build timestamp
+        shell: pwsh
+        run: Get-Date -AsUTC -Format o | Out-File ./Source/0Bins/AssetRipper.GUI.Free/Release/win-x64/publish/compile_time.txt
+
+      - name: Upload Windows x64 application
+        uses: actions/upload-artifact@v7
+        with:
+          name: AssetRipper-Level-IL2CPP-win_x64
+          path: |
+            ./Source/0Bins/AssetRipper.GUI.Free/Release/win-x64/publish/AssetRipper.GUI.Free.exe
+            ./Source/0Bins/AssetRipper.GUI.Free/Release/win-x64/publish/*.dll
+            ./Source/0Bins/AssetRipper.GUI.Free/Release/win-x64/publish/*.so
+            ./Source/0Bins/AssetRipper.GUI.Free/Release/win-x64/publish/*.dylib
+            ./Source/0Bins/AssetRipper.GUI.Free/Release/win-x64/publish/compile_time.txt
+          if-no-files-found: error
+          retention-days: 14

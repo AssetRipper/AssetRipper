@@ -19,6 +19,10 @@ public enum ScriptContentLevel
 	/// </summary>
 	Level3,
 	/// <summary>
+	/// Uses the Cpp2IL recovery pipeline for IL2CPP method recovery.
+	/// </summary>
+	LevelIL2CPP,
+	/// <summary>
 	/// IL2Cpp methods are recovered without regard to safety. Currently the same as <see cref="Level2"/>
 	/// </summary>
 	//Level4,
